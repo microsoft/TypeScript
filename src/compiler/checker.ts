@@ -5885,12 +5885,13 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             var inferenceMapper = createInferenceMapper(context);
 
-            // First infer from all arguments using wildcards for all context sensitive function expressions
+            // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
+            // wildcards for all context sensitive function expressions.
             for (var i = 0; i < args.length; i++) {
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
@@ -5900,11 +5901,15 @@ module ts {
                     inferTypes(context, globalTemplateStringsArrayType, parameterType);
                     continue;
                 }
-                var mapper = !excludeArgument || excludeArgument[i] === undefined ? inferenceMapper : identityMapper;
+                // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                // context sensitive function expressions as wildcards
+                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
                 inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
-            // Next, infer from those context sensitive arguments that are no longer excluded
+            // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
+            // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
+            // as we construct types for contextually typed parameters)
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
                     if (args[i].kind === SyntaxKind.OmittedExpression) {
