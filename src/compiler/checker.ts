@@ -7243,7 +7243,7 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
-            if (hasDynamicName(node)) {
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -7254,7 +7254,7 @@ module ts {
             // Grammar checking
             checkGrammarMethod(node);
 
-            if (hasDynamicName(node)) {
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -8066,12 +8066,13 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (hasDynamicName(node)) {
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 // This check will account for methods in class/interface declarations,
                 // as well as accessors in classes/object literals
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
-            else {
+
+            if (!hasDynamicName(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -8300,12 +8301,11 @@ module ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
-            if (hasDynamicName(node)) {
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
                 }
-                return;
             }
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
