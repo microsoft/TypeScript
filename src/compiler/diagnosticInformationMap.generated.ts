@@ -452,6 +452,6 @@ module ts {
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported.", isEarly: true },
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported.", isEarly: true },
-        An_argument_object_has_different_behaviour_across_Javascript_versions_Use_function_expression_or_rest_parameters_instead: { code: 9002, category: DiagnosticCategory.Error, key: "An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead" },
+        The_argument_object_has_different_behaviour_across_Javascript_versions_Use_function_expression_or_rest_parameters_instead: { code: 9002, category: DiagnosticCategory.Error, key: "The 'argument' object has different behaviour across Javascript versions. Use function expression or rest parameters instead" },
     };
 }

@@ -4856,7 +4856,7 @@ module ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
-              error(node, Diagnostics.An_argument_object_has_different_behaviour_across_Javascript_versions_Use_function_expression_or_rest_parameters_instead);
+              error(node, Diagnostics.The_argument_object_has_different_behaviour_across_Javascript_versions_Use_function_expression_or_rest_parameters_instead);
             }
 
             if (symbol.flags & SymbolFlags.Import) {
@@ -4915,12 +4915,7 @@ module ts {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
 
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
-                if (compilerOptions.target >= ScriptTarget.ES6) {
-                    needToCaptureLexicalThis = false;
-                }
-                else {
-                    needToCaptureLexicalThis = true;
-                }
+                needToCaptureLexicalThis = !(compilerOptions.target >= ScriptTarget.ES6);
             }
 
             switch (container.kind) {

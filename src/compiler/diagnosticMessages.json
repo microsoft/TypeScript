@@ -1909,7 +1909,7 @@
 		"code": 9001,
 		"isEarly": true
 	},
-	"An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead": {
+	"The 'argument' object has different behaviour across Javascript versions. Use function expression or rest parameters instead": {
 		"category": "Error",
 		"code": 9002
 	}
