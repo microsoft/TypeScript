@@ -4874,6 +4874,7 @@ module ts {
                 node.flags & NodeFlags.Export
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
+                || node.kind === SyntaxKind.ImportDeclaration
                     ? node
                     : undefined);
         }
