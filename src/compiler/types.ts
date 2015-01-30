@@ -232,7 +232,7 @@ module ts {
         ModuleBlock,
         ImportEqualsDeclaration,
         ExportAssignment,
-        ImportStatement,
+        ImportDeclaration,
         ImportClause,
         NamespaceImport,
         NamedImports,
@@ -872,7 +872,7 @@ module ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportStatement extends Statement, ModuleElement {
+    export interface ImportDeclaration extends Statement, ModuleElement {
         importClause?: ImportClause;
         moduleSpecifier: StringLiteralExpression;
     }

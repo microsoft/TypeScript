@@ -4529,7 +4529,7 @@ module ts {
                 token === SyntaxKind.FromKeyword;
         }
 
-        function parseImportDeclarationOrStatement(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportStatement {
+        function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
             var identifier: Identifier;
             if (isIdentifier()) {
@@ -4549,8 +4549,8 @@ module ts {
             }
 
             // Import statement
-            var importStatement = <ImportStatement>createNode(SyntaxKind.ImportStatement, fullStart);
-            setModifiers(importStatement, modifiers);
+            var importDeclaration = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
+            setModifiers(importDeclaration, modifiers);
 
             // ImportDeclaration:
             //  import ImportClause from ModuleSpecifier ;
@@ -4579,13 +4579,13 @@ module ts {
                     importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
                 }
 
-                importStatement.importClause = finishNode(importClause);
+                importDeclaration.importClause = finishNode(importClause);
                 parseExpected(SyntaxKind.FromKeyword);
             }
 
-            importStatement.moduleSpecifier = parseModuleSpecifier();
+            importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
-            return finishNode(importStatement);
+            return finishNode(importDeclaration);
         }
 
         function parseModuleReference() {
@@ -4783,7 +4783,7 @@ module ts {
                 case SyntaxKind.ModuleKeyword:
                     return parseModuleDeclaration(fullStart, modifiers);
                 case SyntaxKind.ImportKeyword:
-                    return parseImportDeclarationOrStatement(fullStart, modifiers);
+                    return parseImportDeclarationOrImportEqualsDeclaration(fullStart, modifiers);
                 default:
                     Debug.fail("Mismatch between isDeclarationStart and parseDeclaration");
             }
