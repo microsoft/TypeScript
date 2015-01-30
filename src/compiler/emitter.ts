@@ -3292,12 +3292,8 @@ module ts {
 
             function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
                 // Check whether the parameter list needs parentheses and preserve no-parenthesis
-                if ((node.parameters.length === 1) && (node.pos === node.parameters[0].pos)) {
-                    increaseIndent();
-                    var parameters = node.parameters;
-                    var omitCount = hasRestParameters(node) ? 1 : 0;
-                    emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
-                    decreaseIndent();
+                if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
+                    emit(node.parameters[0]);
                     return;
                 }
                 emitSignatureParameters(node);
