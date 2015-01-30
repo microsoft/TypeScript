@@ -26,9 +26,6 @@ module ts {
     }
 
     var syntax: SyntaxNode[];
-    var syntaxKindTable: Map<SyntaxNode>;
-    var syntaxTypeTable: Map<SyntaxNode>;
-    var syntaxSubTypesTable: Map<SyntaxNode[]>;
     var lastWriteSucceeded: boolean;
 
     var parts: string[] = [];
@@ -48,7 +45,7 @@ module ts {
         var inputStr = sys.readFile(inputFilePath);
         syntax = JSON.parse(inputStr);
 
-        computeSyntaxTables();
+        normalizeSyntaxNodes();
         writeFile();
 
         var output = parts.join("");
@@ -57,11 +54,9 @@ module ts {
         sys.writeFile(outputPath, output);
     }
 
-    function computeSyntaxTables(): void {
-        syntaxKindTable = {};
-        syntaxTypeTable = {};
-        syntaxSubTypesTable = {};
+    function normalizeSyntaxNodes(): void {
         for (var i = 0; i < syntax.length; i++) {
+
             var nodeType = syntax[i];
             var kind = nodeType.kind;
             var type = nodeType.type;
@@ -71,12 +66,10 @@ module ts {
 
             if (kind) {
                 nodeType.kind = kind.replace(/\s+/g, "");
-                syntaxKindTable[nodeType.kind] = nodeType;
             }
 
             if (type) {
                 nodeType.type = normalizeType(type);
-                syntaxTypeTable[nodeType.type] = nodeType;
             }
             else {
                 nodeType.type = normalizeType(nodeType.types || nodeType.baseType);
@@ -88,12 +81,6 @@ module ts {
 
             if (baseType) {
                 nodeType.baseType = normalizeType(baseType);
-                var subTypes = getProperty(syntaxSubTypesTable, nodeType.baseType);
-                if (!subTypes) {
-                    subTypes = [];
-                    syntaxSubTypesTable[nodeType.baseType] = subTypes;
-                }
-                subTypes.push(nodeType);
             }
 
             if (name) {
@@ -373,6 +360,11 @@ module ts {
             dedent();
         }
 
+        writeln(`default:`);
+        indent();
+        writeln(`return node;`);
+        dedent();
+
         dedent();
         writeln(`}`);
 
@@ -402,19 +394,14 @@ module ts {
     }
 
     function writeVisitMember(syntaxNode: SyntaxNode, member: SyntaxMember): void {
-        var memberSyntaxNode = getProperty(syntaxTypeTable, member.type);
-        if (memberSyntaxNode) {
-            if (member.isNodeArray) {
-                write(`visitNodes<${member.type}>(`);
-            }
-            else {
-                write(`visit<${member.type}>(`);
-            }
+        if (member.isNodeArray) {
+            write(`visitNodes<${member.type}>(`);
+        }
+        else {
+            write(`visit<${member.type}>(`);
         }
         write(`(<${syntaxNode.type}>node).${member.name}`);
-        if (memberSyntaxNode) {
-            write(`, cbNode, state)`);
-        }
+        write(`, cbNode, state)`);
     }
 
     function normalizeType(type: string): string {
@@ -456,7 +443,7 @@ module ts {
     }
 
     function canCreate(syntaxNode: SyntaxNode): boolean {
-        return !!syntaxNode.kind;
+        return syntaxNode && !!syntaxNode.kind;
     }
 
     function canUpdate(syntaxNode: SyntaxNode): boolean {

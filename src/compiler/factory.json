@@ -8,14 +8,14 @@
         "type": "StringLiteralExpression",
         "baseType": "LiteralExpression",
         "children": [
-            { "name": "text", "type": "string" }
+            { "name": "text", "type": "string", "readonly": true }
         ]
     },
     {
         "kind": "NumericLiteral",
         "baseType": "LiteralExpression",
         "children": [
-            { "name": "text", "paramName": "value", "type": "number | string", "converter": "String" }
+            { "name": "text", "paramName": "value", "type": "number | string", "converter": "String", "readonly": true }
         ]
     },
     {
@@ -706,8 +706,8 @@
         "kind": "GeneratedLabel",
         "type": "GeneratedLabel",
         "children": [
-            { "name": "label", "type": "Label" },
-            { "name": "labelNumbers", "type": "number[]" }
+            { "name": "label", "type": "Label", "readonly": true },
+            { "name": "labelNumbers", "type": "number[]", "readonly": true }
         ]
     },
     {

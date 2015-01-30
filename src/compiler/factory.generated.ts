@@ -10,24 +10,10 @@ module ts {
             return finishNode(node, location, flags);
         }
 
-        export function updateStringLiteral(node: StringLiteralExpression, text: string): StringLiteralExpression {
-            if (node.text !== text) {
-                return createStringLiteral(text, node, node.flags);
-            }
-            return node;
-        }
-
         export function createNumericLiteral(value: number | string, location?: TextRange, flags?: NodeFlags): LiteralExpression {
             var node = beginNode<LiteralExpression>(SyntaxKind.NumericLiteral);
             node.text = String(value);
             return finishNode(node, location, flags);
-        }
-
-        export function updateNumericLiteral(node: LiteralExpression, value: number | string): LiteralExpression {
-            if (node.text !== value) {
-                return createNumericLiteral(value, node, node.flags);
-            }
-            return node;
         }
 
         export function createRegularExpressionLiteral(location?: TextRange, flags?: NodeFlags): LiteralExpression {
@@ -713,13 +699,6 @@ module ts {
             return finishNode(node, location, flags);
         }
 
-        export function updateGeneratedLabel(node: GeneratedLabel, label: Label, labelNumbers: number[]): GeneratedLabel {
-            if (node.label !== label || node.labelNumbers !== labelNumbers) {
-                return createGeneratedLabel(label, labelNumbers, node, node.flags);
-            }
-            return node;
-        }
-
         export function createSpreadElementExpression(expression: Expression, location?: TextRange, flags?: NodeFlags): SpreadElementExpression {
             var node = beginNode<SpreadElementExpression>(SyntaxKind.SpreadElementExpression);
             node.expression = expression;
@@ -1110,13 +1089,7 @@ module ts {
         function accept(node: Node, cbNode: Visitor, state?: any): Node {
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return Factory.updateStringLiteral(
-                        <StringLiteralExpression>node,
-                        (<StringLiteralExpression>node).text);
                 case SyntaxKind.NumericLiteral:
-                    return Factory.updateNumericLiteral(
-                        <LiteralExpression>node,
-                        (<LiteralExpression>node).text);
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
@@ -1126,7 +1099,7 @@ module ts {
                 case SyntaxKind.Identifier:
                     return Factory.updateIdentifier(
                         <Identifier>node,
-                        (<Identifier>node).text);
+                        visit<string>((<Identifier>node).text, cbNode, state));
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.NullKeyword:
@@ -1325,10 +1298,7 @@ module ts {
                         <YieldExpression>node,
                         visit<Expression>((<YieldExpression>node).expression, cbNode, state));
                 case SyntaxKind.GeneratedLabel:
-                    return Factory.updateGeneratedLabel(
-                        <GeneratedLabel>node,
-                        (<GeneratedLabel>node).label,
-                        (<GeneratedLabel>node).labelNumbers);
+                    return node;
                 case SyntaxKind.SpreadElementExpression:
                     return Factory.updateSpreadElementExpression(
                         <SpreadElementExpression>node,
@@ -1460,6 +1430,8 @@ module ts {
                     return Factory.updateShorthandPropertyAssignment(
                         <ShorthandPropertyAssignment>node,
                         visit<Identifier>((<ShorthandPropertyAssignment>node).name, cbNode, state));
+                default:
+                    return node;
             }
         }
     }
