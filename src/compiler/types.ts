@@ -237,6 +237,7 @@ module ts {
         NamespaceImport,
         NamedImports,
         ImportSpecifier,
+        ExportAll,
 
         // Module references
         ExternalModuleReference,
@@ -899,6 +900,10 @@ module ts {
     export interface ImportSpecifier extends Declaration {
         propertyName?: Identifier; // Property name to be imported from module
         name: Identifier; // element name to be imported in the scope
+    }
+
+    export interface ExportAll extends Declaration, ModuleElement {
+        moduleSpecifier: StringLiteralExpression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

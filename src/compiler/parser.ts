@@ -1392,7 +1392,13 @@ module ts {
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
+            var isTokenExport = token === SyntaxKind.ExportKeyword;
+
             nextToken();
+            if (isTokenExport && token === SyntaxKind.AsteriskToken) {
+                // Export is not modifier if it is followed by '*'
+                return false;
+            }
             return canFollowModifier();
         }
 
@@ -4688,6 +4694,16 @@ module ts {
             return finishNode(node);
         }
 
+        function parseExportAll(fullStart: number, modifiers: ModifiersArray): ExportAll {
+            var node = <ExportAll>createNode(SyntaxKind.ExportAll, fullStart);
+            setModifiers(node, modifiers);
+            parseExpected(SyntaxKind.AsteriskToken);
+            parseExpected(SyntaxKind.FromKeyword);
+            node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4716,7 +4732,7 @@ module ts {
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
+                    return lookAhead(nextTokenFollowingExportMakesDeclaration);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4747,9 +4763,9 @@ module ts {
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
         }
 
-        function nextTokenIsEqualsTokenOrDeclarationStart() {
+        function nextTokenFollowingExportMakesDeclaration() {
             nextToken();
-            return token === SyntaxKind.EqualsToken || isDeclarationStart();
+            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken|| isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4768,6 +4784,9 @@ module ts {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     return parseExportAssignmentTail(fullStart, modifiers);
+                }
+                if (token === SyntaxKind.AsteriskToken) {
+                    return parseExportAll(fullStart, modifiers);
                 }
             }
 
@@ -4875,6 +4894,7 @@ module ts {
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ImportDeclaration
+                || node.kind === SyntaxKind.ExportAll
                     ? node
                     : undefined);
         }
