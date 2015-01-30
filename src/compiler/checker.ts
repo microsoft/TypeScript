@@ -84,6 +84,7 @@ module ts {
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
+        var globalESSymbolConstructorSymbol: Symbol;
 
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
@@ -93,6 +94,8 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
+        var globalESSymbolType: ObjectType;
+        var globalESSymbolConstructorType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -3005,12 +3008,20 @@ module ts {
             return <ObjectType>type;
         }
 
-        function getGlobalSymbol(name: string): Symbol {
-            return resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
+        function getGlobalValueSymbol(name: string): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Value, Diagnostics.Cannot_find_global_value_0);
+        }
+
+        function getGlobalTypeSymbol(name: string): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+        }
+
+        function getGlobalSymbol(name: string, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
+            return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
         function getGlobalType(name: string): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalSymbol(name), 0);
+            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), 0);
         }
 
         function createArrayType(elementType: Type): Type {
@@ -5481,7 +5492,7 @@ module ts {
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
-            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
+            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false);
         }
 
         function isNumericLiteralName(name: string) {
@@ -5514,9 +5525,9 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
-                // This will allow types number, string, or any. It will also allow enums, the unknown
+                // This will allow types number, string, Symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
+                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike, /*includeESSymbols*/ true)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_Symbol_or_any);
                 }
             }
@@ -5781,10 +5792,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
+            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike, /*includeESSymbols*/ true)) {
 
                 // Try to use a number indexer.
-                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -6722,7 +6733,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
+            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -6874,18 +6885,27 @@ module ts {
         }
 
         // Return true if type has the given flags, or is a union type composed of types that all have those flags
-        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
+        // If include includeESSymbols is true, then check if the type (or union constituents) is an ESSymbol
+        // if it does not match the kind. This is necessary because ESSymbol has no corresponding flag.
+        function isTypeOfKind(type: Type, kind: TypeFlags, includeESSymbols: boolean): boolean {
             if (type.flags & kind) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
                 for (var i = 0; i < types.length; i++) {
-                    if (!(types[i].flags & kind)) {
-                        return false;
+                    if (types[i].flags & kind) {
+                        continue;
                     }
+                    if (includeESSymbols && types[i] === globalESSymbolType) {
+                        continue;
+                    }
+                    return false;
                 }
                 return true;
+            }
+            if (includeESSymbols) {
+                return type === globalESSymbolType;
             }
             return false;
         }
@@ -6904,7 +6924,11 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
+            //
+            // The reason for globalESSymbolType !== unknownType is that if the type is unknownType, we don't want to error.
+            // If the globalESSymbolType is also unknownType, then by including globalESSymbolType, we will error
+            // on unknownType, because transitively, type will be the same as globalESSymbolType.
+            if (isTypeOfKind(leftType, TypeFlags.Primitive, /*includeESSymbols*/ globalESSymbolType !== unknownType)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -6919,10 +6943,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike, /*includeESSymbols*/ true)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter, /*includeESSymbols*/ false)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -7083,12 +7107,12 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var resultType: Type;
-                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
+                    if (isTypeOfKind(leftType, TypeFlags.NumberLike, /*includeESSymbols*/ false) && isTypeOfKind(rightType, TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
+                    else if (isTypeOfKind(leftType, TypeFlags.StringLike, /*includeESSymbols*/ false) || isTypeOfKind(rightType, TypeFlags.StringLike, /*includeESSymbols*/ false)) {
                         // If one or both operands are of the String primitive type, the result is of the String primitive type.
                         resultType = stringType;
                     }
@@ -8454,7 +8478,7 @@ module ts {
                 //   and Expr must be an expression of type Any, an object type, or a type parameter type.
                 var varExpr = <Expression>node.initializer;
                 var exprType = checkExpression(varExpr);
-                if (exprType !== anyType && exprType !== stringType) {
+                if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.StringLike, /*includeESSymbols*/ true)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -8466,7 +8490,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter, /*includeESSymbols*/ false)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -10251,7 +10275,7 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
-            globalArraySymbol = getGlobalSymbol("Array");
+            globalArraySymbol = getGlobalTypeSymbol("Array");
             globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
@@ -10259,11 +10283,22 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
-            globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
-                ? getGlobalType("TemplateStringsArray")
-                : unknownType;
+            if (languageVersion >= ScriptTarget.ES6) {
+                globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+                globalESSymbolType = getGlobalType("Symbol");
+                globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
+                globalESSymbolConstructorType = getTypeOfGlobalSymbol(globalESSymbolConstructorSymbol, /*arity*/ 0);
+            }
+            else {
+                globalTemplateStringsArrayType = unknownType;
+                globalESSymbolType = unknownType;
+                globalESSymbolConstructorSymbol = unknownSymbol;
+                globalESSymbolConstructorType = unknownType;
+            }
+
             anyArrayType = createArrayType(anyType);
         }
 

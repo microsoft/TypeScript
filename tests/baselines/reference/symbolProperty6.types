@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty6.ts ===
+class C {
+>C : C
+
+    [Symbol.iterator] = 0;
+>Symbol.iterator : Symbol
+>Symbol : SymbolConstructor
+>iterator : Symbol
+
+    [Symbol.unscopables]: number;
+>Symbol.unscopables : Symbol
+>Symbol : SymbolConstructor
+>unscopables : Symbol
+
+    [Symbol.isRegExp]() { }
+>Symbol.isRegExp : Symbol
+>Symbol : SymbolConstructor
+>isRegExp : Symbol
+
+    get [Symbol.toStringTag]() {
+>Symbol.toStringTag : Symbol
+>Symbol : SymbolConstructor
+>toStringTag : Symbol
+
+        return 0;
+    }
+}

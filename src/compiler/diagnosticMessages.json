@@ -1209,6 +1209,10 @@
         "category": "Error",
         "code": 2466
     },
+    "Cannot find global value '{0}'.": {
+        "category": "Error",
+        "code": 2468
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

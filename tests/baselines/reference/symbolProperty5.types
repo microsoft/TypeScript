@@ -1,0 +1,23 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty5.ts ===
+var x = {
+>x : { [Symbol.iterator]: number; [Symbol.isRegExp](): void; [Symbol.toStringTag]: number; }
+>{    [Symbol.iterator]: 0,    [Symbol.isRegExp]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.isRegExp](): void; [Symbol.toStringTag]: number; }
+
+    [Symbol.iterator]: 0,
+>Symbol.iterator : Symbol
+>Symbol : SymbolConstructor
+>iterator : Symbol
+
+    [Symbol.isRegExp]() { },
+>Symbol.isRegExp : Symbol
+>Symbol : SymbolConstructor
+>isRegExp : Symbol
+
+    get [Symbol.toStringTag]() {
+>Symbol.toStringTag : Symbol
+>Symbol : SymbolConstructor
+>toStringTag : Symbol
+
+        return 0;
+    }
+}

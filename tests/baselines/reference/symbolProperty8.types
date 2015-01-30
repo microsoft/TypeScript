@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty8.ts ===
+interface I {
+>I : I
+
+    [Symbol.unscopables]: number;
+>Symbol.unscopables : Symbol
+>Symbol : SymbolConstructor
+>unscopables : Symbol
+
+    [Symbol.isRegExp]();
+>Symbol.isRegExp : Symbol
+>Symbol : SymbolConstructor
+>isRegExp : Symbol
+}
