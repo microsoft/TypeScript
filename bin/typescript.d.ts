@@ -283,6 +283,11 @@ declare module "typescript" {
         ThisNodeOrAnySubNodesHasError = 32,
         HasAggregatedChildData = 64,
     }
+    const enum RelationComparisonResult {
+        Succeeded = 1,
+        Failed = 2,
+        FailedAndReported = 3,
+    }
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -994,11 +999,15 @@ declare module "typescript" {
         Union = 16384,
         Anonymous = 32768,
         FromSignature = 65536,
-        Unwidened = 131072,
+        ObjectLiteral = 131072,
+        ContainsUndefinedOrNull = 262144,
+        ContainsObjectLiteral = 524288,
         Intrinsic = 127,
+        Primitive = 510,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
+        RequiresWidening = 786432,
     }
     interface Type {
         flags: TypeFlags;
@@ -1123,6 +1132,7 @@ declare module "typescript" {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -1136,6 +1146,7 @@ declare module "typescript" {
         out?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
+        project?: string;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
@@ -1168,6 +1179,7 @@ declare module "typescript" {
     interface CommandLineOption {
         name: string;
         type: string | Map<number>;
+        isFilePath?: boolean;
         shortName?: string;
         description?: DiagnosticMessage;
         paramType?: DiagnosticMessage;
@@ -1428,6 +1440,7 @@ declare module "typescript" {
         isOpen: boolean;
         version: string;
         scriptSnapshot: IScriptSnapshot;
+        nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
     }
     /**
@@ -1470,6 +1483,7 @@ declare module "typescript" {
     }
     interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
+        getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;

@@ -44,6 +44,7 @@ declare module ts {
     function getProperty<T>(map: Map<T>, key: string): T;
     function isEmpty<T>(map: Map<T>): boolean;
     function clone<T>(object: T): T;
+    function extend<T>(first: Map<T>, second: Map<T>): Map<T>;
     function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U;
     function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U;
     function lookUp<T>(map: Map<T>, key: string): T;
@@ -125,6 +126,7 @@ declare module ts {
         createDirectory(directoryName: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        readDirectory(path: string, extension?: string): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -186,7 +188,7 @@ declare module ts {
     function isObjectLiteralMethod(node: Node): boolean;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
-    function getSuperContainer(node: Node): Node;
+    function getSuperContainer(node: Node, includeFunctions: boolean): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
@@ -244,6 +246,8 @@ declare module ts {
 declare module ts {
     var optionDeclarations: CommandLineOption[];
     function parseCommandLine(commandLine: string[]): ParsedCommandLine;
+    function readConfigFile(filename: string): any;
+    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module ts {
     interface ListItemInfo {
