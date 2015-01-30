@@ -1,3 +1,3 @@
 interface I {
-  [a]
+  [a] // Used to be indexer, now it is a computed property
 }

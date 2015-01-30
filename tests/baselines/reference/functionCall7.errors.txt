@@ -1,5 +1,6 @@
 tests/cases/compiler/functionCall7.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/functionCall7.ts(6,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
+  Property 'a' is missing in type 'Number'.
 tests/cases/compiler/functionCall7.ts(7,1): error TS2346: Supplied parameters do not match any signature of call target.
 
 
@@ -14,6 +15,7 @@ tests/cases/compiler/functionCall7.ts(7,1): error TS2346: Supplied parameters do
     foo(4);
         ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
+!!! error TS2345:   Property 'a' is missing in type 'Number'.
     foo();
     ~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

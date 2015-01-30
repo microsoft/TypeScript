@@ -548,6 +548,18 @@ module FourSlash {
             }
         }
 
+        public verifyGetEmitOutputForCurrentFile(expected: string): void {
+            var emit = this.languageService.getEmitOutput(this.activeFile.fileName);
+            if (emit.outputFiles.length !== 1) {
+                throw new Error("Expected exactly one output from emit of " + this.activeFile.fileName);
+            }
+            this.taoInvalidReason = 'verifyGetEmitOutputForCurrentFile impossible';
+            var actual = emit.outputFiles[0].text;
+            if (actual !== expected) {
+                this.raiseError("Expected emit output to be '" + expected + "', but got '" + actual + "'");
+            }
+        }
+
         public verifyMemberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             this.scenarioActions.push('<ShowCompletionList />');
             this.scenarioActions.push('<VerifyCompletionContainsItem ItemName="' + symbol + '"/>');

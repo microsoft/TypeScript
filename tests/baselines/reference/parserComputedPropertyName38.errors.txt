@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,5): error TS9002: Computed property names are not currently supported.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,6): error TS2304: Cannot find name 'public'.
 
 
 ==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts (1 errors) ====
     class C {
         [public]() { }
-        ~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
     }

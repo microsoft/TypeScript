@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType5.ts ===
+interface I {
+>I : I
+
+    [s: string]: any;
+>s : string
+
+    [s: number]: any;
+>s : number
+}
+
+var o: I = {
+>o : I
+>I : I
+>{    [+"foo"]: "",    [+"bar"]: 0} : { [x: string]: string | number; [x: number]: string | number; }
+
+    [+"foo"]: "",
+>+"foo" : number
+
+    [+"bar"]: 0
+>+"bar" : number
+}
