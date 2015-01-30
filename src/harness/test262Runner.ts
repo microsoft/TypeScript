@@ -3,7 +3,7 @@
 /// <reference path='syntacticCleaner.ts' />
 
 class Test262BaselineRunner extends RunnerBase {
-    private static basePath = 'tests/cases/test262';
+    private static basePath = 'internal/cases/test262';
     private static helpersFilePath = 'tests/cases/test262-harness/helpers.d.ts';
     private static helperFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
@@ -15,7 +15,10 @@ class Test262BaselineRunner extends RunnerBase {
         target: ts.ScriptTarget.Latest,
         module: ts.ModuleKind.CommonJS
     };
-    private static baselineOptions: Harness.Baseline.BaselineOptions = { Subfolder: 'test262' };
+    private static baselineOptions: Harness.Baseline.BaselineOptions = {
+        Subfolder: 'test262',
+        Baselinefolder: 'internal/baselines'
+    };
 
     private static getTestFilePath(filename: string): string {
         return Test262BaselineRunner.basePath + "/" + filename;

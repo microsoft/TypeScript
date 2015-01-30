@@ -451,14 +451,16 @@ directory(builtLocalDirectory);
 var run = path.join(builtLocalDirectory, "run.js");
 compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
 
+var internalTests = "internal/"
+
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
 
-var localRwcBaseline = "tests/baselines/rwc/local/";
-var refRwcBaseline = "tests/baselines/rwc/reference/";
+var localRwcBaseline = internalTests + "baselines/rwc/local/";
+var refRwcBaseline = internalTests + "baselines/rwc/reference/";
 
-var localTest262Baseline = "tests/baselines/test262/local/";
-var refTest262Baseline = "tests/baselines/test262/reference/";
+var localTest262Baseline = internalTests + "baselines/test262/local/";
+var refTest262Baseline = internalTests + "baselines/test262/reference/";
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
@@ -491,11 +493,13 @@ function cleanTestDirs() {
         jake.rmRf(localBaseline);
     }
 
-        // Clean the local Rwc baselines directory
+    // Clean the local Rwc baselines directory
     if (fs.existsSync(localRwcBaseline)) {
         jake.rmRf(localRwcBaseline);
     }
 
+    jake.mkdirP(localRwcBaseline);
+	jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
