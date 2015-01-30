@@ -287,7 +287,7 @@ module ts {
         TypeArguments,           // Type arguments in type argument list
         TupleElementTypes,       // Element types in tuple element type list
         HeritageClauses,         // Heritage clauses for a class or interface declaration.
-        ImportSpecifiers,        // Named import clause's import specifier list
+        ImportOrExportSpecifier, // Named import clause's import specifier list or Export clause's export specifier list
         Count                    // Number of parsing contexts
     }
 
@@ -319,7 +319,7 @@ module ts {
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
             case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
-            case ParsingContext.ImportSpecifiers:       return Diagnostics.Identifier_expected;
+            case ParsingContext.ImportOrExportSpecifier: return Diagnostics.Identifier_expected;
         }
     };
 
@@ -1395,8 +1395,8 @@ module ts {
             var isTokenExport = token === SyntaxKind.ExportKeyword;
 
             nextToken();
-            if (isTokenExport && token === SyntaxKind.AsteriskToken) {
-                // Export is not modifier if it is followed by '*'
+            if (isTokenExport && (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken)) {
+                // Export is not modifier if it is followed by '*' or '{'
                 return false;
             }
             return canFollowModifier();
@@ -1458,7 +1458,7 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
-                case ParsingContext.ImportSpecifiers:
+                case ParsingContext.ImportOrExportSpecifier:
                     return isIdentifierOrKeyword();
             }
 
@@ -1496,7 +1496,7 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
-                case ParsingContext.ImportSpecifiers:
+                case ParsingContext.ImportOrExportSpecifier:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -4653,12 +4653,12 @@ module ts {
             // ImportsList:
             //  ImportSpecifier
             //  ImportsList, ImportSpecifier
-            namedImports.elements = parseBracketedList(ParsingContext.ImportSpecifiers, parseImportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            namedImports.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifier, parseImportOrExportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
             return finishNode(namedImports);
         }
 
-        function parseImportSpecifier(): ImportSpecifier {
-            var node = <ImportSpecifier>createNode(SyntaxKind.ImportSpecifier);
+        function parseImportOrExportSpecifier(): ImportOrExportSpecifier {
+            var node = <ImportOrExportSpecifier>createNode(SyntaxKind.ImportOrExportSpecifier);
             // ImportSpecifier:
             //  ImportedBinding
             //  IdentifierName as ImportedBinding
@@ -4700,6 +4700,33 @@ module ts {
             parseExpected(SyntaxKind.AsteriskToken);
             parseExpected(SyntaxKind.FromKeyword);
             node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseExportClauseDeclaration(fullStart: number, modifiers: ModifiersArray): ExportClauseDeclaration {
+            var node = <ExportClauseDeclaration>createNode(SyntaxKind.ExportClauseDeclaration, fullStart);
+            setModifiers(node, modifiers);
+
+            var exportClause = <ExportClause>createNode(SyntaxKind.ExportClause);
+
+            // ExportClause:
+            //  { }
+            //  { ExportsList }
+            //  { ExportsList, }
+            // ExportsList:
+            //  ExportSpecifier
+            //  ExportsList, ExportSpecifier
+            // ExportSpecifier:
+            //  IdentifierName
+            //  IdentifierName as  IdentifierName
+
+            exportClause.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifier, parseImportOrExportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            node.exportClause = finishNode(exportClause);
+
+            if (parseOptional(SyntaxKind.FromKeyword)) {
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
             parseSemicolon();
             return finishNode(node);
         }
@@ -4765,7 +4792,7 @@ module ts {
 
         function nextTokenFollowingExportMakesDeclaration() {
             nextToken();
-            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken|| isDeclarationStart();
+            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4787,6 +4814,9 @@ module ts {
                 }
                 if (token === SyntaxKind.AsteriskToken) {
                     return parseExportAll(fullStart, modifiers);
+                }
+                if (token === SyntaxKind.OpenBraceToken) {
+                    return parseExportClauseDeclaration(fullStart, modifiers);
                 }
             }
 
@@ -4895,6 +4925,7 @@ module ts {
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAll
+                || node.kind === SyntaxKind.ExportClauseDeclaration
                     ? node
                     : undefined);
         }

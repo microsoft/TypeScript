@@ -236,8 +236,10 @@ module ts {
         ImportClause,
         NamespaceImport,
         NamedImports,
-        ImportSpecifier,
+        ImportOrExportSpecifier,
         ExportAll,
+        ExportClauseDeclaration,
+        ExportClause,
 
         // Module references
         ExternalModuleReference,
@@ -894,16 +896,23 @@ module ts {
     }
 
     export interface NamedImports extends Node {
-        elements: NodeArray<ImportSpecifier>;
+        elements: NodeArray<ImportOrExportSpecifier>;
     }
 
-    export interface ImportSpecifier extends Declaration {
+    export interface ImportOrExportSpecifier extends Declaration {
         propertyName?: Identifier; // Property name to be imported from module
         name: Identifier; // element name to be imported in the scope
     }
 
     export interface ExportAll extends Declaration, ModuleElement {
         moduleSpecifier: StringLiteralExpression;
+    }
+
+    export type ExportClause = NamedImports;
+    
+    export interface ExportClauseDeclaration extends Declaration, ModuleElement {
+        exportClause: ExportClause;
+        moduleSpecifier?: StringLiteralExpression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {
