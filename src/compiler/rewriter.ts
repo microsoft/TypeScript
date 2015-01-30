@@ -1,12 +1,6 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
-/// <reference path="factory.ts"/>
 /// <reference path="generator.ts"/>
 
-// TODO(rbuckton): do we need to rewrite around `arguments` or disallow `arguments` in async/generator?
-// TODO(rbuckton): do we need to rewrite around computed properties?
 module ts {
     export module BindingElementRewriter {
         interface RewriterState {
@@ -367,15 +361,14 @@ module ts {
     }
 
     export module AsyncFunctionRewriter {
-        export function rewrite<TNode extends FunctionLikeDeclaration>(node: TNode, resolver: EmitResolver, locals: Locals, compilerOptions: CompilerOptions): TNode {
-            var promiseConstructor = resolver.getPromiseConstructor(node);
+        export function rewrite<TNode extends FunctionLikeDeclaration>(node: TNode, promiseConstructor: EntityName, locals: Locals, compilerOptions: CompilerOptions): TNode {
             var resolve = Locals.createUniqueIdentifier(locals, "_resolve");
             var generatorFunctionBody = Factory.createBlock(rewriteBody(node.body));
             var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, [], generatorFunctionBody);
             generatorFunction.asteriskToken = Factory.createTokenNode(SyntaxKind.AsteriskToken);
 
             var bodyStatements: Statement[] = [];
-            var generator = createGenerator(generatorFunctionBody, bodyStatements, resolver, locals, compilerOptions);
+            var generator = createGenerator(generatorFunctionBody, bodyStatements, locals, compilerOptions);
             var awaiterCallExpression = Factory.createCallExpression(Factory.createIdentifier("__awaiter"), [generator]);
             var resolveCallExpression = Factory.createCallExpression(resolve, [awaiterCallExpression]);
             var resolveCallStatement = Factory.createExpressionStatement(resolveCallExpression);
@@ -402,12 +395,12 @@ module ts {
             }
         }
 
-        function createGenerator(body: Block, statements: Statement[], resolver: EmitResolver, locals: Locals, compilerOptions: CompilerOptions): Expression {
+        function createGenerator(body: Block, statements: Statement[], locals: Locals, compilerOptions: CompilerOptions): Expression {
             var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, [], body);
             generatorFunction.asteriskToken = Factory.createTokenNode(SyntaxKind.AsteriskToken);
 
             if (compilerOptions.target < ScriptTarget.ES6) {
-                generatorFunction = GeneratorFunctionRewriter.rewrite(generatorFunction, resolver, locals);
+                generatorFunction = GeneratorFunctionRewriter.rewrite(generatorFunction, locals);
                 body = <Block>generatorFunction.body;
                 
                 var generator: Expression;
@@ -468,7 +461,7 @@ module ts {
     export module GeneratorFunctionRewriter {
         interface RewriterState {
             locals: Locals;
-            builder: FunctionGenerator;
+            builder: GeneratorFunctionBuilder;
         }
 
         interface CallBinding {
@@ -476,8 +469,8 @@ module ts {
             thisArg?: Identifier;
         }
 
-        export function rewrite<TNode extends FunctionLikeDeclaration>(node: TNode, resolver: EmitResolver, locals: Locals): TNode {
-            var builder = createGeneratorFunctionGenerator(locals);
+        export function rewrite<TNode extends FunctionLikeDeclaration>(node: TNode, locals: Locals): TNode {
+            var builder = GeneratorFunctionBuilder.create(locals);
             var state: RewriterState = {
                 locals,
                 builder
@@ -493,10 +486,10 @@ module ts {
             if (node.body.kind === SyntaxKind.Block) {
                 rewriteBlock(<Block>node.body, state);
             } else {
-                builder.emit(OpCode.Return, Visitor.visit(<Expression>node.body, visitNode, state));
+                GeneratorFunctionBuilder.emit(builder, OpCode.Return, Visitor.visit(<Expression>node.body, visitNode, state));
             }
 
-            var func = <TNode>builder.buildFunction(node.kind, node.name, node, node.flags, node.modifiers);
+            var func = <TNode>GeneratorFunctionBuilder.buildFunction(builder, node.kind, node.name, node, node.flags, node.modifiers);
             func.id = node.id;
             func.parent = node.parent;
             return func;
@@ -645,7 +638,7 @@ module ts {
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration, state: RewriterState): FunctionDeclaration {
-            state.builder.addFunction(node);
+            GeneratorFunctionBuilder.addFunction(state.builder, node);
             return;
         }
 
@@ -687,9 +680,10 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptContinueBlock(getLabelNames(node));
+            GeneratorFunctionBuilder.beginScriptContinueBlock(state.builder, getLabelNames(node));
             node = Visitor.fallback(node, visitNode, state);
-            builder.endScriptContinueBlock();
+            
+            GeneratorFunctionBuilder.endScriptContinueBlock(builder);
             return node;
         }
 
@@ -700,9 +694,9 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptContinueBlock(getLabelNames(node));
+            GeneratorFunctionBuilder.beginScriptContinueBlock(builder, getLabelNames(node));
             node = Visitor.fallback(node, visitNode, state);
-            builder.endScriptContinueBlock();
+            GeneratorFunctionBuilder.endScriptContinueBlock(builder);
             return node;
         }
 
@@ -713,14 +707,14 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptContinueBlock(getLabelNames(node));
+            GeneratorFunctionBuilder.beginScriptContinueBlock(builder, getLabelNames(node));
             node = Factory.updateForStatement(
                 node,
                 Visitor.visit(node.initializer, visitVariableDeclarationListOrExpression, state),
                 Visitor.visit(node.condition, visitNode, state),
                 Visitor.visit(node.iterator, visitNode, state),
                 Visitor.visit(node.statement, visitNode, state));
-            builder.endScriptContinueBlock();
+            GeneratorFunctionBuilder.endScriptContinueBlock(builder);
             return node;
         }
 
@@ -731,38 +725,38 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptContinueBlock(getLabelNames(node));
+            GeneratorFunctionBuilder.beginScriptContinueBlock(builder, getLabelNames(node));
             node = Factory.updateForInStatement(
                 node,
                 Visitor.visit(node.initializer, visitVariableDeclarationListOrExpression, state),
                 Visitor.visit(node.expression, visitNode, state),
                 Visitor.visit(node.statement, visitNode, state));
-            builder.endScriptContinueBlock();
+            GeneratorFunctionBuilder.endScriptContinueBlock(builder);
             return node;
         }
 
         function visitBreakStatement(node: BreakOrContinueStatement, state: RewriterState): Statement {
-            var label = state.builder.findBreakTarget(node.label && node.label.text);
+            var label = GeneratorFunctionBuilder.findBreakTarget(state.builder, node.label && node.label.text);
             if (label > 0) {
-                state.builder.writeLocation(node);
-                return state.builder.createInlineBreak(label);
+                GeneratorFunctionBuilder.writeLocation(state.builder, node);
+                return GeneratorFunctionBuilder.createInlineBreak(state.builder, label);
             }
             return Visitor.fallback(node, visitNode, state);
         }
 
         function visitContinueStatement(node: BreakOrContinueStatement, state: RewriterState): Statement {
-            var label = state.builder.findContinueTarget(node.label && node.label.text);
+            var label = GeneratorFunctionBuilder.findContinueTarget(state.builder, node.label && node.label.text);
             if (label > 0) {
-                state.builder.writeLocation(node);
-                return state.builder.createInlineBreak(label);
+                GeneratorFunctionBuilder.writeLocation(state.builder, node);
+                return GeneratorFunctionBuilder.createInlineBreak(state.builder, label);
             }
             return Visitor.fallback(node, visitNode, state);
         }
 
         function visitReturnStatement(node: ReturnStatement, state: RewriterState): Statement {
             var expression = Visitor.visit(node.expression, visitNode, state);
-            state.builder.writeLocation(node);
-            return state.builder.createInlineReturn(expression);
+            GeneratorFunctionBuilder.writeLocation(state.builder, node);
+            return GeneratorFunctionBuilder.createInlineReturn(state.builder, expression);
         }
 
         function visitSwitchStatement(node: SwitchStatement, state: RewriterState): Statement {
@@ -772,9 +766,9 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptBreakBlock(getLabelNames(node), /*requireLabel*/ false);
+            GeneratorFunctionBuilder.beginScriptBreakBlock(builder, getLabelNames(node), /*requireLabel*/ false);
             node = Visitor.fallback(node, visitNode, state);
-            builder.endScriptBreakBlock();
+            GeneratorFunctionBuilder.endScriptBreakBlock(builder);
             return node;
         }
 
@@ -793,9 +787,9 @@ module ts {
             }
 
             var { builder } = state;
-            builder.beginScriptBreakBlock(getLabelNames(node), /*requireLabel*/ true);
+            GeneratorFunctionBuilder.beginScriptBreakBlock(builder, getLabelNames(node), /*requireLabel*/ true);
             node = Visitor.fallback(node, visitNode, state);
-            builder.endScriptBreakBlock();
+            GeneratorFunctionBuilder.endScriptBreakBlock(builder);
             return node;
         }
 
@@ -817,9 +811,9 @@ module ts {
 
         // expression caching
         function cacheExpression(node: Expression, state: RewriterState): Identifier {
-            var local = state.builder.declareLocal();
+            var local = GeneratorFunctionBuilder.declareLocal(state.builder);
             var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, local, node);
-            state.builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
+            GeneratorFunctionBuilder.emit(state.builder, OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return local;
         }
 
@@ -877,15 +871,15 @@ module ts {
 
         function rewriteLogicalBinaryExpression(node: BinaryExpression, state: RewriterState): Expression {
             var builder = state.builder;
-            var resumeLabel = builder.defineLabel();
-            var resultLocal = builder.declareLocal();
+            var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var resultLocal = GeneratorFunctionBuilder.declareLocal(builder);
             var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BrFalse : OpCode.BrTrue;
-            builder.writeLocation(node.left);
-            builder.emit(OpCode.Assign, resultLocal, Visitor.visit(node.left, visitNode, state));
-            builder.emit(code, resumeLabel, resultLocal);
-            builder.writeLocation(node.right);
-            builder.emit(OpCode.Assign, resultLocal, Visitor.visit(node.right, visitNode, state));
-            builder.markLabel(resumeLabel);
+            GeneratorFunctionBuilder.writeLocation(builder, node.left);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.left, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, code, resumeLabel, resultLocal);
+            GeneratorFunctionBuilder.writeLocation(builder, node.right);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.right, visitNode, state));
+            GeneratorFunctionBuilder.markLabel(builder, resumeLabel);
             return resultLocal;
         }
 
@@ -896,7 +890,7 @@ module ts {
             for (var i = 0; i < expressions.length; i++) {
                 var expression = expressions[i];
                 if (hasAwaitOrYield(expression) && merged) {
-                    builder.emit(OpCode.Statement, Factory.createExpressionStatement(merged));
+                    GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(merged));
                     merged = undefined;
                 }
                 var visited = Visitor.visit(expression, visitNode, state);
@@ -972,24 +966,24 @@ module ts {
         function rewriteLeftHandSideElementAccessExpressionOfCallExpression(node: ElementAccessExpression, state: RewriterState): CallBinding {
             var builder = state.builder;
             var thisArg = cacheExpression(Visitor.visit(node.expression, visitNode, state), state);
-            var target = builder.declareLocal();
+            var target = GeneratorFunctionBuilder.declareLocal(builder);
             var index = Visitor.visit(node.argumentExpression, visitNode, state);
             var indexedAccess = Factory.createElementAccessExpression(thisArg, index, node);
             var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, target, indexedAccess);
-            builder.writeLocation(node);
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return { target, thisArg };
         }
 
         function rewriteLeftHandSidePropertyAccessExpressionOfCallExpression(node: PropertyAccessExpression, state: RewriterState): CallBinding {
             var builder = state.builder;
             var thisArg = cacheExpression(Visitor.visit(node.expression, visitNode, state), state);
-            var target = builder.declareLocal();
+            var target = GeneratorFunctionBuilder.declareLocal(builder);
             var property = Factory.createIdentifier(node.name.text);
             var propertyAccess = Factory.createPropertyAccessExpression(thisArg, property, node);
             var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, target, propertyAccess);
-            builder.writeLocation(node);
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return { target, thisArg };
         }
 
@@ -1005,7 +999,7 @@ module ts {
                 var node = declarations[i];
                 if (hasAwaitOrYield(node)) {
                     if (mergedAssignment) {
-                        builder.emit(OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
+                        GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
                         mergedAssignment = undefined;
                     }
                 }
@@ -1024,7 +1018,7 @@ module ts {
             }
             if (parent.kind === SyntaxKind.VariableDeclarationList && parent.parent.kind === SyntaxKind.ForInStatement) {
                 if (mergedAssignment) {
-                    builder.emit(OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
+                    GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
                     mergedAssignment = undefined;
                 }
 
@@ -1042,7 +1036,7 @@ module ts {
                 rewriteExpression(result, state);
                 return;
             }
-            builder.addVariable(<Identifier>node.name);
+            GeneratorFunctionBuilder.addVariable(builder, <Identifier>node.name);
             var initializer = Visitor.visit(node.initializer, visitNode, state);
             if (initializer) {
                 return Factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, initializer, node);
@@ -1051,28 +1045,28 @@ module ts {
 
         function rewriteConditionalExpression(node: ConditionalExpression, state: RewriterState): Expression {
             var builder = state.builder;
-            var whenFalseLabel = builder.defineLabel();
-            var resumeLabel = builder.defineLabel();
-            var resultLocal = builder.declareLocal();
-            builder.emit(OpCode.BrFalse, whenFalseLabel, Visitor.visit(node.condition, visitNode, state));
-            builder.writeLocation(node.whenTrue);
-            builder.emit(OpCode.Assign, resultLocal, Visitor.visit(node.whenTrue, visitNode, state));
-            builder.emit(OpCode.Break, resumeLabel);
-            builder.markLabel(whenFalseLabel);
-            builder.writeLocation(node.whenFalse);
-            builder.emit(OpCode.Assign, resultLocal, Visitor.visit(node.whenFalse, visitNode, state));
-            builder.markLabel(resumeLabel);
+            var whenFalseLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var resultLocal = GeneratorFunctionBuilder.declareLocal(builder);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, whenFalseLabel, Visitor.visit(node.condition, visitNode, state));
+            GeneratorFunctionBuilder.writeLocation(builder, node.whenTrue);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.whenTrue, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, resumeLabel);
+            GeneratorFunctionBuilder.markLabel(builder, whenFalseLabel);
+            GeneratorFunctionBuilder.writeLocation(builder, node.whenFalse);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.whenFalse, visitNode, state));
+            GeneratorFunctionBuilder.markLabel(builder, resumeLabel);
             return resultLocal;
         }
 
         function rewriteYieldExpression(node: YieldExpression, state: RewriterState): Expression {
             var builder = state.builder;
             var expression = Visitor.visit(node.expression, visitNode, state);
-            var resumeLabel = builder.defineLabel();
-            builder.writeLocation(node);
-            builder.emit(node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, expression);
-            builder.markLabel(resumeLabel);
-            return builder.createResume();
+            var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, expression);
+            GeneratorFunctionBuilder.markLabel(builder, resumeLabel);
+            return GeneratorFunctionBuilder.createResume(builder);
         }
 
         function rewriteParenthesizedExpression(node: ParenthesizedExpression, state: RewriterState): LeftHandSideExpression {
@@ -1084,72 +1078,72 @@ module ts {
             var builder = state.builder;
             var expression = Visitor.visit(node.expression, visitNode, state);
             if (!isAwaitOrYield(node.expression)) {
-                builder.writeLocation(node);
-                builder.emit(OpCode.Statement, expression);
+                GeneratorFunctionBuilder.writeLocation(builder, node);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Statement, expression);
             }
         }
 
         function rewriteIfStatement(node: IfStatement, state: RewriterState): void {
             var builder = state.builder;
-            var resumeLabel = builder.defineLabel();
+            var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
             if (node.elseStatement) {
-                var elseLabel = builder.defineLabel();
+                var elseLabel = GeneratorFunctionBuilder.defineLabel(builder);
             }
-            builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, Visitor.visit(node.expression, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, elseLabel || resumeLabel, Visitor.visit(node.expression, visitNode, state));
             rewriteBlockOrStatement(node.thenStatement, state);
             if (node.elseStatement) {
-                builder.emit(OpCode.Break, resumeLabel);
-                builder.markLabel(elseLabel);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Break, resumeLabel);
+                GeneratorFunctionBuilder.markLabel(builder, elseLabel);
                 rewriteBlockOrStatement(node.elseStatement, state);
             }
-            builder.markLabel(resumeLabel);
+            GeneratorFunctionBuilder.markLabel(builder, resumeLabel);
         }
 
         function rewriteDoStatement(node: DoStatement, state: RewriterState): void {
             var builder = state.builder;
-            var bodyLabel = builder.defineLabel();
-            var conditionLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(conditionLabel, getLabelNames(node));
-            builder.markLabel(bodyLabel);
+            var bodyLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var conditionLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var endLabel = GeneratorFunctionBuilder.beginContinueBlock(builder, conditionLabel, getLabelNames(node));
+            GeneratorFunctionBuilder.markLabel(builder, bodyLabel);
             rewriteBlockOrStatement(node.statement, state);
-            builder.markLabel(conditionLabel);
-            builder.emit(OpCode.BrTrue, bodyLabel, Visitor.visit(node.expression, visitNode, state));
-            builder.endContinueBlock();
+            GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrTrue, bodyLabel, Visitor.visit(node.expression, visitNode, state));
+            GeneratorFunctionBuilder.endContinueBlock(builder);
         }
 
         function rewriteWhileStatement(node: WhileStatement, state: RewriterState): void {
             var builder = state.builder;
-            var conditionLabel = builder.defineLabel();
-            var bodyLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(conditionLabel, getLabelNames(node));
-            builder.markLabel(conditionLabel);
-            builder.emit(OpCode.BrFalse, endLabel, Visitor.visit(node.expression, visitNode, state));
+            var conditionLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var bodyLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var endLabel = GeneratorFunctionBuilder.beginContinueBlock(builder, conditionLabel, getLabelNames(node));
+            GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, Visitor.visit(node.expression, visitNode, state));
             rewriteBlockOrStatement(node.statement, state);
-            builder.emit(OpCode.Break, conditionLabel);
-            builder.endContinueBlock();
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, conditionLabel);
+            GeneratorFunctionBuilder.endContinueBlock(builder);
         }
 
         function rewriteForStatement(node: ForStatement, state: RewriterState): void {
             var builder = state.builder;
-            var conditionLabel = builder.defineLabel();
-            var iteratorLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(iteratorLabel, getLabelNames(node));
+            var conditionLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var iteratorLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var endLabel = GeneratorFunctionBuilder.beginContinueBlock(builder, iteratorLabel, getLabelNames(node));
             if (node.initializer) {
                 var initializer = <Expression>visitVariableDeclarationListOrExpression(node.initializer, state);
-                builder.writeLocation(node.initializer);
-                builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializer));
+                GeneratorFunctionBuilder.writeLocation(builder, node.initializer);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(initializer));
             }
-            builder.markLabel(conditionLabel);
+            GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
             if (node.condition) {
-                builder.emit(OpCode.BrFalse, endLabel, Visitor.visit(node.condition, visitNode, state));
+                GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, Visitor.visit(node.condition, visitNode, state));
             }
             rewriteBlockOrStatement(node.statement, state);
-            builder.markLabel(iteratorLabel);
+            GeneratorFunctionBuilder.markLabel(builder, iteratorLabel);
             if (node.iterator) {
-                builder.emit(OpCode.Statement, Factory.createExpressionStatement(Visitor.visit(node.iterator, visitNode, state)));
+                GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(Visitor.visit(node.iterator, visitNode, state)));
             }
-            builder.emit(OpCode.Break, conditionLabel);
-            builder.endContinueBlock();
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, conditionLabel);
+            GeneratorFunctionBuilder.endContinueBlock(builder);
         }
 
         function rewriteForInStatement(node: ForInStatement, state: RewriterState): void {
@@ -1158,44 +1152,44 @@ module ts {
             while (variable.kind === SyntaxKind.BinaryExpression) {
                 variable = (<BinaryExpression>variable).left;
             }
-            var keysLocal = builder.declareLocal();
-            var tempLocal = builder.declareLocal();
-            var conditionLabel = builder.defineLabel();
-            var iteratorLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(iteratorLabel, getLabelNames(node));
+            var keysLocal = GeneratorFunctionBuilder.declareLocal(builder);
+            var tempLocal = GeneratorFunctionBuilder.declareLocal(builder);
+            var conditionLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var iteratorLabel = GeneratorFunctionBuilder.defineLabel(builder);
+            var endLabel = GeneratorFunctionBuilder.beginContinueBlock(builder, iteratorLabel, getLabelNames(node));
             var initializeKeysExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysLocal, Factory.createArrayLiteralExpression([]));
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeKeysExpression));
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(initializeKeysExpression));
             var keysLengthExpression = Factory.createPropertyAccessExpression(keysLocal, Factory.createIdentifier("length"));
             var keysPushExpression = Factory.createElementAccessExpression(keysLocal, keysLengthExpression);
             var assignKeyExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysPushExpression, tempLocal);
             var assignKeyStatement = Factory.createExpressionStatement(assignKeyExpression);
             var expression = cacheExpression(Factory.makeLeftHandSideExpression(Visitor.visit(node.expression, visitNode, state)), state);
             var forTempInExpressionStatement = Factory.createForInStatement(tempLocal, expression, assignKeyStatement);
-            builder.emit(OpCode.Statement, forTempInExpressionStatement);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, forTempInExpressionStatement);
             var initializeTempExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, tempLocal, Factory.createNumericLiteral(0));
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeTempExpression));
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(initializeTempExpression));
             var conditionExpression = Factory.createBinaryExpression(SyntaxKind.LessThanToken, tempLocal, keysLengthExpression);
-            builder.markLabel(conditionLabel);
-            builder.emit(OpCode.BrFalse, endLabel, conditionExpression);
+            GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, conditionExpression);
             var readKeyExpression = Factory.createElementAccessExpression(keysLocal, tempLocal);
             var hasKeyExpression = Factory.createBinaryExpression(SyntaxKind.InKeyword, readKeyExpression, expression);
-            builder.emit(OpCode.BrFalse, iteratorLabel, hasKeyExpression);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, iteratorLabel, hasKeyExpression);
             var assignVariableExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, readKeyExpression);
-            builder.writeLocation(node.initializer);
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignVariableExpression, variable));
+            GeneratorFunctionBuilder.writeLocation(builder, node.initializer);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(assignVariableExpression, variable));
             rewriteBlockOrStatement(node.statement, state);
-            builder.markLabel(iteratorLabel);
+            GeneratorFunctionBuilder.markLabel(builder, iteratorLabel);
             var incrementTempExpression = Factory.createPostfixUnaryExpression(SyntaxKind.PlusPlusToken, tempLocal);
-            builder.writeLocation(node.initializer);
-            builder.emit(OpCode.Statement, Factory.createExpressionStatement(incrementTempExpression, variable));
-            builder.emit(OpCode.Break, conditionLabel);
-            builder.endContinueBlock();
+            GeneratorFunctionBuilder.writeLocation(builder, node.initializer);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(incrementTempExpression, variable));
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, conditionLabel);
+            GeneratorFunctionBuilder.endContinueBlock(builder);
         }
 
         function rewriteSwitchStatement(node: SwitchStatement, state: RewriterState): void {
             var builder = state.builder;
             var defaultClauseIndex: number = -1;
-            var endLabel = builder.beginBreakBlock(getLabelNames(node), /*requireLabel*/ false);
+            var endLabel = GeneratorFunctionBuilder.beginBreakBlock(builder, getLabelNames(node), /*requireLabel*/ false);
 
             // map clauses to labels
             var clauseHasStatements: boolean[] = [];
@@ -1211,7 +1205,7 @@ module ts {
                 clauseHasStatements[clauseIndex] = !!(clause.statements && clause.statements.length);
                 if (clauseHasStatements[clauseIndex]) {
                     clauseLabelMap[clauseIndex] = clauseLabels.length;
-                    clauseLabels.push(builder.defineLabel());
+                    clauseLabels.push(GeneratorFunctionBuilder.defineLabel(builder));
                 } else {
                     clauseLabelMap[clauseIndex] = clauseLabels.length - 1;
                 }
@@ -1237,10 +1231,10 @@ module ts {
             // emit default case (if any, but not statements)
             if (defaultClauseIndex > -1) {
                 var defaultClauseLabel = clauseLabels[clauseLabelMap[defaultClauseIndex]];
-                builder.writeLocation(node.clauses[defaultClauseIndex]);
-                builder.emit(OpCode.Break, defaultClauseLabel);
+                GeneratorFunctionBuilder.writeLocation(builder, node.clauses[defaultClauseIndex]);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Break, defaultClauseLabel);
             } else {
-                builder.emit(OpCode.Break, endLabel);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Break, endLabel);
             }
 
             // emit switch states and statements
@@ -1250,11 +1244,11 @@ module ts {
                 }
                 var clause = node.clauses[clauseIndex];
                 var clauseLabel = clauseLabels[clauseLabelMap[clauseIndex]];
-                builder.markLabel(clauseLabel);
+                GeneratorFunctionBuilder.markLabel(builder, clauseLabel);
                 rewriteStatements(clause.statements, state);
             }
 
-            builder.endBreakBlock();
+            GeneratorFunctionBuilder.endBreakBlock(builder);
 
             function emitPartialSwitchStatement(): void {
                 var clauses: CaseOrDefaultClause[] = [];
@@ -1265,8 +1259,8 @@ module ts {
                         if (hasAwaitOrYield(caseClause.expression)) {
                             var clauseExpression = Visitor.visit(caseClause.expression, visitNode, state);
                             var clauseLabel = clauseLabels[clauseLabelMap[lastClauseOffset]];
-                            builder.writeLocation(caseClause.expression);
-                            var breakStatement = builder.createInlineBreak(clauseLabel);
+                            GeneratorFunctionBuilder.writeLocation(builder, caseClause.expression);
+                            var breakStatement = GeneratorFunctionBuilder.createInlineBreak(builder, clauseLabel);
                             clauses.push(Factory.createCaseClause(clauseExpression, [breakStatement]));
                             lastClauseOffset++;
                         }
@@ -1278,8 +1272,8 @@ module ts {
                     var clauseLabel = clauseLabels[clauseLabelMap[lastClauseOffset]];
                     if (clause.kind === SyntaxKind.CaseClause) {
                         var caseClause = <CaseClause>clause;
-                        builder.writeLocation(caseClause.expression);
-                        var inlineBreak = builder.createInlineBreak(clauseLabel);
+                        GeneratorFunctionBuilder.writeLocation(builder, caseClause.expression);
+                        var inlineBreak = GeneratorFunctionBuilder.createInlineBreak(builder, clauseLabel);
                         clauses.push(Factory.createCaseClause(Visitor.visit(caseClause.expression, visitNode, state), [inlineBreak]));
                     }
                     lastClauseOffset++;
@@ -1287,79 +1281,79 @@ module ts {
 
                 if (clauses.length) {
                     var switchStatement = Factory.createSwitchStatement(expression, clauses, node);
-                    builder.emit(OpCode.Statement, switchStatement);
+                    GeneratorFunctionBuilder.emit(builder, OpCode.Statement, switchStatement);
                 }
             }
         }
 
         function rewriteWithStatement(node: WithStatement, state: RewriterState): void {
             var builder = state.builder;
-            builder.beginWithBlock(cacheExpression(Visitor.visit(node.expression, visitNode, state), state));
+            GeneratorFunctionBuilder.beginWithBlock(builder, cacheExpression(Visitor.visit(node.expression, visitNode, state), state));
             rewriteBlockOrStatement(node.statement, state);
-            builder.endWithBlock();
+            GeneratorFunctionBuilder.endWithBlock(builder);
         }
 
         function rewriteLabeledStatement(node: LabeledStatement, state: RewriterState): void {
             var builder = state.builder;
             if (!isLabeledOrIterationOrSwitchStatement(node.statement)) {
-                builder.beginBreakBlock(getLabelNames(node), /*requireLabel*/ true);
+                GeneratorFunctionBuilder.beginBreakBlock(builder, getLabelNames(node), /*requireLabel*/ true);
             }
             rewriteBlockOrStatement(node.statement, state);
             if (!isLabeledOrIterationOrSwitchStatement(node.statement)) {
-                builder.endBreakBlock();
+                GeneratorFunctionBuilder.endBreakBlock(builder);
             }
         }
 
         function rewriteTryStatement(node: TryStatement, state: RewriterState): void {
             var builder = state.builder;
-            var endLabel = builder.beginExceptionBlock();
+            var endLabel = GeneratorFunctionBuilder.beginExceptionBlock(builder);
             rewriteBlock(node.tryBlock, state);
             if (node.catchClause) {
-                var variable = builder.declareLocal(/*name*/ undefined, /*globallyUnique*/ true);
+                var variable = GeneratorFunctionBuilder.declareLocal(builder, /*name*/ undefined, /*globallyUnique*/ true);
                 
                 // rename the symbol for the catch clause
                 if (node.catchClause.symbol) {
                     node.catchClause.symbol.generatedName = variable.text;
                 }
 
-                builder.beginCatchBlock(variable);
+                GeneratorFunctionBuilder.beginCatchBlock(builder, variable);
                 rewriteBlock(node.catchClause.block, state);
             }
             if (node.finallyBlock) {
-                builder.beginFinallyBlock();
+                GeneratorFunctionBuilder.beginFinallyBlock(builder);
                 rewriteBlock(node.finallyBlock, state);
             }
-            builder.endExceptionBlock();
+            GeneratorFunctionBuilder.endExceptionBlock(builder);
         }
 
         function rewriteReturnStatement(node: ReturnStatement, state: RewriterState): void {
             var builder = state.builder;
             var expression = Visitor.visit(node.expression, visitNode, state);
-            builder.writeLocation(node);
-            builder.emit(OpCode.Return, expression);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Return, expression);
         }
 
         function rewriteThrowStatement(node: ThrowStatement, state: RewriterState): void {
             var builder = state.builder;
             var expression = Visitor.visit(node.expression, visitNode, state);
-            builder.writeLocation(node);
-            builder.emit(OpCode.Throw, expression);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Throw, expression);
         }
 
         function rewriteBreakStatement(node: BreakOrContinueStatement, state: RewriterState): void {
             var builder = state.builder;
-            var label = builder.findBreakTarget(node.label && node.label.text);
+            var label = GeneratorFunctionBuilder.findBreakTarget(builder, node.label && node.label.text);
             Debug.assert(label > 0, "Expected break statement to point to a label.");
-            builder.writeLocation(node);
-            builder.emit(OpCode.Break, label);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, label);
         }
 
         function rewriteContinueStatement(node: BreakOrContinueStatement, state: RewriterState): void {
             var builder = state.builder;
-            var label = builder.findContinueTarget(node.label && node.label.text);
+            var label = GeneratorFunctionBuilder.findContinueTarget(builder, node.label && node.label.text);
             Debug.assert(label > 0, "Expected continue statement to point to a label.");
-            builder.writeLocation(node);
-            builder.emit(OpCode.Break, label);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.emit(builder, OpCode.Break, label);
         }
 
         function rewriteStatements(statements: Statement[], state: RewriterState): void {
@@ -1420,8 +1414,8 @@ module ts {
 
             var visited = Visitor.visit(node, visitNode, state);
             if (visited) {
-                builder.writeLocation(node);
-                builder.emit(OpCode.Statement, visited);
+                GeneratorFunctionBuilder.writeLocation(builder, node);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Statement, visited);
             }
         }
 
@@ -1433,15 +1427,15 @@ module ts {
 
             var visited = Visitor.visit(node, visitNode, state);
             if (visited) {
-                builder.writeLocation(node);
-                builder.emit(OpCode.Statement, visited);
+                GeneratorFunctionBuilder.writeLocation(builder, node);
+                GeneratorFunctionBuilder.emit(builder, OpCode.Statement, visited);
             }
         }
 
         function rewriteParameterDeclaration(node: ParameterDeclaration, state: RewriterState): void {
             var builder = state.builder;
             var parameterName: Identifier;
-            builder.writeLocation(node);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
             if (isBindingPattern(node.name)) {
                 parameterName = Locals.createUniqueIdentifier(state.locals);
             }
@@ -1449,14 +1443,14 @@ module ts {
                 parameterName = <Identifier>node.name;
             }
 
-            builder.writeLocation(node);
-            builder.addParameter(parameterName, node.flags);
+            GeneratorFunctionBuilder.writeLocation(builder, node);
+            GeneratorFunctionBuilder.addParameter(builder, parameterName, node.flags);
 
             if (isBindingPattern(node.name)) {
                 var declarations = BindingElementRewriter.rewrite(<BindingElement>node, state.locals, parameterName);
                 var expression = rewriteVariableDeclarations(node, declarations, state);
                 if (expression) {
-                    builder.emit(OpCode.Statement, expression);
+                    GeneratorFunctionBuilder.emit(builder, OpCode.Statement, expression);
                 }
             }
             else if (node.initializer) {

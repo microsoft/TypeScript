@@ -3100,12 +3100,12 @@ module ts {
 
                 if (node.flags & NodeFlags.Async) {
                     ensureLocals();
-                    node = AsyncFunctionRewriter.rewrite(node, resolver, locals, compilerOptions);
+                    node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);
                 }
 
                 if (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
                     ensureLocals();
-                    node = GeneratorFunctionRewriter.rewrite(node, resolver, locals);
+                    node = GeneratorFunctionRewriter.rewrite(node, locals);
                 }
 
                 emitSignatureParameters(node);

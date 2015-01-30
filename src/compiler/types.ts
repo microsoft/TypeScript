@@ -997,63 +997,101 @@ module ts {
         variables?: Identifier[];
     }
 
-    export interface CodeGenerator {
-        writeLocation(location: TextRange): void;
-
-        declareLocal(name?: string, globallyUnique?: boolean): Identifier;
-
-        emit(code: OpCode): void;
-        emit(code: OpCode, node: Statement): void;
-        emit(code: OpCode, node: Expression): void;
-        emit(code: OpCode, left: Expression, right: Expression): void;
-
-        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
+    // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
+    export enum BlockAction {
+        Open,
+        Close,
     }
 
-    export interface StatementsGenerator extends CodeGenerator {
-        buildStatements(): Statement[];
+    // the kind for a generated code block in a FunctionBuilder
+    export enum BlockKind {
+        Exception,
+        ScriptBreak,
+        Break,
+        ScriptContinue,
+        Continue,
+        With
     }
 
-    export interface FunctionGenerator extends CodeGenerator {
-        addParameter(name: Identifier, flags?: NodeFlags): void;
-        addVariable(name: Identifier): void
-        addFunction(func: FunctionDeclaration): void;
+    // the state for a generated code exception block
+    export enum ExceptionBlockState {
+        Try,
+        Catch,
+        Finally,
+        Done
+    }
 
-        defineLabel(): Label;
-        markLabel(label: Label): void;
+    // a generated code block
+    export interface BlockScope {
+        kind: BlockKind;
+    }
 
-        beginExceptionBlock(): Label;
-        beginCatchBlock(variable: Identifier): void;
-        beginFinallyBlock(): void;
-        endExceptionBlock(): void;
+    // a generated exception block, used for 'try' statements
+    export interface ExceptionBlock extends BlockScope {
+        state: ExceptionBlockState;
+        startLabel: Label;
+        catchVariable?: Identifier;
+        catchLabel?: Label;
+        finallyLabel?: Label;
+        endLabel: Label;
+    }
 
-        findBreakTarget(labelText?: string): Label;
-        findContinueTarget(labelText?: string): Label;
+    // a generated block that tracks the target for a 'break' statement, used for 'switch' and labeled statements
+    export interface BreakBlock extends BlockScope {
+        breakLabel: Label;
+        labelText?: string[];
+        requireLabel?: boolean;
+    }
 
-        beginWithBlock(expression: Identifier): void;
-        endWithBlock(): void;
+    // a generated block that tracks the targets for 'break' and 'continue' statements, used for iteration statements
+    export interface ContinueBlock extends BreakBlock {
+        continueLabel: Label;
+    }
 
-        beginScriptContinueBlock(labelText: string[]): void;
-        endScriptContinueBlock(): void;
-        beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void;
-        endScriptBreakBlock(): void;
-        beginContinueBlock(continueLabel: Label, labelText: string[]): Label;
-        endContinueBlock(): void;
-        beginBreakBlock(labelText: string[], requireLabel: boolean): Label;
-        endBreakBlock(): void;
+    // a generated block associated with a 'with' statement
+    export interface WithBlock extends BlockScope {
+        expression: Identifier;
+        startLabel: Label;
+        endLabel: Label;
+    }
 
-        emit(code: OpCode): void;
-        emit(code: OpCode, label: Label): void;
-        emit(code: OpCode, label: Label, condition: Expression): void;
-        emit(code: OpCode, node: Statement): void;
-        emit(code: OpCode, node: Expression): void;
-        emit(code: OpCode, left: Expression, right: Expression): void;
+    // flags used by a FunctionBuilder
+    export enum FunctionBuilderFlags {
+        HasProtectedRegions = 0x1,
+    }
 
-        createInlineBreak(label: Label): ReturnStatement;
-        createInlineReturn(expression: Expression): ReturnStatement;
-        createResume(): LeftHandSideExpression;
+    // state information used to build a generator function
+    export interface GeneratorFunctionBuilder {
+        locals: Locals;
 
-        buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration;
+        // flags
+        flags: FunctionBuilderFlags;
+
+        // locations
+        pendingLocation?: TextRange;
+
+        // parameters/hoisted functions
+        parameters?: ParameterDeclaration[];
+        functions?: FunctionDeclaration[];
+
+        // blocks
+        blocks?: BlockScope[];
+        blockStack?: BlockScope[];
+        blockActions?: BlockAction[];
+        blockOffsets?: number[];
+
+        // labels
+        nextLabelId: number;
+        labelNumbers?: number[];
+        labels?: number[];
+
+        // operations
+        operations?: OpCode[];
+        operationArguments?: any[][];
+        operationLocations?: TextRange[];
+
+        // reusable state
+        state?: Identifier;
     }
 
     export interface SourceMapSpan {

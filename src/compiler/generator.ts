@@ -65,204 +65,91 @@ module ts {
         }
     }
 
-    enum BlockAction {
-        Open,
-        Close,
-    }
+    export module GeneratorFunctionBuilder {
+        interface StatementBuilder {
+            builder: GeneratorFunctionBuilder;
+            operationIndex: number;
+            blockIndex: number;
+            labelNumber: number;
+            lastOperationWasAbrupt?: boolean;
+            lastOperationWasCompletion?: boolean;
+            clauses?: CaseClause[];
+            statements?: Statement[];
+            exceptionBlockStack?: ExceptionBlock[];
+            currentExceptionBlock?: ExceptionBlock;
+            withBlockStack?: WithBlock[];
+        }
 
-    enum BlockKind {
-        Exception,
-        ScriptBreak,
-        Break,
-        ScriptContinue,
-        Continue,
-        With
-    }
-
-    enum ExceptionBlockState {
-        Try,
-        Catch,
-        Finally,
-        Done
-    }
-
-    interface BlockScope {
-        kind: BlockKind;
-    }
-
-    interface ExceptionBlock extends BlockScope {
-        state: ExceptionBlockState;
-        startLabel: Label;
-        catchVariable?: Identifier;
-        catchLabel?: Label;
-        finallyLabel?: Label;
-        endLabel: Label;
-    }
-
-    interface BreakBlock extends BlockScope {
-        breakLabel: Label;
-        labelText?: string[];
-        requireLabel?: boolean;
-    }
-
-    interface ContinueBlock extends BreakBlock {
-        continueLabel: Label;
-    }
-
-    interface WithBlock extends BlockScope {
-        expression: Identifier;
-        startLabel: Label;
-        endLabel: Label;
-    }
-
-    export function createStatementsGenerator(locals: Locals): StatementsGenerator {
-        return <StatementsGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ true);
-    }
-
-    export function createGeneratorFunctionGenerator(locals: Locals): FunctionGenerator {
-        return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false);
-    }
-
-    export function createAsyncFunctionGenerator(locals: Locals, promiseConstructor: EntityName): FunctionGenerator {
-        return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false, promiseConstructor);
-    }
-
-    function createCodeGenerator(locals: Locals, isStatementsGenerator: boolean, promiseConstructor?: EntityName): CodeGenerator {
-        // locations
-        var pendingLocation: TextRange;
-
-        // locals/hoisted variables/hoisted functions
-        var parameters: ParameterDeclaration[];
-        var functions: FunctionDeclaration[];
-
-        // blocks
-        var blocks: BlockScope[];
-        var blockStack: BlockScope[];
-        var blockActions: BlockAction[];
-        var blockOffsets: number[];
-        var hasProtectedRegions: boolean;
-
-        // labels
-        var nextLabelId: number = 1;
-        var labelNumbers: number[];
-        var labels: number[];
-
-        // operations
-        var operations: OpCode[];
-        var operationArguments: any[][];
-        var operationLocations: TextRange[];
-
-        var state: Identifier;
-
-        function createStatementsGenerator(): StatementsGenerator {
+        export function create(locals: Locals): GeneratorFunctionBuilder {
             return {
-                writeLocation,
-                declareLocal,
-                defineLabel,
-                markLabel,
-                emit,
-                createUniqueIdentifier,
-                buildStatements
+                locals,
+                flags: 0,
+                nextLabelId: 1
             };
         }
 
-        function createFunctionGenerator(): FunctionGenerator {
-            return {
-                writeLocation,
-                addParameter,
-                addVariable,
-                addFunction,
-                declareLocal,
-                defineLabel,
-                markLabel,
-                beginExceptionBlock,
-                beginCatchBlock,
-                beginFinallyBlock,
-                endExceptionBlock,
-                beginWithBlock,
-                endWithBlock,
-                findBreakTarget,
-                findContinueTarget,
-                beginScriptContinueBlock,
-                endScriptContinueBlock,
-                beginScriptBreakBlock,
-                endScriptBreakBlock,
-                beginContinueBlock,
-                endContinueBlock,
-                beginBreakBlock,
-                endBreakBlock,
-                emit,
-                createUniqueIdentifier,
-                createInlineBreak,
-                createInlineReturn,
-                createResume,
-                buildFunction
-            };
-        }
-
-        return isStatementsGenerator ? createStatementsGenerator() : createFunctionGenerator();
-
-        function declareLocal(name?: string, globallyUnique?: boolean): Identifier {
-            var local = Locals.createUniqueIdentifier(locals, name, globallyUnique);
-            Locals.recordVariable(locals, local);
+        export function declareLocal(builder: GeneratorFunctionBuilder, name?: string, globallyUnique?: boolean): Identifier {
+            var local = Locals.createUniqueIdentifier(builder.locals, name, globallyUnique);
+            Locals.recordVariable(builder.locals, local);
             return local;
         }
 
-        function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
-            return Locals.createUniqueIdentifier(locals, name, globallyUnique);
+        export function writeLocation(builder: GeneratorFunctionBuilder, location: TextRange): void {
+            builder.pendingLocation = location;
         }
 
-        function writeLocation(location: TextRange): void {
-            pendingLocation = location;
-        }
-
-        function readLocation(): TextRange {
-            var location = pendingLocation;
-            pendingLocation = undefined;
+        function readLocation(builder: GeneratorFunctionBuilder): TextRange {
+            var location = builder.pendingLocation;
+            builder.pendingLocation = undefined;
             return location;
         }
 
-        function addParameter(name: Identifier, flags?: NodeFlags): void {
-            if (!parameters) parameters = [];
-            parameters.push(Factory.createParameterDeclaration(
+        export function addParameter(builder: GeneratorFunctionBuilder, name: Identifier, flags?: NodeFlags): void {
+            if (!builder.parameters) {
+                builder.parameters = [];
+            }
+
+            builder.parameters.push(Factory.createParameterDeclaration(
                 name, 
                 /*initializer*/ undefined,
                 /*type*/ undefined, 
                 /*modifiers*/ undefined, 
                 /*dotDotDotToken*/ undefined,
                 /*questionToken*/ undefined,
-                readLocation(),
+                readLocation(builder),
                 flags));
         }
 
-        function addVariable(name: Identifier, flags?: NodeFlags): void {
-            Locals.recordVariable(locals, name);
+        export function addVariable(builder: GeneratorFunctionBuilder, name: Identifier, flags?: NodeFlags): void {
+            Locals.recordVariable(builder.locals, name);
         }
 
-        function addFunction(func: FunctionDeclaration): void {
-            if (!functions) {
-                functions = [];
+        export function addFunction(builder: GeneratorFunctionBuilder, func: FunctionDeclaration): void {
+            if (!builder.functions) {
+                builder.functions = [];
             }
-            functions.push(func);
+            builder.functions.push(func);
         }
 
-        function defineLabel(): Label {
-            if (!labels) labels = [];
-            var label = nextLabelId++;
-            labels[label] = -1;
+        export function defineLabel(builder: GeneratorFunctionBuilder): Label {
+            if (!builder.labels) {
+                builder.labels = [];
+            }
+            var label = builder.nextLabelId++;
+            builder.labels[label] = -1;
             return <Label>label;
         }
 
-        function markLabel(label: Label): void {
-            Debug.assert(!!labels, "No labels were defined.");
-            labels[<number>label] = operations ? operations.length : 0;
+        export function markLabel(builder: GeneratorFunctionBuilder, label: Label): void {
+            Debug.assert(!!builder.labels, "No labels were defined.");
+            builder.labels[<number>label] = builder.operations ? builder.operations.length : 0;
         }
 
-        function beginWithBlock(expression: Identifier): void {
-            var startLabel = defineLabel();
-            var endLabel = defineLabel();
-            markLabel(startLabel);
-            beginBlock(<WithBlock>{
+        export function beginWithBlock(builder: GeneratorFunctionBuilder, expression: Identifier): void {
+            var startLabel = defineLabel(builder);
+            var endLabel = defineLabel(builder);
+            markLabel(builder, startLabel);
+            beginBlock<WithBlock>(builder, {
                 kind: BlockKind.With,
                 expression,
                 startLabel,
@@ -270,80 +157,80 @@ module ts {
             });
         }
 
-        function endWithBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.With);
-            var withBlock = endBlock<WithBlock>();
-            markLabel(withBlock.endLabel);
+        export function endWithBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.With);
+            var withBlock = endBlock<WithBlock>(builder);
+            markLabel(builder, withBlock.endLabel);
         }
 
-        function beginExceptionBlock(): Label {
-            var startLabel = defineLabel();
-            var endLabel = defineLabel();
-            markLabel(startLabel);
-            beginBlock(<ExceptionBlock>{
+        export function beginExceptionBlock(builder: GeneratorFunctionBuilder): Label {
+            var startLabel = defineLabel(builder);
+            var endLabel = defineLabel(builder);
+            markLabel(builder, startLabel);
+            beginBlock<ExceptionBlock>(builder, {
                 kind: BlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
                 endLabel
             });
-            hasProtectedRegions = true;
+            builder.flags |= FunctionBuilderFlags.HasProtectedRegions;
             return endLabel;
         }
 
-        function beginCatchBlock(variable: Identifier): void {
-            Debug.assert(peekBlockKind() === BlockKind.Exception);
+        export function beginCatchBlock(builder: GeneratorFunctionBuilder, variable: Identifier): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.Exception);
 
-            var exception = <ExceptionBlock>peekBlock();
+            var exception = <ExceptionBlock>peekBlock(builder);
             Debug.assert(exception.state < ExceptionBlockState.Catch);
 
             var endLabel = exception.endLabel;
-            emit(OpCode.Break, endLabel);
+            emit(builder, OpCode.Break, endLabel);
 
-            var catchLabel = defineLabel();
-            markLabel(catchLabel);
+            var catchLabel = defineLabel(builder);
+            markLabel(builder, catchLabel);
             exception.state = ExceptionBlockState.Catch;
             exception.catchVariable = variable;
             exception.catchLabel = catchLabel;
 
-            var state = getState();
+            var state = getState(builder);
             var errorProperty = Factory.createPropertyAccessExpression(state, Factory.createIdentifier("error"));
             var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, errorProperty);
-            emit(OpCode.Statement, assignExpression);
+            emit(builder, OpCode.Statement, assignExpression);
         }
 
-        function beginFinallyBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.Exception);
+        export function beginFinallyBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.Exception);
 
-            var exception = <ExceptionBlock>peekBlock();
+            var exception = <ExceptionBlock>peekBlock(builder);
             Debug.assert(exception.state < ExceptionBlockState.Finally);
 
             var state = exception.state;
             var endLabel = exception.endLabel;
-            emit(OpCode.Break, endLabel);
+            emit(builder, OpCode.Break, endLabel);
 
-            var finallyLabel = defineLabel();
-            markLabel(finallyLabel);
+            var finallyLabel = defineLabel(builder);
+            markLabel(builder, finallyLabel);
             exception.state = ExceptionBlockState.Finally;
             exception.finallyLabel = finallyLabel;
         }
 
-        function endExceptionBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.Exception);
-            var exception = endBlock<ExceptionBlock>();
+        export function endExceptionBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.Exception);
+            var exception = endBlock<ExceptionBlock>(builder);
             var state = exception.state;
             if (state < ExceptionBlockState.Finally) {
-                emit(OpCode.Break, exception.endLabel);
+                emit(builder, OpCode.Break, exception.endLabel);
             }
             else {
-                emit(OpCode.Endfinally);
+                emit(builder, OpCode.Endfinally);
             }
 
-            markLabel(exception.endLabel);
+            markLabel(builder, exception.endLabel);
             exception.state = ExceptionBlockState.Done;
         }
 
-        function beginScriptContinueBlock(labelText: string[]): void {
-            beginBlock<ContinueBlock>({
+        export function beginScriptContinueBlock(builder: GeneratorFunctionBuilder, labelText: string[]): void {
+            beginBlock<ContinueBlock>(builder, {
                 kind: BlockKind.ScriptContinue,
                 labelText: labelText,
                 breakLabel: -1,
@@ -351,13 +238,13 @@ module ts {
             });
         }
 
-        function endScriptContinueBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.ScriptContinue);
-            endBlock<ContinueBlock>();
+        export function endScriptContinueBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.ScriptContinue);
+            endBlock<ContinueBlock>(builder);
         }
 
-        function beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void {
-            beginBlock<BreakBlock>({
+        export function beginScriptBreakBlock(builder: GeneratorFunctionBuilder, labelText: string[], requireLabel: boolean): void {
+            beginBlock<BreakBlock>(builder, {
                 kind: BlockKind.ScriptBreak,
                 labelText: labelText,
                 breakLabel: -1,
@@ -365,14 +252,14 @@ module ts {
             });
         }
 
-        function endScriptBreakBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.ScriptBreak);
-            endBlock<BreakBlock>();
+        export function endScriptBreakBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.ScriptBreak);
+            endBlock<BreakBlock>(builder);
         }
 
-        function beginContinueBlock(continueLabel: Label, labelText: string[]): Label {
-            var breakLabel = defineLabel();
-            beginBlock<ContinueBlock>({
+        export function beginContinueBlock(builder: GeneratorFunctionBuilder, continueLabel: Label, labelText: string[]): Label {
+            var breakLabel = defineLabel(builder);
+            beginBlock<ContinueBlock>(builder, {
                 kind: BlockKind.Continue,
                 labelText: labelText,
                 breakLabel: breakLabel,
@@ -381,18 +268,18 @@ module ts {
             return breakLabel;
         }
 
-        function endContinueBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.Continue);
-            var block = endBlock<BreakBlock>();
+        export function endContinueBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.Continue);
+            var block = endBlock<BreakBlock>(builder);
             var breakLabel = block.breakLabel;
             if (breakLabel > 0) {
-                markLabel(breakLabel);
+                markLabel(builder, breakLabel);
             }
         }
 
-        function beginBreakBlock(labelText: string[], requireLabel: boolean): Label {
-            var breakLabel = defineLabel();
-            beginBlock<BreakBlock>({
+        export function beginBreakBlock(builder: GeneratorFunctionBuilder, labelText: string[], requireLabel: boolean): Label {
+            var breakLabel = defineLabel(builder);
+            beginBlock<BreakBlock>(builder, {
                 kind: BlockKind.Break,
                 labelText: labelText,
                 breakLabel: breakLabel,
@@ -401,57 +288,57 @@ module ts {
             return breakLabel;
         }
 
-        function endBreakBlock(): void {
-            Debug.assert(peekBlockKind() === BlockKind.Break);
-            var block = endBlock<BreakBlock>();
+        export function endBreakBlock(builder: GeneratorFunctionBuilder): void {
+            Debug.assert(peekBlockKind(builder) === BlockKind.Break);
+            var block = endBlock<BreakBlock>(builder);
             var breakLabel = block.breakLabel;
             if (breakLabel > 0) {
-                markLabel(breakLabel);
+                markLabel(builder, breakLabel);
             }
         }
 
-        function beginBlock<TBlock extends BlockScope>(block: TBlock): number {
-            if (!blocks) {
-                blocks = [];
-                blockActions = [];
-                blockOffsets = [];
-                blockStack = [];
+        function beginBlock<TBlock extends BlockScope>(builder: GeneratorFunctionBuilder, block: TBlock): number {
+            if (!builder.blocks) {
+                builder.blocks = [];
+                builder.blockActions = [];
+                builder.blockOffsets = [];
+                builder.blockStack = [];
             }
 
-            var index = blockActions.length;
-            blockActions[index] = BlockAction.Open;
-            blockOffsets[index] = operations ? operations.length : 0;
-            blocks[index] = block;
-            blockStack.push(block);
+            var index = builder.blockActions.length;
+            builder.blockActions[index] = BlockAction.Open;
+            builder.blockOffsets[index] = builder.operations ? builder.operations.length : 0;
+            builder.blocks[index] = block;
+            builder.blockStack.push(block);
             return index;
         }
 
-        function endBlock<TBlock extends BlockScope>(): TBlock {
-            Debug.assert(!!blocks, "beginBlock was never called.");
-            var block = blockStack.pop();
-            var index = blockActions.length;
-            blockActions[index] = BlockAction.Close;
-            blockOffsets[index] = operations ? operations.length : 0;
-            blocks[index] = block;
+        function endBlock<TBlock extends BlockScope>(builder: GeneratorFunctionBuilder): TBlock {
+            Debug.assert(!!builder.blocks, "beginBlock was never called.");
+            var block = builder.blockStack.pop();
+            var index = builder.blockActions.length;
+            builder.blockActions[index] = BlockAction.Close;
+            builder.blockOffsets[index] = builder.operations ? builder.operations.length : 0;
+            builder.blocks[index] = block;
             return <TBlock>block;
         }
 
-        function peekBlock(back: number = 0): BlockScope {
-            if (blocks) {
-                return blockStack[blockStack.length - (1 + back)];
+        function peekBlock(builder: GeneratorFunctionBuilder, back: number = 0): BlockScope {
+            if (builder.blocks) {
+                return builder.blockStack[builder.blockStack.length - (1 + back)];
             }
         }
 
-        function peekBlockKind(back: number = 0): BlockKind {
-            var block = peekBlock(back);
+        function peekBlockKind(builder: GeneratorFunctionBuilder, back: number = 0): BlockKind {
+            var block = peekBlock(builder, back);
             return block && block.kind;
         }
 
-        function findBreakTarget(labelText?: string): Label {
-            if (blocks) {
-                for (var i = blockStack.length - 1; i >= 0; i--) {
-                    var block = blockStack[i];
-                    if (supportsBreak(block)) {
+        export function findBreakTarget(builder: GeneratorFunctionBuilder, labelText?: string): Label {
+            if (builder.blocks) {
+                for (var i = builder.blockStack.length - 1; i >= 0; i--) {
+                    var block = builder.blockStack[i];
+                    if (supportsBreak(builder, block)) {
                         var breakBlock = <BreakBlock>block;
                         if ((!labelText && !breakBlock.requireLabel) || breakBlock.labelText && breakBlock.labelText.indexOf(labelText) !== -1) {
                             return breakBlock.breakLabel;
@@ -463,11 +350,11 @@ module ts {
             return 0;
         }
 
-        function findContinueTarget(labelText?: string): Label {
-            if (blocks) {
-                for (var i = blockStack.length - 1; i >= 0; i--) {
-                    var block = blockStack[i];
-                    if (supportsContinue(block)) {
+        export function findContinueTarget(builder: GeneratorFunctionBuilder, labelText?: string): Label {
+            if (builder.blocks) {
+                for (var i = builder.blockStack.length - 1; i >= 0; i--) {
+                    var block = builder.blockStack[i];
+                    if (supportsContinue(builder, block)) {
                         var continueBreakBlock = <ContinueBlock>block;
                         if (!labelText || continueBreakBlock.labelText && continueBreakBlock.labelText.indexOf(labelText) !== -1) {
                             return continueBreakBlock.continueLabel;
@@ -477,7 +364,7 @@ module ts {
             }
         }
 
-        function supportsBreak(block: BlockScope): boolean {
+        function supportsBreak(builder: GeneratorFunctionBuilder, block: BlockScope): boolean {
             switch (block.kind) {
                 case BlockKind.ScriptBreak:
                 case BlockKind.ScriptContinue:
@@ -488,7 +375,7 @@ module ts {
             return false;
         }
 
-        function supportsContinue(block: BlockScope): boolean {
+        function supportsContinue(builder: GeneratorFunctionBuilder, block: BlockScope): boolean {
             switch (block.kind) {
                 case BlockKind.ScriptContinue:
                 case BlockKind.Continue:
@@ -496,6 +383,421 @@ module ts {
             }
             return false;
         }
+
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, label: Label): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, label: Label, condition: Expression): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, node: Statement): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, node: Expression): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, left: Expression, right: Expression): void;
+        export function emit(builder: GeneratorFunctionBuilder, code: OpCode, ...args: any[]): void {
+            switch (code) {
+                case OpCode.Assign:
+                case OpCode.Statement:
+                case OpCode.Return:
+                case OpCode.Throw:
+                case OpCode.Break:
+                case OpCode.BrFalse:
+                case OpCode.BrTrue:
+                case OpCode.Endfinally:
+                case OpCode.Yield:
+                case OpCode.YieldStar:
+                    break;
+
+                default:
+                    reportUnexpectedOpCode(code);
+                    return;
+            }
+
+            var location = readLocation(builder);
+            if (code === OpCode.Statement) {
+                var node = args[0];
+                if (!node) {
+                    return;
+                }
+            }
+
+            if (!builder.operations) {
+                builder.operations = [];
+                builder.operationArguments = [];
+                builder.operationLocations = [];
+            }
+
+            if (!builder.labels) {
+                // mark entry point
+                markLabel(builder, defineLabel(builder));
+            }
+
+            var operationIndex = builder.operations.length;
+            builder.operations[operationIndex] = code;
+            builder.operationArguments[operationIndex] = args;
+            builder.operationLocations[operationIndex] = location;
+        }
+
+        function createLabel(builder: GeneratorFunctionBuilder, label: Label): GeneratedLabel {
+            if (!builder.labelNumbers) {
+                builder.labelNumbers = [];
+            }
+            return Factory.createGeneratedLabel(label, builder.labelNumbers);
+        }
+
+        export function createInlineBreak(builder: GeneratorFunctionBuilder, label: Label): ReturnStatement {
+            var instruction = Factory.createNumericLiteral('3 /*break*/');
+            var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(builder, label)]);
+            return Factory.createReturnStatement(returnExpression, readLocation(builder));
+        }
+
+        export function createInlineReturn(builder: GeneratorFunctionBuilder, expression: Expression): ReturnStatement {
+            var instruction = Factory.createNumericLiteral('3 /*return*/');
+            if (expression) {
+                var returnExpression = Factory.createArrayLiteralExpression([instruction, expression]);
+            } else {
+                var returnExpression = Factory.createArrayLiteralExpression([instruction]);
+            }
+            return Factory.createReturnStatement(returnExpression, readLocation(builder));
+        }
+
+        export function createResume(builder: GeneratorFunctionBuilder): LeftHandSideExpression {
+            var state = getState(builder);
+            return Factory.createPropertyAccessExpression(state, Factory.createIdentifier("sent"));
+        }
+
+        function getState(builder: GeneratorFunctionBuilder): Identifier {
+            if (!builder.state) {
+                builder.state = Locals.createUniqueIdentifier(builder.locals, "_state");
+            }
+            return builder.state;
+        }
+
+        export function buildFunction(builder: GeneratorFunctionBuilder, kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration {
+            var statements: Statement[] = [];
+            statements = buildHoistedFunctionDeclarations(builder, statements);
+
+            var generatorStatements = buildStatements(builder);
+            var generatorFunctionBody = Factory.createBlock(generatorStatements);
+            var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, [Factory.createParameterDeclaration(getState(builder))], generatorFunctionBody);
+            var generatorExpression = Factory.createCallExpression(Factory.createIdentifier("__generator"), [generatorFunction]);
+            var returnStatement = Factory.createReturnStatement(generatorExpression);
+            statements.push(returnStatement);
+
+            var body = Factory.createBlock(Factory.createNodeArray<Statement>(statements));
+
+            var node: FunctionLikeDeclaration;
+            switch (kind) {
+                case SyntaxKind.FunctionDeclaration:
+                    return Factory.createFunctionDeclaration(<Identifier>name, builder.parameters, body, undefined, undefined, modifiers, undefined, location, flags);
+                case SyntaxKind.MethodDeclaration:
+                    return Factory.createMethodDeclaration(name, builder.parameters, body, undefined, undefined, modifiers, undefined, location, flags);
+                case SyntaxKind.GetAccessor:
+                    return Factory.createGetAccessor(name, builder.parameters, body, undefined, undefined, modifiers, location, flags);
+                case SyntaxKind.FunctionExpression:
+                    return Factory.createFunctionExpression(<Identifier>name, builder.parameters, body, undefined, undefined, modifiers, undefined, location, flags);
+                case SyntaxKind.ArrowFunction:
+                    return Factory.createArrowFunction(builder.parameters, body, undefined, undefined, modifiers, location, flags);
+                default:
+                    reportUnexpectedNode(node);
+                    return node;
+            }
+        }
+
+        function buildHoistedFunctionDeclarations(builder: GeneratorFunctionBuilder, statements: Statement[]): Statement[] {
+            if (builder.functions) {
+                statements = statements.concat(builder.functions);
+            }
+            return statements;
+        }
+
+        function buildStatements(builder: GeneratorFunctionBuilder): Statement[] {
+            var { operations, operationArguments, operationLocations } = builder;
+            var statementBuilder: StatementBuilder = {
+                builder,
+                operationIndex: 0,
+                blockIndex: 0,
+                labelNumber: 0
+            };
+
+            if (builder.flags & FunctionBuilderFlags.HasProtectedRegions) {
+                initializeProtectedRegions(statementBuilder);
+            }
+
+            if (operations) {
+                for (statementBuilder.operationIndex = 0; statementBuilder.operationIndex < operations.length; statementBuilder.operationIndex++) {
+                    writeOperation(
+                        statementBuilder,
+                        operations[statementBuilder.operationIndex],
+                        operationArguments[statementBuilder.operationIndex],
+                        operationLocations[statementBuilder.operationIndex]);
+                }
+            }
+
+            flushFinalLabel(statementBuilder);
+
+            if (statementBuilder.clauses) {
+                var state = getState(builder);
+                var labelExpression = Factory.createPropertyAccessExpression(state, Factory.createIdentifier("label"));
+                var switchStatement = Factory.createSwitchStatement(labelExpression, statementBuilder.clauses);
+                return [switchStatement];
+            }
+
+            if (statementBuilder.statements) {
+                return statementBuilder.statements;
+            }
+
+            return [];
+        }
+
+        function initializeProtectedRegions(statementBuilder: StatementBuilder): void {
+            var trysProperty = Factory.createPropertyAccessExpression(getState(statementBuilder.builder), Factory.createIdentifier("trys"));
+            var trysArray = Factory.createArrayLiteralExpression([]);
+            var assignTrys = Factory.createBinaryExpression(SyntaxKind.EqualsToken, trysProperty, trysArray);
+            writeStatement(statementBuilder, assignTrys);
+            flushLabel(statementBuilder);
+        }
+
+        function flushLabel(statementBuilder: StatementBuilder): void {
+            if (!statementBuilder.statements) {
+                return;
+            }
+
+            appendLabel(statementBuilder, /*markLabelEnd*/ !statementBuilder.lastOperationWasAbrupt);
+
+            statementBuilder.lastOperationWasAbrupt = false;
+            statementBuilder.lastOperationWasCompletion = false;
+            statementBuilder.labelNumber++;
+        }
+
+        function flushFinalLabel(statementBuilder: StatementBuilder): void {
+            if (!statementBuilder.lastOperationWasCompletion) {
+                tryEnterLabel(statementBuilder);
+                writeReturn(statementBuilder);
+            }
+
+            if (statementBuilder.statements && statementBuilder.clauses) {
+                appendLabel(statementBuilder, /*markLabelEnd*/ false);
+            }
+        }
+
+        function appendLabel(statementBuilder: StatementBuilder, markLabelEnd: boolean): void {
+            var { builder, statements, withBlockStack, currentExceptionBlock, labelNumber } = statementBuilder;
+            if (!statementBuilder.clauses) {
+                statementBuilder.clauses = [];
+            }
+
+            if (statements) {
+                if (withBlockStack) {
+                    for (var i = withBlockStack.length - 1; i >= 0; i--) {
+                        var withBlock = withBlockStack[i];
+                        statements = [Factory.createWithStatement(withBlock.expression, Factory.createBlock(statements))];
+                    }
+                }
+                if (currentExceptionBlock) {
+                    var startLabel = createLabel(builder, currentExceptionBlock.startLabel);
+                    var endLabel = createLabel(builder, currentExceptionBlock.endLabel);
+                    var catchLabel: Expression;
+                    if (currentExceptionBlock.catchLabel > 0) {
+                        catchLabel = createLabel(builder, currentExceptionBlock.catchLabel);
+                    }
+                    else {
+                        catchLabel = Factory.createOmittedExpression();
+                    }
+
+                    var finallyLabel: Expression;
+                    if (currentExceptionBlock.finallyLabel > 0) {
+                        finallyLabel = createLabel(builder, currentExceptionBlock.finallyLabel);
+                    }
+                    else {
+                        finallyLabel = Factory.createOmittedExpression();
+                    }
+
+                    var labelsArray = Factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
+                    var trysProperty = Factory.createPropertyAccessExpression(getState(builder), Factory.createIdentifier("trys"));
+                    var pushMethod = Factory.createPropertyAccessExpression(trysProperty, Factory.createIdentifier("push"));
+                    var callExpression = Factory.createCallExpression(pushMethod, [labelsArray]);
+                    statements.unshift(Factory.createExpressionStatement(callExpression));
+                    statementBuilder.currentExceptionBlock = undefined;
+                }
+                if (markLabelEnd) {
+                    var nextLabelNumberExpression = Factory.createNumericLiteral(labelNumber + 1);
+                    var labelProperty = Factory.createPropertyAccessExpression(getState(builder), Factory.createIdentifier("label"));
+                    var labelAssign = Factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelNumberExpression);
+                    statements.push(Factory.createExpressionStatement(labelAssign));
+                }
+            }
+
+            var labelNumberExpression = Factory.createNumericLiteral(labelNumber);
+            var clause = Factory.createCaseClause(labelNumberExpression, statements || []);
+            statementBuilder.clauses.push(clause);
+            statementBuilder.statements = undefined;
+        }
+
+        function tryEnterLabel(statementBuilder: StatementBuilder): void {
+            var { operationIndex, builder } = statementBuilder,
+                { labels } = builder;
+
+            if (!labels) {
+                return;
+            }
+
+            var isLabel: boolean = false;
+            for (var label = 0; label < labels.length; label++) {
+                if (labels[label] === operationIndex) {
+                    flushLabel(statementBuilder);
+                    if (!builder.labelNumbers) {
+                        builder.labelNumbers = [];
+                    }
+                    builder.labelNumbers[label] = statementBuilder.labelNumber;
+                }
+            }
+        }
+
+        function tryEnterOrLeaveBlock(statementBuilder: StatementBuilder): void {
+            var { operationIndex, builder: { blocks, blockActions, blockOffsets } } = statementBuilder;
+            if (blocks) {
+                for (; statementBuilder.blockIndex < blockActions.length && blockOffsets[statementBuilder.blockIndex] <= operationIndex; statementBuilder.blockIndex++) {
+                    statementBuilder.blockIndex = statementBuilder.blockIndex;
+                    var block = blocks[statementBuilder.blockIndex];
+                    var blockAction = blockActions[statementBuilder.blockIndex];
+                    if (blockAction === BlockAction.Open && block.kind === BlockKind.Exception) {
+                        var exceptionBlock = <ExceptionBlock>block;
+                        if (!statementBuilder.exceptionBlockStack) {
+                            statementBuilder.exceptionBlockStack = [];
+                        }
+
+                        statementBuilder.exceptionBlockStack.push(statementBuilder.currentExceptionBlock);
+                        statementBuilder.currentExceptionBlock = exceptionBlock;
+                    }
+                    else if (blockAction === BlockAction.Close && block.kind === BlockKind.Exception) {
+                        statementBuilder.currentExceptionBlock = statementBuilder.exceptionBlockStack.pop();
+                    }
+                    else if (blockAction === BlockAction.Open && block.kind === BlockKind.With) {
+                        var withBlock = <WithBlock>block;
+                        if (!statementBuilder.withBlockStack) {
+                            statementBuilder.withBlockStack = [];
+                        }
+                        statementBuilder.withBlockStack.push(withBlock);
+                    }
+                    else if (blockAction === BlockAction.Close && block.kind === BlockKind.With) {
+                        statementBuilder.withBlockStack.pop();
+                    }
+                }
+            }
+        }
+
+        // operations
+        function writeOperation(statementBuilder: StatementBuilder, operation: OpCode, operationArguments: any[], operationLocation: TextRange): void {
+            tryEnterLabel(statementBuilder);
+            tryEnterOrLeaveBlock(statementBuilder);
+
+            // early termination, nothing else to process in this label
+            if (statementBuilder.lastOperationWasAbrupt) {
+                return;
+            }
+
+            statementBuilder.lastOperationWasAbrupt = false;
+            statementBuilder.lastOperationWasCompletion = false;
+            switch (operation) {
+                case OpCode.Statement: return writeStatement(statementBuilder, <Node>operationArguments[0]);
+                case OpCode.Assign: return writeAssign(statementBuilder, <Expression>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.Break: return writeBreak(statementBuilder, <Label>operationArguments[0], operationLocation);
+                case OpCode.BrTrue: return writeBrTrue(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.BrFalse: return writeBrFalse(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.YieldStar: return writeYieldStar(statementBuilder, <Expression>operationArguments[0], operationLocation);
+                case OpCode.Yield: return writeYield(statementBuilder, <Expression>operationArguments[0], operationLocation);
+                case OpCode.Return: return writeReturn(statementBuilder, <Expression>operationArguments[0], operationLocation);
+                case OpCode.Throw: return writeThrow(statementBuilder, <Expression>operationArguments[0], operationLocation);
+                case OpCode.Endfinally: return writeEndfinally(statementBuilder);
+            }
+        }
+
+        function writeStatement(statementBuilder: StatementBuilder, node: Node): void {
+            if (isExpression(node)) {
+                node = Factory.createExpressionStatement(<Expression>node);
+            }
+            if (!statementBuilder.statements) {
+                statementBuilder.statements = [];
+            }
+            statementBuilder.statements.push(<Statement>node);
+        }
+
+        function writeAssign(statementBuilder: StatementBuilder, left: Expression, right: Expression, operationLocation?: TextRange): void {
+            var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, operationLocation);
+            writeStatement(statementBuilder, assignExpression);
+        }
+
+        function writeBreak(statementBuilder: StatementBuilder, label: Label, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            var instruction = Factory.createNumericLiteral('3 /*break*/');
+            var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(statementBuilder.builder, label)]);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            writeStatement(statementBuilder, returnStatement);
+        }
+
+        function writeBrTrue(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
+            var instruction = Factory.createNumericLiteral('3 /*break*/');
+            var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(statementBuilder.builder, label)]);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            var ifStatement = Factory.createIfStatement(condition, returnStatement);
+            writeStatement(statementBuilder, ifStatement);
+        }
+
+        function writeBrFalse(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
+            var instruction = Factory.createNumericLiteral('3 /*break*/');
+            var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(statementBuilder.builder, label)]);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            var parenExpression = Factory.createParenthesizedExpression(condition);
+            var notExpression = Factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, parenExpression);
+            var ifStatement = Factory.createIfStatement(notExpression, returnStatement);
+            writeStatement(statementBuilder, ifStatement);
+        }
+
+        function writeYield(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            var elements: Expression[] = [Factory.createNumericLiteral('4 /*yield*/')];
+            if (expression) {
+                elements.push(expression);
+            }
+            var returnExpression = Factory.createArrayLiteralExpression(elements);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            writeStatement(statementBuilder, returnStatement);
+        }
+
+        function writeYieldStar(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            var elements: Expression[] = [Factory.createNumericLiteral('5 /*yield**/')];
+            if (expression) {
+                elements.push(expression);
+            }
+            var returnExpression = Factory.createArrayLiteralExpression(elements);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            writeStatement(statementBuilder, returnStatement);
+        }
+
+        function writeReturn(statementBuilder: StatementBuilder, expression?: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            statementBuilder.lastOperationWasCompletion = true;
+            var elements: Expression[] = [Factory.createNumericLiteral('2 /*return*/')];
+            if (expression) {
+                elements.push(expression);
+            }
+            var returnExpression = Factory.createArrayLiteralExpression(elements);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            writeStatement(statementBuilder, returnStatement);
+        }
+
+        function writeThrow(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            statementBuilder.lastOperationWasCompletion = true;
+            var throwStatement = Factory.createThrowStatement(expression, operationLocation);
+            writeStatement(statementBuilder, throwStatement);
+        }
+
+        function writeEndfinally(statementBuilder: StatementBuilder): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            var instruction = Factory.createNumericLiteral('6 /*endfinally*/');
+            var returnExpression = Factory.createArrayLiteralExpression([instruction]);
+            var returnStatement = Factory.createReturnStatement(returnExpression);
+            writeStatement(statementBuilder, returnStatement);
+        }        
 
         function reportUnexpectedOpCode(code: OpCode): void {
             var text: string;
@@ -507,425 +809,6 @@ module ts {
             }
 
             Debug.fail("Unexpected OpCode: " + text);
-        }
-
-        function emit(code: OpCode, ...args: any[]): void {
-            switch (code) {
-                case OpCode.Assign:
-                case OpCode.Statement:
-                case OpCode.Return:
-                case OpCode.Throw:
-                    break;
-
-                case OpCode.Break:
-                case OpCode.BrFalse:
-                case OpCode.BrTrue:
-                case OpCode.Endfinally:
-                case OpCode.Yield:
-                case OpCode.YieldStar:
-                    if (!isStatementsGenerator) {
-                        break;
-                    }
-
-                default:
-                    reportUnexpectedOpCode(code);
-                    return;
-            }
-
-            var location = readLocation();
-            if (code === OpCode.Statement) {
-                var node = args[0];
-                if (!node) {
-                    return;
-                }
-            }
-
-            if (!operations) {
-                operations = [];
-                operationArguments = [];
-                operationLocations = [];
-            }
-
-            if (!labels) {
-                // mark entry point
-                markLabel(defineLabel());
-            }
-
-            var operationIndex = operations.length;
-            operations[operationIndex] = code;
-            operationArguments[operationIndex] = args;
-            operationLocations[operationIndex] = location;
-        }
-
-        function createLabel(label: Label): GeneratedLabel {
-            if (!labelNumbers) labelNumbers = [];
-            return Factory.createGeneratedLabel(label, labelNumbers);
-        }
-
-        function createInlineBreak(label: Label): ReturnStatement {
-            var instruction = Factory.createNumericLiteral('3 /*break*/');
-            var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-            return Factory.createReturnStatement(returnExpression, readLocation());
-        }
-
-        function createInlineReturn(expression: Expression): ReturnStatement {
-            var instruction = Factory.createNumericLiteral('3 /*return*/');
-            if (expression) {
-                var returnExpression = Factory.createArrayLiteralExpression([instruction, expression]);
-            } else {
-                var returnExpression = Factory.createArrayLiteralExpression([instruction]);
-            }
-            return Factory.createReturnStatement(returnExpression, readLocation());
-        }
-
-        function createResume(): LeftHandSideExpression {
-            var state = getState();
-            return Factory.createPropertyAccessExpression(state, Factory.createIdentifier("sent"));
-        }
-
-        function getState(): Identifier {
-            if (!state) {
-                state = createUniqueIdentifier("_state");
-            }
-            return state;
-        }
-
-        function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration {
-            var statements: Statement[] = [];
-            statements = buildHoistedFunctionDeclarations(statements);
-            var generatorStatements = buildStatements(/*forceReturn*/ true);
-            var generatorFunctionBody = Factory.createBlock(generatorStatements);
-            var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, [Factory.createParameterDeclaration(getState())], generatorFunctionBody);
-            var generatorExpression = Factory.createCallExpression(Factory.createIdentifier("__generator"), [generatorFunction]);
-            if (promiseConstructor) {
-                var resolve = createUniqueIdentifier("_resolve");
-                var promiseConstructorExpression = Factory.getExpressionForEntityName(promiseConstructor);
-                var awaiterExpression = Factory.createCallExpression(Factory.createIdentifier("__awaiter"), [generatorExpression]);
-                var resolveExpression = Factory.createCallExpression(resolve, [awaiterExpression]);
-                var promiseFunctionBody = Factory.createBlock([Factory.createExpressionStatement(resolveExpression)]);
-                var promiseFunction = Factory.createFunctionExpression(/*name*/ undefined, [Factory.createParameterDeclaration(resolve)], promiseFunctionBody);
-                var newPromiseExpression = Factory.createNewExpression(promiseConstructorExpression, [promiseFunction]);
-                var returnStatement = Factory.createReturnStatement(newPromiseExpression);
-                statements.push(returnStatement);
-            } else {
-                var returnStatement = Factory.createReturnStatement(generatorExpression);
-                statements.push(returnStatement);
-            }
-
-            var body = Factory.createBlock(Factory.createNodeArray<Statement>(statements));
-            var node: FunctionLikeDeclaration;
-            switch (kind) {
-                case SyntaxKind.FunctionDeclaration:
-                    return Factory.createFunctionDeclaration(<Identifier>name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
-                case SyntaxKind.MethodDeclaration:
-                    return Factory.createMethodDeclaration(name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
-                case SyntaxKind.GetAccessor:
-                    return Factory.createGetAccessor(name, parameters, body, undefined, undefined, modifiers, location, flags);
-                case SyntaxKind.FunctionExpression:
-                    return Factory.createFunctionExpression(<Identifier>name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
-                case SyntaxKind.ArrowFunction:
-                    return Factory.createArrowFunction(parameters, body, undefined, undefined, modifiers, location, flags);
-                default:
-                    reportUnexpectedNode(node);
-                    return node;
-            }
-        }
-
-        function buildHoistedFunctionDeclarations(statements: Statement[]): Statement[] {
-            if (functions) {
-                statements = statements.concat(functions);
-            }
-            return statements;
-        }
-
-        function buildStatements(forceReturn?: boolean): Statement[] {
-            var blockIndex: number = 0;
-            var labelNumber: number = 0;
-            var lastOperationWasAbrupt = false;
-            var lastOperationWasCompletion = false;
-            var clauses: CaseClause[];
-            var statements: Statement[];
-            var exceptionBlockStack: ExceptionBlock[];
-            var currentExceptionBlock: ExceptionBlock;
-            var withBlockStack: WithBlock[];
-
-            if (hasProtectedRegions) {
-                initializeProtectedRegions();
-            }
-
-            if (operations) {
-                for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
-                    writeOperation(
-                        operations[operationIndex],
-                        operationArguments[operationIndex],
-                        operationLocations[operationIndex]);
-                }
-            }
-
-            flushFinalLabel();
-
-            if (clauses) {
-                var state = getState();
-                var labelExpression = Factory.createPropertyAccessExpression(state, Factory.createIdentifier("label"));
-                var switchStatement = Factory.createSwitchStatement(labelExpression, clauses);
-                return [switchStatement];
-            }
-
-            if (statements) {
-                return statements;
-            }
-
-            return [];
-
-            function initializeProtectedRegions(): void {
-                var trysProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("trys"));
-                var trysArray = Factory.createArrayLiteralExpression([]);
-                var assignTrys = Factory.createBinaryExpression(SyntaxKind.EqualsToken, trysProperty, trysArray);
-                writeStatement(assignTrys);
-                flushLabel();
-            }
-
-            function flushLabel(): void {
-                if (!statements) {
-                    return;
-                }
-
-                appendLabel(/*markLabelEnd*/ !lastOperationWasAbrupt);
-
-                lastOperationWasAbrupt = false;
-                lastOperationWasCompletion = false;
-                labelNumber++;
-            }
-
-            function flushFinalLabel(): void {
-                if (!lastOperationWasCompletion && forceReturn) {
-                    tryEnterLabel();
-                    writeReturn();
-                }
-
-                if (statements && clauses) {
-                    appendLabel(/*markLabelEnd*/ false);
-                }
-            }
-
-            function appendLabel(markLabelEnd: boolean): void {
-                if (!clauses) {
-                    clauses = [];
-                }
-
-                if (statements) {
-                    if (withBlockStack) {
-                        for (var i = withBlockStack.length - 1; i >= 0; i--) {
-                            var withBlock = withBlockStack[i];
-                            statements = [Factory.createWithStatement(withBlock.expression, Factory.createBlock(statements))];
-                        }
-                    }
-
-                    if (currentExceptionBlock) {
-                        var startLabel = createLabel(currentExceptionBlock.startLabel);
-                        var endLabel = createLabel(currentExceptionBlock.endLabel);
-                        var catchLabel: Expression;
-                        if (currentExceptionBlock.catchLabel > 0) {
-                            catchLabel = createLabel(currentExceptionBlock.catchLabel);
-                        }
-                        else {
-                            catchLabel = Factory.createOmittedExpression();
-                        }
-
-                        var finallyLabel: Expression;
-                        if (currentExceptionBlock.finallyLabel > 0) {
-                            finallyLabel = createLabel(currentExceptionBlock.finallyLabel);
-                        }
-                        else {
-                            finallyLabel = Factory.createOmittedExpression();
-                        }
-
-                        var labelsArray = Factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
-                        var trysProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("trys"));
-                        var pushMethod = Factory.createPropertyAccessExpression(trysProperty, Factory.createIdentifier("push"));
-                        var callExpression = Factory.createCallExpression(pushMethod, [labelsArray]);
-                        statements.unshift(Factory.createExpressionStatement(callExpression));
-                        currentExceptionBlock = undefined;
-                    }
-
-                    if (markLabelEnd) {
-                        var nextLabelNumberExpression = Factory.createNumericLiteral(labelNumber + 1);
-                        var labelProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("label"));
-                        var labelAssign = Factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelNumberExpression);
-                        statements.push(Factory.createExpressionStatement(labelAssign));
-                    }
-                }
-
-                var labelNumberExpression = Factory.createNumericLiteral(labelNumber);
-                var clause = Factory.createCaseClause(labelNumberExpression, statements || []);
-                clauses.push(clause);
-                statements = undefined;
-            }
-
-            function tryEnterLabel(): void {
-                if (!labels) {
-                    return;
-                }
-
-                var isLabel: boolean = false;
-                for (var label = 0; label < labels.length; label++) {
-                    if (labels[label] === operationIndex) {
-                        flushLabel();
-                        if (!labelNumbers) {
-                            labelNumbers = [];
-                        }
-                        labelNumbers[label] = labelNumber;
-                    }
-                }
-            }
-
-            function tryEnterOrLeaveBlock(): void {
-                if (blocks) {
-                    for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
-                        var block = blocks[blockIndex];
-                        var blockAction = blockActions[blockIndex];
-                        if (blockAction === BlockAction.Open && block.kind === BlockKind.Exception) {
-                            var exceptionBlock = <ExceptionBlock>block;
-                            if (!exceptionBlockStack) {
-                                exceptionBlockStack = [];
-                            }
-                            exceptionBlockStack.push(currentExceptionBlock);
-                            currentExceptionBlock = exceptionBlock;
-                        }
-                        else if (blockAction === BlockAction.Close && block.kind === BlockKind.Exception) {
-                            currentExceptionBlock = exceptionBlockStack.pop();
-                        }
-                        else if (blockAction === BlockAction.Open && block.kind === BlockKind.With) {
-                            var withBlock = <WithBlock>block;
-                            if (!withBlockStack) {
-                                withBlockStack = [];
-                            }
-                            withBlockStack.push(withBlock);
-                        }
-                        else if (blockAction === BlockAction.Close && block.kind === BlockKind.With) {
-                            withBlockStack.pop();
-                        }
-                    }
-                }
-            }
-
-            // operations
-            function writeOperation(operation: OpCode, operationArguments: any[], operationLocation: TextRange): void {
-                tryEnterLabel();
-                tryEnterOrLeaveBlock();
-
-                // early termination, nothing else to process in this label
-                if (lastOperationWasAbrupt) {
-                    return;
-                }
-
-                lastOperationWasAbrupt = false;
-                lastOperationWasCompletion = false;
-                switch (operation) {
-                    case OpCode.Statement: return writeStatement(<Node>operationArguments[0]);
-                    case OpCode.Assign: return writeAssign(<Expression>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                    case OpCode.Break: return writeBreak(<Label>operationArguments[0], operationLocation);
-                    case OpCode.BrTrue: return writeBrTrue(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                    case OpCode.BrFalse: return writeBrFalse(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                    case OpCode.YieldStar: return writeYieldStar(<Expression>operationArguments[0], operationLocation);
-                    case OpCode.Yield: return writeYield(<Expression>operationArguments[0], operationLocation);
-                    case OpCode.Return: return writeReturn(<Expression>operationArguments[0], operationLocation);
-                    case OpCode.Throw: return writeThrow(<Expression>operationArguments[0], operationLocation);
-                    case OpCode.Endfinally: return writeEndfinally();
-                }
-            }
-
-            function writeStatement(node: Node): void {
-                if (isExpression(node)) {
-                    node = Factory.createExpressionStatement(<Expression>node);
-                }
-
-                if (!statements) {
-                    statements = [];
-                }
-
-                statements.push(<Statement>node);
-            }
-
-            function writeAssign(left: Expression, right: Expression, operationLocation?: TextRange): void {
-                var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, operationLocation);
-                writeStatement(assignExpression);
-            }
-
-            function writeBreak(label: Label, operationLocation?: TextRange): void {
-                lastOperationWasAbrupt = true;
-                var instruction = Factory.createNumericLiteral('3 /*break*/');
-                var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                writeStatement(returnStatement);
-            }
-
-            function writeBrTrue(label: Label, condition: Expression, operationLocation?: TextRange): void {
-                var instruction = Factory.createNumericLiteral('3 /*break*/');
-                var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                var ifStatement = Factory.createIfStatement(condition, returnStatement);
-                writeStatement(ifStatement);
-            }
-
-            function writeBrFalse(label: Label, condition: Expression, operationLocation?: TextRange): void {
-                var instruction = Factory.createNumericLiteral('3 /*break*/');
-                var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                var parenExpression = Factory.createParenthesizedExpression(condition);
-                var notExpression = Factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, parenExpression);
-                var ifStatement = Factory.createIfStatement(notExpression, returnStatement);
-                writeStatement(ifStatement);
-            }
-
-            function writeYield(expression: Expression, operationLocation?: TextRange): void {
-                lastOperationWasAbrupt = true;
-                var elements: Expression[] = [Factory.createNumericLiteral('4 /*yield*/')];
-                if (expression) {
-                    elements.push(expression);
-                }
-                var returnExpression = Factory.createArrayLiteralExpression(elements);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                writeStatement(returnStatement);
-            }
-
-            function writeYieldStar(expression: Expression, operationLocation?: TextRange): void {
-                lastOperationWasAbrupt = true;
-                var elements: Expression[] = [Factory.createNumericLiteral('5 /*yield**/')];
-                if (expression) {
-                    elements.push(expression);
-                }
-                var returnExpression = Factory.createArrayLiteralExpression(elements);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                writeStatement(returnStatement);
-            }
-
-            function writeReturn(expression?: Expression, operationLocation?: TextRange): void {
-                lastOperationWasAbrupt = true;
-                lastOperationWasCompletion = true;
-                var elements: Expression[] = [Factory.createNumericLiteral('2 /*return*/')];
-                if (expression) {
-                    elements.push(expression);
-                }
-                var returnExpression = Factory.createArrayLiteralExpression(elements);
-                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-                writeStatement(returnStatement);
-            }
-
-            function writeThrow(expression: Expression, operationLocation?: TextRange): void {
-                lastOperationWasAbrupt = true;
-                lastOperationWasCompletion = true;
-                var throwStatement = Factory.createThrowStatement(expression, operationLocation);
-                writeStatement(throwStatement);
-            }
-
-            function writeEndfinally(): void {
-                lastOperationWasAbrupt = true;
-                var instruction = Factory.createNumericLiteral('6 /*endfinally*/');
-                var returnExpression = Factory.createArrayLiteralExpression([instruction]);
-                var returnStatement = Factory.createReturnStatement(returnExpression);
-                writeStatement(returnStatement);
-            }
         }
     }
 }
