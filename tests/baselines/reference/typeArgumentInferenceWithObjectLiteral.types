@@ -1,0 +1,65 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts ===
+interface Computed<T> {
+>Computed : Computed<T>
+>T : T
+
+    read(): T;
+>read : () => T
+>T : T
+
+    write(value: T);
+>write : (value: T) => any
+>value : T
+>T : T
+}
+
+function foo<T>(x: Computed<T>) { }
+>foo : <T>(x: Computed<T>) => void
+>T : T
+>x : Computed<T>
+>Computed : Computed<T>
+>T : T
+
+var s: string;
+>s : string
+
+// Calls below should infer string for T and then assign that type to the value parameter
+foo({
+>foo({    read: () => s,    write: value => s = value}) : void
+>foo : <T>(x: Computed<T>) => void
+>{    read: () => s,    write: value => s = value} : { read: () => string; write: (value: string) => string; }
+
+    read: () => s,
+>read : () => string
+>() => s : () => string
+>s : string
+
+    write: value => s = value
+>write : (value: string) => string
+>value => s = value : (value: string) => string
+>value : string
+>s = value : string
+>s : string
+>value : string
+
+});
+foo({
+>foo({    write: value => s = value,    read: () => s}) : void
+>foo : <T>(x: Computed<T>) => void
+>{    write: value => s = value,    read: () => s} : { write: (value: string) => string; read: () => string; }
+
+    write: value => s = value,
+>write : (value: string) => string
+>value => s = value : (value: string) => string
+>value : string
+>s = value : string
+>s : string
+>value : string
+
+    read: () => s
+>read : () => string
+>() => s : () => string
+>s : string
+
+});
+
