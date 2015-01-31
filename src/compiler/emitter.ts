@@ -1487,7 +1487,6 @@ module ts {
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
-        // var program = resolver.getProgram();
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
@@ -3241,7 +3240,7 @@ module ts {
             }
 
             function shouldEmitAsArrowFunction(node: FunctionLikeDeclaration): boolean {
-                return node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6;
+                return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
