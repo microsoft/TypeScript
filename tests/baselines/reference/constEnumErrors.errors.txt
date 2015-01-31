@@ -11,9 +11,11 @@ tests/cases/compiler/constEnumErrors.ts(32,5): error TS4084: 'const' enums can o
 tests/cases/compiler/constEnumErrors.ts(40,9): error TS4086: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(41,9): error TS4086: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(42,9): error TS4087: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
+tests/cases/compiler/constEnumErrors.ts(47,8): error TS4083: In 'const' enum declarations member initializer must be constant expression.
+tests/cases/compiler/constEnumErrors.ts(50,25): error TS4084: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
 
 
-==== tests/cases/compiler/constEnumErrors.ts (13 errors) ====
+==== tests/cases/compiler/constEnumErrors.ts (15 errors) ====
     const enum E {
                ~
 !!! error TS2300: Duplicate identifier 'E'.
@@ -83,3 +85,14 @@ tests/cases/compiler/constEnumErrors.ts(42,9): error TS4087: 'const' enum member
             ~~~~~
 !!! error TS4087: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
     }
+    
+    const enum E3 {
+        X = 1,
+        Y =baz().X // incorrect const enum initializer - should be identifier or property access
+           ~~~~~~~
+!!! error TS4083: In 'const' enum declarations member initializer must be constant expression.
+    }
+    
+    function baz() : typeof E3 { return undefined; }
+                            ~~
+!!! error TS4084: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.

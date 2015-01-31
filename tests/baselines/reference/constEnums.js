@@ -151,6 +151,17 @@ function bar(e: A.B.C.E): number {
     }
 }
 
+module M1 {
+    export const enum Enum1 { X = 100, Y = X + 1 }
+}
+
+const enum Enum3 {
+    Z = M1.Enum1.Y
+}
+
+var value1 = M1.Enum1.Y;
+var value2 = Enum3.Z;
+
 //// [constEnums.js]
 var A2;
 (function (A2) {
@@ -221,3 +232,5 @@ function bar(e) {
         case 64 /* V3 */: return 1;
     }
 }
+var value1 = 101 /* Y */;
+var value2 = 101 /* Z */;

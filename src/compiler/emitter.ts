@@ -3694,11 +3694,13 @@ module ts {
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
-                if (node.initializer && !isConst(enumParent)) {
-                    emit(node.initializer);
+                var constantValue = resolver.getEnumMemberValue(node);
+                if (constantValue !== undefined) {
+                    write(constantValue.toString());
                 }
                 else {
-                    write(resolver.getEnumMemberValue(node).toString());
+                    Debug.assert(node.initializer !== undefined);
+                    emit(node.initializer);
                 }
                 write("] = ");
                 emitExpressionForPropertyName(node.name);

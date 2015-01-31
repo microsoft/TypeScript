@@ -554,3 +554,41 @@ function bar(e: A.B.C.E): number {
 >V3 : I
     }
 }
+
+module M1 {
+>M1 : typeof M1
+
+    export const enum Enum1 { X = 100, Y = X + 1 }
+>Enum1 : Enum1
+>X : Enum1
+>Y : Enum1
+>X + 1 : number
+>X : Enum1
+}
+
+const enum Enum3 {
+>Enum3 : Enum3
+
+    Z = M1.Enum1.Y
+>Z : Enum3
+>M1.Enum1.Y : M1.Enum1
+>M1.Enum1 : typeof M1.Enum1
+>M1 : typeof M1
+>Enum1 : typeof M1.Enum1
+>Y : M1.Enum1
+}
+
+var value1 = M1.Enum1.Y;
+>value1 : M1.Enum1
+>M1.Enum1.Y : M1.Enum1
+>M1.Enum1 : typeof M1.Enum1
+>M1 : typeof M1
+>Enum1 : typeof M1.Enum1
+>Y : M1.Enum1
+
+var value2 = Enum3.Z;
+>value2 : Enum3
+>Enum3.Z : Enum3
+>Enum3 : typeof Enum3
+>Z : Enum3
+

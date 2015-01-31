@@ -41,3 +41,10 @@ const enum NaNOrInfinity {
     G = 1 / 0, // overflow
     H = 0 / 0  // NaN
 }
+
+const enum E3 {
+    X = 1,
+    Y =baz().X // incorrect const enum initializer - should be identifier or property access
+}
+
+function baz() : typeof E3 { return undefined; }

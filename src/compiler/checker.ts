@@ -8953,7 +8953,7 @@ module ts {
                     }
                     var initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(initializer, enumIsConst);
+                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
                         if (autoValue === undefined) {
                             if (enumIsConst) {
                                 error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
@@ -8963,7 +8963,7 @@ module ts {
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                             }
                         }
                         else if (enumIsConst) {
@@ -8988,7 +8988,7 @@ module ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
-            function getConstantValueForEnumMemberInitializer(initializer: Expression, enumIsConst: boolean): number {
+            function getConstantValueForEnumMemberInitializer(initializer: Expression): number {
                 return evalConstant(initializer);
 
                 function evalConstant(e: Node): number {
@@ -9001,14 +9001,10 @@ module ts {
                             switch ((<PrefixUnaryExpression>e).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
-                                case SyntaxKind.TildeToken: return enumIsConst ? ~value : undefined;
+                                case SyntaxKind.TildeToken: return ~value;
                             }
                             return undefined;
                         case SyntaxKind.BinaryExpression:
-                            if (!enumIsConst) {
-                                return undefined;
-                            }
-
                             var left = evalConstant((<BinaryExpression>e).left);
                             if (left === undefined) {
                                 return undefined;
@@ -9034,14 +9030,10 @@ module ts {
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
                         case SyntaxKind.ParenthesizedExpression:
-                            return enumIsConst ? evalConstant((<ParenthesizedExpression>e).expression) : undefined;
+                            return evalConstant((<ParenthesizedExpression>e).expression);
                         case SyntaxKind.Identifier:
                         case SyntaxKind.ElementAccessExpression:
                         case SyntaxKind.PropertyAccessExpression:
-                            if (!enumIsConst) {
-                                return undefined;
-                            }
-
                             var member = initializer.parent;
                             var currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             var enumType: Type;
@@ -9054,19 +9046,37 @@ module ts {
                                 propertyName = (<Identifier>e).text;
                             }
                             else {
+                                var expression: Expression;
                                 if (e.kind === SyntaxKind.ElementAccessExpression) {
                                     if ((<ElementAccessExpression>e).argumentExpression === undefined ||
                                         (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
                                         return undefined;
                                     }
-                                    var enumType = getTypeOfNode((<ElementAccessExpression>e).expression);
+                                    expression = (<ElementAccessExpression>e).expression;
                                     propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
                                 }
                                 else {
-                                    var enumType = getTypeOfNode((<PropertyAccessExpression>e).expression);
+                                    expression = (<PropertyAccessExpression>e).expression;
                                     propertyName = (<PropertyAccessExpression>e).name.text;
                                 }
-                                if (enumType !== currentType) {
+
+                                // expression part in ElementAccess\PropertyAccess should be either identifier or dottedName
+                                var current = expression;
+                                while (current) {
+                                    if (current.kind === SyntaxKind.Identifier) {
+                                        break;
+                                    }
+                                    else if (current.kind === SyntaxKind.PropertyAccessExpression) {
+                                        current = (<ElementAccessExpression>current).expression;
+                                    }
+                                    else {
+                                        return undefined;
+                                    }
+                                }
+
+                                var enumType = checkExpression(expression);
+                                // allow references to members of other const enums
+                                if (enumType !== currentType && !isConstEnumObjectType(enumType)) {
                                     return undefined;
                                 }
                             }

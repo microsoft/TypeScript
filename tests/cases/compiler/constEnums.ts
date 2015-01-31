@@ -149,3 +149,14 @@ function bar(e: A.B.C.E): number {
         case A.B.C.E.V3: return 1;
     }
 }
+
+module M1 {
+    export const enum Enum1 { X = 100, Y = X + 1 }
+}
+
+const enum Enum3 {
+    Z = M1.Enum1.Y
+}
+
+var value1 = M1.Enum1.Y;
+var value2 = Enum3.Z;
