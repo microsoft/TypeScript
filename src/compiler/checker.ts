@@ -83,6 +83,7 @@ module ts {
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
+        var globalPromiseSymbol: Symbol;
 
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
@@ -92,9 +93,8 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
+        var globalPromiseType: ObjectType;
         var globalIPromiseType: ObjectType;
-        var globalPromiseThenPropertyType: Type;
-        var globalPromiseOnFulfilledParameterType: Type;
         var globalIPromiseConstructorType: ObjectType;
 
         var anyArrayType: Type;
@@ -1594,7 +1594,7 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
-
+                    
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
                     // Source file is always visible
@@ -2690,7 +2690,8 @@ module ts {
                     var type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature));
                 }
                 else {
-                    var type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
+                    var declaration = <FunctionLikeDeclaration>signature.declaration;
+                    var type = getReturnTypeFromBody(declaration);
                 }
                 if (signature.resolvedReturnType === resolvingType) {
                     signature.resolvedReturnType = type;
@@ -2699,7 +2700,7 @@ module ts {
             else if (signature.resolvedReturnType === resolvingType) {
                 signature.resolvedReturnType = anyType;
                 if (compilerOptions.noImplicitAny) {
-                    var declaration = <Declaration>signature.declaration;
+                    var declaration = <FunctionLikeDeclaration>signature.declaration;
                     if (declaration.name) {
                         error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(declaration.name));
                     }
@@ -4534,6 +4535,7 @@ module ts {
                     case SyntaxKind.TypeOfExpression:
                     case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.YieldExpression:
                     case SyntaxKind.ConditionalExpression:
                     case SyntaxKind.SpreadElementExpression:
                     case SyntaxKind.Block:
@@ -4814,7 +4816,7 @@ module ts {
                         nodeLinks.importOnRightSide = symbol;
                     }
                 }
-                
+
                 if (symbolLinks.referenced) {
                     markLinkedImportsAsReferenced(<ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration));
                 }
@@ -4856,6 +4858,7 @@ module ts {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
                 needToCaptureLexicalThis = true;
             } else if (node.parserContextFlags & ParserContextFlags.Await) {
+                // if 'this' is part of an async function, we will need to capture 'this'
                 needToCaptureLexicalThis = true;
             }
 
@@ -4980,20 +4983,20 @@ module ts {
                     if (container && container.parent && container.parent.kind === SyntaxKind.ClassDeclaration) {
                         if (container.flags & NodeFlags.Static) {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
                             canUseSuperExpression =
-                                container.kind === SyntaxKind.MethodDeclaration ||
-                                container.kind === SyntaxKind.MethodSignature ||
-                                container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.PropertyDeclaration ||
-                                container.kind === SyntaxKind.PropertySignature ||
-                                container.kind === SyntaxKind.Constructor;
+                            container.kind === SyntaxKind.MethodDeclaration ||
+                            container.kind === SyntaxKind.MethodSignature ||
+                            container.kind === SyntaxKind.GetAccessor ||
+                            container.kind === SyntaxKind.SetAccessor ||
+                            container.kind === SyntaxKind.PropertyDeclaration ||
+                            container.kind === SyntaxKind.PropertySignature ||
+                            container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
@@ -6440,73 +6443,51 @@ module ts {
             }
         }
 
-        function getPromiseType(type: Type, location: Node): Type {
-            var symbol = resolveName(location, "Promise", SymbolFlags.Value, undefined, undefined);
-            if (symbol) {
-                var promiseType = getDeclaredTypeOfSymbol(symbol);
-                if (getAwaitedType(promiseType)) {
-                    if ((<InterfaceType>promiseType).typeParameters) {
-                        if ((<InterfaceType>promiseType).typeParameters.length === 1) {
-                            return createTypeReference(<GenericType>promiseType, [type]);
-                        }
-                    }
-                    else {
-                        return promiseType;
-                    }
-                }
+        function createPromiseType(awaitedType: Type): Type {
+            if (globalPromiseSymbol) {
+                awaitedType = getAwaitedType(awaitedType, awaitedType);
+                var promiseType = globalPromiseType || getDeclaredTypeOfSymbol(globalPromiseSymbol);
+                return promiseType !== emptyObjectType ? createTypeReference(<GenericType>promiseType, [awaitedType]) : emptyObjectType;
             }
-            return type;
+            return unknownType;
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
-            var isAsync = func.flags & NodeFlags.Async;
-            var type: Type;
+            var isAsync = !!(func.flags & NodeFlags.Async);
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(<Expression>func.body, contextualMapper);
+                var type = checkExpressionCached(<Expression>func.body, contextualMapper, isAsync);
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
-                var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
+                var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync);
                 if (types.length === 0) {
-                    type = voidType;
-                    if (!isAsync) {
-                        return type;
+                    return isAsync ? createPromiseType(voidType) : voidType;
                 }
-                }
-                else {
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
-                    type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                var type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!type) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     return unknownType;
                 }
             }
-            }
-
-            if (isAsync) {
-                type = getPromiseType(type, func);
-                if (!type) {
-                    return unknownType;
-                }
-            }
-
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
+
             type = getWidenedType(type);
-            return type;
+            return isAsync ? createPromiseType(type) : type;
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
-        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
+        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper, isAsync?: boolean): Type[] {
             var aggregatedTypes: Type[] = [];
 
             forEachReturnStatement(body, returnStatement => {
                 var expr = returnStatement.expression;
                 if (expr) {
-                    var type = checkExpressionCached(expr, contextualMapper);
+                    var type = checkExpressionCached(expr, contextualMapper, isAsync);
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
@@ -6576,10 +6557,11 @@ module ts {
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
             }
-            if (node.flags & NodeFlags.Async) {
+            var isAsync = !!(node.flags & NodeFlags.Async);
+            if (isAsync) {
                 emitAwaiter = true;
             }
-            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+            if ((node.asteriskToken || isAsync) && compilerOptions.target < ScriptTarget.ES6) {
                 emitGenerator = true;
             }
             var links = getNodeLinks(node);
@@ -6620,8 +6602,9 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            var isAsync = !!(node.flags & NodeFlags.Async);
             var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
-            if (node.flags & NodeFlags.Async) {
+            if (returnType && isAsync) {
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
@@ -6638,7 +6621,7 @@ module ts {
                 else {
                     var exprType = checkExpression(<Expression>node.body);
                     if (returnType) {
-                        if (node.flags & NodeFlags.Async) {
+                        if (isAsync) {
                             exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
                         }
                         checkTypeAssignableTo(exprType, returnType, node.body, /*headMessage*/ undefined);
@@ -6907,7 +6890,7 @@ module ts {
                         var propName = "" + i;
                         var type = sourceType.flags & TypeFlags.Any ? sourceType :
                             isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
-                            getIndexTypeOfType(sourceType, IndexKind.Number);
+                                getIndexTypeOfType(sourceType, IndexKind.Number);
                         if (type) {
                             checkDestructuringAssignment(e, type, contextualMapper);
                         }
@@ -7121,7 +7104,6 @@ module ts {
                 grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
             }
             else {
-                //checkExpression(node.expression);
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
             }
         }
@@ -7154,10 +7136,16 @@ module ts {
             return result;
         }
 
-        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
+        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper, forAwait?: boolean): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node, contextualMapper);
+            }
+            if (forAwait) {
+                if (!links.resolvedAwaitedType) {
+                    links.resolvedAwaitedType = getAwaitedType(links.resolvedType, links.resolvedType);
+                }
+                return links.resolvedAwaitedType;
             }
             return links.resolvedType;
         }
@@ -7188,8 +7176,7 @@ module ts {
         }
 
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            var type = checkExpressionOrQualifiedName(node, contextualMapper);
-            return type;
+            return checkExpressionOrQualifiedName(node, contextualMapper);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -7380,6 +7367,23 @@ module ts {
                             break;
                     }
                 }
+                if (node.flags & NodeFlags.Async) {
+                    var promiseConstructor = getPromiseConstructor(node);
+                    if (promiseConstructor) {
+                        if (promiseConstructor.kind === SyntaxKind.Identifier) {
+                            var promiseName = (<Identifier>promiseConstructor).text;
+                            var typeSymbol = resolveName(node, promiseName, SymbolFlags.Type, undefined, undefined);
+                            var valueSymbol = resolveName(node, promiseName, SymbolFlags.Value, undefined, undefined);
+                            if (typeSymbol !== valueSymbol) {
+                                var valueLinks = getNodeLinks(valueSymbol.valueDeclaration);
+                                if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
+                                    valueLinks.flags |= NodeCheckFlags.PromiseCollision;
+                                    error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, promiseName);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             checkSpecializedSignatureDeclaration(node);
@@ -7533,7 +7537,7 @@ module ts {
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking accessors
-                checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
+                checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
@@ -7963,31 +7967,26 @@ module ts {
             }
         }
 
-        function getAwaitedType(type: Type, fallbackType?: Type): Type {
+        function getAwaitedType(type: Type, fallbackType?: Type, seen: boolean[] = []): Type {
             var seen: boolean[] = [];
-
-            return getAwaitedTypeRecursive(type, fallbackType);
-
-            function getAwaitedTypeRecursive(type: Type, fallbackType: Type): Type {
-                if (!type || !globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
-                    return fallbackType;
+            if (!type || !globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
+                return fallbackType;
+            }
+            seen[type.id] = true;
+            if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
+                var thenProp = getPropertyOfType(type, "then");
+                var thenType = getTypeOfSymbol(thenProp);
+                var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
+                var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
+                var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                if (seen[awaitedType.id]) return fallbackType;
+                return getAwaitedType(awaitedType, /*fallbackType*/ awaitedType, seen);
+            } else {
+                if (isTypeAssignableTo(type, thenableType)) {
+                    error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
                 }
-                seen[type.id] = true;
-                if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
-                    var thenProp = getPropertyOfType(type, "then");
-                    var thenType = getTypeOfSymbol(thenProp);
-                    var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
-                    var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
-                    var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
-                    var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
-                    if (seen[awaitedType.id]) return fallbackType;
-                    return getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType);
-                } else {
-                    if (isTypeAssignableTo(type, thenableType)) {
-                        error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
-                    }
-                    return fallbackType;
-                }
+                return fallbackType;
             }
         }
 
@@ -8012,8 +8011,11 @@ module ts {
                         var awaitedType = getAwaitedType(returnType);
                         if (awaitedType) {
                             var promiseConstructor = getPromiseConstructor(node);
-                            checkExpressionOrQualifiedName(promiseConstructor);
+                            if (promiseConstructor) {
+                                checkExpressionOrQualifiedName(promiseConstructor);
+                            }
                         }
+                        emitAwaiter = true;
                         return awaitedType;
                     }
                 }
@@ -8024,9 +8026,9 @@ module ts {
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
                 checkFunctionLikeDeclaration(node) ||
-                    checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) ||
-                    checkGrammarFunctionName(node.name) ||
-                    checkGrammarForGenerator(node);
+                checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) ||
+                checkGrammarFunctionName(node.name) ||
+                checkGrammarForGenerator(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -8064,7 +8066,6 @@ module ts {
 
             var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
             if (node.flags & NodeFlags.Async) {
-                emitAwaiter = true;
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
@@ -8139,7 +8140,7 @@ module ts {
 
             return true;
         }
-        
+
         function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
             if (needCollisionCheckForIdentifier(node, name, "_this")) {
                 potentialThisCollisions.push(node);
@@ -8155,7 +8156,7 @@ module ts {
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             var current = node;
-            while (current) {                
+            while (current) {
                 if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureThis) {
                     var isDeclaration = node.kind !== SyntaxKind.Identifier;
                     if (isDeclaration) {
@@ -8267,9 +8268,8 @@ module ts {
                 return typeReference.typeName;
             }
 
-            var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-            if (returnType && returnType.symbol && returnType.symbol.valueDeclaration && returnType.symbol.valueDeclaration.name.kind == SyntaxKind.Identifier) {
-                return <Identifier>returnType.symbol.valueDeclaration.name;
+            if (globalPromiseSymbol && globalPromiseSymbol === resolveName(node, "Promise", SymbolFlags.Value, undefined, undefined)) {
+                return <Identifier>globalPromiseSymbol.valueDeclaration.name;
             }
         }
 
@@ -8714,7 +8714,7 @@ module ts {
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
-        function checkIndexConstraints(type: Type) { 
+        function checkIndexConstraints(type: Type) {
 
             function checkIndexConstraintForProperty(prop: Symbol, propertyType: Type, indexDeclaration: Declaration, indexType: Type, indexKind: IndexKind): void {
                 if (!indexType) {
@@ -8747,8 +8747,8 @@ module ts {
                 if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
                     var errorMessage =
                         indexKind === IndexKind.String
-                        ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
-                        : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
+                            ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
+                            : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
                     error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
                 }
             }
@@ -8777,7 +8777,7 @@ module ts {
                 }
             }
 
-            if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {                
+            if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
                     typeToString(numberIndexType), typeToString(stringIndexType));
             }
@@ -9063,7 +9063,7 @@ module ts {
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
             checkGrammarModifiers(node);
-            
+
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
         }
@@ -9095,7 +9095,7 @@ module ts {
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
-                            checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
+                                checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                             }
                         }
                         else if (enumIsConst) {
@@ -9374,7 +9374,7 @@ module ts {
             checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
-            
+
             if (isInternalModuleImportDeclaration(node)) {
                 target = resolveImport(symbol);
                 // Import declaration for an internal module
@@ -9844,7 +9844,7 @@ module ts {
                     if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
                         node = node.parent;
                     }
-                    // fall through
+                // fall through
                 case SyntaxKind.QualifiedName:
                     // At this point, node is either a qualified name or an identifier
                     Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName, "'node' was expected to be a qualified name or identifier in 'isTypeNode'.");
@@ -10377,9 +10377,17 @@ module ts {
                 globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
             }
 
-            var iPromiseConstructorType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
-            if (iPromiseConstructorType !== emptyObjectType) {
-                globalIPromiseConstructorType = createTypeReference(<GenericType>iPromiseConstructorType, [anyType]);
+            globalIPromiseConstructorType = getGlobalType("IPromiseConstructor");
+
+            if (compilerOptions.target >= ScriptTarget.ES6) {
+                globalPromiseSymbol = getGlobalSymbol("Promise");
+            }
+            else {
+                globalPromiseSymbol = resolveName(undefined, "Promise", SymbolFlags.Type, undefined, undefined);
+            }
+
+            if (globalPromiseSymbol) {
+                globalPromiseType = getTypeOfGlobalSymbol(globalPromiseSymbol, 1);
             }
 
             // thenable type used to verify against a non-promise "thenable" operand to `await`.
@@ -10853,7 +10861,7 @@ module ts {
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
                 var name = prop.name;
-                if (prop.kind === SyntaxKind.OmittedExpression || 
+                if (prop.kind === SyntaxKind.OmittedExpression ||
                     name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);

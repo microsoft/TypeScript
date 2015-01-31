@@ -3607,10 +3607,10 @@ module ts {
                     if (!lookAhead(nextTokenIsFunctionKeywordOnSameLine)) {
                         break;
                     }
-                    modifiers = parseModifiers();
-                    // fall-through
+                    return parseFunctionExpression();
+
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionExpression(modifiers);
+                    return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
                     return parseNewExpression();
                 case SyntaxKind.SlashToken:
@@ -3724,14 +3724,14 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionExpression(modifiers: ModifiersArray): FunctionExpression {
+        function parseFunctionExpression(): FunctionExpression {
             // GeneratorExpression :
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
             var node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
+            setModifiers(node, parseModifiers());
             parseExpected(SyntaxKind.FunctionKeyword);
-            setModifiers(node, modifiers);
             var isAsync = !!(node.flags & NodeFlags.Async);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 

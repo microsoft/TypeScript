@@ -1396,16 +1396,18 @@ module ts {
         SuperInstance       = 0x00000040,  // Instance 'super' reference
         SuperStatic         = 0x00000080,  // Static 'super' reference
         ContextChecked      = 0x00000100,  // Contextual types have been assigned
+        PromiseCollision    = 0x00000200,  // declaration collides with the global 'Promise'
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed  = 0x00000200,
+        EnumValuesComputed  = 0x00000400,
 
-        EmitAwaiter         = 0x00000400,  // Emit __awaiter
-        EmitGenerator       = 0x00000800,  // Emit __generator
+        EmitAwaiter         = 0x00000800,  // Emit __awaiter
+        EmitGenerator       = 0x00001000,  // Emit __generator
     }
 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
+        resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
