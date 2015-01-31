@@ -1997,8 +1997,12 @@ module ts {
             return useCaseSensitivefilenames ? filename : filename.toLowerCase();
         }
 
-        function getSourceFile(filename: string): SourceFile {
-            return program.getSourceFile(getCanonicalFileName(filename));
+        function getValidSourceFile(filename: string): SourceFile {
+            var sourceFile = program.getSourceFile(getCanonicalFileName(filename));
+            if (!sourceFile) {
+                throw new Error("Could not find file: '" + filename + "'.");
+            }
+            return sourceFile;
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -2149,7 +2153,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename));
+            return program.getDiagnostics(getValidSourceFile(filename));
         }
 
         /**
@@ -2162,7 +2166,7 @@ module ts {
             filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
             var checker = getDiagnosticsProducingTypeChecker();
-            var targetSourceFile = getSourceFile(filename);
+            var targetSourceFile = getValidSourceFile(filename);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
@@ -2239,7 +2243,7 @@ module ts {
             filename = normalizeSlashes(filename);
 
             var syntacticStart = new Date().getTime();
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
@@ -2565,7 +2569,7 @@ module ts {
             //       in the getCompletionsAtPosition earlier
             filename = normalizeSlashes(filename);
 
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var session = activeCompletionSession;
 
@@ -2583,7 +2587,7 @@ module ts {
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
                 Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -3084,7 +3088,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
@@ -3130,7 +3134,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3266,7 +3270,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var node = getTouchingWord(sourceFile, position);
             if (!node) {
@@ -3811,7 +3815,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -4634,7 +4638,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var outputFiles: OutputFile[] = [];
 
@@ -4783,7 +4787,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
@@ -4866,7 +4870,7 @@ module ts {
             synchronizeHostData();
             fileName = normalizeSlashes(fileName);
 
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
             processNode(sourceFile);
@@ -5272,7 +5276,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             cancellationToken.throwIfCancellationRequested();
 
@@ -5418,7 +5422,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
 
