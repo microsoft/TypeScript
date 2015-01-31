@@ -1909,7 +1909,7 @@
 		"code": 9001,
 		"isEarly": true
 	},
-	"The 'argument' object has different behaviour across Javascript versions. Use function expression or rest parameters instead": {
+	"The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
 		"category": "Error",
 		"code": 9002
 	}
