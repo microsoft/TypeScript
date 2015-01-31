@@ -1470,6 +1470,7 @@ module ts {
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressEnumInlining?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;

@@ -9084,10 +9084,12 @@ module ts {
                             if (propertyName === undefined) {
                                 return undefined;
                             }
+
                             var property = getPropertyOfObjectType(enumType, propertyName);
                             if (!property || !(property.flags & SymbolFlags.EnumMember)) {
                                 return undefined;
                             }
+
                             var propertyDecl = property.valueDeclaration;
                             // self references are illegal
                             if (member === propertyDecl) {
@@ -9098,6 +9100,7 @@ module ts {
                             if (!isDefinedBefore(propertyDecl, member)) {
                                 return undefined;
                             }
+
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
@@ -10149,6 +10152,10 @@ module ts {
                 var declaration = symbol.valueDeclaration;
                 var constantValue: number;
                 if (declaration.kind === SyntaxKind.EnumMember) {
+                    if (compilerOptions.suppressEnumInlining && !isConstEnumDeclaration(declaration.parent)) {
+                        return undefined;
+                    }
+
                     return getEnumMemberValue(<EnumMember>declaration);
                 }
             }

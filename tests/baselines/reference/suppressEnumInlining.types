@@ -1,0 +1,78 @@
+=== tests/cases/compiler/suppressEnumInlining.ts ===
+
+enum E1 {
+>E1 : E1
+
+    A = 1,
+>A : E1
+
+    B = A + 10,
+>B : E1
+>A + 10 : number
+>A : E1
+
+    C = E1.B - 5
+>C : E1
+>E1.B - 5 : number
+>E1.B : E1
+>E1 : typeof E1
+>B : E1
+}
+
+// regular enums should not be inlined
+var x0 = E1.A;
+>x0 : E1
+>E1.A : E1
+>E1 : typeof E1
+>A : E1
+
+var x1 = E1.B;
+>x1 : E1
+>E1.B : E1
+>E1 : typeof E1
+>B : E1
+
+var x2 = E1.C;
+>x2 : E1
+>E1.C : E1
+>E1 : typeof E1
+>C : E1
+
+const enum E2 {
+>E2 : E2
+
+    A = 1,
+>A : E2
+
+    B = A + 10,
+>B : E2
+>A + 10 : number
+>A : E2
+
+    C = E2.B - 5
+>C : E2
+>E2.B - 5 : number
+>E2.B : E2
+>E2 : typeof E2
+>B : E2
+}
+
+// const enums should always be inlined
+var y0 = E2.A;
+>y0 : E2
+>E2.A : E2
+>E2 : typeof E2
+>A : E2
+
+var y1 = E2.B;
+>y1 : E2
+>E2.B : E2
+>E2 : typeof E2
+>B : E2
+
+var y2 = E2.C;
+>y2 : E2
+>E2.C : E2
+>E2 : typeof E2
+>C : E2
+
