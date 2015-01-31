@@ -1069,7 +1069,7 @@ module ts {
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
              */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
+            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
                 var parentSymbol: Symbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
@@ -1131,11 +1131,12 @@ module ts {
                     }
                 }
 
-                // Get qualified name 
-                if (enclosingDeclaration &&
-                    // TypeParameters do not need qualification
-                    !(symbol.flags & SymbolFlags.TypeParameter)) {
-
+                // Get qualified name if the symbol is not a type parameter
+                // and there is an enclosing declaration or we specifically
+                // asked for it
+                var isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
+                var typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
+                if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
                     walkSymbol(symbol, meaning);
                     return;
                 }
@@ -1158,7 +1159,8 @@ module ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                        // The specified symbol flags need to be reinterpreted as type flags
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1229,17 +1231,18 @@ module ts {
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
                     // Always use 'typeof T' for type of class, enum, and module objects
                     if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     // Use 'typeof T' for types of functions and methods that circularly reference themselves
                     else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     else if (typeStack && contains(typeStack, type)) {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
+                            // The specified symbol flags need to be reinterpreted as type flags
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                         }
                         else {
                             // Recursive usage, use any
@@ -1273,10 +1276,10 @@ module ts {
                     }
                 }
 
-                function writeTypeofSymbol(type: ObjectType) {
+                function writeTypeofSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
@@ -3562,7 +3565,13 @@ module ts {
                 }
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    reportError(headMessage, typeToString(source), typeToString(target));
+                    var sourceType = typeToString(source);
+                    var targetType = typeToString(target);
+                    if (sourceType === targetType) {
+                        sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                        targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                    }
+                    reportError(headMessage, sourceType, targetType);
                 }
                 return Ternary.False;
             }
