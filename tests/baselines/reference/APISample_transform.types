@@ -1059,6 +1059,18 @@ declare module "typescript" {
         HasAggregatedChildData = 64,
 >HasAggregatedChildData : ParserContextFlags
     }
+    const enum RelationComparisonResult {
+>RelationComparisonResult : RelationComparisonResult
+
+        Succeeded = 1,
+>Succeeded : RelationComparisonResult
+
+        Failed = 2,
+>Failed : RelationComparisonResult
+
+        FailedAndReported = 3,
+>FailedAndReported : RelationComparisonResult
+    }
     interface Node extends TextRange {
 >Node : Node
 >TextRange : TextRange

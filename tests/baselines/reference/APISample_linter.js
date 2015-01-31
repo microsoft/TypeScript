@@ -351,6 +351,11 @@ declare module "typescript" {
         ThisNodeOrAnySubNodesHasError = 32,
         HasAggregatedChildData = 64,
     }
+    const enum RelationComparisonResult {
+        Succeeded = 1,
+        Failed = 2,
+        FailedAndReported = 3,
+    }
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;

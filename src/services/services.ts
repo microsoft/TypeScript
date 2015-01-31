@@ -9,7 +9,8 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
-    export var servicesVersion = "0.5";
+
+    export var servicesVersion = "0.5"
 
     export interface Node {
         getSourceFile(): SourceFile;

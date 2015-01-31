@@ -383,19 +383,13 @@ declare module TypeScript {
         Option_0_specified_without_1: string;
         codepage_option_not_supported_on_current_platform: string;
         Concatenate_and_emit_output_to_single_file: string;
-        Generates_corresponding_0_file: string;
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: string;
         Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations: string;
         Watch_input_files: string;
         Redirect_output_structure_to_the_directory: string;
         Do_not_emit_comments_to_output: string;
-        Skip_resolution_and_preprocessing: string;
-        Specify_ECMAScript_target_version_0_default_or_1: string;
-        Specify_module_code_generation_0_or_1: string;
         Print_this_message: string;
-        Print_the_compiler_s_version_0: string;
         Allow_use_of_deprecated_0_keyword_when_referencing_an_external_module: string;
-        Specify_locale_for_errors_and_messages_For_example_0_or_1: string;
         Syntax_0: string;
         options: string;
         file1: string;
@@ -412,7 +406,6 @@ declare module TypeScript {
         LOCATION: string;
         DIRECTORY: string;
         NUMBER: string;
-        Specify_the_codepage_to_use_when_opening_source_files: string;
         Additional_locations: string;
         This_version_of_the_Javascript_runtime_does_not_support_the_0_function: string;
         Unknown_rule: string;
