@@ -1363,7 +1363,7 @@
         "code":  2463
     },
 
-    "Duplicate identifier '{0}'. Compiler uses variable declaration '{0}' to support async functions.": {
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2500
     },

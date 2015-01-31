@@ -7370,16 +7370,15 @@ module ts {
                 if (node.flags & NodeFlags.Async) {
                     var promiseConstructor = getPromiseConstructor(node);
                     if (promiseConstructor) {
-                        if (promiseConstructor.kind === SyntaxKind.Identifier) {
-                            var promiseName = (<Identifier>promiseConstructor).text;
-                            var typeSymbol = resolveName(node, promiseName, SymbolFlags.Type, undefined, undefined);
-                            var valueSymbol = resolveName(node, promiseName, SymbolFlags.Value, undefined, undefined);
-                            if (typeSymbol !== valueSymbol) {
-                                var valueLinks = getNodeLinks(valueSymbol.valueDeclaration);
-                                if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
-                                    valueLinks.flags |= NodeCheckFlags.PromiseCollision;
-                                    error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, promiseName);
-                                }
+                        var promiseIdentifier = getFirstIdentifier(promiseConstructor);
+                        var promiseName = promiseIdentifier.text;
+                        var typeSymbol = resolveName(node, promiseName, SymbolFlags.Type | SymbolFlags.Module, undefined, undefined);
+                        var valueSymbol = resolveName(node, promiseName, SymbolFlags.Value, undefined, undefined);
+                        if (typeSymbol !== valueSymbol) {
+                            var valueLinks = getNodeLinks(valueSymbol.valueDeclaration);
+                            if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
+                                valueLinks.flags |= NodeCheckFlags.PromiseCollision;
+                                error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, promiseName, getTextOfNode(promiseConstructor));
                             }
                         }
                     }
@@ -8282,7 +8281,7 @@ module ts {
             if (identifier.text === "__awaiter") {
                 var isDeclaration = node.kind !== SyntaxKind.Identifier;
                 if (isDeclaration) {
-                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, identifier.text);
                 } else {
                     error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
                 }
@@ -8292,7 +8291,7 @@ module ts {
             if (container && container.flags & NodeFlags.Async && node.kind !== SyntaxKind.Identifier) {
                 var promiseConstructor = getPromiseConstructor(container);
                 if (promiseConstructor && promiseConstructor.kind === SyntaxKind.Identifier && (<Identifier>promiseConstructor).text === identifier.text) {
-                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, getTextOfNode(promiseConstructor));
                 }
             }
         }
@@ -8310,7 +8309,7 @@ module ts {
             // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
             var isDeclaration = node.kind !== SyntaxKind.Identifier;
             if (isDeclaration) {
-                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, identifier.text);
             } else {
                 error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
             }
