@@ -5751,13 +5751,50 @@ This appendix contains a summary of the grammar found in the main document. As d
 ## <a name="A.3"/>A.3 Statements
 
 &emsp;&emsp;*VariableDeclaration:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
+&emsp;&emsp;&emsp;*SimpleVariableDeclaration*  
+&emsp;&emsp;&emsp;*DestructuringVariableDeclaration*
 
-&emsp;&emsp;*VariableDeclarationNoIn:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*InitialiserNoIn<sub>opt</sub>*
+&emsp;&emsp;*SimpleVariableDeclaration:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
 
 &emsp;&emsp;*TypeAnnotation:*  
 &emsp;&emsp;&emsp;`:`&emsp;*Type*
+
+&emsp;&emsp;*DestructuringVariableDeclaration:*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser*
+
+&emsp;&emsp;*BindingPattern:*  
+&emsp;&emsp;&emsp;*ObjectBindingPattern*  
+&emsp;&emsp;&emsp;*ArrayBindingPattern*
+
+&emsp;&emsp;*ObjectBindingPattern:*  
+&emsp;&emsp;&emsp;`{`&emsp;`}`  
+&emsp;&emsp;&emsp;`{`&emsp;*BindingPropertyList*&emsp;`,`*<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*BindingPropertyList:*  
+&emsp;&emsp;&emsp;*BindingProperty*  
+&emsp;&emsp;&emsp;*BindingPropertyList*&emsp;`,`&emsp;*BindingProperty*
+
+&emsp;&emsp;*BindingProperty:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*ArrayBindingPattern:*  
+&emsp;&emsp;&emsp;`[`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`
+
+&emsp;&emsp;*BindingElementList:*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*  
+&emsp;&emsp;&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*
+
+&emsp;&emsp;*BindingElement:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*BindingRestElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*Identifier*
 
 ## <a name="A.4"/>A.4 Functions
 
