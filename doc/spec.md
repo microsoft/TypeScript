@@ -426,7 +426,7 @@ getX({ x: 0, y: 0, color: "red" });  // Extra fields Ok
 getX({ x: 0 });  // Error: supplied parameter does not match
 ```
 
-See section [0](#0) for more information about type comparisons.
+See section [3.10](#3.10) for more information about type comparisons.
 
 ## <a name="1.5"/>1.5 Contextual Typing
 
@@ -961,7 +961,7 @@ The Number primitive type corresponds to the similarly named JavaScript primitiv
 
 The `number` keyword references the Number primitive type and numeric literals may be used to write values of the Number primitive type.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
 
 Some examples:
 
@@ -978,7 +978,7 @@ The Boolean primitive type corresponds to the similarly named JavaScript primiti
 
 The `boolean` keyword references the Boolean primitive type and the `true` and `false` literals reference the two Boolean truth values.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
 
 Some examples:
 
@@ -994,7 +994,7 @@ The String primitive type corresponds to the similarly named JavaScript primitiv
 
 The `string` keyword references the String primitive type and string literals may be used to write values of the String primitive type.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
 
 Some examples:
 
@@ -1098,6 +1098,8 @@ Array literals (section [4.6](#4.6)) may be used to create values of array types
 var a: string[] = ["hello", "world"];
 ```
 
+A type is said to be an ***array-like type*** if it is assignable (section [3.10.4](#3.10.4)) to the type `any[]`.
+
 ### <a name="3.3.3"/>3.3.3 Tuple Types
 
 ***Tuple types*** represent JavaScript arrays with individually tracked element types. Tuple types are written using tuple type literals (section [3.7.5](#3.7.5)). A tuple type combines a set of numerically named properties with the members of an array type. Specifically, a tuple type
@@ -1137,6 +1139,8 @@ interface KeyValuePair<K, V> extends Array<K | V> { 0: K; 1: V; }
 var x: KeyValuePair<number, string> = [10, "ten"];
 ```
 
+A type is said to be a ***tuple-like type*** if it has a property with the numeric name '0'.
+
 ### <a name="3.3.4"/>3.3.4 Function Types
 
 An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.7.7](#3.7.7)) or by including call signatures in object type literals.
@@ -1156,7 +1160,7 @@ Every object type is composed from zero or more of the following kinds of member
 
 Properties are either ***public***, ***private***, or ***protected*** and are either ***required*** or ***optional***:
 
-* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [0](#0). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [0](#0).
+* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [3.10](#3.10). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [3.10](#3.10).
 * Properties in an object type literal or interface declaration may be designated required or optional, while properties declared in other contexts are always considered required. Properties that are optional in the target type of an assignment may be omitted from source objects, as described in section [3.10.4](#3.10.4).
 
 Call and construct signatures may be ***specialized*** (section [3.8.2.4](#3.8.2.4)) by including parameters with string literal types. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized.
@@ -1282,7 +1286,7 @@ interface G<T, U extends Function> {
 
 the base constraint of 'T' is the empty object type, and the base constraint of 'U' and 'V' is 'Function'.
 
-For purposes of determining type relationships (section [0](#0)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
+For purposes of determining type relationships (section [3.10](#3.10)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
 
 ### <a name="3.5.2"/>3.5.2 Type Argument Lists
 
@@ -2280,6 +2284,17 @@ When an object literal is contextually typed by a type that includes a string in
 
 ## <a name="4.6"/>4.6 Array Literals
 
+Array literals are extended to support the spread (`...`) operator.
+
+&emsp;&emsp;*ElementList:*  *( Modified )*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*
+
+&emsp;&emsp;*SpreadElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*AssignmentExpression*
+
 An array literal
 
 ```TypeScript
@@ -2290,22 +2305,39 @@ denotes a value of an array type (section [3.3.2](#3.3.2)) or a tuple type (sect
 
 Each element expression in a non-empty array literal is processed as follows:
 
-* If the array literal is contextually typed (section [4.19](#4.19)) by a type *T* and *T* has a property with the numeric name *N*, where *N* is the index of the element expression in the array literal, the element expression is contextually typed by the type of that property.
+* If the array literal contains no spread elements, and if the array literal is contextually typed (section [4.19](#4.19)) by a type *T* and *T* has a property with the numeric name *N*, where *N* is the index of the element expression in the array literal, the element expression is contextually typed by the type of that property.
 * Otherwise, if the array literal is contextually typed by a type *T* with a numeric index signature, the element expression is contextually typed by the type of the numeric index signature.
 * Otherwise, the element expression is not contextually typed.
 
 The resulting type an array literal expression is determined as follows:
 
 * If the array literal is empty, the resulting type is an array type with the element type Undefined.
-* Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name '0', the resulting type is a tuple type constructed from the types of the element expressions.
-* Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+* Otherwise, if the array literal contains no spread elements and is contextually typed by a tuple-like type (section [3.3.3](#3.3.3)), the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, if the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section [4.17.1](#4.17.1)), the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, the resulting type is an array type with an element type that is the union of the types of the non-spread element expressions and the numeric index signature types of the spread element expressions.
 
-The rules above mean that an array literal is always of an array type, unless it is contextually typed by a type with numerically named properties (such as a tuple type). For example
+A spread element must specify an expression of an array-like type (section [3.3.2](#3.3.2)), or otherwise an error occurs.
+
+The rules above mean that an array literal is always of an array type, unless it is contextually typed by a tuple-like type. For example
 
 ```TypeScript
 var a = [1, 2];                          // number[]  
 var b = ["hello", true];                 // (string | boolean)[]  
 var c: [number, string] = [3, "three"];  // [number, string]
+```
+
+When the output target is ECMAScript 3 or 5, array literals containing spread elements are rewritten to invocations of the `concat` method. For example, the assignments
+
+```TypeScript
+var a = [2, 3, 4];  
+var b = [0, 1, ...a, 5, 6];
+```
+
+are rewritten to
+
+```TypeScript
+var a = [2, 3, 4];  
+var b = [0, 1].concat(a, [5, 6]);
 ```
 
 ## <a name="4.7"/>4.7 Parentheses
@@ -2970,10 +3002,10 @@ In a destructuring assignment expression, the type of the expression on the righ
   * *S* has an apparent property with the property name specified in *P* of a type that is assignable to the target given in *P*, or
   * *P* specifies a numeric property name and *S* has a numeric index signature of a type that is assignable to the target given in *P*, or
   * *S* has a string index signature of a type that is assignable to the target given in *P*. 
-* *V* is an array assignment pattern, *S* is the type Any, an array type, or a tuple type, and, for each assignment element *E* in *V*,
+* *V* is an array assignment pattern, *S* is the type Any or an array-like type (section [3.3.2](#3.3.2)), and, for each assignment element *E* in *V*,
   * *S* is the type Any, or
-  * *S* is a tuple type with a property named *N* of a type that is assignable to the target given in *E*, where *N* is the numeric index of *E* in the array assignment pattern, or
-  * the numeric index signature type of *S* is assignable to the target given in *E*.
+  * *S* is a tuple-like type (section [3.3.3](#3.3.3)) with a property named *N* of a type that is assignable to the target given in *E*, where *N* is the numeric index of *E* in the array assignment pattern, or
+  * *S* is not a tuple-like type and the numeric index signature type of *S* is assignable to the target given in *E*.
 
 In an assignment property or element that includes a default value, the type of the default value must be assignable to the target given in the assignment property or element.
 
@@ -3017,9 +3049,10 @@ Type checking of an expression is improved in several contexts by factoring in t
   * the type of the property with a matching name in the contextual type, if any, or otherwise
   * for a numerically named property, the numeric index type of the contextual type, if any, or otherwise
   * the string index type of the contextual type, if any. 
-* In a contextually typed array literal expression, an element expression at index *N* is contextually typed by
+* In a contextually typed array literal expression containing no spread elements, an element expression at index *N* is contextually typed by
   * the type of the property with the numeric name *N* in the contextual type, if any, or otherwise
   * the numeric index type of the contextual type, if any.
+* In a contextually typed array literal expression containing one or more spread elements, an element expression at index *N* is contextually typed by the numeric index type of the contextual type, if any.
 * In a contextually typed parenthesized expression, the contained expression is contextually typed by the same type.
 * In a type assertion, the expression is contextually typed by the indicated type. 
 * In a || operator expression, if the expression is contextually typed, the operands are contextually typed by the same type. Otherwise, the right expression is contextually typed by the type of the left expression.
@@ -3303,9 +3336,9 @@ The type *T* associated with a binding element is determined as follows:
 * If *S* is the Any type:
   * If the binding element specifies an initializer expression, *T* is the type of that initializer expression.
   * Otherwise, *T* is the Any type.
-* If S is not an array type (i.e. assignable to the type `any[]`), no type is associated with the binding property and an error occurs.
+* If *S* is not an array-like type (section [3.3.2](#3.3.2)), no type is associated with the binding property and an error occurs.
 * If the binding element is a rest element, *T* is an array type with an element type *E*, where *E* is the type of the numeric index signature of *S*.
-* Otherwise, if *S* is a tuple type:
+* Otherwise, if *S* is a tuple-like type (section [3.3.3](#3.3.3)):
   * Let *N* be the zero-based index of the binding element in the array binding pattern.
   * If *S* has a property with the numerical name *N*, *T* is the type of that property.
   * Otherwise, no type is associated with the binding element and an error occurs.
@@ -3368,7 +3401,7 @@ var _a = getSomeObject(),
     z = _d === void 0 ? 10 : _d;
 ```
 
-### <a name="5.1.3"/>5.1.3 Implied Type
+### <a name="5.1.3"/>5.1.3 Implied Type
 
 A variable, parameter, binding property, or binding element declaration that specifies a binding pattern has an ***implied type*** which is determined as follows:
 
@@ -3858,7 +3891,7 @@ class Location {
 }
 ```
 
-In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [0](#0)).
+In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [3.10](#3.10)).
 
 Within the 'Control' class it is possible to access the 'state' private member through an instance of 'SelectableControl'. Effectively, a 'SelectableControl' acts like a 'Control' that is known to have a 'select' method. The 'Button' and 'TextBox' classes are subtypes of 'SelectableControl' (because they both inherit from 'Control' and have a 'select' method), but the 'Image' and 'Location' classes are not.
 
@@ -5720,6 +5753,15 @@ This appendix contains a summary of the grammar found in the main document. As d
 
 &emsp;&emsp;*SetAccessor:*  
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
+
+&emsp;&emsp;*ElementList:*  *( Modified )*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*
+
+&emsp;&emsp;*SpreadElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*AssignmentExpression*
 
 &emsp;&emsp;*CallExpression:*  *( Modified )*  
 &emsp;&emsp;&emsp;…  
