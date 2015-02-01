@@ -323,6 +323,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
@@ -331,7 +332,10 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*outDir*/ undefined,
             /*preserveConstEnums*/ true,
             /*keepComments*/ false,
-            /*noResolve*/ false);
+            /*noResolve*/ false,
+            /*callback*/ function () { 
+                jake.cpR(servicesFile, nodePackageFile, {silent: true});
+            });
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -425,7 +429,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
