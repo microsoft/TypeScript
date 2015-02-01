@@ -5494,7 +5494,7 @@ Except for *ImportDeclarations*, *AmbientModuleElements* always declare exported
 An *AmbientExternalModuleDeclaration* declares an external module. This type of declaration is permitted only at the top level in a source file that contributes to the global module (section [11.1](#11.1)). The *StringLiteral* must specify a top-level external module name. Relative external module names are not permitted.
 
 &emsp;&emsp;*AmbientExternalModuleDeclaration:*  
-&emsp;&emsp;&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
+&emsp;&emsp;&emsp;`declare`&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
 
 &emsp;&emsp;*AmbientExternalModuleBody:*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleElements<sub>opt</sub>*
@@ -6054,7 +6054,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*
 
 &emsp;&emsp;*AmbientExternalModuleDeclaration:*  
-&emsp;&emsp;&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
+&emsp;&emsp;&emsp;`declare`&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
 
 &emsp;&emsp;*AmbientExternalModuleBody:*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleElements<sub>opt</sub>*
