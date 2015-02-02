@@ -111,6 +111,7 @@ module ts {
         var nodeLinks: NodeLinks[] = [];
         var potentialThisCollisions: Node[] = [];
         var potentialArgumentsCollisions: Node[] = [];
+        var symbolNameOverrides: string[];
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
@@ -4784,10 +4785,21 @@ module ts {
             }
         }
 
+        function renameSymbol(symbol: Symbol, name: string): void {
+            if (!symbolNameOverrides) {
+                symbolNameOverrides = [];
+            }
+            
+            symbolNameOverrides[symbol.id] = name;
+        }
+
+
         function getRenamedIdentifier(name: Identifier): string {
-            var links = getNodeLinks(name);
-            if (links.resolvedSymbol) {
-                return links.resolvedSymbol.generatedName;
+            if (symbolNameOverrides) {
+                var links = getNodeLinks(name);
+                if (links.resolvedSymbol) {
+                    return symbolNameOverrides[links.resolvedSymbol.id];
+                }
             }
         }
 
@@ -7536,7 +7548,7 @@ module ts {
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking accessors
-                checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
+                checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
@@ -10334,6 +10346,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                renameSymbol,
                 getRenamedIdentifier,
                 getPromiseConstructor
             };

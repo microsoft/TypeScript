@@ -975,11 +975,12 @@ module ts {
     }
 
     export enum OpCode {
+        Nop,                    // No operation, used to force a new case in the state machine
         Statement,              // A regular javascript statement
         Assign,                 // An assignment
         Break,                  // A break instruction used to jump to a label
-        BrTrue,                 // A break instruction used to jump to a label if a condition evaluates to true
-        BrFalse,                // A break instruction used to jump to a label if a condition evaluates to false
+        BreakWhenTrue,          // A break instruction used to jump to a label if a condition evaluates to true
+        BreakWhenFalse,         // A break instruction used to jump to a label if a condition evaluates to false
         Yield,                  // A completion instruction for the `yield` keyword
         YieldStar,              // A completion instruction for the `yield*` keyword
         Return,                 // A completion instruction for the `return` keyword
@@ -1269,6 +1270,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        renameSymbol(symbol: Symbol, name: string): void;
         getRenamedIdentifier(name: Identifier): string;
         getPromiseConstructor(node: SignatureDeclaration): EntityName;
     }
@@ -1365,7 +1367,6 @@ module ts {
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
         valueDeclaration?: Declaration;// First value declaration of the symbol,
         constEnumOnlyModule?: boolean; // For modules - if true - module contains only const enums or other modules with only const enums.
-        generatedName?: string;        // A generated name for a renamed symbol
     }
 
     export interface SymbolLinks {

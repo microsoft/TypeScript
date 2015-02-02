@@ -33,6 +33,6 @@ declare class Promise<T> {
 
 var foo = async function (): Promise<void> {
 >foo : () => Promise<void>
->function (): Promise<void> {} : () => Promise<void>
+>async function (): Promise<void> {} : () => Promise<void>
 >Promise : Promise<T>
 }

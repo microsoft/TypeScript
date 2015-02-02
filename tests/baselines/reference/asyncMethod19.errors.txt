@@ -1,4 +1,3 @@
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,3): error TS1057: An async function or method must have a valid awaitable return type.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,13): error TS1138: Parameter declaration expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,18): error TS1005: ':' expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,19): error TS1136: Property assignment expected.
@@ -6,7 +5,7 @@ tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,29): erro
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,33): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts (6 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts (5 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -14,8 +13,6 @@ tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,33): erro
     
     var o = {
       async foo(await): Promise<void> {
-      ~~~~~~~~~~
-!!! error TS1057: An async function or method must have a valid awaitable return type.
                 ~~~~~
 !!! error TS1138: Parameter declaration expected.
                      ~

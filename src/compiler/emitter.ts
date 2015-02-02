@@ -2254,11 +2254,20 @@ module ts {
                     write(prefix);
                     write(".");
                 }
-                if (!node.parent || nodeIsMissingOrGenerated(node)) {
-                    write(node.text);
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
+                    write("_arguments");
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    var generatedName = resolver.getRenamedIdentifier(node);
+                    if (generatedName) {
+                        write(generatedName);
+                    }
+                    else if (!node.parent || nodeIsMissingOrGenerated(node)) {
+                        write(node.text);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node);
+                    }
                 }
             }
 
@@ -2339,22 +2348,7 @@ module ts {
             function emitSpreadElementExpression(node: SpreadElementExpression) {
                 write("...");
                 emit((<SpreadElementExpression>node).expression);
-            }
-
-            function needsParenthesisForPropertyAccess(node: Expression) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.ArrayLiteralExpression:
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.ParenthesizedExpression:
-                        // This list is not exhaustive and only includes those cases that are relevant
-                        // to the check in emitArrayLiteral. More cases can be added as needed.
-                        return false;
-                }
-                return true;
-            }
+            }            
 
             function emitArrayLiteral(node: ArrayLiteralExpression) {
                 var elements = node.elements;
@@ -3809,95 +3803,173 @@ module ts {
                     }
                     if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
                         writeLine();
-                        write(`var __generator = __generator || function (m) {`);
-                        writeLine();
-                        increaseIndent();
-                        write(`var d, i, f, g, s, y, b;`);
-                        writeLine();
-                        write(`function n(c) {`);
+                        write(`var __generator = __generator || function (body) {`);
                         increaseIndent();
                         writeLine();
-                        write(`if (f) throw new TypeError("Generator is already executing.");`);
+                        write(`var done, finallyStack, executing, state;`);
                         writeLine();
-                        write(`switch (d && c[0]) {`);
+                        write(`function step(opcode, arg) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`var trys, region, tryLabel, catchLabel, finallyLabel, endLabel;`);
+                        writeLine();
+                        write(`if (executing) throw new TypeError("Generator is already executing.");`);
+                        writeLine();
+                        write(`state = state || { label: 0 };`);
+                        writeLine();
+                        write(`while (true) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`executing = false;`);
+                        writeLine();
+                        write(`if (!done) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`trys = state.trys;`);
+                        writeLine();
+                        write(`region = trys && trys[trys.length - 1];`);
+                        writeLine();
+                        write(`if (region) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`tryLabel = region[0];`);
+                        writeLine();
+                        write(`catchLabel = region[1];`);
+                        writeLine();
+                        write(`finallyLabel = region[2];`);
+                        writeLine();
+                        write(`endLabel = region[3];`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        writeLine();
+                        write(`else if (opcode === 1 || opcode === 2) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`done = true;`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        writeLine();
+                        write(`if (done) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`finallyStack = void 0;`);
+                        writeLine();
+                        write(`switch (opcode) {`);
                         increaseIndent();
                         writeLine();
                         write(`case 0 /*next*/: return { value: void 0, done: true };`);
                         writeLine();
-                        write(`case 1 /*throw*/: throw c[1];`);
+                        write(`case 1 /*throw*/: throw arg;`);
                         writeLine();
-                        write(`case 2 /*return*/: return { value: c[1], done: true };`);
+                        write(`case 2 /*return*/: return { value: arg, done: true };`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
                         decreaseIndent();
                         writeLine();
                         write(`}`);
                         writeLine();
-                        write(`while (!(f = false)) {`);
+                        write(`switch (opcode) {`);
                         increaseIndent();
                         writeLine();
-                        write(`switch (!(g = (s = s || { label: 0 }).trys && s.trys.length && s.trys[s.trys.length - 1]) && c[0]) {`);
+                        write(`case 0 /*next*/:`);
                         increaseIndent();
                         writeLine();
-                        write(`case 1 /*throw*/: throw i = void 0, d = true, c[1];`);
+                        write(`state.sent = arg;`);
                         writeLine();
-                        write(`case 2 /*return*/: return i = void 0, d = true, { value: c[1], done: true };`);
+                        write(`break;`);
                         decreaseIndent();
                         writeLine();
-                        write(`}`);
-                        writeLine();
-                        write(`try {`);
+                        write(`case 4 /*yield*/:`);
                         increaseIndent();
                         writeLine();
-                        write(`if (y && (f = true, typeof (b = y[c[0] === 2 ? "return" : c[0] === 1 ? "throw" : "next"]) === "function")) {`);
-                        increaseIndent();
+                        write(`state.label++;`);
                         writeLine();
-                        write(`if (!(b = b.call(y, c[1])).done) return f = false, b;`);
-                        writeLine();
-                        write(`c[0] = 0 /*next*/, c[1] = b.value;`);
+                        write(`return { value: arg, done: false };`);
                         decreaseIndent();
                         writeLine();
-                        write(`}`);
-                        writeLine();
-                        write(`switch (y = f = false, c[0]) {`);
+                        write(`case 6 /*endfinally*/:`);
                         increaseIndent();
                         writeLine();
-                        write(`case 0 /*next*/: s.sent = c[1]; break;`);
+                        write(`arg = finallyStack.pop(), opcode = finallyStack.pop();`);
                         writeLine();
-                        write(`case 4 /*yield*/: return s.label++, { value: c[1], done: false };`);
+                        write(`trys.pop();`);
                         writeLine();
-                        write(`case 5 /*yield*/: s.label++; y = c[1]; c[0] = 0 /*next*/; c[1] = void 0; continue;`);
-                        writeLine();
-                        write(`case 6 /*endfinally*/: c = i.pop(); continue;`);
+                        write(`continue;`);
+                        decreaseIndent();
                         writeLine();
                         write(`default:`);
                         increaseIndent();
                         writeLine();
-                        write(`if (c[0] === 3 /*break*/ && (!g || c[1] >= g[0] && c[1] < g[3])) { s.label = c[1]; break; }`);
+                        write(`if (opcode === 3 /*break*/ && (!region || (arg > tryLabel && arg < endLabel))) {`);
+                        increaseIndent();
                         writeLine();
-                        write(`if (c[0] === 1 /*throw*/ && s.label < g[1]) { s.error = c[1]; s.label = g[1]; break; }`);
+                        write(`state.label = arg;`);
+                        decreaseIndent();
                         writeLine();
-                        write(`if (s.label < g[2]) { (i = i || []).push(c); s.label = g[2]; break; }`);
+                        write(`}`);
                         writeLine();
-                        write(`if (g[2]) { i.pop(); }`);
+                        write(`else if (opcode === 1 /*throw*/ && state.label < catchLabel) {`);
+                        increaseIndent();
                         writeLine();
-                        write(`s.trys.pop();`);
+                        write(`state.error = arg;`);
+                        writeLine();
+                        write(`state.label = catchLabel;`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        writeLine();
+                        write(`else if (state.label < finallyLabel) {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`finallyStack = finallyStack || [];`);
+                        writeLine();
+                        write(`finallyStack.push(opcode, arg);`);
+                        writeLine();
+                        write(`state.label = finallyLabel;`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        writeLine();
+                        write(`else {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`if (finallyLabel) finallyStack.pop(), finallyStack.pop();`);
+                        writeLine();
+                        write(`trys.pop();`);
                         writeLine();
                         write(`continue;`);
+                        decreaseIndent();
+                        writeLine();
+                        write(`}`);
+                        writeLine();
+                        write(`break;`);
                         decreaseIndent();
                         decreaseIndent();
                         writeLine();
                         write(`}`);
                         writeLine();
-                        write(`c = m((f = true, s));`);
+                        write(`executing = true;`);
+                        writeLine();
+                        write(`try {`);
+                        increaseIndent();
+                        writeLine();
+                        write(`var operation = body(state);`);
+                        writeLine();
+                        write(`opcode = operation[0], arg = operation[1];`);
                         decreaseIndent();
                         writeLine();
                         write(`} catch (e) {`);
                         increaseIndent();
                         writeLine();
-                        write(`y = void 0;`);
+                        write(`opcode = 1 /*throw*/, arg = e;`);
                         writeLine();
-                        write(`c[0] = 1 /*throw*/, c[1] = e;`);
                         decreaseIndent();
-                        writeLine();
                         write(`}`);
                         decreaseIndent();
                         writeLine();
@@ -3909,11 +3981,11 @@ module ts {
                         write(`return {`);
                         increaseIndent();
                         writeLine();
-                        write(`next: function (v) { return n([0 /*next*/, v]); },`);
+                        write(`next: function (v) { return step(0 /*next*/, v); },`);
                         writeLine();
-                        write(`"throw": function (v) { return n([1 /*throw*/, v]); },`);
+                        write(`"throw": function (v) { return step(1 /*throw*/, v); },`);
                         writeLine();
-                        write(`"return": function (v) { return n([2 /*return*/, v]); },`);
+                        write(`"return": function (v) { return step(2 /*return*/, v); },`);
                         decreaseIndent();
                         writeLine();
                         write(`};`);

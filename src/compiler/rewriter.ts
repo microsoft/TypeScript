@@ -508,7 +508,6 @@ module ts {
                 case SyntaxKind.TaggedTemplateExpression: return visitTaggedTemplateExpression(<TaggedTemplateExpression>node, state);
                 case SyntaxKind.TemplateExpression: return visitTemplateExpression(<TemplateExpression>node, state);
                 case SyntaxKind.ParenthesizedExpression: return visitParenthesizedExpression(<ParenthesizedExpression>node, state);
-                case SyntaxKind.FunctionDeclaration: return visitFunctionDeclaration(<FunctionDeclaration>node, state);
                 case SyntaxKind.VariableStatement: return visitVariableStatement(<VariableStatement>node, state);
                 case SyntaxKind.ExpressionStatement: return visitExpressionStatement(<ExpressionStatement>node, state);
                 case SyntaxKind.IfStatement: return visitIfStatement(<IfStatement>node, state);
@@ -523,7 +522,7 @@ module ts {
                 case SyntaxKind.SwitchStatement: return visitSwitchStatement(<SwitchStatement>node, state);
                 case SyntaxKind.LabeledStatement: return visitLabeledStatement(<LabeledStatement>node, state);
                 case SyntaxKind.TryStatement: return visitTryStatement(<TryStatement>node, state);
-                case SyntaxKind.CatchClause: return visitCatchClause(<CatchClause>node, state);
+                case SyntaxKind.FunctionDeclaration: return visitFunctionDeclaration(<FunctionDeclaration>node, state);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.GetAccessor:
@@ -801,14 +800,6 @@ module ts {
             return Visitor.fallback(node, visitNode, state);
         }
 
-        function visitCatchClause(node: CatchClause, state: RewriterState): CatchClause {
-            // we're not rewriting, so clear any generated name on the symbol
-            if (node.symbol) {
-                node.symbol.generatedName = undefined;
-            }
-            return Visitor.fallback(node, visitNode, state);
-        }        
-
         // expression caching
         function cacheExpression(node: Expression, state: RewriterState): Identifier {
             var local = GeneratorFunctionBuilder.declareLocal(state.builder);
@@ -873,7 +864,7 @@ module ts {
             var builder = state.builder;
             var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
             var resultLocal = GeneratorFunctionBuilder.declareLocal(builder);
-            var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BrFalse : OpCode.BrTrue;
+            var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BreakWhenFalse : OpCode.BreakWhenTrue;
             GeneratorFunctionBuilder.writeLocation(builder, node.left);
             GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.left, visitNode, state));
             GeneratorFunctionBuilder.emit(builder, code, resumeLabel, resultLocal);
@@ -910,7 +901,7 @@ module ts {
         function rewriteDestructuringAssignment(node: BinaryExpression, state: RewriterState): Expression {
             var destructured = DestructuringAssignmentRewriter.rewrite(node, state.locals);
             var rewritten = visitBinaryExpression(destructured, state);
-            if (needsParenthesis(node)) {
+            if (needsParenthesisForPropertyAccess(node)) {
                 return Factory.makeLeftHandSideExpression(rewritten);
             }
             return rewritten;
@@ -1048,7 +1039,7 @@ module ts {
             var whenFalseLabel = GeneratorFunctionBuilder.defineLabel(builder);
             var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
             var resultLocal = GeneratorFunctionBuilder.declareLocal(builder);
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, whenFalseLabel, Visitor.visit(node.condition, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, whenFalseLabel, Visitor.visit(node.condition, visitNode, state));
             GeneratorFunctionBuilder.writeLocation(builder, node.whenTrue);
             GeneratorFunctionBuilder.emit(builder, OpCode.Assign, resultLocal, Visitor.visit(node.whenTrue, visitNode, state));
             GeneratorFunctionBuilder.emit(builder, OpCode.Break, resumeLabel);
@@ -1089,7 +1080,7 @@ module ts {
             if (node.elseStatement) {
                 var elseLabel = GeneratorFunctionBuilder.defineLabel(builder);
             }
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, elseLabel || resumeLabel, Visitor.visit(node.expression, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, elseLabel || resumeLabel, Visitor.visit(node.expression, visitNode, state));
             rewriteBlockOrStatement(node.thenStatement, state);
             if (node.elseStatement) {
                 GeneratorFunctionBuilder.emit(builder, OpCode.Break, resumeLabel);
@@ -1107,7 +1098,7 @@ module ts {
             GeneratorFunctionBuilder.markLabel(builder, bodyLabel);
             rewriteBlockOrStatement(node.statement, state);
             GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrTrue, bodyLabel, Visitor.visit(node.expression, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenTrue, bodyLabel, Visitor.visit(node.expression, visitNode, state));
             GeneratorFunctionBuilder.endContinueBlock(builder);
         }
 
@@ -1117,7 +1108,7 @@ module ts {
             var bodyLabel = GeneratorFunctionBuilder.defineLabel(builder);
             var endLabel = GeneratorFunctionBuilder.beginContinueBlock(builder, conditionLabel, getLabelNames(node));
             GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, Visitor.visit(node.expression, visitNode, state));
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, endLabel, Visitor.visit(node.expression, visitNode, state));
             rewriteBlockOrStatement(node.statement, state);
             GeneratorFunctionBuilder.emit(builder, OpCode.Break, conditionLabel);
             GeneratorFunctionBuilder.endContinueBlock(builder);
@@ -1135,7 +1126,7 @@ module ts {
             }
             GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
             if (node.condition) {
-                GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, Visitor.visit(node.condition, visitNode, state));
+                GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, endLabel, Visitor.visit(node.condition, visitNode, state));
             }
             rewriteBlockOrStatement(node.statement, state);
             GeneratorFunctionBuilder.markLabel(builder, iteratorLabel);
@@ -1170,10 +1161,10 @@ module ts {
             GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(initializeTempExpression));
             var conditionExpression = Factory.createBinaryExpression(SyntaxKind.LessThanToken, tempLocal, keysLengthExpression);
             GeneratorFunctionBuilder.markLabel(builder, conditionLabel);
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, endLabel, conditionExpression);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, endLabel, conditionExpression);
             var readKeyExpression = Factory.createElementAccessExpression(keysLocal, tempLocal);
             var hasKeyExpression = Factory.createBinaryExpression(SyntaxKind.InKeyword, readKeyExpression, expression);
-            GeneratorFunctionBuilder.emit(builder, OpCode.BrFalse, iteratorLabel, hasKeyExpression);
+            GeneratorFunctionBuilder.emit(builder, OpCode.BreakWhenFalse, iteratorLabel, hasKeyExpression);
             var assignVariableExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, readKeyExpression);
             GeneratorFunctionBuilder.writeLocation(builder, node.initializer);
             GeneratorFunctionBuilder.emit(builder, OpCode.Statement, Factory.createExpressionStatement(assignVariableExpression, variable));
@@ -1313,7 +1304,7 @@ module ts {
                 
                 // rename the symbol for the catch clause
                 if (node.catchClause.symbol) {
-                    node.catchClause.symbol.generatedName = variable.text;
+                    state.locals.resolver.renameSymbol(node.catchClause.symbol, variable.text);
                 }
 
                 GeneratorFunctionBuilder.beginCatchBlock(builder, variable);

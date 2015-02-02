@@ -173,6 +173,7 @@ module ts {
                 startLabel,
                 endLabel
             });
+            emit(builder, OpCode.Nop);
             builder.flags |= FunctionBuilderFlags.HasProtectedRegions;
             return endLabel;
         }
@@ -196,6 +197,7 @@ module ts {
             var errorProperty = Factory.createPropertyAccessExpression(state, Factory.createIdentifier("error"));
             var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, errorProperty);
             emit(builder, OpCode.Statement, assignExpression);
+            emit(builder, OpCode.Nop);
         }
 
         export function beginFinallyBlock(builder: GeneratorFunctionBuilder): void {
@@ -392,13 +394,14 @@ module ts {
         export function emit(builder: GeneratorFunctionBuilder, code: OpCode, left: Expression, right: Expression): void;
         export function emit(builder: GeneratorFunctionBuilder, code: OpCode, ...args: any[]): void {
             switch (code) {
+                case OpCode.Break:
+                case OpCode.BreakWhenFalse:
+                case OpCode.BreakWhenTrue:
+                case OpCode.Nop:
                 case OpCode.Assign:
                 case OpCode.Statement:
                 case OpCode.Return:
                 case OpCode.Throw:
-                case OpCode.Break:
-                case OpCode.BrFalse:
-                case OpCode.BrTrue:
                 case OpCode.Endfinally:
                 case OpCode.Yield:
                 case OpCode.YieldStar:
@@ -434,14 +437,18 @@ module ts {
             builder.operationLocations[operationIndex] = location;
         }
 
-        function createLabel(builder: GeneratorFunctionBuilder, label: Label): GeneratedLabel {
-            if (!builder.labelNumbers) {
-                builder.labelNumbers = [];
+        function createLabel(builder: GeneratorFunctionBuilder, label: Label): Expression {
+            if (label > 0) {
+                if (!builder.labelNumbers) {
+                    builder.labelNumbers = [];
+                }
+                return Factory.createGeneratedLabel(label, builder.labelNumbers);
             }
-            return Factory.createGeneratedLabel(label, builder.labelNumbers);
+            return Factory.createOmittedExpression();
         }
 
         export function createInlineBreak(builder: GeneratorFunctionBuilder, label: Label): ReturnStatement {
+            Debug.assert(label > 0, `Invalid label: ${label}`);
             var instruction = Factory.createNumericLiteral('3 /*break*/');
             var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(builder, label)]);
             return Factory.createReturnStatement(returnExpression, readLocation(builder));
@@ -481,7 +488,6 @@ module ts {
             statements.push(returnStatement);
 
             var body = Factory.createBlock(Factory.createNodeArray<Statement>(statements));
-
             var node: FunctionLikeDeclaration;
             switch (kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -591,25 +597,13 @@ module ts {
                     }
                 }
                 if (currentExceptionBlock) {
-                    var startLabel = createLabel(builder, currentExceptionBlock.startLabel);
-                    var endLabel = createLabel(builder, currentExceptionBlock.endLabel);
-                    var catchLabel: Expression;
-                    if (currentExceptionBlock.catchLabel > 0) {
-                        catchLabel = createLabel(builder, currentExceptionBlock.catchLabel);
-                    }
-                    else {
-                        catchLabel = Factory.createOmittedExpression();
-                    }
-
-                    var finallyLabel: Expression;
-                    if (currentExceptionBlock.finallyLabel > 0) {
-                        finallyLabel = createLabel(builder, currentExceptionBlock.finallyLabel);
-                    }
-                    else {
-                        finallyLabel = Factory.createOmittedExpression();
-                    }
-
-                    var labelsArray = Factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
+                    var { startLabel, catchLabel, finallyLabel, endLabel } = currentExceptionBlock;
+                    var labelsArray = Factory.createArrayLiteralExpression([
+                        createLabel(builder, startLabel),
+                        createLabel(builder, catchLabel),
+                        createLabel(builder, finallyLabel),
+                        createLabel(builder, endLabel)
+                    ]);
                     var trysProperty = Factory.createPropertyAccessExpression(getState(builder), Factory.createIdentifier("trys"));
                     var pushMethod = Factory.createPropertyAccessExpression(trysProperty, Factory.createIdentifier("push"));
                     var callExpression = Factory.createCallExpression(pushMethod, [labelsArray]);
@@ -662,7 +656,9 @@ module ts {
                         if (!statementBuilder.exceptionBlockStack) {
                             statementBuilder.exceptionBlockStack = [];
                         }
-
+                        if (!statementBuilder.statements) {
+                            statementBuilder.statements = [];
+                        }
                         statementBuilder.exceptionBlockStack.push(statementBuilder.currentExceptionBlock);
                         statementBuilder.currentExceptionBlock = exceptionBlock;
                     }
@@ -696,11 +692,12 @@ module ts {
             statementBuilder.lastOperationWasAbrupt = false;
             statementBuilder.lastOperationWasCompletion = false;
             switch (operation) {
+                case OpCode.Nop: return;
                 case OpCode.Statement: return writeStatement(statementBuilder, <Node>operationArguments[0]);
                 case OpCode.Assign: return writeAssign(statementBuilder, <Expression>operationArguments[0], <Expression>operationArguments[1], operationLocation);
                 case OpCode.Break: return writeBreak(statementBuilder, <Label>operationArguments[0], operationLocation);
-                case OpCode.BrTrue: return writeBrTrue(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                case OpCode.BrFalse: return writeBrFalse(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.BreakWhenTrue: return writeBrTrue(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.BreakWhenFalse: return writeBrFalse(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
                 case OpCode.YieldStar: return writeYieldStar(statementBuilder, <Expression>operationArguments[0], operationLocation);
                 case OpCode.Yield: return writeYield(statementBuilder, <Expression>operationArguments[0], operationLocation);
                 case OpCode.Return: return writeReturn(statementBuilder, <Expression>operationArguments[0], operationLocation);

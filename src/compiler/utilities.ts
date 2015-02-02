@@ -162,11 +162,7 @@ module ts {
     }
 
     export function nodeIsGenerated(node: Node) {
-        if (!node) {
-            return true;
-    }
-    
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos < 0;
+        return node && node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos < 0;
     }
 
     export function nodeIsMissingOrGenerated(node: Node) {
@@ -605,12 +601,8 @@ module ts {
             case SyntaxKind.PostfixUnaryExpression:
                 return true;
             default:
-                if (isLeftHandSideExpression(node)) {
-                    return true;
-                }
+                return isLeftHandSideExpression(node);
         }
-
-        return false;
     }
 
     export function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
@@ -809,7 +801,7 @@ module ts {
         }
     }
 
-    export function needsParenthesis(expression: Expression): boolean {
+    export function needsParenthesisForPropertyAccess(expression: Expression): boolean {
         if (expression.parent) {
             switch (expression.parent.kind) {
                 case SyntaxKind.ExpressionStatement:
@@ -821,21 +813,6 @@ module ts {
         }
 
         return !isLeftHandSideExpression(expression);
-    }
-
-    export function needsParenthesisForPropertyAccess(node: Expression) {
-        switch (node.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.ParenthesizedExpression:
-                // This list is not exhaustive and only includes those cases that are relevant
-                // to the check in emitArrayLiteral. More cases can be added as needed.
-                return false;
-        }
-        return true;
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
