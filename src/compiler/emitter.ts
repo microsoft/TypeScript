@@ -3315,66 +3315,66 @@ module ts {
 
                 if (!node.body) {
                     writeLine();
-					write("}");
-				}
-				else {
-					increaseIndent();
+                    write("}");
+                }
+                else {
+                    increaseIndent();
 
-					emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+                    emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
 
-					var startIndex = 0;
-					if (node.body.kind === SyntaxKind.Block) {
-						startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-					}
-					var outPos = writer.getTextPos();
+                    var startIndex = 0;
+                    if (node.body.kind === SyntaxKind.Block) {
+                        startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
+                    }
+                    var outPos = writer.getTextPos();
 
-					emitCaptureThisForNodeIfNecessary(node);
-					emitDefaultValueAssignments(node);
-					emitRestParameter(node);
-					if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-						decreaseIndent();
-						write(" ");
-						emitStart(node.body);
-						write("return ");
+                    emitCaptureThisForNodeIfNecessary(node);
+                    emitDefaultValueAssignments(node);
+                    emitRestParameter(node);
+                    if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
+                        decreaseIndent();
+                        write(" ");
+                        emitStart(node.body);
+                        write("return ");
 
-						// Don't emit comments on this body.  We'll have already taken care of it above 
-						// when we called emitDetachedComments.
-						emitNode(node.body, /*disableComments:*/ true);
-						emitEnd(node.body);
-						write(";");
-						emitTempDeclarations(/*newLine*/ false);
-						write(" ");
-						emitStart(node.body);
-						write("}");
-						emitEnd(node.body);
-					}
-					else {
-						if (node.body.kind === SyntaxKind.Block) {
-							emitLinesStartingAt((<Block>node.body).statements, startIndex);
-						}
-						else {
-							writeLine();
-							emitLeadingComments(node.body);
-							write("return ");
-							emit(node.body, /*disableComments:*/ true);
-							write(";");
-							emitTrailingComments(node.body);
-						}
-						emitTempDeclarations(/*newLine*/ true);
-						writeLine();
-						if (node.body.kind === SyntaxKind.Block) {
-							emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-							decreaseIndent();
-							emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
-						}
-						else {
-							decreaseIndent();
-							emitStart(node.body);
-							write("}");
-							emitEnd(node.body);
-						}
-					}
-				}
+                        // Don't emit comments on this body.  We'll have already taken care of it above 
+                        // when we called emitDetachedComments.
+                        emitNode(node.body, /*disableComments:*/ true);
+                        emitEnd(node.body);
+                        write(";");
+                        emitTempDeclarations(/*newLine*/ false);
+                        write(" ");
+                        emitStart(node.body);
+                        write("}");
+                        emitEnd(node.body);
+                    }
+                    else {
+                        if (node.body.kind === SyntaxKind.Block) {
+                            emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                        }
+                        else {
+                            writeLine();
+                            emitLeadingComments(node.body);
+                            write("return ");
+                            emit(node.body, /*disableComments:*/ true);
+                            write(";");
+                            emitTrailingComments(node.body);
+                        }
+                        emitTempDeclarations(/*newLine*/ true);
+                        writeLine();
+                        if (node.body.kind === SyntaxKind.Block) {
+                            emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                            decreaseIndent();
+                            emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
+                        }
+                        else {
+                            decreaseIndent();
+                            emitStart(node.body);
+                            write("}");
+                            emitEnd(node.body);
+                        }
+                    }
+                }
 
                 scopeEmitEnd();
                 if (node.flags & NodeFlags.Export) {
@@ -3725,9 +3725,9 @@ module ts {
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
-				writeEnumMemberDeclarationValue(node);
+                writeEnumMemberDeclarationValue(node);
                 write("] = ");
-				emitExpressionForPropertyName(node.name);
+                emitExpressionForPropertyName(node.name);
                 emitEnd(node);
                 write(";");
             }
