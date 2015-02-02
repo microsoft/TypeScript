@@ -1418,7 +1418,6 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
-        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1439,10 +1438,6 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {

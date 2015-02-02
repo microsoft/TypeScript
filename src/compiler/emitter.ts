@@ -2074,8 +2074,6 @@ module ts {
                     return;
                 }
 
-                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
-
                 var emitOuterParens = isExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
@@ -2153,10 +2151,9 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).expression === template;
+                        case SyntaxKind.TaggedTemplateExpression:
                         case SyntaxKind.ParenthesizedExpression:
                             return false;
-                        case SyntaxKind.TaggedTemplateExpression:
-                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
                         default:
                             return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
                     }
@@ -2176,7 +2173,6 @@ module ts {
                     // 
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
-                    Debug.assert(languageVersion < ScriptTarget.ES6);
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
                             switch ((<BinaryExpression>expression).operator) {
@@ -2530,7 +2526,6 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                Debug.assert(languageVersion >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
                 write(" ");
                 emit(node.template);
@@ -3317,62 +3312,70 @@ module ts {
 
                 write(" {");
                 scopeEmitStart(node);
-                increaseIndent();
 
-                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
-
-                var startIndex = 0;
-                if (node.body.kind === SyntaxKind.Block) {
-                    startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-                }
-                var outPos = writer.getTextPos();
-
-                emitCaptureThisForNodeIfNecessary(node);
-                emitDefaultValueAssignments(node);
-                emitRestParameter(node);
-                if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-                    decreaseIndent();
-                    write(" ");
-                    emitStart(node.body);
-                    write("return ");
-
-                    // Don't emit comments on this body.  We'll have already taken care of it above 
-                    // when we called emitDetachedComments.
-                    emitNode(node.body, /*disableComments:*/ true);
-                    emitEnd(node.body);
-                    write(";");
-                    emitTempDeclarations(/*newLine*/ false);
-                    write(" ");
-                    emitStart(node.body);
-                    write("}");
-                    emitEnd(node.body);
-                }
-                else {
-                    if (node.body.kind === SyntaxKind.Block) {
-                        emitLinesStartingAt((<Block>node.body).statements, startIndex);
-                    }
-                    else {
-                        writeLine();
-                        emitLeadingComments(node.body);
-                        write("return ");
-                        emit(node.body, /*disableComments:*/ true);
-                        write(";");
-                        emitTrailingComments(node.body);
-                    }
-                    emitTempDeclarations(/*newLine*/ true);
+                if (!node.body) {
                     writeLine();
-                    if (node.body.kind === SyntaxKind.Block) {
-                        emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-                        decreaseIndent();
-                        emitToken(SyntaxKind.CloseBraceToken,(<Block>node.body).statements.end);
-                    }
-                    else {
-                        decreaseIndent();
-                        emitStart(node.body);
-                        write("}");
-                        emitEnd(node.body);
-                    }
-                }
+					write("}");
+				}
+				else {
+					increaseIndent();
+
+					emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+
+					var startIndex = 0;
+					if (node.body.kind === SyntaxKind.Block) {
+						startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
+					}
+					var outPos = writer.getTextPos();
+
+					emitCaptureThisForNodeIfNecessary(node);
+					emitDefaultValueAssignments(node);
+					emitRestParameter(node);
+					if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
+						decreaseIndent();
+						write(" ");
+						emitStart(node.body);
+						write("return ");
+
+						// Don't emit comments on this body.  We'll have already taken care of it above 
+						// when we called emitDetachedComments.
+						emitNode(node.body, /*disableComments:*/ true);
+						emitEnd(node.body);
+						write(";");
+						emitTempDeclarations(/*newLine*/ false);
+						write(" ");
+						emitStart(node.body);
+						write("}");
+						emitEnd(node.body);
+					}
+					else {
+						if (node.body.kind === SyntaxKind.Block) {
+							emitLinesStartingAt((<Block>node.body).statements, startIndex);
+						}
+						else {
+							writeLine();
+							emitLeadingComments(node.body);
+							write("return ");
+							emit(node.body, /*disableComments:*/ true);
+							write(";");
+							emitTrailingComments(node.body);
+						}
+						emitTempDeclarations(/*newLine*/ true);
+						writeLine();
+						if (node.body.kind === SyntaxKind.Block) {
+							emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+							decreaseIndent();
+							emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
+						}
+						else {
+							decreaseIndent();
+							emitStart(node.body);
+							write("}");
+							emitEnd(node.body);
+						}
+					}
+				}
+
                 scopeEmitEnd();
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
@@ -3722,16 +3725,28 @@ module ts {
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
-                if (node.initializer && !isConst(enumParent)) {
-                    emit(node.initializer);
-                }
-                else {
-                    write(resolver.getEnumMemberValue(node).toString());
-                }
+				writeEnumMemberDeclarationValue(node);
                 write("] = ");
-                emitExpressionForPropertyName(node.name);
+				emitExpressionForPropertyName(node.name);
                 emitEnd(node);
                 write(";");
+            }
+
+            function writeEnumMemberDeclarationValue(member: EnumMember) {
+                if (!member.initializer || isConst(member.parent)) {
+                    var value = resolver.getEnumMemberValue(member);
+                    if (value !== undefined) {
+                        write(value.toString());
+                        return;
+                    }
+                }
+
+                if (member.initializer) {
+                    emit(member.initializer);
+                }
+                else {
+                    write("undefined");
+                }
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
