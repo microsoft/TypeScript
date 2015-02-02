@@ -1,2 +1,4 @@
-EmitOutputStatus : AllOutputGenerationSkipped
+EmitOutputStatus : Succeeded
+Filename : tests/cases/fourslash/inputFile.js
+var x;
 
