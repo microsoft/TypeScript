@@ -456,11 +456,11 @@ var internalTests = "internal/"
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
 
-var localRwcBaseline = internalTests + "baselines/rwc/local/";
-var refRwcBaseline = internalTests + "baselines/rwc/reference/";
+var localRwcBaseline = path.join(internalTests, "baselines/rwc/local");
+var refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 
-var localTest262Baseline = internalTests + "baselines/test262/local/";
-var refTest262Baseline = internalTests + "baselines/test262/reference/";
+var localTest262Baseline = path.join(internalTests, "baselines/test262/local");
+var refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
@@ -511,8 +511,8 @@ function writeTestConfigFile(tests, testConfigFile) {
 }
 
 function deleteTemporaryProjectOutput() {
-    if (fs.existsSync(localBaseline + "projectOutput/")) {
-        jake.rmRf(localBaseline + "projectOutput/");
+    if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
+        jake.rmRf(path.join(localBaseline, "projectOutput/"));
     }
 }
 
