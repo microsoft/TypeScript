@@ -186,7 +186,7 @@ const c18 = 0;
 function F() {
     const c19 = 0;
 }
-var F2 = function () {
+var F2 = () => {
     const c20 = 0;
 };
 var F3 = function () {
@@ -226,7 +226,7 @@ var o = {
     f() {
         const c28 = 0;
     },
-    f2: function () {
+    f2: () => {
         const c29 = 0;
     }
 };

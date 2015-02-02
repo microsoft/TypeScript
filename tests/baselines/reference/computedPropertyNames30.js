@@ -31,7 +31,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.call(this);
-        (function () {
+        (() => {
             var obj = {
                 // Ideally, we would capture this. But the reference is
                 // illegal, and not capturing this is consistent with

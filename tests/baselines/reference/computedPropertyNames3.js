@@ -16,7 +16,7 @@ var C = (function () {
     }
     C.prototype[0 + 1] = function () {
     };
-    C[function () {
+    C[() => {
     }] = function () {
     };
     Object.defineProperty(C.prototype, delete id, {
