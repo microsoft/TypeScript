@@ -1612,7 +1612,7 @@
     "Property '{0}' does not exist on 'const' enum '{1}'.": {
         "category": "Error",
         "code": 4088,
-        "isEarly":  true
+        "isEarly": true
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -1902,11 +1902,15 @@
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000,
-        "isEarly":  true
+        "isEarly": true
     },
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001,
-        "isEarly":  true
+        "isEarly": true
+    },
+    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+        "category": "Error",
+        "code": 9002
     }
 }

@@ -107,7 +107,7 @@ module Utils {
     export function memoize<T extends Function>(f: T): T {
         var cache: { [idx: string]: any } = {};
 
-        return <any>(() => {
+        return <any>(function () {
             var key = Array.prototype.join.call(arguments);
             var cachedResult = cache[key];
             if (cachedResult) {

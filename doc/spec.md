@@ -1,8 +1,8 @@
 # TypeScript Language Specification
 
-Version 1.4
+Version 1.5
 
-October, 2014
+February, 2015
 
 <br/>
 
@@ -120,11 +120,15 @@ TypeScript is a trademark of Microsoft Corporation.
     * [4.15.7 The || operator](#4.15.7)
   * [4.16 The Conditional Operator](#4.16)
   * [4.17 Assignment Operators](#4.17)
+    * [4.17.1 Destructuring Assignment](#4.17.1)
   * [4.18 The Comma Operator](#4.18)
   * [4.19 Contextually Typed Expressions](#4.19)
   * [4.20 Type Guards](#4.20)
 * [5 Statements](#5)
   * [5.1 Variable Statements](#5.1)
+    * [5.1.1 Simple Variable Declarations](#5.1.1)
+    * [5.1.2 Destructuring Variable Declarations](#5.1.2)
+    * [5.1.3 Implied Type](#5.1.3)
   * [5.2 If, Do, and While Statements](#5.2)
   * [5.3 For Statements](#5.3)
   * [5.4 For-In Statements](#5.4)
@@ -139,8 +143,9 @@ TypeScript is a trademark of Microsoft Corporation.
   * [6.1 Function Declarations](#6.1)
   * [6.2 Function Overloads](#6.2)
   * [6.3 Function Implementations](#6.3)
-  * [6.4 Generic Functions](#6.4)
-  * [6.5 Code Generation](#6.5)
+  * [6.4 Destructuring Parameter Declarations](#6.4)
+  * [6.5 Generic Functions](#6.5)
+  * [6.6 Code Generation](#6.6)
 * [7 Interfaces](#7)
   * [7.1 Interface Declarations](#7.1)
   * [7.2 Declaration Merging](#7.2)
@@ -172,7 +177,8 @@ TypeScript is a trademark of Microsoft Corporation.
   * [9.1 Enum Declarations](#9.1)
   * [9.2 Enum Members](#9.2)
   * [9.3 Declaration Merging](#9.3)
-  * [9.4 Code Generation](#9.4)
+  * [9.4 Constant Enum Declarations](#9.4)
+  * [9.5 Code Generation](#9.5)
 * [10 Internal Modules](#10)
   * [10.1 Module Declarations](#10.1)
   * [10.2 Module Body](#10.2)
@@ -420,7 +426,7 @@ getX({ x: 0, y: 0, color: "red" });  // Extra fields Ok
 getX({ x: 0 });  // Error: supplied parameter does not match
 ```
 
-See section [0](#0) for more information about type comparisons.
+See section [3.10](#3.10) for more information about type comparisons.
 
 ## <a name="1.5"/>1.5 Contextual Typing
 
@@ -812,7 +818,7 @@ Declarations introduce names in the ***declaration spaces*** to which they belon
 * Each class declaration has a declaration space for instance members, a declaration space for static members, and a declaration space for type parameters.
 * Each interface declaration has a declaration space for members and a declaration space for type parameters. An interface's declaration space is shared with other interfaces that have the same root module and the same qualified name starting from that root module.
 * Each enum declaration has a declaration space for its enum members. An enum's declaration space is shared with other enums that have the same root module and the same qualified name starting from that root module.
-* Each function declaration (including constructor, member function, and member accessor declarations) and each function expression has a declaration space for variables (parameters, local variables, and local functions) and a declaration space for type parameters.
+* Each function declaration (including constructor, member function, and member accessor declarations) and each function expression has a declaration space for locals (introduced by parameter, variable, and function declarations) and a declaration space for type parameters.
 * Each object literal has a declaration space for its properties.
 * Each object type literal has a declaration space for its members.
 
@@ -868,7 +874,7 @@ The ***scope*** of a name is the region of program text within which it is possi
 * The scope of a type parameter declared in a class or interface declaration is that entire declaration, including constraints, extends clause, implements clause, and declaration body, but not including static member declarations.
 * The scope of a member declared in an enum declaration is the body of that declaration and every enum declaration with the same root and the same qualified name relative to that root.
 * The scope of a type parameter declared in a call or construct signature is that entire signature declaration, including constraints, parameter list, and return type. If the signature is part of a function implementation, the scope includes the function body.
-* The scope of a parameter, local variable, or local function declared within a function declaration (including a constructor, member function, or member accessor declaration) or function expression is the body of that function declaration or function expression.
+* The scope of a local entity (parameter, variable, or function) declared within a function declaration (including a constructor, member function, or member accessor declaration) or function expression is the body of that function declaration or function expression.
 
 Scopes may overlap, for example through nesting of modules and functions. When the scopes of two entities with the same name overlap, the entity with the innermost declaration takes precedence and access to the outer entity is either not possible or only possible by qualifying its name.
 
@@ -955,7 +961,7 @@ The Number primitive type corresponds to the similarly named JavaScript primitiv
 
 The `number` keyword references the Number primitive type and numeric literals may be used to write values of the Number primitive type.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the Number primitive type behaves as an object type with the same properties as the global interface type 'Number'.
 
 Some examples:
 
@@ -972,7 +978,7 @@ The Boolean primitive type corresponds to the similarly named JavaScript primiti
 
 The `boolean` keyword references the Boolean primitive type and the `true` and `false` literals reference the two Boolean truth values.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the Boolean primitive type behaves as an object type with the same properties as the global interface type 'Boolean'.
 
 Some examples:
 
@@ -988,7 +994,7 @@ The String primitive type corresponds to the similarly named JavaScript primitiv
 
 The `string` keyword references the String primitive type and string literals may be used to write values of the String primitive type.
 
-For purposes of determining type relationships (section [0](#0)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
+For purposes of determining type relationships (section [3.10](#3.10)) and accessing properties (section [4.10](#4.10)), the String primitive type behaves as an object type with the same properties as the global interface type 'String'.
 
 Some examples:
 
@@ -1092,6 +1098,8 @@ Array literals (section [4.6](#4.6)) may be used to create values of array types
 var a: string[] = ["hello", "world"];
 ```
 
+A type is said to be an ***array-like type*** if it is assignable (section [3.10.4](#3.10.4)) to the type `any[]`.
+
 ### <a name="3.3.3"/>3.3.3 Tuple Types
 
 ***Tuple types*** represent JavaScript arrays with individually tracked element types. Tuple types are written using tuple type literals (section [3.7.5](#3.7.5)). A tuple type combines a set of numerically named properties with the members of an array type. Specifically, a tuple type
@@ -1131,6 +1139,8 @@ interface KeyValuePair<K, V> extends Array<K | V> { 0: K; 1: V; }
 var x: KeyValuePair<number, string> = [10, "ten"];
 ```
 
+A type is said to be a ***tuple-like type*** if it has a property with the numeric name '0'.
+
 ### <a name="3.3.4"/>3.3.4 Function Types
 
 An object type containing one or more call signatures is said to be a ***function type***. Function types may be written using function type literals (section [3.7.7](#3.7.7)) or by including call signatures in object type literals.
@@ -1150,7 +1160,7 @@ Every object type is composed from zero or more of the following kinds of member
 
 Properties are either ***public***, ***private***, or ***protected*** and are either ***required*** or ***optional***:
 
-* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [0](#0). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [0](#0).
+* Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [8.2.2](#8.2.2), and private properties match only themselves in subtype and assignment compatibility checks, as described in section [3.10](#3.10). Protected members are only accessible within their declaring class and classes derived from it, as described in section [8.2.2](#8.2.2), and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [3.10](#3.10).
 * Properties in an object type literal or interface declaration may be designated required or optional, while properties declared in other contexts are always considered required. Properties that are optional in the target type of an assignment may be omitted from source objects, as described in section [3.10.4](#3.10.4).
 
 Call and construct signatures may be ***specialized*** (section [3.8.2.4](#3.8.2.4)) by including parameters with string literal types. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized.
@@ -1193,7 +1203,7 @@ x = test ? 5 : "five";  // Ok
 x = test ? 0 : false;   // Error, number | boolean not asssignable
 ```
 
-it is possible to assign 'x' a value of type string, number, or the union type string | number, but not any other type. To access a value in 'x', a type guard can be used to first narrow the type of 'x' to either string or number:
+it is possible to assign 'x' a value of type `string`, `number`, or the union type `string | number`, but not any other type. To access a value in 'x', a type guard can be used to first narrow the type of 'x' to either `string` or `number`:
 
 ```TypeScript
 var n = typeof x === "string" ? x.length : x;  // Type of n is number
@@ -1276,7 +1286,7 @@ interface G<T, U extends Function> {
 
 the base constraint of 'T' is the empty object type, and the base constraint of 'U' and 'V' is 'Function'.
 
-For purposes of determining type relationships (section [0](#0)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
+For purposes of determining type relationships (section [3.10](#3.10)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.10](#4.10)), `new` operations (section [4.11](#4.11)), and function calls (section [4.12](#4.12)), type parameters appear to have the members of their base constraint, but no other members.
 
 ### <a name="3.5.2"/>3.5.2 Type Argument Lists
 
@@ -1376,7 +1386,7 @@ Parentheses are required around union, function, or constructor types when they 
 
 ```TypeScript
 (string | number)[]  
-((x: string) => string) | (x: number) => number)
+((x: string) => string) | ((x: number) => number)
 ```
 
 The different forms of type notations are described in the following sections.
@@ -1598,7 +1608,7 @@ var a = { x: 10, y: 20 };
 var b: typeof a;
 ```
 
-Above, 'b' is given the same type as 'a', namely '{ x: number; y: number; }'.
+Above, 'b' is given the same type as 'a', namely `{ x: number; y: number; }`.
 
 If a declaration includes a type annotation that references the entity being declared through a circular path of type queries or type references containing type queries, the resulting type is the Any type. For example, all of the following variables are given the type Any:
 
@@ -1705,7 +1715,7 @@ A signature's parameter list consists of zero or more required parameters, follo
 &emsp;&emsp;&emsp;*RequiredParameterList*&emsp;`,`&emsp;*RequiredParameter*
 
 &emsp;&emsp;*RequiredParameter:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*IdentifierOrPattern*&emsp;*TypeAnnotation<sub>opt</sub>*  
 &emsp;&emsp;&emsp;*Identifier*&emsp;`:`&emsp;*StringLiteral*
 
 &emsp;&emsp;*AccessibilityModifier:*  
@@ -1713,29 +1723,39 @@ A signature's parameter list consists of zero or more required parameters, follo
 &emsp;&emsp;&emsp;`private`  
 &emsp;&emsp;&emsp;`protected`
 
+&emsp;&emsp;*IdentifierOrPattern:*  
+&emsp;&emsp;&emsp;*Identifier*  
+&emsp;&emsp;&emsp;*BindingPattern*
+
 &emsp;&emsp;*OptionalParameterList:*  
 &emsp;&emsp;&emsp;*OptionalParameter*  
 &emsp;&emsp;&emsp;*OptionalParameterList*&emsp;`,`&emsp;*OptionalParameter*
 
 &emsp;&emsp;*OptionalParameter:*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*Identifier*&emsp;`?`&emsp;*TypeAnnotation<sub>opt</sub>*  
-&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser*  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*IdentifierOrPattern*&emsp;`?`&emsp;*TypeAnnotation<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;*IdentifierOrPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser*  
 &emsp;&emsp;&emsp;*Identifier*&emsp;`?`&emsp;`:`&emsp;*StringLiteral*
 
 &emsp;&emsp;*RestParameter:*  
 &emsp;&emsp;&emsp;`...`&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*
 
-Parameter names must be unique. A compile-time error occurs if two or more parameters have the same name.
+A parameter declaration may specify either an identifier or a binding pattern ([5.1.2](#5.1.2)). The identifiers specified in parameter declarations and binding patterns in a parameter list must be unique within that parameter list.
 
-A parameter is permitted to include a `public`, `private`, or `protected` modifier only if it occurs in the parameter list of a *ConstructorImplementation* (section [8.3.1](#8.3.1)).
+The type of a parameter in a signature is determined as follows:
 
-A parameter with a type annotation is considered to be of that type. A type annotation for a rest parameter must denote an array type.
+* If the declaration includes a type annotation, the parameter is of that type.
+* Otherwise, if the declaration includes an initializer expression (which is permitted only when the parameter list occurs in conjunction with a function body), the parameter type is the widened form (section [3.11](#3.11)) of the type of the initializer expression.
+* Otherwise, if the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section [5.1.3](#5.1.3)).
+* Otherwise, if the parameter is a rest parameter, the parameter type is `any[]`.
+* Otherwise, the parameter type is `any`.
 
-A parameter with no type annotation or initializer is considered to be of type `any`, unless it is a rest parameter, in which case it is considered to be of type `any[]`.
+A parameter is permitted to include a `public`, `private`, or `protected` modifier only if it occurs in the parameter list of a *ConstructorImplementation* (section [8.3.1](#8.3.1)) and only if it doesn't specify a *BindingPattern*.
 
-When a parameter type annotation specifies a string literal type, the containing signature is a specialized signature (section [3.8.2.4](#3.8.2.4)). Specialized signatures are not permitted in conjunction with a function body, i.e. the *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, and *ConstructorImplementation* grammar productions do not permit parameters with string literal types.
+A type annotation for a rest parameter must denote an array type.
 
-A parameter can be marked optional by following its name with a question mark (`?`) or by including an initializer. The form that includes an initializer is permitted only in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
+When a parameter type annotation specifies a string literal type, the containing signature is a specialized signature (section [3.8.2.4](#3.8.2.4)). Specialized signatures are not permitted in conjunction with a function body, i.e. the *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, and *ConstructorImplementation* grammar productions do not permit parameters with string literal types.
+
+A parameter can be marked optional by following its name or binding pattern with a question mark (`?`) or by including an initializer. Initializers (including binding property or element initializers) are permitted only when the parameter list occurs in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
 
 #### <a name="3.8.2.3"/>3.8.2.3 Return Type
 
@@ -1917,7 +1937,6 @@ However, doing so means the following capabilities are lost:
 * An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
 * An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
 * An interface can have type parameters, but a type alias for an object type literal cannot.
-* An interface is referenced by its name in error messages and tooling, but a type alias is always expanded to its structural representation. 
 
 ## <a name="3.10"/>3.10 Type Relationships
 
@@ -2263,7 +2282,18 @@ If a get accessor is declared for a property, the return type of the get accesso
 
 When an object literal is contextually typed by a type that includes a string index signature, the resulting type of the object literal includes a string index signature with the union type of the types of the properties declared in the object literal, or the Undefined type if the object literal is empty. Likewise, when an object literal is contextually typed by a type that includes a numeric index signature, the resulting type of the object literal includes a numeric index signature with the union type of the types of the numerically named properties (section [3.8.4](#3.8.4)) declared in the object literal, or the Undefined type if the object literal declares no numerically named properties.
 
-## <a name="4.6"/>4.6 Array Literals
+## <a name="4.6"/>4.6 Array Literals
+
+Array literals are extended to support the spread (`...`) operator.
+
+&emsp;&emsp;*ElementList:*  *( Modified )*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*
+
+&emsp;&emsp;*SpreadElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*AssignmentExpression*
 
 An array literal
 
@@ -2275,22 +2305,39 @@ denotes a value of an array type (section [3.3.2](#3.3.2)) or a tuple type (sect
 
 Each element expression in a non-empty array literal is processed as follows:
 
-* If the array literal is contextually typed (section [4.19](#4.19)) by a type *T* and *T* has a property with the numeric name *N*, where *N* is the index of the element expression in the array literal, the element expression is contextually typed by the type of that property.
+* If the array literal contains no spread elements, and if the array literal is contextually typed (section [4.19](#4.19)) by a type *T* and *T* has a property with the numeric name *N*, where *N* is the index of the element expression in the array literal, the element expression is contextually typed by the type of that property.
 * Otherwise, if the array literal is contextually typed by a type *T* with a numeric index signature, the element expression is contextually typed by the type of the numeric index signature.
 * Otherwise, the element expression is not contextually typed.
 
 The resulting type an array literal expression is determined as follows:
 
 * If the array literal is empty, the resulting type is an array type with the element type Undefined.
-* Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name '0', the resulting type is a tuple type constructed from the types of the element expressions.
-* Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+* Otherwise, if the array literal contains no spread elements and is contextually typed by a tuple-like type (section [3.3.3](#3.3.3)), the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, if the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section [4.17.1](#4.17.1)), the resulting type is a tuple type constructed from the types of the element expressions.
+* Otherwise, the resulting type is an array type with an element type that is the union of the types of the non-spread element expressions and the numeric index signature types of the spread element expressions.
 
-The rules above mean that an array literal is always of an array type, unless it is contextually typed by a type with numerically named properties (such as a tuple type). For example
+A spread element must specify an expression of an array-like type (section [3.3.2](#3.3.2)), or otherwise an error occurs.
+
+The rules above mean that an array literal is always of an array type, unless it is contextually typed by a tuple-like type. For example
 
 ```TypeScript
 var a = [1, 2];                          // number[]  
 var b = ["hello", true];                 // (string | boolean)[]  
 var c: [number, string] = [3, "three"];  // [number, string]
+```
+
+When the output target is ECMAScript 3 or 5, array literals containing spread elements are rewritten to invocations of the `concat` method. For example, the assignments
+
+```TypeScript
+var a = [2, 3, 4];  
+var b = [0, 1, ...a, 5, 6];
+```
+
+are rewritten to
+
+```TypeScript
+var a = [2, 3, 4];  
+var b = [0, 1].concat(a, [5, 6]);
 ```
 
 ## <a name="4.7"/>4.7 Parentheses
@@ -2364,7 +2411,7 @@ The descriptions of function declarations provided in section [6.1](#6.1) apply 
 
 Standard function expressions are function expressions written with the `function` keyword. The type of `this` in a standard function expression is the Any type.
 
-Standard function expressions are transformed to JavaScript in the same manner as function declarations (see section [6.5](#6.5)).
+Standard function expressions are transformed to JavaScript in the same manner as function declarations (see section [6.6](#6.6)).
 
 ### <a name="4.9.2"/>4.9.2 Arrow Function Expressions
 
@@ -2452,11 +2499,23 @@ could be parsed as an arrow function expression with a type parameter or a type 
 
 ### <a name="4.9.3"/>4.9.3 Contextually Typed Function Expressions
 
-Function expressions with no type parameters and no parameter type annotations (but possibly with optional parameters and default parameter values) are contextually typed in certain circumstances, as described in section [4.19](#4.19).
+When a function expression with no type parameters and no parameter type annotations is contextually typed (section [4.19](#4.19)) by a type *T* and a contextual signature *S* can be extracted from *T*, the function expression is processed as if it had explicitly specified parameter type annotations as they exist in *S*. Parameters are matched by position and need not have matching names. If the function expression has fewer parameters than *S*, the additional parameters in *S* are ignored. If the function expression has more parameters than *S*, the additional parameters are all considered to have type Any.
 
-When a function expression is contextually typed by a function type *T*, the function expression is processed as if it had explicitly specified parameter type annotations as they exist in *T*. Parameters are matched by position and need not have matching names. If the function expression has fewer parameters than *T*, the additional parameters in *T* are ignored. If the function expression has more parameters than *T*, the additional parameters are all considered to have type Any.
+Likewise, when a function expression with no return type annotation is contextually typed (section [4.19](#4.19)) by a function type *T* and a contextual signature *S* can be extracted from *T*, expressions in contained return statements (section [5.7](#5.7)) are contextually typed by the return type of *S*.
 
-Furthermore, when a function expression has no return type annotation and is contextually typed by a function type *T*, expressions in contained return statements (section [5.7](#5.7)) are contextually typed by *T*'s return type.
+A contextual signature *S* is extracted from a function type *T* as follows:
+
+* If *T* is a function type with exactly one call signature, and if that call signature is non-generic, *S* is that signature.
+* If *T* is a union type, let *U* be the set of element types in *T* that have call signatures. If each type in *U* has exactly one call signature and that call signature is non-generic, and if all of the signatures are identical ignoring return types, then *S* is a signature with the same parameters and a union of the return types.
+* Otherwise, no contextual signature can be extracted from *T* and *S* is undefined.
+
+In the example
+
+```TypeScript
+var f: (s: string) => string = s => s.toLowerCase();
+```
+
+the function expression is contextually typed by the type of 'f', and since the function expression has no type parameters or type annotations its parameter type information is extracted from the contextual type, thus inferring the type of 's' to be the String primitive type.
 
 ## <a name="4.10"/>4.10 Property Access
 
@@ -2687,7 +2746,7 @@ TypeScript extends the JavaScript expression grammar with the ability to assert 
 
 A type assertion expression consists of a type enclosed in `<` and `>` followed by a unary expression. Type assertion expressions are purely a compile-time construct. Type assertions are *not* checked at run-time and have no impact on the emitted JavaScript (and therefore no run-time cost). The type and the enclosing `<` and `>` are simply removed from the generated code.
 
-In a type assertion expression of the form `<` *T* `>` *e*, *e* is contextually typed (section [4.19](#4.19)) by *T* and the resulting type of* e* is required to be assignable to *T*, or *T* is required to be assignable to the widened form of the resulting type of *e*, or otherwise a compile-time error occurs. The type of the result is *T*.
+In a type assertion expression of the form &lt; *T* > *e*, *e* is contextually typed (section [4.19](#4.19)) by *T* and the resulting type of* e* is required to be assignable to *T*, or *T* is required to be assignable to the widened form of the resulting type of *e*, or otherwise a compile-time error occurs. The type of the result is *T*.
 
 Type assertions check for assignment compatibility in both directions. Thus, type assertions allow type conversions that *might* be correct, but aren't *known* to be correct. In the example
 
@@ -2882,7 +2941,7 @@ An assignment of the form
 v = expr
 ```
 
-requires *v* to be classified as a reference (section [4.1](#4.1)). The *expr* expression is contextually typed (section [4.19](#4.19)) by the type of *v*, and the type of *expr* must be assignable to (section [3.10.4](#3.10.4)) the type of *v*, or otherwise a compile-time error occurs. The result is a value with the type of *expr*.
+requires *v* to be classified as a reference (section [4.1](#4.1)) or as an assignment pattern (section [4.17.1](#4.17.1)). The *expr* expression is contextually typed (section [4.19](#4.19)) by the type of *v*, and the type of *expr* must be assignable to (section [3.10.4](#3.10.4)) the type of *v*, or otherwise a compile-time error occurs. The result is a value with the type of *expr*.
 
 A compound assignment of the form
 
@@ -2896,7 +2955,78 @@ where ??= is one of the compound assignment operators
 *=   /=   %=   +=   -=   <<=   >>=   >>>=   &=   ^=   |=
 ```
 
-is subject to the same requirements, and produces a value of the same type, as the corresponding non-compound operation. A compound assignment furthermore requires *v* to be classified as a reference (section [4.1](#4.1)) and the type of the non-compound operation to be assignable to the type of *v*.
+is subject to the same requirements, and produces a value of the same type, as the corresponding non-compound operation. A compound assignment furthermore requires *v* to be classified as a reference (section [4.1](#4.1)) and the type of the non-compound operation to be assignable to the type of *v*. Note that *v* is not permitted to be an assignment pattern in a compound assignment.
+
+### <a name="4.17.1"/>4.17.1 Destructuring Assignment
+
+A ***destructuring assignment*** is an assignment operation in which the left hand operand is a destructuring assignment pattern.
+
+&emsp;&emsp;*AssignmentPattern:*  
+&emsp;&emsp;&emsp;*ObjectAssignmentPattern*  
+&emsp;&emsp;&emsp;*ArrayAssignmentPattern*
+
+&emsp;&emsp;*ObjectBindingPattern:*  
+&emsp;&emsp;&emsp;`{`&emsp;`}`  
+&emsp;&emsp;&emsp;`{`&emsp;*AssignmentPropertyList*&emsp;`,`*<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*AssignmentPropertyList:*  
+&emsp;&emsp;&emsp;*AssignmentProperty*  
+&emsp;&emsp;&emsp;*AssignmentPropertyList*&emsp;`,`&emsp;*AssignmentProperty*
+
+&emsp;&emsp;*AssignmentProperty:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*LeftHandSideExpression*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*AssignmentPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*ArrayAssignmentPattern:*  
+&emsp;&emsp;&emsp;`[`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentRestElement<sub>opt</sub>*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*AssignmentElementList*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*AssignmentElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentRestElement<sub>opt</sub>*&emsp;`]`
+
+&emsp;&emsp;*AssignmentElementList:*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentElement*  
+&emsp;&emsp;&emsp;*AssignmentElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentElement*
+
+&emsp;&emsp;*AssignmentElement:*  
+&emsp;&emsp;&emsp;*LeftHandSideExpression*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*AssignmentPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*AssignmentRestElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*LeftHandSideExpression*
+
+In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left. An expression of type *S* is considered assignable to an assignment target *V* if one of the following is true:
+
+* *V* is variable and *S* is assignable to the type of *V*.
+* *V* is an object assignment pattern and, for each assignment property *P* in *V*,
+  * *S* is the type Any, or
+  * *S* has an apparent property with the property name specified in *P* of a type that is assignable to the target given in *P*, or
+  * *P* specifies a numeric property name and *S* has a numeric index signature of a type that is assignable to the target given in *P*, or
+  * *S* has a string index signature of a type that is assignable to the target given in *P*. 
+* *V* is an array assignment pattern, *S* is the type Any or an array-like type (section [3.3.2](#3.3.2)), and, for each assignment element *E* in *V*,
+  * *S* is the type Any, or
+  * *S* is a tuple-like type (section [3.3.3](#3.3.3)) with a property named *N* of a type that is assignable to the target given in *E*, where *N* is the numeric index of *E* in the array assignment pattern, or
+  * *S* is not a tuple-like type and the numeric index signature type of *S* is assignable to the target given in *E*.
+
+In an assignment property or element that includes a default value, the type of the default value must be assignable to the target given in the assignment property or element.
+
+When the output target is ECMAScript 6 or higher, destructuring variable assignments remain unchanged in the emitted JavaScript code.
+
+When the output target is ECMAScript 3 or 5, destructuring variable assignments are rewritten to series of simple assignments. For example, the destructuring assignment
+
+```TypeScript
+var x = 1;  
+var y = 2;  
+[x, y] = [y, x];
+```
+
+is rewritten to the simple variable assignments
+
+```TypeScript
+var x = 1;  
+var y = 2;  
+_a = [y, x], x = _a[0], y = _a[1];  
+var _a;
+```
 
 ## <a name="4.18"/>4.18 The Comma Operator
 
@@ -2904,53 +3034,30 @@ The comma operator permits the operands to be of any type and produces a result 
 
 ## <a name="4.19"/>4.19 Contextually Typed Expressions
 
-In certain situations, parameter and return types of function expressions are automatically inferred from the contexts in which the function expressions occur. For example, given the declaration
+Type checking of an expression is improved in several contexts by factoring in the type of the destination of the value computed by the expression. In such situations, the expression is said to be ***contextually typed*** by the type of the destination. An expression is contextually typed in the following circumstances:
 
-```TypeScript
-var f: (s: string) => string;
-```
-
-the assignment
-
-```TypeScript
-f = function(s) { return s.toLowerCase(); }
-```
-
-infers the type of the 's' parameter to be the String primitive type even though there is no type annotation to that effect. The function expression is said to be ***contextually typed*** by the variable to which it is being assigned. Contextual typing occurs in the following situations:
-
-* In variable, parameter, and member declarations with a type annotation and an initializer, the initializer expression is contextually typed by the type of the variable, parameter, or property.
-* In return statements, if the containing function includes a return type annotation, return expressions are contextually typed by that return type. Otherwise, if the containing function is contextually typed by a type *T*, return expressions are contextually typed by *T*'s return type.
-* In typed function calls, argument expressions are contextually typed by their parameter types.
-* In type assertions, the expression is contextually typed by the indicated type.
-* In || operator expressions without a contextual type, the right hand expression is contextually typed by the type of the left hand expression.
-* In assignment expressions, the right hand expression is contextually typed by the type of the left hand expression.
-* In contextually typed object literals, property assignments are contextually typed by their property types.
-* In contextually typed array literals, element expressions are contextually typed by the array element type.
-* In contextually typed || operator expressions, the operands are contextually typed as well.
-* In contextually typed conditional operator expressions, the operands are contextually typed as well.
-
-Contextual typing of an expression *e* by a type *T* proceeds as follows:
-
-* If *e* is an *ObjectLiteral* and *T* is an object type, *e* is processed with the contextual type *T*, as described in section [4.5](#4.5).
-* If *e* is an *ArrayLiteral* and *T* is an object type with a numeric index signature, *e* is processed with the contextual type *T*, as described in section [4.6](#4.6).
-* If *e* is a *FunctionExpression* or *ArrowFunctionExpression* with no type parameters and no parameter type annotations, *T* is a function type with exactly one call signature and *T*'s call signature is non-generic, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are fixed (section [4.12.2](#4.12.2)) and *e* is processed with the contextual type *T*, as described in section [4.9.3](#4.9.3).
-* If *e* is a || operator expression and *T* is an object type, *e* is processed with the contextual type *T*, as described in section [4.15.7](#4.15.7).
-* If *e* is a conditional operator expression and *T* is an object type, *e* is processed with the contextual type *T*, as described in section [4.16](#4.16).
-* Otherwise, *e* is processed without a contextual type.
-
-The rules above require expressions be of the exact syntactic forms specified in order to be processed as contextually typed constructs. For example, given the declaration of the variable 'f' above, the assignment
-
-```TypeScript
-f = s => s.toLowerCase();
-```
-
-causes the function expression to be contextually typed, inferring the String primitive type for 's'. However, simply enclosing the construct in parentheses
-
-```TypeScript
-f = (s => s.toLowerCase());
-```
-
-causes the function expression to be processed without a contextual type, now inferring 's' and the result of the function to be of type Any as no type annotations are present.
+* In a variable, parameter, binding property, binding element, or member declaration, an initializer expression is contextually typed by
+  * the type given in the declaration's type annotation, if any, or otherwise
+  * for a parameter, the contextual type for the declaration (section [4.9.3](#4.9.3)), if any, or otherwise
+  * the type implied by the binding pattern in the declaration (section [5.1.3](#5.1.3)), if any.
+* In the body of a function declaration, function expression, arrow function, method declaration, or get accessor declaration that has a return type annotation, return expressions are contextually typed by the type given in the return type annotation.
+* In the body of a function expression or arrow function that has no return type annotation, if the function expression or arrow function is contextually typed by a function type with exactly one call signature, and if that call signature is non-generic, return expressions are contextually typed by the return type of that call signature.
+* In the body of a constructor declaration, return expressions are contextually typed by the containing class type.
+* In the body of a get accessor with no return type annotation, if a matching set accessor exists and that set accessor has a parameter type annotation, return expressions are contextually typed by the type given in the set accessor's parameter type annotation.
+* In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
+* In a contextually typed object literal, each property value expression is contextually typed by
+  * the type of the property with a matching name in the contextual type, if any, or otherwise
+  * for a numerically named property, the numeric index type of the contextual type, if any, or otherwise
+  * the string index type of the contextual type, if any. 
+* In a contextually typed array literal expression containing no spread elements, an element expression at index *N* is contextually typed by
+  * the type of the property with the numeric name *N* in the contextual type, if any, or otherwise
+  * the numeric index type of the contextual type, if any.
+* In a contextually typed array literal expression containing one or more spread elements, an element expression at index *N* is contextually typed by the numeric index type of the contextual type, if any.
+* In a contextually typed parenthesized expression, the contained expression is contextually typed by the same type.
+* In a type assertion, the expression is contextually typed by the indicated type. 
+* In a || operator expression, if the expression is contextually typed, the operands are contextually typed by the same type. Otherwise, the right expression is contextually typed by the type of the left expression.
+* In a contextually typed conditional operator expression, the operands are contextually typed by the same type.
+* In an assignment expression, the right hand expression is contextually typed by the type of the left hand expression.
 
 In the following example
 
@@ -2993,23 +3100,23 @@ function foo(x: number | string) {
 
 The type of a variable or parameter is narrowed in the following situations:
 
-* In the true branch statement of an 'if' statement, the type of a variable or parameter is *narrowed* by any type guard in the 'if' condition *when true*, provided the true branch statement contains no assignments to the variable or parameter.
-* In the false branch statement of an 'if' statement, the type of a variable or parameter is *narrowed* by any type guard in the 'if' condition *when false*, provided the false branch statement contains no assignments to the variable or parameter.
-* In the true expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when true*, provided the true expression contains no assignments to the variable or parameter.
-* In the false expression of a conditional expression, the type of a variable or parameter is *narrowed* by any type guard in the condition *when false*, provided the false expression contains no assignments to the variable or parameter.
-* In the right operand of a && operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when true*, provided the right operand contains no assignments to the variable or parameter.
-* In the right operand of a || operation, the type of a variable or parameter is *narrowed* by any type guard in the left operand *when false*, provided the right operand contains no assignments to the variable or parameter.
+* In the true branch statement of an 'if' statement, the type of a variable or parameter is *narrowed* by a type guard in the 'if' condition *when true*, provided the true branch statement contains no assignments to the variable or parameter.
+* In the false branch statement of an 'if' statement, the type of a variable or parameter is *narrowed* by a type guard in the 'if' condition *when false*, provided the false branch statement contains no assignments to the variable or parameter.
+* In the true expression of a conditional expression, the type of a variable or parameter is *narrowed* by a type guard in the condition *when true*, provided the true expression contains no assignments to the variable or parameter.
+* In the false expression of a conditional expression, the type of a variable or parameter is *narrowed* by a type guard in the condition *when false*, provided the false expression contains no assignments to the variable or parameter.
+* In the right operand of a && operation, the type of a variable or parameter is *narrowed* by a type guard in the left operand *when true*, provided the right operand contains no assignments to the variable or parameter.
+* In the right operand of a || operation, the type of a variable or parameter is *narrowed* by a type guard in the left operand *when false*, provided the right operand contains no assignments to the variable or parameter.
 
 A type guard is simply an expression that follows a particular pattern. The process of narrowing the type of a variable *x* by a type guard *when true* or *when false* depends on the type guard as follows:
 
-* A type guard of the form `x instanceof C`, where *C* is of a subtype of the global type 'Function' and *C* has a property named 'prototype'
-  * *when true*, narrows the type of *x* to the type of the 'prototype' property in *C* provided it is a subtype of the type of *x*, or
+* A type guard of the form `x instanceof C`, where *x* is not of type Any, *C* is of a subtype of the global type 'Function', and *C* has a property named 'prototype'
+  * *when true*, narrows the type of *x* to the type of the 'prototype' property in *C* provided it is a subtype of the type of *x*, or, if the type of *x* is a union type, removes from the type of *x* all constituent types that aren't subtypes of the type of the 'prototype' property in *C*, or
   * *when false*, has no effect on the type of *x*.
 * A type guard of the form `typeof x === s`, where *s* is a string literal with the value 'string', 'number', or 'boolean',
-  * *when true*, narrows the type of *x* to the given primitive type, or
+  * *when true*, narrows the type of *x* to the given primitive type provided it is a subtype of the type of *x*, or, if the type of *x* is a union type, removes from the type of *x* all constituent types that aren't subtypes of the given primitive type, or
   * *when false*, removes the primitive type from the type of *x*.
 * A type guard of the form `typeof x === s`, where *s* is a string literal with any value but 'string', 'number', or 'boolean',
-  * *when true*, removes the primitive types string, number, and boolean from the type of *x*, or
+  * *when true*, if *x* is a union type, removes from the type of *x* all constituent types that are subtypes of the string, number, or boolean primitive type, or
   * *when false*, has no effect on the type of *x*.
 * A type guard of the form `typeof x !== s`, where *s* is a string literal,
   * *when true*, narrows the type of x by `typeof x === s` *when false*, or
@@ -3025,10 +3132,7 @@ A type guard is simply an expression that follows a particular pattern. The proc
   * *when false*, narrows the type of *x* by *expr<sub>1</sub>* *when false* and then by *expr<sub>2</sub>* *when false*.
 * A type guard of any other form has no effect on the type of *x*.
 
-A primitive type *P* is removed from a type *T* as follows:
-
-* If *T* is a union type *P* | *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*, the result is the type *T<sub>1</sub>* | *T<sub>2</sub>* | … | *T<sub>n</sub>*.
-* Otherwise, the result is *T*.
+In the rules above, when a narrowing operation would remove all constituent types from a union type, the operation has no effect on the union type.
 
 Note that type guards affect types of variables and parameters only and have no effect on members of objects such as properties. Also note that it is possible to defeat a type guard by calling a function that changes the type of the guarded variable.
 
@@ -3040,7 +3144,18 @@ function isLongString(obj: any) {
 }
 ```
 
-the 'obj' parameter has type string in the right operand of the && operator.
+the `obj` parameter has type `string` in the right operand of the && operator.
+
+In the example
+
+```TypeScript
+function processValue(value: number | (() => number)) {  
+    var x = typeof value !== "number" ? value() : value;  
+    // Process number in x  
+}
+```
+
+the value parameter has type `() => number` in the first conditional expression and type `number` in the second conditional expression, and the inferred type of x is `number`.
 
 In the example
 
@@ -3055,18 +3170,21 @@ function f(x: string | number | boolean) {
 }
 ```
 
-the type of 'x' is string | number | boolean in left operand of the || operator, number | boolean in the right operand of the || operator, string | number in the first branch of the 'if' statement, and boolean in the second branch of the 'if' statement.
+the type of x is `string | number | boolean` in the left operand of the || operator, `number | boolean` in the right operand of the || operator, `string | number` in the first branch of the if statement, and `boolean` in the second branch of the if statement.
 
 In the example
 
 ```TypeScript
-function processData(data: string | { (): string }) {  
-    var d = typeof data !== "string" ? data() : data;  
-    // Process string in d  
+class C {  
+    data: string | string[];  
+    getData() {  
+        var data = this.data;  
+        return typeof data === "string" ? data : data.join(" ");  
+    }  
 }
 ```
 
-the inferred type of 'd' is string.
+the type of the `data` variable is `string` in the first conditional expression and `string[]` in the second conditional expression, and the inferred type of `getData` is `string`. Note that the `data` property must be copied to a local variable for the type guard to have an effect.
 
 In the example
 
@@ -3075,12 +3193,12 @@ class NamedItem {
     name: string;  
 }
 
-function getName(obj: any) {  
+function getName(obj: Object) {  
     return obj instanceof NamedItem ? obj.name : "unknown";  
 }
 ```
 
-the inferred type of the 'getName' function is string.
+the type of `obj` is narrowed to `NamedItem` in the first condtional expression, and the inferred type of the `getName` function is `string`.
 
 <br/>
 
@@ -3090,26 +3208,37 @@ This chapter describes the static type checking TypeScript provides for JavaScri
 
 ## <a name="5.1"/>5.1 Variable Statements
 
-Variable statements are extended to include optional type annotations.
+Variable statements are extended to include optional type annotations and ECMAScript 6 destructuring declarations.
 
 &emsp;&emsp;*VariableDeclaration:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
+&emsp;&emsp;&emsp;*SimpleVariableDeclaration*  
+&emsp;&emsp;&emsp;*DestructuringVariableDeclaration*
 
-&emsp;&emsp;*VariableDeclarationNoIn:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*InitialiserNoIn<sub>opt</sub>*
+A variable declaration is either a simple variable declaration or a destructuring variable declaration.
+
+### <a name="5.1.1"/>5.1.1 Simple Variable Declarations
+
+A ***simple variable declaration*** introduces a single named variable and optionally assigns it an initial value.
+
+&emsp;&emsp;*SimpleVariableDeclaration:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
 
 &emsp;&emsp;*TypeAnnotation:*  
 &emsp;&emsp;&emsp;`:`&emsp;*Type*
 
-A variable declaration introduces a variable with the given name in the containing declaration space. The type associated with a variable is determined as follows:
+The type *T* of a variable introduced by a simple variable declaration is determined as follows:
 
-* If the declaration includes a type annotation, the stated type becomes the type of the variable. If an initializer is present, the initializer expression is contextually typed (section [4.19](#4.19)) by the stated type and must be assignable to the stated type, or otherwise a compile-time error occurs.
-* If the declaration includes an initializer but no type annotation, and if the initializer doesn't directly or indirectly reference the variable, the widened type (section [3.11](#3.11)) of the initializer expression becomes the type of the variable. If the initializer directly or indirectly references the variable, the type of the variable becomes the Any type.
-* If the declaration includes neither a type annotation nor an initializer, the type of the variable becomes the Any type.
+* If the declaration includes a type annotation, *T* is that type.
+* Otherwise, if the declaration includes an initializer expression, *T* is the widened form (section [3.11](#3.11)) of the type of the initializer expression.
+* Otherwise, *T* is the Any type.
+
+When a variable declaration specifies both a type annotation and an initializer expression, the type of the initializer expression is required to be assignable to (section [3.10.4](#3.10.4)) the type given in the type annotation.
 
 Multiple declarations for the same variable name in the same declaration space are permitted, provided that each declaration associates the same type with the variable.
 
-Below are some examples of variable declarations and their associated types.
+When a variable declaration has a type annotation, it is an error for that type annotation to use the `typeof` operator to reference the variable being declared.
+
+Below are some examples of simple variable declarations and their associated types.
 
 ```TypeScript
 var a;                          // any  
@@ -3140,6 +3269,167 @@ var c = <Point> { x: 0, y: undefined };
 var d: { x: number; y: number; } = { x: 0, y: undefined };  
 var e = <{ x: number; y: number; }> { x: 0, y: undefined };
 ```
+
+### <a name="5.1.2"/>5.1.2 Destructuring Variable Declarations
+
+A ***destructuring variable declaration*** introduces zero or more named variables and initializes them with values extracted from properties of an object or elements of an array.
+
+&emsp;&emsp;*DestructuringVariableDeclaration:*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser*
+
+&emsp;&emsp;*BindingPattern:*  
+&emsp;&emsp;&emsp;*ObjectBindingPattern*  
+&emsp;&emsp;&emsp;*ArrayBindingPattern*
+
+&emsp;&emsp;*ObjectBindingPattern:*  
+&emsp;&emsp;&emsp;`{`&emsp;`}`  
+&emsp;&emsp;&emsp;`{`&emsp;*BindingPropertyList*&emsp;`,`*<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*BindingPropertyList:*  
+&emsp;&emsp;&emsp;*BindingProperty*  
+&emsp;&emsp;&emsp;*BindingPropertyList*&emsp;`,`&emsp;*BindingProperty*
+
+&emsp;&emsp;*BindingProperty:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*ArrayBindingPattern:*  
+&emsp;&emsp;&emsp;`[`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`
+
+&emsp;&emsp;*BindingElementList:*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*  
+&emsp;&emsp;&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*
+
+&emsp;&emsp;*BindingElement:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*BindingRestElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*Identifier*
+
+Each binding property or element that specifies an identifier introduces a variable by that name. The type of the variable is the widened form (section [3.11](#3.11)) of the type associated with the binding property or element, as defined in the following.
+
+The type *T* associated with a destructuring variable declaration is determined as follows:
+
+* If the declaration includes a type annotation, *T* is that type.
+* Otherwise, if the declaration includes an initializer expression, *T* is the type of that initializer expression.
+* Otherwise, *T* is the Any type.
+
+The type *T* associated with a binding property is determined as follows:
+
+* Let *S* be the type associated with the immediately containing destructuring variable declaration, binding property, or binding element.
+* If *S* is the Any type:
+  * If the binding property specifies an initializer expression, *T* is the type of that initializer expression.
+  * Otherwise, *T* is the Any type.
+* Let *P* be the property name specified in the binding property.
+* If *S* has an apparent property with the name *P*, *T* is the type of that property.
+* Otherwise, if *S* has a numeric index signature and *P* is a numerical name, *T* is the type of the numeric index signature.
+* Otherwise, if *S* has a string index signature, *T* is the type of the string index signature.
+* Otherwise, no type is associated with the binding property and an error occurs.
+
+The type *T* associated with a binding element is determined as follows:
+
+* Let *S* be the type associated with the immediately containing destructuring variable declaration, binding property, or binding element.
+* If *S* is the Any type:
+  * If the binding element specifies an initializer expression, *T* is the type of that initializer expression.
+  * Otherwise, *T* is the Any type.
+* If *S* is not an array-like type (section [3.3.2](#3.3.2)), no type is associated with the binding property and an error occurs.
+* If the binding element is a rest element, *T* is an array type with an element type *E*, where *E* is the type of the numeric index signature of *S*.
+* Otherwise, if *S* is a tuple-like type (section [3.3.3](#3.3.3)):
+  * Let *N* be the zero-based index of the binding element in the array binding pattern.
+  * If *S* has a property with the numerical name *N*, *T* is the type of that property.
+  * Otherwise, no type is associated with the binding element and an error occurs.
+* Otherwise, if *S* has a numeric index signature, *T* is the type of the numeric index signature.
+* Otherwise, no type is associated with the binding element and an error occurs.
+
+When a destructuring variable declaration, binding property, or binding element specifies an initializer expression, the type of the initializer expression is required to be assignable to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
+
+When the output target is ECMAScript 6 or higher, except for removing the optional type annotation, destructuring variable declarations remain unchanged in the emitted JavaScript code.
+
+When the output target is ECMAScript 3 or 5, destructuring variable declarations are rewritten to simple variable declarations. For example, an object destructuring declaration of the form
+
+```TypeScript
+var { x, p: y, q: z = false } = getSomeObject();
+```
+
+is rewritten to the simple variable declarations
+
+```TypeScript
+var _a = getSomeObject(),  
+    x = _a.x,  
+    y = _a.p,  
+    _b = _a.q,  
+    z = _b === void 0 ? false : _b;
+```
+
+The '_a' and '_b' temporary variables exist to ensure the assigned expression is evaluated only once, and the expression 'void 0' simply denotes the JavaScript value 'undefined'.
+
+Similarly, an array destructuring declaration of the form
+
+```TypeScript
+var [x, y, z = 10] = getSomeArray();
+```
+
+is rewritten to the simple variable declarations
+
+```TypeScript
+var _a = getSomeArray(),  
+    x = _a[0],  
+    y = _a[1],  
+    _b = _a[2],  
+    z = _b === void 0 ? 10 : _b;
+```
+
+Combining both forms of destructuring, the example
+
+```TypeScript
+var { x, p: [y, z = 10] = getSomeArray() } = getSomeObject();
+```
+
+is rewritten to
+
+```TypeScript
+var _a = getSomeObject(),  
+    x = _a.x,  
+    _b = _a.p,  
+    _c = _b === void 0 ? getSomeArray() : _b,  
+    y = _c[0],  
+    _d = _c[1],  
+    z = _d === void 0 ? 10 : _d;
+```
+
+### <a name="5.1.3"/>5.1.3 Implied Type
+
+A variable, parameter, binding property, or binding element declaration that specifies a binding pattern has an ***implied type*** which is determined as follows:
+
+* If the declaration specifies an object binding pattern, the implied type is an object type with a set of properties corresponding to the specified binding property declarations. The type of each property is the type implied by its binding property declaration, and a property is optional when its binding property declaration specifies an initializer expression.
+* If the declaration specifies an array binding pattern without a rest element, the implied type is a tuple type with elements corresponding to the specified binding element declarations. The type of each element is the type implied by its binding element declaration.
+* If the declaration specifies an array binding pattern with a rest element, the implied type is an array type with an element type of Any.
+
+The implied type of a binding property or binding element declaration is
+
+* the type of the declaration's initializer expression, if any, or otherwise
+* the implied type of the binding pattern specified in the declaration, if any, or otherwise
+* the type Any.
+
+In the example
+
+```TypeScript
+function f({ a, b = "hello", c = 1 }) { ... }
+```
+
+the implied type of the binding pattern in the function's parameter is '{ a: any; b?: string; c?: number; }'. Since the parameter has no type annotation, this becomes the type of the parameter.
+
+In the example
+
+```TypeScript
+var [a, b, c] = [1, "hello", true];
+```
+
+the array literal initializer expression is contextually typed by the implied type of the binding pattern, specifically the tuple type '[any, any, any]'. Because the contextual type is a tuple type, the resulting type of the array literal is the tuple type '[number, string, boolean]', and the destructuring declaration thus gives the types number, string, and boolean to a, b, and c respectively.
 
 ## <a name="5.2"/>5.2 If, Do, and While Statements
 
@@ -3304,7 +3594,7 @@ In the signature of a function implementation, a parameter can be marked optiona
 
 Initializer expressions are evaluated in the scope of the function body but are not permitted to reference local variables and are only permitted to access parameters that are declared to the left of the parameter they initialize, unless the parameter reference occurs in a nested function expression.
 
-For each parameter with an initializer, a statement that substitutes the default value for an omitted argument is included in the generated JavaScript, as described in section [6.5](#6.5). The example
+For each parameter with an initializer, a statement that substitutes the default value for an omitted argument is included in the generated JavaScript, as described in section [6.6](#6.6). The example
 
 ```TypeScript
 function strange(x: number, y = x * 2, z = x + y) {  
@@ -3333,7 +3623,65 @@ function f(a = x) {
 
 the local variable 'x' is in scope in the parameter initializer (thus hiding the outer 'x'), but it is an error to reference it because it will always be uninitialized at the time the parameter initializer is evaluated.
 
-## <a name="6.4"/>6.4 Generic Functions
+## <a name="6.4"/>6.4 Destructuring Parameter Declarations
+
+Parameter declarations can specify binding patterns (section [3.8.2.2](#3.8.2.2)) and are then called ***destructuring parameter declarations***. Similar to a destructuring variable declaration (section [5.1.2](#5.1.2)), a destructuring parameter declaration introduces zero or more named locals and initializes them with values extracted from properties or elements of the object or array passed as an argument for the parameter.
+
+The type of local introduced in a destructuring parameter declaration is determined in the same manner as a local introduced by a destructuring variable declaration, except the type *T* associated with a destructuring parameter declaration is determined as follows:
+
+* If the declaration includes a type annotation, *T* is that type.
+* Otherwise, if the declaration includes an initializer expression, *T* is the widened form (section [3.11](#3.11)) of the type of the initializer expression.
+* Otherwise, if the declaration specifies a binding pattern, *T* is the implied type of that binding pattern (section [5.1.3](#5.1.3)).
+* Otherwise, if the parameter is a rest parameter, *T* is `any[]`.
+* Otherwise, *T* is `any`.
+
+When the output target is ECMAScript 6 or higher, except for removing the optional type annotation, destructuring parameter declarations remain unchanged in the emitted JavaScript code. When the output target is ECMAScript 3 or 5, destructuring parameter declarations are rewritten to local variable declarations.
+
+The example
+
+```TypeScript
+function drawText({ text = "", location: [x, y] = [0, 0], bold = false }) {  
+    // Draw text  
+}
+```
+
+declares a function `drawText` that takes a single parameter of the type
+
+```TypeScript
+{ text?: string; location?: [number, number]; bold?: boolean; }
+```
+
+When the output target is ECMAScript 3 or 5, the function is rewritten to
+
+```TypeScript
+function drawText(_a) {  
+    var _b = _a.text,  
+        text = _b === void 0 ? "" : _b,  
+        _c = _a.location,  
+        _d = _c === void 0 ? [0, 0] : _c,  
+        x = _d[0],  
+        y = _d[1],  
+        _e = _a.bold,  
+        bold = _e === void 0 ? false : _e;  
+    // Draw text  
+}
+```
+
+Destructuring parameter declarations do not permit type annotations on the individual binding patterns, as such annotations would conflict with the already established meaning of colons in object literals. Type annotations must instead be written on the top-level parameter declaration. For example
+
+```TypeScript
+interface DrawTextInfo {  
+    text?: string;  
+    location?: [number, number];  
+    bold?: boolean;  
+}
+
+function drawText({ text, location: [x, y], bold }: DrawTextInfo) {  
+    // Draw text  
+}
+```
+
+## <a name="6.5"/>6.5 Generic Functions
 
 A function implementation may include type parameters in its signature (section [3.8.2.1](#3.8.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
 
@@ -3368,7 +3716,7 @@ class Person {
 
 the type argument to 'compare' is automatically inferred to be the String type because the two arguments are strings.
 
-## <a name="6.5"/>6.5 Code Generation
+## <a name="6.6"/>6.6 Code Generation
 
 A function declaration generates JavaScript code that is equivalent to:
 
@@ -3543,7 +3891,7 @@ class Location {
 }
 ```
 
-In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [0](#0)).
+In the above example, 'SelectableControl' contains all of the members of 'Control', including the private 'state' property. Since 'state' is a private member it is only possible for descendants of 'Control' to implement 'SelectableControl'. This is because only descendants of 'Control' will have a 'state' private member that originates in the same declaration, which is a requirement for private members to be compatible (section [3.10](#3.10)).
 
 Within the 'Control' class it is possible to access the 'state' private member through an instance of 'SelectableControl'. Effectively, a 'SelectableControl' acts like a 'Control' that is known to have a 'select' method. The 'Button' and 'TextBox' classes are subtypes of 'SelectableControl' (because they both inherit from 'Control' and have a 'select' method), but the 'Image' and 'Location' classes are not.
 
@@ -4183,7 +4531,7 @@ var <ClassName> = (function () {
 
 *ConstructorParameters* is a comma separated list of the constructor's parameter names.
 
-*DefaultValueAssignments* is a sequence of default property value assignments corresponding to those generated for a regular function declaration, as described in section [6.5](#6.5).
+*DefaultValueAssignments* is a sequence of default property value assignments corresponding to those generated for a regular function declaration, as described in section [6.6](#6.6).
 
 *ParameterPropertyAssignments* is a sequence of assignments, one for each parameter property declaration in the constructor, in order they are declared, of the form
 
@@ -4223,7 +4571,7 @@ and static member function declaration generates a statement of the form
 }
 ```
 
-where *MemberName* is the name of the member function, and *FunctionParameters*, *DefaultValueAssignments*, and *FunctionStatements* correspond to those generated for a regular function declaration, as described in section [6.5](#6.5).
+where *MemberName* is the name of the member function, and *FunctionParameters*, *DefaultValueAssignments*, and *FunctionStatements* correspond to those generated for a regular function declaration, as described in section [6.6](#6.6).
 
 A get or set instance member accessor declaration, or a pair of get and set instance member accessor declarations with the same name, generates a statement of the form
 
@@ -4351,11 +4699,13 @@ An enum type is a distinct subtype of the Number primitive type with an associat
 An enum declaration declares an ***enum type*** and an ***enum object*** in the containing module.
 
 &emsp;&emsp;*EnumDeclaration:*  
-&emsp;&emsp;&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*EnumBody<sub>opt</sub>*&emsp;`}`
+&emsp;&emsp;&emsp;`const`*<sub>opt</sub>*&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*EnumBody<sub>opt</sub>*&emsp;`}`
 
 The enum type and enum object declared by an *EnumDeclaration* both have the name given by the *Identifier* of the declaration. The enum type is a distinct subtype of the Number primitive type. The enum object is a variable of an anonymous object type containing a set of properties, all of the enum type, corresponding to the values declared for the enum type in the body of the declaration. The enum object's type furthermore includes a numeric index signature with the signature '[x: number]: string'.
 
 The *Identifier* of an enum declaration may not be one of the predefined type names (section [3.7.1](#3.7.1)).
+
+When an enum declaration includes a `const` modifier it is said to be a constant enum declaration. The members of a constant enum declaration must all have constant values that can be computed at compile time. Constant enum declarations are discussed in section [9.4](#9.4).
 
 The example
 
@@ -4374,7 +4724,7 @@ var Color: {
 };
 ```
 
-The numeric index signature reflects a "reverse mapping" that is automatically generated in every enum object, as described in section [9.4](#9.4). The reverse mapping provides a convenient way to obtain the string representation of an enum value. For example
+The numeric index signature reflects a "reverse mapping" that is automatically generated in every enum object, as described in section [9.5](#9.5). The reverse mapping provides a convenient way to obtain the string representation of an enum value. For example
 
 ```TypeScript
 var c = Color.Red;  
@@ -4385,43 +4735,37 @@ console.log(Color[c]);  // Outputs "Red"
 
 The body of an enum declaration defines zero or more enum members which are the named values of the enum type. Each enum member has an associated numeric value of the primitive type introduced by the enum declaration.
 
-&emsp;&emsp;*EnumBody*:  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`*<sub>opt</sub>*  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`&emsp;*EnumMemberSections*&emsp;`,`*<sub>opt</sub>*  
-&emsp;&emsp;&emsp;*EnumMemberSections*&emsp;`,`*<sub>opt</sub>*
+&emsp;&emsp;*EnumBody:*  
+&emsp;&emsp;&emsp;*EnumMemberList*&emsp;`,`*<sub>opt</sub>*
 
-&emsp;&emsp;*ConstantEnumMembers:*  
+&emsp;&emsp;*EnumMemberList:*  
+&emsp;&emsp;&emsp;*EnumMember*  
+&emsp;&emsp;&emsp;*EnumMemberList*&emsp;`,`&emsp;*EnumMember*
+
+&emsp;&emsp;*EnumMember:*  
 &emsp;&emsp;&emsp;*PropertyName*  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`&emsp;*PropertyName*
+&emsp;&emsp;&emsp;*PropertyName*&emsp;=&emsp;*EnumValue*
 
-&emsp;&emsp;*EnumMemberSections:*  
-&emsp;&emsp;&emsp;*EnumMemberSection*  
-&emsp;&emsp;&emsp;*EnumMemberSections*&emsp;`,`&emsp;*EnumMemberSection*
-
-&emsp;&emsp;*EnumMemberSection:*  
-&emsp;&emsp;&emsp;*ConstantEnumMemberSection*  
-&emsp;&emsp;&emsp;*ComputedEnumMember*
-
-&emsp;&emsp;*ConstantEnumMemberSection:*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*ConstantEnumValue*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*ConstantEnumValue*&emsp;`,`&emsp;*ConstantEnumMembers*
-
-&emsp;&emsp;*ConstantEnumValue:*  
-&emsp;&emsp;&emsp;*SignedInteger*  
-&emsp;&emsp;&emsp;*HexIntegerLiteral*
-
-&emsp;&emsp;*ComputedEnumMember:*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*AssignmentExpression*
+&emsp;&emsp;*EnumValue:*  
+&emsp;&emsp;&emsp;*AssignmentExpression*
 
 Enum members are either ***constant members*** or ***computed members***. Constant members have known constant values that are substituted in place of references to the members in the generated JavaScript code. Computed members have values that are computed at run-time and not known at compile-time. No substitution is performed for references to computed members.
 
-The body of an enum declaration consists of an optional *ConstantEnumMembers* production followed by any number of *ConstantEnumMemberSection* or *ComputedEnumMember* productions.
+An enum member is classified as follows:
 
-* If present, the initial *ConstantEnumMembers* production introduces a series of constant members with consecutive integral values starting at the value zero.
-* A *ConstantEnumMemberSection* introduces one or more constant members with consecutive integral values starting at the specified constant value.
-* A *ComputedEnumMember* introduces a computed member with a value computed by an expression.
+* If the member declaration specifies no value, the member is considered a constant enum member. If the member is the first member in the enum declaration, it is assigned the value zero. Otherwise, it is assigned the value of the immediately preceding member plus one, and an error occurs if the immediately preceding member is not a constant enum member.
+* If the member declaration specifies a value that can be classified as a constant enum expression (as defined below), the member is considered a constant enum member.
+* Otherwise, the member is considered a computed enum member.
 
-Expressions specified for computed members must produce values of type Any, the Number primitive type, or the enum type itself.
+Enum value expressions must be of type Any, the Number primitive type, or the enum type itself.
+
+A ***constant enum expression*** is a subset of the expression grammar that can be evaluated fully at compile time. An expression is considered a constant enum expression if it is one of the following:
+
+* A numeric literal.
+* An identifier or property access that denotes a previously declared member in the same constant enum declaration.
+* A parenthesized constant enum expression.
+* A +, –, or ~ unary operator applied to a constant enum expression.
+* A +, –, *, /, %, &lt;&lt;, >>, >>>, &, ^, or | operator applied to two constant enum expressions.
 
 In the example
 
@@ -4450,7 +4794,7 @@ enum Style {
 }
 ```
 
-the first four members are constant members and the last two are computed members. Note that computed member declarations can reference other enum members without qualification. Also, because enums are subtypes of the Number primitive type, numeric operators, such as the bitwise OR operator, can be used to compute enum values.
+all members are constant members. Note that enum member declarations can reference other enum members without qualification. Also, because enums are subtypes of the Number primitive type, numeric operators, such as the bitwise OR operator, can be used to compute enum values.
 
 ## <a name="9.3"/>9.3 Declaration Merging
 
@@ -4458,7 +4802,29 @@ Enums are "open-ended" and enum declarations with the same qualified name relati
 
 It isn't possible for one enum declaration to continue the automatic numbering sequence of another, and when an enum type has multiple declarations, only one declaration is permitted to omit a value for the first member.
 
-## <a name="9.4"/>9.4 Code Generation
+When enum declarations are merged, they must either all specify a `const` modifier or all specify no `const` modifier.
+
+## <a name="9.4"/>9.4 Constant Enum Declarations
+
+An enum declaration that specifies a `const` modifier is a ***constant enum declaration***. In a constant enum declaration, all members must have constant values and it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+
+Unlike regular enum declarations, constant enum declarations are completely erased in the emitted JavaScript code. For this reason, it is an error to reference a constant enum object in any other context than a property access that selects one of the enum's members. For example:
+
+```TypeScript
+const enum Comparison {  
+    LessThan = -1,  
+    EqualTo = 0,  
+    GreaterThan = 1  
+}
+
+var x = Comparison.EqualTo;  // Ok, replaced with 0 in emitted code  
+var y = Comparison[Comparison.EqualTo];  // Error  
+var z = Comparison;  // Error
+```
+
+The entire const enum declaration is erased in the emitted JavaScript code. Thus, the only permitted references to the enum object are those that are replaced with an enum member value.
+
+## <a name="9.5"/>9.5 Code Generation
 
 An enum declaration generates JavaScript equivalent to the following:
 
@@ -5119,23 +5485,17 @@ An ambient class declaration declares a class instance type and a constructor fu
 
 ### <a name="12.1.4"/>12.1.4 Ambient Enum Declarations
 
-An ambient enum declaration declares an enum type and an enum object in the containing module.
+An ambient enum is grammatically equivalent to a non-ambient enum declaration.
 
 &emsp;&emsp;*AmbientEnumDeclaration:*  
-&emsp;&emsp;&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*AmbientEnumBody<sub>opt</sub>*&emsp;`}`
+&emsp;&emsp;&emsp;*EnumDeclaration*
 
-&emsp;&emsp;*AmbientEnumBody:*  
-&emsp;&emsp;&emsp;*AmbientEnumMemberList*&emsp;`,`*<sub>opt</sub>*
+Ambient enum declarations differ from non-ambient enum declarations in two ways:
 
-&emsp;&emsp;*AmbientEnumMemberList:*  
-&emsp;&emsp;&emsp;*AmbientEnumMember*  
-&emsp;&emsp;&emsp;*AmbientEnumMemberList*&emsp;`,`&emsp;*AmbientEnumMember*
+* In ambient enum declarations, all values specified in enum member declarations must be classified as constant enum expressions.
+* In ambient enum declarations that specify no `const` modifier, enum member declarations that omit a value are considered computed members (as opposed to having auto-incremented values assigned).
 
-&emsp;&emsp;*AmbientEnumMember:*  
-&emsp;&emsp;&emsp;*PropertyName*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;=&emsp;*ConstantEnumValue*
-
-An *AmbientEnumMember* that includes a *ConstantEnumValue* value is considered a constant member. An *AmbientEnumMember* with no *ConstantEnumValue* value is considered a computed member.
+Ambient enum declarations are otherwise processed in the same manner as non-ambient enum declarations.
 
 ### <a name="12.1.5"/>12.1.5 Ambient Module Declarations
 
@@ -5167,7 +5527,7 @@ Except for *ImportDeclarations*, *AmbientModuleElements* always declare exported
 An *AmbientExternalModuleDeclaration* declares an external module. This type of declaration is permitted only at the top level in a source file that contributes to the global module (section [11.1](#11.1)). The *StringLiteral* must specify a top-level external module name. Relative external module names are not permitted.
 
 &emsp;&emsp;*AmbientExternalModuleDeclaration:*  
-&emsp;&emsp;&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
+&emsp;&emsp;&emsp;`declare`&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
 
 &emsp;&emsp;*AmbientExternalModuleBody:*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleElements<sub>opt</sub>*
@@ -5394,6 +5754,15 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;*SetAccessor:*  
 &emsp;&emsp;&emsp;`set`&emsp;*PropertyName*&emsp;`(`&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
 
+&emsp;&emsp;*ElementList:*  *( Modified )*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*AssignmentExpression*  
+&emsp;&emsp;&emsp;*ElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*SpreadElement*
+
+&emsp;&emsp;*SpreadElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*AssignmentExpression*
+
 &emsp;&emsp;*CallExpression:*  *( Modified )*  
 &emsp;&emsp;&emsp;…  
 &emsp;&emsp;&emsp;`super`&emsp;`(`&emsp;*ArgumentList<sub>opt</sub>*&emsp;`)`  
@@ -5424,13 +5793,50 @@ This appendix contains a summary of the grammar found in the main document. As d
 ## <a name="A.3"/>A.3 Statements
 
 &emsp;&emsp;*VariableDeclaration:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
+&emsp;&emsp;&emsp;*SimpleVariableDeclaration*  
+&emsp;&emsp;&emsp;*DestructuringVariableDeclaration*
 
-&emsp;&emsp;*VariableDeclarationNoIn:*  *( Modified )*  
-&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*InitialiserNoIn<sub>opt</sub>*
+&emsp;&emsp;*SimpleVariableDeclaration:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser<sub>opt</sub>*
 
 &emsp;&emsp;*TypeAnnotation:*  
 &emsp;&emsp;&emsp;`:`&emsp;*Type*
+
+&emsp;&emsp;*DestructuringVariableDeclaration:*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*TypeAnnotation<sub>opt</sub>*&emsp;*Initialiser*
+
+&emsp;&emsp;*BindingPattern:*  
+&emsp;&emsp;&emsp;*ObjectBindingPattern*  
+&emsp;&emsp;&emsp;*ArrayBindingPattern*
+
+&emsp;&emsp;*ObjectBindingPattern:*  
+&emsp;&emsp;&emsp;`{`&emsp;`}`  
+&emsp;&emsp;&emsp;`{`&emsp;*BindingPropertyList*&emsp;`,`*<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*BindingPropertyList:*  
+&emsp;&emsp;&emsp;*BindingProperty*  
+&emsp;&emsp;&emsp;*BindingPropertyList*&emsp;`,`&emsp;*BindingProperty*
+
+&emsp;&emsp;*BindingProperty:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`:`&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*ArrayBindingPattern:*  
+&emsp;&emsp;&emsp;`[`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`]`  
+&emsp;&emsp;&emsp;`[`&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingRestElement<sub>opt</sub>*&emsp;`]`
+
+&emsp;&emsp;*BindingElementList:*  
+&emsp;&emsp;&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*  
+&emsp;&emsp;&emsp;*BindingElementList*&emsp;`,`&emsp;*Elision<sub>opt</sub>*&emsp;*BindingElement*
+
+&emsp;&emsp;*BindingElement:*  
+&emsp;&emsp;&emsp;*Identifier*&emsp;*Initialiser<sub>opt</sub>*  
+&emsp;&emsp;&emsp;*BindingPattern*&emsp;*Initialiser<sub>opt</sub>*
+
+&emsp;&emsp;*BindingRestElement:*  
+&emsp;&emsp;&emsp;`...`&emsp;*Identifier*
 
 ## <a name="A.4"/>A.4 Functions
 
@@ -5535,35 +5941,21 @@ This appendix contains a summary of the grammar found in the main document. As d
 ## <a name="A.7"/>A.7 Enums
 
 &emsp;&emsp;*EnumDeclaration:*  
-&emsp;&emsp;&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*EnumBody<sub>opt</sub>*&emsp;`}`
+&emsp;&emsp;&emsp;`const`*<sub>opt</sub>*&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*EnumBody<sub>opt</sub>*&emsp;`}`
 
-&emsp;&emsp;*EnumBody*:  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`*<sub>opt</sub>*  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`&emsp;*EnumMemberSections*&emsp;`,`*<sub>opt</sub>*  
-&emsp;&emsp;&emsp;*EnumMemberSections*&emsp;`,`*<sub>opt</sub>*
+&emsp;&emsp;*EnumBody:*  
+&emsp;&emsp;&emsp;*EnumMemberList*&emsp;`,`*<sub>opt</sub>*
 
-&emsp;&emsp;*ConstantEnumMembers:*  
+&emsp;&emsp;*EnumMemberList:*  
+&emsp;&emsp;&emsp;*EnumMember*  
+&emsp;&emsp;&emsp;*EnumMemberList*&emsp;`,`&emsp;*EnumMember*
+
+&emsp;&emsp;*EnumMember:*  
 &emsp;&emsp;&emsp;*PropertyName*  
-&emsp;&emsp;&emsp;*ConstantEnumMembers*&emsp;`,`&emsp;*PropertyName*
+&emsp;&emsp;&emsp;*PropertyName*&emsp;=&emsp;*EnumValue*
 
-&emsp;&emsp;*EnumMemberSections:*  
-&emsp;&emsp;&emsp;*EnumMemberSection*  
-&emsp;&emsp;&emsp;*EnumMemberSections*&emsp;`,`&emsp;*EnumMemberSection*
-
-&emsp;&emsp;*EnumMemberSection:*  
-&emsp;&emsp;&emsp;*ConstantEnumMemberSection*  
-&emsp;&emsp;&emsp;*ComputedEnumMember*
-
-&emsp;&emsp;*ConstantEnumMemberSection:*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*ConstantEnumValue*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*ConstantEnumValue*&emsp;`,`&emsp;*ConstantEnumMembers*
-
-&emsp;&emsp;*ConstantEnumValue:*  
-&emsp;&emsp;&emsp;*SignedInteger*  
-&emsp;&emsp;&emsp;*HexIntegerLiteral*
-
-&emsp;&emsp;*ComputedEnumMember:*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*AssignmentExpression*
+&emsp;&emsp;*EnumValue:*  
+&emsp;&emsp;&emsp;*AssignmentExpression*
 
 ## <a name="A.8"/>A.8 Internal Modules
 
@@ -5682,18 +6074,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*AccessibilityModifier<sub>opt</sub>*&emsp;`static`*<sub>opt</sub>*&emsp;*PropertyName*&emsp;*CallSignature*&emsp;`;`
 
 &emsp;&emsp;*AmbientEnumDeclaration:*  
-&emsp;&emsp;&emsp;`enum`&emsp;*Identifier*&emsp;`{`&emsp;*AmbientEnumBody<sub>opt</sub>*&emsp;`}`
-
-&emsp;&emsp;*AmbientEnumBody:*  
-&emsp;&emsp;&emsp;*AmbientEnumMemberList*&emsp;`,`*<sub>opt</sub>*
-
-&emsp;&emsp;*AmbientEnumMemberList:*  
-&emsp;&emsp;&emsp;*AmbientEnumMember*  
-&emsp;&emsp;&emsp;*AmbientEnumMemberList*&emsp;`,`&emsp;*AmbientEnumMember*
-
-&emsp;&emsp;*AmbientEnumMember:*  
-&emsp;&emsp;&emsp;*PropertyName*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;=&emsp;*ConstantEnumValue*
+&emsp;&emsp;&emsp;*EnumDeclaration*
 
 &emsp;&emsp;*AmbientModuleDeclaration:*  
 &emsp;&emsp;&emsp;`module`&emsp;*IdentifierPath*&emsp;`{`&emsp;*AmbientModuleBody*&emsp;`}`
@@ -5715,7 +6096,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;`export`*<sub>opt</sub>*&emsp;*ImportDeclaration*
 
 &emsp;&emsp;*AmbientExternalModuleDeclaration:*  
-&emsp;&emsp;&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
+&emsp;&emsp;&emsp;`declare`&emsp;`module`&emsp;*StringLiteral*&emsp;`{`&emsp; *AmbientExternalModuleBody*&emsp;`}`
 
 &emsp;&emsp;*AmbientExternalModuleBody:*  
 &emsp;&emsp;&emsp;*AmbientExternalModuleElements<sub>opt</sub>*

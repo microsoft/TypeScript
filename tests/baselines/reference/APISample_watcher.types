@@ -3085,6 +3085,9 @@ declare module "typescript" {
 
         InElementType = 64,
 >InElementType : TypeFormatFlags
+
+        UseFullyQualifiedType = 128,
+>UseFullyQualifiedType : TypeFormatFlags
     }
     const enum SymbolFormatFlags {
 >SymbolFormatFlags : SymbolFormatFlags

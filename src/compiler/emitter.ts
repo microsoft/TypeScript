@@ -1487,7 +1487,6 @@ module ts {
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
-        // var program = resolver.getProgram();
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
@@ -3240,6 +3239,10 @@ module ts {
                 emitSignatureAndBody(node);
             }
 
+            function shouldEmitAsArrowFunction(node: FunctionLikeDeclaration): boolean {
+                return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
+            }
+
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3249,7 +3252,13 @@ module ts {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
                 }
-                write("function ");
+
+                // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
+                // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
+                if (!shouldEmitAsArrowFunction(node)) {
+                    write("function ");
+                }
+
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
                 }
@@ -3280,6 +3289,15 @@ module ts {
                 decreaseIndent();
             }
 
+            function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
+                // Check whether the parameter list needs parentheses and preserve no-parenthesis
+                if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
+                    emit(node.parameters[0]);
+                    return;
+                }
+                emitSignatureParameters(node);
+            }
+
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
@@ -3287,7 +3305,16 @@ module ts {
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-                emitSignatureParameters(node);
+
+                // When targeting ES6, emit arrow function natively in ES6
+                if (shouldEmitAsArrowFunction(node)) {
+                    emitSignatureParametersForArrow(node);
+                    write(" =>");
+                }
+                else {
+                    emitSignatureParameters(node);
+                }
+
                 write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
@@ -3299,6 +3326,7 @@ module ts {
                     startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                 }
                 var outPos = writer.getTextPos();
+
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);

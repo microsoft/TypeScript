@@ -14,5 +14,5 @@ var o = {
     ["" + 0](y) {
         return y.length;
     },
-    ["" + 1]: function (y) { return y.length; }
+    ["" + 1]: y => { return y.length; }
 };
