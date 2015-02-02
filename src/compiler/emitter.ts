@@ -4372,12 +4372,12 @@ module ts {
             }
         }
 
-        var hasSemanticErrors: boolean = false;
-        var isEmitBlocked: boolean = false;
+        var hasSemanticDiagnostics = false;
+        var isEmitBlocked = false;
 
         if (targetSourceFile === undefined) {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
-            hasSemanticErrors = resolver.hasSemanticErrors();
+            hasSemanticDiagnostics = resolver.hasSemanticDiagnostics();
             isEmitBlocked = host.isEmitBlocked();
 
             forEach(host.getSourceFiles(), sourceFile => {
@@ -4395,7 +4395,7 @@ module ts {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                hasSemanticErrors = resolver.hasSemanticErrors(targetSourceFile);
+                hasSemanticDiagnostics = resolver.hasSemanticDiagnostics(targetSourceFile);
                 isEmitBlocked = host.isEmitBlocked(targetSourceFile);
 
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
@@ -4406,7 +4406,7 @@ module ts {
                 // Emit all, non-external-module file, into one single output file
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        hasSemanticErrors = hasSemanticErrors || resolver.hasSemanticErrors(sourceFile);
+                        hasSemanticDiagnostics = hasSemanticDiagnostics || resolver.hasSemanticDiagnostics(sourceFile);
                         isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
                     }
                 });
@@ -4418,7 +4418,7 @@ module ts {
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
-                if (!hasSemanticErrors && compilerOptions.declaration) {
+                if (!hasSemanticDiagnostics && compilerOptions.declaration) {
                     writeDeclarationFile(jsFilePath, sourceFile);
                 }
             }
@@ -4437,9 +4437,9 @@ module ts {
             emitResultStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         } else if (hasEmitterError) {
             emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else if (hasSemanticErrors && compilerOptions.declaration) {
+        } else if (hasSemanticDiagnostics && compilerOptions.declaration) {
             emitResultStatus = EmitReturnStatus.DeclarationGenerationSkipped;
-        } else if (hasSemanticErrors && !compilerOptions.declaration) {
+        } else if (hasSemanticDiagnostics && !compilerOptions.declaration) {
             emitResultStatus = EmitReturnStatus.JSGeneratedWithSemanticErrors;
         } else {
             emitResultStatus = EmitReturnStatus.Succeeded;
