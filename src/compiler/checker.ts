@@ -6553,6 +6553,9 @@ module ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            if (!func.body) {
+                return unknownType;
+            }
             if (func.body.kind !== SyntaxKind.Block) {
                 var type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
