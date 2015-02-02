@@ -138,7 +138,7 @@ module Playback {
 
     function recordReplay<T extends Function>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
-            return <any>(() => {
+            return <any>(function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);
                 } else if (recordLog !== undefined) {
