@@ -742,11 +742,16 @@
     },
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
-        "code":  1310
+        "code": 1310
     },
     "'{0}' expression is not allowed in an initializer.": {
         "category": "Error",
         "code": 1311,
+        "isEarly": true
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1312,
         "isEarly": true
     },
 
@@ -1360,7 +1365,7 @@
     },
     "A binding pattern parameter cannot be optional in an implementation signature.": {
         "category": "Error",
-        "code":  2463
+        "code": 2463
     },
 
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
@@ -1686,7 +1691,7 @@
     "Property '{0}' does not exist on 'const' enum '{1}'.": {
         "category": "Error",
         "code": 4088,
-        "isEarly":  true
+        "isEarly": true
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -1903,6 +1908,14 @@
     "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
         "category": "Message",
         "code": 6055
+    },
+    "Emit async functions when ECMAScript target version is lower than 'ES6' (experimental).": {
+        "category": "Message",
+        "code": 6056
+    },
+    "Do not emit runtime helper functions (e.g. '__extends', '__awaiter'). Assumes manual reference to tslib.js (experimental).": {
+        "category": "Message",
+        "code": 6057
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

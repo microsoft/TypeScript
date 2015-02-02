@@ -982,7 +982,6 @@ module ts {
         BreakWhenTrue,          // A break instruction used to jump to a label if a condition evaluates to true
         BreakWhenFalse,         // A break instruction used to jump to a label if a condition evaluates to false
         Yield,                  // A completion instruction for the `yield` keyword
-        YieldStar,              // A completion instruction for the `yield*` keyword
         Return,                 // A completion instruction for the `return` keyword
         Throw,                  // A completion instruction for the `throw` keyword
         Endfinally              // Marks the end of a `finally` block
@@ -1627,6 +1626,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        asyncFunctions?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1661,6 +1661,7 @@ module ts {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or filename
+        experimental?: boolean;             // The option is experimental
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter

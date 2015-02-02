@@ -10580,12 +10580,17 @@ module ts {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
             if (flags & NodeFlags.Async) {
-                return checkAsyncModifier(node, lastAsync);
+                return checkGrammarAsyncModifier(node, lastAsync);
             }
         }
 
-        function checkAsyncModifier(node: Node, asyncModifier: Node): boolean {
+        function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
+            if (languageVersion < ScriptTarget.ES6 && !compilerOptions.asyncFunctions) {
+                return grammarErrorOnNode(asyncModifier, Diagnostics.Async_functions_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+
             switch (node.kind) {
+                case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.InterfaceDeclaration:

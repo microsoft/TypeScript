@@ -1055,7 +1055,8 @@ module ts {
             var expression = Visitor.visit(node.expression, visitNode, state);
             var resumeLabel = GeneratorFunctionBuilder.defineLabel(builder);
             GeneratorFunctionBuilder.writeLocation(builder, node);
-            GeneratorFunctionBuilder.emit(builder, node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, expression);
+            Debug.assert(!node.asteriskToken, "yield* not supported");
+            GeneratorFunctionBuilder.emit(builder, OpCode.Yield, expression);
             GeneratorFunctionBuilder.markLabel(builder, resumeLabel);
             return GeneratorFunctionBuilder.createResume(builder);
         }

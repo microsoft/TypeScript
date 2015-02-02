@@ -43,7 +43,7 @@ function func() {
                     return [3 /*break*/, 6];
                 case 5:
                     "finally";
-                    return [6 /*endfinally*/];
+                    return [5 /*endfinally*/];
                 case 6:
                     "after";
                     return [2 /*return*/];

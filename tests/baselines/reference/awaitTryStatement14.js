@@ -54,7 +54,7 @@ function func() {
                     return [4 /*yield*/, p];
                 case 6:
                     "finally1.1";
-                    return [6 /*endfinally*/];
+                    return [5 /*endfinally*/];
                 case 7:
                     "try0.1";
                     return [3 /*break*/, 10];
@@ -64,7 +64,7 @@ function func() {
                     return [3 /*break*/, 10];
                 case 9:
                     "finally0";
-                    return [6 /*endfinally*/];
+                    return [5 /*endfinally*/];
                 case 10:
                     "after";
                     return [2 /*return*/];

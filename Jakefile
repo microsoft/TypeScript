@@ -284,9 +284,16 @@ for (var i in libraryTargets) {
     })(i);
 }
 
+// tslib
+var tslibSource = path.join(libraryDirectory, "tslib.js");
+var tslibTarget = path.join(builtLocalDirectory, "tslib.js");
+file(tslibTarget, [copyright, tslibSource], function() {
+	concatenateFiles(tslibTarget, [copyright, tslibSource]);
+})
+
 // Lib target to build the library files
 desc("Builds the library targets");
-task("lib", libraryTargets);
+task("lib", [tslibTarget].concat(libraryTargets));
 
 // Generate factory
 var processFactoryJs = path.join(scriptsDirectory, "processFactory.js");

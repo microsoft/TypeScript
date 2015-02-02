@@ -404,7 +404,6 @@ module ts {
                 case OpCode.Throw:
                 case OpCode.Endfinally:
                 case OpCode.Yield:
-                case OpCode.YieldStar:
                     break;
 
                 default:
@@ -696,9 +695,8 @@ module ts {
                 case OpCode.Statement: return writeStatement(statementBuilder, <Node>operationArguments[0]);
                 case OpCode.Assign: return writeAssign(statementBuilder, <Expression>operationArguments[0], <Expression>operationArguments[1], operationLocation);
                 case OpCode.Break: return writeBreak(statementBuilder, <Label>operationArguments[0], operationLocation);
-                case OpCode.BreakWhenTrue: return writeBrTrue(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                case OpCode.BreakWhenFalse: return writeBrFalse(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
-                case OpCode.YieldStar: return writeYieldStar(statementBuilder, <Expression>operationArguments[0], operationLocation);
+                case OpCode.BreakWhenTrue: return writeBreakWhenTrue(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                case OpCode.BreakWhenFalse: return writeBreakWhenFalse(statementBuilder, <Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
                 case OpCode.Yield: return writeYield(statementBuilder, <Expression>operationArguments[0], operationLocation);
                 case OpCode.Return: return writeReturn(statementBuilder, <Expression>operationArguments[0], operationLocation);
                 case OpCode.Throw: return writeThrow(statementBuilder, <Expression>operationArguments[0], operationLocation);
@@ -721,6 +719,25 @@ module ts {
             writeStatement(statementBuilder, assignExpression);
         }
 
+        function writeThrow(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            statementBuilder.lastOperationWasCompletion = true;
+            var throwStatement = Factory.createThrowStatement(expression, operationLocation);
+            writeStatement(statementBuilder, throwStatement);
+        }
+
+        function writeReturn(statementBuilder: StatementBuilder, expression?: Expression, operationLocation?: TextRange): void {
+            statementBuilder.lastOperationWasAbrupt = true;
+            statementBuilder.lastOperationWasCompletion = true;
+            var elements: Expression[] = [Factory.createNumericLiteral('2 /*return*/')];
+            if (expression) {
+                elements.push(expression);
+            }
+            var returnExpression = Factory.createArrayLiteralExpression(elements);
+            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+            writeStatement(statementBuilder, returnStatement);
+        }
+
         function writeBreak(statementBuilder: StatementBuilder, label: Label, operationLocation?: TextRange): void {
             statementBuilder.lastOperationWasAbrupt = true;
             var instruction = Factory.createNumericLiteral('3 /*break*/');
@@ -729,7 +746,7 @@ module ts {
             writeStatement(statementBuilder, returnStatement);
         }
 
-        function writeBrTrue(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
+        function writeBreakWhenTrue(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
             var instruction = Factory.createNumericLiteral('3 /*break*/');
             var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(statementBuilder.builder, label)]);
             var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
@@ -737,7 +754,7 @@ module ts {
             writeStatement(statementBuilder, ifStatement);
         }
 
-        function writeBrFalse(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
+        function writeBreakWhenFalse(statementBuilder: StatementBuilder, label: Label, condition: Expression, operationLocation?: TextRange): void {
             var instruction = Factory.createNumericLiteral('3 /*break*/');
             var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(statementBuilder.builder, label)]);
             var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
@@ -758,39 +775,9 @@ module ts {
             writeStatement(statementBuilder, returnStatement);
         }
 
-        function writeYieldStar(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
-            statementBuilder.lastOperationWasAbrupt = true;
-            var elements: Expression[] = [Factory.createNumericLiteral('5 /*yield**/')];
-            if (expression) {
-                elements.push(expression);
-            }
-            var returnExpression = Factory.createArrayLiteralExpression(elements);
-            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-            writeStatement(statementBuilder, returnStatement);
-        }
-
-        function writeReturn(statementBuilder: StatementBuilder, expression?: Expression, operationLocation?: TextRange): void {
-            statementBuilder.lastOperationWasAbrupt = true;
-            statementBuilder.lastOperationWasCompletion = true;
-            var elements: Expression[] = [Factory.createNumericLiteral('2 /*return*/')];
-            if (expression) {
-                elements.push(expression);
-            }
-            var returnExpression = Factory.createArrayLiteralExpression(elements);
-            var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
-            writeStatement(statementBuilder, returnStatement);
-        }
-
-        function writeThrow(statementBuilder: StatementBuilder, expression: Expression, operationLocation?: TextRange): void {
-            statementBuilder.lastOperationWasAbrupt = true;
-            statementBuilder.lastOperationWasCompletion = true;
-            var throwStatement = Factory.createThrowStatement(expression, operationLocation);
-            writeStatement(statementBuilder, throwStatement);
-        }
-
         function writeEndfinally(statementBuilder: StatementBuilder): void {
             statementBuilder.lastOperationWasAbrupt = true;
-            var instruction = Factory.createNumericLiteral('6 /*endfinally*/');
+            var instruction = Factory.createNumericLiteral('5 /*endfinally*/');
             var returnExpression = Factory.createArrayLiteralExpression([instruction]);
             var returnStatement = Factory.createReturnStatement(returnExpression);
             writeStatement(statementBuilder, returnStatement);

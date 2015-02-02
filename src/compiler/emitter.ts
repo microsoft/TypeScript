@@ -3770,24 +3770,32 @@ module ts {
                     }
                     if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
                         writeLine();
-                        write(`var __awaiter = __awaiter || function (g) {`);
+                        write(`var __awaiter = this.__awaiter || function (gen) {`);
                         increaseIndent();
                         writeLine();
-                        write(`function n(r, t) {`);
+                        write(`function step(result) {`);
                         increaseIndent();
                         writeLine();
                         write(`while (true) {`);
                         increaseIndent();
                         writeLine();
-                        write(`if (r.done) return r.value;`);
+                        write(`var done = result.done, value = result.value, then;`);
                         writeLine();
-                        write(`if (r.value && typeof (t = r.value.then) === "function")`);
+                        write(`if (done) return value;`);
+                        writeLine();
+                        write(`if (value && typeof (then = value.then) === "function")`);
                         increaseIndent();
                         writeLine();
-                        write(`return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });`);
+                        write(`return then.call(value,`);
+                        increaseIndent();
+                        writeLine();
+                        write(`function(value) { return step(gen.next(value)) },`);
+                        writeLine();
+                        write(`function(reason) { return step(gen["throw"](reason)) });`);
+                        decreaseIndent();
                         decreaseIndent();
                         writeLine();
-                        write(`r = g.next(r.value);`);
+                        write(`result = gen.next(value);`);
                         decreaseIndent();
                         writeLine();
                         write(`}`);
@@ -3795,7 +3803,7 @@ module ts {
                         writeLine();
                         write(`}`);
                         writeLine();
-                        write(`return n(g.next());`);
+                        write(`return step(gen.next());`);
                         decreaseIndent();
                         writeLine();
                         write(`};`);
@@ -3803,7 +3811,7 @@ module ts {
                     }
                     if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
                         writeLine();
-                        write(`var __generator = __generator || function (body) {`);
+                        write(`var __generator = this.__generator || function (body) {`);
                         increaseIndent();
                         writeLine();
                         write(`var done, finallyStack, executing, state;`);
@@ -3893,7 +3901,7 @@ module ts {
                         write(`return { value: arg, done: false };`);
                         decreaseIndent();
                         writeLine();
-                        write(`case 6 /*endfinally*/:`);
+                        write(`case 5 /*endfinally*/:`);
                         increaseIndent();
                         writeLine();
                         write(`arg = finallyStack.pop(), opcode = finallyStack.pop();`);

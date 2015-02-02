@@ -37,7 +37,7 @@ function func() {
                     return [3 /*break*/, 5];
                 case 4:
                     "finally";
-                    return [6 /*endfinally*/];
+                    return [5 /*endfinally*/];
                 case 5:
                     "after";
                     return [2 /*return*/];
