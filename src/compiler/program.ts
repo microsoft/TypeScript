@@ -114,8 +114,11 @@ module ts {
         }
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return getDiagnostics(sourceFile).length !== 0 ||
-                (options.noEmitOnError && getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0);
+            if (options.noEmitOnError) {
+                return getDiagnostics(sourceFile).length !== 0 || getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0;
+            }
+
+            return false;
         }
 
         function getDiagnosticsProducingTypeChecker() {
