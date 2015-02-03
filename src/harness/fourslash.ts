@@ -388,7 +388,7 @@ module FourSlash {
             this.currentCaretPosition = pos;
 
             var lineStarts = ts.computeLineStarts(this.getCurrentFileContent());
-            var lineCharPos = ts.getLineAndCharacterOfPosition(lineStarts, pos);
+            var lineCharPos = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
             this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 
@@ -1393,7 +1393,7 @@ module FourSlash {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            var incrementalSyntaxDiagnostics = incrementalSourceFile.getSyntacticDiagnostics();
+            var incrementalSyntaxDiagnostics = ts.getSyntacticDiagnostics(incrementalSourceFile);
 
             // Check syntactic structure
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
@@ -1401,7 +1401,7 @@ module FourSlash {
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
-            var referenceSyntaxDiagnostics = referenceSourceFile.getSyntacticDiagnostics();
+            var referenceSyntaxDiagnostics = ts.getSyntacticDiagnostics(referenceSourceFile);
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
