@@ -1,5 +1,6 @@
 ﻿/// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='harness.ts' />
 
 module Harness.LanguageService {
     export class ScriptInfo {
@@ -54,15 +55,10 @@ module Harness.LanguageService {
         }
     }
 
-    class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
-        private lineMap: number[] = null;
-        private textSnapshot: string;
-        private version: number;
-
-        constructor(private scriptInfo: ScriptInfo) {
-            this.textSnapshot = scriptInfo.content;
-            this.version = scriptInfo.version;
-        }
+    class ScriptSnapshot implements ts.IScriptSnapshot {
+        public textSnapshot: string;        public version: number;
+        constructor(public scriptInfo: ScriptInfo) {
+            this.textSnapshot = scriptInfo.content;            this.version = scriptInfo.version;        }
 
         public getText(start: number, end: number): string {
             return this.textSnapshot.substring(start, end);
@@ -72,9 +68,28 @@ module Harness.LanguageService {
             return this.textSnapshot.length;
         }
 
+        public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
+            var oldShim = <ScriptSnapshot>oldScript;
+            return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+        }
+    }
+
+    class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
+        constructor(public scriptSnapshot: ScriptSnapshot) {
+        }
+
+        public getText(start: number, end: number): string {
+            return this.scriptSnapshot.getText(start, end);
+        }
+
+        public getLength(): number {
+            return this.scriptSnapshot.getLength();
+        }
+
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
             var oldShim = <ScriptSnapshotShim>oldScript;
-            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+
+            var range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
             if (range === null) {
                 return null;
             }
@@ -194,7 +209,7 @@ module Harness.LanguageService {
 
         public getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
             if (this.contains(fileName)) {
-                return new ScriptSnapshotShim(this.getScriptInfo(fileName));
+                return new ScriptSnapshotShim(new ScriptSnapshot(this.getScriptInfo(fileName)));
             }
             return undefined;
         }
