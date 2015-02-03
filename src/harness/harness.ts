@@ -930,6 +930,8 @@ module Harness {
                     settingsCallback(null);
                 }
 
+                var newLine = '\r\n';
+
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
@@ -1008,7 +1010,7 @@ module Harness {
 
                         case 'newline':
                         case 'newlines':
-                            ts.sys.newLine = setting.value;
+                            newLine = setting.value;
                             break;
 
                         case 'comments':
@@ -1050,7 +1052,7 @@ module Harness {
                             break;
 
                         case 'includebuiltfile':
-                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value) });
+                            inputFiles.push({ unitName: setting.value, content: normalizeLineEndings(IO.readFile(libFolder + setting.value), newLine) });
                             break;
 
                         default:
@@ -1096,7 +1098,7 @@ module Harness {
                 onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
-                ts.sys.newLine = '\r\n';
+                ts.sys.newLine = newLine;
                 return options;
             }
 
@@ -1166,6 +1168,14 @@ module Harness {
                     }
                 }
             }
+        }
+
+        function normalizeLineEndings(text: string, lineEnding: string): string {
+            var normalized = text.replace(/\r\n?/g, '\n');
+            if (lineEnding !== '\n') {
+                normalized = normalized.replace(/\n/g, lineEnding);
+            }
+            return normalized;
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
