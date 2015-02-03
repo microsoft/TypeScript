@@ -3948,6 +3948,9 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
+        stripInternal?: boolean;
+>stripInternal : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -4028,6 +4031,9 @@ declare module "typescript" {
         error?: DiagnosticMessage;
 >error : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
+
+        experimental?: boolean;
+>experimental : boolean
     }
     const enum CharacterCodes {
 >CharacterCodes : CharacterCodes
