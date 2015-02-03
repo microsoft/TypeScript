@@ -194,7 +194,7 @@ var compilerFilename = "tsc.js";
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -225,6 +225,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (useDebugMode) {
             options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+        }
+
+        if (stripInternal) {
+            options += " --stripInternal"
         }
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
@@ -331,7 +335,8 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*outDir*/ undefined,
             /*preserveConstEnums*/ true,
             /*keepComments*/ false,
-            /*noResolve*/ false);
+            /*noResolve*/ false,
+            /*stripInternal*/ false);
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -347,6 +352,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
             /*preserveConstEnums*/ true,
             /*keepComments*/ true,
             /*noResolve*/ true,
+            /*stripInternal*/ true,
             /*callback*/ function () {
                 function makeDefinitionFiles(definitionsRoots, standaloneDefinitionsFile, nodeDefinitionsFile) {
                     // Create the standalone definition file

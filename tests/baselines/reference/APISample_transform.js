@@ -758,10 +758,6 @@ declare module "typescript" {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        referenceDiagnostics: Diagnostic[];
-        parseDiagnostics: Diagnostic[];
-        semanticDiagnostics: Diagnostic[];
-        syntacticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
         nodeCount: number;
@@ -769,7 +765,6 @@ declare module "typescript" {
         symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
-        lineMap: number[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -1216,6 +1211,7 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1246,6 +1242,7 @@ declare module "typescript" {
         description?: DiagnosticMessage;
         paramType?: DiagnosticMessage;
         error?: DiagnosticMessage;
+        experimental?: boolean;
     }
     const enum CharacterCodes {
         nullCharacter = 0,
