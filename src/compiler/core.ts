@@ -280,7 +280,6 @@ module ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            isEarly: message.isEarly
         };
     }
 
@@ -299,8 +298,7 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code,
-            isEarly: message.isEarly
+            code: message.code
         };
     }
 
@@ -644,6 +642,10 @@ module ts {
             var paddedHexCode = ("0000" + hexCharCode).slice(-4);
             return "\\u" + paddedHexCode;
         }
+    }
+
+    export function getDefaultLibFilename(options: CompilerOptions): string {
+        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
 
     export interface ObjectAllocator {

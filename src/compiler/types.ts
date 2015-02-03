@@ -330,6 +330,12 @@ module ts {
         HasAggregatedChildData = 1 << 6
     }
 
+    export const enum RelationComparisonResult {
+        Succeeded = 1, // Should be truthy
+        Failed = 2,
+        FailedAndReported = 3
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -1066,6 +1072,7 @@ module ts {
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
+        UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
     }
 
     export const enum SymbolFormatFlags {
@@ -1108,7 +1115,7 @@ module ts {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(sourceFile?: SourceFile): boolean;
+        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1258,29 +1265,33 @@ module ts {
     }
 
     export const enum TypeFlags {
-        Any                 = 0x00000001,
-        String              = 0x00000002,
-        Number              = 0x00000004,
-        Boolean             = 0x00000008,
-        Void                = 0x00000010,
-        Undefined           = 0x00000020,
-        Null                = 0x00000040,
-        Enum                = 0x00000080,  // Enum type
-        StringLiteral       = 0x00000100,  // String literal type
-        TypeParameter       = 0x00000200,  // Type parameter
-        Class               = 0x00000400,  // Class
-        Interface           = 0x00000800,  // Interface
-        Reference           = 0x00001000,  // Generic type reference
-        Tuple               = 0x00002000,  // Tuple
-        Union               = 0x00004000,  // Union
-        Anonymous           = 0x00008000,  // Anonymous
-        FromSignature       = 0x00010000,  // Created for signature assignment check
-        Unwidened           = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
+        Any                     = 0x00000001,
+        String                  = 0x00000002,
+        Number                  = 0x00000004,
+        Boolean                 = 0x00000008,
+        Void                    = 0x00000010,
+        Undefined               = 0x00000020,
+        Null                    = 0x00000040,
+        Enum                    = 0x00000080,  // Enum type
+        StringLiteral           = 0x00000100,  // String literal type
+        TypeParameter           = 0x00000200,  // Type parameter
+        Class                   = 0x00000400,  // Class
+        Interface               = 0x00000800,  // Interface
+        Reference               = 0x00001000,  // Generic type reference
+        Tuple                   = 0x00002000,  // Tuple
+        Union                   = 0x00004000,  // Union
+        Anonymous               = 0x00008000,  // Anonymous
+        FromSignature           = 0x00010000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
     // Properties common to all types
@@ -1399,7 +1410,6 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
-        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1420,10 +1430,6 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {

@@ -237,9 +237,6 @@ module FourSlash {
             getLength: () => {
                 return sourceText.length;
             },
-            getLineStartPositions: () => {
-                return <number[]>[];
-            },
             getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
                 return <ts.TextChangeRange>undefined;
             }
@@ -545,6 +542,18 @@ module FourSlash {
             var evaluation = new Function(emit.outputFiles[0].text + ';\r\nreturn (' + expr + ');')();
             if (evaluation !== value) {
                 this.raiseError('Expected evaluation of expression "' + expr + '" to equal "' + value + '", but got "' + evaluation + '"');
+            }
+        }
+
+        public verifyGetEmitOutputForCurrentFile(expected: string): void {
+            var emit = this.languageService.getEmitOutput(this.activeFile.fileName);
+            if (emit.outputFiles.length !== 1) {
+                throw new Error("Expected exactly one output from emit of " + this.activeFile.fileName);
+            }
+            this.taoInvalidReason = 'verifyGetEmitOutputForCurrentFile impossible';
+            var actual = emit.outputFiles[0].text;
+            if (actual !== expected) {
+                this.raiseError("Expected emit output to be '" + expected + "', but got '" + actual + "'");
             }
         }
 
@@ -1391,7 +1400,7 @@ module FourSlash {
             var content = snapshot.getText(0, snapshot.getLength());
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
             var referenceSyntaxDiagnostics = ts.getSyntacticDiagnostics(referenceSourceFile);
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);

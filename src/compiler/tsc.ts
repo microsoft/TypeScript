@@ -2,7 +2,7 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.4.0.0";
+    var version = "1.5.0.0";
 
     export interface SourceFile {
         fileWatcher: FileWatcher;

@@ -7,7 +7,7 @@ module Harness.LanguageService {
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         public lineMap: number[] = null;
 
-        constructor(public fileName: string, public content: string, public isOpen = true) {
+        constructor(public fileName: string, public content: string) {
             this.setContent(content);
         }
 
@@ -72,14 +72,6 @@ module Harness.LanguageService {
             return this.textSnapshot.length;
         }
 
-        public getLineStartPositions(): string {
-            if (this.lineMap === null) {
-                this.lineMap = ts.computeLineStarts(this.textSnapshot);
-            }
-
-            return JSON.stringify(this.lineMap);
-        }
-
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
             var oldShim = <ScriptSnapshotShim>oldScript;
             var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
@@ -109,11 +101,9 @@ module Harness.LanguageService {
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: ts.IScriptSnapshot,
-            version: string,
-            isOpen: boolean): ts.SourceFile {
+            version: string): ts.SourceFile {
             var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
             sourceFile.version = version;
-            sourceFile.isOpen = isOpen;
             return sourceFile;
         }
 
@@ -123,10 +113,9 @@ module Harness.LanguageService {
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: ts.IScriptSnapshot,
             version: string,
-            isOpen: boolean,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange);
+            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
@@ -159,11 +148,15 @@ module Harness.LanguageService {
         }
 
         private getScriptInfo(fileName: string): ScriptInfo {
-            return this.fileNameToScript[fileName];
+            return ts.lookUp(this.fileNameToScript, fileName);
         }
 
         public addScript(fileName: string, content: string) {
             this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
+        }
+
+        private contains(fileName: string): boolean {
+            return ts.hasProperty(this.fileNameToScript, fileName);
         }
 
         public updateScript(fileName: string, content: string) {
@@ -223,20 +216,22 @@ module Harness.LanguageService {
 
         public getScriptFileNames(): string {
             var fileNames: string[] = [];
-            ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
+            ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });
             return JSON.stringify(fileNames);
         }
 
         public getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
-            return new ScriptSnapshotShim(this.getScriptInfo(fileName));
+            if (this.contains(fileName)) {
+                return new ScriptSnapshotShim(this.getScriptInfo(fileName));
+            }
+            return undefined;
         }
 
         public getScriptVersion(fileName: string): string {
-            return this.getScriptInfo(fileName).version.toString();
-        }
-
-        public getScriptIsOpen(fileName: string): boolean {
-            return this.getScriptInfo(fileName).isOpen;
+            if (this.contains(fileName)) {
+                return this.getScriptInfo(fileName).version.toString();
+            }
+            return undefined;
         }
 
         public getLocalizedDiagnosticMessages(): string {
@@ -272,7 +267,6 @@ module Harness.LanguageService {
         public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
             var result = ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
             result.version = "1";
-            result.isOpen = true;
             return result;
         }
 

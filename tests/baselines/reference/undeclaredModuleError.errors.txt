@@ -1,5 +1,6 @@
 tests/cases/compiler/undeclaredModuleError.ts(1,21): error TS2307: Cannot find external module 'fs'.
 tests/cases/compiler/undeclaredModuleError.ts(8,29): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: any, name: string) => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
 tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find name 'IDoNotExist'.
 
 
@@ -18,6 +19,7 @@ tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find 
             } , (error: Error, files: {}[]) => {
     ~~~~~~~~~
 !!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: any, name: string) => boolean'.
+!!! error TS2345:   Type 'void' is not assignable to type 'boolean'.
                     files.forEach((file) => {
                         var fullPath = join(IDoNotExist);
                                             ~~~~~~~~~~~

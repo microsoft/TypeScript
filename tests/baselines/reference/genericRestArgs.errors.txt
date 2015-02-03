@@ -4,6 +4,7 @@ tests/cases/compiler/genericRestArgs.ts(5,34): error TS2345: Argument of type 's
 tests/cases/compiler/genericRestArgs.ts(10,12): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
 tests/cases/compiler/genericRestArgs.ts(12,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'any[]'.
+  Property 'length' is missing in type 'Number'.
 
 
 ==== tests/cases/compiler/genericRestArgs.ts (4 errors) ====
@@ -29,3 +30,4 @@ tests/cases/compiler/genericRestArgs.ts(12,30): error TS2345: Argument of type '
     var a2Gc = makeArrayG<any[]>(1, ""); // error
                                  ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'any[]'.
+!!! error TS2345:   Property 'length' is missing in type 'Number'.

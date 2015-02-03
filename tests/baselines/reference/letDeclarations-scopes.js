@@ -205,6 +205,7 @@ for (let l = 0; n = l; l++) {
 }
 for (let l in {}) {
 }
+// Try/catch/finally
 try {
     let l = 0;
     n = l;
@@ -217,12 +218,14 @@ finally {
     let l = 0;
     n = l;
 }
+// Switch
 switch (0) {
     case 0:
         let l = 0;
         n = l;
         break;
 }
+// blocks
 {
     let l = 0;
     n = l;
@@ -236,7 +239,7 @@ function F() {
     let l = 0;
     n = l;
 }
-var F2 = function () {
+var F2 = () => {
     let l = 0;
     n = l;
 };
@@ -286,7 +289,7 @@ var o = {
         let l = 0;
         n = l;
     },
-    f2: function () {
+    f2: () => {
         let l = 0;
         n = l;
     }
