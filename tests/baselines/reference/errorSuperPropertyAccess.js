@@ -1,0 +1,280 @@
+//// [errorSuperPropertyAccess.ts]
+//super property access in constructor of class with no base type
+//super property access in instance member function of class with no base type
+//super property access in instance member accessor(get and set) of class with no base type
+class NoBase {
+    constructor() {
+        var a = super.prototype;
+        var b = super.hasOwnProperty('');
+    }
+
+    fn() {
+        var a = super.prototype;
+        var b = super.hasOwnProperty('');
+    }
+
+    m = super.prototype;
+    n = super.hasOwnProperty('');
+
+    //super static property access in static member function of class with no base type
+    //super static property access in static member accessor(get and set) of class with no base type
+    public static static1() {
+        super.hasOwnProperty('');
+    }
+
+    public static get static2() {
+        super.hasOwnProperty('');
+        return '';
+    }
+
+    public static set static2(n) {
+        super.hasOwnProperty('');
+    }
+}
+
+class SomeBase {
+    private privateFunc() { }
+    private privateMember = 0;
+
+    public publicFunc() { }
+    public publicMember = 0;
+
+    private static privateStaticFunc() { }
+    private static privateStaticMember = 0;
+
+    public static publicStaticFunc() { }
+    public static publicStaticMember = 0;
+
+}
+
+
+//super.publicInstanceMemberNotFunction in constructor of derived class
+//super.publicInstanceMemberNotFunction in instance member function of derived class
+//super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
+//super property access only available with typed this
+class SomeDerived1 extends SomeBase {
+    constructor() {
+        super();
+        super.publicMember = 1;
+    }
+
+    fn() {
+        var x = super.publicMember;
+    }
+
+    get a() {
+        var x = super.publicMember;
+        return undefined;
+    }
+    set a(n) {
+        n = super.publicMember;
+    }
+    fn2() {
+        function inner() {
+            super.publicFunc();
+        }
+        var x = {
+            test: function () { return super.publicFunc(); }
+        }
+    }
+}
+
+//super.privateProperty in constructor of derived class
+//super.privateProperty in instance member function of derived class
+//super.privateProperty in instance member accessor(get and set) of derived class
+class SomeDerived2 extends SomeBase {
+    constructor() {
+        super();
+        super.privateMember = 1;
+    }
+
+    fn() {
+        var x = super.privateMember;
+    }
+
+    get a() {
+        var x = super.privateMember;
+        return undefined;
+    }
+    set a(n) {
+        n = super.privateMember;
+    }
+}
+
+//super.publicStaticMemberNotFunction in static member function of derived class
+//super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
+//super.privateStaticProperty in static member function of derived class
+//super.privateStaticProperty in static member accessor(get and set) of derived class
+class SomeDerived3 extends SomeBase {
+    static fn() {
+        super.publicStaticMember = 3;
+        super.privateStaticMember = 3;
+        super.privateStaticFunc();
+    }
+    static get a() {
+        super.publicStaticMember = 3;
+        super.privateStaticMember = 3;
+        super.privateStaticFunc();
+        return '';
+    }
+    static set a(n) {
+        super.publicStaticMember = 3;
+        super.privateStaticMember = 3;
+        super.privateStaticFunc();
+    }
+}
+
+// In object literal
+var obj = { n: super.wat, p: super.foo() };
+
+
+//// [errorSuperPropertyAccess.js]
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+//super property access in constructor of class with no base type
+//super property access in instance member function of class with no base type
+//super property access in instance member accessor(get and set) of class with no base type
+var NoBase = (function () {
+    function NoBase() {
+        this.m = super.prototype;
+        this.n = super.hasOwnProperty.call(this, '');
+        var a = super.prototype;
+        var b = super.hasOwnProperty.call(this, '');
+    }
+    NoBase.prototype.fn = function () {
+        var a = super.prototype;
+        var b = super.hasOwnProperty.call(this, '');
+    };
+    //super static property access in static member function of class with no base type
+    //super static property access in static member accessor(get and set) of class with no base type
+    NoBase.static1 = function () {
+        super.hasOwnProperty.call(this, '');
+    };
+    Object.defineProperty(NoBase, "static2", {
+        get: function () {
+            super.hasOwnProperty.call(this, '');
+            return '';
+        },
+        set: function (n) {
+            super.hasOwnProperty.call(this, '');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return NoBase;
+})();
+var SomeBase = (function () {
+    function SomeBase() {
+        this.privateMember = 0;
+        this.publicMember = 0;
+    }
+    SomeBase.prototype.privateFunc = function () {
+    };
+    SomeBase.prototype.publicFunc = function () {
+    };
+    SomeBase.privateStaticFunc = function () {
+    };
+    SomeBase.publicStaticFunc = function () {
+    };
+    SomeBase.privateStaticMember = 0;
+    SomeBase.publicStaticMember = 0;
+    return SomeBase;
+})();
+//super.publicInstanceMemberNotFunction in constructor of derived class
+//super.publicInstanceMemberNotFunction in instance member function of derived class
+//super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
+//super property access only available with typed this
+var SomeDerived1 = (function (_super) {
+    __extends(SomeDerived1, _super);
+    function SomeDerived1() {
+        _super.call(this);
+        _super.prototype.publicMember = 1;
+    }
+    SomeDerived1.prototype.fn = function () {
+        var x = _super.prototype.publicMember;
+    };
+    Object.defineProperty(SomeDerived1.prototype, "a", {
+        get: function () {
+            var x = _super.prototype.publicMember;
+            return undefined;
+        },
+        set: function (n) {
+            n = _super.prototype.publicMember;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SomeDerived1.prototype.fn2 = function () {
+        function inner() {
+            super.publicFunc.call(this);
+        }
+        var x = {
+            test: function () {
+                return super.publicFunc.call(this);
+            }
+        };
+    };
+    return SomeDerived1;
+})(SomeBase);
+//super.privateProperty in constructor of derived class
+//super.privateProperty in instance member function of derived class
+//super.privateProperty in instance member accessor(get and set) of derived class
+var SomeDerived2 = (function (_super) {
+    __extends(SomeDerived2, _super);
+    function SomeDerived2() {
+        _super.call(this);
+        _super.prototype.privateMember = 1;
+    }
+    SomeDerived2.prototype.fn = function () {
+        var x = _super.prototype.privateMember;
+    };
+    Object.defineProperty(SomeDerived2.prototype, "a", {
+        get: function () {
+            var x = _super.prototype.privateMember;
+            return undefined;
+        },
+        set: function (n) {
+            n = _super.prototype.privateMember;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SomeDerived2;
+})(SomeBase);
+//super.publicStaticMemberNotFunction in static member function of derived class
+//super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
+//super.privateStaticProperty in static member function of derived class
+//super.privateStaticProperty in static member accessor(get and set) of derived class
+var SomeDerived3 = (function (_super) {
+    __extends(SomeDerived3, _super);
+    function SomeDerived3() {
+        _super.apply(this, arguments);
+    }
+    SomeDerived3.fn = function () {
+        _super.publicStaticMember = 3;
+        _super.privateStaticMember = 3;
+        _super.privateStaticFunc.call(this);
+    };
+    Object.defineProperty(SomeDerived3, "a", {
+        get: function () {
+            _super.publicStaticMember = 3;
+            _super.privateStaticMember = 3;
+            _super.privateStaticFunc.call(this);
+            return '';
+        },
+        set: function (n) {
+            _super.publicStaticMember = 3;
+            _super.privateStaticMember = 3;
+            _super.privateStaticFunc.call(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SomeDerived3;
+})(SomeBase);
+// In object literal
+var obj = { n: super.wat, p: super.foo.call(this) };
