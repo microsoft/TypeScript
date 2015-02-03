@@ -1,6 +1,6 @@
 //// [parserSymbolIndexer1.ts]
 interface I {
-    [s: Symbol]: string;
+    [s: symbol]: string;
 }
 
 //// [parserSymbolIndexer1.js]

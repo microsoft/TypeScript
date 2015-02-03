@@ -5,7 +5,7 @@ class C1 {
     }
 }
 class C2 extends C1 {
-    [s: Symbol]: () => { x: number };
+    [s: symbol]: () => { x: number };
 }
 
 //// [symbolProperty32.js]

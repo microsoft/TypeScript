@@ -3,7 +3,7 @@ class C1 {
     [Symbol.toStringTag]() {
         return { x: "" };
     }
-    [s: Symbol]: () => { x: number };
+    [s: symbol]: () => { x: number };
 }
 
 //// [symbolProperty30.js]

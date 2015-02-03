@@ -1,7 +1,7 @@
 //@target: ES6
 interface I {
     [Symbol.iterator]: number;
-    [s: Symbol]: string;
+    [s: symbol]: string;
     "__@iterator": string;
 }
 

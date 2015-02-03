@@ -1,5 +1,5 @@
 //@target: ES6
-var s: Symbol;
+var s: symbol;
 var x = {
     [s]: 0,
     [s]() { },

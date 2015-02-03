@@ -3,5 +3,5 @@ class C1 {
     [Symbol.toStringTag]() {
         return { x: "" };
     }
-    [s: Symbol]: () => { x: string };
+    [s: symbol]: () => { x: string };
 }

@@ -1,6 +1,6 @@
 //// [parserSymbolIndexer4.ts]
 var x: {
-    [s: Symbol]: string;
+    [s: symbol]: string;
 }
 
 //// [parserSymbolIndexer4.js]

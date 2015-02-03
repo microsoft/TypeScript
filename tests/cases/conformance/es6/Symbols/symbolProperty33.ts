@@ -5,5 +5,5 @@ class C1 extends C2 {
     }
 }
 class C2 {
-    [s: Symbol]: () => { x: string };
+    [s: symbol]: () => { x: string };
 }

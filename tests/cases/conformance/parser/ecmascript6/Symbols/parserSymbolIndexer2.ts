@@ -1,4 +1,4 @@
 //@target: ES6
 class C {
-    [s: Symbol]: string;
+    [s: symbol]: string;
 }

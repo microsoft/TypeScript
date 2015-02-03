@@ -1,9 +1,9 @@
-//// [parserSymbolIndexer2.ts]
+//// [parserES5SymbolIndexer2.ts]
 class C {
     [s: symbol]: string;
 }
 
-//// [parserSymbolIndexer2.js]
+//// [parserES5SymbolIndexer2.js]
 var C = (function () {
     function C() {
     }
