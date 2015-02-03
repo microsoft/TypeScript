@@ -1418,9 +1418,9 @@ module ts {
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
-        // Set "ScriptTarget.Latest" target by default for language service
+        // Always default to "ScriptTarget.ES5" for the language service
         return {
-            target: ScriptTarget.Latest,
+            target: ScriptTarget.ES5,
             module: ModuleKind.None,
         };
     }
