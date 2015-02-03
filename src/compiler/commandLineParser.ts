@@ -135,6 +135,12 @@ module ts {
             description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
         },
         {
+            name: "stripInternal",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
+            experimental: true
+        },
+        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },

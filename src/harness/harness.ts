@@ -1017,6 +1017,9 @@ module Harness {
                             options.removeComments = setting.value === 'false';
                             break;
 
+                        case 'stripinternal':
+                            options.stripInternal = !!setting.value;
+
                         case 'usecasesensitivefilenames':
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
@@ -1464,7 +1467,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
