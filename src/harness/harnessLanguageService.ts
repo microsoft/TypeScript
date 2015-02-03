@@ -94,34 +94,6 @@ module Harness.LanguageService {
         }
     }
 
-    export class NonCachingDocumentRegistry implements ts.DocumentRegistry {
-        public static Instance: ts.DocumentRegistry = new NonCachingDocumentRegistry();
-
-        public acquireDocument(
-            fileName: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: ts.IScriptSnapshot,
-            version: string): ts.SourceFile {
-            var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
-            sourceFile.version = version;
-            return sourceFile;
-        }
-
-        public updateDocument(
-            document: ts.SourceFile,
-            fileName: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: ts.IScriptSnapshot,
-            version: string,
-            textChangeRange: ts.TextChangeRange
-            ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
-        }
-
-        public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
-            // no op since this class doesn't cache anything
-        }
-    }
     export class TypeScriptLS implements ts.LanguageServiceShimHost {
         private ls: ts.LanguageServiceShim = null;
 
