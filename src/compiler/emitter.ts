@@ -358,6 +358,65 @@ module ts {
 
         var aliasDeclarationEmitInfo: AliasDeclarationEmitInfo[] = [];
 
+        // Contains the reference paths that needs to go in the declaration file. 
+        // Collecting this separately because reference paths need to be first thing in the declaration file 
+        // and we could be collecting these paths from multiple files into single one with --out option
+        var referencePathsOutput = "";
+
+        if (root) {
+            // Emitting just a single file, so emit references in this file only
+            if (!compilerOptions.noResolve) {
+                var addedGlobalFileReference = false;
+                forEach(root.referencedFiles, fileReference => {
+                    var referencedFile = tryResolveScriptReference(host, root, fileReference);
+
+                    // All the references that are not going to be part of same file
+                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
+                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
+
+                        writeReferencePath(referencedFile);
+                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                            addedGlobalFileReference = true;
+                        }
+                    }
+                });
+            }
+
+            emitNode(root);
+        }
+        else {
+            // Emit references corresponding to this file
+            var emittedReferencedFiles: SourceFile[] = [];
+            forEach(host.getSourceFiles(), sourceFile => {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    // Check what references need to be added
+                    if (!compilerOptions.noResolve) {
+                        forEach(sourceFile.referencedFiles, fileReference => {
+                            var referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                            // If the reference file is a declaration file or an external module, emit that reference
+                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+
+                                writeReferencePath(referencedFile);
+                                emittedReferencedFiles.push(referencedFile);
+                            }
+                        });
+                    }
+
+                    emitNode(sourceFile);
+                }
+            });
+        }
+
+        return {
+            reportedDeclarationError,
+            aliasDeclarationEmitInfo,
+            synchronousDeclarationOutput: writer.getText(),
+            referencePathsOutput,
+        }
+
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             var writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
@@ -1402,10 +1461,6 @@ module ts {
             }
         }
 
-        // Contains the reference paths that needs to go in the declaration file. 
-        // Collecting this separately because reference paths need to be first thing in the declaration file 
-        // and we could be collecting these paths from multiple files into single one with --out option
-        var referencePathsOutput = "";
         function writeReferencePath(referencedFile: SourceFile) {
             var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.filename // Declaration file, use declaration file name
@@ -1421,60 +1476,6 @@ module ts {
             /*isAbsolutePathAnUrl*/ false);
 
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
-        }
-
-        if (root) {
-            // Emitting just a single file, so emit references in this file only
-            if (!compilerOptions.noResolve) {
-                var addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    var referencedFile = tryResolveScriptReference(host, root, fileReference);
-
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
-                        }
-                    }
-                });
-            }
-
-            emitNode(root);
-        }
-        else {
-            // Emit references corresponding to this file
-            var emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            var referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-
-                    emitNode(sourceFile);
-                }
-            });
-        }
-
-        return {
-            reportedDeclarationError,
-            aliasDeclarationEmitInfo,
-            synchronousDeclarationOutput: writer.getText(),
-            referencePathsOutput,
         }
     }
     
