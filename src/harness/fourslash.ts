@@ -237,9 +237,6 @@ module FourSlash {
             getLength: () => {
                 return sourceText.length;
             },
-            getLineStartPositions: () => {
-                return <number[]>[];
-            },
             getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
                 return <ts.TextChangeRange>undefined;
             }
@@ -1403,7 +1400,7 @@ module FourSlash {
             var content = snapshot.getText(0, snapshot.getLength());
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
             var referenceSyntaxDiagnostics = referenceSourceFile.getSyntacticDiagnostics();
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);

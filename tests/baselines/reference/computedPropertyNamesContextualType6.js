@@ -16,7 +16,7 @@ foo({
 //// [computedPropertyNamesContextualType6.js]
 foo({
     p: "",
-    0: function () {
+    0: () => {
     },
     ["hi" + "bye"]: true,
     [0 + 1]: 0,

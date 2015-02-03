@@ -1,0 +1,46 @@
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(2,15): error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(7,19): error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(13,13): error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(19,15): error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+
+
+==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts (4 errors) ====
+    var a = () => {
+        var arg = arguments[0];  // error
+                  ~~~~~~~~~
+!!! error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+    }
+    
+    var b = function () {
+        var a = () => {
+            var arg = arguments[0];  // error
+                      ~~~~~~~~~
+!!! error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+        }
+    }
+    
+    function baz() {
+    	() => {
+    		var arg = arguments[0];
+    		          ~~~~~~~~~
+!!! error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+    	}
+    }
+    
+    function foo(inputFunc: () => void) { }
+    foo(() => {
+        var arg = arguments[0];  // error
+                  ~~~~~~~~~
+!!! error TS9002: The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.
+    });
+    
+    function bar() {
+        var arg = arguments[0];  // no error
+    }
+    
+    
+    () => {
+    	function foo() {
+    		var arg = arguments[0];  // no error
+    	}
+    }

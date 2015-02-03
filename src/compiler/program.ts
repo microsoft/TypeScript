@@ -64,7 +64,7 @@ module ts {
 
         return {
             getSourceFile,
-            getDefaultLibFilename: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts"),
+            getDefaultLibFilename: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFilename(options)),
             writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
@@ -113,14 +113,12 @@ module ts {
             return emitHost || (emitHost = createEmitHostFromProgram(program));
         }
 
-        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
-            return forEach(getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile), d => d.isEarly);
-        }
-
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return getDiagnostics(sourceFile).length !== 0 ||
-                hasEarlyErrors(sourceFile) ||
-                (options.noEmitOnError && getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0);
+            if (options.noEmitOnError) {
+                return getDiagnostics(sourceFile).length !== 0 || getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0;
+            }
+
+            return false;
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -176,7 +174,7 @@ module ts {
             }
             var diagnostic: DiagnosticMessage;
             if (hasExtension(filename)) {
-                if (!options.allowNonTsExtensions && !fileExtensionIs(filename, ".ts")) {
+                if (!options.allowNonTsExtensions && !fileExtensionIs(host.getCanonicalFileName(filename), ".ts")) {
                     diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {

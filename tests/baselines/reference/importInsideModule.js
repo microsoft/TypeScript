@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/importInsideModule.ts] ////
+
+//// [importInsideModule_file1.ts]
+export var x = 1;
+
+//// [importInsideModule_file2.ts]
+export module myModule {
+    import foo = require("importInsideModule_file1");
+    var a = foo.x;
+}
+
+//// [importInsideModule_file2.js]
+var myModule;
+(function (myModule) {
+    var foo = require("importInsideModule_file1");
+    var a = foo.x;
+})(myModule = exports.myModule || (exports.myModule = {}));
