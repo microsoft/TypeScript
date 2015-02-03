@@ -852,12 +852,6 @@ module ts {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }
 
-    export function isESSymbolTypeNode(node: Node): boolean {
-        return node.kind === SyntaxKind.TypeReference &&
-            (<TypeReferenceNode>node).typeArguments === undefined &&
-            isESSymbolIdentifier((<TypeReferenceNode>node).typeName);
-    }
-
     /**
      * Includes the word "Symbol" with unicode escapes
      */

@@ -82,6 +82,7 @@ module ts {
         "string": SyntaxKind.StringKeyword,
         "super": SyntaxKind.SuperKeyword,
         "switch": SyntaxKind.SwitchKeyword,
+        "symbol": SyntaxKind.SymbolKeyword,
         "this": SyntaxKind.ThisKeyword,
         "throw": SyntaxKind.ThrowKeyword,
         "true": SyntaxKind.TrueKeyword,

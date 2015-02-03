@@ -140,6 +140,7 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        SymbolKeyword,
         TypeKeyword,
 
         // Parse tree nodes

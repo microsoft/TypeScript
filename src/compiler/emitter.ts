@@ -579,6 +579,7 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);

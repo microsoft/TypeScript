@@ -9751,6 +9751,7 @@ module ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                     return true;
                 case SyntaxKind.VoidKeyword:
                     return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -10529,7 +10530,7 @@ module ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
-                if (isESSymbolTypeNode(parameter.type)) {
+                if (parameter.type.kind === SyntaxKind.SymbolKeyword) {
                     if (languageVersion < ScriptTarget.ES6) {
                         return grammarErrorOnNode(parameter.type, Diagnostics.Symbol_indexers_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }

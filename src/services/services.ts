@@ -5754,7 +5754,8 @@ module ts {
                     else if (token === SyntaxKind.AnyKeyword ||
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword) {
+                             token === SyntaxKind.BooleanKeyword ||
+                             token === SyntaxKind.SymbolKeyword) {
                              if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
                                  // If it looks like we're could be in something generic, don't classify this 
                                  // as a keyword.  We may just get overwritten by the syntactic classifier,
