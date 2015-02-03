@@ -120,7 +120,9 @@ module ts.formatting {
 
     function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
         var precedingToken = findPrecedingToken(position, sourceFile);
-        if (!precedingToken || precedingToken.kind !== expectedTokenKind) {
+        if (!precedingToken ||
+            precedingToken.kind !== expectedTokenKind ||
+            position !== precedingToken.getEnd()) {
             return undefined;
         }
 
