@@ -2388,21 +2388,21 @@ module ts {
                     var containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.CallExpression
-                                || containingNodeKind === SyntaxKind.Constructor;
+                            return containingNodeKind === SyntaxKind.CallExpression  // func( a, |
+                                || containingNodeKind === SyntaxKind.Constructor;    // constructor( a, |
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CallExpression
-                                || containingNodeKind === SyntaxKind.Constructor;
-                        case SyntaxKind.ModuleKeyword:
+                            return containingNodeKind === SyntaxKind.CallExpression // func( |
+                                || containingNodeKind === SyntaxKind.Constructor;   // constructor( |
+                        case SyntaxKind.ModuleKeyword:                               // module | 
                             return true;
                         case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ModuleDeclaration;
+                            return containingNodeKind === SyntaxKind.ModuleDeclaration; // module A.|
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.ClassDeclaration;
+                            return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
-                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration; // class A{ public |
                     }
 
                     // Previous token may have been a keyword that was converted to an identifier.
@@ -2493,11 +2493,13 @@ module ts {
 
                         case SyntaxKind.OpenBraceToken:
                             return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||        // interface a { |
+                                containingNodeKind === SyntaxKind.TypeLiteral;                  // var x : { |
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
-                                previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
+                                (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
+                                 previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  var x : { a; |
 
                         case SyntaxKind.LessThanToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
@@ -2506,9 +2508,10 @@ module ts {
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.StaticKeyword:
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+
                         case SyntaxKind.DotDotDotToken:
                             return containingNodeKind === SyntaxKind.Parameter
-                                || containingNodeKind === SyntaxKind.PropertyDeclaration
                                 || containingNodeKind === SyntaxKind.Constructor;
 
                         case SyntaxKind.PublicKeyword:
