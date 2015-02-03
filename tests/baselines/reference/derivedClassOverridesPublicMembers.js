@@ -1,0 +1,155 @@
+//// [derivedClassOverridesPublicMembers.ts]
+var x: { foo: string; }
+var y: { foo: string; bar: string; }
+
+class Base {
+    a: typeof x;
+    b(a: typeof x) { }
+    get c() { return x; }
+    set c(v: typeof x) { }
+    d: (a: typeof x) => void;
+
+    static r: typeof x;
+    static s(a: typeof x) { }
+    static get t() { return x; }
+    static set t(v: typeof x) { }
+    static u: (a: typeof x) => void;
+
+    constructor(a: typeof x) { }
+}
+
+class Derived extends Base {
+    a: typeof y;
+    b(a: typeof y) { }
+    get c() { return y; }
+    set c(v: typeof y) { }
+    d: (a: typeof y) => void;
+
+    static r: typeof y;
+    static s(a: typeof y) { }
+    static get t() { return y; }
+    static set t(a: typeof y) { }
+    static u: (a: typeof y) => void;
+
+    constructor(a: typeof y) { super(x) }
+}
+
+var d: Derived = new Derived(y);
+var r1 = d.a;
+var r2 = d.b(y);
+var r3 = d.c;
+var r3a = d.d;
+d.c = y;
+var r4 = Derived.r;
+var r5 = Derived.s(y);
+var r6 = Derived.t;
+var r6a = Derived.u;
+Derived.t = y;
+
+class Base2 {
+    [i: string]: Object;
+    [i: number]: typeof x;
+}
+
+class Derived2 extends Base2 {
+    [i: string]: typeof x;
+    [i: number]: typeof y;
+}
+
+var d2: Derived2;
+var r7 = d2[''];
+var r8 = d2[1];
+
+
+
+//// [derivedClassOverridesPublicMembers.js]
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var x;
+var y;
+var Base = (function () {
+    function Base(a) {
+    }
+    Base.prototype.b = function (a) {
+    };
+    Object.defineProperty(Base.prototype, "c", {
+        get: function () {
+            return x;
+        },
+        set: function (v) {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Base.s = function (a) {
+    };
+    Object.defineProperty(Base, "t", {
+        get: function () {
+            return x;
+        },
+        set: function (v) {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Base;
+})();
+var Derived = (function (_super) {
+    __extends(Derived, _super);
+    function Derived(a) {
+        _super.call(this, x);
+    }
+    Derived.prototype.b = function (a) {
+    };
+    Object.defineProperty(Derived.prototype, "c", {
+        get: function () {
+            return y;
+        },
+        set: function (v) {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Derived.s = function (a) {
+    };
+    Object.defineProperty(Derived, "t", {
+        get: function () {
+            return y;
+        },
+        set: function (a) {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Derived;
+})(Base);
+var d = new Derived(y);
+var r1 = d.a;
+var r2 = d.b(y);
+var r3 = d.c;
+var r3a = d.d;
+d.c = y;
+var r4 = Derived.r;
+var r5 = Derived.s(y);
+var r6 = Derived.t;
+var r6a = Derived.u;
+Derived.t = y;
+var Base2 = (function () {
+    function Base2() {
+    }
+    return Base2;
+})();
+var Derived2 = (function (_super) {
+    __extends(Derived2, _super);
+    function Derived2() {
+        _super.apply(this, arguments);
+    }
+    return Derived2;
+})(Base2);
+var d2;
+var r7 = d2[''];
+var r8 = d2[1];

@@ -220,11 +220,11 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->((x => x)) : (x: number) => number
->(x => x) : (x: number) => number
->x => x : (x: number) => number
->x : number
->x : number
+>((x => x)) : (x: any) => any
+>(x => x) : (x: any) => any
+>x => x : (x: any) => any
+>x : any
+>x : any
 
 var lambda1: (x: number) => number = x => x;
 >lambda1 : (x: number) => number

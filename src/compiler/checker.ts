@@ -1069,7 +1069,7 @@ module ts {
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
              */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
+            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
                 var parentSymbol: Symbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
@@ -1131,11 +1131,12 @@ module ts {
                     }
                 }
 
-                // Get qualified name 
-                if (enclosingDeclaration &&
-                    // TypeParameters do not need qualification
-                    !(symbol.flags & SymbolFlags.TypeParameter)) {
-
+                // Get qualified name if the symbol is not a type parameter
+                // and there is an enclosing declaration or we specifically
+                // asked for it
+                var isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
+                var typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
+                if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
                     walkSymbol(symbol, meaning);
                     return;
                 }
@@ -1158,7 +1159,8 @@ module ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                        // The specified symbol flags need to be reinterpreted as type flags
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1229,17 +1231,18 @@ module ts {
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
                     // Always use 'typeof T' for type of class, enum, and module objects
                     if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     // Use 'typeof T' for types of functions and methods that circularly reference themselves
                     else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     else if (typeStack && contains(typeStack, type)) {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
+                            // The specified symbol flags need to be reinterpreted as type flags
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
                         }
                         else {
                             // Recursive usage, use any
@@ -1273,10 +1276,10 @@ module ts {
                     }
                 }
 
-                function writeTypeofSymbol(type: ObjectType) {
+                function writeTypeofSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
@@ -3562,7 +3565,13 @@ module ts {
                 }
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    reportError(headMessage, typeToString(source), typeToString(target));
+                    var sourceType = typeToString(source);
+                    var targetType = typeToString(target);
+                    if (sourceType === targetType) {
+                        sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                        targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                    }
+                    reportError(headMessage, sourceType, targetType);
                 }
                 return Ternary.False;
             }
@@ -4331,6 +4340,9 @@ module ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
+                if (source === anyFunctionType) {
+                    return;
+                }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference
                     var typeParameters = context.typeParameters;
@@ -4849,6 +4861,16 @@ module ts {
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
+            // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
+            // Although in down-level emit of arrow function, we emit it using function expression which means that
+            // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
+            // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
+            // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
+            // can explicitly bound arguments objects
+            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
+              error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+            }
+
             if (symbol.flags & SymbolFlags.Import) {
                 var symbolLinks = getSymbolLinks(symbol);
                 if (!symbolLinks.referenced) {
@@ -4903,7 +4925,9 @@ module ts {
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
-                needToCaptureLexicalThis = true;
+
+                // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
+                needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
 
             switch (container.kind) {
@@ -5895,28 +5919,31 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
-            var mapper = createInferenceMapper(context);
-            // First infer from arguments that are not context sensitive
+            var inferenceMapper = createInferenceMapper(context);
+
+            // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
+            // wildcards for all context sensitive function expressions.
             for (var i = 0; i < args.length; i++) {
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
-                if (!excludeArgument || excludeArgument[i] === undefined) {
-                    var parameterType = getTypeAtPosition(signature, i);
-
-                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                        continue;
-                    }
-
-                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                var parameterType = getTypeAtPosition(signature, i);
+                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                    continue;
                 }
+                // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                // context sensitive function expressions as wildcards
+                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
-            // Next, infer from those context sensitive arguments that are no longer excluded
+            // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
+            // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
+            // as we construct types for contextually typed parameters)
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
                     if (args[i].kind === SyntaxKind.OmittedExpression) {
@@ -5925,10 +5952,11 @@ module ts {
                     // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
                     }
                 }
             }
+
             var inferredTypes = getInferredTypes(context);
             // Inference has failed if the inferenceFailureType type is in list of inferences
             context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
@@ -6525,6 +6553,9 @@ module ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            if (!func.body) {
+                return unknownType;
+            }
             if (func.body.kind !== SyntaxKind.Block) {
                 var type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
@@ -6622,7 +6653,7 @@ module ts {
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper) {
+            if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
             var links = getNodeLinks(node);
@@ -7296,7 +7327,7 @@ module ts {
                 case SyntaxKind.TypeAssertionExpression:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return checkExpression((<ParenthesizedExpression>node).expression);
+                    return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
@@ -10088,7 +10119,7 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors(sourceFile?: SourceFile) {
+        function hasSemanticDiagnostics(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
             return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
@@ -10187,7 +10218,7 @@ module ts {
                 getNodeCheckFlags,
                 getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticErrors,
+                hasSemanticDiagnostics,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,

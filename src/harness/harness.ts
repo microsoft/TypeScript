@@ -107,7 +107,7 @@ module Utils {
     export function memoize<T extends Function>(f: T): T {
         var cache: { [idx: string]: any } = {};
 
-        return <any>(() => {
+        return <any>(function () {
             var key = Array.prototype.join.call(arguments);
             var cachedResult = cache[key];
             if (cachedResult) {
@@ -308,7 +308,6 @@ module Utils {
             assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
             assert.equal(d1.category, d2.category, "d1.category !== d2.category");
             assert.equal(d1.code, d2.code, "d1.code !== d2.code");
-            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
         }
     }
 

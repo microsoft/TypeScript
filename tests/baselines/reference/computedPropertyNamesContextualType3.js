@@ -13,5 +13,5 @@ var o = {
     [+"foo"](y) {
         return y.length;
     },
-    [+"bar"]: function (y) { return y.length; }
+    [+"bar"]: y => { return y.length; }
 };

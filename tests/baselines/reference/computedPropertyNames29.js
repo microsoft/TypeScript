@@ -15,10 +15,9 @@ var C = (function () {
     function C() {
     }
     C.prototype.bar = function () {
-        var _this = this;
-        (function () {
+        (() => {
             var obj = {
-                [_this.bar()]() {
+                [this.bar()]() {
                 } // needs capture
             };
         });
