@@ -891,22 +891,6 @@ module ts {
         amdModuleName: string;
         referencedFiles: FileReference[];
 
-        // Diagnostics reported about the "///<reference" comments in the file.
-        referenceDiagnostics: Diagnostic[];
-
-        // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with).
-        parseDiagnostics: Diagnostic[];
-
-        //getSyntacticDiagnostics(): Diagnostic[];
-
-        // File level diagnostics reported by the binder.
-        semanticDiagnostics: Diagnostic[];
-
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        // This field should never be used directly, use getSyntacticDiagnostics function instead.
-        syntacticDiagnostics: Diagnostic[];
-
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
@@ -915,6 +899,25 @@ module ts {
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
 
+        // @internal
+        // Diagnostics reported about the "///<reference" comments in the file.
+        referenceDiagnostics: Diagnostic[];
+        
+        // @internal
+        // Parse errors refer specifically to things the parser could not understand at all (like 
+        // missing tokens, or tokens it didn't know how to deal with).
+        parseDiagnostics: Diagnostic[];
+        
+        // @internal
+        // File level diagnostics reported by the binder.
+        semanticDiagnostics: Diagnostic[];
+        
+        // @internal
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
+        // This field should never be used directly, use getSyntacticDiagnostics function instead.
+        syntacticDiagnostics: Diagnostic[];
+
+        // @internal
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         lineMap: number[];

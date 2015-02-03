@@ -728,10 +728,6 @@ declare module "typescript" {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        referenceDiagnostics: Diagnostic[];
-        parseDiagnostics: Diagnostic[];
-        semanticDiagnostics: Diagnostic[];
-        syntacticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
         nodeCount: number;
@@ -739,7 +735,6 @@ declare module "typescript" {
         symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
-        lineMap: number[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;

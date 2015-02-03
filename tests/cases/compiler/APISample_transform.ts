@@ -1,5 +1,6 @@
 ﻿// @module: commonjs
 // @includebuiltfile: typescript.d.ts
+// @stripInternal:true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
