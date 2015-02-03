@@ -72,7 +72,7 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += getLineAndCharacterOfPosition(file, file.end).line;
         });
         return count;
     }
@@ -86,7 +86,7 @@ module ts {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
             output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
@@ -413,7 +413,7 @@ module ts {
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        var optsList = optionDeclarations.slice();
+        var optsList = filter(optionDeclarations.slice(), v => !v.experimental);
         optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,

@@ -792,17 +792,13 @@ declare module "typescript" {
         endOfFileToken: Node;
         filename: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
         referenceDiagnostics: Diagnostic[];
         parseDiagnostics: Diagnostic[];
-        getSyntacticDiagnostics(): Diagnostic[];
         semanticDiagnostics: Diagnostic[];
+        syntacticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
         nodeCount: number;
@@ -810,6 +806,7 @@ declare module "typescript" {
         symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
+        lineMap: number[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -1460,15 +1457,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
-    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getLineStarts(sourceFile: SourceFile): number[];
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function positionToLineAndCharacter(text: string, pos: number): {
-        line: number;
-        character: number;
-    };
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1484,6 +1480,8 @@ declare module "typescript" {
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
+    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function isLeftHandSideExpression(expr: Expression): boolean;
@@ -1543,6 +1541,11 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getSyntacticDiagnostics(): Diagnostic[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the

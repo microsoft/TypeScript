@@ -61,6 +61,11 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getSyntacticDiagnostics(): Diagnostic[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
     /**
@@ -716,22 +721,16 @@ module ts {
         public filename: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
+        public lineMap: number[];
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
-
-        // These methods will have their implementation provided by the implementation the 
-        // compiler actually exports off of SourceFile.
-        public getLineAndCharacterFromPosition: (position: number) => LineAndCharacter;
-        public getPositionFromLineAndCharacter: (line: number, character: number) => number;
-        public getLineStarts: () => number[];
-        public getSyntacticDiagnostics: () => Diagnostic[];
-        public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
 
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
+        public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];
@@ -747,6 +746,26 @@ module ts {
         public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
+
+        public getSyntacticDiagnostics(): Diagnostic[]{
+            return getSyntacticDiagnostics(this);
+        }
+
+        public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+            return updateSourceFile(this, newText, textChangeRange);
+        }
+
+        public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
+            return getLineAndCharacterOfPosition(this, position);
+        }
+
+        public getLineStarts(): number[] {
+            return getLineStarts(this);
+        }
+
+        public getPositionFromLineAndCharacter(line: number, character: number): number {
+            return getPositionFromLineAndCharacter(this, line, character);
+        }
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
@@ -1633,7 +1652,7 @@ module ts {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later

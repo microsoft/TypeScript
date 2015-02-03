@@ -887,21 +887,6 @@ module ts {
         filename: string;
         text: string;
 
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-
-        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
-        // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
-        // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
-        // this file as possible.
-        //
-        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
-        // from this SourceFile that are being held onto may change as a result (including 
-        // becoming detached from any SourceFile).  It is recommended that this SourceFile not
-        // be used once 'update' is called on it.
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
@@ -913,11 +898,14 @@ module ts {
         // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
 
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        getSyntacticDiagnostics(): Diagnostic[];
+        //getSyntacticDiagnostics(): Diagnostic[];
 
         // File level diagnostics reported by the binder.
         semanticDiagnostics: Diagnostic[];
+
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
+        // This field should never be used directly, use getSyntacticDiagnostics function instead.
+        syntacticDiagnostics: Diagnostic[];
 
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -926,6 +914,10 @@ module ts {
         symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
+
+        // Stores a line map for the file.
+        // This field should never be used directly to obtain line map, use getLineMap function instead.
+        lineMap: number[];
     }
 
     export interface ScriptReferenceHost {
@@ -1476,6 +1468,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1514,6 +1507,7 @@ module ts {
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
+        experimental?: boolean;
     }
 
     export const enum CharacterCodes {
