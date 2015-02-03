@@ -3040,7 +3040,7 @@ module ts {
                     emitLeadingComments(node);
                 }
                 write("function");
-                if (compilerOptions.target >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES6) {
                     emit(node.asteriskToken);
                 }
                 write(" ");
@@ -3097,7 +3097,7 @@ module ts {
                     node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);
                 }
 
-                if (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
+                if (node.asteriskToken && languageVersion <= ScriptTarget.ES5) {
                     ensureLocals();
                     node = GeneratorFunctionRewriter.rewrite(node, locals);
                 }
