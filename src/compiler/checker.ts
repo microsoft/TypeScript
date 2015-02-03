@@ -10119,7 +10119,7 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors(sourceFile?: SourceFile) {
+        function hasSemanticDiagnostics(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
             return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
@@ -10218,7 +10218,7 @@ module ts {
                 getNodeCheckFlags,
                 getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticErrors,
+                hasSemanticDiagnostics,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,

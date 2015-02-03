@@ -2922,8 +2922,8 @@ declare module "typescript" {
 >node : EnumMember
 >EnumMember : EnumMember
 
-        hasSemanticErrors(sourceFile?: SourceFile): boolean;
->hasSemanticErrors : (sourceFile?: SourceFile) => boolean
+        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
+>hasSemanticDiagnostics : (sourceFile?: SourceFile) => boolean
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 
@@ -3690,9 +3690,6 @@ declare module "typescript" {
 
         code: number;
 >code : number
-
-        isEarly?: boolean;
->isEarly : boolean
     }
     interface DiagnosticMessageChain {
 >DiagnosticMessageChain : DiagnosticMessageChain
@@ -3733,12 +3730,6 @@ declare module "typescript" {
 
         code: number;
 >code : number
-
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
->isEarly : boolean
     }
     enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory
