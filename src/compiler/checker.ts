@@ -9075,8 +9075,8 @@ module ts {
                                 }
 
                                 var enumType = checkExpression(expression);
-                                // allow references to members of other const enums
-                                if (enumType !== currentType && !isConstEnumObjectType(enumType)) {
+                                // allow references to constant members of other enums
+                                if (!(enumType.symbol && (enumType.symbol.flags & SymbolFlags.Enum))) {
                                     return undefined;
                                 }
                             }

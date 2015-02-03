@@ -48,3 +48,6 @@ const enum E3 {
 }
 
 function baz() : typeof E3 { return undefined; }
+
+enum E4 { V = Math.PI }
+const enum E5 { V = E4.V } // initializer cannot use non-constant member of regular enums

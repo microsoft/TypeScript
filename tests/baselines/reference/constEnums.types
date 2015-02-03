@@ -578,6 +578,18 @@ const enum Enum3 {
 >Y : M1.Enum1
 }
 
+enum Enum4 { V = 100 }
+>Enum4 : Enum4
+>V : Enum4
+
+const enum Enum5 { V = Enum4.V + 100 } // allow references to constant members of regular enums
+>Enum5 : Enum5
+>V : Enum5
+>Enum4.V + 100 : number
+>Enum4.V : Enum4
+>Enum4 : typeof Enum4
+>V : Enum4
+
 var value1 = M1.Enum1.Y;
 >value1 : M1.Enum1
 >M1.Enum1.Y : M1.Enum1
@@ -586,9 +598,15 @@ var value1 = M1.Enum1.Y;
 >Enum1 : typeof M1.Enum1
 >Y : M1.Enum1
 
-var value2 = Enum3.Z;
+var value2 = Enum3.Z
 >value2 : Enum3
 >Enum3.Z : Enum3
 >Enum3 : typeof Enum3
 >Z : Enum3
+
+var value3 = Enum5.V;;
+>value3 : Enum5
+>Enum5.V : Enum5
+>Enum5 : typeof Enum5
+>V : Enum5
 

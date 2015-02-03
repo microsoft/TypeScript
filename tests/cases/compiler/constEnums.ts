@@ -158,5 +158,9 @@ const enum Enum3 {
     Z = M1.Enum1.Y
 }
 
+enum Enum4 { V = 100 }
+const enum Enum5 { V = Enum4.V + 100 } // allow references to constant members of regular enums
+
 var value1 = M1.Enum1.Y;
-var value2 = Enum3.Z;
+var value2 = Enum3.Z
+var value3 = Enum5.V;;
