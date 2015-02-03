@@ -1,0 +1,37 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty20.ts ===
+interface I {
+>I : I
+
+    [Symbol.iterator]: (s: string) => string;
+>Symbol.iterator : Symbol
+>Symbol : SymbolConstructor
+>iterator : Symbol
+>s : string
+
+    [Symbol.toStringTag](s: number): number;
+>Symbol.toStringTag : Symbol
+>Symbol : SymbolConstructor
+>toStringTag : Symbol
+>s : number
+}
+
+var i: I = {
+>i : I
+>I : I
+>{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }
+
+    [Symbol.iterator]: s => s,
+>Symbol.iterator : Symbol
+>Symbol : SymbolConstructor
+>iterator : Symbol
+>s => s : (s: string) => string
+>s : string
+>s : string
+
+    [Symbol.toStringTag](n) { return n; }
+>Symbol.toStringTag : Symbol
+>Symbol : SymbolConstructor
+>toStringTag : Symbol
+>n : number
+>n : number
+}

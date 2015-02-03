@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty45.ts ===
+class C {
+>C : C
+
+    get [Symbol.hasInstance]() {
+>Symbol.hasInstance : Symbol
+>Symbol : SymbolConstructor
+>hasInstance : Symbol
+
+        return "";
+    }
+    get [Symbol.toPrimitive]() {
+>Symbol.toPrimitive : Symbol
+>Symbol : SymbolConstructor
+>toPrimitive : Symbol
+
+        return "";
+    }
+}

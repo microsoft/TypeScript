@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty51.ts ===
+module M {
+>M : typeof M
+
+    module Symbol { }
+>Symbol : unknown
+
+    class C {
+>C : C
+
+        [Symbol.iterator]() { }
+>Symbol.iterator : Symbol
+>Symbol : SymbolConstructor
+>iterator : Symbol
+    }
+}

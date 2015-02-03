@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty29.ts ===
+class C1 {
+>C1 : C1
+
+    [Symbol.toStringTag]() {
+>Symbol.toStringTag : Symbol
+>Symbol : SymbolConstructor
+>toStringTag : Symbol
+
+        return { x: "" };
+>{ x: "" } : { x: string; }
+>x : string
+    }
+    [s: Symbol]: () => { x: string };
+>s : Symbol
+>Symbol : Symbol
+>x : string
+}

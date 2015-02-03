@@ -1,0 +1,53 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty21.ts ===
+interface I<T, U> {
+>I : I<T, U>
+>T : T
+>U : U
+
+    [Symbol.unscopables]: T;
+>Symbol.unscopables : Symbol
+>Symbol : SymbolConstructor
+>unscopables : Symbol
+>T : T
+
+    [Symbol.isConcatSpreadable]: U;
+>Symbol.isConcatSpreadable : Symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : Symbol
+>U : U
+}
+
+declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
+>foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
+>T : T
+>U : U
+>p : I<T, U>
+>I : I<T, U>
+>T : T
+>U : U
+>t : T
+>T : T
+>u : U
+>U : U
+
+foo({
+>foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.isRegExp]: 0,    [Symbol.unscopables]: true}) : { t: boolean; u: string; }
+>foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
+>{    [Symbol.isConcatSpreadable]: "",    [Symbol.isRegExp]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.isRegExp]: number; [Symbol.unscopables]: boolean; }
+
+    [Symbol.isConcatSpreadable]: "",
+>Symbol.isConcatSpreadable : Symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : Symbol
+
+    [Symbol.isRegExp]: 0,
+>Symbol.isRegExp : Symbol
+>Symbol : SymbolConstructor
+>isRegExp : Symbol
+
+    [Symbol.unscopables]: true
+>Symbol.unscopables : Symbol
+>Symbol : SymbolConstructor
+>unscopables : Symbol
+
+});
