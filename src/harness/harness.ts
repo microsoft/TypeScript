@@ -1051,6 +1051,10 @@ module Harness {
                             options.suppressImplicitAnyIndexErrors = setting.value === 'true';
                             break;
 
+                        case 'suppressenuminlining':
+                            options.suppressEnumInlining = setting.value === 'true';
+                            break;
+
                         case 'includebuiltfile':
                             inputFiles.push({ unitName: setting.value, content: normalizeLineEndings(IO.readFile(libFolder + setting.value), newLine) });
                             break;
@@ -1464,7 +1468,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "suppressenuminlining"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

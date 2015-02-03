@@ -108,7 +108,7 @@ var E2;
 var E3;
 (function (E3) {
     E3[E3["X"] = 'foo'.length] = "X";
-    E3[E3["Y"] = 4 + 3] = "Y";
+    E3[E3["Y"] = 7] = "Y";
     E3[E3["Z"] = +'foo'] = "Z";
 })(E3 || (E3 = {}));
 // Enum with constant members followed by computed members
@@ -145,7 +145,7 @@ var E8;
 var E9;
 (function (E9) {
     E9[E9["A"] = 0] = "A";
-    E9[E9["B"] = E9.A] = "B";
+    E9[E9["B"] = 0] = "B";
 })(E9 || (E9 = {}));
 // (refer to .js to validate)
 // Enum constant members are propagated
@@ -154,13 +154,13 @@ var doNotPropagate = [
     E7.A,
     E4.Z,
     E3.X,
-    E3.Y,
+    7 /* Y */,
     E3.Z
 ];
 // Enum computed members are not propagated
 var doPropagate = [
     0 /* A */,
-    E9.B,
+    0 /* B */,
     0 /* B */,
     1 /* C */,
     0 /* A */,

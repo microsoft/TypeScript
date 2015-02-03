@@ -134,41 +134,29 @@ sourceFile:sourceMapValidationEnums.ts
 ---
 >>>    e2[e2["x"] = 10] = "x";
 1->^^^^
-2 >    ^^^^^^^^^^^^^
-3 >                 ^^
-4 >                   ^^^^^^^
-5 >                          ^
-6 >                           ^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^
+4 >                           ^->
 1-> {
   >    
-2 >    x = 
-3 >                 10
-4 >                   
-5 >                          
+2 >    x = 10
+3 >                          
 1->Emitted(9, 5) Source(7, 5) + SourceIndex(0) name (e2)
-2 >Emitted(9, 18) Source(7, 9) + SourceIndex(0) name (e2)
-3 >Emitted(9, 20) Source(7, 11) + SourceIndex(0) name (e2)
-4 >Emitted(9, 27) Source(7, 11) + SourceIndex(0) name (e2)
-5 >Emitted(9, 28) Source(7, 11) + SourceIndex(0) name (e2)
+2 >Emitted(9, 27) Source(7, 11) + SourceIndex(0) name (e2)
+3 >Emitted(9, 28) Source(7, 11) + SourceIndex(0) name (e2)
 ---
 >>>    e2[e2["y"] = 10] = "y";
 1->^^^^
-2 >    ^^^^^^^^^^^^^
-3 >                 ^^
-4 >                   ^^^^^^^
-5 >                          ^
-6 >                           ^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^
+4 >                           ^->
 1->,
   >    
-2 >    y = 
-3 >                 10
-4 >                   
-5 >                          
+2 >    y = 10
+3 >                          
 1->Emitted(10, 5) Source(8, 5) + SourceIndex(0) name (e2)
-2 >Emitted(10, 18) Source(8, 9) + SourceIndex(0) name (e2)
-3 >Emitted(10, 20) Source(8, 11) + SourceIndex(0) name (e2)
-4 >Emitted(10, 27) Source(8, 11) + SourceIndex(0) name (e2)
-5 >Emitted(10, 28) Source(8, 11) + SourceIndex(0) name (e2)
+2 >Emitted(10, 27) Source(8, 11) + SourceIndex(0) name (e2)
+3 >Emitted(10, 28) Source(8, 11) + SourceIndex(0) name (e2)
 ---
 >>>    e2[e2["z"] = 11] = "z";
 1->^^^^

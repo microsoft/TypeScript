@@ -43,6 +43,16 @@ const enum NaNOrInfinity {
     H = 0 / 0  // NaN
 }
 
+const enum E3 {
+    X = 1,
+    Y =baz().X // incorrect const enum initializer - should be identifier or property access
+}
+
+function baz() : typeof E3 { return undefined; }
+
+enum E4 { V = Math.PI }
+const enum E5 { V = E4.V } // initializer cannot use non-constant member of regular enums
+
 //// [constEnumErrors.js]
 var E;
 (function (E) {
@@ -56,3 +66,10 @@ var y = [E2];
 function foo(t) {
 }
 foo(E2);
+function baz() {
+    return undefined;
+}
+var E4;
+(function (E4) {
+    E4[E4["V"] = Math.PI] = "V";
+})(E4 || (E4 = {}));

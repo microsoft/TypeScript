@@ -41,3 +41,13 @@ const enum NaNOrInfinity {
     G = 1 / 0, // overflow
     H = 0 / 0  // NaN
 }
+
+const enum E3 {
+    X = 1,
+    Y =baz().X // incorrect const enum initializer - should be identifier or property access
+}
+
+function baz() : typeof E3 { return undefined; }
+
+enum E4 { V = Math.PI }
+const enum E5 { V = E4.V } // initializer cannot use non-constant member of regular enums

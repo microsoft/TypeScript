@@ -848,7 +848,7 @@ var TypeScript;
         // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
         // we don't find the "precomment" attached to the errorneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
-        GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 1 << 1] = "DontPruneSearchBasedOnPosition";
+        GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 2] = "DontPruneSearchBasedOnPosition";
     })(TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));
     var GetAstPathOptions = TypeScript.GetAstPathOptions;
     ///
@@ -899,7 +899,7 @@ var TypeScript;
                 if (pos >= minChar) {
                     lookInComments(cur.postComments);
                 }
-                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {
+                if (!hasFlag(options, 2 /* DontPruneSearchBasedOnPosition */)) {
                     // Don't go further down the tree if pos is outside of [minChar, limChar]
                     walker.options.goChildren = (minChar <= pos && pos <= limChar);
                 }

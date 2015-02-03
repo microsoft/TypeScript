@@ -1,5 +1,5 @@
 enum E {
     a,
-    b = a,
+    b = Math.PI,
     c
 }

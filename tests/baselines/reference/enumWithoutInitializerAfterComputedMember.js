@@ -1,7 +1,7 @@
 //// [enumWithoutInitializerAfterComputedMember.ts]
 enum E {
     a,
-    b = a,
+    b = Math.PI,
     c
 }
 
@@ -9,6 +9,6 @@ enum E {
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
-    E[E["b"] = E.a] = "b";
+    E[E["b"] = Math.PI] = "b";
     E[E["c"] = undefined] = "c";
 })(E || (E = {}));

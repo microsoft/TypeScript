@@ -3736,15 +3736,11 @@ module ts {
             }
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {
-                if (!member.initializer || isConst(member.parent)) {
-                    var value = resolver.getEnumMemberValue(member);
-                    if (value !== undefined) {
-                        write(value.toString());
-                        return;
-                    }
+                var value = resolver.getEnumMemberValue(member);
+                if (value !== undefined) {
+                    write(value.toString());
                 }
-
-                if (member.initializer) {
+                else if (member.initializer) {
                     emit(member.initializer);
                 }
                 else {

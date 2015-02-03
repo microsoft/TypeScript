@@ -3883,6 +3883,9 @@ declare module "typescript" {
         sourceRoot?: string;
 >sourceRoot : string
 
+        suppressEnumInlining?: boolean;
+>suppressEnumInlining : boolean
+
         suppressImplicitAnyIndexErrors?: boolean;
 >suppressImplicitAnyIndexErrors : boolean
 

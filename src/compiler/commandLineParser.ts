@@ -130,6 +130,10 @@ module ts {
             paramType: Diagnostics.LOCATION,
         },
         {
+            name: "suppressEnumInlining",
+            type: "boolean"
+        },
+        {
             name: "suppressImplicitAnyIndexErrors",
             type: "boolean",
             description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
