@@ -90,11 +90,11 @@ export function compile(filenames: string[], options: ts.CompilerOptions): void 
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
 >lineChar : ts.LineAndCharacter
 >diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterFromPosition : (position: number) => ts.LineAndCharacter
+>diagnostic.file.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
->getLineAndCharacterFromPosition : (position: number) => ts.LineAndCharacter
+>getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.start : number
 >diagnostic : ts.Diagnostic
 >start : number
@@ -2209,26 +2209,6 @@ declare module "typescript" {
         text: string;
 >text : string
 
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (position: number) => LineAndCharacter
->position : number
->LineAndCharacter : LineAndCharacter
-
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
->line : number
->character : number
-
-        getLineStarts(): number[];
->getLineStarts : () => number[]
-
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
->update : (newText: string, textChangeRange: TextChangeRange) => SourceFile
->newText : string
->textChangeRange : TextChangeRange
->TextChangeRange : TextChangeRange
->SourceFile : SourceFile
-
         amdDependencies: string[];
 >amdDependencies : string[]
 
@@ -2247,12 +2227,12 @@ declare module "typescript" {
 >parseDiagnostics : Diagnostic[]
 >Diagnostic : Diagnostic
 
-        getSyntacticDiagnostics(): Diagnostic[];
->getSyntacticDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
-
         semanticDiagnostics: Diagnostic[];
 >semanticDiagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        syntacticDiagnostics: Diagnostic[];
+>syntacticDiagnostics : Diagnostic[]
 >Diagnostic : Diagnostic
 
         hasNoDefaultLib: boolean;
@@ -2278,6 +2258,9 @@ declare module "typescript" {
         identifiers: Map<string>;
 >identifiers : Map<string>
 >Map : Map<T>
+
+        lineMap: number[];
+>lineMap : number[]
     }
     interface ScriptReferenceHost {
 >ScriptReferenceHost : ScriptReferenceHost
@@ -4446,14 +4429,26 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->getPositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>line : number
+>character : number
+
+    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
 
-    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
->getLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
+    function getLineStarts(sourceFile: SourceFile): number[];
+>getLineStarts : (sourceFile: SourceFile) => number[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+>computeLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
 >lineStarts : number[]
 >position : number
 
@@ -4464,18 +4459,13 @@ declare module "typescript" {
 >character : number
 
     };
-    function positionToLineAndCharacter(text: string, pos: number): {
->positionToLineAndCharacter : (text: string, pos: number) => { line: number; character: number; }
->text : string
->pos : number
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>position : number
+>LineAndCharacter : LineAndCharacter
 
-        line: number;
->line : number
-
-        character: number;
->character : number
-
-    };
     function isWhiteSpace(ch: number): boolean;
 >isWhiteSpace : (ch: number) => boolean
 >ch : number
@@ -4561,6 +4551,21 @@ declare module "typescript" {
 >token : SyntaxKind
 >SyntaxKind : SyntaxKind
 >NodeFlags : NodeFlags
+
+    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
+>getSyntacticDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
+>updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange) => SourceFile
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>newText : string
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
 
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
 >isEvalOrArgumentsIdentifier : (node: Node) => boolean
@@ -4783,6 +4788,30 @@ declare module "typescript" {
         getNamedDeclarations(): Declaration[];
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
+
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+>pos : number
+>LineAndCharacter : LineAndCharacter
+
+        getLineStarts(): number[];
+>getLineStarts : () => number[]
+
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+>getPositionFromLineAndCharacter : (line: number, character: number) => number
+>line : number
+>character : number
+
+        getSyntacticDiagnostics(): Diagnostic[];
+>getSyntacticDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+>update : (newText: string, textChangeRange: TextChangeRange) => SourceFile
+>newText : string
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
