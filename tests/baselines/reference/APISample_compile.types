@@ -2219,22 +2219,6 @@ declare module "typescript" {
 >referencedFiles : FileReference[]
 >FileReference : FileReference
 
-        referenceDiagnostics: Diagnostic[];
->referenceDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
-        parseDiagnostics: Diagnostic[];
->parseDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
-        semanticDiagnostics: Diagnostic[];
->semanticDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
-        syntacticDiagnostics: Diagnostic[];
->syntacticDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
         hasNoDefaultLib: boolean;
 >hasNoDefaultLib : boolean
 
@@ -2258,9 +2242,6 @@ declare module "typescript" {
         identifiers: Map<string>;
 >identifiers : Map<string>
 >Map : Map<T>
-
-        lineMap: number[];
->lineMap : number[]
     }
     interface ScriptReferenceHost {
 >ScriptReferenceHost : ScriptReferenceHost
@@ -3818,6 +3799,9 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
+        stripInternal?: boolean;
+>stripInternal : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -3898,6 +3882,9 @@ declare module "typescript" {
         error?: DiagnosticMessage;
 >error : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
+
+        experimental?: boolean;
+>experimental : boolean
     }
     const enum CharacterCodes {
 >CharacterCodes : CharacterCodes
