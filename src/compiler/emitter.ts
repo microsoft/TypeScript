@@ -355,6 +355,7 @@ module ts {
         var reportedDeclarationError = false;
 
         var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
+        var emit = compilerOptions.stripInternal ? stripInternal : emitNode;
 
         var aliasDeclarationEmitInfo: AliasDeclarationEmitInfo[] = [];
 
@@ -383,7 +384,7 @@ module ts {
                 });
             }
 
-            emitNode(root);
+            emitSourceFile(root);
         }
         else {
             // Emit references corresponding to this file
@@ -405,7 +406,7 @@ module ts {
                         });
                     }
 
-                    emitNode(sourceFile);
+                    emitSourceFile(sourceFile);
                 }
             });
         }
@@ -415,6 +416,23 @@ module ts {
             aliasDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
+        }
+
+        function hasInternalAnnotation(range: CommentRange) {
+            var text = currentSourceFile.text;
+            var comment = text.substring(range.pos, range.end);
+            return comment.indexOf("@internal") >= 0;
+        }
+
+        function stripInternal(node: Node) {
+            if (node) {
+                var leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
+                    return;
+                }
+
+                emitNode(node);
+            }
         }
 
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
@@ -522,7 +540,7 @@ module ts {
 
         function emitLines(nodes: Node[]) {
             for (var i = 0, n = nodes.length; i < n; i++) {
-                emitNode(nodes[i]);
+                emit(nodes[i]);
             }
         }
 

@@ -1725,6 +1725,10 @@
         "category": "Message",
         "code": 6055
     },
+    "Do not emit declarations for code that has an '@internal' annotation.": {
+        "category": "Message",
+        "code": 6056
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
