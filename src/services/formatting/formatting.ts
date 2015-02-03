@@ -120,6 +120,11 @@ module ts.formatting {
 
     function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
         var precedingToken = findPrecedingToken(position, sourceFile);
+        
+        // when it is claimed that trigger character was typed at given position 
+        // we verify that there is a token with a matching kind whose end is equal to position (because the character was just typed).
+        // If this condition is not hold - then trigger character was typed in some other context, 
+        // i.e.in comment and thus should not trigger autoformatting
         if (!precedingToken ||
             precedingToken.kind !== expectedTokenKind ||
             position !== precedingToken.getEnd()) {
