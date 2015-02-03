@@ -2515,7 +2515,14 @@ module ts {
                                 isFunction(containingNodeKind) ||
                                 containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||        // interface A<T, |
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x, y|
+
+                        case SyntaxKind.DotToken:
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;       // var [.|
+
+                        case SyntaxKind.OpenBracketToken:
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x|
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
@@ -2541,8 +2548,9 @@ module ts {
                             return containingNodeKind === SyntaxKind.PropertyDeclaration;
 
                         case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter
-                                || containingNodeKind === SyntaxKind.Constructor;
+                            return containingNodeKind === SyntaxKind.Parameter ||
+                                containingNodeKind === SyntaxKind.Constructor ||
+                                (previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
