@@ -1569,29 +1569,29 @@ module Harness {
             Baselinefolder?: string;
         }
 
-        export function localPath(fileName: string, baselinefolder?: string, subfolder?: string) {
-            if (baselinefolder === undefined) {
+        export function localPath(fileName: string, baselineFolder?: string, subfolder?: string) {
+            if (baselineFolder === undefined) {
                 return baselinePath(fileName, 'local', 'tests/baselines', subfolder);
             }
             else {
-                return baselinePath(fileName, 'local', baselinefolder, subfolder);
+                return baselinePath(fileName, 'local', baselineFolder, subfolder);
             }
         }
 
-        function referencePath(fileName: string, baselinefolder?: string, subfolder?: string) {
-            if (baselinefolder === undefined) {
+        function referencePath(fileName: string, baselineFolder?: string, subfolder?: string) {
+            if (baselineFolder === undefined) {
                 return baselinePath(fileName, 'reference', 'tests/baselines', subfolder);
             }
             else {
-                return baselinePath(fileName, 'reference', baselinefolder, subfolder);
+                return baselinePath(fileName, 'reference', baselineFolder, subfolder);
             }
         }
 
-        function baselinePath(fileName: string, type: string, baselinefolder: string, subfolder?: string) {
+        function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedroot + baselinefolder + '/' +  subfolder + '/' + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/' +  subfolder + '/' + type + '/' + fileName;
             } else {
-                return Harness.userSpecifiedroot + baselinefolder + '/'  + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/'  + type + '/' + fileName;
             }
         }
 
