@@ -6553,6 +6553,9 @@ module ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            if (!func.body) {
+                return unknownType;
+            }
             if (func.body.kind !== SyntaxKind.Block) {
                 var type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
@@ -10116,7 +10119,7 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors(sourceFile?: SourceFile) {
+        function hasSemanticDiagnostics(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
             return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
@@ -10215,7 +10218,7 @@ module ts {
                 getNodeCheckFlags,
                 getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticErrors,
+                hasSemanticDiagnostics,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,

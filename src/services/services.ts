@@ -9,6 +9,7 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
+
     export var servicesVersion = "0.5"
 
     export interface Node {
@@ -56,7 +57,6 @@ module ts {
     }
 
     export interface SourceFile {
-        isOpen: boolean;
         version: string;
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
@@ -74,13 +74,6 @@ module ts {
 
         /** Gets the length of this script snapshot. */
         getLength(): number;
-
-        /**
-         * This call returns the array containing the start position of every line.  
-         * i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
-         * always determine this (albeit in a more expensive manner).
-         */
-        getLineStartPositions(): number[];
 
         /**
          * Gets the TextChangeRange that describe how the text changed between this text and 
@@ -107,16 +100,10 @@ module ts {
                 return this.text.length;
             }
 
-            public getLineStartPositions(): number[] {
-                if (!this._lineStartPositions) {
-                    this._lineStartPositions = computeLineStarts(this.text);
-                }
-
-                return this._lineStartPositions;
-            }
-
             public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-                throw new Error("not yet implemented");
+                // Text-based snapshots do not support incremental parsing. Return undefined
+                // to signal that to the caller.
+                return undefined;
             }
         }
 
@@ -755,7 +742,6 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public version: string;
-        public isOpen: boolean;
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
@@ -850,26 +836,22 @@ module ts {
         }
     }
 
-    export interface Logger {
-        log(s: string): void;
-        trace(s: string): void;
-        error(s: string): void;
-    }
-
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends Logger {
+    export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
-        getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(options: CompilerOptions): string;
+        log? (s: string): void;
+        trace? (s: string): void;
+        error? (s: string): void;
     }
 
     //
@@ -917,6 +899,8 @@ module ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
         getEmitOutput(fileName: string): EmitOutput;
+
+        getProgram(): Program;
 
         getSourceFile(filename: string): SourceFile;
 
@@ -1172,24 +1156,79 @@ module ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
     }
 
+    /**
+      * The document registry represents a store of SourceFile objects that can be shared between 
+      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+      * of files in the context. 
+      * SourceFile objects account for most of the memory usage by the language service. Sharing 
+      * the same DocumentRegistry instance between different instances of LanguageService allow 
+      * for more efficient memory utilization since all projects will share at least the library 
+      * file (lib.d.ts).
+      *
+      * A more advanced use of the document registry is to serialize sourceFile objects to disk 
+      * and re-hydrate them when needed.
+      *
+      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it 
+      * to all subsequent createLanguageService calls.
+      */
     export interface DocumentRegistry {
+        /**
+          * Request a stored SourceFile with a given filename and compilationSettings.
+          * The first call to acquire will call createLanguageServiceSourceFile to generate
+          * the SourceFile if was not found in the registry.
+          *
+          * @param filename The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the 
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          */
         acquireDocument(
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            isOpen: boolean): SourceFile;
+            version: string): SourceFile;
 
+        /**
+          * Request an updated version of an already existing SourceFile with a given filename
+          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * to get an updated SourceFile.
+          *
+          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
+          * registry originally.
+          *
+          * @param sourceFile The original sourceFile object to update
+          * @param filename The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the 
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file 
+          * was not found in the registry and a new one was created.
+          */
         updateDocument(
             sourceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            isOpen: boolean,
-            textChangeRange: TextChangeRange
-            ): SourceFile;
+            textChangeRange: TextChangeRange): SourceFile;
 
+        /**
+          * Informs the DocumentRegistry that a file is not needed any longer.
+          *
+          * Note: It is not allowed to call release on a SourceFile that was not acquired from
+          * this registry originally.
+          *
+          * @param filename The name of the file to be released
+          * @param compilationSettings The compilation settings used to acquire the file
+          */
         releaseDocument(filename: string, compilationSettings: CompilerOptions): void
     }
 
@@ -1327,10 +1366,9 @@ module ts {
 
     // Information about a specific host file.
     interface HostFileInformation {
-        filename: string;
+        hostFilename: string;
         version: string;
-        isOpen: boolean;
-        sourceText?: IScriptSnapshot;
+        scriptSnapshot: IScriptSnapshot;
     }
 
     interface DocumentRegistryEntry {
@@ -1418,16 +1456,13 @@ module ts {
             // script id => script index
             this.filenameToEntry = {};
 
-            var filenames = host.getScriptFileNames();
-            for (var i = 0, n = filenames.length; i < n; i++) {
-                var filename = filenames[i];
-                this.filenameToEntry[normalizeSlashes(filename)] = {
-                    filename: filename,
-                    version: host.getScriptVersion(filename),
-                    isOpen: host.getScriptIsOpen(filename)
-                };
+            // Initialize the list with the root file names
+            var rootFilenames = host.getScriptFileNames();
+            for (var i = 0, n = rootFilenames.length; i < n; i++) {
+                this.createEntry(rootFilenames[i]);
             }
 
+            // store the compilation settings
             this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
         }
 
@@ -1435,28 +1470,41 @@ module ts {
             return this._compilationSettings;
         }
 
+        private createEntry(filename: string) {
+            var entry: HostFileInformation;
+            var scriptSnapshot = this.host.getScriptSnapshot(filename);
+            if (scriptSnapshot) {
+                entry = {
+                    hostFilename: filename,
+                    version: this.host.getScriptVersion(filename),
+                    scriptSnapshot: scriptSnapshot
+                };
+            }
+
+            return this.filenameToEntry[normalizeSlashes(filename)] = entry;
+        }
+
         public getEntry(filename: string): HostFileInformation {
-            filename = normalizeSlashes(filename);
-            return lookUp(this.filenameToEntry, filename);
+            return lookUp(this.filenameToEntry, normalizeSlashes(filename));
         }
 
         public contains(filename: string): boolean {
-            return !!this.getEntry(filename);
+            return hasProperty(this.filenameToEntry, normalizeSlashes(filename));
         }
 
-        public getHostfilename(filename: string) {
-            var hostCacheEntry = this.getEntry(filename);
-            if (hostCacheEntry) {
-                return hostCacheEntry.filename;
+        public getOrCreateEntry(filename: string): HostFileInformation {
+            if (this.contains(filename)) {
+                return this.getEntry(filename);
             }
-            return filename;
+
+            return this.createEntry(filename);
         }
 
-        public getFilenames(): string[] {
+        public getRootFilenames(): string[] {
             var fileNames: string[] = [];
 
             forEachKey(this.filenameToEntry, key => {
-                if (hasProperty(this.filenameToEntry, key))
+                if (hasProperty(this.filenameToEntry, key) && this.filenameToEntry[key])
                     fileNames.push(key);
             });
 
@@ -1464,19 +1512,13 @@ module ts {
         }
 
         public getVersion(filename: string): string {
-            return this.getEntry(filename).version;
-        }
-
-        public isOpen(filename: string): boolean {
-            return this.getEntry(filename).isOpen;
+            var file = this.getEntry(filename);
+            return file && file.version;
         }
 
         public getScriptSnapshot(filename: string): IScriptSnapshot {
             var file = this.getEntry(filename);
-            if (!file.sourceText) {
-                file.sourceText = this.host.getScriptSnapshot(file.filename);
-            }
-            return file.sourceText;
+            return file && file.scriptSnapshot;
         }
 
         public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
@@ -1502,11 +1544,17 @@ module ts {
         constructor(private host: LanguageServiceHost) {
         }
 
+        private log(message: string) {
+            if (this.host.log) {
+                this.host.log(message);
+            }
+        }
+
         private initialize(filename: string) {
             // ensure that both source file and syntax tree are either initialized or not initialized
             var start = new Date().getTime();
             this.hostCache = new HostCache(this.host);
-            this.host.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
+            this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
 
             var version = this.hostCache.getVersion(filename);
             var sourceFile: SourceFile;
@@ -1515,8 +1563,8 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*isOpen*/ true, /*setNodeParents;*/ true);
-                this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
+                this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
@@ -1524,8 +1572,8 @@ module ts {
                 var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
 
                 var start = new Date().getTime();
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange);
-                this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
+                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
+                this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
@@ -1546,15 +1594,14 @@ module ts {
         }
     }
 
-    function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean) {
+    function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string) {
         sourceFile.version = version;
-        sourceFile.isOpen = isOpen;
         sourceFile.scriptSnapshot = scriptSnapshot;
     } 
 
-    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
-        setSourceFileFields(sourceFile, scriptSnapshot, version, isOpen);
+        setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
         return sourceFile;
@@ -1562,7 +1609,7 @@ module ts {
 
     export var disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile {
         if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
@@ -1583,11 +1630,11 @@ module ts {
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
-            if (version !== sourceFile.version || isOpen != sourceFile.isOpen) {
+            if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
                     var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
-                    setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                    setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
                     newSourceFile.nameTable = undefined;
@@ -1597,7 +1644,7 @@ module ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, isOpen, /*setNodeParents:*/ true);
+        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1641,13 +1688,12 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            isOpen: boolean): SourceFile {
+            version: string): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, isOpen, /*setNodeParents:*/ false);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -1666,7 +1712,6 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            isOpen: boolean,
             textChangeRange: TextChangeRange
             ): SourceFile {
 
@@ -1675,7 +1720,7 @@ module ts {
             var entry = lookUp(bucket, filename);
             Debug.assert(entry !== undefined);
 
-            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, isOpen, textChangeRange);
+            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
             return entry.sourceFile;
         }
 
@@ -1926,18 +1971,14 @@ module ts {
         });
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var ruleProvider: formatting.RulesProvider;
-        var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-
         var useCaseSensitivefilenames = false;
-        var sourceFilesByName: Map<SourceFile> = {};
-        var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
 
@@ -1946,12 +1987,22 @@ module ts {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
+        function log(message: string) {
+            if (host.log) {
+                host.log(message);
+            }
+        }
+
         function getCanonicalFileName(filename: string) {
             return useCaseSensitivefilenames ? filename : filename.toLowerCase();
         }
 
-        function getSourceFile(filename: string): SourceFile {
-            return lookUp(sourceFilesByName, getCanonicalFileName(filename));
+        function getValidSourceFile(filename: string): SourceFile {
+            var sourceFile = program.getSourceFile(getCanonicalFileName(filename));
+            if (!sourceFile) {
+                throw new Error("Could not find file: '" + filename + "'.");
+            }
+            return sourceFile;
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -1961,142 +2012,121 @@ module ts {
         function getRuleProvider(options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
-                ruleProvider = new formatting.RulesProvider(host);
+                ruleProvider = new formatting.RulesProvider();
             }
 
             ruleProvider.ensureUpToDate(options);
             return ruleProvider;
         }
 
-        function createCompilerHost(): CompilerHost {
-            return {
-                getSourceFile: (filename, languageVersion) => {
-                    var sourceFile = getSourceFile(filename);
-                    return sourceFile && sourceFile.getSourceFile();
-                },
-                getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
-                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
-                getNewLine: () => {
-                    return host.getNewLine ? host.getNewLine() : "\r\n";
-                },
-                getDefaultLibFilename: (options): string => {
-                    return host.getDefaultLibFilename(options);
-                },
-                writeFile: (filename, data, writeByteOrderMark) => {
-                },
-                getCurrentDirectory: (): string => {
-                    return host.getCurrentDirectory();
-                }
-            };
-        }
-
-        function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-            return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename) && sourceFile.isOpen === hostCache.isOpen(sourceFile.filename);
-        }
-
-        function programUpToDate(): boolean {
-            // If we haven't create a program yet, then it is not up-to-date
-            if (!program) {
-                return false;
-            }
-
-            // If number of files in the program do not match, it is not up-to-date
-            var hostFilenames = hostCache.getFilenames();
-            if (program.getSourceFiles().length !== hostFilenames.length) {
-                return false;
-            }
-
-            // If any file is not up-to-date, then the whole program is not up-to-date
-            for (var i = 0, n = hostFilenames.length; i < n; i++) {
-                if (!sourceFileUpToDate(program.getSourceFile(hostFilenames[i]))) {
-                    return false;
-                }
-            }
-
-            // If the compilation settings do no match, then the program is not up-to-date
-            return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
-        }
-
         function synchronizeHostData(): void {
-            // Reset the cache at start of every refresh
-            hostCache = new HostCache(host);
+            // Get a fresh cache of the host information
+            var hostCache = new HostCache(host);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
                 return;
             }
 
-            var compilationSettings = hostCache.compilationSettings();
-
-            // Now, remove any files from the compiler that are no longer in the host.
-            var oldProgram = program;
-            if (oldProgram) {
-                var oldSettings = program.getCompilerOptions();
-                // If the language version changed, then that affects what types of things we parse. So
-                // we have to dump all syntax trees.
-                // TODO: handle propagateEnumConstants
-                // TODO: is module still needed
-                var settingsChangeAffectsSyntax = oldSettings.target !== compilationSettings.target || oldSettings.module !== compilationSettings.module;
-
-                var changesInCompilationSettingsAffectSyntax =
-                    oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax;
-                var oldSourceFiles = program.getSourceFiles();
-
-                for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
-                    cancellationToken.throwIfCancellationRequested();
-                    var filename = oldSourceFiles[i].filename;
-                    if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(filename, oldSettings);
-                        delete sourceFilesByName[getCanonicalFileName(filename)];
-                    }
-                }
-            }
-
-            // Now, for every file the host knows about, either add the file (if the compiler
-            // doesn't know about it.).  Or notify the compiler about any changes (if it does
-            // know about it.)
-            var hostfilenames = hostCache.getFilenames();
-            for (var i = 0, n = hostfilenames.length; i < n; i++) {
-                var filename = hostfilenames[i];
-
-                var version = hostCache.getVersion(filename);
-                var isOpen = hostCache.isOpen(filename);
-                var scriptSnapshot = hostCache.getScriptSnapshot(filename);
-
-                var sourceFile: SourceFile = getSourceFile(filename);
-                if (sourceFile) {
-                    //
-                    // If the sourceFile is the same, assume no update
-                    //
-                    if (sourceFileUpToDate(sourceFile)) {
-                        continue;
-                    }
-
-                    // Only perform incremental parsing on open files that are being edited.  If a file was
-                    // open, but is now closed, we want to re-parse entirely so we don't have any tokens that
-                    // are holding onto expensive script snapshot instances on the host.  Similarly, if a 
-                    // file was closed, then we always want to re-parse.  This is so our tree doesn't keep 
-                    // the old buffer alive that represented the file on disk (as the host has moved to a 
-                    // new text buffer).
-                    var textChangeRange: TextChangeRange = null;
-                    if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.scriptSnapshot);
-                    }
-
-                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
-                }
-                else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
-                }
-
-                // Remember the new sourceFile
-                sourceFilesByName[getCanonicalFileName(filename)] = sourceFile;
-            }
+            var oldSettings = program && program.getCompilerOptions();
+            var newSettings = hostCache.compilationSettings();
+            var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
             // Now create a new compiler
-            program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
+            var newProgram = createProgram(hostCache.getRootFilenames(), newSettings, {
+                getSourceFile: getOrCreateSourceFile,
+                getCancellationToken: () => cancellationToken,
+                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
+                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
+                getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
+                getDefaultLibFilename: (options) => host.getDefaultLibFilename(options),
+                writeFile: (filename, data, writeByteOrderMark) => { },
+                getCurrentDirectory: () => host.getCurrentDirectory()
+            });
+
+            // Release any files we have acquired in the old program but are 
+            // not part of the new program.
+            if (program) {
+                var oldSourceFiles = program.getSourceFiles();
+                for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
+                    var filename = oldSourceFiles[i].filename;
+                    if (!newProgram.getSourceFile(filename) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(filename, oldSettings);
+                    }
+                }
+            }
+
+            program = newProgram;
             typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+
+            return;
+
+            function getOrCreateSourceFile(filename: string): SourceFile {
+                cancellationToken.throwIfCancellationRequested();
+
+                // The program is asking for this file, check first if the host can locate it.
+                // If the host can not locate the file, then it does not exist. return undefined
+                // to the program to allow reporting of errors for missing files.
+                var hostFileInformation = hostCache.getOrCreateEntry(filename);
+                if (!hostFileInformation) {
+                    return undefined;
+                }
+
+                // Check if the language version has changed since we last created a program; if they are the same,
+                // it is safe to reuse the souceFiles; if not, then the shape of the AST can change, and the oldSourceFile
+                // can not be reused. we have to dump all syntax trees and create new ones.
+                if (!changesInCompilationSettingsAffectSyntax) {
+
+                    // Check if the old program had this file already
+                    var oldSourceFile = program && program.getSourceFile(filename);
+                    if (oldSourceFile) {
+                        // This SourceFile is safe to reuse, return it
+                        if (sourceFileUpToDate(oldSourceFile)) {
+                            return oldSourceFile;
+                        }
+
+                        // We have an older version of the sourceFile, incrementally parse the changes
+                        var textChangeRange = hostCache.getChangeRange(filename, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        return documentRegistry.updateDocument(oldSourceFile, filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                    }
+                }
+
+                // Could not find this file in the old program, create a new SourceFile for it.
+                return documentRegistry.acquireDocument(filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+            }
+
+            function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename);
+            }
+
+            function programUpToDate(): boolean {
+                // If we haven't create a program yet, then it is not up-to-date
+                if (!program) {
+                    return false;
+                }
+
+                // If number of files in the program do not match, it is not up-to-date
+                var rootFilenames = hostCache.getRootFilenames();
+                if (program.getSourceFiles().length !== rootFilenames.length) {
+                    return false;
+                }
+
+                // If any file is not up-to-date, then the whole program is not up-to-date
+                for (var i = 0, n = rootFilenames.length; i < n; i++) {
+                    if (!sourceFileUpToDate(program.getSourceFile(rootFilenames[i]))) {
+                        return false;
+                    }
+                }
+
+                // If the compilation settings do no match, then the program is not up-to-date
+                return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+            }
+        }
+
+        function getProgram(): Program {
+            synchronizeHostData();
+
+            return program;
         }
 
         /**
@@ -2123,7 +2153,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename));
+            return program.getDiagnostics(getValidSourceFile(filename));
         }
 
         /**
@@ -2136,7 +2166,7 @@ module ts {
             filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
             var checker = getDiagnosticsProducingTypeChecker();
-            var targetSourceFile = getSourceFile(filename);
+            var targetSourceFile = getValidSourceFile(filename);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
@@ -2213,19 +2243,19 @@ module ts {
             filename = normalizeSlashes(filename);
 
             var syntacticStart = new Date().getTime();
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
-            host.log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
             var insideComment = isInsideComment(sourceFile, currentToken, position);
-            host.log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                host.log("Returning an empty list because completion was inside a comment.");
+                log("Returning an empty list because completion was inside a comment.");
                 return undefined;
             }
 
@@ -2233,19 +2263,19 @@ module ts {
             // Note: previousToken can be undefined if we are the beginning of the file
             var start = new Date().getTime();
             var previousToken = findPrecedingToken(position, sourceFile);
-            host.log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
             if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
                 var start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                host.log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
             if (previousToken && isCompletionListBlocker(previousToken)) {
-                host.log("Returning an empty list because completion was requested in an invalid position.");
+                log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
@@ -2274,7 +2304,7 @@ module ts {
                 symbols: {},
                 typeChecker: typeInfoResolver
             };
-            host.log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
+            log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
             var location = getTouchingPropertyName(sourceFile, position);
             // Populate the completion list
@@ -2348,7 +2378,7 @@ module ts {
             if (!isMemberCompletion) {
                 Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
             }
-            host.log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return {
                 isMemberCompletion,
@@ -2367,7 +2397,7 @@ module ts {
                         }
                     }
                 });
-                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2375,7 +2405,7 @@ module ts {
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
-                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
 
@@ -2539,7 +2569,7 @@ module ts {
             //       in the getCompletionsAtPosition earlier
             filename = normalizeSlashes(filename);
 
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var session = activeCompletionSession;
 
@@ -2557,7 +2587,7 @@ module ts {
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
                 Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -3058,7 +3088,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
@@ -3104,7 +3134,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3240,7 +3270,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var node = getTouchingWord(sourceFile, position);
             if (!node) {
@@ -3785,7 +3815,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -4608,7 +4638,7 @@ module ts {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             var outputFiles: OutputFile[] = [];
 
@@ -4757,7 +4787,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
@@ -4840,7 +4870,7 @@ module ts {
             synchronizeHostData();
             fileName = normalizeSlashes(fileName);
 
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
             processNode(sourceFile);
@@ -5194,12 +5224,12 @@ module ts {
 
             var start = new Date().getTime();
             var sourceFile = getCurrentSourceFile(filename);
-            host.log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
 
             var result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
-            host.log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
         }
@@ -5246,7 +5276,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(filename);
 
             cancellationToken.throwIfCancellationRequested();
 
@@ -5392,7 +5422,7 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName);
-            var sourceFile = getSourceFile(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
 
@@ -5468,11 +5498,12 @@ module ts {
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
             getSourceFile: getCurrentSourceFile,
+            getProgram
         };
     }
 
     /// Classifier
-    export function createClassifier(host: Logger): Classifier {
+    export function createClassifier(): Classifier {
         var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
@@ -5773,6 +5804,23 @@ module ts {
         }
 
         return { getClassificationsForLine };
+    }
+
+    /// getDefaultLibraryFilePath
+    declare var __dirname: string;
+    
+    /**
+      * Get the path of the default library file (lib.d.ts) as distributed with the typescript
+      * node package.
+      * The functionality is not supported if the ts module is consumed outside of a node module. 
+      */
+    export function getDefaultLibFilePath(options: CompilerOptions): string {
+        // Check __dirname is defined and that we are on a node.js system.
+        if (typeof __dirname !== "undefined") {
+            return __dirname + directorySeparator + getDefaultLibFilename(options);
+        }
+
+        throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
     }
 
     function initializeServices() {
