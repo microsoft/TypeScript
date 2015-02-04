@@ -358,10 +358,9 @@ module ts {
 
     export function getSyntacticDiagnostics(sourceFile: SourceFile) {
         if (!sourceFile.syntacticDiagnostics) {
-            // Don't bother doing any grammar checks if there are already parser errors.  
-            // Otherwise we may end up with too many cascading errors.
             sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
         }
+
         return sourceFile.syntacticDiagnostics;
     }
 

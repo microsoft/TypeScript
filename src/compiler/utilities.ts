@@ -1068,4 +1068,84 @@ module ts {
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
     }
+
+    // @internal
+    export function createDiagnosticCollection(): DiagnosticCollection {
+        var nonFileDiagnostics: Diagnostic[] = [];
+        var fileDiagnostics: Map<Diagnostic[]> = {};
+
+        var diagnosticsModified = false;
+        var modificationCount = 0;
+
+        return {
+            add,
+            getGlobalDiagnostics,
+            getDiagnostics,
+            getModificationCount
+        };
+
+        function getModificationCount() {
+            return modificationCount;
+        }
+
+        function add(diagnostic: Diagnostic): void {
+            var diagnostics: Diagnostic[];
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                if (!diagnostics) {
+                    diagnostics = [];
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                }
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+
+            diagnostics.push(diagnostic);
+            diagnosticsModified = true;
+            modificationCount++;
+        }
+
+        function getGlobalDiagnostics(): Diagnostic[] {
+            sortAndDeduplicate();
+            return nonFileDiagnostics;
+        }
+
+        function getDiagnostics(fileName?: string): Diagnostic[] {
+            sortAndDeduplicate();
+            if (fileName) {
+                return fileDiagnostics[fileName] || [];
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            forEach(nonFileDiagnostics, d => { allDiagnostics.push(d) });
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    forEach(fileDiagnostics[key], d => { allDiagnostics.push(d) });
+                }
+            }
+
+            return sortAndDeplicateList(allDiagnostics);
+        }
+
+        function sortAndDeduplicate() {
+            if (!diagnosticsModified) {
+                return;
+            }
+
+            diagnosticsModified = false;
+            nonFileDiagnostics = sortAndDeplicateList(nonFileDiagnostics);
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    fileDiagnostics[key] = sortAndDeplicateList(fileDiagnostics[key]);
+                }
+            }
+        }
+
+        function sortAndDeplicateList(diagnostics: Diagnostic[]): Diagnostic[] {
+            return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics))
+        }
+    }
 }

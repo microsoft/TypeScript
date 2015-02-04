@@ -104,8 +104,7 @@ module ts {
         var nodeLinks: NodeLinks[] = [];
         var potentialThisCollisions: Node[] = [];
 
-        var diagnostics: Diagnostic[] = [];
-        var diagnosticsModified: boolean = false;
+        var diagnostics = createDiagnosticCollection();
 
         var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
             "string": {
@@ -122,16 +121,11 @@ module ts {
             }
         };
 
-        function addDiagnostic(diagnostic: Diagnostic) {
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
-        }
-
         function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
-            addDiagnostic(diagnostic);
+            diagnostics.add(diagnostic);
         }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
@@ -3479,7 +3473,8 @@ module ts {
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
-                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
             }
             return result !== Ternary.False;
 
@@ -5705,9 +5700,9 @@ module ts {
                         return false;
                     }
                     else {
-                        var diagnosticsCount = diagnostics.length;
+                        var modificationCount = diagnostics.getModificationCount();
                         checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.length === diagnosticsCount
+                        return diagnostics.getModificationCount() === modificationCount;
                     }
                 }
             }
@@ -8927,7 +8922,7 @@ module ts {
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
                         }
                     }
                 }
@@ -9578,30 +9573,19 @@ module ts {
             }
         }
 
-        function getSortedDiagnostics(): Diagnostic[]{
-            Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
-
-            if (diagnosticsModified) {
-                diagnostics.sort(compareDiagnostics);
-                diagnostics = deduplicateSortedDiagnostics(diagnostics);
-                diagnosticsModified = false;
-            }
-            return diagnostics;
-        }
-
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
-                return filter(getSortedDiagnostics(), d => d.file === sourceFile);
+                return diagnostics.getDiagnostics(sourceFile.fileName);
             }
             forEach(host.getSourceFiles(), checkSourceFile);
-            return getSortedDiagnostics();
+            return diagnostics.getDiagnostics();
         }
 
         function getGlobalDiagnostics(): Diagnostic[]{
             throwIfNonDiagnosticsProducing();
-            return filter(getSortedDiagnostics(), d => !d.file);
+            return diagnostics.getGlobalDiagnostics();
         }
 
         function throwIfNonDiagnosticsProducing() {
@@ -10234,7 +10218,7 @@ module ts {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticDiagnostics, addDiagnostic);
+                forEach(file.semanticDiagnostics, d => diagnostics.add(d));
             });
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
@@ -11035,14 +11019,14 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
 
         function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             if (!hasParseDiagnostics(sourceFile)) {
-                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11052,7 +11036,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = getErrorSpanForNode(node);
                 var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11186,7 +11170,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;
             }
         }
