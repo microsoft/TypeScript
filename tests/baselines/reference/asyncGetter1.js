@@ -15,11 +15,6 @@ var C = (function () {
     }
     Object.defineProperty(C.prototype, "foo", {
         get: function () {
-            return new Promise(function (_resolve) {
-                _resolve(__awaiter(__generator(function (_state) {
-                    return [2 /*return*/];
-                })));
-            });
         },
         enumerable: true,
         configurable: true

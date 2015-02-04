@@ -1,4 +1,4 @@
-=== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter7.ts ===
+=== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod10.ts ===
 declare class Promise<T> {
 >Promise : Promise<T>
 >T : T
@@ -34,10 +34,12 @@ declare class Promise<T> {
 class C {
 >C : C
 
-  async get foo(): Promise<void> {
->foo : Promise<void>
+  async foo(a = await => await): Promise<void> {
+>foo : (a?: (await: any) => any) => Promise<void>
+>a : (await: any) => any
+>await => await : (await: any) => any
+>await : any
+>await : any
 >Promise : Promise<T>
-
-    return;
   }
 }

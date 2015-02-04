@@ -1,4 +1,4 @@
-tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction6.ts(6,27): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction6.ts(6,22): error TS2304: Cannot find name 'await'.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction6.ts (1 errors) ====
@@ -8,6 +8,6 @@ tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction6.t
     }
     
     var foo = async (a = await): Promise<void> => {
-                              ~
-!!! error TS1109: Expression expected.
+                         ~~~~~
+!!! error TS2304: Cannot find name 'await'.
     }

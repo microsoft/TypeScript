@@ -1,4 +1,4 @@
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod20.ts(7,22): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod20.ts(7,17): error TS2304: Cannot find name 'await'.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod20.ts (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod20.ts(7,22): erro
     
     var o = {
       async foo(a = await): Promise<void> {
-                         ~
-!!! error TS1109: Expression expected.
+                    ~~~~~
+!!! error TS2304: Cannot find name 'await'.
       }
     }

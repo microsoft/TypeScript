@@ -1,8 +1,9 @@
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(7,3): error TS1042: 'async' modifier cannot be used here.
 tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(7,13): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(9,13): error TS2304: Cannot find name 'await'.
 
 
-==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts (2 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts (3 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -10,6 +11,8 @@ tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(9,13): error
     
     class C {
       async get foo(): Promise<void> {
+      ~~~~~
+!!! error TS1042: 'async' modifier cannot be used here.
                 ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
          // Legal to use 'await' in a type context.
