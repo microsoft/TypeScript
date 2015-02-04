@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/Symbols/symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'Symbol', or 'any'.
+tests/cases/conformance/es6/Symbols/symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty53.ts (1 errors) ====
     var obj = {
         [Symbol.for]: 0
         ~~~~~~~~~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', 'Symbol', or 'any'.
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     };

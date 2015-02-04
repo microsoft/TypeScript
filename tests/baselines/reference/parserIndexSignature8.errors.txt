@@ -1,12 +1,12 @@
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(1,13): error TS1023: An index signature parameter type must be 'string', 'number', or 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,14): error TS1023: An index signature parameter type must be 'string', 'number', or 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(1,13): error TS1023: An index signature parameter type must be 'string', 'number', or 'symbol'.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,14): error TS1023: An index signature parameter type must be 'string', 'number', or 'symbol'.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts (2 errors) ====
     var foo: { [index: any]; }; // expect an error here
                 ~~~~~
-!!! error TS1023: An index signature parameter type must be 'string', 'number', or 'Symbol'.
+!!! error TS1023: An index signature parameter type must be 'string', 'number', or 'symbol'.
     var foo2: { [index: RegExp]; }; // expect an error here
                  ~~~~~
-!!! error TS1023: An index signature parameter type must be 'string', 'number', or 'Symbol'.
+!!! error TS1023: An index signature parameter type must be 'string', 'number', or 'symbol'.
     

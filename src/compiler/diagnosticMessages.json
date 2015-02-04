@@ -67,7 +67,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string', 'number', or 'Symbol'.": {
+    "An index signature parameter type must be 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 1023
     },
@@ -483,11 +483,11 @@
         "category": "Error",
         "code": 1164
     },
-    "A computed property name in an ambient context must directly refer to a built-in Symbol.": {
+    "A computed property name in an ambient context must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must directly refer to a built-in Symbol.": {
+    "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1166
     },
@@ -495,15 +495,15 @@
         "category": "Error",
         "code": 1167
     },
-    "A computed property name in a method overload must directly refer to a built-in Symbol.": {
+    "A computed property name in a method overload must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1168
     },
-    "A computed property name in an interface must directly refer to a built-in Symbol.": {
+    "A computed property name in an interface must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1169
     },
-    "A computed property name in a type literal must directly refer to a built-in Symbol.": {
+    "A computed property name in a type literal must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1170
     },
@@ -579,7 +579,7 @@
         "category": "Error",
         "code": 1187
     },
-    "'Symbol' indexers are only available when targeting ECMAScript 6 and higher.": {
+    "'symbol' indexers are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1188,
         "isEarly": true
@@ -1193,7 +1193,7 @@
         "category": "Error",
         "code": 2463
     },
-    "A computed property name must be of type 'string', 'number', 'Symbol', or 'any'.": {
+    "A computed property name must be of type 'string', 'number', 'symbol', or 'any'.": {
         "category": "Error",
         "code": 2464
     },
@@ -1207,7 +1207,7 @@
     },
     "A computed property name cannot reference a type parameter from its containing type.": {
         "category": "Error",
-        "code": 2466
+        "code": 2467
     },
     "Cannot find global value '{0}'.": {
         "category": "Error",
