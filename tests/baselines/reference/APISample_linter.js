@@ -759,9 +759,6 @@ declare module "typescript" {
         referencedFiles: FileReference[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }

@@ -893,11 +893,17 @@ module ts {
 
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
+        
+        // @internal
+        nodeCount: number;
+
+        // @internal
+        identifierCount: number;
+
+        // @internal
+        symbolCount: number;
 
         // @internal
         // Diagnostics reported about the "///<reference" comments in the file.

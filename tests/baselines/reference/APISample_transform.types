@@ -2304,15 +2304,6 @@ declare module "typescript" {
 >externalModuleIndicator : Node
 >Node : Node
 
-        nodeCount: number;
->nodeCount : number
-
-        identifierCount: number;
->identifierCount : number
-
-        symbolCount: number;
->symbolCount : number
-
         languageVersion: ScriptTarget;
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
