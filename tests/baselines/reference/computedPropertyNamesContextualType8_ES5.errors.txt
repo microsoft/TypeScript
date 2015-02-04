@@ -2,11 +2,9 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualTy
   Index signatures are incompatible.
     Type 'string | number' is not assignable to type 'boolean'.
       Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES5.ts(7,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES5.ts(8,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES5.ts (3 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES5.ts (1 errors) ====
     interface I {
         [s: string]: boolean;
         [s: number]: boolean;
@@ -19,9 +17,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualTy
 !!! error TS2322:     Type 'string | number' is not assignable to type 'boolean'.
 !!! error TS2322:       Type 'string' is not assignable to type 'boolean'.
         [""+"foo"]: "",
-        ~~~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
         [""+"bar"]: 0
-        ~~~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }

@@ -1,48 +1,30 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(3,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(3,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(4,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(5,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(5,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(6,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(6,12): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(7,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(8,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts(8,12): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts (12 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES5.ts (6 errors) ====
     var b: boolean;
     class C {
         [b]() {}
         ~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
-        ~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
         static [true]() { }
-               ~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
                ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
         [[]]() { }
         ~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
-        ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
         static [{}]() { }
-               ~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
         [undefined]() { }
         ~~~~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
-        ~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
         static [null]() { }
-               ~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
                ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
     }

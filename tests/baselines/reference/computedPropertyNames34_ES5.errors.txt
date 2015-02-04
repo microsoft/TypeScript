@@ -1,15 +1,12 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES5.ts(5,13): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES5.ts(5,18): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES5.ts (2 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES5.ts (1 errors) ====
     function foo<T>() { return '' }
     class C<T> {
         static bar() {
             var obj = {
                 [foo<T>()]() { }
-                ~~~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
                      ~
 !!! error TS2302: Static members cannot reference class type parameters.
             };

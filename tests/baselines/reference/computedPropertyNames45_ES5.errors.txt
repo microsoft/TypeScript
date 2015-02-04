@@ -1,16 +1,12 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(5,9): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(11,5): error TS2411: Property '["set1"]' of type 'Foo' is not assignable to string index type 'Foo2'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(11,9): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts (3 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts (1 errors) ====
     class Foo { x }
     class Foo2 { x; y }
     
     class C {
         get ["get1"]() { return new Foo }
-            ~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }
     
     class D extends C {
@@ -19,6 +15,4 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts(11
         set ["set1"](p: Foo) { }
         ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property '["set1"]' of type 'Foo' is not assignable to string index type 'Foo2'.
-            ~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }

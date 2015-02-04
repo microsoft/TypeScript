@@ -1,9 +1,7 @@
 tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts(8,5): error TS2412: Property '[1 << 6]' of type 'Foo' is not assignable to numeric index type 'Foo2'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts(8,9): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts(9,9): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts (3 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts (1 errors) ====
     class Foo { x }
     class Foo2 { x; y }
     
@@ -14,9 +12,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts(9,
         get [1 << 6]() { return new Foo }
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2412: Property '[1 << 6]' of type 'Foo' is not assignable to numeric index type 'Foo2'.
-            ~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
         set [1 << 6](p: Foo2) { }
-            ~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }

@@ -1,9 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts(8,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts(8,5): error TS2411: Property '[""]' of type '() => Foo' is not assignable to string index type '() => Foo2'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts(9,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts (3 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts (1 errors) ====
     class Foo { x }
     class Foo2 { x; y }
     
@@ -12,11 +10,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts(9,
     
         // Computed properties
         [""]() { return new Foo }
-        ~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
         ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property '[""]' of type '() => Foo' is not assignable to string index type '() => Foo2'.
         [""]() { return new Foo2 }
-        ~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }

@@ -17,3 +17,7 @@ var v = {
     set ["" + ""](x) {
     }
 };
+
+
+//// [computedPropertyNamesDeclarationEmit5_ES5.d.ts]
+declare var v: {};

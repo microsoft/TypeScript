@@ -26,3 +26,8 @@ var C = (function () {
     });
     return C;
 })();
+
+
+//// [computedPropertyNamesDeclarationEmit1_ES5.d.ts]
+declare class C {
+}
