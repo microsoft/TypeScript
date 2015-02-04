@@ -1,0 +1,71 @@
+=== tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement29.ts ===
+declare class Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+>init : (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: T | IPromise<T>) => void
+>value : T | IPromise<T>
+>T : T
+>IPromise : IPromise<T>
+>T : T
+>reject : (reason?: any) => void
+>reason : any
+
+    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+>then : <TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>) => Promise<TResult>
+>TResult : TResult
+>onfulfilled : (value: T) => TResult | IPromise<TResult>
+>value : T
+>T : T
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>onrejected : (reason: any) => TResult | IPromise<TResult>
+>reason : any
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>Promise : Promise<T>
+>TResult : TResult
+}
+declare var a: number;
+>a : number
+
+declare var o: { x: number; };
+>o : { x: number; }
+>x : number
+
+declare var aro: { x: number; }[];
+>aro : { x: number; }[]
+>x : number
+
+declare var ar: number[];
+>ar : number[]
+
+declare var pa: Promise<number>;
+>pa : Promise<number>
+>Promise : Promise<T>
+
+declare var po: Promise<{x: number;}>;
+>po : Promise<{ x: number; }>
+>Promise : Promise<T>
+>x : number
+
+declare var paro: Promise<{x:number;}[]>;
+>paro : Promise<{ x: number; }[]>
+>Promise : Promise<T>
+>x : number
+
+async function func(): Promise<void> {
+>func : () => Promise<void>
+>Promise : Promise<T>
+
+  var [{ x } = await po] = aro;
+>x : number
+>await po : { x: number; }
+>po : Promise<{ x: number; }>
+>aro : { x: number; }[]
+}
+
