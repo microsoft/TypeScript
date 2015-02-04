@@ -109,7 +109,7 @@ module Harness.LanguageService {
         }
     }
 
-    export interface LanugageServiceAdaptor {
+    export interface LanguageServiceAdaptor {
         getHost(): LanguageServiceAdaptorHost;
         getLanguageService(): ts.LanguageService;
         getClassifier(): ts.Classifier;
@@ -210,7 +210,7 @@ module Harness.LanguageService {
         error(s: string): void { }
     }
 
-    export class NativeLanugageServiceAdaptor implements LanugageServiceAdaptor {
+    export class NativeLanugageServiceAdaptor implements LanguageServiceAdaptor {
         private host: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) { 
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
@@ -391,7 +391,7 @@ module Harness.LanguageService {
         dispose(): void { this.shim.dispose({}); }
     }
 
-    export class ShimLanugageServiceAdaptor implements LanugageServiceAdaptor {
+    export class ShimLanugageServiceAdaptor implements LanguageServiceAdaptor {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
