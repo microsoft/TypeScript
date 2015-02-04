@@ -61,6 +61,11 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getSyntacticDiagnostics(): Diagnostic[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
     /**
@@ -713,25 +718,19 @@ module ts {
 
     class SourceFileObject extends NodeObject implements SourceFile {
         public _declarationBrand: any;
-        public filename: string;
+        public fileName: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
+        public lineMap: number[];
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
-
-        // These methods will have their implementation provided by the implementation the 
-        // compiler actually exports off of SourceFile.
-        public getLineAndCharacterFromPosition: (position: number) => LineAndCharacter;
-        public getPositionFromLineAndCharacter: (line: number, character: number) => number;
-        public getLineStarts: () => number[];
-        public getSyntacticDiagnostics: () => Diagnostic[];
-        public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
 
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
+        public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];
@@ -747,6 +746,26 @@ module ts {
         public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
+
+        public getSyntacticDiagnostics(): Diagnostic[]{
+            return getSyntacticDiagnostics(this);
+        }
+
+        public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+            return updateSourceFile(this, newText, textChangeRange);
+        }
+
+        public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
+            return getLineAndCharacterOfPosition(this, position);
+        }
+
+        public getLineStarts(): number[] {
+            return getLineStarts(this);
+        }
+
+        public getPositionFromLineAndCharacter(line: number, character: number): number {
+            return getPositionFromLineAndCharacter(this, line, character);
+        }
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
@@ -848,7 +867,7 @@ module ts {
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
@@ -902,7 +921,7 @@ module ts {
 
         getProgram(): Program;
 
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
     }
@@ -1174,11 +1193,11 @@ module ts {
       */
     export interface DocumentRegistry {
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1188,13 +1207,13 @@ module ts {
           * in the registry and a new one was created.
           */
         acquireDocument(
-            filename: string,
+            fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string): SourceFile;
 
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -1202,7 +1221,7 @@ module ts {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1215,7 +1234,7 @@ module ts {
           */
         updateDocument(
             sourceFile: SourceFile,
-            filename: string,
+            fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
@@ -1227,10 +1246,10 @@ module ts {
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void
     }
 
     // TODO: move these to enums
@@ -1351,7 +1370,7 @@ module ts {
     /// Language Service
 
     interface CompletionSession {
-        filename: string;           // the file where the completion was requested
+        fileName: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
         symbols: Map<Symbol>;       // symbols by entry name map
@@ -1367,7 +1386,7 @@ module ts {
 
     // Information about a specific host file.
     interface HostFileInformation {
-        hostFilename: string;
+        hostFileName: string;
         version: string;
         scriptSnapshot: IScriptSnapshot;
     }
@@ -1419,9 +1438,9 @@ module ts {
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
-        // Set "ScriptTarget.Latest" target by default for language service
+        // Always default to "ScriptTarget.ES5" for the language service
         return {
-            target: ScriptTarget.Latest,
+            target: ScriptTarget.ES5,
             module: ModuleKind.None,
         };
     }
@@ -1450,17 +1469,17 @@ module ts {
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     class HostCache {
-        private filenameToEntry: Map<HostFileInformation>;
+        private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
 
         constructor(private host: LanguageServiceHost) {
             // script id => script index
-            this.filenameToEntry = {};
+            this.fileNameToEntry = {};
 
             // Initialize the list with the root file names
-            var rootFilenames = host.getScriptFileNames();
-            for (var i = 0, n = rootFilenames.length; i < n; i++) {
-                this.createEntry(rootFilenames[i]);
+            var rootFileNames = host.getScriptFileNames();
+            for (var i = 0, n = rootFileNames.length; i < n; i++) {
+                this.createEntry(rootFileNames[i]);
             }
 
             // store the compilation settings
@@ -1471,64 +1490,64 @@ module ts {
             return this._compilationSettings;
         }
 
-        private createEntry(filename: string) {
+        private createEntry(fileName: string) {
             var entry: HostFileInformation;
-            var scriptSnapshot = this.host.getScriptSnapshot(filename);
+            var scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
-                    hostFilename: filename,
-                    version: this.host.getScriptVersion(filename),
+                    hostFileName: fileName,
+                    version: this.host.getScriptVersion(fileName),
                     scriptSnapshot: scriptSnapshot
                 };
             }
 
-            return this.filenameToEntry[normalizeSlashes(filename)] = entry;
+            return this.fileNameToEntry[normalizeSlashes(fileName)] = entry;
         }
 
-        public getEntry(filename: string): HostFileInformation {
-            return lookUp(this.filenameToEntry, normalizeSlashes(filename));
+        public getEntry(fileName: string): HostFileInformation {
+            return lookUp(this.fileNameToEntry, normalizeSlashes(fileName));
         }
 
-        public contains(filename: string): boolean {
-            return hasProperty(this.filenameToEntry, normalizeSlashes(filename));
+        public contains(fileName: string): boolean {
+            return hasProperty(this.fileNameToEntry, normalizeSlashes(fileName));
         }
 
-        public getOrCreateEntry(filename: string): HostFileInformation {
-            if (this.contains(filename)) {
-                return this.getEntry(filename);
+        public getOrCreateEntry(fileName: string): HostFileInformation {
+            if (this.contains(fileName)) {
+                return this.getEntry(fileName);
             }
 
-            return this.createEntry(filename);
+            return this.createEntry(fileName);
         }
 
-        public getRootFilenames(): string[] {
+        public getRootFileNames(): string[] {
             var fileNames: string[] = [];
 
-            forEachKey(this.filenameToEntry, key => {
-                if (hasProperty(this.filenameToEntry, key) && this.filenameToEntry[key])
+            forEachKey(this.fileNameToEntry, key => {
+                if (hasProperty(this.fileNameToEntry, key) && this.fileNameToEntry[key])
                     fileNames.push(key);
             });
 
             return fileNames;
         }
 
-        public getVersion(filename: string): string {
-            var file = this.getEntry(filename);
+        public getVersion(fileName: string): string {
+            var file = this.getEntry(fileName);
             return file && file.version;
         }
 
-        public getScriptSnapshot(filename: string): IScriptSnapshot {
-            var file = this.getEntry(filename);
+        public getScriptSnapshot(fileName: string): IScriptSnapshot {
+            var file = this.getEntry(fileName);
             return file && file.scriptSnapshot;
         }
 
-        public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
-            var currentVersion = this.getVersion(filename);
+        public getChangeRange(fileName: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
+            var currentVersion = this.getVersion(fileName);
             if (lastKnownVersion === currentVersion) {
                 return unchangedTextChangeRange; // "No changes"
             }
 
-            var scriptSnapshot = this.getScriptSnapshot(filename);
+            var scriptSnapshot = this.getScriptSnapshot(fileName);
             return scriptSnapshot.getChangeRange(oldScriptSnapshot);
         }
     }
@@ -1538,7 +1557,7 @@ module ts {
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentFilename: string = "";
+        private currentFileName: string = "";
         private currentFileVersion: string = null;
         private currentSourceFile: SourceFile = null;
 
@@ -1551,26 +1570,26 @@ module ts {
             }
         }
 
-        private initialize(filename: string) {
+        private initialize(fileName: string) {
             // ensure that both source file and syntax tree are either initialized or not initialized
             var start = new Date().getTime();
             this.hostCache = new HostCache(this.host);
             this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
 
-            var version = this.hostCache.getVersion(filename);
+            var version = this.hostCache.getVersion(fileName);
             var sourceFile: SourceFile;
 
-            if (this.currentFilename !== filename) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+            if (this.currentFileName !== fileName) {
+                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
 
                 var start = new Date().getTime();
-                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
+                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
                 this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
 
-                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
+                var editRange = this.hostCache.getChangeRange(fileName, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
 
                 var start = new Date().getTime();
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
@@ -1580,18 +1599,18 @@ module ts {
             if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
-                this.currentFilename = filename;
+                this.currentFileName = fileName;
                 this.currentSourceFile = sourceFile;
             }
         }
 
-        public getCurrentSourceFile(filename: string): SourceFile {
-            this.initialize(filename);
+        public getCurrentSourceFile(fileName: string): SourceFile {
+            this.initialize(fileName);
             return this.currentSourceFile;
         }
 
-        public getCurrentScriptSnapshot(filename: string): IScriptSnapshot {
-            return this.getCurrentSourceFile(filename).scriptSnapshot;
+        public getCurrentScriptSnapshot(fileName: string): IScriptSnapshot {
+            return this.getCurrentSourceFile(fileName).scriptSnapshot;
         }
     }
 
@@ -1600,8 +1619,8 @@ module ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
-    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
-        var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
+    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
+        var sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
@@ -1634,7 +1653,7 @@ module ts {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -1645,7 +1664,7 @@ module ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1686,17 +1705,17 @@ module ts {
         }
 
         function acquireDocument(
-            filename: string,
+            fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            var entry = lookUp(bucket, filename);
+            var entry = lookUp(bucket, fileName);
             if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
+                var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
-                bucket[filename] = entry = {
+                bucket[fileName] = entry = {
                     sourceFile: sourceFile,
                     refCount: 0,
                     owners: []
@@ -1709,7 +1728,7 @@ module ts {
 
         function updateDocument(
             sourceFile: SourceFile,
-            filename: string,
+            fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
@@ -1718,23 +1737,23 @@ module ts {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
             Debug.assert(bucket !== undefined);
-            var entry = lookUp(bucket, filename);
+            var entry = lookUp(bucket, fileName);
             Debug.assert(entry !== undefined);
 
             entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
             return entry.sourceFile;
         }
 
-        function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
+        function releaseDocument(fileName: string, compilationSettings: CompilerOptions): void {
             var bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            var entry = lookUp(bucket, filename);
+            var entry = lookUp(bucket, fileName);
             entry.refCount--;
 
             Debug.assert(entry.refCount >= 0);
             if (entry.refCount === 0) {
-                delete bucket[filename];
+                delete bucket[fileName];
             }
         }
 
@@ -1786,7 +1805,7 @@ module ts {
                                         var importPath = scanner.getTokenValue();
                                         var pos = scanner.getTokenPos();
                                         importedFiles.push({
-                                            filename: importPath,
+                                            fileName: importPath,
                                             pos: pos,
                                             end: pos + importPath.length
                                         });
@@ -1979,7 +1998,7 @@ module ts {
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        var useCaseSensitivefilenames = false;
+        var useCaseSensitivefileNames = false;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
 
@@ -1994,14 +2013,14 @@ module ts {
             }
         }
 
-        function getCanonicalFileName(filename: string) {
-            return useCaseSensitivefilenames ? filename : filename.toLowerCase();
+        function getCanonicalFileName(fileName: string) {
+            return useCaseSensitivefileNames ? fileName : fileName.toLowerCase();
         }
 
-        function getValidSourceFile(filename: string): SourceFile {
-            var sourceFile = program.getSourceFile(getCanonicalFileName(filename));
+        function getValidSourceFile(fileName: string): SourceFile {
+            var sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
             if (!sourceFile) {
-                throw new Error("Could not find file: '" + filename + "'.");
+                throw new Error("Could not find file: '" + fileName + "'.");
             }
             return sourceFile;
         }
@@ -2034,14 +2053,14 @@ module ts {
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
             // Now create a new compiler
-            var newProgram = createProgram(hostCache.getRootFilenames(), newSettings, {
+            var newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
-                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
+                getCanonicalFileName: (fileName) => useCaseSensitivefileNames ? fileName : fileName.toLowerCase(),
+                useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
-                getDefaultLibFilename: (options) => host.getDefaultLibFilename(options),
-                writeFile: (filename, data, writeByteOrderMark) => { },
+                getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
+                writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()
             });
 
@@ -2050,9 +2069,9 @@ module ts {
             if (program) {
                 var oldSourceFiles = program.getSourceFiles();
                 for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
-                    var filename = oldSourceFiles[i].filename;
-                    if (!newProgram.getSourceFile(filename) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(filename, oldSettings);
+                    var fileName = oldSourceFiles[i].fileName;
+                    if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(fileName, oldSettings);
                     }
                 }
             }
@@ -2062,13 +2081,13 @@ module ts {
 
             return;
 
-            function getOrCreateSourceFile(filename: string): SourceFile {
+            function getOrCreateSourceFile(fileName: string): SourceFile {
                 cancellationToken.throwIfCancellationRequested();
 
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                var hostFileInformation = hostCache.getOrCreateEntry(filename);
+                var hostFileInformation = hostCache.getOrCreateEntry(fileName);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -2079,7 +2098,7 @@ module ts {
                 if (!changesInCompilationSettingsAffectSyntax) {
 
                     // Check if the old program had this file already
-                    var oldSourceFile = program && program.getSourceFile(filename);
+                    var oldSourceFile = program && program.getSourceFile(fileName);
                     if (oldSourceFile) {
                         // This SourceFile is safe to reuse, return it
                         if (sourceFileUpToDate(oldSourceFile)) {
@@ -2087,17 +2106,17 @@ module ts {
                         }
 
                         // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostCache.getChangeRange(filename, oldSourceFile.version, oldSourceFile.scriptSnapshot);
-                        return documentRegistry.updateDocument(oldSourceFile, filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                        var textChangeRange = hostCache.getChangeRange(fileName, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
                     }
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename);
+                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.fileName);
             }
 
             function programUpToDate(): boolean {
@@ -2107,14 +2126,14 @@ module ts {
                 }
 
                 // If number of files in the program do not match, it is not up-to-date
-                var rootFilenames = hostCache.getRootFilenames();
-                if (program.getSourceFiles().length !== rootFilenames.length) {
+                var rootFileNames = hostCache.getRootFileNames();
+                if (program.getSourceFiles().length !== rootFileNames.length) {
                     return false;
                 }
 
                 // If any file is not up-to-date, then the whole program is not up-to-date
-                for (var i = 0, n = rootFilenames.length; i < n; i++) {
-                    if (!sourceFileUpToDate(program.getSourceFile(rootFilenames[i]))) {
+                for (var i = 0, n = rootFileNames.length; i < n; i++) {
+                    if (!sourceFileUpToDate(program.getSourceFile(rootFileNames[i]))) {
                         return false;
                     }
                 }
@@ -2144,30 +2163,30 @@ module ts {
         function dispose(): void {
             if (program) {
                 forEach(program.getSourceFiles(),
-                    (f) => { documentRegistry.releaseDocument(f.filename, program.getCompilerOptions()); });
+                    (f) => { documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()); });
             }
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(filename: string) {
+        function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
+            fileName = normalizeSlashes(fileName);
 
-            return program.getDiagnostics(getValidSourceFile(filename));
+            return program.getDiagnostics(getValidSourceFile(fileName));
         }
 
         /**
          * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors  
          */
-        function getSemanticDiagnostics(filename: string) {
+        function getSemanticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename)
+            fileName = normalizeSlashes(fileName)
             var compilerOptions = program.getCompilerOptions();
             var checker = getDiagnosticsProducingTypeChecker();
-            var targetSourceFile = getValidSourceFile(filename);
+            var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
@@ -2238,13 +2257,13 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(filename: string, position: number) {
+        function getCompletionsAtPosition(fileName: string, position: number) {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
+            fileName = normalizeSlashes(fileName);
 
             var syntacticStart = new Date().getTime();
-            var sourceFile = getValidSourceFile(filename);
+            var sourceFile = getValidSourceFile(fileName);
 
             var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
@@ -2299,7 +2318,7 @@ module ts {
 
             // Clear the current activeCompletionSession for this session
             activeCompletionSession = {
-                filename: filename,
+                fileName: fileName,
                 position: position,
                 entries: [],
                 symbols: {},
@@ -2637,17 +2656,17 @@ module ts {
             }
         }
 
-        function getCompletionEntryDetails(filename: string, position: number, entryName: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
-            filename = normalizeSlashes(filename);
+            fileName = normalizeSlashes(fileName);
 
-            var sourceFile = getValidSourceFile(filename);
+            var sourceFile = getValidSourceFile(fileName);
 
             var session = activeCompletionSession;
 
             // Ensure that the current active completion session is still valid for this request
-            if (!session || session.filename !== filename || session.position !== position) {
+            if (!session || session.fileName !== fileName || session.position !== position) {
                 return undefined;
             }
 
@@ -2660,7 +2679,7 @@ module ts {
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
                 Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
-                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
+                var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -3203,11 +3222,11 @@ module ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
+        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
-            var sourceFile = getValidSourceFile(filename);
+            fileName = normalizeSlashes(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3227,10 +3246,10 @@ module ts {
                 var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
                     return [{
-                        fileName: referenceFile.filename,
+                        fileName: referenceFile.fileName,
                         textSpan: createTextSpanFromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
-                        name: comment.filename,
+                        name: comment.fileName,
                         containerName: undefined,
                         containerKind: undefined
                     }];
@@ -3283,7 +3302,7 @@ module ts {
 
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
-                    fileName: node.getSourceFile().filename,
+                    fileName: node.getSourceFile().fileName,
                     textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
                     kind: symbolKind,
                     name: symbolName,
@@ -3339,11 +3358,11 @@ module ts {
         }
 
         /// References and Occurrences
-        function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
+        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
-            var sourceFile = getValidSourceFile(filename);
+            fileName = normalizeSlashes(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
             if (!node) {
@@ -3478,7 +3497,7 @@ module ts {
 
                         if (shouldHighlightNextKeyword) {
                             result.push({
-                                fileName: filename,
+                                fileName: fileName,
                                 textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
                                 isWriteAccess: false
                             });
@@ -4206,7 +4225,7 @@ module ts {
                             if ((findInStrings && isInString(position)) ||
                                 (findInComments && isInComment(position))) {
                                 result.push({
-                                    fileName: sourceFile.filename,
+                                    fileName: sourceFile.fileName,
                                     textSpan: createTextSpan(position, searchText.length),
                                     isWriteAccess: false
                                 });
@@ -4591,7 +4610,7 @@ module ts {
             }
 
             return {
-                fileName: node.getSourceFile().filename,
+                fileName: node.getSourceFile().fileName,
                 textSpan: createTextSpanFromBounds(start, end),
                 isWriteAccess: isWriteAccess(node)
             };
@@ -4633,7 +4652,7 @@ module ts {
             forEach(program.getSourceFiles(), sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
 
-                var filename = sourceFile.filename;
+                var fileName = sourceFile.fileName;
                 var declarations = sourceFile.getNamedDeclarations();
                 for (var i = 0, n = declarations.length; i < n; i++) {
                     var declaration = declarations[i];
@@ -4647,7 +4666,7 @@ module ts {
                             kind: getNodeKind(declaration),
                             kindModifiers: getNodeModifiers(declaration),
                             matchKind: MatchKind[matchKind],
-                            fileName: filename,
+                            fileName: fileName,
                             textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
                             containerName: container && container.name ? (<Identifier>container.name).text : "",
@@ -4707,17 +4726,17 @@ module ts {
             return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
         }
 
-        function getEmitOutput(filename: string): EmitOutput {
+        function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
-            var sourceFile = getValidSourceFile(filename);
+            fileName = normalizeSlashes(fileName);
+            var sourceFile = getValidSourceFile(fileName);
 
             var outputFiles: OutputFile[] = [];
 
-            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
                 outputFiles.push({
-                    name: filename,
+                    name: fileName,
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
                 });
@@ -4866,16 +4885,16 @@ module ts {
         }
 
         /// Syntactic features
-        function getCurrentSourceFile(filename: string): SourceFile {
-            filename = normalizeSlashes(filename);
-            var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(filename);
+        function getCurrentSourceFile(fileName: string): SourceFile {
+            fileName = normalizeSlashes(fileName);
+            var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return currentSourceFile;
         }
 
-        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): TextSpan {
-            filename = ts.normalizeSlashes(filename);
+        function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+            fileName = ts.normalizeSlashes(fileName);
             // Get node at the location
-            var node = getTouchingPropertyName(getCurrentSourceFile(filename), startPos);
+            var node = getTouchingPropertyName(getCurrentSourceFile(fileName), startPos);
 
             if (!node) {
                 return;
@@ -4927,16 +4946,16 @@ module ts {
             return createTextSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
-        function getBreakpointStatementAtPosition(filename: string, position: number) {
+        function getBreakpointStatementAtPosition(fileName: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            filename = ts.normalizeSlashes(filename);
-            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position);
+            fileName = ts.normalizeSlashes(fileName);
+            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(fileName), position);
         }
 
-        function getNavigationBarItems(filename: string): NavigationBarItem[] {
-            filename = normalizeSlashes(filename);
+        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
+            fileName = normalizeSlashes(fileName);
 
-            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
+            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(fileName));
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -5232,15 +5251,15 @@ module ts {
             }
         }
 
-        function getOutliningSpans(filename: string): OutliningSpan[] {
+        function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            filename = normalizeSlashes(filename);
-            var sourceFile = getCurrentSourceFile(filename);
+            fileName = normalizeSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
 
-        function getBraceMatchingAtPosition(filename: string, position: number) {
-            var sourceFile = getCurrentSourceFile(filename);
+        function getBraceMatchingAtPosition(fileName: string, position: number) {
+            var sourceFile = getCurrentSourceFile(fileName);
             var result: TextSpan[] = [];
 
             var token = getTouchingToken(sourceFile, position);
@@ -5292,11 +5311,11 @@ module ts {
             }
         }
 
-        function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
-            filename = normalizeSlashes(filename);
+        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
+            fileName = normalizeSlashes(fileName);
 
             var start = new Date().getTime();
-            var sourceFile = getCurrentSourceFile(filename);
+            var sourceFile = getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
@@ -5338,7 +5357,7 @@ module ts {
             return [];
         }
 
-        function getTodoComments(filename: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+        function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually 
             // treat it as a semantic operation here.  This is because we expect our host to call
             // this on every single file.  If we treat this syntactically, then that will cause
@@ -5347,9 +5366,9 @@ module ts {
             // anything away.
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
+            fileName = normalizeSlashes(fileName);
 
-            var sourceFile = getValidSourceFile(filename);
+            var sourceFile = getValidSourceFile(fileName);
 
             cancellationToken.throwIfCancellationRequested();
 
@@ -5890,7 +5909,7 @@ module ts {
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {
-            return __dirname + directorySeparator + getDefaultLibFilename(options);
+            return __dirname + directorySeparator + getDefaultLibFileName(options);
         }
 
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");

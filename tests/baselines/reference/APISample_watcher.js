@@ -15,40 +15,40 @@ declare var path: any;
 
 import ts = require("typescript");
 
-function watch(rootFilenames: string[], options: ts.CompilerOptions) {
+function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     var files: ts.Map<{ version: number }> = {};
 
     // initialize the list of files
-    rootFilenames.forEach(filename => {
-        files[filename] = { version: 0 };
+    rootFileNames.forEach(fileName => {
+        files[fileName] = { version: 0 };
     });
 
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost: ts.LanguageServiceHost = {
-        getScriptFileNames: () => rootFilenames,
-        getScriptVersion: (filename) => files[filename] && files[filename].version.toString(),
-        getScriptSnapshot: (filename) => {
-            if (!fs.existsSync(filename)) {
+        getScriptFileNames: () => rootFileNames,
+        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
+        getScriptSnapshot: (fileName) => {
+            if (!fs.existsSync(fileName)) {
                 return undefined;
             }
 
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
-        getDefaultLibFilename: (options) => ts.getDefaultLibFilePath(options),
+        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
     };
 
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
 
     // Now let's watch the files
-    rootFilenames.forEach(filename => {
+    rootFileNames.forEach(fileName => {
         // First time around, emit all files
-        emitFile(filename);
+        emitFile(fileName);
 
         // Add a watch on the file to handle next change
-        fs.watchFile(filename,
+        fs.watchFile(fileName,
             { persistent: true, interval: 250 },
             (curr, prev) => {
                 // Check timestamp
@@ -57,22 +57,22 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
                 }
 
                 // Update the version to signal a change in the file
-                files[filename].version++;
+                files[fileName].version++;
 
                 // write the changes to disk
-                emitFile(filename);
+                emitFile(fileName);
             });
     });
 
-    function emitFile(filename: string) {
-        var output = services.getEmitOutput(filename);
+    function emitFile(fileName: string) {
+        var output = services.getEmitOutput(fileName);
 
         if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
-            console.log(`Emitting ${filename}`);
+            console.log(`Emitting ${fileName}`);
         }
         else {
-            console.log(`Emitting ${filename} failed`);
-            logErrors(filename);
+            console.log(`Emitting ${fileName} failed`);
+            logErrors(fileName);
         }
 
         output.outputFiles.forEach(o => {
@@ -80,15 +80,15 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
         });
     }
 
-    function logErrors(filename: string) {
+    function logErrors(fileName: string) {
         var allDiagnostics = services.getCompilerOptionsDiagnostics()
-            .concat(services.getSyntacticDiagnostics(filename))
-            .concat(services.getSemanticDiagnostics(filename));
+            .concat(services.getSyntacticDiagnostics(fileName))
+            .concat(services.getSemanticDiagnostics(fileName));
 
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);
@@ -99,7 +99,7 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 
 // Initialize files constituting the program as all .ts files in the current directory
 var currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(filename=> filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts");
+    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
 
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
@@ -782,7 +782,7 @@ declare module "typescript" {
         exportName: Identifier;
     }
     interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
@@ -790,30 +790,19 @@ declare module "typescript" {
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
-        filename: string;
+        fileName: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        referenceDiagnostics: Diagnostic[];
-        parseDiagnostics: Diagnostic[];
-        getSyntacticDiagnostics(): Diagnostic[];
-        semanticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
     interface Program extends ScriptReferenceHost {
@@ -863,7 +852,7 @@ declare module "typescript" {
         getCompilerOptions(): CompilerOptions;
         getCompilerHost(): CompilerHost;
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
     interface TypeChecker {
         getEmitResolver(): EmitResolver;
@@ -1256,6 +1245,7 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1275,7 +1265,7 @@ declare module "typescript" {
     }
     interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
     interface CommandLineOption {
@@ -1286,6 +1276,7 @@ declare module "typescript" {
         description?: DiagnosticMessage;
         paramType?: DiagnosticMessage;
         error?: DiagnosticMessage;
+        experimental?: boolean;
     }
     const enum CharacterCodes {
         nullCharacter = 0,
@@ -1416,10 +1407,10 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
     }
     interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken?(): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
@@ -1460,15 +1451,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
-    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getLineStarts(sourceFile: SourceFile): number[];
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function positionToLineAndCharacter(text: string, pos: number): {
-        line: number;
-        character: number;
-    };
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1484,8 +1474,10 @@ declare module "typescript" {
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
+    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function isLeftHandSideExpression(expr: Expression): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
 }
@@ -1543,6 +1535,11 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getSyntacticDiagnostics(): Diagnostic[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -1580,7 +1577,7 @@ declare module "typescript" {
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
@@ -1614,7 +1611,7 @@ declare module "typescript" {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
         getEmitOutput(fileName: string): EmitOutput;
         getProgram(): Program;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         dispose(): void;
     }
     interface ClassifiedSpan {
@@ -1851,11 +1848,11 @@ declare module "typescript" {
       */
     interface DocumentRegistry {
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1864,9 +1861,9 @@ declare module "typescript" {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -1874,7 +1871,7 @@ declare module "typescript" {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1885,17 +1882,17 @@ declare module "typescript" {
           * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
           * was not found in the registry and a new one was created.
           */
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
           *
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
     }
     class ScriptElementKind {
         static unknown: string;
@@ -1966,7 +1963,7 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
     var disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
@@ -1989,63 +1986,63 @@ declare module "typescript" {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 var ts = require("typescript");
-function watch(rootFilenames, options) {
+function watch(rootFileNames, options) {
     var files = {};
     // initialize the list of files
-    rootFilenames.forEach(function (filename) {
-        files[filename] = { version: 0 };
+    rootFileNames.forEach(function (fileName) {
+        files[fileName] = { version: 0 };
     });
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost = {
-        getScriptFileNames: function () { return rootFilenames; },
-        getScriptVersion: function (filename) { return files[filename] && files[filename].version.toString(); },
-        getScriptSnapshot: function (filename) {
-            if (!fs.existsSync(filename)) {
+        getScriptFileNames: function () { return rootFileNames; },
+        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
+        getScriptSnapshot: function (fileName) {
+            if (!fs.existsSync(fileName)) {
                 return undefined;
             }
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
         getCurrentDirectory: function () { return process.cwd(); },
         getCompilationSettings: function () { return options; },
-        getDefaultLibFilename: function (options) { return ts.getDefaultLibFilePath(options); }
+        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); }
     };
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
     // Now let's watch the files
-    rootFilenames.forEach(function (filename) {
+    rootFileNames.forEach(function (fileName) {
         // First time around, emit all files
-        emitFile(filename);
+        emitFile(fileName);
         // Add a watch on the file to handle next change
-        fs.watchFile(filename, { persistent: true, interval: 250 }, function (curr, prev) {
+        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
             // Check timestamp
             if (+curr.mtime <= +prev.mtime) {
                 return;
             }
             // Update the version to signal a change in the file
-            files[filename].version++;
+            files[fileName].version++;
             // write the changes to disk
-            emitFile(filename);
+            emitFile(fileName);
         });
     });
-    function emitFile(filename) {
-        var output = services.getEmitOutput(filename);
+    function emitFile(fileName) {
+        var output = services.getEmitOutput(fileName);
         if (output.emitOutputStatus === 0 /* Succeeded */) {
-            console.log("Emitting " + filename);
+            console.log("Emitting " + fileName);
         }
         else {
-            console.log("Emitting " + filename + " failed");
-            logErrors(filename);
+            console.log("Emitting " + fileName + " failed");
+            logErrors(fileName);
         }
         output.outputFiles.forEach(function (o) {
             fs.writeFileSync(o.name, o.text, "utf8");
         });
     }
-    function logErrors(filename) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(filename)).concat(services.getSemanticDiagnostics(filename));
+    function logErrors(fileName) {
+        var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(fileName)).concat(services.getSemanticDiagnostics(fileName));
         allDiagnostics.forEach(function (diagnostic) {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log("  Error " + diagnostic.file.filename + " (" + lineChar.line + "," + lineChar.character + "): " + diagnostic.messageText);
+                console.log("  Error " + diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + diagnostic.messageText);
             }
             else {
                 console.log("  Error: " + diagnostic.messageText);
@@ -2054,6 +2051,6 @@ function watch(rootFilenames, options) {
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (filename) { return filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts"; });
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
 watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });

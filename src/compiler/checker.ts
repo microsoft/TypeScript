@@ -538,7 +538,7 @@ module ts {
             }
 
             var moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
-            var searchPath = getDirectoryPath(getSourceFile(location).filename);
+            var searchPath = getDirectoryPath(getSourceFile(location).fileName);
 
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
@@ -553,8 +553,8 @@ module ts {
                 }
             }
             while (true) {
-                var filename = normalizePath(combinePaths(searchPath, moduleName));
-                var sourceFile = host.getSourceFile(filename + ".ts") || host.getSourceFile(filename + ".d.ts");
+                var fileName = normalizePath(combinePaths(searchPath, moduleName));
+                var sourceFile = host.getSourceFile(fileName + ".ts") || host.getSourceFile(fileName + ".d.ts");
                 if (sourceFile || isRelative) break;
                 var parentPath = getDirectoryPath(searchPath);
                 if (parentPath === searchPath) break;
@@ -564,7 +564,7 @@ module ts {
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.fileName);
                 return;
             }
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);

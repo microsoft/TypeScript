@@ -872,7 +872,7 @@ module ts {
     }
 
     export interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
 
     export interface CommentRange extends TextRange {
@@ -884,53 +884,54 @@ module ts {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
-        filename: string;
+        fileName: string;
         text: string;
-
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-
-        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
-        // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
-        // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
-        // this file as possible.
-        //
-        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
-        // from this SourceFile that are being held onto may change as a result (including 
-        // becoming detached from any SourceFile).  It is recommended that this SourceFile not
-        // be used once 'update' is called on it.
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
 
+        hasNoDefaultLib: boolean;
+        externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        languageVersion: ScriptTarget;
+        identifiers: Map<string>;
+        
+        // @internal
+        nodeCount: number;
+
+        // @internal
+        identifierCount: number;
+
+        // @internal
+        symbolCount: number;
+
+        // @internal
         // Diagnostics reported about the "///<reference" comments in the file.
         referenceDiagnostics: Diagnostic[];
-
+        
+        // @internal
         // Parse errors refer specifically to things the parser could not understand at all (like 
         // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
-
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        getSyntacticDiagnostics(): Diagnostic[];
-
+        
+        // @internal
         // File level diagnostics reported by the binder.
         semanticDiagnostics: Diagnostic[];
+        
+        // @internal
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
+        // This field should never be used directly, use getSyntacticDiagnostics function instead.
+        syntacticDiagnostics: Diagnostic[];
 
-        hasNoDefaultLib: boolean;
-        externalModuleIndicator: Node; // The first node that causes this file to be an external module
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
-        languageVersion: ScriptTarget;
-        identifiers: Map<string>;
+        // @internal
+        // Stores a line map for the file.
+        // This field should never be used directly to obtain line map, use getLineMap function instead.
+        lineMap: number[];
     }
 
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
 
@@ -999,7 +1000,7 @@ module ts {
         getCompilerHost(): CompilerHost;
 
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
 
     export interface TypeChecker {
@@ -1476,6 +1477,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1502,18 +1504,19 @@ module ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
 
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
-        isFilePath?: boolean;               // True if option value is a path or filename
+        isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
+        experimental?: boolean;
     }
 
     export const enum CharacterCodes {
@@ -1656,10 +1659,10 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
