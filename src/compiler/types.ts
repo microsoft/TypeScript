@@ -896,37 +896,27 @@ module ts {
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
         
-        // @internal
-        nodeCount: number;
+        /* @internal */ nodeCount: number;
+        /* @internal */ identifierCount: number;
+        /* @internal */ symbolCount: number;
 
-        // @internal
-        identifierCount: number;
-
-        // @internal
-        symbolCount: number;
-
-        // @internal
         // Diagnostics reported about the "///<reference" comments in the file.
-        referenceDiagnostics: Diagnostic[];
+        /* @internal */ referenceDiagnostics: Diagnostic[];
         
-        // @internal
         // Parse errors refer specifically to things the parser could not understand at all (like 
         // missing tokens, or tokens it didn't know how to deal with).
-        parseDiagnostics: Diagnostic[];
+        /* @internal */ parseDiagnostics: Diagnostic[];
         
-        // @internal
         // File level diagnostics reported by the binder.
-        semanticDiagnostics: Diagnostic[];
+        /* @internal */ semanticDiagnostics: Diagnostic[];
         
-        // @internal
         // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         // This field should never be used directly, use getSyntacticDiagnostics function instead.
-        syntacticDiagnostics: Diagnostic[];
+        /* @internal */ syntacticDiagnostics: Diagnostic[];
 
-        // @internal
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
-        lineMap: number[];
+        /* @internal */ lineMap: number[];
     }
 
     export interface ScriptReferenceHost {
@@ -1007,10 +997,6 @@ module ts {
         getEmitResolver(): EmitResolver;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getNodeCount(): number;
-        getIdentifierCount(): number;
-        getSymbolCount(): number;
-        getTypeCount(): number;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1039,6 +1025,11 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+
+        /* @internal */ getNodeCount(): number;
+        /* @internal */ getIdentifierCount(): number;
+        /* @internal */ getSymbolCount(): number;
+        /* @internal */ getTypeCount(): number;
     }
 
     export interface SymbolDisplayBuilder {

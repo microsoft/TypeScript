@@ -2421,18 +2421,6 @@ declare module "typescript" {
 >getGlobalDiagnostics : () => Diagnostic[]
 >Diagnostic : Diagnostic
 
-        getNodeCount(): number;
->getNodeCount : () => number
-
-        getIdentifierCount(): number;
->getIdentifierCount : () => number
-
-        getSymbolCount(): number;
->getSymbolCount : () => number
-
-        getTypeCount(): number;
->getTypeCount : () => number
-
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
 >getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type
 >symbol : Symbol
