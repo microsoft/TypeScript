@@ -279,7 +279,7 @@ module FourSlash {
             // Create a new Services Adaptor
             this.cancellationToken = new TestCancellationToken();
             var compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            var languageServiceAdaptor = new Harness.LanguageService.ShimLanugageServiceAdaptor(this.cancellationToken, compilationOptions);
+            var languageServiceAdaptor = new Harness.LanguageService.NativeLanugageServiceAdaptor(this.cancellationToken, compilationOptions);
             this.languageServiceAdaptorHost = languageServiceAdaptor.getHost();
             this.languageService = languageServiceAdaptor.getLanguageService();
 
@@ -1784,67 +1784,6 @@ module FourSlash {
 
             if (actual.length !== 0) {
                 this.raiseError('verifyNoMatchingBracePosition failed - expected: 0 spans, actual: ' + actual.length);
-            }
-        }
-
-        public verifyTypesAgainstFullCheckAtPositions(positions: number[]) {
-            this.taoInvalidReason = 'verifyTypesAgainstFullCheckAtPositions impossible';
-
-            // Create a from-scratch LS to check against
-            var referenceLanguageServiceShimHost = new Harness.LanguageService.TypeScriptLS();
-            var referenceLanguageServiceShim = referenceLanguageServiceShimHost.getLanguageService();
-            var referenceLanguageService = referenceLanguageServiceShim.languageService;
-
-            // Add lib.d.ts to the reference language service
-            referenceLanguageServiceShimHost.addDefaultLibrary();
-
-            for (var i = 0; i < this.testData.files.length; i++) {
-                var file = this.testData.files[i];
-
-                var content = this.getFileContent(file.fileName);
-                referenceLanguageServiceShimHost.addScript(this.testData.files[i].fileName, content);
-            }
-
-            for (i = 0; i < positions.length; i++) {
-                var nameOf = (type: ts.QuickInfo) => type ? ts.displayPartsToString(type.displayParts) : '(none)';
-
-                var pullName: string, refName: string;
-                var anyFailed = false;
-
-                var errMsg = '';
-
-                try {
-                    var pullType = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, positions[i]);
-                    pullName = nameOf(pullType);
-                } catch (err1) {
-                    errMsg = 'Failed to get pull type check. Exception: ' + err1 + '\r\n';
-                    if (err1.stack) errMsg = errMsg + err1.stack;
-                    pullName = '(failed)';
-                    anyFailed = true;
-                }
-
-                try {
-                    var referenceType = referenceLanguageService.getQuickInfoAtPosition(this.activeFile.fileName, positions[i]);
-                    refName = nameOf(referenceType);
-                } catch (err2) {
-                    errMsg = 'Failed to get full type check. Exception: ' + err2 + '\r\n';
-                    if (err2.stack) errMsg = errMsg + err2.stack;
-                    refName = '(failed)';
-                    anyFailed = true;
-                }
-
-                var failure = anyFailed || (refName !== pullName);
-                if (failure) {
-                    content = this.getFileContent(this.activeFile.fileName);
-                    var textAtPosition = content.substr(positions[i], 10);
-                    var positionDescription = 'Position ' + positions[i] + ' ("' + textAtPosition + '"...)';
-
-                    if (anyFailed) {
-                        throw new Error('Exception thrown in language service for ' + positionDescription + '\r\n' + errMsg);
-                    } else if (refName !== pullName) {
-                        throw new Error('Pull/Full disagreement failed at ' + positionDescription + ' - expected full typecheck type "' + refName + '" to equal pull type "' + pullName + '".');
-                    }
-                }
             }
         }
 

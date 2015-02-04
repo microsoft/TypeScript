@@ -80,16 +80,6 @@ module FourSlashInterface {
         }
     }
 
-    export class diagnostics {
-        public validateTypeAtCurrentPosition() {
-            return this.validateTypesAtPositions(FourSlash.currentTestState.currentCaretPosition);
-        }
-
-        public validateTypesAtPositions(...positions: number[]) {
-            return FourSlash.currentTestState.verifyTypesAgainstFullCheckAtPositions(positions);
-        }
-    }
-
     export class goTo {
         // Moves the caret to the specified marker,
         // or the anonymous marker ('/**/') if no name
@@ -647,7 +637,6 @@ module fs {
     export var edit = new FourSlashInterface.edit();
     export var debug = new FourSlashInterface.debug();
     export var format = new FourSlashInterface.format();
-    export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
 }
 module ts {
@@ -666,6 +655,5 @@ var verify = new FourSlashInterface.verify();
 var edit = new FourSlashInterface.edit();
 var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
-var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
 var classification = FourSlashInterface.classification;
