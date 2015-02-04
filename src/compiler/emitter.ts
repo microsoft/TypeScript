@@ -2561,6 +2561,14 @@ module ts {
                 emit(node.expression);
             }
 
+            function emitAwaitExpression(node: AwaitExpression) {
+                // NOTE: even though 'await' is syntatically valid in ES6 and earlier, we will emit the expression here if we reach this point
+                // as a fallback when there is an error during grammar check.
+                write(tokenToString(SyntaxKind.AwaitKeyword));
+                write(" ");
+                emit(node.expression);
+            }
+
             function emitYieldExpression(node: YieldExpression) {
                 write(tokenToString(SyntaxKind.YieldKeyword));
                 emit(node.asteriskToken);
@@ -3092,14 +3100,17 @@ module ts {
                 locals = undefined;
                 tempParameters = undefined;
 
-                if (node.flags & NodeFlags.Async) {
-                    ensureLocals();
-                    node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);
-                }
+                if (node.kind !== SyntaxKind.GetAccessor &&
+                    node.kind !== SyntaxKind.SetAccessor) {
+                    if (node.flags & NodeFlags.Async) {
+                        ensureLocals();
+                        node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);
+                    }
 
-                if (node.asteriskToken && languageVersion <= ScriptTarget.ES5) {
-                    ensureLocals();
-                    node = GeneratorFunctionRewriter.rewrite(node, locals);
+                    if (node.asteriskToken && languageVersion <= ScriptTarget.ES5) {
+                        ensureLocals();
+                        node = GeneratorFunctionRewriter.rewrite(node, locals);
+                    }
                 }
 
                 emitSignatureParameters(node);
@@ -4107,6 +4118,8 @@ module ts {
                         return emitTypeOfExpression(<TypeOfExpression>node);
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
                     case SyntaxKind.YieldExpression:
                         return emitYieldExpression(<YieldExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
