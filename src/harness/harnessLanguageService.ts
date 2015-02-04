@@ -56,9 +56,13 @@ module Harness.LanguageService {
     }
 
     class ScriptSnapshot implements ts.IScriptSnapshot {
-        public textSnapshot: string;        public version: number;
+        public textSnapshot: string;
+        public version: number;
+
         constructor(public scriptInfo: ScriptInfo) {
-            this.textSnapshot = scriptInfo.content;            this.version = scriptInfo.version;        }
+            this.textSnapshot = scriptInfo.content;
+            this.version = scriptInfo.version;
+        }
 
         public getText(start: number, end: number): string {
             return this.textSnapshot.substring(start, end);

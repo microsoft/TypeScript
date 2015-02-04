@@ -275,11 +275,26 @@ module FourSlash {
             }
         }
 
-        constructor(public testData: FourSlashData) {
+        private getLanguageServiceAdaptor(testType: FourSlashTestType):
+            { new (cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdaptor } {
+            switch (testType) {
+                case FourSlashTestType.Native:
+                    return Harness.LanguageService.NativeLanugageServiceAdaptor;
+                    break;
+                case FourSlashTestType.Shims:
+                    return Harness.LanguageService.ShimLanugageServiceAdaptor;
+                    break;
+                default:
+                    throw new Error("Unknown FourSlash test type: ");
+            }
+        }
+
+        constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adaptor
             this.cancellationToken = new TestCancellationToken();
             var compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            var languageServiceAdaptor = new Harness.LanguageService.NativeLanugageServiceAdaptor(this.cancellationToken, compilationOptions);
+            var languageserviceAdaptorFactory = this.getLanguageServiceAdaptor(testType);
+            var languageServiceAdaptor = new languageserviceAdaptorFactory(this.cancellationToken, compilationOptions);
             this.languageServiceAdaptorHost = languageServiceAdaptor.getHost();
             this.languageService = languageServiceAdaptor.getLanguageService();
 
@@ -308,7 +323,7 @@ module FourSlash {
                 // Add triple reference files into language-service host
                 ts.forEach(referencedFiles, referenceFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
-                    var referenceFilePath = "tests/cases/fourslash/" + referenceFile.filename;
+                    var referenceFilePath = this.basePath+ '/' + referenceFile.filename;
                     this.addMatchedInputFile(referenceFilePath);
                 });
 
@@ -316,7 +331,7 @@ module FourSlash {
                 ts.forEach(importedFiles, importedFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
-                    var importedFilePath = "tests/cases/fourslash/" + importedFile.filename + ".ts";
+                    var importedFilePath = this.basePath + '/' + importedFile.filename + ".ts";
                     this.addMatchedInputFile(importedFilePath);
                 });
 
@@ -1382,6 +1397,12 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
+            if (this.testType !== FourSlashTestType.Native) { 
+                // getSourcefile() results can not be serialized. Only perform these verifications 
+                // if running against a native LS object.
+                return;
+            }
+
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
@@ -2052,7 +2073,7 @@ module FourSlash {
             } else if (typeof indexOrName === 'string') {
                 var name = <string>indexOrName;
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the filename
-                name = name.indexOf('/') === -1 ? 'tests/cases/fourslash/' + name : name;
+                name = name.indexOf('/') === -1 ? (this.basePath + '/'  + name) : name;
                 var availableNames: string[] = [];
                 var foundIt = false;
                 for (var i = 0; i < this.testData.files.length; i++) {
@@ -2118,17 +2139,17 @@ module FourSlash {
     var fsOutput = new Harness.Compiler.WriterAggregator();
     var fsErrors = new Harness.Compiler.WriterAggregator();
     export var xmlData: TestXmlData[] = [];
-    export function runFourSlashTest(fileName: string) {
+    export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
         var content = Harness.IO.readFile(fileName);
-        var xml = runFourSlashTestContent(content, fileName);
+        var xml = runFourSlashTestContent(basePath, testType, content, fileName);
         xmlData.push(xml);
     }
 
-    export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
+    export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
-        var testData = parseTestData(content, fileName);
+        var testData = parseTestData(basePath, content, fileName);
 
-        currentTestState = new TestState(testData);
+        currentTestState = new TestState(basePath, testType, testData);
 
         var result = '';
         var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
@@ -2171,7 +2192,7 @@ module FourSlash {
         return lines.map(s => s.substr(1)).join('\n');
     }
 
-    function parseTestData(contents: string, fileName: string): FourSlashData {
+    function parseTestData(basePath: string, contents: string, fileName: string): FourSlashData {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         var optionRegex = /^\s*@(\w+): (.*)\s*/;
 
@@ -2239,7 +2260,7 @@ module FourSlash {
                                 currentFileName = fileName;
                             }
 
-                            currentFileName = 'tests/cases/fourslash/' + match[2];
+                            currentFileName = basePath +  '/' + match[2];
                             currentFileOptions[match[1]] = match[2];
                         } else {
                             // Add other fileMetadata flag
