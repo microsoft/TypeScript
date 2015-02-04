@@ -16,11 +16,10 @@ import ts = require("typescript");
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
     var host = ts.createCompilerHost(options);
     var program = ts.createProgram(fileNames, options, host);
-    var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
     var result = program.emitFiles();
 
     var allDiagnostics = program.getDiagnostics()
-        .concat(checker.getDiagnostics())
+        .concat(program.getTypeCheckerDiagnostics())
         .concat(result.diagnostics);
 
     allDiagnostics.forEach(diagnostic => {
@@ -741,6 +740,8 @@ declare module "typescript" {
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
@@ -789,8 +790,6 @@ declare module "typescript" {
     }
     interface TypeChecker {
         getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1917,9 +1916,8 @@ var ts = require("typescript");
 function compile(fileNames, options) {
     var host = ts.createCompilerHost(options);
     var program = ts.createProgram(fileNames, options, host);
-    var checker = ts.createTypeChecker(program, true);
     var result = program.emitFiles();
-    var allDiagnostics = program.getDiagnostics().concat(checker.getDiagnostics()).concat(result.diagnostics);
+    var allDiagnostics = program.getDiagnostics().concat(program.getTypeCheckerDiagnostics()).concat(result.diagnostics);
     allDiagnostics.forEach(function (diagnostic) {
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
         console.log(diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + diagnostic.messageText);

@@ -931,6 +931,10 @@ module ts {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
 
+        // These will merge with the below diagnostics function in a followup checkin.
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
+
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
@@ -997,8 +1001,6 @@ module ts {
 
     export interface TypeChecker {
         getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1027,6 +1029,10 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+
+        // Should not be called directly.  Should only be accessed through the Program instance.
+        /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getGlobalDiagnostics(): Diagnostic[];
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;

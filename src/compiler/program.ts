@@ -98,9 +98,11 @@ module ts {
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getCompilerHost: () => host,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getDeclarationDiagnostics: getDeclarationDiagnostics,
+            getDiagnostics,
+            getGlobalDiagnostics,
+            getTypeCheckerDiagnostics,
+            getTypeCheckerGlobalDiagnostics,
+            getDeclarationDiagnostics,
             getTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emitFiles: invokeEmitter,
@@ -115,7 +117,7 @@ module ts {
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
             if (options.noEmitOnError) {
-                return getDiagnostics(sourceFile).length !== 0 || getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0;
+                return getDiagnostics(sourceFile).length !== 0 || getTypeCheckerDiagnostics(sourceFile).length !== 0;
             }
 
             return false;
@@ -149,6 +151,14 @@ module ts {
         function getSourceFile(fileName: string) {
             fileName = host.getCanonicalFileName(fileName);
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
+        }
+
+        function getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile);
+        }
+
+        function getTypeCheckerGlobalDiagnostics(): Diagnostic[] {
+            return getDiagnosticsProducingTypeChecker().getGlobalDiagnostics();
         }
 
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {

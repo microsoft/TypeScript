@@ -770,6 +770,8 @@ declare module "typescript" {
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
@@ -818,8 +820,6 @@ declare module "typescript" {
     }
     interface TypeChecker {
         getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];

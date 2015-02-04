@@ -162,20 +162,13 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 >length : number
 
         // Type check and get semantic errors
-        var checker = program.getTypeChecker(true);
->checker : ts.TypeChecker
->program.getTypeChecker(true) : ts.TypeChecker
->program.getTypeChecker : (produceDiagnostics: boolean) => ts.TypeChecker
->program : ts.Program
->getTypeChecker : (produceDiagnostics: boolean) => ts.TypeChecker
-
-        errors = checker.getDiagnostics();
->errors = checker.getDiagnostics() : ts.Diagnostic[]
+        errors = program.getTypeCheckerDiagnostics();
+>errors = program.getTypeCheckerDiagnostics() : ts.Diagnostic[]
 >errors : ts.Diagnostic[]
->checker.getDiagnostics() : ts.Diagnostic[]
->checker.getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
->checker : ts.TypeChecker
->getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
+>program.getTypeCheckerDiagnostics() : ts.Diagnostic[]
+>program.getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
+>program : ts.Program
+>getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
 
         // Generate output
         program.emitFiles();
@@ -2339,6 +2332,16 @@ declare module "typescript" {
 >getCompilerHost : () => CompilerHost
 >CompilerHost : CompilerHost
 
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
+>getTypeCheckerGlobalDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 >getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
@@ -2488,16 +2491,6 @@ declare module "typescript" {
         getEmitResolver(): EmitResolver;
 >getEmitResolver : () => EmitResolver
 >EmitResolver : EmitResolver
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
-        getGlobalDiagnostics(): Diagnostic[];
->getGlobalDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
 
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
 >getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type

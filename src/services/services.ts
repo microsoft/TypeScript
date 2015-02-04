@@ -2184,13 +2184,12 @@ module ts {
 
             fileName = normalizeSlashes(fileName)
             var compilerOptions = program.getCompilerOptions();
-            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            var allDiagnostics = checker.getDiagnostics(targetSourceFile);
+            var allDiagnostics = program.getTypeCheckerDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
                 allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));

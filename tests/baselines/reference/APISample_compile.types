@@ -40,14 +40,6 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >options : ts.CompilerOptions
 >host : ts.CompilerHost
 
-    var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
->checker : ts.TypeChecker
->ts.createTypeChecker(program, /*produceDiagnostics*/ true) : ts.TypeChecker
->ts.createTypeChecker : (host: ts.TypeCheckerHost, produceDiagnostics: boolean) => ts.TypeChecker
->ts : typeof ts
->createTypeChecker : (host: ts.TypeCheckerHost, produceDiagnostics: boolean) => ts.TypeChecker
->program : ts.Program
-
     var result = program.emitFiles();
 >result : ts.EmitResult
 >program.emitFiles() : ts.EmitResult
@@ -57,21 +49,21 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 
     var allDiagnostics = program.getDiagnostics()
 >allDiagnostics : ts.Diagnostic[]
->program.getDiagnostics()        .concat(checker.getDiagnostics())        .concat(result.diagnostics) : ts.Diagnostic[]
->program.getDiagnostics()        .concat(checker.getDiagnostics())        .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->program.getDiagnostics()        .concat(checker.getDiagnostics()) : ts.Diagnostic[]
+>program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics())        .concat(result.diagnostics) : ts.Diagnostic[]
+>program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics())        .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
+>program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics()) : ts.Diagnostic[]
 >program.getDiagnostics()        .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
 >program.getDiagnostics() : ts.Diagnostic[]
 >program.getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
 >program : ts.Program
 >getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
 
-        .concat(checker.getDiagnostics())
+        .concat(program.getTypeCheckerDiagnostics())
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->checker.getDiagnostics() : ts.Diagnostic[]
->checker.getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
->checker : ts.TypeChecker
->getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
+>program.getTypeCheckerDiagnostics() : ts.Diagnostic[]
+>program.getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
+>program : ts.Program
+>getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
 
         .concat(result.diagnostics);
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
@@ -2261,6 +2253,16 @@ declare module "typescript" {
 >getCompilerHost : () => CompilerHost
 >CompilerHost : CompilerHost
 
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
+>getTypeCheckerGlobalDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 >getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
@@ -2410,16 +2412,6 @@ declare module "typescript" {
         getEmitResolver(): EmitResolver;
 >getEmitResolver : () => EmitResolver
 >EmitResolver : EmitResolver
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
-        getGlobalDiagnostics(): Diagnostic[];
->getGlobalDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
 
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
 >getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type

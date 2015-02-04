@@ -16,11 +16,10 @@ import ts = require("typescript");
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
     var host = ts.createCompilerHost(options);
     var program = ts.createProgram(fileNames, options, host);
-    var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
     var result = program.emitFiles();
 
     var allDiagnostics = program.getDiagnostics()
-        .concat(checker.getDiagnostics())
+        .concat(program.getTypeCheckerDiagnostics())
         .concat(result.diagnostics);
 
     allDiagnostics.forEach(diagnostic => {

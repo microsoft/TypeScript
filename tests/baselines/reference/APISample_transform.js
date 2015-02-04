@@ -49,8 +49,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     // Do not generate code in the presence of early errors
     if (!errors.length) {
         // Type check and get semantic errors
-        var checker = program.getTypeChecker(true);
-        errors = checker.getDiagnostics();
+        errors = program.getTypeCheckerDiagnostics();
         // Generate output
         program.emitFiles();
     }
@@ -771,6 +770,8 @@ declare module "typescript" {
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
@@ -819,8 +820,6 @@ declare module "typescript" {
     }
     interface TypeChecker {
         getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1974,8 +1973,7 @@ function transform(contents, compilerOptions) {
     // Do not generate code in the presence of early errors
     if (!errors.length) {
         // Type check and get semantic errors
-        var checker = program.getTypeChecker(true);
-        errors = checker.getDiagnostics();
+        errors = program.getTypeCheckerDiagnostics();
         // Generate output
         program.emitFiles();
     }
