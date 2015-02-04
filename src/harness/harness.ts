@@ -690,8 +690,6 @@ module Harness {
     }
 }
 
-
-
 module Harness {
     var tcServicesFilename = "typescriptServices.js";
 
