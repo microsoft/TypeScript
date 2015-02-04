@@ -2515,8 +2515,9 @@ module ts {
                                 isFunction(containingNodeKind) ||
                                 containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||        // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x, y|
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface A<T, |
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||       //  var [x, y|
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x, y|
 
                         case SyntaxKind.DotToken:
                             return containingNodeKind === SyntaxKind.ArrayBindingPattern;       // var [.|
@@ -2530,8 +2531,9 @@ module ts {
 
                         case SyntaxKind.OpenBraceToken:
                             return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||        // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral;                  // var x : { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface a { |
+                                containingNodeKind === SyntaxKind.TypeLiteral ||               // var x : { |
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x|
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
