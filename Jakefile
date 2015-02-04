@@ -382,6 +382,10 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 desc("Builds the full compiler and services");
 task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile]);
 
+// Local target to build only tsc.js
+desc("Builds only the compiler");
+task("tsc", ["generate-diagnostics", "lib", tscFile]);
+
 // Local target to build the compiler and services
 desc("Sets release mode flag");
 task("release", function() {
