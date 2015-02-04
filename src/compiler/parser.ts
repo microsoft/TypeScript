@@ -3263,6 +3263,19 @@ module ts {
             return finishNode(node);
         }
 
+        function isAwaitExpression(): boolean {
+            if (token === SyntaxKind.AwaitKeyword) {
+                if (inAwaitContext()) {
+                    return true;
+                }
+
+                // here we are using similar heuristics as 'isYieldExpression'
+                return lookAhead(nextTokenIsIdentifierOnSameLine);
+            }
+
+            return false;
+        }
+
         function parseAwaitExpression() {
             var node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
@@ -3271,6 +3284,10 @@ module ts {
         }
 
         function parseUnaryExpressionOrHigher(): UnaryExpression {
+            if (isAwaitExpression()) {
+                return parseAwaitExpression();
+            }
+
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
@@ -3287,12 +3304,6 @@ module ts {
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
-                case SyntaxKind.AwaitKeyword:
-                    if (inAwaitContext()) {
-                        return parseAwaitExpression();
-                    }
-                    // fall-through
-
                 default:
                     return parsePostfixExpressionOrHigher();
             }
