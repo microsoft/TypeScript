@@ -2418,17 +2418,27 @@ module ts {
                     var containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.CallExpression  // func( a, |
-                                || containingNodeKind === SyntaxKind.Constructor;    // constructor( a, |
+                            return containingNodeKind === SyntaxKind.CallExpression                         // func( a, |
+                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |
+                                || previousToken.parent.parent.parent.kind === SyntaxKind.VariableDeclaration;     // var x = (a, b| <- this can be a lambda expression
+              
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CallExpression // func( |
-                                || containingNodeKind === SyntaxKind.Constructor;   // constructor( |
+                            return containingNodeKind === SyntaxKind.CallExpression                         // func( |
+                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( |
+                                || previousToken.parent.parent.kind === SyntaxKind.VariableDeclaration;     // var x = (a| <- this can be a lambda expression
+
                         case SyntaxKind.ModuleKeyword:                               // module | 
                             return true;
+
                         case SyntaxKind.DotToken:
                             return containingNodeKind === SyntaxKind.ModuleDeclaration; // module A.|
+
                         case SyntaxKind.OpenBraceToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
+
+                        case SyntaxKind.EqualsToken:
+                            return containingNodeKind === SyntaxKind.VariableDeclaration; // var x = a| <- this can be lambda expression
+
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
