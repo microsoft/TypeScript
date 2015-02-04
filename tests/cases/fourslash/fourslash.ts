@@ -561,11 +561,11 @@ module FourSlashInterface {
 
     export class cancellation {
         public resetCancelled() {
-            FourSlash.currentTestState.cancellationToken.resetCancelled();
+            FourSlash.currentTestState.resetCancelled();
         }
 
         public setCancelled(numberOfCalls: number = 0) {
-            FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
+            FourSlash.currentTestState.setCancelled(numberOfCalls);
         }
     }
 
