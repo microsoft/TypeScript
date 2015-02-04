@@ -1569,21 +1569,32 @@ module Harness {
         export interface BaselineOptions {
             LineEndingSensitive?: boolean;
             Subfolder?: string;
+            Baselinefolder?: string;
         }
 
-        export function localPath(fileName: string, subfolder?: string) {
-            return baselinePath(fileName, 'local', subfolder);
+        export function localPath(fileName: string, baselineFolder?: string, subfolder?: string) {
+            if (baselineFolder === undefined) {
+                return baselinePath(fileName, 'local', 'tests/baselines', subfolder);
+            }
+            else {
+                return baselinePath(fileName, 'local', baselineFolder, subfolder);
+            }
         }
 
-        function referencePath(fileName: string, subfolder?: string) {
-            return baselinePath(fileName, 'reference', subfolder);
+        function referencePath(fileName: string, baselineFolder?: string, subfolder?: string) {
+            if (baselineFolder === undefined) {
+                return baselinePath(fileName, 'reference', 'tests/baselines', subfolder);
+            }
+            else {
+                return baselinePath(fileName, 'reference', baselineFolder, subfolder);
+            }
         }
 
-        function baselinePath(fileName: string, type: string, subfolder?: string) {
+        function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedroot + 'tests/baselines/' + subfolder + '/' + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/' +  subfolder + '/' + type + '/' + fileName;
             } else {
-                return Harness.userSpecifiedroot + 'tests/baselines/' + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/'  + type + '/' + fileName;
             }
         }
 
@@ -1637,7 +1648,7 @@ module Harness {
                 return;
             }
 
-            var refFilename = referencePath(relativeFilename, opts && opts.Subfolder);
+            var refFilename = referencePath(relativeFilename, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
             if (actual === null) {
                 actual = '<no content>';
@@ -1675,7 +1686,7 @@ module Harness {
             opts?: BaselineOptions): void {
 
             var actual = <string>undefined;
-            var actualFilename = localPath(relativeFilename, opts && opts.Subfolder);
+            var actualFilename = localPath(relativeFilename, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
             if (runImmediately) {
                 actual = generateActual(actualFilename, generateContent);
