@@ -210,7 +210,7 @@ module Harness.LanguageService {
             return "";
         }
 
-        public getDefaultLibFilename(): string {
+        public getDefaultLibFileName(): string {
             return "";
         }
 

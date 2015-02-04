@@ -667,7 +667,7 @@ module ts {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.filename, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
         var syntaxCursor = createSyntaxCursor(sourceFile);
@@ -713,7 +713,7 @@ module ts {
         // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
         // will immediately bail out of walking any subtrees when we can see that their parents
         // are already correct.
-        var result = parseSourceFile(sourceFile.filename, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)  
+        var result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)  
 
         return result;
     }
@@ -857,11 +857,11 @@ module ts {
             }
         }
     }
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
-        return parseSourceFile(filename, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+        return parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
     }
 
-    function parseSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
+    function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext = 0;
         var identifiers: Map<string> = {};
         var identifierCount = 0;
@@ -876,8 +876,8 @@ module ts {
         sourceFile.parseDiagnostics = [];
         sourceFile.semanticDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.flags = fileExtensionIs(sourceFile.filename, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+        sourceFile.fileName = normalizePath(fileName);
+        sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is

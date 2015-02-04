@@ -52,7 +52,7 @@ module Utils {
 
     export var currentExecutionEnvironment = getExecutionEnvironment();
 
-    export function evalFile(fileContents: string, filename: string, nodeContext?: any) {
+    export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         var environment = getExecutionEnvironment();
         switch (environment) {
             case ExecutionEnvironment.CScript:
@@ -62,9 +62,9 @@ module Utils {
             case ExecutionEnvironment.Node:
                 var vm = require('vm');
                 if (nodeContext) {
-                    vm.runInNewContext(fileContents, nodeContext, filename);
+                    vm.runInNewContext(fileContents, nodeContext, fileName);
                 } else {
-                    vm.runInThisContext(fileContents, filename);
+                    vm.runInThisContext(fileContents, fileName);
                 }
                 break;
             default:
@@ -389,9 +389,9 @@ module Harness {
         writeFile(path: string, contents: string): void;
         directoryName(path: string): string;
         createDirectory(path: string): void;
-        fileExists(filename: string): boolean;
+        fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
-        deleteFile(filename: string): void;
+        deleteFile(fileName: string): void;
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         getMemoryUsage? (): number;
@@ -621,7 +621,7 @@ module Harness {
                 // root of the server
                 if (dirPath.match(/localhost:\d+$/) || dirPath.match(/localhost:\d+\/$/)) {
                     dirPath = null;
-                    // path + filename
+                    // path + fileName
                 } else if (dirPath.indexOf('.') === -1) {
                     dirPath = dirPath.substring(0, dirPath.lastIndexOf('/'));
                     // path
@@ -692,26 +692,26 @@ module Harness {
 
 
 module Harness {
-    var tcServicesFilename = "typescriptServices.js";
+    var tcServicesFileName = "typescriptServices.js";
 
     export var libFolder: string;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
             libFolder = "built/local/";
-            tcServicesFilename = "built/local/typescriptServices.js";
+            tcServicesFileName = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Node:
             libFolder = "built/local/";
-            tcServicesFilename = "built/local/typescriptServices.js";
+            tcServicesFileName = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Browser:
             libFolder = "built/local/";
-            tcServicesFilename = "built/local/typescriptServices.js";
+            tcServicesFileName = "built/local/typescriptServices.js";
             break;
         default:
             throw new Error('Unknown context');
     }
-    export var tcServicesFile = IO.readFile(tcServicesFilename);
+    export var tcServicesFile = IO.readFile(tcServicesFileName);
 
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
@@ -800,7 +800,7 @@ module Harness {
 
 
         // Cache these between executions so we don't have to re-parse them for every test
-        export var fourslashFilename = 'fourslash.ts';
+        export var fourslashFileName = 'fourslash.ts';
         export var fourslashSourceFile: ts.SourceFile;
 
         export function getCanonicalFileName(fileName: string): string {
@@ -819,14 +819,14 @@ module Harness {
                 return useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             }
 
-            var filemap: { [filename: string]: ts.SourceFile; } = {};
+            var filemap: { [fileName: string]: ts.SourceFile; } = {};
             var getCurrentDirectory = currentDirectory === undefined ? ts.sys.getCurrentDirectory : () => currentDirectory;
 
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
-                    var filename = ts.normalizeSlashes(file.unitName);
-                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget);
+                    var fileName = ts.normalizeSlashes(file.unitName);
+                    filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, scriptTarget);
                 }
             };
             inputFiles.forEach(register);
@@ -841,8 +841,8 @@ module Harness {
                         var canonicalAbsolutePath = getCanonicalFileName(ts.getNormalizedAbsolutePath(fn, currentDirectory));
                         return Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(canonicalAbsolutePath)) ? filemap[canonicalAbsolutePath] : undefined;
                     }
-                    else if (fn === fourslashFilename) {
-                        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
+                    else if (fn === fourslashFileName) {
+                        var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
                         fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                         return fourslashSourceFile;
                     }
@@ -854,7 +854,7 @@ module Harness {
                         return undefined;
                     }
                 },
-                getDefaultLibFilename: options => defaultLibFileName,
+                getDefaultLibFileName: options => defaultLibFileName,
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
@@ -935,7 +935,7 @@ module Harness {
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
-                        // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
+                        // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":
                         case "modulegentarget":
                             if (typeof setting.value === 'string') {
@@ -1066,8 +1066,8 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
-                        var filename = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target);
+                        var fileName = ts.normalizeSlashes(file.unitName);
+                        filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, options.target);
                     }
                 };
                 inputFiles.forEach(register);
@@ -1148,12 +1148,12 @@ module Harness {
                         var sourceFileName: string;
                         if (ts.isExternalModule(sourceFile) || !options.out) {
                             if (options.outDir) {
-                                var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
+                                var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                                 sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
                                 sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                             }
                             else {
-                                sourceFileName = sourceFile.filename;
+                                sourceFileName = sourceFile.fileName;
                             }
                         }
                         else {
@@ -1184,7 +1184,7 @@ module Harness {
         export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
             var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
             return {
-                filename: err.file && err.file.filename,
+                fileName: err.file && err.file.fileName,
                 start: err.start,
                 end: err.start + err.length,
                 line: errorLineInfo.line,
@@ -1199,8 +1199,8 @@ module Harness {
             // This is basically copied from tsc.ts's reportError to replicate what tsc does
             var errorOutput = "";
             ts.forEach(diagnostics, diagnotic => {
-                if (diagnotic.filename) {
-                    errorOutput += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): ";
+                if (diagnotic.fileName) {
+                    errorOutput += diagnotic.fileName + "(" + diagnotic.line + "," + diagnotic.character + "): ";
                 }
 
                 errorOutput += diagnotic.category + " TS" + diagnotic.code + ": " + diagnotic.message + ts.sys.newLine;
@@ -1210,7 +1210,7 @@ module Harness {
         }
 
         function compareDiagnostics(d1: HarnessDiagnostic, d2: HarnessDiagnostic) {
-            return ts.compareValues(d1.filename, d2.filename) ||
+            return ts.compareValues(d1.fileName, d2.fileName) ||
                 ts.compareValues(d1.start, d2.start) ||
                 ts.compareValues(d1.end, d2.end) ||
                 ts.compareValues(d1.code, d2.code) ||
@@ -1236,14 +1236,14 @@ module Harness {
             }
 
             // Report global errors
-            var globalErrors = diagnostics.filter(err => !err.filename);
+            var globalErrors = diagnostics.filter(err => !err.fileName);
             globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
             inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {
                 // Filter down to the errors in the file
                 var fileErrors = diagnostics.filter(e => {
-                    var errFn = e.filename;
+                    var errFn = e.fileName;
                     return errFn && errFn === inputFile.unitName;
                 });
 
@@ -1307,12 +1307,12 @@ module Harness {
             });
 
             var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.filename && isLibraryFile(diagnostic.filename);
+                return diagnostic.fileName && isLibraryFile(diagnostic.fileName);
             });
 
             var numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
                 // Count an error generated from tests262-harness folder.This should only apply for test262
-                return diagnostic.filename && diagnostic.filename.indexOf("test262-harness") >= 0;
+                return diagnostic.fileName && diagnostic.fileName.indexOf("test262-harness") >= 0;
             });
 
             // Verify we didn't miss any errors in total
@@ -1323,7 +1323,7 @@ module Harness {
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
-            // Collect, test, and sort the filenames
+            // Collect, test, and sort the fileNames
             function cleanName(fn: string) {
                 var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');
                 return fn.substr(lastSlash + 1).toLowerCase();
@@ -1336,7 +1336,7 @@ module Harness {
                 // Some extra spacing if this isn't the first file
                 if (result.length) result = result + '\r\n\r\n';
 
-                // Filename header + content
+                // FileName header + content
                 result = result + '/*====== ' + outputFile.fileName + ' ======*/\r\n';
                 if (clean) {
                     result = result + clean(outputFile.code);
@@ -1366,7 +1366,7 @@ module Harness {
         }
 
         export interface HarnessDiagnostic {
-            filename: string;
+            fileName: string;
             start: number;
             end: number;
             line: number;
@@ -1481,7 +1481,7 @@ module Harness {
             return opts;
         }
 
-        /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
+        /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, fileName: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
             var settings = extractCompilerSettings(code);
 
@@ -1599,7 +1599,7 @@ module Harness {
         }
 
         var fileCache: { [idx: string]: boolean } = {};
-        function generateActual(actualFilename: string, generateContent: () => string): string {
+        function generateActual(actualFileName: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
             // Creates the directory including its parent if not already present
@@ -1618,11 +1618,11 @@ module Harness {
             }
 
             // Create folders if needed
-            createDirectoryStructure(Harness.IO.directoryName(actualFilename));
+            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
 
             // Delete the actual file in case it fails
-            if (IO.fileExists(actualFilename)) {
-                IO.deleteFile(actualFilename);
+            if (IO.fileExists(actualFileName)) {
+                IO.deleteFile(actualFileName);
             }
 
             var actual = generateContent();
@@ -1634,13 +1634,13 @@ module Harness {
             // Store the content in the 'local' folder so we
             // can accept it later (manually)
             if (actual !== null) {
-                IO.writeFile(actualFilename, actual);
+                IO.writeFile(actualFileName, actual);
             }
 
             return actual;
         }
 
-        function compareToBaseline(actual: string, relativeFilename: string, opts: BaselineOptions) {
+        function compareToBaseline(actual: string, relativeFileName: string, opts: BaselineOptions) {
             // actual is now either undefined (the generator had an error), null (no file requested),
             // or some real output of the function
             if (actual === undefined) {
@@ -1648,15 +1648,15 @@ module Harness {
                 return;
             }
 
-            var refFilename = referencePath(relativeFilename, opts && opts.Baselinefolder, opts && opts.Subfolder);
+            var refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
             if (actual === null) {
                 actual = '<no content>';
             }
 
             var expected = '<no content>';
-            if (IO.fileExists(refFilename)) {
-                expected = IO.readFile(refFilename);
+            if (IO.fileExists(refFileName)) {
+                expected = IO.readFile(refFileName);
             }
 
             var lineEndingSensitive = opts && opts.LineEndingSensitive;
@@ -1669,34 +1669,34 @@ module Harness {
             return { expected, actual };
         }
 
-        function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {
+        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
             var encoded_actual = (new Buffer(actual)).toString('utf8')
             if (expected != encoded_actual) {
                 // Overwrite & issue error
-                var errMsg = 'The baseline file ' + relativeFilename + ' has changed';
+                var errMsg = 'The baseline file ' + relativeFileName + ' has changed';
                 throw new Error(errMsg);
             }
         }
 
         export function runBaseline(
             descriptionForDescribe: string,
-            relativeFilename: string,
+            relativeFileName: string,
             generateContent: () => string,
             runImmediately = false,
             opts?: BaselineOptions): void {
 
             var actual = <string>undefined;
-            var actualFilename = localPath(relativeFilename, opts && opts.Baselinefolder, opts && opts.Subfolder);
+            var actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
             if (runImmediately) {
-                actual = generateActual(actualFilename, generateContent);
-                var comparison = compareToBaseline(actual, relativeFilename, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFilename, actualFilename, descriptionForDescribe);
+                actual = generateActual(actualFileName, generateContent);
+                var comparison = compareToBaseline(actual, relativeFileName, opts);
+                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
             } else {
-                actual = generateActual(actualFilename, generateContent);
+                actual = generateActual(actualFileName, generateContent);
 
-                var comparison = compareToBaseline(actual, relativeFilename, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFilename, actualFilename, descriptionForDescribe);
+                var comparison = compareToBaseline(actual, relativeFileName, opts);
+                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
             }
         }
     }

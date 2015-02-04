@@ -21,9 +21,9 @@ declare var path: any;
 import ts = require("typescript");
 >ts : typeof ts
 
-function watch(rootFilenames: string[], options: ts.CompilerOptions) {
->watch : (rootFilenames: string[], options: ts.CompilerOptions) => void
->rootFilenames : string[]
+function watch(rootFileNames: string[], options: ts.CompilerOptions) {
+>watch : (rootFileNames: string[], options: ts.CompilerOptions) => void
+>rootFileNames : string[]
 >options : ts.CompilerOptions
 >ts : unknown
 >CompilerOptions : ts.CompilerOptions
@@ -36,19 +36,19 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >{} : { [x: string]: undefined; }
 
     // initialize the list of files
-    rootFilenames.forEach(filename => {
->rootFilenames.forEach(filename => {        files[filename] = { version: 0 };    }) : void
->rootFilenames.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->rootFilenames : string[]
+    rootFileNames.forEach(fileName => {
+>rootFileNames.forEach(fileName => {        files[fileName] = { version: 0 };    }) : void
+>rootFileNames.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>rootFileNames : string[]
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->filename => {        files[filename] = { version: 0 };    } : (filename: string) => void
->filename : string
+>fileName => {        files[fileName] = { version: 0 };    } : (fileName: string) => void
+>fileName : string
 
-        files[filename] = { version: 0 };
->files[filename] = { version: 0 } : { version: number; }
->files[filename] : { version: number; }
+        files[fileName] = { version: 0 };
+>files[fileName] = { version: 0 } : { version: number; }
+>files[fileName] : { version: number; }
 >files : ts.Map<{ version: number; }>
->filename : string
+>fileName : string
 >{ version: 0 } : { version: number; }
 >version : number
 
@@ -59,61 +59,61 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >servicesHost : ts.LanguageServiceHost
 >ts : unknown
 >LanguageServiceHost : ts.LanguageServiceHost
->{        getScriptFileNames: () => rootFilenames,        getScriptVersion: (filename) => files[filename] && files[filename].version.toString(),        getScriptSnapshot: (filename) => {            if (!fs.existsSync(filename)) {                return undefined;            }            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());        },        getCurrentDirectory: () => process.cwd(),        getCompilationSettings: () => options,        getDefaultLibFilename: (options) => ts.getDefaultLibFilePath(options),    } : { getScriptFileNames: () => string[]; getScriptVersion: (filename: string) => string; getScriptSnapshot: (filename: string) => ts.IScriptSnapshot; getCurrentDirectory: () => any; getCompilationSettings: () => ts.CompilerOptions; getDefaultLibFilename: (options: ts.CompilerOptions) => string; }
+>{        getScriptFileNames: () => rootFileNames,        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),        getScriptSnapshot: (fileName) => {            if (!fs.existsSync(fileName)) {                return undefined;            }            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());        },        getCurrentDirectory: () => process.cwd(),        getCompilationSettings: () => options,        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),    } : { getScriptFileNames: () => string[]; getScriptVersion: (fileName: string) => string; getScriptSnapshot: (fileName: string) => ts.IScriptSnapshot; getCurrentDirectory: () => any; getCompilationSettings: () => ts.CompilerOptions; getDefaultLibFileName: (options: ts.CompilerOptions) => string; }
 
-        getScriptFileNames: () => rootFilenames,
+        getScriptFileNames: () => rootFileNames,
 >getScriptFileNames : () => string[]
->() => rootFilenames : () => string[]
->rootFilenames : string[]
+>() => rootFileNames : () => string[]
+>rootFileNames : string[]
 
-        getScriptVersion: (filename) => files[filename] && files[filename].version.toString(),
->getScriptVersion : (filename: string) => string
->(filename) => files[filename] && files[filename].version.toString() : (filename: string) => string
->filename : string
->files[filename] && files[filename].version.toString() : string
->files[filename] : { version: number; }
+        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
+>getScriptVersion : (fileName: string) => string
+>(fileName) => files[fileName] && files[fileName].version.toString() : (fileName: string) => string
+>fileName : string
+>files[fileName] && files[fileName].version.toString() : string
+>files[fileName] : { version: number; }
 >files : ts.Map<{ version: number; }>
->filename : string
->files[filename].version.toString() : string
->files[filename].version.toString : (radix?: number) => string
->files[filename].version : number
->files[filename] : { version: number; }
+>fileName : string
+>files[fileName].version.toString() : string
+>files[fileName].version.toString : (radix?: number) => string
+>files[fileName].version : number
+>files[fileName] : { version: number; }
 >files : ts.Map<{ version: number; }>
->filename : string
+>fileName : string
 >version : number
 >toString : (radix?: number) => string
 
-        getScriptSnapshot: (filename) => {
->getScriptSnapshot : (filename: string) => ts.IScriptSnapshot
->(filename) => {            if (!fs.existsSync(filename)) {                return undefined;            }            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());        } : (filename: string) => ts.IScriptSnapshot
->filename : string
+        getScriptSnapshot: (fileName) => {
+>getScriptSnapshot : (fileName: string) => ts.IScriptSnapshot
+>(fileName) => {            if (!fs.existsSync(fileName)) {                return undefined;            }            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());        } : (fileName: string) => ts.IScriptSnapshot
+>fileName : string
 
-            if (!fs.existsSync(filename)) {
->!fs.existsSync(filename) : boolean
->fs.existsSync(filename) : any
+            if (!fs.existsSync(fileName)) {
+>!fs.existsSync(fileName) : boolean
+>fs.existsSync(fileName) : any
 >fs.existsSync : any
 >fs : any
 >existsSync : any
->filename : string
+>fileName : string
 
                 return undefined;
 >undefined : undefined
             }
 
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());
->ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString()) : ts.IScriptSnapshot
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
+>ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString()) : ts.IScriptSnapshot
 >ts.ScriptSnapshot.fromString : (text: string) => ts.IScriptSnapshot
 >ts.ScriptSnapshot : typeof ts.ScriptSnapshot
 >ts : typeof ts
 >ScriptSnapshot : typeof ts.ScriptSnapshot
 >fromString : (text: string) => ts.IScriptSnapshot
->fs.readFileSync(filename).toString() : any
->fs.readFileSync(filename).toString : any
->fs.readFileSync(filename) : any
+>fs.readFileSync(fileName).toString() : any
+>fs.readFileSync(fileName).toString : any
+>fs.readFileSync(fileName) : any
 >fs.readFileSync : any
 >fs : any
 >readFileSync : any
->filename : string
+>fileName : string
 >toString : any
 
         },
@@ -130,8 +130,8 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >() => options : () => ts.CompilerOptions
 >options : ts.CompilerOptions
 
-        getDefaultLibFilename: (options) => ts.getDefaultLibFilePath(options),
->getDefaultLibFilename : (options: ts.CompilerOptions) => string
+        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+>getDefaultLibFileName : (options: ts.CompilerOptions) => string
 >(options) => ts.getDefaultLibFilePath(options) : (options: ts.CompilerOptions) => string
 >options : ts.CompilerOptions
 >ts.getDefaultLibFilePath(options) : string
@@ -156,27 +156,27 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >createDocumentRegistry : () => ts.DocumentRegistry
 
     // Now let's watch the files
-    rootFilenames.forEach(filename => {
->rootFilenames.forEach(filename => {        // First time around, emit all files        emitFile(filename);        // Add a watch on the file to handle next change        fs.watchFile(filename,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[filename].version++;                // write the changes to disk                emitFile(filename);            });    }) : void
->rootFilenames.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->rootFilenames : string[]
+    rootFileNames.forEach(fileName => {
+>rootFileNames.forEach(fileName => {        // First time around, emit all files        emitFile(fileName);        // Add a watch on the file to handle next change        fs.watchFile(fileName,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[fileName].version++;                // write the changes to disk                emitFile(fileName);            });    }) : void
+>rootFileNames.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>rootFileNames : string[]
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->filename => {        // First time around, emit all files        emitFile(filename);        // Add a watch on the file to handle next change        fs.watchFile(filename,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[filename].version++;                // write the changes to disk                emitFile(filename);            });    } : (filename: string) => void
->filename : string
+>fileName => {        // First time around, emit all files        emitFile(fileName);        // Add a watch on the file to handle next change        fs.watchFile(fileName,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[fileName].version++;                // write the changes to disk                emitFile(fileName);            });    } : (fileName: string) => void
+>fileName : string
 
         // First time around, emit all files
-        emitFile(filename);
->emitFile(filename) : void
->emitFile : (filename: string) => void
->filename : string
+        emitFile(fileName);
+>emitFile(fileName) : void
+>emitFile : (fileName: string) => void
+>fileName : string
 
         // Add a watch on the file to handle next change
-        fs.watchFile(filename,
->fs.watchFile(filename,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[filename].version++;                // write the changes to disk                emitFile(filename);            }) : any
+        fs.watchFile(fileName,
+>fs.watchFile(fileName,            { persistent: true, interval: 250 },            (curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[fileName].version++;                // write the changes to disk                emitFile(fileName);            }) : any
 >fs.watchFile : any
 >fs : any
 >watchFile : any
->filename : string
+>fileName : string
 
             { persistent: true, interval: 250 },
 >{ persistent: true, interval: 250 } : { persistent: boolean; interval: number; }
@@ -184,7 +184,7 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >interval : number
 
             (curr, prev) => {
->(curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[filename].version++;                // write the changes to disk                emitFile(filename);            } : (curr: any, prev: any) => void
+>(curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[fileName].version++;                // write the changes to disk                emitFile(fileName);            } : (curr: any, prev: any) => void
 >curr : any
 >prev : any
 
@@ -204,34 +204,34 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
                 }
 
                 // Update the version to signal a change in the file
-                files[filename].version++;
->files[filename].version++ : number
->files[filename].version : number
->files[filename] : { version: number; }
+                files[fileName].version++;
+>files[fileName].version++ : number
+>files[fileName].version : number
+>files[fileName] : { version: number; }
 >files : ts.Map<{ version: number; }>
->filename : string
+>fileName : string
 >version : number
 
                 // write the changes to disk
-                emitFile(filename);
->emitFile(filename) : void
->emitFile : (filename: string) => void
->filename : string
+                emitFile(fileName);
+>emitFile(fileName) : void
+>emitFile : (fileName: string) => void
+>fileName : string
 
             });
     });
 
-    function emitFile(filename: string) {
->emitFile : (filename: string) => void
->filename : string
+    function emitFile(fileName: string) {
+>emitFile : (fileName: string) => void
+>fileName : string
 
-        var output = services.getEmitOutput(filename);
+        var output = services.getEmitOutput(fileName);
 >output : ts.EmitOutput
->services.getEmitOutput(filename) : ts.EmitOutput
+>services.getEmitOutput(fileName) : ts.EmitOutput
 >services.getEmitOutput : (fileName: string) => ts.EmitOutput
 >services : ts.LanguageService
 >getEmitOutput : (fileName: string) => ts.EmitOutput
->filename : string
+>fileName : string
 
         if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
 >output.emitOutputStatus === ts.EmitReturnStatus.Succeeded : boolean
@@ -244,25 +244,25 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >EmitReturnStatus : typeof ts.EmitReturnStatus
 >Succeeded : ts.EmitReturnStatus
 
-            console.log(`Emitting ${filename}`);
->console.log(`Emitting ${filename}`) : any
+            console.log(`Emitting ${fileName}`);
+>console.log(`Emitting ${fileName}`) : any
 >console.log : any
 >console : any
 >log : any
->filename : string
+>fileName : string
         }
         else {
-            console.log(`Emitting ${filename} failed`);
->console.log(`Emitting ${filename} failed`) : any
+            console.log(`Emitting ${fileName} failed`);
+>console.log(`Emitting ${fileName} failed`) : any
 >console.log : any
 >console : any
 >log : any
->filename : string
+>fileName : string
 
-            logErrors(filename);
->logErrors(filename) : void
->logErrors : (filename: string) => void
->filename : string
+            logErrors(fileName);
+>logErrors(fileName) : void
+>logErrors : (fileName: string) => void
+>fileName : string
         }
 
         output.outputFiles.forEach(o => {
@@ -290,43 +290,43 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
         });
     }
 
-    function logErrors(filename: string) {
->logErrors : (filename: string) => void
->filename : string
+    function logErrors(fileName: string) {
+>logErrors : (fileName: string) => void
+>fileName : string
 
         var allDiagnostics = services.getCompilerOptionsDiagnostics()
 >allDiagnostics : ts.Diagnostic[]
->services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(filename))            .concat(services.getSemanticDiagnostics(filename)) : ts.Diagnostic[]
->services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(filename))            .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(filename)) : ts.Diagnostic[]
+>services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName))            .concat(services.getSemanticDiagnostics(fileName)) : ts.Diagnostic[]
+>services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName))            .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
+>services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName)) : ts.Diagnostic[]
 >services.getCompilerOptionsDiagnostics()            .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
 >services.getCompilerOptionsDiagnostics() : ts.Diagnostic[]
 >services.getCompilerOptionsDiagnostics : () => ts.Diagnostic[]
 >services : ts.LanguageService
 >getCompilerOptionsDiagnostics : () => ts.Diagnostic[]
 
-            .concat(services.getSyntacticDiagnostics(filename))
+            .concat(services.getSyntacticDiagnostics(fileName))
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->services.getSyntacticDiagnostics(filename) : ts.Diagnostic[]
+>services.getSyntacticDiagnostics(fileName) : ts.Diagnostic[]
 >services.getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[]
 >services : ts.LanguageService
 >getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[]
->filename : string
+>fileName : string
 
-            .concat(services.getSemanticDiagnostics(filename));
+            .concat(services.getSemanticDiagnostics(fileName));
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->services.getSemanticDiagnostics(filename) : ts.Diagnostic[]
+>services.getSemanticDiagnostics(fileName) : ts.Diagnostic[]
 >services.getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[]
 >services : ts.LanguageService
 >getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[]
->filename : string
+>fileName : string
 
         allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
+>allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
             if (diagnostic.file) {
@@ -346,16 +346,16 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >start : number
 
-                console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
->console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+>console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
 >console.log : any
 >console : any
 >log : any
->diagnostic.file.filename : string
+>diagnostic.file.fileName : string
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
->filename : string
+>fileName : string
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
@@ -383,7 +383,7 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 // Initialize files constituting the program as all .ts files in the current directory
 var currentDirectoryFiles = fs.readdirSync(process.cwd()).
 >currentDirectoryFiles : any
->fs.readdirSync(process.cwd()).    filter(filename=> filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts") : any
+>fs.readdirSync(process.cwd()).    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts") : any
 >fs.readdirSync(process.cwd()).    filter : any
 >fs.readdirSync(process.cwd()) : any
 >fs.readdirSync : any
@@ -394,29 +394,29 @@ var currentDirectoryFiles = fs.readdirSync(process.cwd()).
 >process : any
 >cwd : any
 
-    filter(filename=> filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts");
+    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
 >filter : any
->filename=> filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts" : (filename: any) => boolean
->filename : any
->filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts" : boolean
->filename.length >= 3 : boolean
->filename.length : any
->filename : any
+>fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts" : (fileName: any) => boolean
+>fileName : any
+>fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts" : boolean
+>fileName.length >= 3 : boolean
+>fileName.length : any
+>fileName : any
 >length : any
->filename.substr(filename.length - 3, 3) === ".ts" : boolean
->filename.substr(filename.length - 3, 3) : any
->filename.substr : any
->filename : any
+>fileName.substr(fileName.length - 3, 3) === ".ts" : boolean
+>fileName.substr(fileName.length - 3, 3) : any
+>fileName.substr : any
+>fileName : any
 >substr : any
->filename.length - 3 : number
->filename.length : any
->filename : any
+>fileName.length - 3 : number
+>fileName.length : any
+>fileName : any
 >length : any
 
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
 >watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS }) : void
->watch : (rootFilenames: string[], options: ts.CompilerOptions) => void
+>watch : (rootFileNames: string[], options: ts.CompilerOptions) => void
 >currentDirectoryFiles : any
 >{ module: ts.ModuleKind.CommonJS } : { [x: string]: ts.ModuleKind; module: ts.ModuleKind; }
 >module : ts.ModuleKind
@@ -2436,8 +2436,8 @@ declare module "typescript" {
 >FileReference : FileReference
 >TextRange : TextRange
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
     }
     interface CommentRange extends TextRange {
 >CommentRange : CommentRange
@@ -2459,8 +2459,8 @@ declare module "typescript" {
 >endOfFileToken : Node
 >Node : Node
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
 
         text: string;
 >text : string
@@ -2497,9 +2497,9 @@ declare module "typescript" {
 >getCompilerOptions : () => CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         getCurrentDirectory(): string;
@@ -2655,9 +2655,9 @@ declare module "typescript" {
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
     }
     interface TypeChecker {
@@ -4095,8 +4095,8 @@ declare module "typescript" {
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        filenames: string[];
->filenames : string[]
+        fileNames: string[];
+>fileNames : string[]
 
         errors: Diagnostic[];
 >errors : Diagnostic[]
@@ -4514,17 +4514,17 @@ declare module "typescript" {
     interface CompilerHost {
 >CompilerHost : CompilerHost
 
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
->getSourceFile : (filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
->filename : string
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+>getSourceFile : (fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
+>fileName : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
 >onError : (message: string) => void
 >message : string
 >SourceFile : SourceFile
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -4532,9 +4532,9 @@ declare module "typescript" {
 >getCancellationToken : () => CancellationToken
 >CancellationToken : CancellationToken
 
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
->writeFile : (filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
->filename : string
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>writeFile : (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
+>fileName : string
 >data : string
 >writeByteOrderMark : boolean
 >onError : (message: string) => void
@@ -4806,9 +4806,9 @@ declare module "typescript" {
 >node : Node
 >Node : Node
 
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
->createSourceFile : (filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
->filename : string
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
+>fileName : string
 >sourceText : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
@@ -5132,8 +5132,8 @@ declare module "typescript" {
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -5322,9 +5322,9 @@ declare module "typescript" {
 >getProgram : () => Program
 >Program : Program
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         dispose(): void;
@@ -5911,11 +5911,11 @@ declare module "typescript" {
 >DocumentRegistry : DocumentRegistry
 
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5924,9 +5924,9 @@ declare module "typescript" {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
->acquireDocument : (filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
->filename : string
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+>acquireDocument : (fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5935,7 +5935,7 @@ declare module "typescript" {
 >SourceFile : SourceFile
 
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -5943,7 +5943,7 @@ declare module "typescript" {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5954,11 +5954,11 @@ declare module "typescript" {
           * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
           * was not found in the registry and a new one was created.
           */
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
->updateDocument : (sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+>updateDocument : (sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
 >sourceFile : SourceFile
 >SourceFile : SourceFile
->filename : string
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5974,12 +5974,12 @@ declare module "typescript" {
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
->releaseDocument : (filename: string, compilationSettings: CompilerOptions) => void
->filename : string
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+>releaseDocument : (fileName: string, compilationSettings: CompilerOptions) => void
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
     }
@@ -6179,9 +6179,9 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
 >throwIfCancellationRequested : () => void
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
->createLanguageServiceSourceFile : (filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
->filename : string
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+>createLanguageServiceSourceFile : (fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
+>fileName : string
 >scriptSnapshot : IScriptSnapshot
 >IScriptSnapshot : IScriptSnapshot
 >scriptTarget : ScriptTarget

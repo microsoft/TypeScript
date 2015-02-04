@@ -164,7 +164,7 @@ module ts {
     
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         var options: CompilerOptions = {};
-        var filenames: string[] = [];
+        var fileNames: string[] = [];
         var errors: Diagnostic[] = [];
         var shortOptionNames: Map<string> = {};
         var optionNameMap: Map<CommandLineOption> = {};
@@ -178,7 +178,7 @@ module ts {
         parseStrings(commandLine);
         return {
             options,
-            filenames,
+            fileNames,
             errors
         };
 
@@ -232,16 +232,16 @@ module ts {
                     }
                 }
                 else {
-                    filenames.push(s);
+                    fileNames.push(s);
                 }
             }
         }
 
-        function parseResponseFile(filename: string) {
-            var text = sys.readFile(filename);
+        function parseResponseFile(fileName: string) {
+            var text = sys.readFile(fileName);
 
             if (!text) {
-                errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, filename));
+                errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
                 return;
             }
 
@@ -259,7 +259,7 @@ module ts {
                         pos++;
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unterminated_quoted_string_in_response_file_0, filename));
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
                     }
                 }
                 else {
@@ -271,9 +271,9 @@ module ts {
         }
     }
 
-    export function readConfigFile(filename: string): any {
+    export function readConfigFile(fileName: string): any {
         try {
-            var text = sys.readFile(filename);
+            var text = sys.readFile(fileName);
             return /\S/.test(text) ? JSON.parse(text) : {};
         }
         catch (e) {
@@ -285,7 +285,7 @@ module ts {
 
         return {
             options: getCompilerOptions(),
-            filenames: getFiles(),
+            fileNames: getFiles(),
             errors
         };
 

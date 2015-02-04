@@ -55,7 +55,7 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
                 return true;
             }
             return false;
@@ -314,7 +314,7 @@ module ts {
     }
 
     function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
-        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, host.getCurrentDirectory());
+        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
@@ -325,15 +325,15 @@ module ts {
             var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
         }
         else {
-            var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
+            var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    function writeFile(host: EmitHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
-        host.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
-            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
+    function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
+        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         });
     }
 
@@ -1481,7 +1481,7 @@ module ts {
 
         function writeReferencePath(referencedFile: SourceFile) {
             var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                ? referencedFile.filename // Declaration file, use declaration file name
+                ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
                     : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
@@ -1735,14 +1735,14 @@ module ts {
                     var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                        node.filename,
+                        node.fileName,
                         host.getCurrentDirectory(),
                         host.getCanonicalFileName,
                         /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
                     // The one that can be used from program to get the actual source file
-                    sourceMapData.inputSourceFileNames.push(node.filename);
+                    sourceMapData.inputSourceFileNames.push(node.fileName);
                 }
 
                 function recordScopeNameOfNode(node: Node, scopeName?: string) {
@@ -1857,7 +1857,7 @@ module ts {
                 }
 
                 // Initialize source map data
-                var sourceMapJsFile = getBaseFilename(normalizeSlashes(jsFilePath));
+                var sourceMapJsFile = getBaseFileName(normalizeSlashes(jsFilePath));
                 sourceMapData = {
                     sourceMapFilePath: jsFilePath + ".map",
                     jsSourceMappingURL: sourceMapJsFile + ".map",

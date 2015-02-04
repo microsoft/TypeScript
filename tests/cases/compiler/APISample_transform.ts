@@ -27,16 +27,16 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
-        getSourceFile: (filename, target) => {
-            return files[filename] !== undefined ?
-                ts.createSourceFile(filename, files[filename], target) : undefined;
+        getSourceFile: (fileName, target) => {
+            return files[fileName] !== undefined ?
+                ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: (name, text, writeByteOrderMark) => {
             outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
         },
-        getDefaultLibFilename: () => "lib.d.ts",
+        getDefaultLibFileName: () => "lib.d.ts",
         useCaseSensitiveFileNames: () => false,
-        getCanonicalFileName: (filename) => filename,
+        getCanonicalFileName: (fileName) => fileName,
         getCurrentDirectory: () => "",
         getNewLine: () => "\n"
     };
@@ -56,7 +56,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     }
     return {
         outputs: outputs,
-        errors: errors.map(function (e) { return e.file.filename + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
+        errors: errors.map(function (e) { return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
     };
 }
 
