@@ -235,14 +235,14 @@ export function delint(sourceFile: ts.SourceFile) {
 >node : ts.Node
 >getStart : (sourceFile?: ts.SourceFile) => number
 
-        console.log(`${sourceFile.filename} (${lineChar.line},${lineChar.character}): ${message}`)
->console.log(`${sourceFile.filename} (${lineChar.line},${lineChar.character}): ${message}`) : any
+        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
+>console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
->sourceFile.filename : string
+>sourceFile.fileName : string
 >sourceFile : ts.SourceFile
->filename : string
+>fileName : string
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
@@ -253,8 +253,8 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 }
 
-var filenames = process.argv.slice(2);
->filenames : any
+var fileNames = process.argv.slice(2);
+>fileNames : any
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
@@ -262,29 +262,29 @@ var filenames = process.argv.slice(2);
 >argv : any
 >slice : any
 
-filenames.forEach(filename => {
->filenames.forEach(filename => {    // Parse a file    var sourceFile = ts.createSourceFile(filename, fs.readFileSync(filename).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
->filenames.forEach : any
->filenames : any
+fileNames.forEach(fileName => {
+>fileNames.forEach(fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
+>fileNames.forEach : any
+>fileNames : any
 >forEach : any
->filename => {    // Parse a file    var sourceFile = ts.createSourceFile(filename, fs.readFileSync(filename).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (filename: any) => void
->filename : any
+>fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
+>fileName : any
 
     // Parse a file
-    var sourceFile = ts.createSourceFile(filename, fs.readFileSync(filename).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 >sourceFile : ts.SourceFile
->ts.createSourceFile(filename, fs.readFileSync(filename).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
->ts.createSourceFile : (filename: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
 >ts : typeof ts
->createSourceFile : (filename: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
->filename : any
->fs.readFileSync(filename).toString() : any
->fs.readFileSync(filename).toString : any
->fs.readFileSync(filename) : any
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>fileName : any
+>fs.readFileSync(fileName).toString() : any
+>fs.readFileSync(fileName).toString : any
+>fs.readFileSync(fileName) : any
 >fs.readFileSync : any
 >fs : any
 >readFileSync : any
->filename : any
+>fileName : any
 >toString : any
 >ts.ScriptTarget.ES6 : ts.ScriptTarget
 >ts.ScriptTarget : typeof ts.ScriptTarget
@@ -2310,8 +2310,8 @@ declare module "typescript" {
 >FileReference : FileReference
 >TextRange : TextRange
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
     }
     interface CommentRange extends TextRange {
 >CommentRange : CommentRange
@@ -2333,8 +2333,8 @@ declare module "typescript" {
 >endOfFileToken : Node
 >Node : Node
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
 
         text: string;
 >text : string
@@ -2380,9 +2380,9 @@ declare module "typescript" {
 >getCompilerOptions : () => CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         getCurrentDirectory(): string;
@@ -2538,9 +2538,9 @@ declare module "typescript" {
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
     }
     interface TypeChecker {
@@ -3978,8 +3978,8 @@ declare module "typescript" {
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        filenames: string[];
->filenames : string[]
+        fileNames: string[];
+>fileNames : string[]
 
         errors: Diagnostic[];
 >errors : Diagnostic[]
@@ -4397,17 +4397,17 @@ declare module "typescript" {
     interface CompilerHost {
 >CompilerHost : CompilerHost
 
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
->getSourceFile : (filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
->filename : string
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+>getSourceFile : (fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
+>fileName : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
 >onError : (message: string) => void
 >message : string
 >SourceFile : SourceFile
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -4415,9 +4415,9 @@ declare module "typescript" {
 >getCancellationToken : () => CancellationToken
 >CancellationToken : CancellationToken
 
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
->writeFile : (filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
->filename : string
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>writeFile : (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
+>fileName : string
 >data : string
 >writeByteOrderMark : boolean
 >onError : (message: string) => void
@@ -4689,9 +4689,9 @@ declare module "typescript" {
 >node : Node
 >Node : Node
 
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
->createSourceFile : (filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
->filename : string
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
+>fileName : string
 >sourceText : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
@@ -5015,8 +5015,8 @@ declare module "typescript" {
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -5205,9 +5205,9 @@ declare module "typescript" {
 >getProgram : () => Program
 >Program : Program
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         dispose(): void;
@@ -5794,11 +5794,11 @@ declare module "typescript" {
 >DocumentRegistry : DocumentRegistry
 
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5807,9 +5807,9 @@ declare module "typescript" {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
->acquireDocument : (filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
->filename : string
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+>acquireDocument : (fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5818,7 +5818,7 @@ declare module "typescript" {
 >SourceFile : SourceFile
 
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -5826,7 +5826,7 @@ declare module "typescript" {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5837,11 +5837,11 @@ declare module "typescript" {
           * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
           * was not found in the registry and a new one was created.
           */
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
->updateDocument : (sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+>updateDocument : (sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
 >sourceFile : SourceFile
 >SourceFile : SourceFile
->filename : string
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5857,12 +5857,12 @@ declare module "typescript" {
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
->releaseDocument : (filename: string, compilationSettings: CompilerOptions) => void
->filename : string
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+>releaseDocument : (fileName: string, compilationSettings: CompilerOptions) => void
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
     }
@@ -6062,9 +6062,9 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
 >throwIfCancellationRequested : () => void
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
->createLanguageServiceSourceFile : (filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
->filename : string
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+>createLanguageServiceSourceFile : (fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
+>fileName : string
 >scriptSnapshot : IScriptSnapshot
 >IScriptSnapshot : IScriptSnapshot
 >scriptTarget : ScriptTarget

@@ -15,9 +15,9 @@ module ts {
         // returned by CScript sys environment
         var unsupportedFileEncodingErrorCode = -2147024809;
 
-        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
-                var text = sys.readFile(filename, options.charset);
+                var text = sys.readFile(fileName, options.charset);
             }
             catch (e) {
                 if (onError) {
@@ -28,7 +28,7 @@ module ts {
                 text = "";
             }
 
-            return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -64,7 +64,7 @@ module ts {
 
         return {
             getSourceFile,
-            getDefaultLibFilename: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFilename(options)),
+            getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
@@ -83,7 +83,7 @@ module ts {
 
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
-            processRootFile(host.getDefaultLibFilename(options), true);
+            processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
@@ -146,9 +146,9 @@ module ts {
             return emitFiles(resolver, getEmitHost(), targetSourceFile);
         }
         
-        function getSourceFile(filename: string) {
-            filename = host.getCanonicalFileName(filename);
-            return hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
+        function getSourceFile(fileName: string) {
+            fileName = host.getCanonicalFileName(fileName);
+            return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
@@ -159,73 +159,73 @@ module ts {
             return filter(errors, e => !e.file);
         }
 
-        function hasExtension(filename: string): boolean {
-            return getBaseFilename(filename).indexOf(".") >= 0;
+        function hasExtension(fileName: string): boolean {
+            return getBaseFileName(fileName).indexOf(".") >= 0;
         }
 
-        function processRootFile(filename: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(filename), isDefaultLib);
+        function processRootFile(fileName: string, isDefaultLib: boolean) {
+            processSourceFile(normalizePath(fileName), isDefaultLib);
         }
 
-        function processSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             if (refEnd !== undefined && refPos !== undefined) {
                 var start = refPos;
                 var length = refEnd - refPos;
             }
             var diagnostic: DiagnosticMessage;
-            if (hasExtension(filename)) {
-                if (!options.allowNonTsExtensions && !fileExtensionIs(host.getCanonicalFileName(filename), ".ts")) {
+            if (hasExtension(fileName)) {
+                if (!options.allowNonTsExtensions && !fileExtensionIs(host.getCanonicalFileName(fileName), ".ts")) {
                     diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
-                else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                 }
-                else if (refFile && host.getCanonicalFileName(filename) === host.getCanonicalFileName(refFile.filename)) {
+                else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                     diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                 }
-                else if (!findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(fileName + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
-                    filename += ".ts";
+                    fileName += ".ts";
                 }
             }
 
             if (diagnostic) {
                 if (refFile) {
-                    errors.push(createFileDiagnostic(refFile, start, length, diagnostic, filename));
+                    errors.push(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(diagnostic, filename));
+                    errors.push(createCompilerDiagnostic(diagnostic, fileName));
                 }
             }
         }
 
-        // Get source file from normalized filename
-        function findSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            var canonicalName = host.getCanonicalFileName(filename);
+        // Get source file from normalized fileName
+        function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
+            var canonicalName = host.getCanonicalFileName(fileName);
             if (hasProperty(filesByName, canonicalName)) {
                 // We've already looked for this file, use cached result
-                return getSourceFileFromCache(filename, canonicalName, /*useAbsolutePath*/ false);
+                return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
             }
             else {
-                var normalizedAbsolutePath = getNormalizedAbsolutePath(filename, host.getCurrentDirectory());
+                var normalizedAbsolutePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
                 var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
                 if (hasProperty(filesByName, canonicalAbsolutePath)) {
                     return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
                 }
 
                 // We haven't looked for this file, do so now and cache result
-                var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
+                var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                     if (refFile) {
                         errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                            Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                            Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
                 if (file) {
@@ -235,7 +235,7 @@ module ts {
                     filesByName[canonicalAbsolutePath] = file;
 
                     if (!options.noResolve) {
-                        var basePath = getDirectoryPath(filename);
+                        var basePath = getDirectoryPath(fileName);
                         processReferencedFiles(file, basePath);
                         processImportedModules(file, basePath);
                     }
@@ -252,13 +252,13 @@ module ts {
             }
             return file;
 
-            function getSourceFileFromCache(filename: string, canonicalName: string, useAbsolutePath: boolean): SourceFile {
+            function getSourceFileFromCache(fileName: string, canonicalName: string, useAbsolutePath: boolean): SourceFile {
                 var file = filesByName[canonicalName];
                 if (file && host.useCaseSensitiveFileNames()) {
-                    var sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.filename, host.getCurrentDirectory()) : file.filename;
+                    var sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
                         errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                            Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, sourceFileName));
+                            Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                     }
                 }
                 return file;
@@ -267,8 +267,8 @@ module ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                var referencedFilename = isRootedDiskPath(ref.filename) ? ref.filename : combinePaths(basePath, ref.filename);
-                processSourceFile(normalizePath(referencedFilename), /* isDefaultLib */ false, file, ref.pos, ref.end);
+                var referencedFileName = isRootedDiskPath(ref.fileName) ? ref.fileName : combinePaths(basePath, ref.fileName);
+                processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 
@@ -322,8 +322,8 @@ module ts {
                 }
             });
 
-            function findModuleSourceFile(filename: string, nameLiteral: LiteralExpression) {
-                return findSourceFile(filename, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
+            function findModuleSourceFile(fileName: string, nameLiteral: LiteralExpression) {
+                return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }
 
@@ -359,8 +359,8 @@ module ts {
                 forEach(files, sourceFile => {
                     // Each file contributes into common source file path
                     if (!(sourceFile.flags & NodeFlags.DeclarationFile)
-                        && !fileExtensionIs(sourceFile.filename, ".js")) {
-                        var sourcePathComponents = getNormalizedPathComponents(sourceFile.filename, host.getCurrentDirectory());
+                        && !fileExtensionIs(sourceFile.fileName, ".js")) {
+                        var sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
                         sourcePathComponents.pop(); // FileName is not part of directory
                         if (commonPathComponents) {
                             for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {

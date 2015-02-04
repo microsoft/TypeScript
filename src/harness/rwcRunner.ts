@@ -56,7 +56,7 @@ module RWC {
                 runWithIOLog(ioLog, () => {
                     harnessCompiler.reset();
                     // Load the files
-                    ts.forEach(opts.filenames, fileName => {
+                    ts.forEach(opts.fileNames, fileName => {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
                     });
 
@@ -183,7 +183,7 @@ class RWCRunner extends RunnerBase {
         }
     }
 
-    private runTest(jsonFilename: string) {
-        RWC.runRWCTest(jsonFilename);
+    private runTest(jsonFileName: string) {
+        RWC.runRWCTest(jsonFileName);
     }
 }

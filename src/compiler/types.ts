@@ -872,7 +872,7 @@ module ts {
     }
 
     export interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
 
     export interface CommentRange extends TextRange {
@@ -884,7 +884,7 @@ module ts {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
-        filename: string;
+        fileName: string;
         text: string;
 
         amdDependencies: string[];
@@ -925,7 +925,7 @@ module ts {
 
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
 
@@ -994,7 +994,7 @@ module ts {
         getCompilerHost(): CompilerHost;
 
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
 
     export interface TypeChecker {
@@ -1498,14 +1498,14 @@ module ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
 
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
-        isFilePath?: boolean;               // True if option value is a path or filename
+        isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
@@ -1653,10 +1653,10 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

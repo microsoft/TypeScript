@@ -68,8 +68,8 @@ module ts {
         // There should be no reused nodes between two trees that are fully parsed.
         assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
-        assert.equal(newTree.filename, incrementalNewTree.filename, "newTree.filename !== incrementalNewTree.filename");
-        assert.equal(newTree.text, incrementalNewTree.text, "newTree.filename !== incrementalNewTree.filename");
+        assert.equal(newTree.fileName, incrementalNewTree.fileName, "newTree.fileName !== incrementalNewTree.fileName");
+        assert.equal(newTree.text, incrementalNewTree.text, "newTree.text !== incrementalNewTree.text");
 
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
@@ -781,7 +781,7 @@ module m3 { }\
                 "            }\r\n" +
                 "                \r\n" +
                 "            return {\r\n" +
-                "                getEmitOutput: (filename): Bar => null,\r\n" +
+                "                getEmitOutput: (fileName): Bar => null,\r\n" +
                 "            };\r\n" +
                 "        }";
 

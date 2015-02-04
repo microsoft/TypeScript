@@ -15,40 +15,40 @@ declare var path: any;
 
 import ts = require("typescript");
 
-function watch(rootFilenames: string[], options: ts.CompilerOptions) {
+function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     var files: ts.Map<{ version: number }> = {};
 
     // initialize the list of files
-    rootFilenames.forEach(filename => {
-        files[filename] = { version: 0 };
+    rootFileNames.forEach(fileName => {
+        files[fileName] = { version: 0 };
     });
 
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost: ts.LanguageServiceHost = {
-        getScriptFileNames: () => rootFilenames,
-        getScriptVersion: (filename) => files[filename] && files[filename].version.toString(),
-        getScriptSnapshot: (filename) => {
-            if (!fs.existsSync(filename)) {
+        getScriptFileNames: () => rootFileNames,
+        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
+        getScriptSnapshot: (fileName) => {
+            if (!fs.existsSync(fileName)) {
                 return undefined;
             }
 
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(filename).toString());
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
-        getDefaultLibFilename: (options) => ts.getDefaultLibFilePath(options),
+        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
     };
 
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
 
     // Now let's watch the files
-    rootFilenames.forEach(filename => {
+    rootFileNames.forEach(fileName => {
         // First time around, emit all files
-        emitFile(filename);
+        emitFile(fileName);
 
         // Add a watch on the file to handle next change
-        fs.watchFile(filename,
+        fs.watchFile(fileName,
             { persistent: true, interval: 250 },
             (curr, prev) => {
                 // Check timestamp
@@ -57,22 +57,22 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
                 }
 
                 // Update the version to signal a change in the file
-                files[filename].version++;
+                files[fileName].version++;
 
                 // write the changes to disk
-                emitFile(filename);
+                emitFile(fileName);
             });
     });
 
-    function emitFile(filename: string) {
-        var output = services.getEmitOutput(filename);
+    function emitFile(fileName: string) {
+        var output = services.getEmitOutput(fileName);
 
         if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
-            console.log(`Emitting ${filename}`);
+            console.log(`Emitting ${fileName}`);
         }
         else {
-            console.log(`Emitting ${filename} failed`);
-            logErrors(filename);
+            console.log(`Emitting ${fileName} failed`);
+            logErrors(fileName);
         }
 
         output.outputFiles.forEach(o => {
@@ -80,15 +80,15 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
         });
     }
 
-    function logErrors(filename: string) {
+    function logErrors(fileName: string) {
         var allDiagnostics = services.getCompilerOptionsDiagnostics()
-            .concat(services.getSyntacticDiagnostics(filename))
-            .concat(services.getSemanticDiagnostics(filename));
+            .concat(services.getSyntacticDiagnostics(fileName))
+            .concat(services.getSemanticDiagnostics(fileName));
 
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);
@@ -99,7 +99,7 @@ function watch(rootFilenames: string[], options: ts.CompilerOptions) {
 
 // Initialize files constituting the program as all .ts files in the current directory
 var currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(filename=> filename.length >= 3 && filename.substr(filename.length - 3, 3) === ".ts");
+    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
 
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

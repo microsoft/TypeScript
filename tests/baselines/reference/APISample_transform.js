@@ -27,16 +27,16 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
-        getSourceFile: (filename, target) => {
-            return files[filename] !== undefined ?
-                ts.createSourceFile(filename, files[filename], target) : undefined;
+        getSourceFile: (fileName, target) => {
+            return files[fileName] !== undefined ?
+                ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: (name, text, writeByteOrderMark) => {
             outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
         },
-        getDefaultLibFilename: () => "lib.d.ts",
+        getDefaultLibFileName: () => "lib.d.ts",
         useCaseSensitiveFileNames: () => false,
-        getCanonicalFileName: (filename) => filename,
+        getCanonicalFileName: (fileName) => fileName,
         getCurrentDirectory: () => "",
         getNewLine: () => "\n"
     };
@@ -56,7 +56,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     }
     return {
         outputs: outputs,
-        errors: errors.map(function (e) { return e.file.filename + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
+        errors: errors.map(function (e) { return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
     };
 }
 
@@ -745,7 +745,7 @@ declare module "typescript" {
         exportName: Identifier;
     }
     interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
@@ -753,7 +753,7 @@ declare module "typescript" {
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
-        filename: string;
+        fileName: string;
         text: string;
         amdDependencies: string[];
         amdModuleName: string;
@@ -768,7 +768,7 @@ declare module "typescript" {
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
     interface Program extends ScriptReferenceHost {
@@ -818,7 +818,7 @@ declare module "typescript" {
         getCompilerOptions(): CompilerOptions;
         getCompilerHost(): CompilerHost;
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
     interface TypeChecker {
         getEmitResolver(): EmitResolver;
@@ -1231,7 +1231,7 @@ declare module "typescript" {
     }
     interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
     interface CommandLineOption {
@@ -1373,10 +1373,10 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
     }
     interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken?(): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
@@ -1443,7 +1443,7 @@ declare module "typescript" {
     function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function isLeftHandSideExpression(expr: Expression): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
 }
@@ -1543,7 +1543,7 @@ declare module "typescript" {
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
@@ -1577,7 +1577,7 @@ declare module "typescript" {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
         getEmitOutput(fileName: string): EmitOutput;
         getProgram(): Program;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         dispose(): void;
     }
     interface ClassifiedSpan {
@@ -1813,11 +1813,11 @@ declare module "typescript" {
       */
     interface DocumentRegistry {
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1826,9 +1826,9 @@ declare module "typescript" {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -1836,7 +1836,7 @@ declare module "typescript" {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -1847,17 +1847,17 @@ declare module "typescript" {
           * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
           * was not found in the registry and a new one was created.
           */
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
           *
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
     }
     class ScriptElementKind {
         static unknown: string;
@@ -1928,7 +1928,7 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
     var disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
@@ -1962,15 +1962,15 @@ function transform(contents, compilerOptions) {
     var outputs = [];
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
-        getSourceFile: function (filename, target) {
-            return files[filename] !== undefined ? ts.createSourceFile(filename, files[filename], target) : undefined;
+        getSourceFile: function (fileName, target) {
+            return files[fileName] !== undefined ? ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: function (name, text, writeByteOrderMark) {
             outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
         },
-        getDefaultLibFilename: function () { return "lib.d.ts"; },
+        getDefaultLibFileName: function () { return "lib.d.ts"; },
         useCaseSensitiveFileNames: function () { return false; },
-        getCanonicalFileName: function (filename) { return filename; },
+        getCanonicalFileName: function (fileName) { return fileName; },
         getCurrentDirectory: function () { return ""; },
         getNewLine: function () { return "\n"; }
     };
@@ -1989,7 +1989,7 @@ function transform(contents, compilerOptions) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.filename + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText;
+            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText;
         })
     };
 }

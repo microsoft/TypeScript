@@ -31,7 +31,7 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -110,7 +110,7 @@ module ts {
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
         var loc = getLineAndCharacterOfPosition(file, node.pos);
-        return file.filename + "(" + loc.line + "," + loc.character + ")";
+        return file.fileName + "(" + loc.line + "," + loc.character + ")";
     }
 
     export function getStartPosOfNode(node: Node): number {
@@ -746,7 +746,7 @@ module ts {
 
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
-            var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
+            var referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
@@ -804,7 +804,7 @@ module ts {
                         fileReference: {
                             pos: start,
                             end: end,
-                            filename: matchResult[3]
+                            fileName: matchResult[3]
                         },
                         isNoDefaultLib: false
                     };

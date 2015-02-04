@@ -109,7 +109,7 @@ module ts {
         Declaration_expected: { code: 1146, category: DiagnosticCategory.Error, key: "Declaration expected." },
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: DiagnosticCategory.Error, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: 1148, category: DiagnosticCategory.Error, key: "Cannot compile external modules unless the '--module' flag is provided." },
-        Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: 1149, category: DiagnosticCategory.Error, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
+        File_name_0_differs_from_already_included_file_name_1_only_in_casing: { code: 1149, category: DiagnosticCategory.Error, key: "File name '{0}' differs from already included file name '{1}' only in casing" },
         new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: DiagnosticCategory.Error, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         var_let_or_const_expected: { code: 1152, category: DiagnosticCategory.Error, key: "'var', 'let' or 'const' expected." },
         let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1153, category: DiagnosticCategory.Error, key: "'let' declarations are only available when targeting ECMAScript 6 and higher." },
