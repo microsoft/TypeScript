@@ -1025,7 +1025,7 @@ module ts {
                 rewriteExpression(result, state);
                 return;
             }
-            GeneratorFunctionBuilder.addVariable(builder, <Identifier>node.name);
+            GeneratorFunctionBuilder.addVariable(builder, Factory.createIdentifier((<Identifier>node.name).text));
             var initializer = Visitor.visit(node.initializer, visitNode, state);
             if (initializer) {
                 return Factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, initializer, node);
