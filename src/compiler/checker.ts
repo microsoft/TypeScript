@@ -10218,7 +10218,7 @@ module ts {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticDiagnostics, d => diagnostics.add(d));
+                forEach(file.bindDiagnostics, d => diagnostics.add(d));
             });
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {

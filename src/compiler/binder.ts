@@ -136,9 +136,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.semanticDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -159,7 +159,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                    file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
                         Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
                 }
                 symbol.exports[prototypeSymbol.name] = prototypeSymbol;

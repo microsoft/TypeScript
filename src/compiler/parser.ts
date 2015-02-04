@@ -873,7 +873,7 @@ module ts {
         sourceFile.pos = sourceFile.end = 0;
         sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
+        sourceFile.bindDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
         sourceFile.fileName = normalizePath(fileName);
         sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
@@ -958,7 +958,7 @@ module ts {
         sourceFile.syntacticDiagnostics = undefined;
         sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
+        sourceFile.bindDiagnostics = [];
         sourceFile.end = sourceText.length;
         sourceFile.text = sourceText;
 

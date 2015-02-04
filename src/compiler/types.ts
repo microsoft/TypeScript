@@ -892,7 +892,9 @@ module ts {
         referencedFiles: FileReference[];
 
         hasNoDefaultLib: boolean;
-        externalModuleIndicator: Node; // The first node that causes this file to be an external module
+
+        // The first node that causes this file to be an external module
+        externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
         
@@ -908,7 +910,7 @@ module ts {
         /* @internal */ parseDiagnostics: Diagnostic[];
         
         // File level diagnostics reported by the binder.
-        /* @internal */ semanticDiagnostics: Diagnostic[];
+        /* @internal */ bindDiagnostics: Diagnostic[];
         
         // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         // This field should never be used directly, use getSyntacticDiagnostics function instead.
