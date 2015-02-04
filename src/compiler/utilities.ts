@@ -445,6 +445,19 @@ module ts {
         }
     }
 
+    export function getContainingParameter(node: Node): ParameterDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isAnyFunction(node)) {
+                break;
+            }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                return <ParameterDeclaration>node;
+            }
+        }
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;

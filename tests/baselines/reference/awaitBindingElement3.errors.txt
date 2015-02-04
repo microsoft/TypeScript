@@ -1,8 +1,7 @@
-tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3.ts(9,29): error TS2304: Cannot find name 'await'.
-tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3.ts(9,35): error TS1005: ',' expected.
+tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3.ts(9,34): error TS1311: 'await' expression is not allowed in an initializer.
 
 
-==== tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3.ts (2 errors) ====
+==== tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3.ts (1 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -12,9 +11,7 @@ tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement3
     declare var pa: Promise<number>;
     declare var po: Promise<{x: number;}>;
     async function func({ x } = await po): Promise<void> {
-                                ~~~~~
-!!! error TS2304: Cannot find name 'await'.
-                                      ~~
-!!! error TS1005: ',' expected.
+                                     
+!!! error TS1311: 'await' expression is not allowed in an initializer.
     }
     

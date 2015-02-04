@@ -331,6 +331,9 @@ module ts {
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError | AsyncParameter | Await,
 
+        // Context flags passed as part of the modified ES6 grammar.
+        ContextParameterFlags = DisallowIn | Yield | GeneratorParameter | AsyncParameter | Await,
+
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an 

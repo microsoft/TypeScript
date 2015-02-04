@@ -6749,10 +6749,13 @@ module ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Await)) {
-                grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
-            }
-            else if (node.parserContextFlags & ParserContextFlags.AsyncParameter) {
-                grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "await");
+                var parameter = getContainingParameter(node);
+                if (parameter && parameter.parserContextFlags & ParserContextFlags.Await) {
+                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "await");
+                }
+                else {
+                    grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
+                }
             }
 
             var operandType = checkExpression(node.expression);
@@ -7108,12 +7111,15 @@ module ts {
         }
 
         function checkYieldExpression(node: YieldExpression): void {
-            // Grammar checking
+            // Grammar checking            
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
-                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
-            }
-            else if (node.parserContextFlags & ParserContextFlags.GeneratorParameter) {
-                grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
+                var parameter = getContainingParameter(node);
+                if (parameter && parameter.parserContextFlags & ParserContextFlags.Yield) {
+                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
+                }
+                else {
+                    grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+                }
             }
             else {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);

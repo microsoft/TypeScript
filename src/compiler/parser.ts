@@ -7,7 +7,7 @@ module ts {
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
- 
+
     export function createNode(kind: SyntaxKind): Node {
         return new (getNodeConstructor(kind))();
     }
@@ -300,26 +300,26 @@ module ts {
 
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
         switch (context) {
-            case ParsingContext.SourceElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.ModuleElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.BlockStatements:        return Diagnostics.Statement_expected;
-            case ParsingContext.SwitchClauses:          return Diagnostics.case_or_default_expected;
+            case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.ModuleElements: return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.BlockStatements: return Diagnostics.Statement_expected;
+            case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
             case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
-            case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
-            case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:         return Diagnostics.Type_reference_expected;
-            case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
-            case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
-            case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
-            case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
-            case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
-            case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
-            case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
-            case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
-            case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
-            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
-            case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
+            case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+            case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
+            case ParsingContext.TypeReferences: return Diagnostics.Type_reference_expected;
+            case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
+            case ParsingContext.ObjectBindingElements: return Diagnostics.Property_destructuring_pattern_expected;
+            case ParsingContext.ArrayBindingElements: return Diagnostics.Array_element_destructuring_pattern_expected;
+            case ParsingContext.ArgumentExpressions: return Diagnostics.Argument_expression_expected;
+            case ParsingContext.ObjectLiteralMembers: return Diagnostics.Property_assignment_expected;
+            case ParsingContext.ArrayLiteralMembers: return Diagnostics.Expression_or_comma_expected;
+            case ParsingContext.Parameters: return Diagnostics.Parameter_declaration_expected;
+            case ParsingContext.TypeParameters: return Diagnostics.Type_parameter_declaration_expected;
+            case ParsingContext.TypeArguments: return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
+            case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
         }
     };
 
@@ -367,7 +367,7 @@ module ts {
     /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
     function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
         Debug.assert(isPrologueDirective(node));
-        var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
+        var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile, (<ExpressionStatement>node).expression);
 
         // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
         // string to contain unicode escapes (as per ES5).
@@ -919,7 +919,7 @@ module ts {
             }
 
             function getLastChildWorker(node: Node): Node {
-                var last:Node = undefined;
+                var last: Node = undefined;
                 forEachChild(node, child => {
                     if (nodeIsPresent(child)) {
                         last = child;
@@ -1029,48 +1029,6 @@ module ts {
             
             // no need to do anything special if 'in' is already allowed.
             return func();
-        }
-
-        function setParameterContextAnd<T>(yieldAndGeneratorParameterContext: boolean, awaitAndAsyncParameterContext: boolean, callback: () => T): T {
-            var savedInGeneratorParameterContext = inGeneratorParameterContext();
-            var savedInYieldContext = inYieldContext();
-            var savedInAsyncParameterContext = inAsyncParameterContext();
-            var savedInAwaitContext = inAwaitContext();
-
-            setGeneratorParameterContext(yieldAndGeneratorParameterContext);
-            setYieldContext(yieldAndGeneratorParameterContext);
-            setAsyncParameterContext(awaitAndAsyncParameterContext);
-            setAwaitContext(awaitAndAsyncParameterContext);
-
-            var result = callback();
-
-            setGeneratorParameterContext(savedInGeneratorParameterContext);
-            setYieldContext(savedInYieldContext);
-            setAsyncParameterContext(savedInAsyncParameterContext);
-            setAwaitContext(savedInAwaitContext);
-
-            return result;
-        }
-
-        function setYieldOrAwaitContextFromParameterContextAnd<T>(val: boolean, callback: () => T): T {
-            if (inGeneratorParameterContext()) {
-                var savedYieldContext = inYieldContext();
-                setYieldContext(val);
-            }
-            if (inAsyncParameterContext()) {
-                var savedAwaitContext = inAwaitContext();
-                setAwaitContext(val);
-            }
-
-            var result = callback();
-
-            if (inGeneratorParameterContext()) {
-                setYieldContext(savedYieldContext);
-            }
-            if (inAsyncParameterContext()) {
-                setAwaitContext(savedAwaitContext);
-            }
-            return result;
         }
 
         function disallowInAnd<T>(func: () => T): T {
@@ -1237,7 +1195,7 @@ module ts {
             if (token === SyntaxKind.AwaitKeyword && inAwaitContext()) {
                 return false;
             }
-            
+
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
@@ -1386,21 +1344,28 @@ module ts {
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
-            // PropertyName[Yield,GeneratorParameter] :
+            // PropertyName[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified)
             //     LiteralPropertyName
             //     [+GeneratorParameter] ComputedPropertyName
-            //     [~GeneratorParameter] ComputedPropertyName[?Yield]
+            //     [+AsyncParameter] ComputedPropertyName
+            //     [~GeneratorParameter,~AsyncParameter] ComputedPropertyName[?Yield,?Await]
             // 
-            // ComputedPropertyName[Yield] :
-            //     [ AssignmentExpression[In, ?Yield] ]
+            // ComputedPropertyName[Yield,Await] :
+            //     [ AssignmentExpression[In,?Yield,?Await] ]
             //
             var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
+            var explicitFlags = ParserContextFlags.None;
+            var ambientFlags = ParserContextFlags.None;
+            if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
+                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+            }
+
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            node.expression = setYieldOrAwaitContextFromParameterContextAnd(false, allowInAndParseExpression);
+            node.expression = setContextParametersAnd(parseExpression, explicitFlags, ambientFlags);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -1656,7 +1621,7 @@ module ts {
             if (node) {
                 return <T>consumeNode(node);
             }
-            
+
             return parseElement();
         }
 
@@ -2211,16 +2176,31 @@ module ts {
             }
         }
 
+        function setContextParameters(explicitFlags: ParserContextFlags = ParserContextFlags.None, ambientFlags: ParserContextFlags = ParserContextFlags.None) {
+            var savedFlags = contextFlags;
+            var generatedFlags = contextFlags & ParserContextFlags.ContextParameterFlags;
+            contextFlags &= ~ParserContextFlags.ContextParameterFlags;
+            contextFlags |= explicitFlags;
+            contextFlags |= generatedFlags & ambientFlags;
+            return savedFlags;
+        }
+
+        function setContextParametersAnd<T>(callback: () => T, explicitFlags?: ParserContextFlags, ambientFlags?: ParserContextFlags): T {
+            var savedFlags = setContextParameters(explicitFlags, ambientFlags);
+            var result = callback();
+            contextFlags = savedFlags;
+            return result;
+        }
+
         function parseParameter(): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
-            // SingleNameBinding[Yield,GeneratorParameter] : See 13.2.3
-            //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
-            //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
+            // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.1
+            //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
 
-            node.name = setYieldOrAwaitContextFromParameterContextAnd(true, parseIdentifierOrPattern);
+            node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -2236,7 +2216,7 @@ module ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = setYieldOrAwaitContextFromParameterContextAnd(false, parseParameterInitializer);
+            node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
 
             // Do not check for initializers in an ambient context for parameters. This is not
             // a grammar error because the grammar allows arbitrary call signatures in
@@ -2249,16 +2229,12 @@ module ts {
             return finishNode(node);
         }
 
-        function parseParameterInitializer() {
-            return parseInitializer(/*inParameter*/ true);
-        }
-
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldAndGeneratorParameterContext: boolean,
-                awaitAndAsyncParameterContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldAndGeneratorParameterContext: boolean,
+            awaitAndAsyncParameterContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
             var returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
             signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, awaitAndAsyncParameterContext, requireCompleteParameterList);
@@ -2277,33 +2253,36 @@ module ts {
         // this FormalParameters production either always sets both to true, or always sets
         // both to false.  As such we only have a single parameter to represent both.
         function parseParameterList(yieldAndGeneratorParameterContext: boolean, awaitAndAsyncParameterContext: boolean, requireCompleteParameterList: boolean) {
-            // FormalParameters[Yield,GeneratorParameter] :
+            // FormalParameters[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified)
             //      ...
             //
-            // FormalParameter[Yield,GeneratorParameter] :
-            //      BindingElement[?Yield, ?GeneratorParameter]
+            // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified)
+            //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
             //
-            // BindingElement[Yield, GeneratorParameter ] : See 13.2.3
-            //      SingleNameBinding[?Yield, ?GeneratorParameter]
-            //      [+GeneratorParameter]BindingPattern[?Yield, GeneratorParameter]Initializer[In]opt
-            //      [~GeneratorParameter]BindingPattern[?Yield]Initializer[In, ?Yield]opt
+            // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
+            //      SingleNameBinding[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
+            //      [+GeneratorParameter]BindingPattern[?Yield,?Await,GeneratorParameter]Initializer[In]opt
+            //      [+AsyncParameter]BindingPattern[?Yield,?Await,GeneratorParameter]Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter]BindingPattern[?Yield,?Await]Initializer[In,?Yield,?Await]opt
             //
-            // SingleNameBinding[Yield, GeneratorParameter] : See 13.2.3
+            // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
-            //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
+            //      [+AsyncParameter]BindingIdentifier[Await]Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter]BindingIdentifier[?Yield,?Await]Initializer[In,?Yield,?Await]opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
-
-                var result = setParameterContextAnd(
-                    yieldAndGeneratorParameterContext,
-                    awaitAndAsyncParameterContext,
-                    parseDelimitedParameterList);
-
+                var explicitFlags = ParserContextFlags.None;
+                if (yieldAndGeneratorParameterContext) {
+                    explicitFlags |= ParserContextFlags.Yield | ParserContextFlags.GeneratorParameter;
+                }
+                if (awaitAndAsyncParameterContext) {
+                    explicitFlags |= ParserContextFlags.Await | ParserContextFlags.AsyncParameter;
+                }
+                var result = setContextParametersAnd(parseDelimitedParameterList, explicitFlags);
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
                     return undefined;
                 }
-
                 return result;
             }
 
@@ -2691,10 +2670,8 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            return setParameterContextAnd(
-                /*yieldAndGeneratorParameterContext*/ false,
-                /*awaitAndAsyncParameterContext*/ false,
-                parseTypeWorker);
+            var result = setContextParametersAnd(parseTypeWorker, /*explicitFlags*/ ParserContextFlags.None);
+            return result;
         }
 
         function parseTypeWorker(): TypeNode {
@@ -2767,15 +2744,40 @@ module ts {
         }
 
         function parseExpression(): Expression {
-            // Expression[in]:
-            //      AssignmentExpression[in] 
-            //      Expression[in] , AssignmentExpression[in]
+            // Expression[In,Yield,Await]:
+            //      AssignmentExpression[?In,?Yield,?Await] 
+            //      Expression[?In,?Yield,?Await] , AssignmentExpression[?In,?Yield,?Await]
 
             var expr = parseAssignmentExpressionOrHigher();
             while (parseOptional(SyntaxKind.CommaToken)) {
                 expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
             }
             return expr;
+        }
+
+        function parseBindingElementInitializer(inParameter: boolean): Expression {
+            // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
+            //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
+            //      [+AsyncParameter] BindingPattern[?Yield,?Await,AsyncParameter] Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+            // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
+            //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
+            //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+            var explicitFlags = ParserContextFlags.None;
+            var ambientFlags = ParserContextFlags.None;
+            if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
+                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+            }
+            return setContextParametersAnd(inParameter ? parseParameterInitializer : parseNonParameterInitializer, explicitFlags, ambientFlags);
+        }
+
+        function parseParameterInitializer() {
+            return parseInitializer(/*inParameter*/ true);
+        }
+
+        function parseNonParameterInitializer() {
+            return parseInitializer(/*inParameter*/ false);
         }
 
         function parseInitializer(inParameter: boolean): Expression {
@@ -2795,8 +2797,8 @@ module ts {
                 }
             }
 
-            // Initializer[In, Yield] :
-            //     = AssignmentExpression[?In, ?Yield]
+            // Initializer[In, Yield, Await] : (Modified)
+            //     = AssignmentExpression[?In, ?Yield, ?Await]
 
             parseExpected(SyntaxKind.EqualsToken);
             return parseAssignmentExpressionOrHigher();
@@ -2994,12 +2996,12 @@ module ts {
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
         }
-        
+
         function isParenthesizedArrowFunctionExpressionWorker() {
             if (token === SyntaxKind.AsyncKeyword && !parseContextualModifier(SyntaxKind.AsyncKeyword, /*isArrowFunction*/ true)) {
                 return Tristate.False;
             }
-            
+
             var first = token;
             var second = nextToken();
 
@@ -4221,8 +4223,8 @@ module ts {
             }
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-            node.name = parseIdentifierOrPattern();
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
+            node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
@@ -4236,9 +4238,9 @@ module ts {
             else {
                 parseExpected(SyntaxKind.ColonToken);
                 node.propertyName = <Identifier>id;
-                node.name = parseIdentifierOrPattern();
+                node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
             }
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
@@ -4259,10 +4261,63 @@ module ts {
         }
 
         function isIdentifierOrPattern() {
-            return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
+            return isBindingPattern() || isIdentifier();
         }
 
-        function parseIdentifierOrPattern(): Identifier | BindingPattern {
+        function isBindingPattern() {
+            return token === SyntaxKind.OpenBracketToken
+                || token === SyntaxKind.OpenBraceToken;
+        }
+
+        function parseIdentifierOrPattern(inBindingElement: boolean): Identifier | BindingPattern {
+            var explicitFlags = ParserContextFlags.None;
+            var ambientFlags = ParserContextFlags.None;
+            if (inBindingElement) {
+                if (isBindingPattern()) {
+                    // When we parse BindingPattern here, we always pass the ambient values for [Yield], [Await], [GeneratorParameter], and [AsyncParameter]:
+                    //
+                    // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
+                    //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
+                    //      [+AsyncParameter] BindingPattern[?Yield,?Await,AsyncParameter] Initializer[In]opt
+                    //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+                    ambientFlags = ParserContextFlags.GeneratorParameter | ParserContextFlags.AsyncParameter | ParserContextFlags.Yield | ParserContextFlags.Await;
+                }
+                else {
+                    // When we parse BindingIdentifier here, we set [Yield] if [GeneratorParameter] is set; [Await] if [AsyncParameter] is 
+                    // set; otherwise, the we pass the ambient values for [Yield] and [Await]:
+                    //
+                    // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
+                    //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
+                    //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
+                    //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+                    if (inGeneratorParameterContext()) {
+                        explicitFlags = ParserContextFlags.Yield;
+                    }
+                    else if (inAsyncParameterContext()) {
+                        explicitFlags = ParserContextFlags.Await;
+                    }
+                    else {
+                        ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                    }
+                }
+            }
+            else {
+                // VariableDeclaration[In,Yield,Await] : (Modified) 13.2.2
+                //      BindingIdentifier[?Yield,?Await] Initializer[?In]opt
+                //      BindingPattern[Yield,Await] Initializer[?In]
+                //
+                // 13.2.2 always passes [Yield] to BindingPattern. May be a spec bug. Filed as https://bugs.ecmascript.org/show_bug.cgi?id=3743
+                if (isBindingPattern()) {
+                    explicitFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                }
+                else {
+                    ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                }
+            }
+            return setContextParametersAnd(parseIdentifierOrPatternWorker, explicitFlags, ambientFlags);
+        }
+
+        function parseIdentifierOrPatternWorker(): Identifier | BindingPattern {
             if (token === SyntaxKind.OpenBracketToken) {
                 return parseArrayBindingPattern();
             }
@@ -4274,7 +4329,7 @@ module ts {
 
         function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.name = parseIdentifierOrPattern();
+            node.name = parseIdentifierOrPattern(/*inBindingElement*/ false);
             node.type = parseTypeAnnotation();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
@@ -4368,10 +4423,6 @@ module ts {
                 parseSemicolon();
                 return finishNode(property);
             }
-        }
-
-        function parseNonParameterInitializer() {
-            return parseInitializer(/*inParameter*/ false);
         }
 
         function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
@@ -4504,12 +4555,18 @@ module ts {
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                // ClassTail[Yield,GeneratorParameter] : See 14.5
-                //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
+                // ClassTail[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.5
+                //      [~GeneratorParameter,~AsyncParameter]ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
+                //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
-                node.members = setYieldOrAwaitContextFromParameterContextAnd(false, parseClassMembers);
+                var explicitFlags = ParserContextFlags.None;
+                var ambientFlags = ParserContextFlags.None;
+                if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
+                    ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                }
 
+                node.members = setContextParametersAnd(parseClassMembers, explicitFlags, ambientFlags);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4519,14 +4576,21 @@ module ts {
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
-            // ClassTail[Yield,GeneratorParameter] : See 14.5
-            //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
+            // ClassTail[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.5
+            //      [~GeneratorParameter,~AsyncParameter] ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
+            //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
             if (isHeritageClause()) {
-                return isClassHeritageClause
-                    ? setYieldOrAwaitContextFromParameterContextAnd(false, parseHeritageClausesWorker)
-                    : parseHeritageClausesWorker();
+                var explicitFlags = ParserContextFlags.None;
+                var ambientFlags = ParserContextFlags.None;
+                if (isClassHeritageClause) {
+                    if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
+                        ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                    }
+                }
+
+                return setContextParametersAnd(parseHeritageClausesWorker, explicitFlags, ambientFlags);
             }
 
             return undefined;
@@ -4882,8 +4946,8 @@ module ts {
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                || node.kind === SyntaxKind.ExportAssignment
+                    || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    || node.kind === SyntaxKind.ExportAssignment
                     ? node
                     : undefined);
         }
