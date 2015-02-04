@@ -18,12 +18,14 @@ function func() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
+                    _a = [a];
+                    _b = _a.concat;
                     return [4 /*yield*/, par];
                 case 1:
-                    x = [a].concat(_state.sent, [a]);
+                    x = _b.call(_a, _state.sent, [a]);
                     return [2 /*return*/];
             }
         })));
     });
-    var x;
+    var x, _a, _b;
 }

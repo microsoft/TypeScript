@@ -589,11 +589,9 @@ module ts {
                 if (thisArg) {
                     var callArguments: NodeArray<Expression> = Factory.createNodeArray([<Expression>thisArg].concat(arguments), node.arguments);
                     var callProperty = Factory.createPropertyAccessExpression(target, Factory.createIdentifier("call"));
-                    var callExpression = Factory.createCallExpression(callProperty, callArguments, node);
-                    return callExpression;
+                    return Factory.updateCallExpression(node, callProperty, callArguments);
                 } else {
-                    var callExpression = Factory.createCallExpression(target, arguments, node);
-                    return callExpression;
+                    return Factory.updateCallExpression(node, target, arguments);
                 }
             }
             return Visitor.fallback(node, visitNode, state);

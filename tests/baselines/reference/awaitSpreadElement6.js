@@ -20,10 +20,12 @@ function func() {
                 case 0:
                     return [4 /*yield*/, par];
                 case 1:
-                    x = _state.sent.concat(ar);
+                    _a = _state.sent;
+                    _b = _a.concat;
+                    x = _b.call(_a, ar);
                     return [2 /*return*/];
             }
         })));
     });
-    var x;
+    var x, _a, _b;
 }

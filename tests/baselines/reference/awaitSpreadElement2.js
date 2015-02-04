@@ -20,7 +20,7 @@ function func() {
                 case 0:
                     return [4 /*yield*/, par];
                 case 1:
-                    x = (_state.sent);
+                    x = _state.sent;
                     return [2 /*return*/];
             }
         })));
