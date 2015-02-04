@@ -67,6 +67,7 @@ module ts {
         var stringType = createIntrinsicType(TypeFlags.String, "string");
         var numberType = createIntrinsicType(TypeFlags.Number, "number");
         var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
+        var esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
         var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
@@ -123,6 +124,10 @@ module ts {
             "boolean": {
                 type: booleanType,
                 flags: TypeFlags.Boolean
+            },
+            "symbol": {
+                type: esSymbolType,
+                flags: TypeFlags.ESSymbol
             }
         };
 
@@ -3191,6 +3196,8 @@ module ts {
                     return numberType;
                 case SyntaxKind.BooleanKeyword:
                     return booleanType;
+                case SyntaxKind.SymbolKeyword:
+                    return esSymbolType;
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.StringLiteral:
@@ -5492,7 +5499,7 @@ module ts {
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
-            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false);
+            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
         }
 
         function isNumericLiteralName(name: string) {
@@ -5527,7 +5534,7 @@ module ts {
 
                 // This will allow types number, string, Symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike, /*includeESSymbols*/ true)) {
+                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_Symbol_or_any);
                 }
             }
@@ -5792,10 +5799,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike, /*includeESSymbols*/ true)) {
+            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
+                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -6733,7 +6740,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
+            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -6884,28 +6891,19 @@ module ts {
             return numberType;
         }
 
-        // Return true if type has the given flags, or is a union type composed of types that all have those flags
-        // If include includeESSymbols is true, then check if the type (or union constituents) is an ESSymbol
-        // if it does not match the kind. This is necessary because ESSymbol has no corresponding flag.
-        function isTypeOfKind(type: Type, kind: TypeFlags, includeESSymbols: boolean): boolean {
+        // Return true if type has the given flags, or is a union type composed of types that all have those flags.
+        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
                 for (var i = 0; i < types.length; i++) {
-                    if (types[i].flags & kind) {
-                        continue;
+                    if (!(types[i].flags & kind)) {
+                        return false;
                     }
-                    if (includeESSymbols && types[i] === globalESSymbolType) {
-                        continue;
-                    }
-                    return false;
                 }
                 return true;
-            }
-            if (includeESSymbols) {
-                return type === globalESSymbolType;
             }
             return false;
         }
@@ -6924,11 +6922,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            //
-            // The reason for globalESSymbolType !== unknownType is that if the type is unknownType, we don't want to error.
-            // If the globalESSymbolType is also unknownType, then by including globalESSymbolType, we will error
-            // on unknownType, because transitively, type will be the same as globalESSymbolType.
-            if (isTypeOfKind(leftType, TypeFlags.Primitive, /*includeESSymbols*/ globalESSymbolType !== unknownType)) {
+            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -6943,10 +6937,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike, /*includeESSymbols*/ true)) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter, /*includeESSymbols*/ false)) {
+            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -7107,12 +7101,12 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var resultType: Type;
-                    if (isTypeOfKind(leftType, TypeFlags.NumberLike, /*includeESSymbols*/ false) && isTypeOfKind(rightType, TypeFlags.NumberLike, /*includeESSymbols*/ false)) {
+                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (isTypeOfKind(leftType, TypeFlags.StringLike, /*includeESSymbols*/ false) || isTypeOfKind(rightType, TypeFlags.StringLike, /*includeESSymbols*/ false)) {
+                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
                         // If one or both operands are of the String primitive type, the result is of the String primitive type.
                         resultType = stringType;
                     }
@@ -8478,7 +8472,7 @@ module ts {
                 //   and Expr must be an expression of type Any, an object type, or a type parameter type.
                 var varExpr = <Expression>node.initializer;
                 var exprType = checkExpression(varExpr);
-                if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.StringLike, /*includeESSymbols*/ true)) {
+                if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.StringLike)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -8490,7 +8484,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter, /*includeESSymbols*/ false)) {
+            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
