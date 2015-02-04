@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty2.ts ===
 var s = Symbol();
->s : Symbol
->Symbol() : Symbol
+>s : symbol
+>Symbol() : symbol
 >Symbol : SymbolConstructor
 
 var x = {
@@ -9,13 +9,13 @@ var x = {
 >{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : {}
 
     [s]: 0,
->s : Symbol
+>s : symbol
 
     [s]() { },
->s : Symbol
+>s : symbol
 
     get [s]() {
->s : Symbol
+>s : symbol
 
         return 0;
     }

@@ -2,7 +2,6 @@
 var x: {
 >x : {}
 
-    [s: Symbol]: string;
->s : Symbol
->Symbol : Symbol
+    [s: symbol]: string;
+>s : symbol
 }

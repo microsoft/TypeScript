@@ -3,9 +3,9 @@ class C {
 >C : C
 
     [Symbol.iterator]: { x; y };
->Symbol.iterator : Symbol
+>Symbol.iterator : symbol
 >Symbol : SymbolConstructor
->iterator : Symbol
+>iterator : symbol
 >x : any
 >y : any
 }
@@ -13,9 +13,9 @@ interface I {
 >I : I
 
     [Symbol.iterator]?: { x };
->Symbol.iterator : Symbol
+>Symbol.iterator : symbol
 >Symbol : SymbolConstructor
->iterator : Symbol
+>iterator : symbol
 >x : any
 }
 

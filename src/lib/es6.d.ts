@@ -1,4 +1,4 @@
-declare type PropertyKey = string | number | Symbol;
+declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
     /** Returns a string representation of an object. */
@@ -20,21 +20,21 @@ interface SymbolConstructor {
       * Returns a new unique Symbol value.
       * @param  description Description of the new Symbol object.
       */
-    (description?: string|number): Symbol;
+    (description?: string|number): symbol;
 
     /**
       * Returns a Symbol object from the global symbol registry matching the given key if found. 
       * Otherwise, returns a new symbol with this key.
       * @param key key to search for.
       */
-    for(key: string): Symbol;
+    for(key: string): symbol;
 
     /**
       * Returns a key from the global symbol registry matching the given Symbol if found. 
       * Otherwise, returns a undefined.
       * @param sym Symbol to find the key for.
       */
-    keyFor(sym: Symbol): string;
+    keyFor(sym: symbol): string;
 
     // Well-known Symbols
 
@@ -42,42 +42,42 @@ interface SymbolConstructor {
       * A method that determines if a constructor object recognizes an object as one of the 
       * constructor’s instances. Called by the semantics of the instanceof operator. 
       */
-    hasInstance: Symbol;
+    hasInstance: symbol;
 
     /** 
       * A Boolean value that if true indicates that an object should flatten to its array elements
       * by Array.prototype.concat.
       */
-    isConcatSpreadable: Symbol;
+    isConcatSpreadable: symbol;
 
     /** 
       * A Boolean value that if true indicates that an object may be used as a regular expression. 
       */
-    isRegExp: Symbol;
+    isRegExp: symbol;
 
     /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
       * for-of statement. 
       */
-    iterator: Symbol;
+    iterator: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
       * abstract operation. 
       */
-    toPrimitive: Symbol;
+    toPrimitive: symbol;
 
     /** 
       * A String value that is used in the creation of the default string description of an object. 
       * Called by the built- in method Object.prototype.toString. 
       */
-    toStringTag: Symbol;
+    toStringTag: symbol;
 
     /** 
       * An Object whose own property names are property names that are excluded from the with 
       * environment bindings of the associated objects.
       */
-    unscopables: Symbol;
+    unscopables: symbol;
 }
 declare var Symbol: SymbolConstructor;
 
@@ -108,7 +108,7 @@ interface ObjectConstructor {
       * Returns an array of all symbol properties found directly on object o.
       * @param o Object to retrieve the symbols from.
       */
-    getOwnPropertySymbols(o: any): Symbol[];
+    getOwnPropertySymbols(o: any): symbol[];
 
     /**
       *  Returns true if the values are the same value, false otherwise.
@@ -3521,7 +3521,7 @@ declare var Reflect: {
     getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     getPrototypeOf(target: any): any;
     has(target: any, propertyKey: string): boolean;
-    has(target: any, propertyKey: Symbol): boolean;
+    has(target: any, propertyKey: symbol): boolean;
     isExtensible(target: any): boolean;
     ownKeys(target: any): Array<PropertyKey>;
     preventExtensions(target: any): boolean;

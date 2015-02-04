@@ -3,9 +3,9 @@ class C1 {
 >C1 : C1
 
     [Symbol.toStringTag]() {
->Symbol.toStringTag : Symbol
+>Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
->toStringTag : Symbol
+>toStringTag : symbol
 
         return { x: "" };
 >{ x: "" } : { x: string; }
@@ -16,8 +16,7 @@ class C2 extends C1 {
 >C2 : C2
 >C1 : C1
 
-    [s: Symbol]: () => { x: string };
->s : Symbol
->Symbol : Symbol
+    [s: symbol]: () => { x: string };
+>s : symbol
 >x : string
 }

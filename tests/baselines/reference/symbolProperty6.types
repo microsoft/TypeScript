@@ -3,24 +3,24 @@ class C {
 >C : C
 
     [Symbol.iterator] = 0;
->Symbol.iterator : Symbol
+>Symbol.iterator : symbol
 >Symbol : SymbolConstructor
->iterator : Symbol
+>iterator : symbol
 
     [Symbol.unscopables]: number;
->Symbol.unscopables : Symbol
+>Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
->unscopables : Symbol
+>unscopables : symbol
 
     [Symbol.isRegExp]() { }
->Symbol.isRegExp : Symbol
+>Symbol.isRegExp : symbol
 >Symbol : SymbolConstructor
->isRegExp : Symbol
+>isRegExp : symbol
 
     get [Symbol.toStringTag]() {
->Symbol.toStringTag : Symbol
+>Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
->toStringTag : Symbol
+>toStringTag : symbol
 
         return 0;
     }

@@ -3,7 +3,7 @@ declare class C {
 >C : C
 
     [Symbol.isRegExp]: string;
->Symbol.isRegExp : Symbol
+>Symbol.isRegExp : symbol
 >Symbol : SymbolConstructor
->isRegExp : Symbol
+>isRegExp : symbol
 }

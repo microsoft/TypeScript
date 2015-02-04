@@ -3,9 +3,9 @@ class C1 {
 >C1 : C1
 
     [Symbol.toStringTag]() {
->Symbol.toStringTag : Symbol
+>Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
->toStringTag : Symbol
+>toStringTag : symbol
 
         return "";
     }
@@ -16,9 +16,9 @@ class C2 extends C1 {
 >C1 : C1
 
     [Symbol.toStringTag]() {
->Symbol.toStringTag : Symbol
+>Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
->toStringTag : Symbol
+>toStringTag : symbol
 
         return "";
     }

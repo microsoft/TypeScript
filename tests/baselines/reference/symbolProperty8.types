@@ -3,12 +3,12 @@ interface I {
 >I : I
 
     [Symbol.unscopables]: number;
->Symbol.unscopables : Symbol
+>Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
->unscopables : Symbol
+>unscopables : symbol
 
     [Symbol.isRegExp]();
->Symbol.isRegExp : Symbol
+>Symbol.isRegExp : symbol
 >Symbol : SymbolConstructor
->isRegExp : Symbol
+>isRegExp : symbol
 }

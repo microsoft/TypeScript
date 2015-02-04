@@ -3,16 +3,16 @@ class C {
 >C : C
 
     get [Symbol.hasInstance]() {
->Symbol.hasInstance : Symbol
+>Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
->hasInstance : Symbol
+>hasInstance : symbol
 
         return "";
     }
     get [Symbol.toPrimitive]() {
->Symbol.toPrimitive : Symbol
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->toPrimitive : Symbol
+>toPrimitive : symbol
 
         return "";
     }

@@ -5,15 +5,15 @@ interface I<T, U> {
 >U : U
 
     [Symbol.unscopables]: T;
->Symbol.unscopables : Symbol
+>Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
->unscopables : Symbol
+>unscopables : symbol
 >T : T
 
     [Symbol.isConcatSpreadable]: U;
->Symbol.isConcatSpreadable : Symbol
+>Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : Symbol
+>isConcatSpreadable : symbol
 >U : U
 }
 
@@ -36,18 +36,18 @@ foo({
 >{    [Symbol.isConcatSpreadable]: "",    [Symbol.isRegExp]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.isRegExp]: number; [Symbol.unscopables]: boolean; }
 
     [Symbol.isConcatSpreadable]: "",
->Symbol.isConcatSpreadable : Symbol
+>Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : Symbol
+>isConcatSpreadable : symbol
 
     [Symbol.isRegExp]: 0,
->Symbol.isRegExp : Symbol
+>Symbol.isRegExp : symbol
 >Symbol : SymbolConstructor
->isRegExp : Symbol
+>isRegExp : symbol
 
     [Symbol.unscopables]: true
->Symbol.unscopables : Symbol
+>Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
->unscopables : Symbol
+>unscopables : symbol
 
 });

@@ -2,7 +2,6 @@
 class C {
 >C : C
 
-    [s: Symbol]: string;
->s : Symbol
->Symbol : Symbol
+    [s: symbol]: string;
+>s : symbol
 }

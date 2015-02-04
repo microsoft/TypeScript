@@ -3,7 +3,7 @@ declare class C {
 >C : C
 
     [Symbol.unscopables](): string;
->Symbol.unscopables : Symbol
+>Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
->unscopables : Symbol
+>unscopables : symbol
 }

@@ -3410,10 +3410,13 @@ declare module "typescript" {
         ContainsObjectLiteral = 524288,
 >ContainsObjectLiteral : TypeFlags
 
-        Intrinsic = 127,
+        ESSymbol = 1048576,
+>ESSymbol : TypeFlags
+
+        Intrinsic = 1048703,
 >Intrinsic : TypeFlags
 
-        Primitive = 510,
+        Primitive = 1049086,
 >Primitive : TypeFlags
 
         StringLike = 258,

@@ -2,7 +2,6 @@
 interface I {
 >I : I
 
-    [s: Symbol]: string;
->s : Symbol
->Symbol : Symbol
+    [s: symbol]: string;
+>s : symbol
 }
