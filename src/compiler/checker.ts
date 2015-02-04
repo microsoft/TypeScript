@@ -8075,20 +8075,22 @@ module ts {
 
             checkSourceElement(node.body);
 
-            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
-            if (node.flags & NodeFlags.Async) {
-                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
-                if (awaitableReturnType) {
-                    returnType = awaitableReturnType;
+            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;            
+            if (!isAnyAccessor(node)) {
+                if (node.flags & NodeFlags.Async) {
+                    var awaitableReturnType = checkAwaitableReturnType(node, returnType);
+                    if (awaitableReturnType) {
+                        returnType = awaitableReturnType;
+                    }
                 }
-            }
 
-            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
-                emitGenerator = true;
-            }
+                if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+                    emitGenerator = true;
+                }
 
-            if (returnType && !isAccessor(node.kind)) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
+                if (returnType) {
+                    checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
+                }
             }
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -8962,10 +8964,6 @@ module ts {
                     error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                 }
             }
-        }
-
-        function isAccessor(kind: SyntaxKind): boolean {
-            return kind === SyntaxKind.GetAccessor || kind === SyntaxKind.SetAccessor;
         }
 
         function areTypeParametersIdentical(list1: TypeParameterDeclaration[], list2: TypeParameterDeclaration[]) {
@@ -11355,7 +11353,7 @@ module ts {
         function checkGrammarForStatementInAmbientContext(node: Node): boolean {
             if (isInAmbientContext(node)) {
                 // An accessors is already reported about the ambient context
-                if (isAccessor(node.parent.kind)) {
+                if (isAnyAccessor(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
                 }
 

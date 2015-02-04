@@ -3100,8 +3100,7 @@ module ts {
                 locals = undefined;
                 tempParameters = undefined;
 
-                if (node.kind !== SyntaxKind.GetAccessor &&
-                    node.kind !== SyntaxKind.SetAccessor) {
+                if (!isAnyAccessor(node)) {
                     if (node.flags & NodeFlags.Async) {
                         ensureLocals();
                         node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);

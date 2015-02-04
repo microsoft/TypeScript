@@ -665,6 +665,16 @@ module ts {
         return false;
     }
 
+    export function isAnyAccessor(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+        }
+
+        return false;
+    }
+
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         var moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
