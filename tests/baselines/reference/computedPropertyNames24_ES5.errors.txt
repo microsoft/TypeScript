@@ -1,0 +1,19 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES5.ts(9,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES5.ts(9,6): error TS2466: 'super' cannot be referenced in a computed property name.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES5.ts (2 errors) ====
+    class Base {
+        bar() {
+            return 0;
+        }
+    }
+    class C extends Base {
+        // Gets emitted as super, not _super, which is consistent with
+        // use of super in static properties initializers.
+        [super.bar()]() { }
+        ~~~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+         ~~~~~
+!!! error TS2466: 'super' cannot be referenced in a computed property name.
+    }

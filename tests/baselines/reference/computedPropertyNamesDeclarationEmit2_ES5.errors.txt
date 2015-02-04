@@ -1,0 +1,17 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts(2,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts(3,16): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts(4,16): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts (3 errors) ====
+    class C {
+        static ["" + ""]() { }
+               ~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static get ["" + ""]() { return 0; }
+                   ~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static set ["" + ""](x) { }
+                   ~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+    }

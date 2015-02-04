@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames18_ES5.ts(3,9): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames18_ES5.ts (1 errors) ====
+    function foo() {
+        var obj = {
+            [this.bar]: 0
+            ~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        }
+    }

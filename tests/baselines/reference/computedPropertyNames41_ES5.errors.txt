@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts(8,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts (1 errors) ====
+    class Foo { x }
+    class Foo2 { x; y }
+    
+    class C {
+        [s: string]: () => Foo2;
+    
+        // Computed properties
+        static [""]() { return new Foo }
+               ~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+    }

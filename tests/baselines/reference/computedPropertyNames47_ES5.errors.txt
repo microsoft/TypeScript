@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames47_ES5.ts(4,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames47_ES5.ts (1 errors) ====
+    enum E1 { x }
+    enum E2 { x }
+    var o = {
+        [E1.x || E2.x]: 0
+        ~~~~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+    };

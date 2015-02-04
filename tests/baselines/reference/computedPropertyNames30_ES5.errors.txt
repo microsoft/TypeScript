@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES5.ts(11,17): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES5.ts(11,19): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES5.ts (2 errors) ====
+    class Base {
+    }
+    class C extends Base {
+        constructor() {
+            super();
+            () => {
+                var obj = {
+                    // Ideally, we would capture this. But the reference is
+                    // illegal, and not capturing this is consistent with
+                    //treatment of other similar violations.
+                    [(super(), "prop")]() { }
+                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+                      ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
+                };
+            }
+        }
+    }

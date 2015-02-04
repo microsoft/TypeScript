@@ -1,0 +1,52 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(5,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(6,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(7,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(8,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(9,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(10,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(11,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(12,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(13,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(14,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts(15,12): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames13_ES5.ts (11 errors) ====
+    var s: string;
+    var n: number;
+    var a: any;
+    class C {
+        [s]() {}
+        ~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [n]() { }
+        ~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static [s + s]() { }
+               ~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [s + n]() { }
+        ~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [+s]() { }
+        ~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static [""]() { }
+               ~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [0]() { }
+        ~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [a]() { }
+        ~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static [<any>true]() { }
+               ~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        [`hello bye`]() { }
+        ~~~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+        static [`hello ${a} bye`]() { }
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
+    }
