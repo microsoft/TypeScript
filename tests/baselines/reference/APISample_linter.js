@@ -1726,7 +1726,7 @@ declare module "typescript" {
     }
     interface CompletionInfo {
         isMemberCompletion: boolean;
-        isBuilder: boolean;
+        isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
     interface CompletionEntry {

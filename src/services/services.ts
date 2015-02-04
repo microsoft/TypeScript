@@ -1072,7 +1072,7 @@ module ts {
 
     export interface CompletionInfo {
         isMemberCompletion: boolean;
-        isBuilder: boolean;
+        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
         entries: CompletionEntry[];
     }
 
@@ -2314,7 +2314,7 @@ module ts {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
                 var isMemberCompletion = true;
-                var isBuilder = false;
+                var isNewIdentifierLocation = false;
 
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
@@ -2367,7 +2367,7 @@ module ts {
                 else {
                     // Get scope members
                     isMemberCompletion = false;
-                    isBuilder = isCompletionListBuilder(previousToken);
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
@@ -2385,7 +2385,7 @@ module ts {
 
             return {
                 isMemberCompletion,
-                isBuilder,
+                isNewIdentifierLocation,
                 entries: activeCompletionSession.entries
             };
 
@@ -2413,7 +2413,7 @@ module ts {
                 return result;
             }
 
-            function isCompletionListBuilder(previousToken: Node): boolean {
+            function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
                 if (previousToken) {
                     var containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {

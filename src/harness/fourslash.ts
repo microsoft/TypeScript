@@ -665,12 +665,12 @@ module FourSlash {
             }
         }
 
-        public verifyCompletionListHasBuilder(negative: boolean) {
+        public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             var completions = this.getCompletionListAtCaret();
 
-            if ((completions && !completions.isBuilder) && !negative) {
+            if ((completions && !completions.isNewIdentifierLocation) && !negative) {
                 this.raiseError("Expected builder completion entry");
-            } else if ((completions && completions.isBuilder) && negative) {
+            } else if ((completions && completions.isNewIdentifierLocation) && negative) {
                 this.raiseError("Un-expected builder completion entry");
             }
         }
