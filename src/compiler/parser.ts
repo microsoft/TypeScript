@@ -1031,6 +1031,48 @@ module ts {
             return func();
         }
 
+        function setParameterContextAnd<T>(yieldAndGeneratorParameterContext: boolean, awaitAndAsyncParameterContext: boolean, callback: () => T): T {
+            var savedInGeneratorParameterContext = inGeneratorParameterContext();
+            var savedInYieldContext = inYieldContext();
+            var savedInAsyncParameterContext = inAsyncParameterContext();
+            var savedInAwaitContext = inAwaitContext();
+
+            setGeneratorParameterContext(yieldAndGeneratorParameterContext);
+            setYieldContext(yieldAndGeneratorParameterContext);
+            setAsyncParameterContext(awaitAndAsyncParameterContext);
+            setAwaitContext(awaitAndAsyncParameterContext);
+
+            var result = callback();
+
+            setGeneratorParameterContext(savedInGeneratorParameterContext);
+            setYieldContext(savedInYieldContext);
+            setAsyncParameterContext(savedInAsyncParameterContext);
+            setAwaitContext(savedInAwaitContext);
+
+            return result;
+        }
+
+        function setYieldOrAwaitContextFromParameterContextAnd<T>(val: boolean, callback: () => T): T {
+            if (inGeneratorParameterContext()) {
+                var savedYieldContext = inYieldContext();
+                setYieldContext(val);
+            }
+            if (inAsyncParameterContext()) {
+                var savedAwaitContext = inAwaitContext();
+                setAwaitContext(val);
+            }
+
+            var result = callback();
+
+            if (inGeneratorParameterContext()) {
+                setYieldContext(savedYieldContext);
+            }
+            if (inAsyncParameterContext()) {
+                setAwaitContext(savedAwaitContext);
+            }
+            return result;
+        }
+
         function disallowInAnd<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.DisallowIn) {
                 // no need to do anything special if 'in' is already disallowed.
@@ -1358,70 +1400,59 @@ module ts {
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            if (inGeneratorParameterContext()) {
-                var savedYieldContext = inYieldContext();
-                setYieldContext(false);
-            }
-            if (inAsyncParameterContext()) {
-                var savedAwaitContext = inAwaitContext();
-                setAwaitContext(false);
-            }
-
-            node.expression = allowInAnd(parseExpression);
-            
-            if (inGeneratorParameterContext()) {
-                setYieldContext(savedYieldContext);
-            }
-            if (inAsyncParameterContext()) {
-                setAwaitContext(savedAwaitContext);
-            }
+            node.expression = setYieldOrAwaitContextFromParameterContextAnd(false, allowInAndParseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
-        function parseContextualModifier(t: SyntaxKind): boolean {
-            return token === t && tryParse(nextTokenCanFollowModifier);
+        function allowInAndParseExpression() {
+            return allowInAnd(parseExpression);
         }
 
-        function nextTokenCanFollowModifier() {
-            if (token === SyntaxKind.AsyncKeyword) {
-                nextToken();
-                return canFollowAsyncModifier();
-            }
+        function parseContextualModifier(t: SyntaxKind, isArrowFunction?: boolean): boolean {
+            return token === t && tryParse(isArrowFunction
+                ? nextTokenCanFollowModifierForArrowFunction
+                : nextTokenCanFollowModifier);
+        }
 
+        function nextTokenCanFollowModifierForArrowFunction() {
+            return nextTokenCanFollowModifier(/*isArrowFunction*/ true);
+        }
+
+        function nextTokenCanFollowModifier(isArrowFunction?: boolean) {
             nextToken();
-            return canFollowModifier();
+            return canFollowModifier(isArrowFunction);
         }
 
-        function parseAnyContextualModifier(): boolean {
-            return isModifier(token) && tryParse(nextTokenCanFollowContextualModifier);
+        function parseAnyContextualModifier(isArrowFunction?: boolean): boolean {
+            return isModifier(token) && tryParse(isArrowFunction
+                ? nextTokenCanFollowContextualModifierForArrowFunction
+                : nextTokenCanFollowContextualModifier);
         }
 
-        function nextTokenCanFollowContextualModifier() {
+        function nextTokenCanFollowContextualModifierForArrowFunction() {
+            return nextTokenCanFollowContextualModifier(/*isArrowFunction*/ true);
+        }
+
+        function nextTokenCanFollowContextualModifier(isArrowFunction?: boolean) {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
-            if (token === SyntaxKind.AsyncKeyword) {
-                nextToken();
-                return canFollowAsyncModifier();
-            }
-
             nextToken();
-            return canFollowModifier();
+            return canFollowModifier(isArrowFunction);
         }
 
-        function canFollowAsyncModifier(): boolean {
-            if (scanner.hasPrecedingLineBreak()) {
-                return false;
+        function canFollowModifier(isArrowFunction?: boolean): boolean {
+            if (isArrowFunction) {
+                if (scanner.hasPrecedingLineBreak()) {
+                    return false;
+                }
+                return token === SyntaxKind.OpenParenToken
+                    || token === SyntaxKind.LessThanToken;
             }
-
-            return token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || canFollowModifier();
-        }
-
-        function canFollowModifier(): boolean {
             return token === SyntaxKind.OpenBracketToken
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
@@ -2189,16 +2220,7 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            if (inGeneratorParameterContext()) {
-                var savedYieldContext = inYieldContext();
-                setYieldContext(true);
-            }
-            if (inAsyncParameterContext()) {
-                var savedAwaitContext = inAwaitContext();
-                setAwaitContext(true);
-            }
-
-            node.name = parseIdentifierOrPattern();
+            node.name = setYieldOrAwaitContextFromParameterContextAnd(true, parseIdentifierOrPattern);
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -2214,22 +2236,7 @@ module ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-
-            if (inGeneratorParameterContext()) {
-                setYieldContext(false);
-            }
-            
-            // Here we do not disable the [Await] context and instead use the ambient [Await] context, 
-            // as [Await] could be reserved as a keyword by an enclosing async function
-
-            node.initializer = parseParameterInitializer();
-
-            if (inGeneratorParameterContext()) {
-                setYieldContext(savedYieldContext);
-            }
-            if (inAsyncParameterContext()) {
-                setAwaitContext(savedAwaitContext);
-            }
+            node.initializer = setYieldOrAwaitContextFromParameterContextAnd(false, parseParameterInitializer);
 
             // Do not check for initializers in an ambient context for parameters. This is not
             // a grammar error because the grammar allows arbitrary call signatures in
@@ -2285,22 +2292,11 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
-                var savedYieldContext = inYieldContext();
-                var savedGeneratorParameterContext = inGeneratorParameterContext();
-                var savedAwaitContext = inAwaitContext();
-                var savedAsyncParameterContext = inAsyncParameterContext();
 
-                setYieldContext(yieldAndGeneratorParameterContext);
-                setGeneratorParameterContext(yieldAndGeneratorParameterContext);
-                setAwaitContext(awaitAndAsyncParameterContext);
-                setAsyncParameterContext(awaitAndAsyncParameterContext);
-
-                var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
-
-                setYieldContext(savedYieldContext);
-                setGeneratorParameterContext(savedGeneratorParameterContext);
-                setAwaitContext(savedAwaitContext);
-                setAsyncParameterContext(savedAsyncParameterContext);
+                var result = setParameterContextAnd(
+                    yieldAndGeneratorParameterContext,
+                    awaitAndAsyncParameterContext,
+                    parseDelimitedParameterList);
 
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
@@ -2315,6 +2311,10 @@ module ts {
             // we definitely can't provide that.  However, if they're ok with an incomplete one,
             // then just return an empty set of parameters.
             return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
+        }
+
+        function parseDelimitedParameterList() {
+            return parseDelimitedList(ParsingContext.Parameters, parseParameter);
         }
 
         function parseTypeMemberSemicolon() {
@@ -2691,24 +2691,10 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var savedYieldContext = inYieldContext();
-            var savedGeneratorParameterContext = inGeneratorParameterContext();
-            var savedAwaitContext = inAwaitContext();
-            var savedAsyncParameterContext = inAsyncParameterContext();
-
-            setYieldContext(false);
-            setGeneratorParameterContext(false);
-            setAwaitContext(false);
-            setAsyncParameterContext(false);
-
-            var result = parseTypeWorker();
-
-            setYieldContext(savedYieldContext);
-            setGeneratorParameterContext(savedGeneratorParameterContext);
-            setAwaitContext(savedAwaitContext);
-            setAsyncParameterContext(savedAsyncParameterContext);
-
-            return result;
+            return setParameterContextAnd(
+                /*yieldAndGeneratorParameterContext*/ false,
+                /*awaitAndAsyncParameterContext*/ false,
+                parseTypeWorker);
         }
 
         function parseTypeWorker(): TypeNode {
@@ -3008,14 +2994,10 @@ module ts {
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
         }
-
+        
         function isParenthesizedArrowFunctionExpressionWorker() {
-            if (token === SyntaxKind.AsyncKeyword) {
-                // If we see an "async" keyword followed by a linebreak or a token other than "(" or "<", this is not an arrow function.
-                nextToken();
-                if (scanner.hasPrecedingLineBreak() || (token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.LessThanToken)) {
-                    return Tristate.False;
-                }
+            if (token === SyntaxKind.AsyncKeyword && !parseContextualModifier(SyntaxKind.AsyncKeyword, /*isArrowFunction*/ true)) {
+                return Tristate.False;
             }
             
             var first = token;
@@ -3083,7 +3065,7 @@ module ts {
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
             var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction);
-            setModifiers(node, parseModifiers());
+            setModifiers(node, parseModifiers(/*isArrowFunction*/ true));
             var isAsync = !!(node.flags & NodeFlags.Async);
 
             // Arrow functions are never generators.
@@ -4445,14 +4427,14 @@ module ts {
             return false;
         }
 
-        function parseModifiers(): ModifiersArray {
+        function parseModifiers(isArrowFunction?: boolean): ModifiersArray {
             var flags = 0;
             var modifiers: ModifiersArray;
             while (true) {
                 var modifierStart = scanner.getStartPos();
                 var modifierKind = token;
 
-                if (!parseAnyContextualModifier()) {
+                if (!parseAnyContextualModifier(isArrowFunction)) {
                     break;
                 }
 
@@ -4515,23 +4497,7 @@ module ts {
                 //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
-                if (inGeneratorParameterContext()) {
-                    var savedYieldContext = inYieldContext();
-                    setYieldContext(false);
-                }
-                if (inAsyncParameterContext()) {
-                    var savedAwaitContext = inAwaitContext();
-                    setAwaitContext(false);
-                }
-
-                node.members = parseClassMembers();
-                
-                if (inGeneratorParameterContext()) {
-                    setYieldContext(savedYieldContext);
-                }
-                if (inAsyncParameterContext()) {
-                    setAwaitContext(savedAwaitContext);
-                }
+                node.members = setYieldOrAwaitContextFromParameterContextAnd(false, parseClassMembers);
 
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
@@ -4547,27 +4513,9 @@ module ts {
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
             if (isHeritageClause()) {
-                if (isClassHeritageClause) {
-                    if (inGeneratorParameterContext()) {
-                        var savedYieldContext = inYieldContext();
-                        setYieldContext(false);
-                    }
-                    if (inAsyncParameterContext()) {
-                        var savedAwaitContext = inAwaitContext();
-                        setAwaitContext(false);
-                    }
-                }
-                
-                var result = parseHeritageClausesWorker();
-                if (isClassHeritageClause) {
-                    if (inGeneratorParameterContext()) {
-                        setYieldContext(savedYieldContext);
-                    }
-                    if (inAsyncParameterContext()) {
-                        setAwaitContext(savedAwaitContext);
-                    }
-                }
-                return result;
+                return isClassHeritageClause
+                    ? setYieldOrAwaitContextFromParameterContextAnd(false, parseHeritageClausesWorker)
+                    : parseHeritageClausesWorker();
             }
 
             return undefined;
