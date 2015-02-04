@@ -558,7 +558,7 @@ module ts {
             if (hasAwaitOrYield(node)) {
                 var rewritten = SpreadElementRewriter.rewrite(node);
                 if (rewritten !== node) {
-                    return Visitor.fallback(rewritten, visitNode, state);
+                    return Visitor.visit(rewritten, visitNode, state);
                 }
                 return Factory.updateArrayLiteralExpression(node, Visitor.visitNodes(node.elements, visitNode, state, hasAwaitOrYield, cacheExpression));
             }
