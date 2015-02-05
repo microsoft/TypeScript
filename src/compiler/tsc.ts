@@ -2,7 +2,7 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.4.0.0";
+    var version = "1.5.0.0";
 
     export interface SourceFile {
         fileWatcher: FileWatcher;
@@ -72,7 +72,7 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += getLineAndCharacterOfPosition(file, file.end).line;
         });
         return count;
     }
@@ -86,9 +86,9 @@ module ts {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
+            output += diagnostic.file.fileName + "(" + loc.line + "," + loc.character + "): ";
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
@@ -136,27 +136,27 @@ module ts {
 
     function findConfigFile(): string {
         var searchPath = normalizePath(sys.getCurrentDirectory());
-        var filename = "tsconfig.json";
+        var fileName = "tsconfig.json";
         while (true) {
-            if (sys.fileExists(filename)) {
-                return filename;
+            if (sys.fileExists(fileName)) {
+                return fileName;
             }
             var parentPath = getDirectoryPath(searchPath);
             if (parentPath === searchPath) {
                 break;
             }
             searchPath = parentPath;
-            filename = "../" + filename;
+            fileName = "../" + fileName;
         }
         return undefined;
     }
 
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
-        var configFilename: string;                 // Configuration file name (if any)
+        var configFileName: string;                 // Configuration file name (if any)
         var configFileWatcher: FileWatcher;         // Configuration file watcher
         var cachedProgram: Program;                 // Program cached from last compilation
-        var rootFilenames: string[];                // Root filenames for compilation
+        var rootFileNames: string[];                // Root fileNames for compilation
         var compilerOptions: CompilerOptions;       // Compiler options for compilation
         var compilerHost: CompilerHost;             // Compiler host
         var hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
@@ -193,17 +193,17 @@ module ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
-            configFilename = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
-            if (commandLine.filenames.length !== 0) {
+            configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
+            if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
         }
-        else if (commandLine.filenames.length === 0 && isJSONSupported()) {
-            configFilename = findConfigFile();
+        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+            configFileName = findConfigFile();
         }
 
-        if (commandLine.filenames.length === 0 && !configFilename) {
+        if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
@@ -214,8 +214,8 @@ module ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
-            if (configFilename) {
-                configFileWatcher = sys.watchFile(configFilename, configFileChanged);
+            if (configFileName) {
+                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
         }
 
@@ -225,22 +225,22 @@ module ts {
         function performCompilation() {
 
             if (!cachedProgram) {
-                if (configFilename) {
-                    var configObject = readConfigFile(configFilename);
+                if (configFileName) {
+                    var configObject = readConfigFile(configFileName);
                     if (!configObject) {
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFilename));
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
                         return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
                     }
-                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFilename));
+                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
                         return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
                     }
-                    rootFilenames = configParseResult.filenames;
+                    rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
                 else {
-                    rootFilenames = commandLine.filenames;
+                    rootFileNames = commandLine.fileNames;
                     compilerOptions = commandLine.options;
                 }
                 compilerHost = createCompilerHost(compilerOptions);
@@ -248,7 +248,7 @@ module ts {
                 compilerHost.getSourceFile = getSourceFile;
             }
 
-            var compileResult = compile(rootFilenames, compilerOptions, compilerHost);
+            var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
             if (!commandLine.options.watch) {
                 return sys.exit(compileResult.exitStatus);
@@ -258,20 +258,20 @@ module ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
-                var sourceFile = cachedProgram.getSourceFile(filename);
+                var sourceFile = cachedProgram.getSourceFile(fileName);
                 // A modified source file has no watcher and should not be reused
                 if (sourceFile && sourceFile.fileWatcher) {
                     return sourceFile;
                 }
             }
             // Use default host function
-            var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
+            var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && commandLine.options.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
             }
             return sourceFile;
         }
@@ -321,9 +321,9 @@ module ts {
         }
     }
 
-    function compile(filenames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var program = createProgram(filenames, compilerOptions, compilerHost);
+        var program = createProgram(fileNames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
         var errors: Diagnostic[] = program.getDiagnostics();
@@ -359,7 +359,7 @@ module ts {
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
-                sys.write(file.filename + sys.newLine);
+                sys.write(file.fileName + sys.newLine);
             });
         }
 
@@ -413,7 +413,7 @@ module ts {
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        var optsList = optionDeclarations.slice();
+        var optsList = filter(optionDeclarations.slice(), v => !v.experimental);
         optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,

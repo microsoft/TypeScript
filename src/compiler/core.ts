@@ -315,7 +315,6 @@ module ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            isEarly: message.isEarly
         };
     }
 
@@ -334,8 +333,7 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code,
-            isEarly: message.isEarly
+            code: message.code
         };
     }
 
@@ -401,12 +399,12 @@ module ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
-    function getDiagnosticFilename(diagnostic: Diagnostic): string {
-        return diagnostic.file ? diagnostic.file.filename : undefined;
+    function getDiagnosticFileName(diagnostic: Diagnostic): string {
+        return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
 
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number {
-        return compareValues(getDiagnosticFilename(d1), getDiagnosticFilename(d2)) ||
+        return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
@@ -509,8 +507,8 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
-    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
-        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
+    export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
     export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
@@ -608,7 +606,7 @@ module ts {
         return absolutePath;
     }
 
-    export function getBaseFilename(path: string) {
+    export function getBaseFileName(path: string) {
         var i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
@@ -679,6 +677,10 @@ module ts {
             var paddedHexCode = ("0000" + hexCharCode).slice(-4);
             return "\\u" + paddedHexCode;
         }
+    }
+
+    export function getDefaultLibFileName(options: CompilerOptions): string {
+        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
 
     export interface ObjectAllocator {

@@ -20,12 +20,12 @@ module ts {
     }
 
     function createTree(text: IScriptSnapshot, version: string) {
-        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, version, /*isOpen:*/ true, /*setNodeParents:*/ true)
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, version, /*setNodeParents:*/ true)
     }
 
     function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {
-        var diagnostics1 = file1.getSyntacticDiagnostics();
-        var diagnostics2 = file2.getSyntacticDiagnostics();
+        var diagnostics1 = getSyntacticDiagnostics(file1);
+        var diagnostics2 = getSyntacticDiagnostics(file2);
 
         assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
         for (var i = 0, n = diagnostics1.length; i < n; i++) {
@@ -39,7 +39,6 @@ module ts {
             assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
             assert.equal(d1.category, d2.category, "d1.category !== d2.category");
             assert.equal(d1.code, d2.code, "d1.code !== d2.code");
-            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
         }
     }
 
@@ -57,7 +56,7 @@ module ts {
         Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
-        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
+        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", textChangeRange);
         Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.
@@ -69,8 +68,8 @@ module ts {
         // There should be no reused nodes between two trees that are fully parsed.
         assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
-        assert.equal(newTree.filename, incrementalNewTree.filename, "newTree.filename !== incrementalNewTree.filename");
-        assert.equal(newTree.text, incrementalNewTree.text, "newTree.filename !== incrementalNewTree.filename");
+        assert.equal(newTree.fileName, incrementalNewTree.fileName, "newTree.fileName !== incrementalNewTree.fileName");
+        assert.equal(newTree.text, incrementalNewTree.text, "newTree.text !== incrementalNewTree.text");
 
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
@@ -782,7 +781,7 @@ module m3 { }\
                 "            }\r\n" +
                 "                \r\n" +
                 "            return {\r\n" +
-                "                getEmitOutput: (filename): Bar => null,\r\n" +
+                "                getEmitOutput: (fileName): Bar => null,\r\n" +
                 "            };\r\n" +
                 "        }";
 

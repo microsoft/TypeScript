@@ -1,7 +1,13 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(7,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(11,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(15,41): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+  Types of parameters 'n' and 'b' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts (4 errors) ====
@@ -16,16 +22,22 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts
     someGenerics4<string, number>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
     function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
     someGenerics5<number, string>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
     someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
                                             ~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+!!! error TS2345:   Types of parameters 'n' and 'b' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     

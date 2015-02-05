@@ -347,6 +347,12 @@ module ts {
         HasAggregatedChildData = 1 << 9,
     }
 
+    export const enum RelationComparisonResult {
+        Succeeded = 1, // Should be truthy
+        Failed = 2,
+        FailedAndReported = 3
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -624,7 +630,7 @@ module ts {
     export interface VoidExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
-    
+
     export interface AwaitExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
@@ -682,7 +688,7 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-    
+
     export interface SpreadElementExpression extends Expression {
         expression: Expression;
     }
@@ -892,7 +898,7 @@ module ts {
     }
 
     export interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
 
     export interface CommentRange extends TextRange {
@@ -904,53 +910,54 @@ module ts {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
-        filename: string;
+        fileName: string;
         text: string;
-
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-
-        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
-        // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
-        // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
-        // this file as possible.
-        //
-        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
-        // from this SourceFile that are being held onto may change as a result (including 
-        // becoming detached from any SourceFile).  It is recommended that this SourceFile not
-        // be used once 'update' is called on it.
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
 
+        hasNoDefaultLib: boolean;
+        externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        languageVersion: ScriptTarget;
+        identifiers: Map<string>;
+        
+        // @internal
+        nodeCount: number;
+
+        // @internal
+        identifierCount: number;
+
+        // @internal
+        symbolCount: number;
+
+        // @internal
         // Diagnostics reported about the "///<reference" comments in the file.
         referenceDiagnostics: Diagnostic[];
 
+        // @internal
         // Parse errors refer specifically to things the parser could not understand at all (like 
         // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
 
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        getSyntacticDiagnostics(): Diagnostic[];
-
+        // @internal
         // File level diagnostics reported by the binder.
         semanticDiagnostics: Diagnostic[];
 
-        hasNoDefaultLib: boolean;
-        externalModuleIndicator: Node; // The first node that causes this file to be an external module
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
-        languageVersion: ScriptTarget;
-        identifiers: Map<string>;
+        // @internal
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
+        // This field should never be used directly, use getSyntacticDiagnostics function instead.
+        syntacticDiagnostics: Diagnostic[];
+
+        // @internal
+        // Stores a line map for the file.
+        // This field should never be used directly to obtain line map, use getLineMap function instead.
+        lineMap: number[];
     }
 
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
 
@@ -1139,7 +1146,7 @@ module ts {
         getCompilerHost(): CompilerHost;
 
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
 
     export interface TypeChecker {
@@ -1212,7 +1219,7 @@ module ts {
     }
 
     export const enum TypeFormatFlags {
-        None                            = 0x00000000, 
+        None                            = 0x00000000,
         WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
         UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
@@ -1220,20 +1227,21 @@ module ts {
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
+        UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
     }
 
     export const enum SymbolFormatFlags {
         None = 0x00000000,
 
         // Write symbols's type argument if it is instantiated symbol
-                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-                                                       //     var a: C<number>; 
-                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+        //     var a: C<number>; 
+        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
         WriteTypeParametersOrArguments = 0x00000001, 
 
         // Use only external alias information to get the symbol name in the given context
-                                                       // eg.  module m { export class c { } } import x = m.c; 
-                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
+        // eg.  module m { export class c { } } import x = m.c; 
+        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
     }
 
@@ -1262,7 +1270,7 @@ module ts {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(sourceFile?: SourceFile): boolean;
+        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1424,29 +1432,33 @@ module ts {
     }
 
     export const enum TypeFlags {
-        Any                 = 0x00000001,
-        String              = 0x00000002,
-        Number              = 0x00000004,
-        Boolean             = 0x00000008,
-        Void                = 0x00000010,
-        Undefined           = 0x00000020,
-        Null                = 0x00000040,
-        Enum                = 0x00000080,  // Enum type
-        StringLiteral       = 0x00000100,  // String literal type
-        TypeParameter       = 0x00000200,  // Type parameter
-        Class               = 0x00000400,  // Class
-        Interface           = 0x00000800,  // Interface
-        Reference           = 0x00001000,  // Generic type reference
-        Tuple               = 0x00002000,  // Tuple
-        Union               = 0x00004000,  // Union
-        Anonymous           = 0x00008000,  // Anonymous
-        FromSignature       = 0x00010000,  // Created for signature assignment check
-        Unwidened           = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
+        Any                     = 0x00000001,
+        String                  = 0x00000002,
+        Number                  = 0x00000004,
+        Boolean                 = 0x00000008,
+        Void                    = 0x00000010,
+        Undefined               = 0x00000020,
+        Null                    = 0x00000040,
+        Enum                    = 0x00000080,  // Enum type
+        StringLiteral           = 0x00000100,  // String literal type
+        TypeParameter           = 0x00000200,  // Type parameter
+        Class                   = 0x00000400,  // Class
+        Interface               = 0x00000800,  // Interface
+        Reference               = 0x00001000,  // Generic type reference
+        Tuple                   = 0x00002000,  // Tuple
+        Union                   = 0x00004000,  // Union
+        Anonymous               = 0x00008000,  // Anonymous
+        FromSignature           = 0x00010000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
     // Properties common to all types
@@ -1558,14 +1570,13 @@ module ts {
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
-                                            // It is optional because in contextual signature instantiation, nothing fails
+        // It is optional because in contextual signature instantiation, nothing fails
     }
 
     export interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
         code: number;
-        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1586,10 +1597,6 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1629,6 +1636,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         asyncFunctions?: boolean;
         [option: string]: string | number | boolean;
     }
@@ -1656,19 +1664,19 @@ module ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
 
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
-        isFilePath?: boolean;               // True if option value is a path or filename
-        experimental?: boolean;             // The option is experimental
+        isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
+        experimental?: boolean;
     }
 
     export const enum CharacterCodes {
@@ -1699,7 +1707,7 @@ module ts {
         narrowNoBreakSpace = 0x202F,
         ideographicSpace = 0x3000,
         mathematicalSpace = 0x205F,
-        ogham = 0x1680, 
+        ogham = 0x1680,
 
         _ = 0x5F,
         $ = 0x24,
@@ -1811,10 +1819,10 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

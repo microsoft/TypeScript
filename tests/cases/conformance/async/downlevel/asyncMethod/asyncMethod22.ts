@@ -5,8 +5,8 @@ declare class Promise<T> {
     then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
 }
 
-var o: {
+var o = {
   async foo(): Promise<void> {
     var v = { [await]: foo }
   }
-}
+};

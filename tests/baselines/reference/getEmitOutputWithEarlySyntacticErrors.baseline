@@ -1,2 +1,5 @@
-EmitOutputStatus : AllOutputGenerationSkipped
+EmitOutputStatus : JSGeneratedWithSemanticErrors
+FileName : tests/cases/fourslash/inputFile1.js
+// File contains early errors. All outputs should be skipped.
+const uninitialized_const_error;
 

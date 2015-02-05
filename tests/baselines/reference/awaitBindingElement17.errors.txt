@@ -1,4 +1,4 @@
-tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement17.ts(12,33): error TS1311: 'await' expression is not allowed in an initializer.
+tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement17.ts(12,33): error TS1310: 'await' expression is not allowed in an initializer.
 
 
 ==== tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement17.ts (1 errors) ====
@@ -15,6 +15,6 @@ tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement1
     declare var paro: Promise<{x:number;}[]>;
     async function func([{ x = await pa }]): Promise<void> {
                                     
-!!! error TS1311: 'await' expression is not allowed in an initializer.
+!!! error TS1310: 'await' expression is not allowed in an initializer.
     }
     
