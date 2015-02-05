@@ -376,7 +376,7 @@ module FourSlash {
         }
 
         private getFileContent(fileName: string): string {
-            var script = this.languageServiceAdaptorHost.getScriptInfo(this.activeFile.fileName);
+            var script = this.languageServiceAdaptorHost.getScriptInfo(fileName);
             return script.content;
         }
 
