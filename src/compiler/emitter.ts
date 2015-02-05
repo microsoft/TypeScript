@@ -1515,6 +1515,49 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
 
+        if (targetSourceFile === undefined) {
+            forEach(host.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
+                    emitFile(jsFilePath, sourceFile);
+                }
+            });
+
+            if (compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+        else {
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+                emitFile(jsFilePath, targetSourceFile);
+            }
+            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+
+        // Sort and make the unique list of diagnostics
+        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
+
+        // Update returnCode if there is any EmitterError
+        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+
+        // Check and update returnCode for syntactic and semantic
+        var emitResultStatus: EmitReturnStatus;
+        if (hasEmitterError) {
+            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
+        } else {
+            emitResultStatus = EmitReturnStatus.Succeeded;
+        }
+
+        return {
+            emitResultStatus,
+            diagnostics,
+            sourceMaps: sourceMapDataList
+        };
+
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             var writer = createTextWriter(newLine);
             var write = writer.write;
@@ -4395,29 +4438,6 @@ module ts {
                 writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
-
-        if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
-
-            if (compilerOptions.out) {
-                emitFile(compilerOptions.out);
-            }
-        }
-        else {
-            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-                emitFile(jsFilePath, targetSourceFile);
-            }
-            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                emitFile(compilerOptions.out);
-            }
-        }
        
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             emitJavaScript(jsFilePath, sourceFile);
@@ -4426,25 +4446,5 @@ module ts {
                 writeDeclarationFile(jsFilePath, sourceFile);
             }
         }
-
-        // Sort and make the unique list of diagnostics
-        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
-
-        // Update returnCode if there is any EmitterError
-        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
-
-        // Check and update returnCode for syntactic and semantic
-        var emitResultStatus: EmitReturnStatus;
-        if (hasEmitterError) {
-            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else {
-            emitResultStatus = EmitReturnStatus.Succeeded;
-        }
-
-        return {
-            emitResultStatus,
-            diagnostics,
-            sourceMaps: sourceMapDataList
-        };
     }
 }
