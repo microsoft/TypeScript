@@ -322,35 +322,33 @@ module ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        var parseStart = new Date().getTime();
+        ts.parseTime = 0;
+        ts.bindTime = 0;
+        ts.checkTime = 0;
+        ts.emitTime = 0;
+
+        var start = new Date().getTime();
         var program = createProgram(fileNames, compilerOptions, compilerHost);
 
-        var bindStart = new Date().getTime();
         var errors: Diagnostic[] = program.getDiagnostics();
         var exitStatus: EmitReturnStatus;
 
         if (errors.length) {
-            var checkStart = bindStart;
-            var emitStart = bindStart;
-            var reportStart = bindStart;
             exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         }
         else {
-            var checkStart = new Date().getTime();
             errors = program.getTypeCheckerDiagnostics();
             if (compilerOptions.noEmit) {
                 exitStatus = EmitReturnStatus.Succeeded;
             }
             else {
-                var emitStart = new Date().getTime();
                 var emitOutput = program.emit();
-                var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
-                var reportStart = new Date().getTime();
-                errors = concatenate(errors, emitErrors);
+                errors = concatenate(errors, emitOutput.diagnostics);
             }
         }
 
+        var end = start - new Date().getTime();
         reportDiagnostics(errors);
 
         if (compilerOptions.listFiles) {
@@ -367,14 +365,16 @@ module ts {
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
+
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
-            reportTimeStatistic("Parse time", bindStart - parseStart);
-            reportTimeStatistic("Bind time", checkStart - bindStart);
-            reportTimeStatistic("Check time", emitStart - checkStart);
-            reportTimeStatistic("Emit time", reportStart - emitStart);
-            reportTimeStatistic("Total time", reportStart - parseStart);
+
+            reportTimeStatistic("Parse time", ts.parseTime);
+            reportTimeStatistic("Bind time", ts.bindTime);
+            reportTimeStatistic("Check time", ts.checkTime);
+            reportTimeStatistic("Emit time", ts.emitTime);
+            reportTimeStatistic("Total time", start - end);
         }
 
         return { program, exitStatus };

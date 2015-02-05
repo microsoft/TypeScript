@@ -2,6 +2,8 @@
 /// <reference path="emitter.ts" />
 
 module ts {
+    /* @internal */ export var emitTime = 0;
+
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
         var existingDirectories: Map<boolean> = {};
@@ -155,9 +157,14 @@ module ts {
         }
 
         function emit(targetSourceFile?: SourceFile, writeFileCallback?: WriteFileCallback) {
+            var start = new Date().getTime();
+
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             var host = getEmitHost(writeFileCallback);
-            return emitFiles(resolver, host, targetSourceFile);
+            var result = emitFiles(resolver, host, targetSourceFile);
+
+            emitTime += new Date().getTime() - start;
+            return result;
         }
         
         function getSourceFile(fileName: string) {

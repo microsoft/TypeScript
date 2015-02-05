@@ -1,6 +1,8 @@
 /// <reference path="parser.ts"/>
 
 module ts {
+    /* @internal */ export var bindTime = 0;
+
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated    = 1,
@@ -60,8 +62,13 @@ module ts {
         return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
-    export function bindSourceFile(file: SourceFile) {
+    export function bindSourceFile(file: SourceFile): void {
+        var start = new Date().getTime();
+        bindSourceFileWorker(file);
+        bindTime += new Date().getTime() - start;
+    }
 
+    function bindSourceFileWorker(file: SourceFile): void {
         var parent: Node;
         var container: Node;
         var blockScopeContainer: Node;
