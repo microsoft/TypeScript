@@ -167,7 +167,7 @@ module ts {
         Global_type_0_must_be_a_class_or_interface_type: { code: 2316, category: DiagnosticCategory.Error, key: "Global type '{0}' must be a class or interface type." },
         Global_type_0_must_have_1_type_parameter_s: { code: 2317, category: DiagnosticCategory.Error, key: "Global type '{0}' must have {1} type parameter(s)." },
         Cannot_find_global_type_0: { code: 2318, category: DiagnosticCategory.Error, key: "Cannot find global type '{0}'." },
-        Named_properties_0_of_types_1_and_2_are_not_identical: { code: 2319, category: DiagnosticCategory.Error, key: "Named properties '{0}' of types '{1}' and '{2}' are not identical." },
+        Named_property_0_of_types_1_and_2_are_not_identical: { code: 2319, category: DiagnosticCategory.Error, key: "Named property '{0}' of types '{1}' and '{2}' are not identical." },
         Interface_0_cannot_simultaneously_extend_types_1_and_2: { code: 2320, category: DiagnosticCategory.Error, key: "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}'." },
         Excessive_stack_depth_comparing_types_0_and_1: { code: 2321, category: DiagnosticCategory.Error, key: "Excessive stack depth comparing types '{0}' and '{1}'." },
         Type_0_is_not_assignable_to_type_1: { code: 2322, category: DiagnosticCategory.Error, key: "Type '{0}' is not assignable to type '{1}'." },

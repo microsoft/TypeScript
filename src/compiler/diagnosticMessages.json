@@ -661,7 +661,7 @@
         "category": "Error",
         "code": 2318
     },
-    "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
+    "Named property '{0}' of types '{1}' and '{2}' are not identical.": {
         "category": "Error",
         "code": 2319
     },
