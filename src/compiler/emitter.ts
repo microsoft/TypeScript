@@ -3916,7 +3916,7 @@ module ts {
                     emitLiteral(<LiteralExpression>getExternalModuleImportDeclarationExpression(imp));
                 });
                 forEach(node.amdDependencies, amdDependency => {
-                    var text = "\"" + amdDependency + "\"";
+                    var text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
                 });
@@ -3924,6 +3924,12 @@ module ts {
                 forEach(imports, imp => {
                     write(", ");
                     emit(imp.name);
+                });
+                forEach(node.amdDependencies, amdDependency => {
+                    if (amdDependency.name) {
+                        write(", ");
+                        write(amdDependency.name);
+                    }
                 });
                 write(") {");
                 increaseIndent();
