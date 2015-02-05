@@ -73,13 +73,14 @@ module ts {
         };
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program {
         var program: Program;
         var files: SourceFile[] = [];
         var filesByName: Map<SourceFile> = {};
         var errors: Diagnostic[] = [];
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory: string;
+        host = host || createCompilerHost(options);
 
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {

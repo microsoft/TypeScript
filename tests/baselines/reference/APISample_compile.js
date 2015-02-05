@@ -14,8 +14,7 @@ declare var console: any;
 import ts = require("typescript");
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
-    var host = ts.createCompilerHost(options);
-    var program = ts.createProgram(fileNames, options, host);
+    var program = ts.createProgram(fileNames, options);
     var result = program.emit();
 
     var allDiagnostics = program.getDiagnostics()
@@ -1426,7 +1425,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     function createCompilerHost(options: CompilerOptions): CompilerHost;
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
+    function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {
     var servicesVersion: string;
@@ -1926,8 +1925,7 @@ declare module "typescript" {
  */
 var ts = require("typescript");
 function compile(fileNames, options) {
-    var host = ts.createCompilerHost(options);
-    var program = ts.createProgram(fileNames, options, host);
+    var program = ts.createProgram(fileNames, options);
     var result = program.emit();
     var allDiagnostics = program.getDiagnostics().concat(program.getTypeCheckerDiagnostics()).concat(result.diagnostics);
     allDiagnostics.forEach(function (diagnostic) {

@@ -14,8 +14,7 @@ declare var console: any;
 import ts = require("typescript");
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
-    var host = ts.createCompilerHost(options);
-    var program = ts.createProgram(fileNames, options, host);
+    var program = ts.createProgram(fileNames, options);
     var result = program.emit();
 
     var allDiagnostics = program.getDiagnostics()

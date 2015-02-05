@@ -4715,8 +4715,8 @@ declare module "typescript" {
 >CompilerOptions : CompilerOptions
 >CompilerHost : CompilerHost
 
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
->createProgram : (rootNames: string[], options: CompilerOptions, host: CompilerHost) => Program
+    function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
+>createProgram : (rootNames: string[], options: CompilerOptions, host?: CompilerHost) => Program
 >rootNames : string[]
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions

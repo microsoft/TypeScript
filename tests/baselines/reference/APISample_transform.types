@@ -139,9 +139,9 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
 >program : ts.Program
 >ts.createProgram(["file.ts"], compilerOptions, compilerHost) : ts.Program
->ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
+>ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
 >ts : typeof ts
->createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
+>createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
 >["file.ts"] : string[]
 >compilerOptions : ts.CompilerOptions
 >compilerHost : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
@@ -4656,8 +4656,8 @@ declare module "typescript" {
 >CompilerOptions : CompilerOptions
 >CompilerHost : CompilerHost
 
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
->createProgram : (rootNames: string[], options: CompilerOptions, host: CompilerHost) => Program
+    function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
+>createProgram : (rootNames: string[], options: CompilerOptions, host?: CompilerHost) => Program
 >rootNames : string[]
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
