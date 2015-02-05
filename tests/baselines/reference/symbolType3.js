@@ -10,6 +10,8 @@ typeof Symbol.toStringTag;
 ~ Symbol();
 ! Symbol();
 
++(Symbol() || 0);
+
 //// [symbolType3.js]
 var s = Symbol();
 delete Symbol.iterator;
@@ -21,3 +23,4 @@ typeof Symbol.toStringTag;
 -Symbol();
 ~Symbol();
 !Symbol();
++(Symbol() || 0);

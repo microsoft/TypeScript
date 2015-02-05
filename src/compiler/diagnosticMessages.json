@@ -813,7 +813,7 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.": {
+    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 2360
     },
@@ -1212,6 +1212,10 @@
     "Cannot find global value '{0}'.": {
         "category": "Error",
         "code": 2468
+    },
+    "The '{0}' operator cannot be applied to a value of type 'symbol'.": {
+        "category": "Error",
+        "code": 2469
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

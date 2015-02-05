@@ -9,6 +9,9 @@ s <= 0;
 s >= s;
 s >= 0;
 
+0 >= (s || 0);
+(s || 0) >= s;
+
 //// [symbolType8.js]
 var s = Symbol.for("compare");
 s < s;
@@ -19,3 +22,5 @@ s <= s;
 s <= 0;
 s >= s;
 s >= 0;
+0 >= (s || 0);
+(s || 0) >= s;

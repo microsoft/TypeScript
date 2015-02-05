@@ -9,3 +9,5 @@ typeof Symbol.toStringTag;
 - Symbol();
 ~ Symbol();
 ! Symbol();
+
++(Symbol() || 0);

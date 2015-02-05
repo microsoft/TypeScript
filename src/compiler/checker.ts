@@ -6856,6 +6856,9 @@ module ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
+                    if (hasSomeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
+                        error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_a_value_of_type_symbol, tokenToString(node.operator));
+                    }
                     return numberType;
                 case SyntaxKind.ExclamationToken:
                     return booleanType;
@@ -6889,6 +6892,24 @@ module ts {
                     Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
             }
             return numberType;
+        }
+
+        // Just like isTypeOfKind below, except that it returns true if *any* constituent
+        // has this kind.
+        function hasSomeTypeOfKind(type: Type, kind: TypeFlags): boolean {
+            if (type.flags & kind) {
+                return true;
+            }
+            if (type.flags & TypeFlags.Union) {
+                var types = (<UnionType>type).types;
+                for (var i = 0; i < types.length; i++) {
+                    if (types[i].flags & kind) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
         }
 
         // Return true if type has the given flags, or is a union type composed of types that all have those flags.
@@ -6938,7 +6959,7 @@ module ts {
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
             if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
-                error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
+                error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
@@ -7106,14 +7127,21 @@ module ts {
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
-                        // If one or both operands are of the String primitive type, the result is of the String primitive type.
-                        resultType = stringType;
-                    }
-                    else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
-                        // Otherwise, the result is of type Any.
-                        // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
-                        resultType = anyType;
+                    else {
+                        if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
+                            // If one or both operands are of the String primitive type, the result is of the String primitive type.
+                            resultType = stringType;
+                        }
+                        else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
+                            // Otherwise, the result is of type Any.
+                            // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
+                            resultType = anyType;
+                        }
+
+                        // Symbols are not allowed at all in arithmetic expressions
+                        if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
+                            return resultType;
+                        }
                     }
 
                     if (!resultType) {
@@ -7125,14 +7153,18 @@ module ts {
                         checkAssignmentOperator(resultType);
                     }
                     return resultType;
-                case SyntaxKind.EqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsToken:
-                case SyntaxKind.EqualsEqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsEqualsToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
+                    if (!checkForDisallowedESSymbolOperand(operator)) {
+                        return booleanType;
+                    }
+                    // Fall through
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -7150,6 +7182,20 @@ module ts {
                     return rightType;
                 case SyntaxKind.CommaToken:
                     return rightType;
+            }
+
+            // Return type is true if there was no error, false if there was an error.
+            function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
+                var offendingSymbolOperand =
+                    hasSomeTypeOfKind(leftType, TypeFlags.ESSymbol) ? node.left :
+                    hasSomeTypeOfKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                    undefined;
+                if (offendingSymbolOperand) {
+                    error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_a_value_of_type_symbol, tokenToString(operator));
+                    return false;
+                }
+
+                return true;
             }
 
             function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind {
