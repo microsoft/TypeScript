@@ -26,9 +26,6 @@ module ts {
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
 
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
-        isDeclarationEmitBlocked(sourceFile?: SourceFile): boolean;
-
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;

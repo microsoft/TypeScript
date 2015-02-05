@@ -52,3 +52,16 @@ var C = (function () {
     C.y = 1;
     return C;
 })();
+
+
+//// [declFilePrivateStatic.d.ts]
+declare class C {
+    private static x;
+    static y: number;
+    private static a();
+    static b(): void;
+    private static c;
+    static d: number;
+    private static e;
+    static f: any;
+}

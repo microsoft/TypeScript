@@ -1144,7 +1144,9 @@ module ts {
                 if (accessor) {
                     return accessor.kind === SyntaxKind.GetAccessor
                         ? accessor.type // Getter - return type
-                        : accessor.parameters[0].type; // Setter parameter type
+                        : accessor.parameters.length > 0
+                            ? accessor.parameters[0].type // Setter parameter type
+                            : undefined;
                 }
             }
 
@@ -1575,6 +1577,25 @@ module ts {
 
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
+
+            if (compilerOptions.sourceMap) {
+                initializeEmitterWithSourceMaps();
+            }
+
+            if (root) {
+                emit(root);
+            }
+            else {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        emit(sourceFile);
+                    }
+                });
+            }
+
+            writeLine();
+            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
+            return;
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -2637,7 +2658,6 @@ module ts {
                 emit(node.operand);
                 write(tokenToString(node.operator));
             }
-
 
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
@@ -4237,7 +4257,6 @@ module ts {
                 return leadingComments;
             }
 
-
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
@@ -4355,24 +4374,6 @@ module ts {
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
-
-            if (compilerOptions.sourceMap) {
-                initializeEmitterWithSourceMaps();
-            }
-
-            if (root) {
-                emit(root);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
-                    }
-                });
-            }
-
-            writeLine();
-            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
         }
 
         function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile) {
@@ -4395,14 +4396,7 @@ module ts {
             }
         }
 
-        var isEmitBlocked = false;
-        var isDeclarationEmitBlocked = false;
-
         if (targetSourceFile === undefined) {
-            // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
-            isEmitBlocked = host.isEmitBlocked();
-            isDeclarationEmitBlocked = host.isDeclarationEmitBlocked();
-
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
@@ -4417,33 +4411,19 @@ module ts {
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                isEmitBlocked = host.isEmitBlocked(targetSourceFile);
-                isDeclarationEmitBlocked = host.isDeclarationEmitBlocked(targetSourceFile);
-
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
-                // Emit all, non-external-module file, into one single output file
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
-                        isDeclarationEmitBlocked = isDeclarationEmitBlocked || host.isDeclarationEmitBlocked(sourceFile);
-                    }
-                });
-
                 emitFile(compilerOptions.out);
             }
         }
        
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            if (!isEmitBlocked) {
-                emitJavaScript(jsFilePath, sourceFile);
-                if (!isDeclarationEmitBlocked && compilerOptions.declaration) {
-                    writeDeclarationFile(jsFilePath, sourceFile);
-                }
+            emitJavaScript(jsFilePath, sourceFile);
+
+            if (compilerOptions.declaration) {
+                writeDeclarationFile(jsFilePath, sourceFile);
             }
         }
 
@@ -4455,14 +4435,8 @@ module ts {
 
         // Check and update returnCode for syntactic and semantic
         var emitResultStatus: EmitReturnStatus;
-        if (isEmitBlocked) {
-            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_AllOutputsSkipped;
-        } else if (hasEmitterError) {
+        if (hasEmitterError) {
             emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else if (isDeclarationEmitBlocked && compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated;
-        } else if (isDeclarationEmitBlocked && !compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_JavaScriptGenerated;
         } else {
             emitResultStatus = EmitReturnStatus.Succeeded;
         }
@@ -4470,7 +4444,7 @@ module ts {
         return {
             emitResultStatus,
             diagnostics,
-            sourceMaps: isEmitBlocked ? undefined : sourceMapDataList
+            sourceMaps: sourceMapDataList
         };
     }
 }

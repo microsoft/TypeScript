@@ -1,6 +1,6 @@
-EmitOutputStatus : DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated
-Diagnostics:
-  Type 'string' is not assignable to type 'number'.
+EmitOutputStatus : Succeeded
 FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
+FileName : tests/cases/fourslash/inputFile.d.ts
+declare var x: number;
 

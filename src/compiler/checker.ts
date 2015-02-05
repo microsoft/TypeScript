@@ -55,7 +55,7 @@ module ts {
             getSignatureFromDeclaration,
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            getEmitResolver: () => emitResolver,
+            getEmitResolver,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -122,6 +122,13 @@ module ts {
                 flags: TypeFlags.Boolean
             }
         };
+
+        function getEmitResolver(sourceFile?: SourceFile) {
+            // Ensure we have all the type information in place for this file so that all the
+            // emitter questions of this resolver will return the right information.
+            getDiagnostics(sourceFile);
+            return emitResolver;
+        }
 
         function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var diagnostic = location

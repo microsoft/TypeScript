@@ -136,9 +136,7 @@ module ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            isEmitBlocked,
             getCurrentDirectory: host.getCurrentDirectory,
-            getEmitResolver: () => getDiagnosticsProducingTypeChecker().getEmitResolver(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -155,29 +153,8 @@ module ts {
                 getNewLine: host.getNewLine,
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                isEmitBlocked,
-                isDeclarationEmitBlocked,
                 writeFile: writeFileCallback || host.writeFile,
             };
-        }
-
-        function hasPreEmitDiagnostics(sourceFile?: SourceFile): boolean {
-            var hasSyntacticDiagnostics = program.getSyntacticDiagnostics(sourceFile).length > 0;
-            var hasSemanticDiagnostics = program.getSemanticDiagnostics(sourceFile).length > 0;
-
-            if (hasSyntacticDiagnostics || hasSemanticDiagnostics) {
-                return true;
-            }
-
-            return !sourceFile && program.getGlobalDiagnostics().length > 0;
-        }
-
-        function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return options.noEmitOnError && hasPreEmitDiagnostics(sourceFile);
-        }
-
-        function isDeclarationEmitBlocked(sourceFile?: SourceFile) {
-            return hasPreEmitDiagnostics(sourceFile);
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -189,18 +166,23 @@ module ts {
         }
 
         function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{
-            var typeChecker = getDiagnosticsProducingTypeChecker();
-            typeChecker.getDiagnostics(targetSourceFile);
-            var resolver = typeChecker.getEmitResolver();
+            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
             return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
 
-        function emit(targetSourceFile?: SourceFile, writeFileCallback?: WriteFileCallback) {
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
+            // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+            // immediately bail out.
+            if (options.noEmitOnError && getPreEmitDiagnostics(this).length > 0) {
+                return { diagnostics: [], sourceMaps: undefined, emitResultStatus: EmitReturnStatus.DiagnosticsPresent_AllOutputsSkipped };
+            }
+
             var start = new Date().getTime();
 
-            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
-            var host = getEmitHost(writeFileCallback);
-            var result = emitFiles(resolver, host, targetSourceFile);
+            var result = emitFiles(
+                getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile),
+                getEmitHost(writeFileCallback),
+                sourceFile);
 
             emitTime += new Date().getTime() - start;
             return result;

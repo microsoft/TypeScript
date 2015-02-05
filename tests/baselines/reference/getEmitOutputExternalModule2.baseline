@@ -1,7 +1,4 @@
-EmitOutputStatus : DiagnosticsPresent_JavaScriptGenerated
-Diagnostics:
-  Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
-  Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
+EmitOutputStatus : Succeeded
 FileName : declSingleFile.js
 var x = 5;
 var Bar = (function () {

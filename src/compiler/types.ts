@@ -984,7 +984,7 @@ module ts {
     export enum EmitReturnStatus {
         // All outputs generated if requested (.js, .map, .d.ts), no errors reported
         Succeeded = 0,
-
+        
         // No .js, .map or d.ts generated because of diagnostics and the presence of the 
         // -noEmitOnError optoin.
         DiagnosticsPresent_AllOutputsSkipped = 1,
@@ -1050,7 +1050,7 @@ module ts {
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
-        /* @internal */ getEmitResolver(): EmitResolver;
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
