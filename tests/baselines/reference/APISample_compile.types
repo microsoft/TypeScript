@@ -98,9 +98,9 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
->diagnostic.messageText : string
+>diagnostic.messageText : string | ts.DiagnosticMessageChain
 >diagnostic : ts.Diagnostic
->messageText : string
+>messageText : string | ts.DiagnosticMessageChain
 
     });
 
@@ -2250,17 +2250,13 @@ declare module "typescript" {
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
 
-        getCompilerHost(): CompilerHost;
->getCompilerHost : () => CompilerHost
->CompilerHost : CompilerHost
-
         /**
          * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
          * the javascript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the javascript and declaration for that
          * specific file will be generated.
          *
-         * If writeFile is not specified then the writeFile callback from getCompilerHost() will be
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
          * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the javascript and declaration files.
          */
@@ -2399,10 +2395,6 @@ declare module "typescript" {
         getCompilerOptions(): CompilerOptions;
 >getCompilerOptions : () => CompilerOptions
 >CompilerOptions : CompilerOptions
-
-        getCompilerHost(): CompilerHost;
->getCompilerHost : () => CompilerHost
->CompilerHost : CompilerHost
 
         getSourceFiles(): SourceFile[];
 >getSourceFiles : () => SourceFile[]
@@ -3659,8 +3651,9 @@ declare module "typescript" {
         length: number;
 >length : number
 
-        messageText: string;
->messageText : string
+        messageText: string | DiagnosticMessageChain;
+>messageText : string | DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
 
         category: DiagnosticCategory;
 >category : DiagnosticCategory

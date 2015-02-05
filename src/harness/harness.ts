@@ -183,7 +183,7 @@ module Utils {
         return {
             start: diagnostic.start,
             length: diagnostic.length,
-            messageText: diagnostic.messageText,
+            messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine),
             category: (<any>ts).DiagnosticCategory[diagnostic.category],
             code: diagnostic.code
         };
@@ -305,7 +305,9 @@ module Utils {
 
             assert.equal(d1.start, d2.start, "d1.start !== d2.start");
             assert.equal(d1.length, d2.length, "d1.length !== d2.length");
-            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(
+                ts.flattenDiagnosticMessageText(d1.messageText, ts.sys.newLine),
+                ts.flattenDiagnosticMessageText(d2.messageText, ts.sys.newLine), "d1.messageText !== d2.messageText");
             assert.equal(d1.category, d2.category, "d1.category !== d2.category");
             assert.equal(d1.code, d2.code, "d1.code !== d2.code");
         }
@@ -1182,7 +1184,7 @@ module Harness {
                 end: err.start + err.length,
                 line: errorLineInfo.line,
                 character: errorLineInfo.character,
-                message: err.messageText,
+                message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
                 category: ts.DiagnosticCategory[err.category].toLowerCase(),
                 code: err.code
             };

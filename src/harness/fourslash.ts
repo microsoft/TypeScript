@@ -513,7 +513,9 @@ module FourSlash {
             }
 
             errors.forEach(function (error: ts.Diagnostic) {
-                Harness.IO.log("  minChar: " + error.start + ", limChar: " + (error.start + error.length) + ", message: " + error.messageText + "\n");
+                Harness.IO.log("  minChar: " + error.start +
+                    ", limChar: " + (error.start + error.length) +
+                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine) + "\n");
             });
         }
 
@@ -1179,7 +1181,10 @@ module FourSlash {
 
             if (errorList.length) {
                 errorList.forEach(err => {
-                    Harness.IO.log("start: " + err.start + ", length: " + err.length + ", message: " + err.messageText);
+                    Harness.IO.log(
+                        "start: " + err.start +
+                        ", length: " + err.length +
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine));
                 });
             }
         }
@@ -2214,7 +2219,7 @@ module FourSlash {
 
         var errors = program.getDiagnostics().concat(checker.getDiagnostics());
         if (errors.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => e.messageText).join('\r\n'));
+            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
         program.emit();
         result = result || ''; // Might have an empty fourslash file

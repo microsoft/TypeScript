@@ -78,8 +78,8 @@ module ts {
     }
 
     function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
-        var diagnostic: Diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return diagnostic.messageText;
+        var diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return <string>diagnostic.messageText;
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
@@ -92,7 +92,7 @@ module ts {
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        output += category + " TS" + diagnostic.code + ": " + flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) + sys.newLine;
 
         sys.write(output);
     }

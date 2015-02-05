@@ -275,14 +275,14 @@ class ProjectRunner extends RunnerBase {
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
             var allInputFiles: { emittedFileName: string; code: string; }[] = [];
             var compilerOptions = compilerResult.program.getCompilerOptions();
-            var compilerHost = compilerResult.program.getCompilerHost();
+
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (Harness.Compiler.isDTS(sourceFile.fileName)) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
                     if (compilerOptions.outDir) {
-                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerHost.getCurrentDirectory());
+                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
                         var emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
                     }

@@ -23,9 +23,9 @@ module ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode ?
-                        createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText :
-                        e.message);
+                    onError(e.number === unsupportedFileEncodingErrorCode
+                        ? createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText
+                        : e.message);
                 }
                 text = "";
             }
@@ -97,7 +97,6 @@ module ts {
             getSourceFile: getSourceFile,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
-            getCompilerHost: () => host,
             getDiagnostics,
             getGlobalDiagnostics,
             getTypeCheckerDiagnostics,
@@ -118,17 +117,16 @@ module ts {
         return program;
 
         function getEmitHost(writeFileCallback?: WriteFileCallback) {
-            var compilerHost = program.getCompilerHost();
             return {
-                getCanonicalFileName: compilerHost.getCanonicalFileName,
+                getCanonicalFileName: host.getCanonicalFileName,
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: compilerHost.getCurrentDirectory,
-                getNewLine: compilerHost.getNewLine,
+                getCurrentDirectory: host.getCurrentDirectory,
+                getNewLine: host.getNewLine,
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 isEmitBlocked,
-                writeFile: writeFileCallback || compilerHost.writeFile,
+                writeFile: writeFileCallback || host.writeFile,
             };
         }
 

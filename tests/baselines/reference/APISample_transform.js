@@ -772,14 +772,13 @@ declare module "typescript" {
     }
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        getCompilerHost(): CompilerHost;
         /**
          * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
          * the javascript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the javascript and declaration for that
          * specific file will be generated.
          *
-         * If writeFile is not specified then the writeFile callback from getCompilerHost() will be
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
          * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the javascript and declaration files.
          */
@@ -826,7 +825,6 @@ declare module "typescript" {
     }
     interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
-        getCompilerHost(): CompilerHost;
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
     }
@@ -1175,7 +1173,7 @@ declare module "typescript" {
         file: SourceFile;
         start: number;
         length: number;
-        messageText: string;
+        messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
     }
