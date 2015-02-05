@@ -211,17 +211,25 @@ module ts {
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
-        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+        function getDiagnosticsHelper(sourceFile: SourceFile, getDiagnostics: (sourceFile: SourceFile) => Diagnostic[]): Diagnostic[] {
             if (sourceFile) {
-                return ts.getSyntacticDiagnostics(sourceFile);
+                return getDiagnostics(sourceFile);
             }
 
             var allDiagnostics: Diagnostic[] = [];
             forEach(program.getSourceFiles(), sourceFile => {
-                addRange(allDiagnostics, ts.getSyntacticDiagnostics(sourceFile));
+                addRange(allDiagnostics, getDiagnostics(sourceFile));
             });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
+        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+            return getDiagnosticsHelper(sourceFile, ts.getSyntacticDiagnostics);
+        }
+
+        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
@@ -233,19 +241,6 @@ module ts {
             var programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
 
             return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
-        }
-
-        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            if (sourceFile) {
-                return sortAndDeduplicateDiagnostics(getSemanticDiagnosticsForFile(sourceFile));
-            }
-
-            var allDiagnostics: Diagnostic[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
-                addRange(allDiagnostics, getSemanticDiagnosticsForFile(sourceFile));
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[]{
