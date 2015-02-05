@@ -1,0 +1,13 @@
+=== tests/cases/compiler/es6ExportDefaultFunctionDeclarationOverload.ts ===
+export default function b(a: string): string;
+>b : { (a: string): string; (a: number): number; }
+>a : string
+
+export default function b(a: number): number;
+>b : { (a: string): string; (a: number): number; }
+>a : number
+
+export default function b(a: any): any {
+>b : { (a: string): string; (a: number): number; }
+>a : any
+}
