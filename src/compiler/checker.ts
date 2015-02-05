@@ -4767,7 +4767,7 @@ module ts {
                 if (assumeTrue) {
                     // Assumed result is true. If check was not for a primitive type, remove all primitive types
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol, /*isOfTypeKind*/ true);
                     }
                     // Check was for a primitive type, return that primitive type if it is a subtype
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
