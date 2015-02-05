@@ -2448,33 +2448,23 @@ declare module "typescript" {
 >sourceMapDecodedMappings : SourceMapSpan[]
 >SourceMapSpan : SourceMapSpan
     }
-    enum EmitReturnStatus {
->EmitReturnStatus : EmitReturnStatus
+    enum ExitStatus {
+>ExitStatus : ExitStatus
 
-        Succeeded = 0,
->Succeeded : EmitReturnStatus
+        Success = 0,
+>Success : ExitStatus
 
-        DiagnosticsPresent_AllOutputsSkipped = 1,
->DiagnosticsPresent_AllOutputsSkipped : EmitReturnStatus
+        DiagnosticsPresent_OutputsSkipped = 1,
+>DiagnosticsPresent_OutputsSkipped : ExitStatus
 
-        DiagnosticsPresent_JavaScriptGenerated = 2,
->DiagnosticsPresent_JavaScriptGenerated : EmitReturnStatus
-
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
->DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated : EmitReturnStatus
-
-        EmitErrorsEncountered = 4,
->EmitErrorsEncountered : EmitReturnStatus
-
-        CompilerOptionsErrors = 5,
->CompilerOptionsErrors : EmitReturnStatus
+        DiagnosticsPresent_OutputsGenerated = 2,
+>DiagnosticsPresent_OutputsGenerated : ExitStatus
     }
     interface EmitResult {
 >EmitResult : EmitResult
 
-        emitResultStatus: EmitReturnStatus;
->emitResultStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
 
         diagnostics: Diagnostic[];
 >diagnostics : Diagnostic[]
@@ -5595,9 +5585,8 @@ declare module "typescript" {
 >outputFiles : OutputFile[]
 >OutputFile : OutputFile
 
-        emitOutputStatus: EmitReturnStatus;
->emitOutputStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
     }
     const enum OutputFileType {
 >OutputFileType : OutputFileType

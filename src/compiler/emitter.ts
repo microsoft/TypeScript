@@ -1508,7 +1508,8 @@ module ts {
 
     // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult
+    {
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
@@ -1541,19 +1542,8 @@ module ts {
         // Sort and make the unique list of diagnostics
         diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
 
-        // Update returnCode if there is any EmitterError
-        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
-
-        // Check and update returnCode for syntactic and semantic
-        var emitResultStatus: EmitReturnStatus;
-        if (hasEmitterError) {
-            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else {
-            emitResultStatus = EmitReturnStatus.Succeeded;
-        }
-
         return {
-            emitResultStatus,
+            emitSkipped: false,
             diagnostics,
             sourceMaps: sourceMapDataList
         };

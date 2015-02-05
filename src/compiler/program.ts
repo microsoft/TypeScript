@@ -174,20 +174,20 @@ module ts {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.
             if (options.noEmitOnError && getPreEmitDiagnostics(this).length > 0) {
-                return { diagnostics: [], sourceMaps: undefined, emitResultStatus: EmitReturnStatus.DiagnosticsPresent_AllOutputsSkipped };
+                return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
             }
 
             var start = new Date().getTime();
 
-            var result = emitFiles(
+            var emitResult = emitFiles(
                 getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile),
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
             emitTime += new Date().getTime() - start;
-            return result;
+            return emitResult;
         }
-        
+
         function getSourceFile(fileName: string) {
             fileName = host.getCanonicalFileName(fileName);
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;

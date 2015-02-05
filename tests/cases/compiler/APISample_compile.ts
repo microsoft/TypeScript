@@ -25,8 +25,9 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
         console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
     });
 
-    console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`);
-    process.exit(emitResult.emitResultStatus);
+    var exitCode = emitResult.emitSkipped ? 1 : 0;
+    console.log(`Process exiting with code '${exitCode}'.`);
+    process.exit(exitCode);
 }
 
 compile(process.argv.slice(2), {

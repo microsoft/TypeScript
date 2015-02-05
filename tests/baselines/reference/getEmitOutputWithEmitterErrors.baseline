@@ -1,5 +1,4 @@
-EmitOutputStatus : EmitErrorsEncountered
-Diagnostics:
+EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile.js
 var M;
 (function (M) {

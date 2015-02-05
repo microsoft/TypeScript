@@ -1140,11 +1140,10 @@ module FourSlash {
                     // Loop through all the emittedFiles and emit them one by one
                     emitFiles.forEach(emitFile => {
                         var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
-                        var emitOutputStatus = emitOutput.emitOutputStatus;
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus] + ts.sys.newLine;
+                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + ts.sys.newLine;
 
-                        if (emitOutputStatus !== ts.EmitReturnStatus.Succeeded) {
+                        if (emitOutput.emitSkipped) {
                             resultString += "Diagnostics:" + ts.sys.newLine;
                             var diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (var i = 0, n = diagnostics.length; i < n; i++) {

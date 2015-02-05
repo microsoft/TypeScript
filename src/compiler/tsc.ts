@@ -165,7 +165,7 @@ module ts {
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
@@ -174,29 +174,29 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.help) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
@@ -206,13 +206,13 @@ module ts {
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
                 configFileWatcher = sys.watchFile(configFileName, configFileChanged);
@@ -229,12 +229,12 @@ module ts {
                     var configObject = readConfigFile(configFileName);
                     if (!configObject) {
                         reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
@@ -362,33 +362,46 @@ module ts {
 
         return { program, exitStatus };
 
-        function compileProgram(): EmitReturnStatus {
+        function compileProgram(): ExitStatus {
             // First get any syntactic errors. 
-            var errors = program.getSyntacticDiagnostics();
-            reportDiagnostics(errors);
+            var diagnostics = program.getSyntacticDiagnostics();
+            reportDiagnostics(diagnostics);
 
             // If we didn't have any syntactic errors, then also try getting the global and 
             // semantic errors.
-            if (errors.length === 0) {
-                var errors = program.getGlobalDiagnostics();
-                reportDiagnostics(errors);
+            if (diagnostics.length === 0) {
+                var diagnostics = program.getGlobalDiagnostics();
+                reportDiagnostics(diagnostics);
 
-                if (errors.length === 0) {
-                    var errors = program.getSemanticDiagnostics();
-                    reportDiagnostics(errors);
+                if (diagnostics.length === 0) {
+                    var diagnostics = program.getSemanticDiagnostics();
+                    reportDiagnostics(diagnostics);
                 }
             }
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {
-                return EmitReturnStatus.Succeeded;
+                return diagnostics.length
+                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
+                    : ExitStatus.Success;
             }
 
             // Otherwise, emit and report any errors we ran into.
             var emitOutput = program.emit();
             reportDiagnostics(emitOutput.diagnostics);
 
-            return emitOutput.emitResultStatus;
+            // If the emitter didn't emit anything, then pass that value along.
+            if (emitOutput.emitSkipped) {
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            }
+
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+                ExitStatus.DiagnosticsPresent_OutputsGenerated;
+            }
+
+            return ExitStatus.Success;
         }
     }
 

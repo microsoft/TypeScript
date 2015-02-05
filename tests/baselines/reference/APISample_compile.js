@@ -25,8 +25,9 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
         console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
     });
 
-    console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`);
-    process.exit(emitResult.emitResultStatus);
+    var exitCode = emitResult.emitSkipped ? 1 : 0;
+    console.log(`Process exiting with code '${exitCode}'.`);
+    process.exit(exitCode);
 }
 
 compile(process.argv.slice(2), {
@@ -777,16 +778,13 @@ declare module "typescript" {
         sourceMapMappings: string;
         sourceMapDecodedMappings: SourceMapSpan[];
     }
-    enum EmitReturnStatus {
-        Succeeded = 0,
-        DiagnosticsPresent_AllOutputsSkipped = 1,
-        DiagnosticsPresent_JavaScriptGenerated = 2,
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
-        EmitErrorsEncountered = 4,
-        CompilerOptionsErrors = 5,
+    enum ExitStatus {
+        Success = 0,
+        DiagnosticsPresent_OutputsSkipped = 1,
+        DiagnosticsPresent_OutputsGenerated = 2,
     }
     interface EmitResult {
-        emitResultStatus: EmitReturnStatus;
+        emitSkipped: boolean;
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];
     }
@@ -1723,7 +1721,7 @@ declare module "typescript" {
     }
     interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputStatus: EmitReturnStatus;
+        emitSkipped: boolean;
     }
     const enum OutputFileType {
         JavaScript = 0,
@@ -1926,8 +1924,9 @@ function compile(fileNames, options) {
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
         console.log(diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL));
     });
-    console.log("Process exiting with code '" + emitResult.emitResultStatus + "'.");
-    process.exit(emitResult.emitResultStatus);
+    var exitCode = emitResult.emitSkipped ? 1 : 0;
+    console.log("Process exiting with code '" + exitCode + "'.");
+    process.exit(exitCode);
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {

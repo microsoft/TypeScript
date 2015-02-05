@@ -104,23 +104,26 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 
     });
 
-    console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`);
->console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`) : any
+    var exitCode = emitResult.emitSkipped ? 1 : 0;
+>exitCode : number
+>emitResult.emitSkipped ? 1 : 0 : number
+>emitResult.emitSkipped : boolean
+>emitResult : ts.EmitResult
+>emitSkipped : boolean
+
+    console.log(`Process exiting with code '${exitCode}'.`);
+>console.log(`Process exiting with code '${exitCode}'.`) : any
 >console.log : any
 >console : any
 >log : any
->emitResult.emitResultStatus : ts.EmitReturnStatus
->emitResult : ts.EmitResult
->emitResultStatus : ts.EmitReturnStatus
+>exitCode : number
 
-    process.exit(emitResult.emitResultStatus);
->process.exit(emitResult.emitResultStatus) : any
+    process.exit(exitCode);
+>process.exit(exitCode) : any
 >process.exit : any
 >process : any
 >exit : any
->emitResult.emitResultStatus : ts.EmitReturnStatus
->emitResult : ts.EmitResult
->emitResultStatus : ts.EmitReturnStatus
+>exitCode : number
 }
 
 compile(process.argv.slice(2), {
@@ -2349,33 +2352,23 @@ declare module "typescript" {
 >sourceMapDecodedMappings : SourceMapSpan[]
 >SourceMapSpan : SourceMapSpan
     }
-    enum EmitReturnStatus {
->EmitReturnStatus : EmitReturnStatus
+    enum ExitStatus {
+>ExitStatus : ExitStatus
 
-        Succeeded = 0,
->Succeeded : EmitReturnStatus
+        Success = 0,
+>Success : ExitStatus
 
-        DiagnosticsPresent_AllOutputsSkipped = 1,
->DiagnosticsPresent_AllOutputsSkipped : EmitReturnStatus
+        DiagnosticsPresent_OutputsSkipped = 1,
+>DiagnosticsPresent_OutputsSkipped : ExitStatus
 
-        DiagnosticsPresent_JavaScriptGenerated = 2,
->DiagnosticsPresent_JavaScriptGenerated : EmitReturnStatus
-
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
->DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated : EmitReturnStatus
-
-        EmitErrorsEncountered = 4,
->EmitErrorsEncountered : EmitReturnStatus
-
-        CompilerOptionsErrors = 5,
->CompilerOptionsErrors : EmitReturnStatus
+        DiagnosticsPresent_OutputsGenerated = 2,
+>DiagnosticsPresent_OutputsGenerated : ExitStatus
     }
     interface EmitResult {
 >EmitResult : EmitResult
 
-        emitResultStatus: EmitReturnStatus;
->emitResultStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
 
         diagnostics: Diagnostic[];
 >diagnostics : Diagnostic[]
@@ -5496,9 +5489,8 @@ declare module "typescript" {
 >outputFiles : OutputFile[]
 >OutputFile : OutputFile
 
-        emitOutputStatus: EmitReturnStatus;
->emitOutputStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
     }
     const enum OutputFileType {
 >OutputFileType : OutputFileType

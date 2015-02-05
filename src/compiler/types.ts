@@ -981,31 +981,21 @@ module ts {
     }
 
     // Return code used by getEmitOutput function to indicate status of the function
-    export enum EmitReturnStatus {
-        // All outputs generated if requested (.js, .map, .d.ts), no errors reported
-        Succeeded = 0,
+    export enum ExitStatus {
+        // Compiler ran successfully.  Either this was a simple do-nothing compilation (for example,
+        // when -version or -help was provided, or this was a normal compilation, no diagnostics
+        // were produced, and all outputs were generated successfully.
+        Success = 0,
         
-        // No .js, .map or d.ts generated because of diagnostics and the presence of the 
-        // -noEmitOnError optoin.
-        DiagnosticsPresent_AllOutputsSkipped = 1,
+        // Diagnostics were produced and because of them no code was generated.
+        DiagnosticsPresent_OutputsSkipped = 1,
 
-        // .js and .map generated.  However, diagnostics were generated as well.
-        // No .d.ts was requested or generated.
-        DiagnosticsPresent_JavaScriptGenerated = 2,
-
-        // .js, .map generated.  .d.ts was requested but was not generated due to the 
-        // presence of diagnostics.
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
-
-        // Emitter errors occurred during emitting process.
-        EmitErrorsEncountered = 4,
-
-        // Errors occurred in parsing compiler options, nothing generated
-        CompilerOptionsErrors = 5,
+        // Diagnostics were produced and outputs were generated in spite of them.
+        DiagnosticsPresent_OutputsGenerated = 2,
     }
 
     export interface EmitResult {
-        emitResultStatus: EmitReturnStatus;
+        emitSkipped: boolean;
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }

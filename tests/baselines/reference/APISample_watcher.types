@@ -233,16 +233,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >getEmitOutput : (fileName: string) => ts.EmitOutput
 >fileName : string
 
-        if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
->output.emitOutputStatus === ts.EmitReturnStatus.Succeeded : boolean
->output.emitOutputStatus : ts.EmitReturnStatus
+        if (!output.emitSkipped) {
+>!output.emitSkipped : boolean
+>output.emitSkipped : boolean
 >output : ts.EmitOutput
->emitOutputStatus : ts.EmitReturnStatus
->ts.EmitReturnStatus.Succeeded : ts.EmitReturnStatus
->ts.EmitReturnStatus : typeof ts.EmitReturnStatus
->ts : typeof ts
->EmitReturnStatus : typeof ts.EmitReturnStatus
->Succeeded : ts.EmitReturnStatus
+>emitSkipped : boolean
 
             console.log(`Emitting ${fileName}`);
 >console.log(`Emitting ${fileName}`) : any
@@ -322,11 +317,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fileName : string
 
         allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
+>allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
             if (diagnostic.file) {
@@ -346,8 +341,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >start : number
 
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
->console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
+>console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`) : any
 >console.log : any
 >console : any
 >log : any
@@ -362,6 +357,10 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
+>ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n") : string
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>ts : typeof ts
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
 >diagnostic.messageText : string | ts.DiagnosticMessageChain
 >diagnostic : ts.Diagnostic
 >messageText : string | ts.DiagnosticMessageChain
@@ -2622,33 +2621,23 @@ declare module "typescript" {
 >sourceMapDecodedMappings : SourceMapSpan[]
 >SourceMapSpan : SourceMapSpan
     }
-    enum EmitReturnStatus {
->EmitReturnStatus : EmitReturnStatus
+    enum ExitStatus {
+>ExitStatus : ExitStatus
 
-        Succeeded = 0,
->Succeeded : EmitReturnStatus
+        Success = 0,
+>Success : ExitStatus
 
-        DiagnosticsPresent_AllOutputsSkipped = 1,
->DiagnosticsPresent_AllOutputsSkipped : EmitReturnStatus
+        DiagnosticsPresent_OutputsSkipped = 1,
+>DiagnosticsPresent_OutputsSkipped : ExitStatus
 
-        DiagnosticsPresent_JavaScriptGenerated = 2,
->DiagnosticsPresent_JavaScriptGenerated : EmitReturnStatus
-
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
->DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated : EmitReturnStatus
-
-        EmitErrorsEncountered = 4,
->EmitErrorsEncountered : EmitReturnStatus
-
-        CompilerOptionsErrors = 5,
->CompilerOptionsErrors : EmitReturnStatus
+        DiagnosticsPresent_OutputsGenerated = 2,
+>DiagnosticsPresent_OutputsGenerated : ExitStatus
     }
     interface EmitResult {
 >EmitResult : EmitResult
 
-        emitResultStatus: EmitReturnStatus;
->emitResultStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
 
         diagnostics: Diagnostic[];
 >diagnostics : Diagnostic[]
@@ -5769,9 +5758,8 @@ declare module "typescript" {
 >outputFiles : OutputFile[]
 >OutputFile : OutputFile
 
-        emitOutputStatus: EmitReturnStatus;
->emitOutputStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
     }
     const enum OutputFileType {
 >OutputFileType : OutputFileType

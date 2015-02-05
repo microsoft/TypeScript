@@ -67,7 +67,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     function emitFile(fileName: string) {
         var output = services.getEmitOutput(fileName);
 
-        if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
+        if (!output.emitSkipped) {
             console.log(`Emitting ${fileName}`);
         }
         else {
@@ -88,7 +88,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);
@@ -847,16 +847,13 @@ declare module "typescript" {
         sourceMapMappings: string;
         sourceMapDecodedMappings: SourceMapSpan[];
     }
-    enum EmitReturnStatus {
-        Succeeded = 0,
-        DiagnosticsPresent_AllOutputsSkipped = 1,
-        DiagnosticsPresent_JavaScriptGenerated = 2,
-        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
-        EmitErrorsEncountered = 4,
-        CompilerOptionsErrors = 5,
+    enum ExitStatus {
+        Success = 0,
+        DiagnosticsPresent_OutputsSkipped = 1,
+        DiagnosticsPresent_OutputsGenerated = 2,
     }
     interface EmitResult {
-        emitResultStatus: EmitReturnStatus;
+        emitSkipped: boolean;
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];
     }
@@ -1793,7 +1790,7 @@ declare module "typescript" {
     }
     interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputStatus: EmitReturnStatus;
+        emitSkipped: boolean;
     }
     const enum OutputFileType {
         JavaScript = 0,
@@ -2028,7 +2025,7 @@ function watch(rootFileNames, options) {
     });
     function emitFile(fileName) {
         var output = services.getEmitOutput(fileName);
-        if (output.emitOutputStatus === 0 /* Succeeded */) {
+        if (!output.emitSkipped) {
             console.log("Emitting " + fileName);
         }
         else {
@@ -2044,7 +2041,7 @@ function watch(rootFileNames, options) {
         allDiagnostics.forEach(function (diagnostic) {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log("  Error " + diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + diagnostic.messageText);
+                console.log("  Error " + diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
             }
             else {
                 console.log("  Error: " + diagnostic.messageText);
