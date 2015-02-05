@@ -7,16 +7,25 @@ var v = {
 }
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.js]
-var v = {
-    ["" + ""]: 0,
-    ["" + ""]: function () {
+var v = (_a = {},
+    _a["" + ""] = 0,
+    _a["" + ""] = function () {
     },
-    get ["" + ""]() {
-        return 0;
-    },
-    set ["" + ""](x) {
-    }
-};
+    Object.defineProperty(_a, "" + "", {
+        get: function () {
+            return 0;
+        },
+        enumerable: true,
+        configurable: true,
+    }),
+    Object.defineProperty(_a, "" + "", {
+        set: function (x) {
+        },
+        enumerable: true,
+        configurable: true,
+    }),
+    _a);
+var _a;
 
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.d.ts]

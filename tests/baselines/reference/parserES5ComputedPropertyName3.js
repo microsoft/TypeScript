@@ -2,5 +2,6 @@
 var v = { [e]() { } };
 
 //// [parserES5ComputedPropertyName3.js]
-var v = { [e]: function () {
-} };
+var v = (_a = {}, _a[e] = function () {
+}, _a);
+var _a;

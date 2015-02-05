@@ -5,10 +5,20 @@ var v = {
 }
 
 //// [computedPropertyNames1_ES5.js]
-var v = {
-    get [0 + 1]() {
-        return 0;
-    },
-    set [0 + 1](v) {
-    } //No error
-};
+var v = (_a = {},
+    Object.defineProperty(_a, 0 + 1, {
+        get: function () {
+            return 0;
+        },
+        enumerable: true,
+        configurable: true,
+    }),
+    Object.defineProperty(_a, 0 + 1, {
+        set: function (v) {
+        } //No error
+        ,
+        enumerable: true,
+        configurable: true,
+    }),
+    _a);
+var _a;

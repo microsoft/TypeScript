@@ -271,7 +271,7 @@ module ts {
         });
     }
 
-    function getAllAccessorDeclarations(node: ClassDeclaration, accessor: AccessorDeclaration) {
+    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
         var firstAccessor: AccessorDeclaration;
         var getAccessor: AccessorDeclaration;
         var setAccessor: AccessorDeclaration;
@@ -288,7 +288,7 @@ module ts {
             }
         }
         else {
-            forEach(node.members,(member: Declaration) => {
+            forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
                     (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
                     (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
@@ -1116,8 +1116,8 @@ module ts {
             if (hasDynamicName(node)) {
                 return;
             }
-            
-            var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
+
+            var accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
@@ -2220,7 +2220,10 @@ module ts {
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
+            // For example, this is utilized when feeding in a result to Object.defineProperty.
             function emitExpressionForPropertyName(node: DeclarationName) {
+                Debug.assert(node.kind !== SyntaxKind.BindingElement);
+
                 if (node.kind === SyntaxKind.StringLiteral) {
                     emitLiteral(<LiteralExpression>node);
                 }
@@ -2417,21 +2420,166 @@ module ts {
                 }
             }
 
-            function emitObjectLiteral(node: ObjectLiteralExpression) {
+            function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number) {
                 write("{");
-                var properties = node.properties;
-                if (properties.length) {
+
+                if (numElements > 0) {
+                    var properties = node.properties;
                     var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
                     if (!multiLine) {
                         write(" ");
                     }
-                    emitList(properties, 0, properties.length, /*multiLine*/ multiLine,
+                    emitList(properties, 0, numElements, /*multiLine*/ multiLine,
                         /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
                     if (!multiLine) {
                         write(" ");
                     }
                 }
+
                 write("}");
+            }
+            
+            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
+                var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                var properties = node.properties;
+                
+                write("(");
+
+                // For computed properties, we need to create a unique handle to the object
+                // literal so we can modify it without risking internal assignments tainting the object.
+                var tempVar = createTempVariable(node);
+                recordTempDeclaration(tempVar);
+                
+                // Write out the first non-computed properties
+                // (or all properties if none of them are computed),
+                // then emit the rest through indexing on the temp variable.
+                emit(tempVar)
+                write(" = ");
+                emitObjectLiteralBody(node, firstComputedPropertyIndex);
+                
+                if (multiLine) {
+                    increaseIndent();
+                }
+                
+                for (var i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
+                    writeSeparator();
+
+                    var property = properties[i];
+
+                    emitStart(property)
+                    if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
+                        // TODO (drosen): Reconcile with 'emitMemberFunctions'.
+                        var accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
+                        write("Object.defineProperty(");
+                        emit(tempVar);
+                        write(", ");
+                        emitStart(node.name);
+                        emitExpressionForPropertyName(property.name);
+                        emitEnd(property.name);
+                        write(", {");
+                        increaseIndent();
+                        if (accessors.getAccessor) {
+                            writeLine()
+                            emitLeadingComments(accessors.getAccessor);
+                            write("get: ");
+                            emitStart(accessors.getAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.getAccessor);
+                            emitEnd(accessors.getAccessor);
+                            emitTrailingComments(accessors.getAccessor);
+                            write(",");
+                        }
+                        if (accessors.setAccessor) {
+                            writeLine();
+                            emitLeadingComments(accessors.setAccessor);
+                            write("set: ");
+                            emitStart(accessors.setAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.setAccessor);
+                            emitEnd(accessors.setAccessor);
+                            emitTrailingComments(accessors.setAccessor);
+                            write(",");
+                        }
+                        writeLine();
+                        write("enumerable: true,");
+                        writeLine();
+                        write("configurable: true");
+                        decreaseIndent();
+                        writeSeparator();
+                        write("})");
+                        emitEnd(property);
+                    }
+                    else  {
+                        emitLeadingComments(property);
+                        emitStart(property.name);
+                        emit(tempVar);
+                        emitMemberAccessForPropertyName(property.name);
+                        emitEnd(property.name);
+                        
+                        write(" = ");
+
+                        if (property.kind === SyntaxKind.PropertyAssignment) {
+                            emit((<PropertyAssignment>property).initializer);
+                        }
+                        else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            emitExpressionIdentifier((<ShorthandPropertyAssignment>property).name);
+                        }
+                        else if (property.kind === SyntaxKind.MethodDeclaration) {
+                            emitFunctionDeclaration(<MethodDeclaration>property);
+                        }
+                        else {
+                            Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
+                        }
+                    }
+                    
+                    emitEnd(property);
+                }
+                
+                writeSeparator();
+                emit(tempVar);
+                
+                write(")");
+
+                if (multiLine) {
+                    decreaseIndent();
+                }
+                
+                function writeSeparator() {
+                    if (multiLine) {
+                        write(",");
+                        writeLine();
+                    }
+                    else {
+                        write(", ");
+                    }
+                }
+            }
+
+            function emitObjectLiteral(node: ObjectLiteralExpression) {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    emitObjectLiteralBody(node, node.properties.length);
+                    return;
+                }
+
+                var properties = node.properties;
+
+                // Find the first computed property.
+                // Everything until that point can be emitted as part of the initial object literal.
+                var numInitialNonComputedProperties = properties.length;
+                forEach(properties, (property, i) => {
+                    if (hasDynamicName(properties[i])) {
+                        numInitialNonComputedProperties = i;
+                        return true;
+                    }
+                });
+
+                var hasComputedProperty = numInitialNonComputedProperties !== properties.length;
+                if (hasComputedProperty) {
+                    emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
+                }
+                else {
+                    emitObjectLiteralBody(node, properties.length);
+                }
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
@@ -2464,7 +2612,7 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                if (languageVersion <= ScriptTarget.ES5 || resolver.getExpressionNamePrefix(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -3446,6 +3594,7 @@ module ts {
             }
 
             function emitMemberAccessForPropertyName(memberName: DeclarationName) {
+                // TODO: (jfreeman,drosen): comment on why this is emitNode instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNode(memberName);
@@ -3495,13 +3644,14 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitNode(node.name);
+                        emitNode(node.name); // TODO (shkamat,drosen): comment for why emitNode instead of emit.
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
+                        // TODO (drosen): Should we performing emitStart twice on emitStart(member)?
                         emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
                         emitEnd(member);
@@ -3510,7 +3660,7 @@ module ts {
                         emitTrailingComments(member);
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
-                        var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
+                        var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
@@ -3521,6 +3671,7 @@ module ts {
                                 write(".prototype");
                             }
                             write(", ");
+                            // TODO: Shouldn't emitStart on name occur *here*?
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");

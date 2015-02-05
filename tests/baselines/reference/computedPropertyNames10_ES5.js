@@ -20,27 +20,28 @@ var v = {
 var s;
 var n;
 var a;
-var v = {
-    [s]: function () {
+var v = (_a = {},
+    _a[s] = function () {
     },
-    [n]: function () {
+    _a[n] = function () {
     },
-    [s + s]: function () {
+    _a[s + s] = function () {
     },
-    [s + n]: function () {
+    _a[s + n] = function () {
     },
-    [+s]: function () {
+    _a[+s] = function () {
     },
-    [""]: function () {
+    _a[""] = function () {
     },
-    [0]: function () {
+    _a[0] = function () {
     },
-    [a]: function () {
+    _a[a] = function () {
     },
-    [true]: function () {
+    _a[true] = function () {
     },
-    ["hello bye"]: function () {
+    _a["hello bye"] = function () {
     },
-    ["hello " + a + " bye"]: function () {
-    }
-};
+    _a["hello " + a + " bye"] = function () {
+    },
+    _a);
+var _a;

@@ -14,11 +14,13 @@ foo({
 });
 
 //// [computedPropertyNamesContextualType6_ES5.js]
-foo({
+foo((_a = {
     p: "",
     0: function () {
-    },
-    ["hi" + "bye"]: true,
-    [0 + 1]: 0,
-    [+"hi"]: [0]
-});
+    }
+},
+    _a["hi" + "bye"] = true,
+    _a[0 + 1] = 0,
+    _a[+"hi"] = [0],
+    _a));
+var _a;
