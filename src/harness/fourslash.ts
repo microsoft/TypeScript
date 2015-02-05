@@ -1407,7 +1407,7 @@ module FourSlash {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            var incrementalSyntaxDiagnostics = ts.getSyntacticDiagnostics(incrementalSourceFile);
+            var incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
 
             // Check syntactic structure
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
@@ -1415,7 +1415,7 @@ module FourSlash {
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
-            var referenceSyntaxDiagnostics = ts.getSyntacticDiagnostics(referenceSourceFile);
+            var referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);

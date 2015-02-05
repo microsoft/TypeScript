@@ -4640,12 +4640,6 @@ declare module "typescript" {
 >SyntaxKind : SyntaxKind
 >NodeFlags : NodeFlags
 
-    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
->getSyntacticDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
 >updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange) => SourceFile
 >sourceFile : SourceFile
@@ -4901,10 +4895,6 @@ declare module "typescript" {
 >getPositionFromLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
-
-        getSyntacticDiagnostics(): Diagnostic[];
->getSyntacticDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
 
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 >update : (newText: string, textChangeRange: TextChangeRange) => SourceFile

@@ -64,7 +64,6 @@ module ts {
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromLineAndCharacter(line: number, character: number): number;
-        getSyntacticDiagnostics(): Diagnostic[];
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -746,10 +745,6 @@ module ts {
         public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
-
-        public getSyntacticDiagnostics(): Diagnostic[]{
-            return getSyntacticDiagnostics(this);
-        }
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);

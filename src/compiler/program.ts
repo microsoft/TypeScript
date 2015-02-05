@@ -225,11 +225,15 @@ module ts {
         }
 
         function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
-            return getDiagnosticsHelper(sourceFile, ts.getSyntacticDiagnostics);
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile);
         }
 
         function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
+        }
+
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            return sourceFile.parseDiagnostics;
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {

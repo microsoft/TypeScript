@@ -902,20 +902,13 @@ module ts {
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
 
-        // Diagnostics reported about the "///<reference" comments in the file.
-        /* @internal */ referenceDiagnostics: Diagnostic[];
-        
-        // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with).
+        // File level diagnostics reported by the parser (includes diagnostics about /// references
+        // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
         
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
         
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        // This field should never be used directly, use getSyntacticDiagnostics function instead.
-        /* @internal */ syntacticDiagnostics: Diagnostic[];
-
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];

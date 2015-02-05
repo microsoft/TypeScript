@@ -1439,7 +1439,6 @@ declare module "typescript" {
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
-    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
@@ -1505,7 +1504,6 @@ declare module "typescript" {
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromLineAndCharacter(line: number, character: number): number;
-        getSyntacticDiagnostics(): Diagnostic[];
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**

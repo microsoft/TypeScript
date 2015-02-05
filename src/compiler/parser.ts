@@ -357,14 +357,6 @@ module ts {
         forEachChild(sourceFile, walk);
     }
 
-    export function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
-        if (!sourceFile.syntacticDiagnostics) {
-            sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
-        }
-
-        return sourceFile.syntacticDiagnostics;
-    }
-
     function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
         if (element.length) {
             visitArray(<IncrementalNodeArray>element);
@@ -880,7 +872,6 @@ module ts {
         sourceFile.end = sourceText.length;
         sourceFile.text = sourceText;
 
-        sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
         sourceFile.bindDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
@@ -4698,7 +4689,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4706,7 +4697,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
