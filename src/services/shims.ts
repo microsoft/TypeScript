@@ -368,7 +368,12 @@ module ts {
                 });
         }
 
-        private realizeDiagnostic(diagnostic: Diagnostic, newLine?: string): { message: string; start: number; length: number; category: string; } {
+        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
+            var newLine = this.getNewLine();
+            return diagnostics.map(d => this.realizeDiagnostic(d, newLine));
+        }
+
+        private realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
             return {
                 message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
                 start: diagnostic.start,
@@ -405,8 +410,8 @@ module ts {
             return this.forwardJSONCall(
                 "getSyntacticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSyntacticDiagnostics(fileName);
-                    return errors.map(e => this.realizeDiagnostic(e), this.getNewLine());
+                    var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -414,8 +419,8 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSemanticDiagnostics(fileName);
-                    return errors.map(e => this.realizeDiagnostic(e), this.getNewLine());
+                    var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -423,8 +428,8 @@ module ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(e => this.realizeDiagnostic(e), this.getNewLine())
+                    var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
