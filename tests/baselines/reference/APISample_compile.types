@@ -2272,11 +2272,6 @@ declare module "typescript" {
 >WriteFileCallback : WriteFileCallback
 >EmitResult : EmitResult
 
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
->isEmitBlocked : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
-
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 >getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile

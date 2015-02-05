@@ -1081,22 +1081,16 @@ module Harness {
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
-                var isEmitBlocked = program.isEmitBlocked();
-
-                // only emit if there weren't parse errors
-                var emitResult: ts.EmitResult;
-                if (!isEmitBlocked) {
-                    emitResult = program.emit();
-                }
+                var emitResult = program.emit();
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(program.getTypeCheckerDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
+                program.getDiagnostics().concat(program.getTypeCheckerDiagnostics()).concat(emitResult.diagnostics).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });
                 this.lastErrors = errors;
 
-                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
+                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
                 onComplete(result, program);
 
                 // reset what newline means in case the last test changed it

@@ -947,8 +947,6 @@ module ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
 
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
-
         // These will merge with the below diagnostics function in a followup checkin.
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeCheckerGlobalDiagnostics(): Diagnostic[];

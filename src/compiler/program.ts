@@ -126,7 +126,7 @@ module ts {
                 getNewLine: compilerHost.getNewLine,
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                isEmitBlocked: program.isEmitBlocked,
+                isEmitBlocked,
                 writeFile: writeFileCallback || compilerHost.writeFile,
             };
         }

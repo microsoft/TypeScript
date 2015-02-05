@@ -4471,7 +4471,7 @@ module ts {
         return {
             emitResultStatus,
             diagnostics,
-            sourceMaps: sourceMapDataList
+            sourceMaps: isEmitBlocked ? undefined : sourceMapDataList
         };
     }
 }

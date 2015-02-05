@@ -753,7 +753,6 @@ declare module "typescript" {
          * will be invoked when writing the javascript and declaration files.
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];

@@ -338,10 +338,7 @@ module ts {
         else {
             var checkStart = new Date().getTime();
             errors = program.getTypeCheckerDiagnostics();
-            if (program.isEmitBlocked()) {
-                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-            }
-            else if (compilerOptions.noEmit) {
+            if (compilerOptions.noEmit) {
                 exitStatus = EmitReturnStatus.Succeeded;
             }
             else {
