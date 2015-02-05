@@ -876,7 +876,10 @@ module ts {
 
         var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-        sourceFile.pos = sourceFile.end = 0;
+        sourceFile.pos = 0;
+        sourceFile.end = sourceText.length;
+        sourceFile.text = sourceText;
+
         sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
         sourceFile.bindDiagnostics = [];
@@ -960,13 +963,6 @@ module ts {
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode: boolean = false;
-
-        sourceFile.syntacticDiagnostics = undefined;
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.bindDiagnostics = [];
-        sourceFile.end = sourceText.length;
-        sourceFile.text = sourceText;
 
         // Create and prime the scanner before parsing the source elements.
         scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
