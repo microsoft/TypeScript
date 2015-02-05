@@ -2370,6 +2370,7 @@ module ts {
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
 
                     var contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
@@ -2405,6 +2406,7 @@ module ts {
             return {
                 isMemberCompletion,
                 isNewIdentifierLocation,
+                isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
 
@@ -2438,13 +2440,20 @@ module ts {
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.CallExpression                         // func( a, |
-                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |
-                                || previousToken.parent.parent.parent.kind === SyntaxKind.VariableDeclaration;     // var x = (a, b| <- this can be a lambda expression
+                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |   public, protected, private keywords are allowed here, so show completion
+                                || containingNodeKind === SyntaxKind.NewExpression                          // new C(a, |
+                                || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression;                      // var x = (a, |
+
               
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CallExpression                         // func( |
-                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( |
-                                || previousToken.parent.parent.kind === SyntaxKind.VariableDeclaration;     // var x = (a| <- this can be a lambda expression
+                            return containingNodeKind === SyntaxKind.CallExpression               // func( |
+                                || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
+                                || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression;     // var x = (a|
+
+                        case SyntaxKind.OpenBracketToken:
+                            return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
 
                         case SyntaxKind.ModuleKeyword:                               // module | 
                             return true;
@@ -2456,7 +2465,14 @@ module ts {
                             return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
 
                         case SyntaxKind.EqualsToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration; // var x = a| <- this can be lambda expression
+                            return containingNodeKind === SyntaxKind.VariableDeclaration // var x = a|
+                            || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+
+                        case SyntaxKind.TemplateHead:
+                            return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
+
+                        case SyntaxKind.TemplateMiddle:
+                            return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
@@ -2596,6 +2612,9 @@ module ts {
                         case SyntaxKind.GetKeyword:
                         case SyntaxKind.SetKeyword:
                         case SyntaxKind.ImportKeyword:
+                        case SyntaxKind.LetKeyword:
+                        case SyntaxKind.ConstKeyword:
+                        case SyntaxKind.YieldKeyword:
                             return true;
                     }
 
@@ -2607,7 +2626,9 @@ module ts {
                         case "function":
                         case "var":
                         case "static":
-                            // TODO: add let and const
+                        case "let":
+                        case "const":
+                        case "yield":
                             return true;
                     }
                 }
