@@ -1,0 +1,7 @@
+=== tests/cases/compiler/es6ExportDefaultAnonymousFunctionDeclarationOverload.ts ===
+
+No type information for this code.//export default function (a: string): string;
+No type information for this code.//export default function (a: number): number;
+No type information for this code.//export default function (a: any): any {
+No type information for this code.//}
+No type information for this code.
