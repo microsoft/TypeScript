@@ -78,7 +78,7 @@ module Harness.LanguageService {
         }
     }
 
-    class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
+    class ScriptSnapshotProxy implements ts.ScriptSnapshotShim {
         constructor(public scriptSnapshot: ts.IScriptSnapshot) {
         }
 
@@ -91,7 +91,7 @@ module Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
-            var oldShim = <ScriptSnapshotShim>oldScript;
+            var oldShim = <ScriptSnapshotProxy>oldScript;
 
             var range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
             if (range === null) {
@@ -248,7 +248,7 @@ module Harness.LanguageService {
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(filename: string): ts.ScriptSnapshotShim {
             var nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(filename);
-            return nativeScriptSnapshot && new ScriptSnapshotShim(nativeScriptSnapshot); 
+            return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot); 
         }
         getScriptVersion(filename: string): string { return this.nativeHost.getScriptVersion(filename); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
