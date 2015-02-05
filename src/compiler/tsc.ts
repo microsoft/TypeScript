@@ -328,28 +328,11 @@ module ts {
         ts.emitTime = 0;
 
         var start = new Date().getTime();
+
         var program = createProgram(fileNames, compilerOptions, compilerHost);
-
-        var errors: Diagnostic[] = program.getDiagnostics();
-        var exitStatus: EmitReturnStatus;
-
-        if (errors.length) {
-            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        }
-        else {
-            errors = program.getTypeCheckerDiagnostics();
-            if (compilerOptions.noEmit) {
-                exitStatus = EmitReturnStatus.Succeeded;
-            }
-            else {
-                var emitOutput = program.emit();
-                exitStatus = emitOutput.emitResultStatus;
-                errors = concatenate(errors, emitOutput.diagnostics);
-            }
-        }
+        var exitStatus = compileProgram();
 
         var end = start - new Date().getTime();
-        reportDiagnostics(errors);
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -378,6 +361,29 @@ module ts {
         }
 
         return { program, exitStatus };
+
+        function compileProgram(): EmitReturnStatus {
+            // First get any syntactic errors. 
+            var errors = program.getDiagnostics();
+            reportDiagnostics(errors);
+
+            // If we didn't have any syntactic errors, then also try getting the semantic errors.
+            if (errors.length === 0) {
+                var errors = program.getTypeCheckerDiagnostics();
+                reportDiagnostics(errors);
+            }
+
+            // If the user doesn't want us to emit, then we're done at this point.
+            if (compilerOptions.noEmit) {
+                return EmitReturnStatus.Succeeded;
+            }
+
+            // Otherwise, emit and report any errors we ran into.
+            var emitOutput = program.emit();
+            reportDiagnostics(emitOutput.diagnostics);
+
+            return emitOutput.emitResultStatus;
+        }
     }
 
     function printVersion() {
