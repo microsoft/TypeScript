@@ -16,7 +16,7 @@ import ts = require("typescript");
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
     var host = ts.createCompilerHost(options);
     var program = ts.createProgram(fileNames, options, host);
-    var result = program.emitFiles();
+    var result = program.emit();
 
     var allDiagnostics = program.getDiagnostics()
         .concat(program.getTypeCheckerDiagnostics())

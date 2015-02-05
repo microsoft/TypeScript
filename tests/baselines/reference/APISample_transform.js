@@ -51,7 +51,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
         // Type check and get semantic errors
         errors = program.getTypeCheckerDiagnostics();
         // Generate output
-        program.emitFiles();
+        program.emit();
     }
     return {
         outputs: outputs,
@@ -767,10 +767,24 @@ declare module "typescript" {
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
+    interface WriteFileCallback {
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+    }
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
-        getEmitResolver(): EmitResolver;
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.
+         *
+         * If writeFile is not specified then the writeFile callback from getCompilerHost() will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -778,8 +792,6 @@ declare module "typescript" {
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
     interface SourceMapSpan {
         emittedLine: number;
@@ -1368,7 +1380,7 @@ declare module "typescript" {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken?(): CancellationToken;
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
@@ -1975,7 +1987,7 @@ function transform(contents, compilerOptions) {
         // Type check and get semantic errors
         errors = program.getTypeCheckerDiagnostics();
         // Generate output
-        program.emitFiles();
+        program.emit();
     }
     return {
         outputs: outputs,

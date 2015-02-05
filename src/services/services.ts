@@ -4664,12 +4664,7 @@ module ts {
                 });
             }
 
-            // Get an emit host from our program, but override the writeFile functionality to
-            // call our local writer function.
-            var emitHost = createEmitHostFromProgram(program);
-            emitHost.writeFile = writeFile;
-
-            var emitOutput = emitFiles(program.getEmitResolver(), emitHost, sourceFile);
+            var emitOutput = program.emit(sourceFile, writeFile);
 
             return {
                 outputFiles,

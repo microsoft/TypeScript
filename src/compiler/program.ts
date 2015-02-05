@@ -90,7 +90,6 @@ module ts {
 
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
-        var emitHost: EmitHost;
 
         program = {
             getSourceFile: getSourceFile,
@@ -105,7 +104,7 @@ module ts {
             getTypeChecker,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
-            emitFiles: invokeEmitter,
+            emit,
             isEmitBlocked,
             getCurrentDirectory: host.getCurrentDirectory,
             getEmitResolver: () => getDiagnosticsProducingTypeChecker().getEmitResolver(),
@@ -116,9 +115,21 @@ module ts {
         };
         return program;
 
-        function getEmitHost() {
-            return emitHost || (emitHost = createEmitHostFromProgram(program));
+        function getEmitHost(writeFileCallback?: WriteFileCallback) {
+            var compilerHost = program.getCompilerHost();
+            return {
+                getCanonicalFileName: compilerHost.getCanonicalFileName,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
+                getCompilerOptions: program.getCompilerOptions,
+                getCurrentDirectory: compilerHost.getCurrentDirectory,
+                getNewLine: compilerHost.getNewLine,
+                getSourceFile: program.getSourceFile,
+                getSourceFiles: program.getSourceFiles,
+                isEmitBlocked: program.isEmitBlocked,
+                writeFile: writeFileCallback || compilerHost.writeFile,
+            };
         }
+
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
             if (options.noEmitOnError) {
@@ -143,9 +154,10 @@ module ts {
             return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
+        function emit(targetSourceFile?: SourceFile, writeFileCallback?: WriteFileCallback) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
-            return emitFiles(resolver, getEmitHost(), targetSourceFile);
+            var host = getEmitHost(writeFileCallback);
+            return emitFiles(resolver, host, targetSourceFile);
         }
         
         function getSourceFile(fileName: string) {

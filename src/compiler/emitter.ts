@@ -1504,8 +1504,9 @@ module ts {
         return diagnostics;
     }
 
+    // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;

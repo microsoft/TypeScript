@@ -31,7 +31,7 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -841,21 +841,6 @@ module ts {
                 return true;
         }
         return false;
-    }
-
-    export function createEmitHostFromProgram(program: Program): EmitHost {
-        var compilerHost = program.getCompilerHost();
-        return {
-            getCanonicalFileName: compilerHost.getCanonicalFileName,
-            getCommonSourceDirectory: program.getCommonSourceDirectory,
-            getCompilerOptions: program.getCompilerOptions,
-            getCurrentDirectory: compilerHost.getCurrentDirectory,
-            getNewLine: compilerHost.getNewLine,
-            getSourceFile: program.getSourceFile,
-            getSourceFiles: program.getSourceFiles,
-            isEmitBlocked: program.isEmitBlocked,
-            writeFile: compilerHost.writeFile,
-        };
     }
 
     export function textSpanEnd(span: TextSpan) {

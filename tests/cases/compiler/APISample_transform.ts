@@ -51,7 +51,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
         // Type check and get semantic errors
         errors = program.getTypeCheckerDiagnostics();
         // Generate output
-        program.emitFiles();
+        program.emit();
     }
     return {
         outputs: outputs,

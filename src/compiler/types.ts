@@ -927,10 +927,27 @@ module ts {
         getCurrentDirectory(): string;
     }
 
+    export interface WriteFileCallback {
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+    }
+
     export interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
-        getEmitResolver(): EmitResolver;
+
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then 
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.  
+         *
+         * If writeFile is not specified then the writeFile callback from getCompilerHost() will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
 
         // These will merge with the below diagnostics function in a followup checkin.
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -950,9 +967,6 @@ module ts {
         // will throw an invalid operation exception.
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
-
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
 
         // For testing purposes only.  Should not be used by any other consumers (including the 
         // language service).
@@ -1671,7 +1685,7 @@ module ts {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

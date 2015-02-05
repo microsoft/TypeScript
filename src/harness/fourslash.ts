@@ -2216,7 +2216,7 @@ module FourSlash {
         if (errors.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => e.messageText).join('\r\n'));
         }
-        program.emitFiles();
+        program.emit();
         result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test

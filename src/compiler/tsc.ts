@@ -346,7 +346,7 @@ module ts {
             }
             else {
                 var emitStart = new Date().getTime();
-                var emitOutput = program.emitFiles();
+                var emitOutput = program.emit();
                 var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();

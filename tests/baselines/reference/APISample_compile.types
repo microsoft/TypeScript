@@ -40,12 +40,12 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >options : ts.CompilerOptions
 >host : ts.CompilerHost
 
-    var result = program.emitFiles();
+    var result = program.emit();
 >result : ts.EmitResult
->program.emitFiles() : ts.EmitResult
->program.emitFiles : (targetSourceFile?: ts.SourceFile) => ts.EmitResult
+>program.emit() : ts.EmitResult
+>program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
 >program : ts.Program
->emitFiles : (targetSourceFile?: ts.SourceFile) => ts.EmitResult
+>emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
 
     var allDiagnostics = program.getDiagnostics()
 >allDiagnostics : ts.Diagnostic[]
@@ -2241,6 +2241,16 @@ declare module "typescript" {
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
     }
+    interface WriteFileCallback {
+>WriteFileCallback : WriteFileCallback
+
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>fileName : string
+>data : string
+>writeByteOrderMark : boolean
+>onError : (message: string) => void
+>message : string
+    }
     interface Program extends ScriptReferenceHost {
 >Program : Program
 >ScriptReferenceHost : ScriptReferenceHost
@@ -2253,9 +2263,28 @@ declare module "typescript" {
 >getCompilerHost : () => CompilerHost
 >CompilerHost : CompilerHost
 
-        getEmitResolver(): EmitResolver;
->getEmitResolver : () => EmitResolver
->EmitResolver : EmitResolver
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.
+         *
+         * If writeFile is not specified then the writeFile callback from getCompilerHost() will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+>emit : (targetSourceFile?: SourceFile, writeFile?: WriteFileCallback) => EmitResult
+>targetSourceFile : SourceFile
+>SourceFile : SourceFile
+>writeFile : WriteFileCallback
+>WriteFileCallback : WriteFileCallback
+>EmitResult : EmitResult
+
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+>isEmitBlocked : (sourceFile?: SourceFile) => boolean
+>sourceFile : SourceFile
+>SourceFile : SourceFile
 
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 >getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
@@ -2289,17 +2318,6 @@ declare module "typescript" {
 
         getCommonSourceDirectory(): string;
 >getCommonSourceDirectory : () => string
-
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
->emitFiles : (targetSourceFile?: SourceFile) => EmitResult
->targetSourceFile : SourceFile
->SourceFile : SourceFile
->EmitResult : EmitResult
-
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
->isEmitBlocked : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
     }
     interface SourceMapSpan {
 >SourceMapSpan : SourceMapSpan
@@ -4255,13 +4273,9 @@ declare module "typescript" {
 >getCancellationToken : () => CancellationToken
 >CancellationToken : CancellationToken
 
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
->writeFile : (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
->fileName : string
->data : string
->writeByteOrderMark : boolean
->onError : (message: string) => void
->message : string
+        writeFile: WriteFileCallback;
+>writeFile : WriteFileCallback
+>WriteFileCallback : WriteFileCallback
 
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
