@@ -1,4 +1,6 @@
-EmitOutputStatus : JSGeneratedWithSemanticErrors
+EmitOutputStatus : DiagnosticsPresent_JavaScriptGenerated
+Diagnostics:
+  Type 'string' is not assignable to type 'number'.
 FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
 

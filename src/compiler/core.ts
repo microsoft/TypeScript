@@ -118,6 +118,12 @@ module ts {
         return result;
     }
 
+    export function addRange<T>(to: T[], from: T[]): void {
+        for (var i = 0, n = from.length; i < n; i++) {
+            to.push(from[i]);
+        }
+    } 
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
@@ -367,6 +373,10 @@ module ts {
 
         // We still have one chain remaining.  The shorter chain should come first.
         return text1 ? 1 : -1;
+    }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 
     export function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {

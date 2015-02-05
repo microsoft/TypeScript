@@ -12,6 +12,9 @@ declare var process: any;
 declare var console: any;
 >console : any
 
+declare var os: any;
+>os : any
+
 import ts = require("typescript");
 >ts : typeof ts
 
@@ -31,43 +34,33 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >fileNames : string[]
 >options : ts.CompilerOptions
 
-    var result = program.emit();
->result : ts.EmitResult
+    var emitResult = program.emit();
+>emitResult : ts.EmitResult
 >program.emit() : ts.EmitResult
 >program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
 >program : ts.Program
 >emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
 
-    var allDiagnostics = program.getDiagnostics()
+    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
 >allDiagnostics : ts.Diagnostic[]
->program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics())        .concat(result.diagnostics) : ts.Diagnostic[]
->program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics())        .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->program.getDiagnostics()        .concat(program.getTypeCheckerDiagnostics()) : ts.Diagnostic[]
->program.getDiagnostics()        .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->program.getDiagnostics() : ts.Diagnostic[]
->program.getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
+>ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics) : ts.Diagnostic[]
+>ts.getPreEmitDiagnostics(program).concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
+>ts.getPreEmitDiagnostics(program) : ts.Diagnostic[]
+>ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
+>ts : typeof ts
+>getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
 >program : ts.Program
->getDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
-
-        .concat(program.getTypeCheckerDiagnostics())
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->program.getTypeCheckerDiagnostics() : ts.Diagnostic[]
->program.getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
->program : ts.Program
->getTypeCheckerDiagnostics : (sourceFile?: ts.SourceFile) => ts.Diagnostic[]
-
-        .concat(result.diagnostics);
->concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->result.diagnostics : ts.Diagnostic[]
->result : ts.EmitResult
+>emitResult.diagnostics : ts.Diagnostic[]
+>emitResult : ts.EmitResult
 >diagnostics : ts.Diagnostic[]
 
     allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    }) : void
+>allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
@@ -82,8 +75,8 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >diagnostic : ts.Diagnostic
 >start : number
 
-        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
->console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
+        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
+>console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`) : any
 >console.log : any
 >console : any
 >log : any
@@ -98,28 +91,35 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
+>ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL) : string
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>ts : typeof ts
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
 >diagnostic.messageText : string | ts.DiagnosticMessageChain
 >diagnostic : ts.Diagnostic
 >messageText : string | ts.DiagnosticMessageChain
+>os.EOL : any
+>os : any
+>EOL : any
 
     });
 
-    console.log(`Process exiting with code '${result.emitResultStatus}'.`);
->console.log(`Process exiting with code '${result.emitResultStatus}'.`) : any
+    console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`);
+>console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`) : any
 >console.log : any
 >console : any
 >log : any
->result.emitResultStatus : ts.EmitReturnStatus
->result : ts.EmitResult
+>emitResult.emitResultStatus : ts.EmitReturnStatus
+>emitResult : ts.EmitResult
 >emitResultStatus : ts.EmitReturnStatus
 
-    process.exit(result.emitResultStatus);
->process.exit(result.emitResultStatus) : any
+    process.exit(emitResult.emitResultStatus);
+>process.exit(emitResult.emitResultStatus) : any
 >process.exit : any
 >process : any
 >exit : any
->result.emitResultStatus : ts.EmitReturnStatus
->result : ts.EmitResult
+>emitResult.emitResultStatus : ts.EmitReturnStatus
+>emitResult : ts.EmitResult
 >emitResultStatus : ts.EmitReturnStatus
 }
 
@@ -2268,18 +2268,8 @@ declare module "typescript" {
 >WriteFileCallback : WriteFileCallback
 >EmitResult : EmitResult
 
-        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
-        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
->getTypeCheckerGlobalDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSyntacticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
@@ -2288,8 +2278,14 @@ declare module "typescript" {
 >getGlobalDiagnostics : () => Diagnostic[]
 >Diagnostic : Diagnostic
 
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
->getDeclarationDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSemanticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getDeclarationDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
@@ -2359,14 +2355,14 @@ declare module "typescript" {
         Succeeded = 0,
 >Succeeded : EmitReturnStatus
 
-        AllOutputGenerationSkipped = 1,
->AllOutputGenerationSkipped : EmitReturnStatus
+        DiagnosticsPresent_AllOutputsSkipped = 1,
+>DiagnosticsPresent_AllOutputsSkipped : EmitReturnStatus
 
-        JSGeneratedWithSemanticErrors = 2,
->JSGeneratedWithSemanticErrors : EmitReturnStatus
+        DiagnosticsPresent_JavaScriptGenerated = 2,
+>DiagnosticsPresent_JavaScriptGenerated : EmitReturnStatus
 
-        DeclarationGenerationSkipped = 3,
->DeclarationGenerationSkipped : EmitReturnStatus
+        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
+>DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated : EmitReturnStatus
 
         EmitErrorsEncountered = 4,
 >EmitErrorsEncountered : EmitReturnStatus
@@ -2851,11 +2847,6 @@ declare module "typescript" {
 >getEnumMemberValue : (node: EnumMember) => number
 >node : EnumMember
 >EnumMember : EnumMember
-
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
->hasSemanticDiagnostics : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
 
         isDeclarationVisible(node: Declaration): boolean;
 >isDeclarationVisible : (node: Declaration) => boolean
@@ -4555,6 +4546,18 @@ declare module "typescript" {
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 >CompilerHost : CompilerHost
+
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+>getPreEmitDiagnostics : (program: Program) => Diagnostic[]
+>program : Program
+>Program : Program
+>Diagnostic : Diagnostic
+
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+>flattenDiagnosticMessageText : (messageText: string | DiagnosticMessageChain, newLine: string) => string
+>messageText : string | DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
+>newLine : string
 
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 >createProgram : (rootNames: string[], options: CompilerOptions, host?: CompilerHost) => Program

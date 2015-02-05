@@ -1,4 +1,6 @@
-EmitOutputStatus : DeclarationGenerationSkipped
+EmitOutputStatus : DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated
+Diagnostics:
+  Type 'string' is not assignable to type 'number'.
 FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
 

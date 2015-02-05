@@ -364,13 +364,19 @@ module ts {
 
         function compileProgram(): EmitReturnStatus {
             // First get any syntactic errors. 
-            var errors = program.getDiagnostics();
+            var errors = program.getSyntacticDiagnostics();
             reportDiagnostics(errors);
 
-            // If we didn't have any syntactic errors, then also try getting the semantic errors.
+            // If we didn't have any syntactic errors, then also try getting the global and 
+            // semantic errors.
             if (errors.length === 0) {
-                var errors = program.getTypeCheckerDiagnostics();
+                var errors = program.getGlobalDiagnostics();
                 reportDiagnostics(errors);
+
+                if (errors.length === 0) {
+                    var errors = program.getSemanticDiagnostics();
+                    reportDiagnostics(errors);
+                }
             }
 
             // If the user doesn't want us to emit, then we're done at this point.

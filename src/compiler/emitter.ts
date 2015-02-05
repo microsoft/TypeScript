@@ -4395,13 +4395,13 @@ module ts {
             }
         }
 
-        var hasSemanticDiagnostics = false;
         var isEmitBlocked = false;
+        var isDeclarationEmitBlocked = false;
 
         if (targetSourceFile === undefined) {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
-            hasSemanticDiagnostics = resolver.hasSemanticDiagnostics();
             isEmitBlocked = host.isEmitBlocked();
+            isDeclarationEmitBlocked = host.isDeclarationEmitBlocked();
 
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
@@ -4418,8 +4418,8 @@ module ts {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                hasSemanticDiagnostics = resolver.hasSemanticDiagnostics(targetSourceFile);
                 isEmitBlocked = host.isEmitBlocked(targetSourceFile);
+                isDeclarationEmitBlocked = host.isDeclarationEmitBlocked(targetSourceFile);
 
                 var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
                 emitFile(jsFilePath, targetSourceFile);
@@ -4429,8 +4429,8 @@ module ts {
                 // Emit all, non-external-module file, into one single output file
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        hasSemanticDiagnostics = hasSemanticDiagnostics || resolver.hasSemanticDiagnostics(sourceFile);
                         isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
+                        isDeclarationEmitBlocked = isDeclarationEmitBlocked || host.isDeclarationEmitBlocked(sourceFile);
                     }
                 });
 
@@ -4441,15 +4441,14 @@ module ts {
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
-                if (!hasSemanticDiagnostics && compilerOptions.declaration) {
+                if (!isDeclarationEmitBlocked && compilerOptions.declaration) {
                     writeDeclarationFile(jsFilePath, sourceFile);
                 }
             }
         }
 
         // Sort and make the unique list of diagnostics
-        diagnostics.sort(compareDiagnostics);
-        diagnostics = deduplicateSortedDiagnostics(diagnostics);
+        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
 
         // Update returnCode if there is any EmitterError
         var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
@@ -4457,13 +4456,13 @@ module ts {
         // Check and update returnCode for syntactic and semantic
         var emitResultStatus: EmitReturnStatus;
         if (isEmitBlocked) {
-            emitResultStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_AllOutputsSkipped;
         } else if (hasEmitterError) {
             emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else if (hasSemanticDiagnostics && compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.DeclarationGenerationSkipped;
-        } else if (hasSemanticDiagnostics && !compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+        } else if (isDeclarationEmitBlocked && compilerOptions.declaration) {
+            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated;
+        } else if (isDeclarationEmitBlocked && !compilerOptions.declaration) {
+            emitResultStatus = EmitReturnStatus.DiagnosticsPresent_JavaScriptGenerated;
         } else {
             emitResultStatus = EmitReturnStatus.Succeeded;
         }

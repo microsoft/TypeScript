@@ -357,7 +357,7 @@ module ts {
         forEachChild(sourceFile, walk);
     }
 
-    export function getSyntacticDiagnostics(sourceFile: SourceFile) {
+    export function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
         if (!sourceFile.syntacticDiagnostics) {
             sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
         }

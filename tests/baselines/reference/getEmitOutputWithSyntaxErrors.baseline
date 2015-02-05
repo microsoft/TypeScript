@@ -1,4 +1,6 @@
-EmitOutputStatus : Succeeded
+EmitOutputStatus : DiagnosticsPresent_JavaScriptGenerated
+Diagnostics:
+  Type expected.
 FileName : tests/cases/fourslash/inputFile.js
 var x;
 

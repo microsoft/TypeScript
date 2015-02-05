@@ -12,6 +12,7 @@ declare var process: any;
 declare var console: any;
 declare var fs: any;
 declare var path: any;
+declare var os: any;
 
 import ts = require("typescript");
 
@@ -45,17 +46,17 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
 
     // Query for early errors
-    var errors = program.getDiagnostics();
-    // Do not generate code in the presence of early errors
-    if (!errors.length) {
-        // Type check and get semantic errors
-        errors = program.getTypeCheckerDiagnostics();
-        // Generate output
-        program.emit();
-    }
+    var errors = ts.getPreEmitDiagnostics(program);
+    var emitResult = program.emit();
+
+    errors = errors.concat(emitResult.diagnostics);
+
     return {
         outputs: outputs,
-        errors: errors.map(function (e) { return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
+        errors: errors.map(function (e) {
+            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
+                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
+        })
     };
 }
 
@@ -783,11 +784,10 @@ declare module "typescript" {
          * will be invoked when writing the javascript and declaration files.
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
-        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
     }
@@ -812,9 +812,9 @@ declare module "typescript" {
     }
     enum EmitReturnStatus {
         Succeeded = 0,
-        AllOutputGenerationSkipped = 1,
-        JSGeneratedWithSemanticErrors = 2,
-        DeclarationGenerationSkipped = 3,
+        DiagnosticsPresent_AllOutputsSkipped = 1,
+        DiagnosticsPresent_JavaScriptGenerated = 2,
+        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
         EmitErrorsEncountered = 4,
         CompilerOptionsErrors = 5,
     }
@@ -919,7 +919,6 @@ declare module "typescript" {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1453,6 +1452,8 @@ declare module "typescript" {
 }
 declare module "typescript" {
     function createCompilerHost(options: CompilerOptions): CompilerHost;
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {
@@ -1978,18 +1979,13 @@ function transform(contents, compilerOptions) {
     // Create a program from inputs
     var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
     // Query for early errors
-    var errors = program.getDiagnostics();
-    // Do not generate code in the presence of early errors
-    if (!errors.length) {
-        // Type check and get semantic errors
-        errors = program.getTypeCheckerDiagnostics();
-        // Generate output
-        program.emit();
-    }
+    var errors = ts.getPreEmitDiagnostics(program);
+    var emitResult = program.emit();
+    errors = errors.concat(emitResult.diagnostics);
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText;
+            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
 }

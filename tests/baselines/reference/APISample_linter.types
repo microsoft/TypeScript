@@ -2415,18 +2415,8 @@ declare module "typescript" {
 >WriteFileCallback : WriteFileCallback
 >EmitResult : EmitResult
 
-        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
-        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
->getTypeCheckerGlobalDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSyntacticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
@@ -2435,8 +2425,14 @@ declare module "typescript" {
 >getGlobalDiagnostics : () => Diagnostic[]
 >Diagnostic : Diagnostic
 
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
->getDeclarationDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSemanticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getDeclarationDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
@@ -2506,14 +2502,14 @@ declare module "typescript" {
         Succeeded = 0,
 >Succeeded : EmitReturnStatus
 
-        AllOutputGenerationSkipped = 1,
->AllOutputGenerationSkipped : EmitReturnStatus
+        DiagnosticsPresent_AllOutputsSkipped = 1,
+>DiagnosticsPresent_AllOutputsSkipped : EmitReturnStatus
 
-        JSGeneratedWithSemanticErrors = 2,
->JSGeneratedWithSemanticErrors : EmitReturnStatus
+        DiagnosticsPresent_JavaScriptGenerated = 2,
+>DiagnosticsPresent_JavaScriptGenerated : EmitReturnStatus
 
-        DeclarationGenerationSkipped = 3,
->DeclarationGenerationSkipped : EmitReturnStatus
+        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
+>DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated : EmitReturnStatus
 
         EmitErrorsEncountered = 4,
 >EmitErrorsEncountered : EmitReturnStatus
@@ -2998,11 +2994,6 @@ declare module "typescript" {
 >getEnumMemberValue : (node: EnumMember) => number
 >node : EnumMember
 >EnumMember : EnumMember
-
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
->hasSemanticDiagnostics : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
 
         isDeclarationVisible(node: Declaration): boolean;
 >isDeclarationVisible : (node: Declaration) => boolean
@@ -4702,6 +4693,18 @@ declare module "typescript" {
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 >CompilerHost : CompilerHost
+
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+>getPreEmitDiagnostics : (program: Program) => Diagnostic[]
+>program : Program
+>Program : Program
+>Diagnostic : Diagnostic
+
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+>flattenDiagnosticMessageText : (messageText: string | DiagnosticMessageChain, newLine: string) => string
+>messageText : string | DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
+>newLine : string
 
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 >createProgram : (rootNames: string[], options: CompilerOptions, host?: CompilerHost) => Program

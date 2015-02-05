@@ -946,13 +946,10 @@ module ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
 
-        // These will merge with the below diagnostics function in a followup checkin.
-        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 
         // Gets a type checker that can be used to semantically analyze source fils in the program.
         getTypeChecker(): TypeChecker;
@@ -992,12 +989,26 @@ module ts {
 
     // Return code used by getEmitOutput function to indicate status of the function
     export enum EmitReturnStatus {
-        Succeeded = 0,                      // All outputs generated if requested (.js, .map, .d.ts), no errors reported
-        AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, nothing generated
-        JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
-        DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
-        EmitErrorsEncountered = 4,          // Emitter errors occurred during emitting process
-        CompilerOptionsErrors = 5,          // Errors occurred in parsing compiler options, nothing generated
+        // All outputs generated if requested (.js, .map, .d.ts), no errors reported
+        Succeeded = 0,
+
+        // No .js, .map or d.ts generated because of diagnostics and the presence of the 
+        // -noEmitOnError optoin.
+        DiagnosticsPresent_AllOutputsSkipped = 1,
+
+        // .js and .map generated.  However, diagnostics were generated as well.
+        // No .d.ts was requested or generated.
+        DiagnosticsPresent_JavaScriptGenerated = 2,
+
+        // .js, .map generated.  .d.ts was requested but was not generated due to the 
+        // presence of diagnostics.
+        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
+
+        // Emitter errors occurred during emitting process.
+        EmitErrorsEncountered = 4,
+
+        // Errors occurred in parsing compiler options, nothing generated
+        CompilerOptionsErrors = 5,
     }
 
     export interface EmitResult {
@@ -1137,7 +1148,6 @@ module ts {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;

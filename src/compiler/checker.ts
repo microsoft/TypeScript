@@ -10111,11 +10111,6 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticDiagnostics(sourceFile?: SourceFile) {
-            // Return true if there is any semantic error in a file or globally
-            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
-        }
-
         function isImportResolvedToValue(symbol: Symbol): boolean {
             var target = resolveImport(symbol);
             // const enums and modules that contain only const enums are not considered values from the emit perespective
@@ -10210,7 +10205,6 @@ module ts {
                 getNodeCheckFlags,
                 getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticDiagnostics,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
@@ -10226,14 +10220,15 @@ module ts {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.bindDiagnostics, d => diagnostics.add(d));
             });
+
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
                     extendSymbolTable(globals, file.locals);
                 }
             });
+
             // Initialize special symbols
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");

@@ -75,6 +75,37 @@ module ts {
         };
     }
 
+    export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
+        var diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+        return sortAndDeduplicateDiagnostics(diagnostics);
+    }
+
+    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
+        if (typeof messageText === "string") {
+            return messageText;
+        }
+        else {
+            var diagnosticChain = messageText;
+            var result = "";
+
+            var indent = 0;
+            while (diagnosticChain) {
+                if (indent) {
+                    result += newLine;
+
+                    for (var i = 0; i < indent; i++) {
+                        result += "  ";
+                    }
+                }
+                result += diagnosticChain.messageText;
+                indent++;
+                diagnosticChain = diagnosticChain.next;
+            }
+
+            return result;
+        }
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program {
         var program: Program;
         var files: SourceFile[] = [];
@@ -97,10 +128,9 @@ module ts {
             getSourceFile: getSourceFile,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
-            getDiagnostics,
+            getSyntacticDiagnostics,
             getGlobalDiagnostics,
-            getTypeCheckerDiagnostics,
-            getTypeCheckerGlobalDiagnostics,
+            getSemanticDiagnostics,
             getDeclarationDiagnostics,
             getTypeChecker,
             getDiagnosticsProducingTypeChecker,
@@ -116,7 +146,7 @@ module ts {
         };
         return program;
 
-        function getEmitHost(writeFileCallback?: WriteFileCallback) {
+        function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
                 getCanonicalFileName: host.getCanonicalFileName,
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
@@ -126,17 +156,28 @@ module ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 isEmitBlocked,
+                isDeclarationEmitBlocked,
                 writeFile: writeFileCallback || host.writeFile,
             };
         }
 
+        function hasPreEmitDiagnostics(sourceFile?: SourceFile): boolean {
+            var hasSyntacticDiagnostics = program.getSyntacticDiagnostics(sourceFile).length > 0;
+            var hasSemanticDiagnostics = program.getSemanticDiagnostics(sourceFile).length > 0;
 
-        function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            if (options.noEmitOnError) {
-                return getDiagnostics(sourceFile).length !== 0 || getTypeCheckerDiagnostics(sourceFile).length !== 0;
+            if (hasSyntacticDiagnostics || hasSemanticDiagnostics) {
+                return true;
             }
 
-            return false;
+            return !sourceFile && program.getGlobalDiagnostics().length > 0;
+        }
+
+        function isEmitBlocked(sourceFile?: SourceFile): boolean {
+            return options.noEmitOnError && hasPreEmitDiagnostics(sourceFile);
+        }
+
+        function isDeclarationEmitBlocked(sourceFile?: SourceFile) {
+            return hasPreEmitDiagnostics(sourceFile);
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -170,20 +211,51 @@ module ts {
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
-        function getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile);
+        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            if (sourceFile) {
+                return ts.getSyntacticDiagnostics(sourceFile);
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            forEach(program.getSourceFiles(), sourceFile => {
+                addRange(allDiagnostics, ts.getSyntacticDiagnostics(sourceFile));
+            });
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function getTypeCheckerGlobalDiagnostics(): Diagnostic[] {
-            return getDiagnosticsProducingTypeChecker().getGlobalDiagnostics();
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+
+            Debug.assert(!!sourceFile.bindDiagnostics);
+            var bindDiagnostics = sourceFile.bindDiagnostics;
+            var checkDiagnostics = typeChecker.getDiagnostics(sourceFile);
+            var programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+
+            return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
-            return sourceFile ? diagnostics.getDiagnostics(sourceFile.fileName) : diagnostics.getDiagnostics();
+        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            if (sourceFile) {
+                return sortAndDeduplicateDiagnostics(getSemanticDiagnosticsForFile(sourceFile));
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            forEach(program.getSourceFiles(), sourceFile => {
+                addRange(allDiagnostics, getSemanticDiagnosticsForFile(sourceFile));
+            });
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[]{
-            return diagnostics.getGlobalDiagnostics();
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+
+            var allDiagnostics: Diagnostic[] = [];
+            addRange(allDiagnostics, typeChecker.getGlobalDiagnostics());
+            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function hasExtension(fileName: string): boolean {
@@ -272,9 +344,6 @@ module ts {
                     else {
                         files.push(file);
                     }
-                    forEach(getSyntacticDiagnostics(file), e => {
-                        diagnostics.add(e);
-                    });
                 }
             }
             return file;

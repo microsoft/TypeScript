@@ -25,7 +25,9 @@ module ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
+
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        isDeclarationEmitBlocked(sourceFile?: SourceFile): boolean;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -210,34 +212,8 @@ module ts {
             length,
             code: messageChain.code,
             category: messageChain.category,
-            messageText: messageChain
+            messageText: messageChain.next ? messageChain : messageChain.messageText
         };
-    }
-
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
-        if (typeof messageText === "string") {
-            return messageText;
-        }
-        else {
-            var diagnosticChain = messageText;
-            var result = "";
-
-            var indent = 0;
-            while (diagnosticChain) {
-                if (indent) {
-                    result += newLine;
-
-                    for (var i = 0; i < indent; i++) {
-                        result += "  ";
-                    }
-                }
-                result += diagnosticChain.messageText;
-                indent++;
-                diagnosticChain = diagnosticChain.next;
-            }
-
-            return result;
-        }
     }
 
     export function getErrorSpanForNode(node: Node): Node {
@@ -1144,7 +1120,7 @@ module ts {
                 }
             }
 
-            return sortAndDeplicateList(allDiagnostics);
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function sortAndDeduplicate() {
@@ -1153,17 +1129,13 @@ module ts {
             }
 
             diagnosticsModified = false;
-            nonFileDiagnostics = sortAndDeplicateList(nonFileDiagnostics);
+            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
             for (var key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
-                    fileDiagnostics[key] = sortAndDeplicateList(fileDiagnostics[key]);
+                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
                 }
             }
-        }
-
-        function sortAndDeplicateList(diagnostics: Diagnostic[]): Diagnostic[] {
-            return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics))
         }
     }
 }

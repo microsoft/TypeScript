@@ -10,24 +10,23 @@
 
 declare var process: any;
 declare var console: any;
+declare var os: any;
 
 import ts = require("typescript");
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
     var program = ts.createProgram(fileNames, options);
-    var result = program.emit();
+    var emitResult = program.emit();
 
-    var allDiagnostics = program.getDiagnostics()
-        .concat(program.getTypeCheckerDiagnostics())
-        .concat(result.diagnostics);
+    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
 
     allDiagnostics.forEach(diagnostic => {
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
     });
 
-    console.log(`Process exiting with code '${result.emitResultStatus}'.`);
-    process.exit(result.emitResultStatus);
+    console.log(`Process exiting with code '${emitResult.emitResultStatus}'.`);
+    process.exit(emitResult.emitResultStatus);
 }
 
 compile(process.argv.slice(2), {

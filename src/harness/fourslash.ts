@@ -1142,14 +1142,23 @@ module FourSlash {
                         var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
                         var emitOutputStatus = emitOutput.emitOutputStatus;
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus];
-                        resultString += "\n";
+                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus] + ts.sys.newLine;
+
+                        if (emitOutputStatus !== ts.EmitReturnStatus.Succeeded) {
+                            resultString += "Diagnostics:" + ts.sys.newLine;
+                            var diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
+                            for (var i = 0, n = diagnostics.length; i < n; i++) {
+                                resultString += "  " + diagnostics[0].messageText + ts.sys.newLine;
+                            }
+                        }
+
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                            var fileName = "FileName : " + outputFile.name + "\n";
+                            var fileName = "FileName : " + outputFile.name + ts.sys.newLine;
                             resultString = resultString + fileName + outputFile.text;
                         });
-                        resultString += "\n";
+                        resultString += ts.sys.newLine;
                     });
+
                     return resultString;
                 },
                 true /* run immediately */);
@@ -2215,11 +2224,11 @@ module FourSlash {
             ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
         var program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
-        var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
 
-        var errors = program.getDiagnostics().concat(checker.getDiagnostics());
-        if (errors.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
+        var diagnostics = ts.getPreEmitDiagnostics(program);
+        if (diagnostics.length > 0) {
+            throw new Error('Error compiling ' + fileName + ': ' +
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
         program.emit();
         result = result || ''; // Might have an empty fourslash file

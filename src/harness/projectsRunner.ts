@@ -127,23 +127,20 @@ class ProjectRunner extends RunnerBase {
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
             var program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
-            var errors = program.getDiagnostics();
-            var sourceMapData: ts.SourceMapData[] = null;
-            if (!errors.length) {
-                errors = program.getTypeCheckerDiagnostics();
-                var emitResult = program.emit();
-                errors = ts.concatenate(errors, emitResult.diagnostics);
-                sourceMapData = emitResult.sourceMaps;
+            var errors = ts.getPreEmitDiagnostics(program);
 
-                // Clean up source map data that will be used in baselining
-                if (sourceMapData) {
-                    for (var i = 0; i < sourceMapData.length; i++) {
-                        for (var j = 0; j < sourceMapData[i].sourceMapSources.length; j++) {
-                            sourceMapData[i].sourceMapSources[j] = cleanProjectUrl(sourceMapData[i].sourceMapSources[j]);
-                        }
-                        sourceMapData[i].jsSourceMappingURL = cleanProjectUrl(sourceMapData[i].jsSourceMappingURL);
-                        sourceMapData[i].sourceMapSourceRoot = cleanProjectUrl(sourceMapData[i].sourceMapSourceRoot);
+            var emitResult = program.emit();
+            errors = ts.concatenate(errors, emitResult.diagnostics);
+            var sourceMapData = emitResult.sourceMaps;
+
+            // Clean up source map data that will be used in baselining
+            if (sourceMapData) {
+                for (var i = 0; i < sourceMapData.length; i++) {
+                    for (var j = 0; j < sourceMapData[i].sourceMapSources.length; j++) {
+                        sourceMapData[i].sourceMapSources[j] = cleanProjectUrl(sourceMapData[i].sourceMapSources[j]);
                     }
+                    sourceMapData[i].jsSourceMappingURL = cleanProjectUrl(sourceMapData[i].jsSourceMappingURL);
+                    sourceMapData[i].sourceMapSourceRoot = cleanProjectUrl(sourceMapData[i].sourceMapSourceRoot);
                 }
             }
 

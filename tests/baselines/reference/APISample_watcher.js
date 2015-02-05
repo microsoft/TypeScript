@@ -821,11 +821,10 @@ declare module "typescript" {
          * will be invoked when writing the javascript and declaration files.
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
-        getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getTypeCheckerGlobalDiagnostics(): Diagnostic[];
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
     }
@@ -850,9 +849,9 @@ declare module "typescript" {
     }
     enum EmitReturnStatus {
         Succeeded = 0,
-        AllOutputGenerationSkipped = 1,
-        JSGeneratedWithSemanticErrors = 2,
-        DeclarationGenerationSkipped = 3,
+        DiagnosticsPresent_AllOutputsSkipped = 1,
+        DiagnosticsPresent_JavaScriptGenerated = 2,
+        DiagnosticsPresent_JavaScriptGenerated_DeclarationNotGenerated = 3,
         EmitErrorsEncountered = 4,
         CompilerOptionsErrors = 5,
     }
@@ -957,7 +956,6 @@ declare module "typescript" {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1491,6 +1489,8 @@ declare module "typescript" {
 }
 declare module "typescript" {
     function createCompilerHost(options: CompilerOptions): CompilerHost;
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {

@@ -2168,7 +2168,7 @@ module ts {
 
             fileName = normalizeSlashes(fileName);
 
-            return program.getDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
         /**
@@ -2179,18 +2179,19 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName)
-            var compilerOptions = program.getCompilerOptions();
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            var allDiagnostics = program.getTypeCheckerDiagnostics(targetSourceFile);
-            if (compilerOptions.declaration) {
-                // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
+            var semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            if (!program.getCompilerOptions().declaration) {
+                return semanticDiagnostics;
             }
-            return allDiagnostics
+
+            // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+            var declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            return semanticDiagnostics.concat(declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
