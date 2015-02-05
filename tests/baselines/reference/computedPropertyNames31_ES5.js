@@ -41,7 +41,8 @@ var C = (function (_super) {
             var obj = (_a = {},
                 _a[_super.prototype.bar.call(_this)] = function () {
                 },
-                _a);
+                _a
+            );
             var _a;
         });
         return 0;

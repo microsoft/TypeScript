@@ -11,14 +11,15 @@ var v = (_a = {},
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, 0 + 1, {
         set: function (v) {
         } //No error
         ,
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
-    _a);
+    _a
+);
 var _a;

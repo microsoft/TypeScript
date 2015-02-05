@@ -6,5 +6,6 @@ var o = {
 //// [computedPropertyNames46_ES5.js]
 var o = (_a = {},
     _a["" || 0] = 0,
-    _a);
+    _a
+);
 var _a;

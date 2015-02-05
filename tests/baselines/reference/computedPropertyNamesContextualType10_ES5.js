@@ -12,5 +12,6 @@ var o: I = {
 var o = (_a = {},
     _a[+"foo"] = "",
     _a[+"bar"] = 0,
-    _a);
+    _a
+);
 var _a;

@@ -26,72 +26,73 @@ var v = (_a = {},
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, n, {
         set: function (v) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, s + s, {
         get: function () {
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, s + n, {
         set: function (v) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, +s, {
         get: function () {
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, "", {
         set: function (v) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, 0, {
         get: function () {
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, a, {
         set: function (v) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, true, {
         get: function () {
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, "hello bye", {
         set: function (v) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, "hello " + a + " bye", {
         get: function () {
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
-    _a);
+    _a
+);
 var _a;

@@ -16,15 +16,16 @@ var v = (_a = {},
             return 0;
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
     Object.defineProperty(_a, "" + "", {
         set: function (x) {
         },
         enumerable: true,
-        configurable: true,
+        configurable: true
     }),
-    _a);
+    _a
+);
 var _a;
 
 

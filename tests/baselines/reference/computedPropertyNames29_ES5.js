@@ -20,7 +20,8 @@ var C = (function () {
             var obj = (_a = {},
                 _a[_this.bar()] = function () {
                 },
-                _a);
+                _a
+            );
             var _a;
         });
         return 0;

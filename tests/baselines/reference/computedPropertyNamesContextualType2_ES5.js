@@ -15,5 +15,6 @@ var o = (_a = {},
         return y.length;
     },
     _a[+"bar"] = function (y) { return y.length; },
-    _a);
+    _a
+);
 var _a;

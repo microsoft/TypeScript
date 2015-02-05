@@ -43,5 +43,6 @@ var v = (_a = {},
     },
     _a["hello " + a + " bye"] = function () {
     },
-    _a);
+    _a
+);
 var _a;

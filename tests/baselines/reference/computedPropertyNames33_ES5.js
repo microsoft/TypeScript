@@ -20,7 +20,8 @@ var C = (function () {
         var obj = (_a = {},
             _a[foo()] = function () {
             },
-            _a);
+            _a
+        );
         return 0;
         var _a;
     };

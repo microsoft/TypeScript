@@ -32,5 +32,6 @@ var v = (_a = {},
     _a[true] = 0,
     _a["hello bye"] = 0,
     _a["hello " + a + " bye"] = 0,
-    _a);
+    _a
+);
 var _a;

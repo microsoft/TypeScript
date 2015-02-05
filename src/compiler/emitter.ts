@@ -195,7 +195,7 @@ module ts {
                     // }
                     // module m {
                     //     /* this is line 1 -- Assume current writer indent 8
-                    //      * line                                                --3 = 8 - 4 + 5 
+                    //      * line                                                --3 = 8 - 4 + 5
                     //            More right indented comment */                  --4 = 8 - 4 + 11
                     //     class c { }
                     // }
@@ -359,8 +359,8 @@ module ts {
 
         var aliasDeclarationEmitInfo: AliasDeclarationEmitInfo[] = [];
 
-        // Contains the reference paths that needs to go in the declaration file. 
-        // Collecting this separately because reference paths need to be first thing in the declaration file 
+        // Contains the reference paths that needs to go in the declaration file.
+        // Collecting this separately because reference paths need to be first thing in the declaration file
         // and we could be collecting these paths from multiple files into single one with --out option
         var referencePathsOutput = "";
 
@@ -467,7 +467,7 @@ module ts {
                 // Eg.
                 // export function bar(a: foo.Foo) { }
                 // import foo = require("foo");
-                // Writing of function bar would mark alias declaration foo as visible but we haven't yet visited that declaration so do nothing, 
+                // Writing of function bar would mark alias declaration foo as visible but we haven't yet visited that declaration so do nothing,
                 // we would write alias foo declaration when we visit it since it would now be marked as visible
                 if (aliasEmitInfo) {
                     createAndSetNewTextWriterWithSymbolWriter();
@@ -608,7 +608,7 @@ module ts {
             }
 
             function emitEntityName(entityName: EntityName) {
-                var visibilityResult = resolver.isEntityNameVisible(entityName, 
+                var visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportDeclaration ? entityName.parent : enclosingDeclaration);
 
@@ -692,7 +692,7 @@ module ts {
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
             if (node.parent === currentSourceFile) {
-                // If the node is exported 
+                // If the node is exported
                 if (node.flags & NodeFlags.Export) {
                     write("export ");
                 }
@@ -730,7 +730,7 @@ module ts {
         }
 
         function writeImportDeclaration(node: ImportDeclaration) {
-            // note usage of writer. methods instead of aliases created, just to make sure we are using 
+            // note usage of writer. methods instead of aliases created, just to make sure we are using
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
@@ -1083,7 +1083,7 @@ module ts {
         }
 
         function emitTypeOfVariableDeclarationFromTypeLiteral(node: VariableLikeDeclaration) {
-            // if this is property of type literal, 
+            // if this is property of type literal,
             // or is parameter of method/call/construct/index signature of type literal
             // emit only if type is specified
             if (node.type) {
@@ -1496,7 +1496,7 @@ module ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-    
+
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         var diagnostics: Diagnostic[] = [];
         var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
@@ -1557,7 +1557,7 @@ module ts {
             var emitEnd = function (node: Node) { };
 
             /** Emit the text for the given token that comes after startPos
-              * This by default writes the text provided with the given tokenKind 
+              * This by default writes the text provided with the given tokenKind
               * but if optional emitFn callback is provided the text is emitted using the callback instead of default text
               * @param tokenKind the kind of the token to search and emit
               * @param startPos the position in the source to start searching for the token
@@ -1624,13 +1624,13 @@ module ts {
                     // 1. Relative Column 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.emittedColumn - prevEncodedEmittedColumn);
 
-                    // 2. Relative sourceIndex 
+                    // 2. Relative sourceIndex
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceIndex - lastEncodedSourceMapSpan.sourceIndex);
 
                     // 3. Relative sourceLine 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceLine - lastEncodedSourceMapSpan.sourceLine);
 
-                    // 4. Relative sourceColumn 0 based 
+                    // 4. Relative sourceColumn 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
 
                     // 5. Relative namePosition 0 based
@@ -1730,7 +1730,7 @@ module ts {
 
                 function recordNewSourceFileStart(node: SourceFile) {
                     // Add the file to tsFilePaths
-                    // If sourceroot option: Use the relative path corresponding to the common directory path 
+                    // If sourceroot option: Use the relative path corresponding to the common directory path
                     // otherwise source locations relative to map file location
                     var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
@@ -1870,7 +1870,7 @@ module ts {
                     sourceMapDecodedMappings: []
                 };
 
-                // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the 
+                // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
                 // relative paths of the sources list in the sourcemap
                 sourceMapData.sourceMapSourceRoot = ts.normalizeSlashes(sourceMapData.sourceMapSourceRoot);
                 if (sourceMapData.sourceMapSourceRoot.length && sourceMapData.sourceMapSourceRoot.charCodeAt(sourceMapData.sourceMapSourceRoot.length - 1) !== CharacterCodes.slash) {
@@ -2186,10 +2186,10 @@ module ts {
                     // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
                     // which have greater precedence and '-' which has equal precedence.
                     // All unary operators have a higher precedence apart from yield.
-                    // Arrow functions and conditionals have a lower precedence, 
+                    // Arrow functions and conditionals have a lower precedence,
                     // although we convert the former into regular function expressions in ES5 mode,
                     // and in ES6 mode this function won't get called anyway.
-                    // 
+                    //
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
                     switch (expression.kind) {
@@ -2438,29 +2438,29 @@ module ts {
 
                 write("}");
             }
-            
+
             function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
                 var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
                 var properties = node.properties;
-                
+
                 write("(");
 
                 // For computed properties, we need to create a unique handle to the object
                 // literal so we can modify it without risking internal assignments tainting the object.
                 var tempVar = createTempVariable(node);
                 recordTempDeclaration(tempVar);
-                
+
                 // Write out the first non-computed properties
                 // (or all properties if none of them are computed),
                 // then emit the rest through indexing on the temp variable.
                 emit(tempVar)
                 write(" = ");
                 emitObjectLiteralBody(node, firstComputedPropertyIndex);
-                
+
                 if (multiLine) {
                     increaseIndent();
                 }
-                
+
                 for (var i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
                     writeSeparator();
 
@@ -2505,7 +2505,7 @@ module ts {
                         writeLine();
                         write("configurable: true");
                         decreaseIndent();
-                        writeSeparator();
+                        writeLine();
                         write("})");
                         emitEnd(property);
                     }
@@ -2515,7 +2515,7 @@ module ts {
                         emit(tempVar);
                         emitMemberAccessForPropertyName(property.name);
                         emitEnd(property.name);
-                        
+
                         write(" = ");
 
                         if (property.kind === SyntaxKind.PropertyAssignment) {
@@ -2531,19 +2531,20 @@ module ts {
                             Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
                         }
                     }
-                    
+
                     emitEnd(property);
                 }
-                
+
                 writeSeparator();
                 emit(tempVar);
-                
-                write(")");
 
                 if (multiLine) {
                     decreaseIndent();
+                    writeLine();
                 }
-                
+
+                write(")");
+
                 function writeSeparator() {
                     if (multiLine) {
                         write(",");
@@ -2706,7 +2707,7 @@ module ts {
                     var operand = (<TypeAssertion>node.expression).expression;
 
                     // Make sure we consider all nested cast expressions, e.g.:
-                    // (<any><number><any>-A).x; 
+                    // (<any><number><any>-A).x;
                     while (operand.kind == SyntaxKind.TypeAssertionExpression) {
                         operand = (<TypeAssertion>operand).expression;
                     }
@@ -2714,7 +2715,7 @@ module ts {
                     // We have an expression of the form: (<Type>SubExpr)
                     // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
                     // Omitting the parentheses, however, could cause change in the semantics of the generated
-                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.: 
+                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
                     //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
                     //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
                     //      new (<any>A()) should be emitted as new (A()) and not new A()
@@ -3507,7 +3508,7 @@ module ts {
                         emitStart(node.body);
                         write("return ");
 
-                        // Don't emit comments on this body.  We'll have already taken care of it above 
+                        // Don't emit comments on this body.  We'll have already taken care of it above
                         // when we called emitDetachedComments.
                         emitNode(node.body, /*disableComments:*/ true);
                         emitEnd(node.body);
@@ -4207,12 +4208,12 @@ module ts {
                         return false;
 
                     case SyntaxKind.ModuleDeclaration:
-                        // Only emit the leading/trailing comments for a module if we're actually 
+                        // Only emit the leading/trailing comments for a module if we're actually
                         // emitting the module as well.
                         return shouldEmitModuleDeclaration(<ModuleDeclaration>node);
 
                     case SyntaxKind.EnumDeclaration:
-                        // Only emit the leading/trailing comments for an enum if we're actually 
+                        // Only emit the leading/trailing comments for an enum if we're actually
                         // emitting the module as well.
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
@@ -4436,7 +4437,7 @@ module ts {
                 }
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);                
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
@@ -4452,7 +4453,7 @@ module ts {
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
-                                // comment is not part of the copyright comments.  Return what we have so 
+                                // comment is not part of the copyright comments.  Return what we have so
                                 // far.
                                 return detachedComments;
                             }
@@ -4491,7 +4492,7 @@ module ts {
                     if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                         return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
                     }
-                    // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text 
+                    // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                     // so that we don't end up computing comment string and doing match for all // comments
                     else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
                         comment.pos + 2 < comment.end &&
@@ -4527,7 +4528,7 @@ module ts {
 
         function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile) {
             var emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
-            // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
+            // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
             // or should we just not write this file like we are doing now
             if (!emitDeclarationResult.reportedDeclarationError) {
                 var declarationOutput = emitDeclarationResult.referencePathsOutput;
@@ -4587,7 +4588,7 @@ module ts {
                 emitFile(compilerOptions.out);
             }
         }
-       
+
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
