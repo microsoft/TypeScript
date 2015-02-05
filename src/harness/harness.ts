@@ -1081,8 +1081,6 @@ module Harness {
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
-                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
-
                 var isEmitBlocked = program.isEmitBlocked();
 
                 // only emit if there weren't parse errors
@@ -1092,7 +1090,7 @@ module Harness {
                 }
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
+                program.getDiagnostics().concat(program.getTypeCheckerDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });

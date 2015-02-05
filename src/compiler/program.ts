@@ -88,7 +88,6 @@ module ts {
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
 
-
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
         var emitHost: EmitHost;
@@ -104,10 +103,16 @@ module ts {
             getTypeCheckerGlobalDiagnostics,
             getDeclarationDiagnostics,
             getTypeChecker,
+            getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emitFiles: invokeEmitter,
             isEmitBlocked,
             getCurrentDirectory: host.getCurrentDirectory,
+            getEmitResolver: () => getDiagnosticsProducingTypeChecker().getEmitResolver(),
+            getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
+            getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
+            getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
+            getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
 
@@ -127,13 +132,8 @@ module ts {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
 
-        function getTypeChecker(produceDiagnostics: boolean) {
-            if (produceDiagnostics) {
-                return getDiagnosticsProducingTypeChecker();
-            }
-            else {
-                return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, produceDiagnostics));
-            }
+        function getTypeChecker() {
+            return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
         function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{

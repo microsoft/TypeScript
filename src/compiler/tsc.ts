@@ -336,9 +336,8 @@ module ts {
             exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         }
         else {
-            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
+            errors = program.getTypeCheckerDiagnostics();
             if (program.isEmitBlocked()) {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
@@ -367,10 +366,10 @@ module ts {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
-            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportCountStatistic("Nodes", program.getNodeCount());
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }

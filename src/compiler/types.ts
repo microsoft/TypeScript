@@ -930,6 +930,7 @@ module ts {
     export interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+        getEmitResolver(): EmitResolver;
 
         // These will merge with the below diagnostics function in a followup checkin.
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -947,11 +948,20 @@ module ts {
         //
         // If 'produceDiagnostics' is false, then any calls to get diagnostics from the TypeChecker
         // will throw an invalid operation exception.
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
+        getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
 
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+
+        // For testing purposes only.  Should not be used by any other consumers (including the 
+        // language service).
+        /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+
+        /* @internal */ getNodeCount(): number;
+        /* @internal */ getIdentifierCount(): number;
+        /* @internal */ getSymbolCount(): number;
+        /* @internal */ getTypeCount(): number;
     }
 
     export interface SourceMapSpan {
@@ -1000,7 +1010,6 @@ module ts {
     }
 
     export interface TypeChecker {
-        getEmitResolver(): EmitResolver;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1033,6 +1042,7 @@ module ts {
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
+        /* @internal */ getEmitResolver(): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;

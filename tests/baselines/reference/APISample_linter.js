@@ -770,12 +770,13 @@ declare module "typescript" {
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+        getEmitResolver(): EmitResolver;
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getTypeCheckerGlobalDiagnostics(): Diagnostic[];
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
+        getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
@@ -819,7 +820,6 @@ declare module "typescript" {
         getSourceFile(fileName: string): SourceFile;
     }
     interface TypeChecker {
-        getEmitResolver(): EmitResolver;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];

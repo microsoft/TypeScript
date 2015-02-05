@@ -2024,10 +2024,6 @@ module ts {
             return sourceFile;
         }
 
-        function getDiagnosticsProducingTypeChecker() {
-            return program.getTypeChecker(/*produceDiagnostics:*/ true);
-        }
-
         function getRuleProvider(options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
@@ -2076,7 +2072,7 @@ module ts {
             }
 
             program = newProgram;
-            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+            typeInfoResolver = program.getTypeChecker();
 
             return;
 
@@ -2155,7 +2151,7 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+                typeInfoResolver = program.getTypeChecker();
             }
         }
 
@@ -4673,7 +4669,7 @@ module ts {
             var emitHost = createEmitHostFromProgram(program);
             emitHost.writeFile = writeFile;
 
-            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
+            var emitOutput = emitFiles(program.getEmitResolver(), emitHost, sourceFile);
 
             return {
                 outputFiles,

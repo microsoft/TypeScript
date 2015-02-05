@@ -2391,6 +2391,10 @@ declare module "typescript" {
 >getCompilerHost : () => CompilerHost
 >CompilerHost : CompilerHost
 
+        getEmitResolver(): EmitResolver;
+>getEmitResolver : () => EmitResolver
+>EmitResolver : EmitResolver
+
         getTypeCheckerDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 >getTypeCheckerDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
@@ -2417,9 +2421,8 @@ declare module "typescript" {
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
 
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
->getTypeChecker : (produceDiagnostics: boolean) => TypeChecker
->produceDiagnostics : boolean
+        getTypeChecker(): TypeChecker;
+>getTypeChecker : () => TypeChecker
 >TypeChecker : TypeChecker
 
         getCommonSourceDirectory(): string;
@@ -2546,10 +2549,6 @@ declare module "typescript" {
     }
     interface TypeChecker {
 >TypeChecker : TypeChecker
-
-        getEmitResolver(): EmitResolver;
->getEmitResolver : () => EmitResolver
->EmitResolver : EmitResolver
 
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
 >getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type
