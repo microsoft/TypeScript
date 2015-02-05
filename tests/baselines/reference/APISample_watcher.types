@@ -5720,6 +5720,9 @@ declare module "typescript" {
         isMemberCompletion: boolean;
 >isMemberCompletion : boolean
 
+        isNewIdentifierLocation: boolean;
+>isNewIdentifierLocation : boolean
+
         entries: CompletionEntry[];
 >entries : CompletionEntry[]
 >CompletionEntry : CompletionEntry
