@@ -77,7 +77,7 @@ module ts {
         var program: Program;
         var files: SourceFile[] = [];
         var filesByName: Map<SourceFile> = {};
-        var errors: Diagnostic[] = [];
+        var diagnostics = createDiagnosticCollection();
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory: string;
         host = host || createCompilerHost(options);
@@ -87,7 +87,6 @@ module ts {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
-        errors.sort(compareDiagnostics);
 
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
@@ -174,12 +173,12 @@ module ts {
             return getDiagnosticsProducingTypeChecker().getGlobalDiagnostics();
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return sourceFile ? filter(errors, e => e.file === sourceFile) : errors;
+        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+            return sourceFile ? diagnostics.getDiagnostics(sourceFile.fileName) : diagnostics.getDiagnostics();
         }
 
-        function getGlobalDiagnostics(): Diagnostic[] {
-            return filter(errors, e => !e.file);
+        function getGlobalDiagnostics(): Diagnostic[]{
+            return diagnostics.getGlobalDiagnostics();
         }
 
         function hasExtension(fileName: string): boolean {
@@ -219,10 +218,10 @@ module ts {
 
             if (diagnostic) {
                 if (refFile) {
-                    errors.push(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
+                    diagnostics.add(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(diagnostic, fileName));
+                    diagnostics.add(createCompilerDiagnostic(diagnostic, fileName));
                 }
             }
         }
@@ -244,11 +243,11 @@ module ts {
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                     if (refFile) {
-                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
+                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
                 if (file) {
@@ -269,7 +268,7 @@ module ts {
                         files.push(file);
                     }
                     forEach(getSyntacticDiagnostics(file), e => {
-                        errors.push(e);
+                        diagnostics.add(e);
                     });
                 }
             }
@@ -280,7 +279,7 @@ module ts {
                 if (file && host.useCaseSensitiveFileNames()) {
                     var sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
-                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                     }
                 }
@@ -354,10 +353,10 @@ module ts {
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 if (options.sourceRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 return;
             }
@@ -368,7 +367,7 @@ module ts {
                 var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
                 var errorLength = externalModuleErrorSpan.end - errorStart;
-                errors.push(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot
@@ -389,7 +388,7 @@ module ts {
                             for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
                                 if (commonPathComponents[i] !== sourcePathComponents[i]) {
                                     if (i === 0) {
-                                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                                         return;
                                     }
 
@@ -422,11 +421,11 @@ module ts {
 
             if (options.noEmit) {
                 if (options.out || options.outDir) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
                 }
 
                 if (options.declaration) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
         }
