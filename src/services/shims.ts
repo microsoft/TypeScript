@@ -51,7 +51,7 @@ module ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: string): string;
+        getDefaultLibFileName(options: string): string;
     }
 
     ///
@@ -265,8 +265,8 @@ module ts {
             return this.shimHost.getCurrentDirectory();
         }
 
-        public getDefaultLibFilename(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
+        public getDefaultLibFileName(options: CompilerOptions): string {
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -702,7 +702,7 @@ module ts {
 
                     forEach(result.referencedFiles, refFile => {
                         convertResult.referencedFiles.push({
-                            path: normalizePath(refFile.filename),
+                            path: normalizePath(refFile.fileName),
                             position: refFile.pos,
                             length: refFile.end - refFile.pos
                         });
@@ -710,7 +710,7 @@ module ts {
 
                     forEach(result.importedFiles, importedFile => {
                         convertResult.importedFiles.push({
-                            path: normalizeSlashes(importedFile.filename),
+                            path: normalizeSlashes(importedFile.fileName),
                             position: importedFile.pos,
                             length: importedFile.end - importedFile.pos
                         });

@@ -1,12 +1,12 @@
 EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile1.js
+FileName : tests/cases/fourslash/inputFile1.js
 var x = 5;
 var Bar = (function () {
     function Bar() {
     }
     return Bar;
 })();
-Filename : tests/cases/fourslash/inputFile1.d.ts
+FileName : tests/cases/fourslash/inputFile1.d.ts
 declare var x: number;
 declare class Bar {
     x: string;
@@ -14,14 +14,14 @@ declare class Bar {
 }
 
 EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile2.js
+FileName : tests/cases/fourslash/inputFile2.js
 var x1 = "hello world";
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
 })();
-Filename : tests/cases/fourslash/inputFile2.d.ts
+FileName : tests/cases/fourslash/inputFile2.d.ts
 declare var x1: string;
 declare class Foo {
     x: string;

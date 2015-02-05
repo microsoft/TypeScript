@@ -15,9 +15,9 @@ declare var console: any;
 import ts = require("typescript");
 >ts : typeof ts
 
-export function compile(filenames: string[], options: ts.CompilerOptions): void {
->compile : (filenames: string[], options: ts.CompilerOptions) => void
->filenames : string[]
+export function compile(fileNames: string[], options: ts.CompilerOptions): void {
+>compile : (fileNames: string[], options: ts.CompilerOptions) => void
+>fileNames : string[]
 >options : ts.CompilerOptions
 >ts : unknown
 >CompilerOptions : ts.CompilerOptions
@@ -30,13 +30,13 @@ export function compile(filenames: string[], options: ts.CompilerOptions): void 
 >createCompilerHost : (options: ts.CompilerOptions) => ts.CompilerHost
 >options : ts.CompilerOptions
 
-    var program = ts.createProgram(filenames, options, host);
+    var program = ts.createProgram(fileNames, options, host);
 >program : ts.Program
->ts.createProgram(filenames, options, host) : ts.Program
+>ts.createProgram(fileNames, options, host) : ts.Program
 >ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
 >ts : typeof ts
 >createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
->filenames : string[]
+>fileNames : string[]
 >options : ts.CompilerOptions
 >host : ts.CompilerHost
 
@@ -80,35 +80,35 @@ export function compile(filenames: string[], options: ts.CompilerOptions): void 
 >diagnostics : ts.Diagnostic[]
 
     allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    }) : void
+>allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);    } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
 >lineChar : ts.LineAndCharacter
 >diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterFromPosition : (position: number) => ts.LineAndCharacter
+>diagnostic.file.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
->getLineAndCharacterFromPosition : (position: number) => ts.LineAndCharacter
+>getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.start : number
 >diagnostic : ts.Diagnostic
 >start : number
 
-        console.log(`${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
->console.log(`${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
+        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+>console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`) : any
 >console.log : any
 >console : any
 >log : any
->diagnostic.file.filename : string
+>diagnostic.file.fileName : string
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
->filename : string
+>fileName : string
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
@@ -142,7 +142,7 @@ export function compile(filenames: string[], options: ts.CompilerOptions): void 
 
 compile(process.argv.slice(2), {
 >compile(process.argv.slice(2), {    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS}) : void
->compile : (filenames: string[], options: ts.CompilerOptions) => void
+>compile : (fileNames: string[], options: ts.CompilerOptions) => void
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
@@ -2180,8 +2180,8 @@ declare module "typescript" {
 >FileReference : FileReference
 >TextRange : TextRange
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
     }
     interface CommentRange extends TextRange {
 >CommentRange : CommentRange
@@ -2203,31 +2203,11 @@ declare module "typescript" {
 >endOfFileToken : Node
 >Node : Node
 
-        filename: string;
->filename : string
+        fileName: string;
+>fileName : string
 
         text: string;
 >text : string
-
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (position: number) => LineAndCharacter
->position : number
->LineAndCharacter : LineAndCharacter
-
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
->line : number
->character : number
-
-        getLineStarts(): number[];
->getLineStarts : () => number[]
-
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
->update : (newText: string, textChangeRange: TextChangeRange) => SourceFile
->newText : string
->textChangeRange : TextChangeRange
->TextChangeRange : TextChangeRange
->SourceFile : SourceFile
 
         amdDependencies: string[];
 >amdDependencies : string[]
@@ -2239,37 +2219,12 @@ declare module "typescript" {
 >referencedFiles : FileReference[]
 >FileReference : FileReference
 
-        referenceDiagnostics: Diagnostic[];
->referenceDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
-        parseDiagnostics: Diagnostic[];
->parseDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
-        getSyntacticDiagnostics(): Diagnostic[];
->getSyntacticDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
-
-        semanticDiagnostics: Diagnostic[];
->semanticDiagnostics : Diagnostic[]
->Diagnostic : Diagnostic
-
         hasNoDefaultLib: boolean;
 >hasNoDefaultLib : boolean
 
         externalModuleIndicator: Node;
 >externalModuleIndicator : Node
 >Node : Node
-
-        nodeCount: number;
->nodeCount : number
-
-        identifierCount: number;
->identifierCount : number
-
-        symbolCount: number;
->symbolCount : number
 
         languageVersion: ScriptTarget;
 >languageVersion : ScriptTarget
@@ -2286,9 +2241,9 @@ declare module "typescript" {
 >getCompilerOptions : () => CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         getCurrentDirectory(): string;
@@ -2444,9 +2399,9 @@ declare module "typescript" {
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
     }
     interface TypeChecker {
@@ -3835,6 +3790,9 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
+        stripInternal?: boolean;
+>stripInternal : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -3881,8 +3839,8 @@ declare module "typescript" {
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        filenames: string[];
->filenames : string[]
+        fileNames: string[];
+>fileNames : string[]
 
         errors: Diagnostic[];
 >errors : Diagnostic[]
@@ -3915,6 +3873,9 @@ declare module "typescript" {
         error?: DiagnosticMessage;
 >error : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
+
+        experimental?: boolean;
+>experimental : boolean
     }
     const enum CharacterCodes {
 >CharacterCodes : CharacterCodes
@@ -4297,17 +4258,17 @@ declare module "typescript" {
     interface CompilerHost {
 >CompilerHost : CompilerHost
 
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
->getSourceFile : (filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
->filename : string
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+>getSourceFile : (fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
+>fileName : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
 >onError : (message: string) => void
 >message : string
 >SourceFile : SourceFile
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -4315,9 +4276,9 @@ declare module "typescript" {
 >getCancellationToken : () => CancellationToken
 >CancellationToken : CancellationToken
 
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
->writeFile : (filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
->filename : string
+        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>writeFile : (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
+>fileName : string
 >data : string
 >writeByteOrderMark : boolean
 >onError : (message: string) => void
@@ -4446,14 +4407,26 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->getPositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>line : number
+>character : number
+
+    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
 
-    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
->getLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
+    function getLineStarts(sourceFile: SourceFile): number[];
+>getLineStarts : (sourceFile: SourceFile) => number[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+>computeLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
 >lineStarts : number[]
 >position : number
 
@@ -4464,18 +4437,13 @@ declare module "typescript" {
 >character : number
 
     };
-    function positionToLineAndCharacter(text: string, pos: number): {
->positionToLineAndCharacter : (text: string, pos: number) => { line: number; character: number; }
->text : string
->pos : number
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>position : number
+>LineAndCharacter : LineAndCharacter
 
-        line: number;
->line : number
-
-        character: number;
->character : number
-
-    };
     function isWhiteSpace(ch: number): boolean;
 >isWhiteSpace : (ch: number) => boolean
 >ch : number
@@ -4562,14 +4530,29 @@ declare module "typescript" {
 >SyntaxKind : SyntaxKind
 >NodeFlags : NodeFlags
 
+    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
+>getSyntacticDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
+>updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange) => SourceFile
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>newText : string
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
+
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
 >isEvalOrArgumentsIdentifier : (node: Node) => boolean
 >node : Node
 >Node : Node
 
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
->createSourceFile : (filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
->filename : string
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean) => SourceFile
+>fileName : string
 >sourceText : string
 >languageVersion : ScriptTarget
 >ScriptTarget : ScriptTarget
@@ -4783,6 +4766,30 @@ declare module "typescript" {
         getNamedDeclarations(): Declaration[];
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
+
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+>pos : number
+>LineAndCharacter : LineAndCharacter
+
+        getLineStarts(): number[];
+>getLineStarts : () => number[]
+
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+>getPositionFromLineAndCharacter : (line: number, character: number) => number
+>line : number
+>character : number
+
+        getSyntacticDiagnostics(): Diagnostic[];
+>getSyntacticDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+>update : (newText: string, textChangeRange: TextChangeRange) => SourceFile
+>newText : string
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -4869,8 +4876,8 @@ declare module "typescript" {
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
 
-        getDefaultLibFilename(options: CompilerOptions): string;
->getDefaultLibFilename : (options: CompilerOptions) => string
+        getDefaultLibFileName(options: CompilerOptions): string;
+>getDefaultLibFileName : (options: CompilerOptions) => string
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
 
@@ -5059,9 +5066,9 @@ declare module "typescript" {
 >getProgram : () => Program
 >Program : Program
 
-        getSourceFile(filename: string): SourceFile;
->getSourceFile : (filename: string) => SourceFile
->filename : string
+        getSourceFile(fileName: string): SourceFile;
+>getSourceFile : (fileName: string) => SourceFile
+>fileName : string
 >SourceFile : SourceFile
 
         dispose(): void;
@@ -5457,6 +5464,9 @@ declare module "typescript" {
         isMemberCompletion: boolean;
 >isMemberCompletion : boolean
 
+        isNewIdentifierLocation: boolean;
+>isNewIdentifierLocation : boolean
+
         entries: CompletionEntry[];
 >entries : CompletionEntry[]
 >CompletionEntry : CompletionEntry
@@ -5648,11 +5658,11 @@ declare module "typescript" {
 >DocumentRegistry : DocumentRegistry
 
         /**
-          * Request a stored SourceFile with a given filename and compilationSettings.
+          * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
           *
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5661,9 +5671,9 @@ declare module "typescript" {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
->acquireDocument : (filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
->filename : string
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+>acquireDocument : (fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5672,7 +5682,7 @@ declare module "typescript" {
 >SourceFile : SourceFile
 
         /**
-          * Request an updated version of an already existing SourceFile with a given filename
+          * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
@@ -5680,7 +5690,7 @@ declare module "typescript" {
           * registry originally.
           *
           * @param sourceFile The original sourceFile object to update
-          * @param filename The name of the file requested
+          * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
@@ -5691,11 +5701,11 @@ declare module "typescript" {
           * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
           * was not found in the registry and a new one was created.
           */
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
->updateDocument : (sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+>updateDocument : (sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
 >sourceFile : SourceFile
 >SourceFile : SourceFile
->filename : string
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
@@ -5711,12 +5721,12 @@ declare module "typescript" {
           * Note: It is not allowed to call release on a SourceFile that was not acquired from
           * this registry originally.
           *
-          * @param filename The name of the file to be released
+          * @param fileName The name of the file to be released
           * @param compilationSettings The compilation settings used to acquire the file
           */
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
->releaseDocument : (filename: string, compilationSettings: CompilerOptions) => void
->filename : string
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+>releaseDocument : (fileName: string, compilationSettings: CompilerOptions) => void
+>fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
     }
@@ -5916,9 +5926,9 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
 >throwIfCancellationRequested : () => void
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
->createLanguageServiceSourceFile : (filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
->filename : string
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+>createLanguageServiceSourceFile : (fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
+>fileName : string
 >scriptSnapshot : IScriptSnapshot
 >IScriptSnapshot : IScriptSnapshot
 >scriptTarget : ScriptTarget

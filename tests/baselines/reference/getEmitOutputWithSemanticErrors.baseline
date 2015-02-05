@@ -1,4 +1,4 @@
 EmitOutputStatus : JSGeneratedWithSemanticErrors
-Filename : tests/cases/fourslash/inputFile.js
+FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
 

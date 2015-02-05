@@ -1,5 +1,5 @@
 EmitOutputStatus : Succeeded
-Filename : declSingleFile.js
+FileName : declSingleFile.js
 var x = 5;
 var Bar = (function () {
     function Bar() {
@@ -12,7 +12,7 @@ var Foo = (function () {
     }
     return Foo;
 })();
-Filename : declSingleFile.d.ts
+FileName : declSingleFile.d.ts
 declare var x: number;
 declare class Bar {
     x: string;

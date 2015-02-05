@@ -1,5 +1,6 @@
 ﻿// @module: commonjs
 // @includebuiltfile: typescript.d.ts
+// @stripInternal:true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
@@ -12,9 +13,9 @@ declare var console: any;
 
 import ts = require("typescript");
 
-export function compile(filenames: string[], options: ts.CompilerOptions): void {
+export function compile(fileNames: string[], options: ts.CompilerOptions): void {
     var host = ts.createCompilerHost(options);
-    var program = ts.createProgram(filenames, options, host);
+    var program = ts.createProgram(fileNames, options, host);
     var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
     var result = program.emitFiles();
 
@@ -24,7 +25,7 @@ export function compile(filenames: string[], options: ts.CompilerOptions): void 
 
     allDiagnostics.forEach(diagnostic => {
         var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(`${diagnostic.file.filename} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
     });
 
     console.log(`Process exiting with code '${result.emitResultStatus}'.`);

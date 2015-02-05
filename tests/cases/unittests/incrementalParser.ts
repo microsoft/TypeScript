@@ -24,8 +24,8 @@ module ts {
     }
 
     function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {
-        var diagnostics1 = file1.getSyntacticDiagnostics();
-        var diagnostics2 = file2.getSyntacticDiagnostics();
+        var diagnostics1 = getSyntacticDiagnostics(file1);
+        var diagnostics2 = getSyntacticDiagnostics(file2);
 
         assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
         for (var i = 0, n = diagnostics1.length; i < n; i++) {
@@ -68,8 +68,8 @@ module ts {
         // There should be no reused nodes between two trees that are fully parsed.
         assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
-        assert.equal(newTree.filename, incrementalNewTree.filename, "newTree.filename !== incrementalNewTree.filename");
-        assert.equal(newTree.text, incrementalNewTree.text, "newTree.filename !== incrementalNewTree.filename");
+        assert.equal(newTree.fileName, incrementalNewTree.fileName, "newTree.fileName !== incrementalNewTree.fileName");
+        assert.equal(newTree.text, incrementalNewTree.text, "newTree.text !== incrementalNewTree.text");
 
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
@@ -781,7 +781,7 @@ module m3 { }\
                 "            }\r\n" +
                 "                \r\n" +
                 "            return {\r\n" +
-                "                getEmitOutput: (filename): Bar => null,\r\n" +
+                "                getEmitOutput: (fileName): Bar => null,\r\n" +
                 "            };\r\n" +
                 "        }";
 

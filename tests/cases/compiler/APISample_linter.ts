@@ -1,5 +1,6 @@
 ﻿// @module: commonjs
 // @includebuiltfile: typescript.d.ts
+// @stripInternal:true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
@@ -51,14 +52,14 @@ export function delint(sourceFile: ts.SourceFile) {
 
     function report(node: ts.Node, message: string) {
         var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(`${sourceFile.filename} (${lineChar.line},${lineChar.character}): ${message}`)
+        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
     }
 }
 
-var filenames = process.argv.slice(2);
-filenames.forEach(filename => {
+var fileNames = process.argv.slice(2);
+fileNames.forEach(fileName => {
     // Parse a file
-    var sourceFile = ts.createSourceFile(filename, fs.readFileSync(filename).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 
     // delint it
     delint(sourceFile);

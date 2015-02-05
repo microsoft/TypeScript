@@ -60,18 +60,18 @@ interface IOLog {
 }
 
 interface PlaybackControl {
-    startReplayFromFile(logFilename: string): void;
+    startReplayFromFile(logFileName: string): void;
     startReplayFromString(logContents: string): void;
     startReplayFromData(log: IOLog): void;
     endReplay(): void;
-    startRecord(logFilename: string): void;
+    startRecord(logFileName: string): void;
     endRecord(): void;
 }
 
 module Playback {
     var recordLog: IOLog = undefined;
     var replayLog: IOLog = undefined;
-    var recordLogFilenameBase = '';
+    var recordLogFileNameBase = '';
 
     interface Memoized<T> {
         (s: string): T;
@@ -130,8 +130,8 @@ module Playback {
             replayLog = undefined;
         };
 
-        wrapper.startRecord = (filenameBase) => {
-            recordLogFilenameBase = filenameBase;
+        wrapper.startRecord = (fileNameBase) => {
+            recordLogFileNameBase = fileNameBase;
             recordLog = createEmptyLog();
         };
     }
@@ -176,7 +176,7 @@ module Playback {
 
     function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
         var normalizedName = ts.normalizeSlashes(expectedPath).toLowerCase();
-        // Try to find the result through normal filename
+        // Try to find the result through normal fileName
         for (var i = 0; i < logArray.length; i++) {
             if (ts.normalizeSlashes(logArray[i].path).toLowerCase() === normalizedName) {
                 return logArray[i].result;
@@ -231,7 +231,7 @@ module Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 var i = 0;
-                var fn = () => recordLogFilenameBase + i + '.json';
+                var fn = () => recordLogFileNameBase + i + '.json';
                 while (underlying.fileExists(fn())) i++;
                 underlying.writeFile(fn(), JSON.stringify(recordLog));
                 recordLog = undefined;

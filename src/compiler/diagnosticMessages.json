@@ -427,7 +427,7 @@
         "category": "Error",
         "code": 1148
     },
-    "Filename '{0}' differs from already included filename '{1}' only in casing": {
+    "File name '{0}' differs from already included file name '{1}' only in casing": {
         "category": "Error",
         "code": 1149
     },
@@ -1724,6 +1724,10 @@
     "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
         "category": "Message",
         "code": 6055
+    },
+    "Do not emit declarations for code that has an '@internal' annotation.": {
+        "category": "Message",
+        "code": 6056
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

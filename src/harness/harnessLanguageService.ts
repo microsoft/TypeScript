@@ -117,7 +117,7 @@ module Harness.LanguageService {
         getHost(): LanguageServiceAdaptorHost;
         getLanguageService(): ts.LanguageService;
         getClassifier(): ts.Classifier;
-        getPreProcessedFileInfo(filename: string, fileContents: string): ts.PreProcessedFileInfo;
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
     }
 
     class LanguageServiceHostBase  {
@@ -172,7 +172,7 @@ module Harness.LanguageService {
             assert.isTrue(line >= 1);
             assert.isTrue(col >= 1);
 
-            return ts.getPositionFromLineAndCharacter(script.lineMap, line, col);
+            return ts.computePositionFromLineAndCharacter(script.lineMap, line, col);
         }
 
         /**
@@ -183,7 +183,7 @@ module Harness.LanguageService {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            var result = ts.getLineAndCharacterOfPosition(script.lineMap, position);
+            var result = ts.computeLineAndCharacterOfPosition(script.lineMap, position);
 
             assert.isTrue(result.line >= 1);
             assert.isTrue(result.character >= 1);
@@ -199,14 +199,14 @@ module Harness.LanguageService {
         getCompilationSettings(): ts.CompilerOptions { return this.settings; }
         getCancellationToken(): ts.CancellationToken { return this.cancellationToken; }
         getCurrentDirectory(): string { return ""; }
-        getDefaultLibFilename(): string { return ""; }
+        getDefaultLibFileName(): string { return ""; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
-        getScriptSnapshot(filename: string): ts.IScriptSnapshot {
-            var script = this.getScriptInfo(filename);
+        getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
+            var script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
-        getScriptVersion(filename: string): string {
-            var script = this.getScriptInfo(filename);
+        getScriptVersion(fileName: string): string {
+            var script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
         log(s: string): void { }
@@ -222,7 +222,7 @@ module Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
         getClassifier(): ts.Classifier { return ts.createClassifier(); }
-        getPreProcessedFileInfo(filename: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
     }
 
     /// Shim adabtor
@@ -244,13 +244,13 @@ module Harness.LanguageService {
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.CancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
-        getDefaultLibFilename(): string { return this.nativeHost.getDefaultLibFilename(); }
+        getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
-        getScriptSnapshot(filename: string): ts.ScriptSnapshotShim {
-            var nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(filename);
+        getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
+            var nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot); 
         }
-        getScriptVersion(filename: string): string { return this.nativeHost.getScriptVersion(filename); }
+        getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
@@ -389,7 +389,7 @@ module Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshalled accross the shim layer.");
         }
-        getSourceFile(filename: string): ts.SourceFile {
+        getSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshalled accross the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
@@ -405,7 +405,7 @@ module Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
-        getPreProcessedFileInfo(filename: string, fileContents: string): ts.PreProcessedFileInfo {
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             var shimResult: {
                 referencedFiles: ts.IFileReference[];
                 importedFiles: ts.IFileReference[];
@@ -413,7 +413,7 @@ module Harness.LanguageService {
             };
 
             var coreServicesShim = this.factory.createCoreServicesShim(this.host);
-            shimResult = unwrappJSONCallResult(coreServicesShim.getPreProcessedFileInfo(filename, ts.ScriptSnapshot.fromString(fileContents)));
+            shimResult = unwrappJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
             var convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
@@ -423,7 +423,7 @@ module Harness.LanguageService {
 
             ts.forEach(shimResult.referencedFiles, refFile => {
                 convertResult.referencedFiles.push({
-                    filename: refFile.path,
+                    fileName: refFile.path,
                     pos: refFile.position,
                     end: refFile.position + refFile.length
                 });
@@ -431,7 +431,7 @@ module Harness.LanguageService {
 
             ts.forEach(shimResult.importedFiles, importedFile => {
                 convertResult.importedFiles.push({
-                    filename: importedFile.path,
+                    fileName: importedFile.path,
                     pos: importedFile.position,
                     end: importedFile.position + importedFile.length
                 });
