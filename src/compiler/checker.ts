@@ -2524,6 +2524,9 @@ module ts {
             else if (type.flags & TypeFlags.Boolean) {
                 type = globalBooleanType;
             }
+            else if (type.flags & TypeFlags.ESSymbol) {
+                type = globalESSymbolType;
+            }
             return type;
         }
 
