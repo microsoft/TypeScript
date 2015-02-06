@@ -1109,11 +1109,15 @@ module ts {
             }
 
             var allDiagnostics: Diagnostic[] = [];
-            forEach(nonFileDiagnostics, d => { allDiagnostics.push(d) });
+            function pushDiagnostic(d: Diagnostic) {
+                allDiagnostics.push(d);
+            }
+
+            forEach(nonFileDiagnostics, pushDiagnostic);
 
             for (var key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
-                    forEach(fileDiagnostics[key], d => { allDiagnostics.push(d) });
+                    forEach(fileDiagnostics[key], pushDiagnostic);
                 }
             }
 
