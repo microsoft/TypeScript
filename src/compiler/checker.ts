@@ -9954,6 +9954,13 @@ module ts {
                 return getSymbolOfNode(node.parent);
             }
 
+            if (node.kind === SyntaxKind.Identifier &&
+                node.parent.kind === SyntaxKind.ImportSpecifier &&
+                (<ImportSpecifier>node.parent).propertyName === node) {
+                var symbol = getSymbolOfNode(node.parent);
+                return resolveImport(symbol);
+            }
+
             if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 return node.parent.kind === SyntaxKind.ExportAssignment
                     ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
@@ -10047,6 +10054,13 @@ module ts {
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 var symbol = getSymbolInfo(node);
                 return symbol && getTypeOfSymbol(symbol);
+            }
+
+            if (node.kind === SyntaxKind.Identifier &&
+                node.parent.kind === SyntaxKind.ImportSpecifier &&
+                (<ImportSpecifier>node.parent).propertyName === node) {
+                var symbol = getSymbolOfNode(node.parent);
+                return getTypeOfSymbol(resolveImport(symbol));
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
