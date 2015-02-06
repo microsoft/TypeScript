@@ -9218,6 +9218,9 @@ module ts {
                             else if (isExternalModuleImportEqualsDeclaration(statement)) {
                                 grammarErrorOnNode(getExternalModuleImportEqualsDeclarationExpression(statement), Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                             }
+                            else if (statement.kind === SyntaxKind.ImportDeclaration) {
+                                grammarErrorOnNode((<ImportDeclaration>statement).moduleSpecifier, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                            }
                         }
                     }
                 }
@@ -9352,16 +9355,19 @@ module ts {
             }
             else {
                 // This has to be instantiated module
-                var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(node);
-                if (externalSymbolInfo) {
-                    /// TODO(shkamat): this will always be instantiated for external module file 
-                    // May be we should check with the statements
-                    if (!isInstantiatedModule(<ModuleDeclaration | SourceFile>externalSymbolInfo.externalModuleSymbol.declarations[0], compilerOptions.preserveConstEnums)) {
-                        error(node.moduleSpecifier, Diagnostics.Import_declaration_without_import_clause_references_external_module_0_that_is_not_instantiated);
-                    }
-                    else {
-                        // Mark the import as referenced so that we emit it in the final .js file.
-                        getSymbolLinks(externalSymbolInfo.externalModuleSymbol).referenced = true;
+                if ((node.parent.kind === SyntaxKind.SourceFile) ||
+                    (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral)) {
+                    var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(node);
+                    if (externalSymbolInfo) {
+                        /// TODO(shkamat): this will always be instantiated for external module file 
+                        // May be we should check with the statements
+                        if (!isInstantiatedModule(<ModuleDeclaration | SourceFile>externalSymbolInfo.externalModuleSymbol.declarations[0], compilerOptions.preserveConstEnums)) {
+                            error(node.moduleSpecifier, Diagnostics.Import_declaration_without_import_clause_references_external_module_0_that_is_not_instantiated);
+                        }
+                        else {
+                            // Mark the import as referenced so that we emit it in the final .js file.
+                            getSymbolLinks(externalSymbolInfo.externalModuleSymbol).referenced = true;
+                        }
                     }
                 }
             }
