@@ -5544,39 +5544,49 @@ module ts {
                 var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
-                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
-                    if (kind) {
-                        return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                            getSymbolModifiers(symbol),
-                            createTextSpan(node.getStart(), node.getWidth()));
+                if (symbol) {
+                    var declarations = symbol.getDeclarations();
+                    if (declarations && declarations.length > 0) {
+                        // Disallow rename for elements that are defined in the standard TypeScript library.
+                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
+                        for (var i = 0; i < declarations.length; i++) {
+                            var sourceFile = declarations[i].getSourceFile();
+                            if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
+                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                            }
+                        }
+
+                        var kind = getSymbolKind(symbol, typeInfoResolver, node);
+                        if (kind) {
+                            return {
+                                canRename: true,
+                                localizedErrorMessage: undefined,
+                                displayName: symbol.name,
+                                fullDisplayName: typeInfoResolver.getFullyQualifiedName(symbol),
+                                kind: kind,
+                                kindModifiers: getSymbolModifiers(symbol),
+                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
+                            };
+                        }
                     }
                 }
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
 
+            function endsWith(string: string, value: string): boolean {
+                return string.lastIndexOf(value) + value.length === string.length;
+            }
+
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
                     canRename: false,
-                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key),
+                    localizedErrorMessage: localizedErrorMessage,
                     displayName: undefined,
                     fullDisplayName: undefined,
                     kind: undefined,
                     kindModifiers: undefined,
                     triggerSpan: undefined
-                };
-            }
-
-            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TextSpan): RenameInfo {
-                return {
-                    canRename: true,
-                    localizedErrorMessage: undefined,
-                    displayName,
-                    fullDisplayName,
-                    kind,
-                    kindModifiers,
-                    triggerSpan
                 };
             }
         }
