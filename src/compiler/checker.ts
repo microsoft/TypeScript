@@ -4880,11 +4880,13 @@ module ts {
             var symbol = getResolvedSymbol(node);
 
             if (symbol.flags & SymbolFlags.Import) {
-
                 var symbolLinks = getSymbolLinks(symbol);
                 symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
 
-                // TODO(andersh): Figure out what this does
+                // TODO: AndersH: This needs to be simplified. In an import of the form "import x = a.b.c;" we only need
+                // to resolve "a" and mark it as referenced. If "b" and/or "c" are aliases, we would be able to access them
+                // unless they're exported, and in that case they're already implicitly referenced.
+
                 //var symbolLinks = getSymbolLinks(symbol);
                 //if (!symbolLinks.referenced) {
                 //    var importOrExportAssignment = getLeftSideOfImportEqualsOrExportAssignment(node);

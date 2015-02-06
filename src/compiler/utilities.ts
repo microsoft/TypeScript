@@ -753,36 +753,12 @@ module ts {
     }
 
     export function getAncestor(node: Node, kind: SyntaxKind): Node {
-        switch (kind) {
-            // special-cases that can be come first
-            case SyntaxKind.ClassDeclaration:
-                while (node) {
-                    switch (node.kind) {
-                        case SyntaxKind.ClassDeclaration:
-                            return <ClassDeclaration>node;
-                        case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.TypeAliasDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                            // early exit cases - declarations cannot be nested in classes
-                            return undefined;
-                        default:
-                            node = node.parent;
-                            continue;
-                    }
-                }
-                break;
-            default:
-                while (node) {
-                    if (node.kind === kind) {
-                        return node;
-                    }
-                    node = node.parent;
-                }
-                break;
+        while (node) {
+            if (node.kind === kind) {
+                return node;
+            }
+            node = node.parent;
         }
-
         return undefined;
     }
 
