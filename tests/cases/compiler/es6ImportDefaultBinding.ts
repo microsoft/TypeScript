@@ -7,3 +7,4 @@ export = a;
 
 // @filename: es6ImportDefaultBinding_1.ts
 import defaultBinding from "es6ImportDefaultBinding_0";
+var x = defaultBinding;

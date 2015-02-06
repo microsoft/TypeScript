@@ -10,3 +10,7 @@ export = a;
 import defaultBinding from "es6ImportDefaultBinding_0";
 >defaultBinding : number
 
+var x = defaultBinding;
+>x : number
+>defaultBinding : number
+
