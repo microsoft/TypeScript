@@ -10,7 +10,7 @@
 
 module ts {
 
-    export var servicesVersion = "0.5"
+    export var servicesVersion = "0.4"
 
     export interface Node {
         getSourceFile(): SourceFile;
