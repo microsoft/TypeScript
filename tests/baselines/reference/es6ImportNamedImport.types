@@ -17,13 +17,55 @@ export var a1 = 10;
 export var x1 = 10;
 >x1 : number
 
+export var z1 = 10;
+>z1 : number
+
+export var z2 = 10;
+>z2 : number
+
 === tests/cases/compiler/es6ImportNamedImport_1.ts ===
 import { } from "es6ImportNamedImport_0";
-No type information for this code.import { a } from "es6ImportNamedImport_0";
-No type information for this code.import { a as b } from "es6ImportNamedImport_0";
-No type information for this code.import { x, a as y } from "es6ImportNamedImport_0";
-No type information for this code.import { x as z,  } from "es6ImportNamedImport_0";
-No type information for this code.import { m,  } from "es6ImportNamedImport_0";
-No type information for this code.import { a1, x1 } from "es6ImportNamedImport_0";
-No type information for this code.import { a1 as a11, x1 as x11 } from "es6ImportNamedImport_0";
-No type information for this code.
+import { a } from "es6ImportNamedImport_0";
+>a : number
+
+import { a as b } from "es6ImportNamedImport_0";
+>a : number
+>b : number
+
+import { x, a as y } from "es6ImportNamedImport_0";
+>x : number
+>a : number
+>y : number
+
+import { x as z,  } from "es6ImportNamedImport_0";
+>x : number
+>z : number
+
+import { m,  } from "es6ImportNamedImport_0";
+>m : number
+
+import { a1, x1 } from "es6ImportNamedImport_0";
+>a1 : number
+>x1 : number
+
+import { a1 as a11, x1 as x11 } from "es6ImportNamedImport_0";
+>a1 : number
+>a11 : number
+>x1 : number
+>x11 : number
+
+import { z1 } from "es6ImportNamedImport_0";
+>z1 : number
+
+var z111 = z1;
+>z111 : number
+>z1 : number
+
+import { z2 as z3 } from "es6ImportNamedImport_0";
+>z2 : number
+>z3 : number
+
+var z2 = z3; // z2 shouldn't give redeclare error
+>z2 : number
+>z3 : number
+

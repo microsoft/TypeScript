@@ -12,10 +12,30 @@ export var m = a;
 >a : number
 
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts ===
-import defaultBinding, { } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.import defaultBinding, { a } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.import defaultBinding, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.import defaultBinding, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.import defaultBinding, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.import defaultBinding, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
-No type information for this code.
+import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding1 : unknown
+
+import defaultBinding2, { a } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding2 : unknown
+>a : unknown
+
+import defaultBinding3, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding3 : unknown
+>a : unknown
+>b : unknown
+
+import defaultBinding4, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding4 : unknown
+>x : unknown
+>a : unknown
+>y : unknown
+
+import defaultBinding5, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding5 : unknown
+>x : unknown
+>z : unknown
+
+import defaultBinding6, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+>defaultBinding6 : unknown
+>m : unknown
+

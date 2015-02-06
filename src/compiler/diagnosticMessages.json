@@ -1306,6 +1306,18 @@
         "category": "Error",
         "code": 2466
     },
+    "External module '{0}' has no default export or export assignment.": {
+        "category": "Error",
+        "code": 2467
+    },
+    "External module '{0}' does not contain any named exports.": {
+        "category": "Error",
+        "code": 2468
+    },
+    "Import declaration without import clause references external module '{0}' that is not instantiated.": {
+        "category": "Error",
+        "code": 2469
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

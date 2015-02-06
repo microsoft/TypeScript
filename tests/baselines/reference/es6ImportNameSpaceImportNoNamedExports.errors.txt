@@ -1,0 +1,12 @@
+tests/cases/compiler/es6ImportNameSpaceImportNoNamedExports_1.ts(1,8): error TS2468: External module 'es6ImportNameSpaceImportNoNamedExports_0' does not contain any named exports.
+
+
+==== tests/cases/compiler/es6ImportNameSpaceImportNoNamedExports_0.ts (0 errors) ====
+    
+    var a = 10;
+    export = a;
+    
+==== tests/cases/compiler/es6ImportNameSpaceImportNoNamedExports_1.ts (1 errors) ====
+    import * as nameSpaceBinding from "es6ImportNameSpaceImportNoNamedExports_0"; // error
+           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2468: External module 'es6ImportNameSpaceImportNoNamedExports_0' does not contain any named exports.

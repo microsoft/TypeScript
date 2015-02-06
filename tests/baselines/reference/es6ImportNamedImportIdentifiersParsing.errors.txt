@@ -1,18 +1,48 @@
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,10): error TS2300: Duplicate identifier 'yield'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,23): error TS2307: Cannot find external module 'somemodule'.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,10): error TS2300: Duplicate identifier 'default'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,25): error TS2307: Cannot find external module 'somemodule'.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,19): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,19): error TS2300: Duplicate identifier 'default'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,34): error TS2307: Cannot find external module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,21): error TS2300: Duplicate identifier 'yield'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,34): error TS2307: Cannot find external module 'somemodule'.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(6,21): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(6,21): error TS2300: Duplicate identifier 'default'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(6,36): error TS2307: Cannot find external module 'somemodule'.
 
 
-==== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts (3 errors) ====
+==== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts (13 errors) ====
     
     import { yield } from "somemodule"; // Allowed
+             ~~~~~
+!!! error TS2300: Duplicate identifier 'yield'.
+                          ~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'somemodule'.
     import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier
              ~~~~~~~
 !!! error TS1003: Identifier expected.
+             ~~~~~~~
+!!! error TS2300: Duplicate identifier 'default'.
+                            ~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'somemodule'.
     import { yield as default } from "somemodule"; // error to use default as binding name
                       ~~~~~~~
 !!! error TS1003: Identifier expected.
+                      ~~~~~~~
+!!! error TS2300: Duplicate identifier 'default'.
+                                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'somemodule'.
     import { default as yield } from "somemodule"; // no error 
+                        ~~~~~
+!!! error TS2300: Duplicate identifier 'yield'.
+                                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'somemodule'.
     import { default as default } from "somemodule"; // default as is ok, error of default binding name
                         ~~~~~~~
 !!! error TS1003: Identifier expected.
+                        ~~~~~~~
+!!! error TS2300: Duplicate identifier 'default'.
+                                       ~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'somemodule'.

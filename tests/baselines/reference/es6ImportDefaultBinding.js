@@ -2,11 +2,15 @@
 
 //// [es6ImportDefaultBinding_0.ts]
 
-export var a = 10;
+var a = 10;
+export = a;
 
 //// [es6ImportDefaultBinding_1.ts]
 import defaultBinding from "es6ImportDefaultBinding_0";
+var x = defaultBinding;
 
 //// [es6ImportDefaultBinding_0.js]
-exports.a = 10;
+var a = 10;
+module.exports = a;
 //// [es6ImportDefaultBinding_1.js]
+var x = defaultBinding;

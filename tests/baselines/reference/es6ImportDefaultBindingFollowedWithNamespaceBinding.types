@@ -5,4 +5,6 @@ export var a = 10;
 
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts ===
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
-No type information for this code.
+>defaultBinding : unknown
+>nameSpaceBinding : unknown
+

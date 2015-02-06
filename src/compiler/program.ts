@@ -276,10 +276,13 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (isExternalModuleImportEqualsDeclaration(node) &&
-                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                if ((isExternalModuleImportEqualsDeclaration(node) &&
+                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) ||
+                    (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleSpecifier)) {
 
-                    var nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
+                    var nameLiteral = node.kind === SyntaxKind.ImportDeclaration
+                        ? (<ImportDeclaration>node).moduleSpecifier 
+                        : <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
                     var moduleName = nameLiteral.text;
                     if (moduleName) {
                         var searchPath = basePath;
@@ -304,10 +307,13 @@ module ts {
                     // The StringLiteral must specify a top - level external module name.
                     // Relative external module names are not permitted
                     forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (isExternalModuleImportEqualsDeclaration(node) &&
-                            getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                        if ((isExternalModuleImportEqualsDeclaration(node) &&
+                            getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) || 
+                            (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleSpecifier)) {
 
-                            var nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
+                            var nameLiteral = node.kind === SyntaxKind.ImportDeclaration
+                                ? (<ImportDeclaration>node).moduleSpecifier
+                                : <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
                             var moduleName = nameLiteral.text;
                             if (moduleName) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6

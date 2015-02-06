@@ -1,0 +1,10 @@
+tests/cases/compiler/es6ImportInInternalModule.ts(3,12): error TS1147: Import declarations in an internal module cannot reference an external module.
+
+
+==== tests/cases/compiler/es6ImportInInternalModule.ts (1 errors) ====
+    
+    module m {
+        import "someModule";
+               ~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
+    }

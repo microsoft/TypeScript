@@ -262,7 +262,21 @@ module ts {
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
             case SyntaxKind.ExternalModuleReference:
-                return visitNode(cbNode, (<ExternalModuleReference>node).expression);
+                return visitNode(cbNode,(<ExternalModuleReference>node).expression);
+            case SyntaxKind.ImportDeclaration:
+                return visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode,(<ImportDeclaration>node).importClause) ||
+                    visitNode(cbNode,(<ImportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportClause:
+                return visitNode(cbNode,(<ImportClause>node).name) ||
+                    visitNode(cbNode,(<ImportClause>node).namedBindings);
+            case SyntaxKind.NamespaceImport:
+                return visitNode(cbNode,(<Declaration>node).name);
+            case SyntaxKind.NamedImports:
+                return visitNodes(cbNodes,(<NamedImports>node).elements);
+            case SyntaxKind.ImportSpecifier:
+                return visitNode(cbNode,(<ImportSpecifier>node).propertyName) ||
+                    visitNode(cbNode,(<ImportSpecifier>node).name);
         }
     }
 
@@ -4565,7 +4579,7 @@ module ts {
                 //  ImportedDefaultBinding, NameSpaceImport
                 //  ImportedDefaultBinding, NamedImports
 
-                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
+                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause, identifier ? identifier.pos : undefined);
                 if (identifier) {
                     // ImportedDefaultBinding:
                     //  ImportedBinding

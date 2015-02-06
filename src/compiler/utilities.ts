@@ -572,7 +572,7 @@ module ts {
         return false;
     }
 
-    export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+    export function isInstantiatedModule(node: ModuleDeclaration | SourceFile, preserveConstEnums: boolean) {
         var moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
                (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
@@ -593,6 +593,10 @@ module ts {
 
     export function hasDotDotDotToken(node: Node) {
         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
+    }
+
+    export function isAnyImportSyntax(node: Node) {
+        return node.kind == SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ImportDeclaration;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -668,6 +672,9 @@ module ts {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.NamespaceImport:
                 return true;
         }
         return false;

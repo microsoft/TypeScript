@@ -1,0 +1,13 @@
+tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts(1,24): error TS2468: External module 'es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0' does not contain any named exports.
+
+
+==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts (0 errors) ====
+    
+    var a = 10;
+    export = a;
+    
+==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2468: External module 'es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0' does not contain any named exports.
+    var x: number = defaultBinding;
