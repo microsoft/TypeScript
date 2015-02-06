@@ -67,6 +67,7 @@ module ts {
         BarBarToken,
         QuestionToken,
         ColonToken,
+        AtToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -150,6 +151,7 @@ module ts {
         // Signature elements
         TypeParameter,
         Parameter,
+        Decorator,
         // TypeMember
         PropertySignature,
         PropertyDeclaration,
@@ -230,6 +232,7 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+		IncompleteDeclaration,
 
         // Module references
         ExternalModuleReference,
@@ -342,13 +345,14 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined. 
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
-        id?: number;                  // Unique id (used to look up NodeLinks)
-        parent?: Node;                // Parent node (initialized by binding)
-        symbol?: Symbol;              // Symbol declared by node (initialized by binding)
-        locals?: SymbolTable;         // Locals associated with node (initialized by binding)
-        nextContainer?: Node;         // Next container in declaration order (initialized by binding)
-        localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
-        modifiers?: ModifiersArray;           // Array of modifiers
+        id?: number;                        // Unique id (used to look up NodeLinks)
+        parent?: Node;                      // Parent node (initialized by binding)
+        symbol?: Symbol;                    // Symbol declared by node (initialized by binding)
+        locals?: SymbolTable;               // Locals associated with node (initialized by binding)
+        nextContainer?: Node;               // Next container in declaration order (initialized by binding)
+        localSymbol?: Symbol;               // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;  // Array of decorators
+        modifiers?: ModifiersArray;         // Array of modifiers
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -380,6 +384,10 @@ module ts {
 
     export interface ComputedPropertyName extends Node {
         expression: Expression;
+    }
+
+    export interface Decorator extends Node {
+        expression: LeftHandSideExpression;
     }
 
     export interface TypeParameterDeclaration extends Declaration {
