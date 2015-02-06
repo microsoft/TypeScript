@@ -5453,7 +5453,6 @@ module ts {
                 if (symbol) {
                     var declarations = symbol.getDeclarations();
                     if (declarations && declarations.length > 0) {
-
                         // Disallow rename for elements that are defined in the standard TypeScript library.
                         var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
                         for (var i = 0; i < declarations.length; i++) {
@@ -5461,13 +5460,19 @@ module ts {
                             if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
                                 return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
                             }
-            	        }
+                        }
 
                         var kind = getSymbolKind(symbol, typeInfoResolver, node);
                         if (kind) {
-                            return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                                getSymbolModifiers(symbol),
-                                createTextSpan(node.getStart(), node.getWidth()));
+                            return {
+                                canRename: true,
+                                localizedErrorMessage: undefined,
+                                displayName: symbol.name,
+                                fullDisplayName: typeInfoResolver.getFullyQualifiedName(symbol),
+                                kind: kind,
+                                kindModifiers: getSymbolModifiers(symbol),
+                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
+                            };
                         }
                     }
                 }
@@ -5476,7 +5481,7 @@ module ts {
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
 
             function endsWith(string: string, value: string): boolean {
-                return string.substring(string.length - value.length, string.length) === value;
+                return string.lastIndexOf(value) + value.length === string.length;
             }
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
@@ -5488,18 +5493,6 @@ module ts {
                     kind: undefined,
                     kindModifiers: undefined,
                     triggerSpan: undefined
-                };
-            }
-
-            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TextSpan): RenameInfo {
-                return {
-                    canRename: true,
-                    localizedErrorMessage: undefined,
-                    displayName,
-                    fullDisplayName,
-                    kind,
-                    kindModifiers,
-                    triggerSpan
                 };
             }
         }
