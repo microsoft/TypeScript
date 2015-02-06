@@ -467,10 +467,17 @@ module ts {
                     bindModuleDeclaration(<ModuleDeclaration>node);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.ImportClause:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ImportClause:
+                    if ((<ImportClause>node).name) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
