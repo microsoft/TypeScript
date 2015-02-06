@@ -64,7 +64,6 @@ module ts {
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromLineAndCharacter(line: number, character: number): number;
-        getSyntacticDiagnostics(): Diagnostic[];
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -733,7 +732,7 @@ module ts {
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
-        public semanticDiagnostics: Diagnostic[];
+        public bindDiagnostics: Diagnostic[];
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -746,10 +745,6 @@ module ts {
         public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
-
-        public getSyntacticDiagnostics(): Diagnostic[]{
-            return getSyntacticDiagnostics(this);
-        }
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
@@ -1128,7 +1123,7 @@ module ts {
 
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputStatus: EmitReturnStatus;
+        emitSkipped: boolean;
     }
 
     export const enum OutputFileType {
@@ -2025,10 +2020,6 @@ module ts {
             return sourceFile;
         }
 
-        function getDiagnosticsProducingTypeChecker() {
-            return program.getTypeChecker(/*produceDiagnostics:*/ true);
-        }
-
         function getRuleProvider(options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
@@ -2077,7 +2068,7 @@ module ts {
             }
 
             program = newProgram;
-            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+            typeInfoResolver = program.getTypeChecker();
 
             return;
 
@@ -2156,7 +2147,7 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+                typeInfoResolver = program.getTypeChecker();
             }
         }
 
@@ -2173,7 +2164,7 @@ module ts {
 
             fileName = normalizeSlashes(fileName);
 
-            return program.getDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
         /**
@@ -2184,19 +2175,19 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName)
-            var compilerOptions = program.getCompilerOptions();
-            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            var allDiagnostics = checker.getDiagnostics(targetSourceFile);
-            if (compilerOptions.declaration) {
-                // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
+            var semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            if (!program.getCompilerOptions().declaration) {
+                return semanticDiagnostics;
             }
-            return allDiagnostics
+
+            // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+            var declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            return semanticDiagnostics.concat(declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -3070,7 +3061,7 @@ module ts {
                 addPrefixForAnyFunctionOrVar(symbol, "enum member");
                 var declaration = symbol.declarations[0];
                 if (declaration.kind === SyntaxKind.EnumMember) {
-                    var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);
+                    var constantValue = typeResolver.getConstantValue(<EnumMember>declaration);
                     if (constantValue !== undefined) {
                         displayParts.push(spacePart());
                         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4763,16 +4754,11 @@ module ts {
                 });
             }
 
-            // Get an emit host from our program, but override the writeFile functionality to
-            // call our local writer function.
-            var emitHost = createEmitHostFromProgram(program);
-            emitHost.writeFile = writeFile;
-
-            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
+            var emitOutput = program.emit(sourceFile, writeFile);
 
             return {
                 outputFiles,
-                emitOutputStatus: emitOutput.emitResultStatus
+                emitSkipped: emitOutput.emitSkipped
             };
         }
 

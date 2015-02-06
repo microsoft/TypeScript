@@ -20,3 +20,13 @@ function makePoint(x) {
 ;
 var point = makePoint(2);
 var x = point.x;
+
+
+//// [declFileObjectLiteralWithOnlyGetter.d.ts]
+declare function makePoint(x: number): {
+    x: number;
+};
+declare var point: {
+    x: number;
+};
+declare var x: number;

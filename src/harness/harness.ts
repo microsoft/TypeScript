@@ -183,7 +183,7 @@ module Utils {
         return {
             start: diagnostic.start,
             length: diagnostic.length,
-            messageText: diagnostic.messageText,
+            messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine),
             category: (<any>ts).DiagnosticCategory[diagnostic.category],
             code: diagnostic.code
         };
@@ -305,7 +305,9 @@ module Utils {
 
             assert.equal(d1.start, d2.start, "d1.start !== d2.start");
             assert.equal(d1.length, d2.length, "d1.length !== d2.length");
-            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(
+                ts.flattenDiagnosticMessageText(d1.messageText, ts.sys.newLine),
+                ts.flattenDiagnosticMessageText(d2.messageText, ts.sys.newLine), "d1.messageText !== d2.messageText");
             assert.equal(d1.category, d2.category, "d1.category !== d2.category");
             assert.equal(d1.code, d2.code, "d1.code !== d2.code");
         }
@@ -1074,30 +1076,22 @@ module Harness {
                 otherFiles.forEach(register);
 
                 var fileOutputs: GeneratedFile[] = [];
-
+                
                 var programFiles = inputFiles.map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
-                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
-
-                var isEmitBlocked = program.isEmitBlocked();
-
-                // only emit if there weren't parse errors
-                var emitResult: ts.EmitResult;
-                if (!isEmitBlocked) {
-                    emitResult = program.emitFiles();
-                }
+                var emitResult = program.emit();
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
+                ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });
                 this.lastErrors = errors;
 
-                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
+                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
                 onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
@@ -1189,7 +1183,7 @@ module Harness {
                 end: err.start + err.length,
                 line: errorLineInfo.line,
                 character: errorLineInfo.character,
-                message: err.messageText,
+                message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
                 category: ts.DiagnosticCategory[err.category].toLowerCase(),
                 code: err.code
             };

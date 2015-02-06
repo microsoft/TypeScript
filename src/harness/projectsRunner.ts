@@ -127,24 +127,20 @@ class ProjectRunner extends RunnerBase {
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
             var program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
-            var errors = program.getDiagnostics();
-            var sourceMapData: ts.SourceMapData[] = null;
-            if (!errors.length) {
-                var checker = program.getTypeChecker(/*produceDiagnostics:*/ true);
-                errors = checker.getDiagnostics();
-                var emitResult = program.emitFiles();
-                errors = ts.concatenate(errors, emitResult.diagnostics);
-                sourceMapData = emitResult.sourceMaps;
+            var errors = ts.getPreEmitDiagnostics(program);
 
-                // Clean up source map data that will be used in baselining
-                if (sourceMapData) {
-                    for (var i = 0; i < sourceMapData.length; i++) {
-                        for (var j = 0; j < sourceMapData[i].sourceMapSources.length; j++) {
-                            sourceMapData[i].sourceMapSources[j] = cleanProjectUrl(sourceMapData[i].sourceMapSources[j]);
-                        }
-                        sourceMapData[i].jsSourceMappingURL = cleanProjectUrl(sourceMapData[i].jsSourceMappingURL);
-                        sourceMapData[i].sourceMapSourceRoot = cleanProjectUrl(sourceMapData[i].sourceMapSourceRoot);
+            var emitResult = program.emit();
+            errors = ts.concatenate(errors, emitResult.diagnostics);
+            var sourceMapData = emitResult.sourceMaps;
+
+            // Clean up source map data that will be used in baselining
+            if (sourceMapData) {
+                for (var i = 0; i < sourceMapData.length; i++) {
+                    for (var j = 0; j < sourceMapData[i].sourceMapSources.length; j++) {
+                        sourceMapData[i].sourceMapSources[j] = cleanProjectUrl(sourceMapData[i].sourceMapSources[j]);
                     }
+                    sourceMapData[i].jsSourceMappingURL = cleanProjectUrl(sourceMapData[i].jsSourceMappingURL);
+                    sourceMapData[i].sourceMapSourceRoot = cleanProjectUrl(sourceMapData[i].sourceMapSourceRoot);
                 }
             }
 
@@ -276,14 +272,14 @@ class ProjectRunner extends RunnerBase {
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
             var allInputFiles: { emittedFileName: string; code: string; }[] = [];
             var compilerOptions = compilerResult.program.getCompilerOptions();
-            var compilerHost = compilerResult.program.getCompilerHost();
+
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (Harness.Compiler.isDTS(sourceFile.fileName)) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
                     if (compilerOptions.outDir) {
-                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerHost.getCurrentDirectory());
+                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
                         var emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
                     }

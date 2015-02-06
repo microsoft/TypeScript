@@ -134,6 +134,10 @@ module Harness.LanguageService {
         public trace(s: string) {
         }
 
+        public getNewLine(): string {
+            return "\r\n";
+        }
+
         public addDefaultLibrary() {
             this.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
         }

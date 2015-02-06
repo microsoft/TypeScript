@@ -2379,6 +2379,16 @@ declare module "typescript" {
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
     }
+    interface WriteFileCallback {
+>WriteFileCallback : WriteFileCallback
+
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>fileName : string
+>data : string
+>writeByteOrderMark : boolean
+>onError : (message: string) => void
+>message : string
+    }
     interface Program extends ScriptReferenceHost {
 >Program : Program
 >ScriptReferenceHost : ScriptReferenceHost
@@ -2387,12 +2397,26 @@ declare module "typescript" {
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
 
-        getCompilerHost(): CompilerHost;
->getCompilerHost : () => CompilerHost
->CompilerHost : CompilerHost
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.
+         *
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+>emit : (targetSourceFile?: SourceFile, writeFile?: WriteFileCallback) => EmitResult
+>targetSourceFile : SourceFile
+>SourceFile : SourceFile
+>writeFile : WriteFileCallback
+>WriteFileCallback : WriteFileCallback
+>EmitResult : EmitResult
 
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSyntacticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
@@ -2401,30 +2425,24 @@ declare module "typescript" {
 >getGlobalDiagnostics : () => Diagnostic[]
 >Diagnostic : Diagnostic
 
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
->getDeclarationDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getSemanticDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >Diagnostic : Diagnostic
 
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
->getTypeChecker : (produceDiagnostics: boolean) => TypeChecker
->produceDiagnostics : boolean
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getDeclarationDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getTypeChecker(): TypeChecker;
+>getTypeChecker : () => TypeChecker
 >TypeChecker : TypeChecker
 
         getCommonSourceDirectory(): string;
 >getCommonSourceDirectory : () => string
-
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
->emitFiles : (targetSourceFile?: SourceFile) => EmitResult
->targetSourceFile : SourceFile
->SourceFile : SourceFile
->EmitResult : EmitResult
-
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
->isEmitBlocked : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
     }
     interface SourceMapSpan {
 >SourceMapSpan : SourceMapSpan
@@ -2478,33 +2496,23 @@ declare module "typescript" {
 >sourceMapDecodedMappings : SourceMapSpan[]
 >SourceMapSpan : SourceMapSpan
     }
-    enum EmitReturnStatus {
->EmitReturnStatus : EmitReturnStatus
+    enum ExitStatus {
+>ExitStatus : ExitStatus
 
-        Succeeded = 0,
->Succeeded : EmitReturnStatus
+        Success = 0,
+>Success : ExitStatus
 
-        AllOutputGenerationSkipped = 1,
->AllOutputGenerationSkipped : EmitReturnStatus
+        DiagnosticsPresent_OutputsSkipped = 1,
+>DiagnosticsPresent_OutputsSkipped : ExitStatus
 
-        JSGeneratedWithSemanticErrors = 2,
->JSGeneratedWithSemanticErrors : EmitReturnStatus
-
-        DeclarationGenerationSkipped = 3,
->DeclarationGenerationSkipped : EmitReturnStatus
-
-        EmitErrorsEncountered = 4,
->EmitErrorsEncountered : EmitReturnStatus
-
-        CompilerOptionsErrors = 5,
->CompilerOptionsErrors : EmitReturnStatus
+        DiagnosticsPresent_OutputsGenerated = 2,
+>DiagnosticsPresent_OutputsGenerated : ExitStatus
     }
     interface EmitResult {
 >EmitResult : EmitResult
 
-        emitResultStatus: EmitReturnStatus;
->emitResultStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
 
         diagnostics: Diagnostic[];
 >diagnostics : Diagnostic[]
@@ -2521,10 +2529,6 @@ declare module "typescript" {
 >getCompilerOptions : () => CompilerOptions
 >CompilerOptions : CompilerOptions
 
-        getCompilerHost(): CompilerHost;
->getCompilerHost : () => CompilerHost
->CompilerHost : CompilerHost
-
         getSourceFiles(): SourceFile[];
 >getSourceFiles : () => SourceFile[]
 >SourceFile : SourceFile
@@ -2536,32 +2540,6 @@ declare module "typescript" {
     }
     interface TypeChecker {
 >TypeChecker : TypeChecker
-
-        getEmitResolver(): EmitResolver;
->getEmitResolver : () => EmitResolver
->EmitResolver : EmitResolver
-
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
->getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
-        getGlobalDiagnostics(): Diagnostic[];
->getGlobalDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
-
-        getNodeCount(): number;
->getNodeCount : () => number
-
-        getIdentifierCount(): number;
->getIdentifierCount : () => number
-
-        getSymbolCount(): number;
->getSymbolCount : () => number
-
-        getTypeCount(): number;
->getTypeCount : () => number
 
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
 >getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type
@@ -2712,10 +2690,12 @@ declare module "typescript" {
 >symbol : Symbol
 >Symbol : Symbol
 
-        getEnumMemberValue(node: EnumMember): number;
->getEnumMemberValue : (node: EnumMember) => number
->node : EnumMember
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+>getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression | EnumMember) => number
+>node : PropertyAccessExpression | ElementAccessExpression | EnumMember
 >EnumMember : EnumMember
+>PropertyAccessExpression : PropertyAccessExpression
+>ElementAccessExpression : ElementAccessExpression
 
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
 >isValidPropertyAccess : (node: QualifiedName | PropertyAccessExpression, propertyName: string) => boolean
@@ -3002,16 +2982,6 @@ declare module "typescript" {
 >Node : Node
 >NodeCheckFlags : NodeCheckFlags
 
-        getEnumMemberValue(node: EnumMember): number;
->getEnumMemberValue : (node: EnumMember) => number
->node : EnumMember
->EnumMember : EnumMember
-
-        hasSemanticDiagnostics(sourceFile?: SourceFile): boolean;
->hasSemanticDiagnostics : (sourceFile?: SourceFile) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
-
         isDeclarationVisible(node: Declaration): boolean;
 >isDeclarationVisible : (node: Declaration) => boolean
 >node : Declaration
@@ -3063,9 +3033,10 @@ declare module "typescript" {
 >Node : Node
 >SymbolVisibilityResult : SymbolVisibilityResult
 
-        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
->getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression) => number
->node : PropertyAccessExpression | ElementAccessExpression
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+>getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression | EnumMember) => number
+>node : PropertyAccessExpression | ElementAccessExpression | EnumMember
+>EnumMember : EnumMember
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
@@ -3806,8 +3777,9 @@ declare module "typescript" {
         length: number;
 >length : number
 
-        messageText: string;
->messageText : string
+        messageText: string | DiagnosticMessageChain;
+>messageText : string | DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
 
         category: DiagnosticCategory;
 >category : DiagnosticCategory
@@ -4406,13 +4378,9 @@ declare module "typescript" {
 >getCancellationToken : () => CancellationToken
 >CancellationToken : CancellationToken
 
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
->writeFile : (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
->fileName : string
->data : string
->writeByteOrderMark : boolean
->onError : (message: string) => void
->message : string
+        writeFile: WriteFileCallback;
+>writeFile : WriteFileCallback
+>WriteFileCallback : WriteFileCallback
 
         getCurrentDirectory(): string;
 >getCurrentDirectory : () => string
@@ -4660,12 +4628,6 @@ declare module "typescript" {
 >SyntaxKind : SyntaxKind
 >NodeFlags : NodeFlags
 
-    function getSyntacticDiagnostics(sourceFile: SourceFile): Diagnostic[];
->getSyntacticDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
->sourceFile : SourceFile
->SourceFile : SourceFile
->Diagnostic : Diagnostic
-
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
 >updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange) => SourceFile
 >sourceFile : SourceFile
@@ -4714,8 +4676,20 @@ declare module "typescript" {
 >CompilerOptions : CompilerOptions
 >CompilerHost : CompilerHost
 
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
->createProgram : (rootNames: string[], options: CompilerOptions, host: CompilerHost) => Program
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+>getPreEmitDiagnostics : (program: Program) => Diagnostic[]
+>program : Program
+>Program : Program
+>Diagnostic : Diagnostic
+
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+>flattenDiagnosticMessageText : (messageText: string | DiagnosticMessageChain, newLine: string) => string
+>messageText : string | DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
+>newLine : string
+
+    function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
+>createProgram : (rootNames: string[], options: CompilerOptions, host?: CompilerHost) => Program
 >rootNames : string[]
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
@@ -4909,10 +4883,6 @@ declare module "typescript" {
 >getPositionFromLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
-
-        getSyntacticDiagnostics(): Diagnostic[];
->getSyntacticDiagnostics : () => Diagnostic[]
->Diagnostic : Diagnostic
 
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 >update : (newText: string, textChangeRange: TextChangeRange) => SourceFile
@@ -5664,9 +5634,8 @@ declare module "typescript" {
 >outputFiles : OutputFile[]
 >OutputFile : OutputFile
 
-        emitOutputStatus: EmitReturnStatus;
->emitOutputStatus : EmitReturnStatus
->EmitReturnStatus : EmitReturnStatus
+        emitSkipped: boolean;
+>emitSkipped : boolean
     }
     const enum OutputFileType {
 >OutputFileType : OutputFileType

@@ -3,6 +3,7 @@
 
 module ts {
     var nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+    /* @internal */ export var parseTime = 0;
 
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
@@ -354,15 +355,6 @@ module ts {
         }
 
         forEachChild(sourceFile, walk);
-    }
-
-    export function getSyntacticDiagnostics(sourceFile: SourceFile) {
-        if (!sourceFile.syntacticDiagnostics) {
-            // Don't bother doing any grammar checks if there are already parser errors.  
-            // Otherwise we may end up with too many cascading errors.
-            sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
-        }
-        return sourceFile.syntacticDiagnostics;
     }
 
     function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
@@ -857,8 +849,13 @@ module ts {
             }
         }
     }
+
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
-        return parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+        var start = new Date().getTime();
+        var result = parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+
+        parseTime += new Date().getTime() - start;
+        return result;
     }
 
     function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
@@ -871,10 +868,12 @@ module ts {
 
         var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-        sourceFile.pos = sourceFile.end = 0;
-        sourceFile.referenceDiagnostics = [];
+        sourceFile.pos = 0;
+        sourceFile.end = sourceText.length;
+        sourceFile.text = sourceText;
+
         sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
+        sourceFile.bindDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
         sourceFile.fileName = normalizePath(fileName);
         sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
@@ -955,13 +954,6 @@ module ts {
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode: boolean = false;
-
-        sourceFile.syntacticDiagnostics = undefined;
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
-        sourceFile.end = sourceText.length;
-        sourceFile.text = sourceText;
 
         // Create and prime the scanner before parsing the source elements.
         scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
@@ -4697,7 +4689,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4705,7 +4697,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }

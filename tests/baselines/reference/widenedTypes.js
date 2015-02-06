@@ -43,3 +43,17 @@ var ob = { x: "" };
 // Highlights the difference between array literals and object literals
 var arr = [3, null]; // not assignable because null is not widened. BCT is {}
 var obj = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
+
+
+//// [widenedTypes.d.ts]
+declare var t: number[];
+declare var x: typeof undefined;
+declare var y: any;
+declare var u: number[];
+declare var ob: {
+    x: typeof undefined;
+};
+declare var arr: string[];
+declare var obj: {
+    [x: string]: string;
+};

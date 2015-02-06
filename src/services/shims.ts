@@ -52,6 +52,7 @@ module ts {
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
+        getNewLine?(): string;
     }
 
     ///
@@ -367,9 +368,14 @@ module ts {
                 });
         }
 
-        private static realizeDiagnostic(diagnostic: Diagnostic): { message: string; start: number; length: number; category: string; } {
+        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
+            var newLine = this.getNewLine();
+            return diagnostics.map(d => this.realizeDiagnostic(d, newLine));
+        }
+
+        private realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
             return {
-                message: diagnostic.messageText,
+                message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
@@ -396,12 +402,16 @@ module ts {
                 });
         }
 
+        private getNewLine(): string {
+            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
+        }
+
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
                 "getSyntacticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSyntacticDiagnostics(fileName);
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic);
+                    var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -409,8 +419,8 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSemanticDiagnostics(fileName);
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic);
+                    var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -418,8 +428,8 @@ module ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic)
+                    var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
