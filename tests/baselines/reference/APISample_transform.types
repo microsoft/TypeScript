@@ -2642,10 +2642,12 @@ declare module "typescript" {
 >symbol : Symbol
 >Symbol : Symbol
 
-        getEnumMemberValue(node: EnumMember): number;
->getEnumMemberValue : (node: EnumMember) => number
->node : EnumMember
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+>getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression | EnumMember) => number
+>node : PropertyAccessExpression | ElementAccessExpression | EnumMember
 >EnumMember : EnumMember
+>PropertyAccessExpression : PropertyAccessExpression
+>ElementAccessExpression : ElementAccessExpression
 
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
 >isValidPropertyAccess : (node: QualifiedName | PropertyAccessExpression, propertyName: string) => boolean
@@ -2932,11 +2934,6 @@ declare module "typescript" {
 >Node : Node
 >NodeCheckFlags : NodeCheckFlags
 
-        getEnumMemberValue(node: EnumMember): number;
->getEnumMemberValue : (node: EnumMember) => number
->node : EnumMember
->EnumMember : EnumMember
-
         isDeclarationVisible(node: Declaration): boolean;
 >isDeclarationVisible : (node: Declaration) => boolean
 >node : Declaration
@@ -2988,9 +2985,10 @@ declare module "typescript" {
 >Node : Node
 >SymbolVisibilityResult : SymbolVisibilityResult
 
-        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
->getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression) => number
->node : PropertyAccessExpression | ElementAccessExpression
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+>getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression | EnumMember) => number
+>node : PropertyAccessExpression | ElementAccessExpression | EnumMember
+>EnumMember : EnumMember
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 

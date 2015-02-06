@@ -825,7 +825,7 @@ module ts {
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
             writeTextOfNode(currentSourceFile, node.name);
-            var enumMemberValue = resolver.getEnumMemberValue(node);
+            var enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
                 write(enumMemberValue.toString());
@@ -1507,7 +1507,7 @@ module ts {
     }
 
     // @internal
-    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -3809,7 +3809,7 @@ module ts {
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {
                 if (!member.initializer || isConst(member.parent)) {
-                    var value = resolver.getEnumMemberValue(member);
+                    var value = resolver.getConstantValue(member);
                     if (value !== undefined) {
                         write(value.toString());
                         return;
