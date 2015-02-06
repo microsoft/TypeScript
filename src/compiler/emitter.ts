@@ -2459,13 +2459,20 @@ module ts {
             function emitComputedPropertyName(node: ComputedPropertyName, tempNames?: Identifier[]) {
                 write("[");
 				if (tempNames) {
-					var tempName = createTempVariable(node);
-					recordTempDeclaration(tempName);
-					tempNames[node.id] = tempName;
-					write(tempName.text);
-					write(" = ");
+					if (tempNames[node.id]) {
+						emitNode(tempNames[node.id]);
+					} else {
+						var tempName = createTempVariable(node);
+						recordTempDeclaration(tempName);
+						tempNames[node.id] = tempName;
+						write(tempName.text);
+						write(" = ");
+						emit(node.expression);
+					}
 				}
-                emit(node.expression);
+				else {
+					emit(node.expression);
+				}
                 write("]");
             }
 
@@ -3792,7 +3799,7 @@ module ts {
 						emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
 						var saveEmit = emit;
 						emit = emitNode;
-						emitMemberAccessForPropertyName(node.name, info.computedPropertyNameCache);
+						emitMemberAccessForPropertyName(node.name);
 						emit = saveEmit;
 					}
 				}
@@ -3822,6 +3829,7 @@ module ts {
 						}
 						else if (node.kind === SyntaxKind.SetAccessor) {
 							emitNode(info.propertyDescriptorCache[node.id]);
+							write(".set");
 						}					
 						else {
 							emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
@@ -3857,6 +3865,10 @@ module ts {
 				forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex, info));
 			}
 
+			function emitDecoratorsOfMembers(node: ClassDeclaration, info: DecoratorEmitInfo) {
+				forEach(node.members, member => emitDecoratorsOfMember(node, member, info));
+			}
+
 			function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, info: DecoratorEmitInfo) {
 				var name = member.name;
 				var decorators = getDecoratorsOfMember(node, member);
@@ -3883,7 +3895,10 @@ module ts {
 
 				write("// ");
 				emitTargetOfClassElement(node, member);
+				var saveEmit = emit;
+				emit = emitNode;
 				emitMemberAccessForPropertyName(name);
+				emit = saveEmit;
 				write(" decorators:");
 				writeLine();
 
@@ -4032,7 +4047,7 @@ module ts {
 			}
 
 			function emitDecoratorsOfClass(node: ClassDeclaration, info: DecoratorEmitInfo) {
-				forEach(node.members, member => emitDecoratorsOfMember(node, member, info));
+				emitDecoratorsOfMembers(node, info);
 				emitDecoratorsOfConstructor(node, info);
 			}
 
