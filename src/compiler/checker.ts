@@ -5540,6 +5540,14 @@ module ts {
                 if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
+                else if (isWellKnownSymbolSyntactically(node.expression)) {
+                    // If it's not ES6, error 
+                    // Check that Symbol corresponds to  global symbol, and that property exists, and that it's a symbol
+                }
+                else {
+                    // Some syntactic forms require that the property name be a well known symbol.
+                    // Will move the grammar checks here.
+                }
             }
 
             return links.resolvedType;
@@ -5835,31 +5843,50 @@ module ts {
         /**
          * If indexArgumentExpression is a string literal or number literal, returns its text.
          * If indexArgumentExpression is a well known symbol, returns the property name corresponding
-         *    to this symbol.
+         *    to this symbol, as long as it is a proper symbol reference.
          * Otherwise, returns undefined.
          */
-        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression) {
+        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression): string {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
             }
-            if (isWellKnownSymbolSyntactically(indexArgumentExpression)) {
-                var leftHandSide = (<PropertyAccessExpression>indexArgumentExpression).expression;
-                Debug.assert((<Identifier>leftHandSide).text === "Symbol");
-                // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
-                // global Symbol object
-                var leftHandSideSymbol = resolveName(indexArgumentExpression, (<Identifier>leftHandSide).text,
-                    SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                if (leftHandSideSymbol === globalESSymbolConstructorSymbol) {
-                    // Make sure the property type is the primitive symbol type
+            if (languageVersion >= ScriptTarget.ES6 && isWellKnownSymbolSyntactically(indexArgumentExpression)) {
+                if (checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>indexArgumentExpression, /*reportError*/ false)) {
                     var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
-                    var esSymbolConstructorPropertyType = getTypeOfPropertyOfType(globalESSymbolConstructorType, rightHandSideName);
-                    if (esSymbolConstructorPropertyType && esSymbolConstructorPropertyType.flags & TypeFlags.ESSymbol) {
-                        return getPropertyNameForKnownSymbolName(rightHandSideName);
-                    }
+                    return getPropertyNameForKnownSymbolName(rightHandSideName);
                 }
             }
 
             return undefined;
+        }
+
+        /**
+         * A proper symbol reference requires the following:
+         *   1. The language version is at least ES6
+         *   2. The expression is of the form Symbol.<identifier>
+         *   3. Symbol in this context resolves to the global Symbol object
+         *   4. The property access denotes a property that is present on the global Symbol object
+         *   5. The property on the global Symbol object is of the primitive type symbol.
+         */
+        function checkSymbolNameIsProperSymbolReference(wellKnownSymbolName: PropertyAccessExpression, reportError: boolean): boolean {
+            if (languageVersion < ScriptTarget.ES6) {
+                return false;
+            }
+
+            Debug.assert(isWellKnownSymbolSyntactically(wellKnownSymbolName));
+            // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
+            // global Symbol object
+            var leftHandSide = (<PropertyAccessExpression>wellKnownSymbolName).expression;
+            var leftHandSideSymbol = resolveName(wellKnownSymbolName, (<Identifier>leftHandSide).text,
+                SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            if (leftHandSideSymbol !== globalESSymbolConstructorSymbol) {
+                return false;
+            }
+            
+            // Make sure the property type is the primitive symbol type
+            var rightHandSideName = (<Identifier>(<PropertyAccessExpression>wellKnownSymbolName).name).text;
+            var esSymbolConstructorPropertyType = getTypeOfPropertyOfType(globalESSymbolConstructorType, rightHandSideName);
+            return !!(esSymbolConstructorPropertyType && esSymbolConstructorPropertyType.flags & TypeFlags.ESSymbol);
         }
 
         function resolveUntypedCall(node: CallLikeExpression): Signature {
