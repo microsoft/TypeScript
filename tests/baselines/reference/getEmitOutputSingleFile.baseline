@@ -1,5 +1,5 @@
-EmitOutputStatus : Succeeded
-Filename : outputDir/singleFile.js
+EmitSkipped: false
+FileName : outputDir/singleFile.js
 var x;
 var Bar = (function () {
     function Bar() {

@@ -1,12 +1,15 @@
 tests/cases/compiler/intrinsics.ts(2,21): error TS2304: Cannot find name 'hasOwnProperty'.
+tests/cases/compiler/intrinsics.ts(2,21): error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
 tests/cases/compiler/intrinsics.ts(11,1): error TS2304: Cannot find name '__proto__'.
 
 
-==== tests/cases/compiler/intrinsics.ts (2 errors) ====
+==== tests/cases/compiler/intrinsics.ts (3 errors) ====
     
     var hasOwnProperty: hasOwnProperty; // Error
                         ~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'hasOwnProperty'.
+                        ~~~~~~~~~~~~~~
+!!! error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
     
     module m1 {
         export var __proto__;
