@@ -172,7 +172,7 @@ class ProjectRunner extends RunnerBase {
                 else {
                     var text = getSourceFileText(fileName);
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(fileName, text, languageVersion);
+                        sourceFile = Harness.Compiler.createSourceFileAndAssertInvariants(fileName, text, languageVersion);
                     }
                 }
 

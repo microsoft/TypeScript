@@ -102,7 +102,7 @@ module Harness.LanguageService {
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: ts.IScriptSnapshot,
             version: string): ts.SourceFile {
-            var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
+            var sourceFile = Compiler.createSourceFileAndAssertInvariants(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
             sourceFile.version = version;
             return sourceFile;
         }
@@ -115,7 +115,9 @@ module Harness.LanguageService {
             version: string,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
+            var result = ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
+            Utils.assertInvariants(result, /*parent:*/ undefined);
+            return result;
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
@@ -269,7 +271,7 @@ module Harness.LanguageService {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
-            var result = ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
+            var result = Compiler.createSourceFileAndAssertInvariants(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
             result.version = "1";
             return result;
         }
