@@ -439,22 +439,65 @@ module ts {
             return result;
         }
 
+        function getDeclarationOfImportSymbol(symbol: Symbol): Declaration {
+            return forEach(symbol.declarations, d =>
+                d.kind === SyntaxKind.ImportEqualsDeclaration ||
+                d.kind === SyntaxKind.ImportClause ||
+                d.kind === SyntaxKind.NamespaceImport ||
+                d.kind === SyntaxKind.ImportSpecifier ? d : undefined);
+        }
+
+        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
+            return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ?
+                resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)) :
+                getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+        }
+
+        function getTargetOfImportClause(node: ImportClause): Symbol {
+            // TODO: Verify that returned symbol originates in "export default" statement
+            return resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+        }
+
+        function getTargetOfNamespaceImport(node: NamespaceImport): Symbol {
+            // TODO: Verify that returned symbol does not originate in "export default" statement
+            return resolveExternalModuleName(node, (<ImportDeclaration>node.parent.parent).moduleSpecifier);
+        }
+
+        function getTargetOfImportSpecifier(node: ImportSpecifier): Symbol {
+            var moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent.parent.parent).moduleSpecifier);
+            if (moduleSymbol) {
+                var name = node.propertyName || node.name;
+                if (name.text) {
+                    var symbol = getSymbol(moduleSymbol.exports, name.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+                    if (!symbol) {
+                        error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
+                        return;
+                    }
+                    return symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) ? symbol : resolveImport(symbol);
+                }
+            }
+        }
+
+        function getTargetOfImportDeclaration(node: Declaration): Symbol {
+            switch (node.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                case SyntaxKind.ImportClause:
+                    return getTargetOfImportClause(<ImportClause>node);
+                case SyntaxKind.NamespaceImport:
+                    return getTargetOfNamespaceImport(<NamespaceImport>node);
+                case SyntaxKind.ImportSpecifier:
+                    return getTargetOfImportSpecifier(<ImportSpecifier>node);
+            }
+        }
+
         function resolveImport(symbol: Symbol): Symbol {
             Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");
             var links = getSymbolLinks(symbol);
             if (!links.target) {
                 links.target = resolvingSymbol;
-                var node = <ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration);
-                // Grammar checking
-                if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                    if ((<ExternalModuleReference>node.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
-                        grammarErrorOnNode((<ExternalModuleReference>node.moduleReference).expression, Diagnostics.String_literal_expected);
-                    }
-                }
-
-                var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
-                    ? resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node))
-                    : getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+                var node = getDeclarationOfImportSymbol(symbol);
+                var target = getTargetOfImportDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -4837,31 +4880,36 @@ module ts {
             var symbol = getResolvedSymbol(node);
 
             if (symbol.flags & SymbolFlags.Import) {
-                var symbolLinks = getSymbolLinks(symbol);
-                if (!symbolLinks.referenced) {
-                    var importOrExportAssignment = getLeftSideOfImportEqualsOrExportAssignment(node);
 
-                    // decision about whether import is referenced can be made now if
-                    // - import that are used anywhere except right side of import declarations
-                    // - imports that are used on the right side of exported import declarations
-                    // for other cases defer decision until the check of left side
-                    if (!importOrExportAssignment ||
-                        (importOrExportAssignment.flags & NodeFlags.Export) ||
-                        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
-                        // Mark the import as referenced so that we emit it in the final .js file.
-                        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
-                    }
-                    else {
-                        var nodeLinks = getNodeLinks(importOrExportAssignment);
-                        Debug.assert(!nodeLinks.importOnRightSide);
-                        nodeLinks.importOnRightSide = symbol;
-                    }
-                }
+                var symbolLinks = getSymbolLinks(symbol);
+                symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+
+                // TODO(andersh): Figure out what this does
+                //var symbolLinks = getSymbolLinks(symbol);
+                //if (!symbolLinks.referenced) {
+                //    var importOrExportAssignment = getLeftSideOfImportEqualsOrExportAssignment(node);
+
+                //    // decision about whether import is referenced can be made now if
+                //    // - import that are used anywhere except right side of import declarations
+                //    // - imports that are used on the right side of exported import declarations
+                //    // for other cases defer decision until the check of left side
+                //    if (!importOrExportAssignment ||
+                //        (importOrExportAssignment.flags & NodeFlags.Export) ||
+                //        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
+                //        // Mark the import as referenced so that we emit it in the final .js file.
+                //        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                //        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                //    }
+                //    else {
+                //        var nodeLinks = getNodeLinks(importOrExportAssignment);
+                //        Debug.assert(!nodeLinks.importOnRightSide);
+                //        nodeLinks.importOnRightSide = symbol;
+                //    }
+                //}
                 
-                if (symbolLinks.referenced) {
-                    markLinkedImportsAsReferenced(<ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration));
-                }
+                //if (symbolLinks.referenced) {
+                //    markLinkedImportsAsReferenced(<ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration));
+                //}
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -9228,6 +9276,10 @@ module ts {
                 }
             }
             else {
+                var moduleNameExpr = getExternalModuleImportEqualsDeclarationExpression(node);
+                if (moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
+                    grammarErrorOnNode(moduleNameExpr, Diagnostics.String_literal_expected);
+                }
                 // Import declaration for an external module
                 if (node.parent.kind === SyntaxKind.SourceFile) {
                     target = resolveImport(symbol);
@@ -9237,8 +9289,8 @@ module ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
                     // other external modules only through top - level external module names.
                     // Relative external module names are not permitted.
-                    if (getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
-                        if (isExternalModuleNameRelative((<LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node)).text)) {
+                    if (moduleNameExpr.kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
                             error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
                             target = unknownSymbol;
                         }
@@ -11037,6 +11089,7 @@ module ts {
             //     export_opt   AmbientDeclaration
             //
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ExportAssignment ||
                 (node.flags & NodeFlags.Ambient)) {
