@@ -5,7 +5,8 @@ var x = {
 }
 
 //// [templateStringInObjectLiteral.js]
-var x = {
+var x = (_a = ["b"], _a.raw = ["b"], {
     a: "abc" + 123 + "def"
-} "b";
+}(_a));
 321;
+var _a;

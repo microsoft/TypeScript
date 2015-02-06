@@ -13,6 +13,7 @@ function foo() {
         rest[_i - 0] = arguments[_i];
     }
 }
-foo "" + function (x) {
+(_a = ["", ""], _a.raw = ["", ""], foo(_a, function (x) {
     x = "bad";
-};
+}));
+var _a;
