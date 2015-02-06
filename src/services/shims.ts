@@ -204,6 +204,8 @@ module ts {
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
+        private files: string[];
+        
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -230,10 +232,15 @@ module ts {
 
         public getScriptFileNames(): string[] {
             var encoded = this.shimHost.getScriptFileNames();
-            return JSON.parse(encoded);
+            return this.files = JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
+            // Shim the API changes for 1.5 release. This should be removed once
+            // TypeScript 1.5 has shipped.
+            if (this.files && this.files.indexOf(fileName) < 0) {
+                return undefined;
+            }
             var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
@@ -266,7 +273,10 @@ module ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            // Shim the API changes for 1.5 release. This should be removed once
+            // TypeScript 1.5 has shipped.
+            return "";
+            //return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -662,6 +672,9 @@ module ts {
                 "getEmitOutput('" + fileName + "')",
                 () => {
                     var output = this.languageService.getEmitOutput(fileName);
+                    // Shim the API changes for 1.5 release. This should be removed once
+                    // TypeScript 1.5 has shipped.
+                    (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
                     return output;
                 });
         }
