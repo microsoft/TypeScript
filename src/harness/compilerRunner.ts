@@ -149,7 +149,6 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // check errors
             it('Correct errors for ' + fileName, () => {
-                debugger;
                 if (this.errors) {
                     Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;

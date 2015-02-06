@@ -923,7 +923,6 @@ module Harness {
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
 
-                debugger;
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
@@ -1083,7 +1082,6 @@ module Harness {
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
-                debugger;
                 var emitResult = program.emit();
 
                 var errors: HarnessDiagnostic[] = [];
