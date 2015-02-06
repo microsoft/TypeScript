@@ -4579,7 +4579,7 @@ module ts {
                 //  ImportedDefaultBinding, NameSpaceImport
                 //  ImportedDefaultBinding, NamedImports
 
-                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
+                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause, identifier ? identifier.pos : undefined);
                 if (identifier) {
                     // ImportedDefaultBinding:
                     //  ImportedBinding

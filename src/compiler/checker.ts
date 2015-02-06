@@ -443,35 +443,87 @@ module ts {
             Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");
             var links = getSymbolLinks(symbol);
             if (!links.target) {
-                var node = <ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration);
-                if (node) {
-                    links.target = resolvingSymbol;
-                    // Grammar checking
-                    if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        if ((<ExternalModuleReference>node.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
-                            grammarErrorOnNode((<ExternalModuleReference>node.moduleReference).expression, Diagnostics.String_literal_expected);
+                links.target = resolvingSymbol;
+                var target: Symbol;
+                for (var i = 0; i < symbol.declarations.length; i++) {
+                    if (symbol.declarations[i].kind === SyntaxKind.ImportEqualsDeclaration) {
+                        var importEqualsDeclaration = <ImportEqualsDeclaration>symbol.declarations[i];
+                        // Grammar checking
+                        if (importEqualsDeclaration.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                            if ((<ExternalModuleReference>importEqualsDeclaration.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
+                                grammarErrorOnNode((<ExternalModuleReference>importEqualsDeclaration.moduleReference).expression, Diagnostics.String_literal_expected);
+                            }
                         }
-                    }
 
-                    var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
-                        ? resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node))
-                        : getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
-                    if (links.target === resolvingSymbol) {
-                        links.target = target || unknownSymbol;
+                        target = importEqualsDeclaration.moduleReference.kind === SyntaxKind.ExternalModuleReference
+                            ? getResolvedExportSymbolOrModuleSymbol(resolveExternalModuleName(importEqualsDeclaration, getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)))
+                            : getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>importEqualsDeclaration.moduleReference, importEqualsDeclaration);
+                        break;
                     }
-                    else {
-                        error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+                    else if (symbol.declarations[i].kind === SyntaxKind.ImportClause) {
+                        var defaultImportBinding = <ImportClause>symbol.declarations[i];
+                        var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(defaultImportBinding);
+                        if (externalSymbolInfo && getExportAssignmentSymbol(externalSymbolInfo.externalModuleSymbol)) {
+                            target = getResolvedExportSymbol(externalSymbolInfo.externalModuleSymbol);
+                        }
+                        else if (externalSymbolInfo) {
+                            // Report error that there is no default symbol
+                            error(defaultImportBinding.name, Diagnostics.External_module_0_has_no_default_export_or_export_assignment, externalSymbolInfo.moduleSpecifier.text);
+                        }
+                        break;
+                    } else if (symbol.declarations[i].kind === SyntaxKind.NamespaceImport) {
+                        var namespaceImport = <NamespaceImport>symbol.declarations[i];
+                        var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(namespaceImport);
+                        if (externalSymbolInfo && externalSymbolInfo.externalModuleSymbol.exports && !isEmpty(externalSymbolInfo.externalModuleSymbol.exports)) {
+                            target = externalSymbolInfo.externalModuleSymbol;
+                        }
+                        else if (externalSymbolInfo) {
+                            error(namespaceImport, Diagnostics.External_module_0_does_not_contain_any_named_exports, externalSymbolInfo.moduleSpecifier.text);
+                        }
+                        break;
+                    } else if (symbol.declarations[i].kind === SyntaxKind.ImportSpecifier) {
+                        var namedImport = <ImportSpecifier>symbol.declarations[i];
+                        var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(namedImport);
+                        var symbolName = namedImport.propertyName ? namedImport.propertyName.text : namedImport.name.text;
+                        if (externalSymbolInfo && hasProperty(externalSymbolInfo.externalModuleSymbol.exports, symbolName)) {
+                            target = externalSymbolInfo.externalModuleSymbol.exports[symbolName];
+                        }
+                        else if (externalSymbolInfo) {
+                            // Error
+                            error(namedImport, Diagnostics.Module_0_has_no_exported_member_1, externalSymbolInfo.moduleSpecifier.text, symbolName);
+                        }
+                        break;
                     }
                 }
+                if (links.target === resolvingSymbol) {
+                    links.target = target || unknownSymbol;
+                }
                 else {
-                    // TODO(shkamat): This could be true in case of ImportDeclaration
-                    links.target = unknownSymbol;
+                    error(importEqualsDeclaration, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
                 }
             }
             else if (links.target === resolvingSymbol) {
                 links.target = unknownSymbol;
             }
             return links.target;
+
+        }
+        function getSymbolInfoForModuleSpecifierOfImportDeclaration(declaration: Declaration) {
+            var node: Node = declaration;
+            while (node.kind !== SyntaxKind.ImportDeclaration) {
+                node = node.parent;
+            }
+
+            var moduleSpecifier = (<ImportDeclaration>node).moduleSpecifier;
+            if (moduleSpecifier) {
+                var externalModuleSymbol = resolveExternalModuleName(declaration, moduleSpecifier);
+                if (externalModuleSymbol) {
+                    return {
+                        moduleSpecifier,
+                        externalModuleSymbol
+                    };
+                }
+            }
         }
 
         // This function is only for imports with entity names
@@ -555,7 +607,7 @@ module ts {
             if (!isRelative) {
                 var symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
                 if (symbol) {
-                    return getResolvedExportSymbol(symbol);
+                    return symbol;
                 }
             }
             while (true) {
@@ -568,7 +620,7 @@ module ts {
             }
             if (sourceFile) {
                 if (sourceFile.symbol) {
-                    return getResolvedExportSymbol(sourceFile.symbol);
+                    return sourceFile.symbol;
                 }
                 error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
                 return;
@@ -576,8 +628,12 @@ module ts {
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
+        function getResolvedExportSymbolOrModuleSymbol(moduleSymbol: Symbol): Symbol {
+            return getResolvedExportSymbol(moduleSymbol) || moduleSymbol;
+        }
+
         function getResolvedExportSymbol(moduleSymbol: Symbol): Symbol {
-            var symbol = getExportAssignmentSymbol(moduleSymbol);
+            var symbol = moduleSymbol ? getExportAssignmentSymbol(moduleSymbol) : undefined;
             if (symbol) {
                 if (symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) {
                     return symbol;
@@ -586,7 +642,6 @@ module ts {
                     return resolveImport(symbol);
                 }
             }
-            return moduleSymbol;
         }
 
         function getExportAssignmentSymbol(symbol: Symbol): Symbol {
@@ -9276,6 +9331,80 @@ module ts {
             }
         }
 
+        function checkImportDeclaration(node: ImportDeclaration) {
+            // Grammar checking
+            checkGrammarModifiers(node);
+
+            if (node.importClause) {
+                checkImportBinding(node.importClause);
+
+                if (node.importClause.namedBindings) {
+                    if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        checkImportBinding(<NamespaceImport>node.importClause.namedBindings);
+                    }
+                    else {
+                        var namedImports = <NamedImports>node.importClause.namedBindings;
+                        forEach(namedImports.elements, namedImport => {
+                            checkImportBinding(namedImport);
+                        });
+                    }
+                }
+            }
+            else {
+                // This has to be instantiated module
+                var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(node);
+                if (externalSymbolInfo) {
+                    if (!isInstantiatedModule(<ModuleDeclaration | SourceFile>externalSymbolInfo.externalModuleSymbol.declarations[0], compilerOptions.preserveConstEnums)) {
+                        error(node.moduleSpecifier, Diagnostics.Import_declaration_without_import_clause_references_external_module_0_that_is_not_instantiated);
+                    }
+                    else {
+                        // Mark the import as referenced so that we emit it in the final .js file.
+                        getSymbolLinks(externalSymbolInfo.externalModuleSymbol).referenced = true;
+                    }
+                }
+            }
+
+            function checkImportBinding(importBinding: Declaration) {
+                if (importBinding.name) {
+                    checkCollisionWithCapturedThisVariable(importBinding, <Identifier>importBinding.name);
+                    checkCollisionWithRequireExportsInGeneratedCode(importBinding, <Identifier>importBinding.name);
+                    var symbol = getSymbolOfNode(importBinding);
+                    var target: Symbol;
+                    // Import declaration for an external module
+                    if (node.parent.kind === SyntaxKind.SourceFile) {
+                        target = resolveImport(symbol);
+                    }
+                    else if (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral) {
+                        // TypeScript 1.0 spec (April 2013): 12.1.6
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
+                        // other external modules only through top - level external module names.
+                        // Relative external module names are not permitted.
+                        if (isExternalModuleNameRelative(node.moduleSpecifier.text)) {
+                            error(importBinding, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
+                            target = unknownSymbol;
+                        }
+                        else {
+                            target = resolveImport(symbol);
+                        }
+                    }
+                    else {
+                        // Parent is an internal module (syntax error is already reported)
+                        target = unknownSymbol;
+                    }
+
+                    if (target !== unknownSymbol) {
+                        var excludedMeanings =
+                            (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
+                            (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
+                            (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                        if (target.flags & excludedMeanings) {
+                            error(node, Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0, symbolToString(symbol));
+                        }
+                    }
+                }
+            }
+        }
+
         function checkExportAssignment(node: ExportAssignment) {
             // Grammar checking
             if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
@@ -9379,6 +9508,8 @@ module ts {
                     return checkModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return checkImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                case SyntaxKind.ImportDeclaration:
+                    return checkImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
@@ -10222,6 +10353,7 @@ module ts {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.Parameter:
+                case SyntaxKind.ImportDeclaration:
                     break;
                 default:
                     return false;
@@ -10325,7 +10457,7 @@ module ts {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
             }
-            else if (node.kind === SyntaxKind.ImportEqualsDeclaration && flags & NodeFlags.Ambient) {
+            else if (isAnyImportSyntax(node) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {

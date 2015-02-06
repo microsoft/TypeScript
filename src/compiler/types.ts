@@ -872,7 +872,7 @@ module ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends Statement, ModuleElement {
+    export interface ImportDeclaration extends Declaration, ModuleElement {
         importClause?: ImportClause;
         moduleSpecifier: StringLiteralExpression;
     }

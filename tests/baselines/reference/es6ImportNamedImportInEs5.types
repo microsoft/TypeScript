@@ -20,31 +20,31 @@ export var x1 = 10;
 === tests/cases/compiler/es6ImportNamedImportInEs5_1.ts ===
 import { } from "es6ImportNamedImportInEs5_0";
 import { a } from "es6ImportNamedImportInEs5_0";
->a : unknown
+>a : number
 
 import { a as b } from "es6ImportNamedImportInEs5_0";
 >a : unknown
->b : unknown
+>b : number
 
 import { x, a as y } from "es6ImportNamedImportInEs5_0";
->x : unknown
+>x : number
 >a : unknown
->y : unknown
+>y : number
 
 import { x as z,  } from "es6ImportNamedImportInEs5_0";
 >x : unknown
->z : unknown
+>z : number
 
 import { m,  } from "es6ImportNamedImportInEs5_0";
->m : unknown
+>m : number
 
 import { a1, x1 } from "es6ImportNamedImportInEs5_0";
->a1 : unknown
->x1 : unknown
+>a1 : number
+>x1 : number
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImportInEs5_0";
 >a1 : unknown
->a11 : unknown
+>a11 : number
 >x1 : unknown
->x11 : unknown
+>x11 : number
 

@@ -1,14 +1,16 @@
-//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding.ts] ////
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1.ts] ////
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts]
 
-export var a = 10;
+var a = 10;
+export = a;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts]
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
-var x: number = nameSpaceBinding.a;
+var x: number = defaultBinding;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.js]
-exports.a = 10;
+var a = 10;
+module.exports = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.js]
-var x = nameSpaceBinding.a;
+var x = defaultBinding;

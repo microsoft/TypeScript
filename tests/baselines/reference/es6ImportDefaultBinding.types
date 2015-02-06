@@ -1,9 +1,12 @@
 === tests/cases/compiler/es6ImportDefaultBinding_0.ts ===
 
-export var a = 10;
+var a = 10;
+>a : number
+
+export = a;
 >a : number
 
 === tests/cases/compiler/es6ImportDefaultBinding_1.ts ===
 import defaultBinding from "es6ImportDefaultBinding_0";
->defaultBinding : unknown
+>defaultBinding : number
 
