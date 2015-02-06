@@ -17,6 +17,7 @@ tests/cases/compiler/giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(61,5): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(61,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(62,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
@@ -39,6 +40,7 @@ tests/cases/compiler/giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(100,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(125,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(125,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
@@ -62,6 +64,7 @@ tests/cases/compiler/giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(179,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(204,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(204,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
@@ -117,6 +120,7 @@ tests/cases/compiler/giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(294,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(319,5): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(319,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(320,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
@@ -139,6 +143,7 @@ tests/cases/compiler/giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(358,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(383,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(383,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
@@ -162,6 +167,7 @@ tests/cases/compiler/giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(437,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(462,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(462,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
@@ -233,6 +239,7 @@ tests/cases/compiler/giant.ts(558,24): error TS1184: An implementation cannot be
 tests/cases/compiler/giant.ts(561,21): error TS1184: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(563,21): error TS1184: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(587,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(587,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
@@ -249,6 +256,7 @@ tests/cases/compiler/giant.ts(623,24): error TS1184: An implementation cannot be
 tests/cases/compiler/giant.ts(626,21): error TS1184: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(628,21): error TS1184: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(653,9): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/giant.ts(653,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
@@ -257,7 +265,7 @@ tests/cases/compiler/giant.ts(672,25): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/giant.ts (257 errors) ====
+==== tests/cases/compiler/giant.ts (265 errors) ====
     
     /*
         Prefixes
@@ -357,6 +365,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
         [p];
         ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+         ~
+!!! error TS2304: Cannot find name 'p'.
         [p1: string];
         ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -465,6 +475,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -590,6 +602,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -815,6 +829,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
         [p];
         ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+         ~
+!!! error TS2304: Cannot find name 'p'.
         [p1: string];
         ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -923,6 +939,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1048,6 +1066,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1315,6 +1335,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1413,6 +1435,8 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             [p];
             ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+             ~
+!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.

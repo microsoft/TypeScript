@@ -24,7 +24,7 @@ var x = foo({ name: "Sprocket" });
 >x : string
 >foo({ name: "Sprocket" }) : string
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket" } : { name: string; description?: string; }
+>{ name: "Sprocket" } : { name: string; }
 >name : string
 
 var x: string;
@@ -74,7 +74,7 @@ var b = bar({});
 >b : {}
 >bar({}) : {}
 >bar : <T>(param: { x?: T; }) => T
->{} : { x?: {}; }
+>{} : {}
 
 var b: {};
 >b : {}

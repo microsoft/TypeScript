@@ -21,7 +21,7 @@ defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
 >{} : {}
->{ get: function () { return 5; } } : { get: () => number; set?(v: any): void; }
+>{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number
 >function () { return 5; } : () => number
 
@@ -47,7 +47,7 @@ defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
 >{} : {}
->{ get: function () { return 5; } } : { get: () => number; set?: (v: any) => void; }
+>{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number
 >function () { return 5; } : () => number
 

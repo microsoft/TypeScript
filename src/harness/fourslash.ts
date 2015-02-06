@@ -118,7 +118,7 @@ module FourSlash {
         baselineFile: 'BaselineFile',
         declaration: 'declaration',
         emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-        filename: 'Filename',
+        fileName: 'Filename',
         mapRoot: 'mapRoot',
         module: 'module',
         out: 'out',
@@ -129,7 +129,7 @@ module FourSlash {
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
+    var fileMetadataNames = [testOptMetadataNames.fileName, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
     var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
@@ -237,9 +237,6 @@ module FourSlash {
             getLength: () => {
                 return sourceText.length;
             },
-            getLineStartPositions: () => {
-                return <number[]>[];
-            },
             getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
                 return <ts.TextChangeRange>undefined;
             }
@@ -271,7 +268,7 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
-        private inputFiles: ts.Map<string> = {};  // Map between inputFile's filename and its content for easily looking up when resolving references
+        private inputFiles: ts.Map<string> = {};  // Map between inputFile's fileName and its content for easily looking up when resolving references
         
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -363,9 +360,9 @@ module FourSlash {
             };
 
             this.testData.files.forEach(file => {
-                var filename = file.fileName.replace(Harness.IO.directoryName(file.fileName), '').substr(1);
-                var filenameWithoutExtension = filename.substr(0, filename.lastIndexOf("."));
-                this.scenarioActions.push('<CreateFileOnDisk FileId="' + filename + '" FileNameWithoutExtension="' + filenameWithoutExtension + '" FileExtension=".ts"><![CDATA[' + file.content + ']]></CreateFileOnDisk>');
+                var fileName = file.fileName.replace(Harness.IO.directoryName(file.fileName), '').substr(1);
+                var fileNameWithoutExtension = fileName.substr(0, fileName.lastIndexOf("."));
+                this.scenarioActions.push('<CreateFileOnDisk FileId="' + fileName + '" FileNameWithoutExtension="' + fileNameWithoutExtension + '" FileExtension=".ts"><![CDATA[' + file.content + ']]></CreateFileOnDisk>');
             });
 
             // Open the first file by default
@@ -391,7 +388,7 @@ module FourSlash {
             this.currentCaretPosition = pos;
 
             var lineStarts = ts.computeLineStarts(this.getCurrentFileContent());
-            var lineCharPos = ts.getLineAndCharacterOfPosition(lineStarts, pos);
+            var lineCharPos = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
             this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 
@@ -412,8 +409,8 @@ module FourSlash {
             var fileToOpen: FourSlashFile = this.findFile(indexOrName);
             fileToOpen.fileName = ts.normalizeSlashes(fileToOpen.fileName);
             this.activeFile = fileToOpen;
-            var filename = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), '').substr(1);
-            this.scenarioActions.push('<OpenFile FileName="" SrcFileId="' + filename + '" FileId="' + filename + '" />');
+            var fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), '').substr(1);
+            this.scenarioActions.push('<OpenFile FileName="" SrcFileId="' + fileName + '" FileId="' + fileName + '" />');
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
@@ -516,7 +513,9 @@ module FourSlash {
             }
 
             errors.forEach(function (error: ts.Diagnostic) {
-                Harness.IO.log("  minChar: " + error.start + ", limChar: " + (error.start + error.length) + ", message: " + error.messageText + "\n");
+                Harness.IO.log("  minChar: " + error.start +
+                    ", limChar: " + (error.start + error.length) +
+                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine) + "\n");
             });
         }
 
@@ -665,7 +664,16 @@ module FourSlash {
 
                 Harness.IO.log(errorMsg);
                 this.raiseError("Completion list is not empty at Caret");
+            }
+        }
 
+        public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
+            var completions = this.getCompletionListAtCaret();
+
+            if ((completions && !completions.isNewIdentifierLocation) && !negative) {
+                this.raiseError("Expected builder completion entry");
+            } else if ((completions && completions.isNewIdentifierLocation) && negative) {
+                this.raiseError("Un-expected builder completion entry");
             }
         }
 
@@ -733,7 +741,7 @@ module FourSlash {
                 var localFiles = this.testData.files.map<string>(file => file.fileName);
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
-                    if (localFiles.some((filename) => filename === entry.fileName)) {
+                    if (localFiles.some((fileName) => fileName === entry.fileName)) {
                         ++referencesCount;
                     }
                 });
@@ -1141,16 +1149,24 @@ module FourSlash {
                     // Loop through all the emittedFiles and emit them one by one
                     emitFiles.forEach(emitFile => {
                         var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
-                        var emitOutputStatus = emitOutput.emitOutputStatus;
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus];
-                        resultString += "\n";
+                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + ts.sys.newLine;
+
+                        if (emitOutput.emitSkipped) {
+                            resultString += "Diagnostics:" + ts.sys.newLine;
+                            var diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
+                            for (var i = 0, n = diagnostics.length; i < n; i++) {
+                                resultString += "  " + diagnostics[0].messageText + ts.sys.newLine;
+                            }
+                        }
+
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                            var filename = "Filename : " + outputFile.name + "\n";
-                            resultString = resultString + filename + outputFile.text;
+                            var fileName = "FileName : " + outputFile.name + ts.sys.newLine;
+                            resultString = resultString + fileName + outputFile.text;
                         });
-                        resultString += "\n";
+                        resultString += ts.sys.newLine;
                     });
+
                     return resultString;
                 },
                 true /* run immediately */);
@@ -1182,7 +1198,10 @@ module FourSlash {
 
             if (errorList.length) {
                 errorList.forEach(err => {
-                    Harness.IO.log("start: " + err.start + ", length: " + err.length + ", message: " + err.messageText);
+                    Harness.IO.log(
+                        "start: " + err.start +
+                        ", length: " + err.length +
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine));
                 });
             }
         }
@@ -1396,15 +1415,15 @@ module FourSlash {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            var incrementalSyntaxDiagnostics = incrementalSourceFile.getSyntacticDiagnostics();
+            var incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
 
             // Check syntactic structure
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
             var content = snapshot.getText(0, snapshot.getLength());
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
-            var referenceSyntaxDiagnostics = referenceSourceFile.getSyntacticDiagnostics();
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+            var referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
@@ -2134,7 +2153,7 @@ module FourSlash {
                 }
             } else if (typeof indexOrName === 'string') {
                 var name = <string>indexOrName;
-                // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the filename
+                // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf('/') === -1 ? 'tests/cases/fourslash/' + name : name;
                 var availableNames: string[] = [];
                 var foundIt = false;
@@ -2206,20 +2225,20 @@ module FourSlash {
         currentTestState = new TestState(testData);
 
         var result = '';
-        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
+        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined },
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
-        var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
+        var program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
-        var errors = program.getDiagnostics().concat(checker.getDiagnostics());
-        if (errors.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => e.messageText).join('\r\n'));
+        var diagnostics = ts.getPreEmitDiagnostics(program);
+        if (diagnostics.length > 0) {
+            throw new Error('Error compiling ' + fileName + ': ' +
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
-        program.emitFiles();
+        program.emit();
         result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test
@@ -2299,8 +2318,8 @@ module FourSlash {
                     if (globalMetadataNamesIndex === -1) {
                         if (fileMetadataNamesIndex === -1) {
                             throw new Error('Unrecognized metadata name "' + match[1] + '". Available global metadata names are: ' + globalMetadataNames.join(', ') + '; file metadata names are: ' + fileMetadataNames.join(', '));
-                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.filename)) {
-                            // Found an @Filename directive, if this is not the first then create a new subfile
+                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.fileName)) {
+                            // Found an @FileName directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
                                 file.fileOptions = currentFileOptions;

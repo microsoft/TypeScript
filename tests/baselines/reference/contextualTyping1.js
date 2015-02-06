@@ -2,4 +2,4 @@
 var foo: {id:number;} = {id:4};
 
 //// [contextualTyping1.js]
-var foo = { id: 4 };
+var foo = { id: 4 };\n

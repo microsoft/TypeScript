@@ -194,7 +194,7 @@ var compilerFilename = "tsc.js";
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -225,6 +225,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (useDebugMode) {
             options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+        }
+
+        if (stripInternal) {
+            options += " --stripInternal"
         }
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
@@ -331,7 +335,8 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*outDir*/ undefined,
             /*preserveConstEnums*/ true,
             /*keepComments*/ false,
-            /*noResolve*/ false);
+            /*noResolve*/ false,
+            /*stripInternal*/ false);
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -347,6 +352,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
             /*preserveConstEnums*/ true,
             /*keepComments*/ true,
             /*noResolve*/ true,
+            /*stripInternal*/ true,
             /*callback*/ function () {
                 function makeDefinitionFiles(definitionsRoots, standaloneDefinitionsFile, nodeDefinitionsFile) {
                     // Create the standalone definition file
@@ -375,6 +381,10 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
 task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile]);
+
+// Local target to build only tsc.js
+desc("Builds only the compiler");
+task("tsc", ["generate-diagnostics", "lib", tscFile]);
 
 // Local target to build the compiler and services
 desc("Sets release mode flag");
@@ -451,14 +461,16 @@ directory(builtLocalDirectory);
 var run = path.join(builtLocalDirectory, "run.js");
 compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
 
+var internalTests = "internal/"
+
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
 
-var localRwcBaseline = "tests/baselines/rwc/local/";
-var refRwcBaseline = "tests/baselines/rwc/reference/";
+var localRwcBaseline = path.join(internalTests, "baselines/rwc/local");
+var refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 
-var localTest262Baseline = "tests/baselines/test262/local/";
-var refTest262Baseline = "tests/baselines/test262/reference/";
+var localTest262Baseline = path.join(internalTests, "baselines/test262/local");
+var refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
@@ -491,11 +503,13 @@ function cleanTestDirs() {
         jake.rmRf(localBaseline);
     }
 
-        // Clean the local Rwc baselines directory
+    // Clean the local Rwc baselines directory
     if (fs.existsSync(localRwcBaseline)) {
         jake.rmRf(localRwcBaseline);
     }
 
+    jake.mkdirP(localRwcBaseline);
+	jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
@@ -507,8 +521,8 @@ function writeTestConfigFile(tests, testConfigFile) {
 }
 
 function deleteTemporaryProjectOutput() {
-    if (fs.existsSync(localBaseline + "projectOutput/")) {
-        jake.rmRf(localBaseline + "projectOutput/");
+    if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
+        jake.rmRf(path.join(localBaseline, "projectOutput/"));
     }
 }
 

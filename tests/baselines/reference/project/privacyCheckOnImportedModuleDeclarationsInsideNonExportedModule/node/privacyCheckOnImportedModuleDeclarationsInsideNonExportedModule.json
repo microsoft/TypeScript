@@ -8,5 +8,7 @@
         "lib.d.ts",
         "test.ts"
     ],
-    "emittedFiles": []
+    "emittedFiles": [
+        "test.js"
+    ]
 }
