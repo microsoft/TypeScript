@@ -4527,6 +4527,8 @@ module ts {
 
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
+            var afterImportPos = scanner.getStartPos();
+
             var identifier: Identifier;
             if (isIdentifier()) {
                 identifier = parseIdentifier();
@@ -4554,34 +4556,38 @@ module ts {
             if (identifier || // import id
                 token === SyntaxKind.AsteriskToken || // import * 
                 token === SyntaxKind.OpenBraceToken) { // import {
-                //ImportClause:
-                //  ImportedDefaultBinding
-                //  NameSpaceImport
-                //  NamedImports
-                //  ImportedDefaultBinding, NameSpaceImport
-                //  ImportedDefaultBinding, NamedImports
-
-                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
-                if (identifier) {
-                    // ImportedDefaultBinding:
-                    //  ImportedBinding
-                    importClause.name = identifier;
-                }
-
-                // If there was no default import or if there is comma token after default import 
-                // parse namespace or named imports
-                if (!importClause.name ||
-                    parseOptional(SyntaxKind.CommaToken)) {
-                    importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
-                }
-
-                importDeclaration.importClause = finishNode(importClause);
+                importDeclaration.importClause = parseImportClause(identifier, afterImportPos);
                 parseExpected(SyntaxKind.FromKeyword);
             }
 
             importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
             return finishNode(importDeclaration);
+        }
+
+        function parseImportClause(identifier: Identifier, fullStart: number) {
+            //ImportClause:
+            //  ImportedDefaultBinding
+            //  NameSpaceImport
+            //  NamedImports
+            //  ImportedDefaultBinding, NameSpaceImport
+            //  ImportedDefaultBinding, NamedImports
+
+            var importClause = <ImportClause>createNode(SyntaxKind.ImportClause, fullStart);
+            if (identifier) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                importClause.name = identifier;
+            }
+
+            // If there was no default import or if there is comma token after default import 
+            // parse namespace or named imports
+            if (!importClause.name ||
+                parseOptional(SyntaxKind.CommaToken)) {
+                importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
+            }
+
+            return finishNode(importClause);
         }
 
         function parseModuleReference() {
