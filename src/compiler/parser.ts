@@ -250,6 +250,20 @@ module ts {
                 return visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
                     visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
+            case SyntaxKind.ImportDeclaration:
+                return visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportClause:
+                return visitNode(cbNode, (<ImportClause>node).name) ||
+                    visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.NamespaceImport:
+                return visitNode(cbNode, (<NamespaceImport>node).name);
+            case SyntaxKind.NamedImports:
+                return visitNodes(cbNodes, (<NamedImports>node).elements);
+            case SyntaxKind.ImportSpecifier:
+                return visitNode(cbNode, (<ImportSpecifier>node).propertyName) ||
+                    visitNode(cbNode, (<ImportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ExportAssignment>node).exportName);
