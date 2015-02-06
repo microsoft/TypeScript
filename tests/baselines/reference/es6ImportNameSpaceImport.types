@@ -5,4 +5,5 @@ export var a = 10;
 
 === tests/cases/compiler/es6ImportNameSpaceImport_1.ts ===
 import * as nameSpaceBinding from "es6ImportNameSpaceImport_0";
-No type information for this code.
+>nameSpaceBinding : unknown
+

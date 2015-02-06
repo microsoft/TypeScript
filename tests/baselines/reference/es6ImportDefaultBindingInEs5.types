@@ -5,4 +5,5 @@ export var a = 10;
 
 === tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts ===
 import defaultBinding from "es6ImportDefaultBindingInEs5_0";
-No type information for this code.
+>defaultBinding : unknown
+

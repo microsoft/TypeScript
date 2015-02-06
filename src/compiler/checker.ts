@@ -443,23 +443,29 @@ module ts {
             Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");
             var links = getSymbolLinks(symbol);
             if (!links.target) {
-                links.target = resolvingSymbol;
                 var node = <ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration);
-                // Grammar checking
-                if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                    if ((<ExternalModuleReference>node.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
-                        grammarErrorOnNode((<ExternalModuleReference>node.moduleReference).expression, Diagnostics.String_literal_expected);
+                if (node) {
+                    links.target = resolvingSymbol;
+                    // Grammar checking
+                    if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        if ((<ExternalModuleReference>node.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
+                            grammarErrorOnNode((<ExternalModuleReference>node.moduleReference).expression, Diagnostics.String_literal_expected);
+                        }
+                    }
+
+                    var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
+                        ? resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node))
+                        : getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+                    if (links.target === resolvingSymbol) {
+                        links.target = target || unknownSymbol;
+                    }
+                    else {
+                        error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
                     }
                 }
-
-                var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
-                    ? resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node))
-                    : getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
-                if (links.target === resolvingSymbol) {
-                    links.target = target || unknownSymbol;
-                }
                 else {
-                    error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+                    // TODO(shkamat): This could be true in case of ImportDeclaration
+                    links.target = unknownSymbol;
                 }
             }
             else if (links.target === resolvingSymbol) {
@@ -4821,6 +4827,10 @@ module ts {
 
         /*Transitively mark all linked imports as referenced*/
         function markLinkedImportsAsReferenced(node: ImportEqualsDeclaration): void {
+            // TODO(shkamat): For now this could be true for ImportDeclaration bound symbol
+            if (!node) {
+                return;
+            }
             var nodeLinks = getNodeLinks(node);
             while (nodeLinks.importOnRightSide) {
                 var rightSide = nodeLinks.importOnRightSide;

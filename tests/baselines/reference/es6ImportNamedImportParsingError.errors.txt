@@ -5,7 +5,6 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,19): error TS1005: 
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(2,24): error TS1005: '{' expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,8): error TS1128: Declaration or statement expected.
-tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,12): error TS2304: Cannot find name 'a'.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,16): error TS2304: Cannot find name 'from'.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,21): error TS1005: ';' expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,13): error TS1005: 'from' expected.
@@ -19,7 +18,7 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: 
     export var x = a;
     export var m = a;
     
-==== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts (13 errors) ====
+==== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts (12 errors) ====
     import { * } from "es6ImportNamedImportParsingError_0";
              ~
 !!! error TS1003: Identifier expected.
@@ -37,8 +36,6 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: 
 !!! error TS1128: Declaration or statement expected.
            ~
 !!! error TS1128: Declaration or statement expected.
-               ~
-!!! error TS2304: Cannot find name 'a'.
                    ~~~~
 !!! error TS2304: Cannot find name 'from'.
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

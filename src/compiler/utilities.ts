@@ -595,6 +595,10 @@ module ts {
         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
     }
 
+    export function isAnyImportSyntax(node: Node) {
+        return node.kind == SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ImportDeclaration;
+    }
+
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {

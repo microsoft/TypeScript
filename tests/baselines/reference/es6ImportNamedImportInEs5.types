@@ -19,11 +19,32 @@ export var x1 = 10;
 
 === tests/cases/compiler/es6ImportNamedImportInEs5_1.ts ===
 import { } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { a } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { a as b } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { x, a as y } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { x as z,  } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { m,  } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { a1, x1 } from "es6ImportNamedImportInEs5_0";
-No type information for this code.import { a1 as a11, x1 as x11 } from "es6ImportNamedImportInEs5_0";
-No type information for this code.
+import { a } from "es6ImportNamedImportInEs5_0";
+>a : unknown
+
+import { a as b } from "es6ImportNamedImportInEs5_0";
+>a : unknown
+>b : unknown
+
+import { x, a as y } from "es6ImportNamedImportInEs5_0";
+>x : unknown
+>a : unknown
+>y : unknown
+
+import { x as z,  } from "es6ImportNamedImportInEs5_0";
+>x : unknown
+>z : unknown
+
+import { m,  } from "es6ImportNamedImportInEs5_0";
+>m : unknown
+
+import { a1, x1 } from "es6ImportNamedImportInEs5_0";
+>a1 : unknown
+>x1 : unknown
+
+import { a1 as a11, x1 as x11 } from "es6ImportNamedImportInEs5_0";
+>a1 : unknown
+>a11 : unknown
+>x1 : unknown
+>x11 : unknown
+
