@@ -467,6 +467,9 @@ module ts {
                     bindModuleDeclaration(<ModuleDeclaration>node);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ImportSpecifier:
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
