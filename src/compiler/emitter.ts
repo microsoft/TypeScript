@@ -2374,7 +2374,7 @@ module ts {
                             i++;
                         }
                         write("[");
-                        emitList(elements, pos, i - pos, multiLine, trailingComma);
+                        emitList(elements, pos, i - pos, multiLine, trailingComma && i === length);
                         write("]");
                         pos = i;
                     }
@@ -2389,17 +2389,17 @@ module ts {
                 var elements = node.elements;
                 if (elements.length === 0) {
                     write("[]");
-                    return;
                 }
-                if (languageVersion >= ScriptTarget.ES6) {
+                else if (languageVersion >= ScriptTarget.ES6) {
                     write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                    emitList(elements, 0, elements.length, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
                     write("]");
-                    return;
                 }
-                emitListWithSpread(elements, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                    /*trailingComma*/ elements.hasTrailingComma);
+                else {
+                    emitListWithSpread(elements, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma);
+                }
             }
 
             function emitObjectLiteral(node: ObjectLiteralExpression) {
@@ -2502,12 +2502,12 @@ module ts {
 
             function skipParentheses(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression) {
-                    node = (<ParenthesizedExpression>node).expression;
+                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
                 }
                 return node;
             }
 
-            function emitTarget(node: Expression): Expression {
+            function emitCallTarget(node: Expression): Expression {
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
                     emit(node);
                     return node;
@@ -2526,12 +2526,14 @@ module ts {
                 var target: Expression;
                 var expr = skipParentheses(node.expression);
                 if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                    target = emitTarget((<PropertyAccessExpression>expr).expression);
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
                     write(".");
                     emit((<PropertyAccessExpression>expr).name);
                 }
                 else if (expr.kind === SyntaxKind.ElementAccessExpression) {
-                    target = emitTarget((<PropertyAccessExpression>expr).expression);
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
                     write("[");
                     emit((<ElementAccessExpression>expr).argumentExpression);
                     write("]");
@@ -2546,13 +2548,16 @@ module ts {
                 write(".apply(");
                 if (target) {
                     if (target.kind === SyntaxKind.SuperKeyword) {
+                        // Calls of form super(...) and super.foo(...)
                         emitThis(target);
                     }
                     else {
+                        // Calls of form obj.foo(...)
                         emit(target);
                     }
                 }
                 else {
+                    // Calls of form foo(...)
                     write("void 0");
                 }
                 write(", ");

@@ -3530,12 +3530,6 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAssignmentExpressionOrOmittedExpression(): Expression {
-            return token === SyntaxKind.CommaToken
-                ? <Expression>createNode(SyntaxKind.OmittedExpression)
-                : parseAssignmentExpressionOrHigher();
-        }
-
         function parseSpreadElement(): Expression {
             var node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
             parseExpected(SyntaxKind.DotDotDotToken);
@@ -3544,7 +3538,9 @@ module ts {
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
-            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrOmittedExpression();
+            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
+                token === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
+                parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
