@@ -41,11 +41,11 @@ module ts {
         referencePathsOutput: string;
     }
 
-	interface DecoratorEmitInfo {
-		workingVariable?: Identifier; // temporary variable used as working memory for decorator application
-		computedPropertyNameCache: Identifier[]; // a cache of temporary variables used to hold onto the result of the expression for a computed property
-		propertyDescriptorCache: Identifier[]; // a cache of property descriptors created when emitting accessor declarations
-	}
+    interface DecoratorEmitInfo {
+        workingVariable?: Identifier; // temporary variable used as working memory for decorator application
+        computedPropertyNameCache: Identifier[]; // a cache of temporary variables used to hold onto the result of the expression for a computed property
+        propertyDescriptorCache: Identifier[]; // a cache of property descriptors created when emitting accessor declarations
+    }
 
     var indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
@@ -152,7 +152,7 @@ module ts {
     }
 
     function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
-		writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+                          writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
         var emitLeadingSpace = !trailingSeparator;
         forEach(comments, comment => {
             if (emitLeadingSpace) {
@@ -279,12 +279,12 @@ module ts {
 
     function getAllAccessorDeclarations(node: ClassDeclaration, accessor: AccessorDeclaration) {
         var firstAccessor: AccessorDeclaration;
-		var lastAccessor: AccessorDeclaration;
+        var lastAccessor: AccessorDeclaration;
         var getAccessor: AccessorDeclaration;
         var setAccessor: AccessorDeclaration;
         if (accessor.name.kind === SyntaxKind.ComputedPropertyName) {
             firstAccessor = accessor;
-			lastAccessor = accessor;
+            lastAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
                 getAccessor = accessor;
             }
@@ -304,7 +304,7 @@ module ts {
                         firstAccessor = <AccessorDeclaration>member;
                     }
 
-					lastAccessor = <AccessorDeclaration>member;
+                    lastAccessor = <AccessorDeclaration>member;
 
                     if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
                         getAccessor = <AccessorDeclaration>member;
@@ -318,7 +318,7 @@ module ts {
         }
         return {
             firstAccessor,
-			lastAccessor,
+            lastAccessor,
             getAccessor,
             setAccessor
         };
@@ -1055,33 +1055,33 @@ module ts {
                 var diagnosticMessage: DiagnosticMessage;
                 if (node.kind === SyntaxKind.VariableDeclaration) {
                     diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-						symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-							Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-							Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
-						Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
+                    symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                    Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                    Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
+                    Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                 }
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                 else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (node.flags & NodeFlags.Static) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-								Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
                     else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-								Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
                     else {
                         // Interfaces cannot have types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
                     }
                 }
 
@@ -1165,13 +1165,13 @@ module ts {
                     // Setters have to have type named and cannot infer it so, the type should always be named
                     if (accessorWithTypeAnnotation.parent.flags & NodeFlags.Static) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
                     }
                     else {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
                     }
                     return {
                         diagnosticMessage,
@@ -1183,17 +1183,17 @@ module ts {
                 else {
                     if (accessorWithTypeAnnotation.flags & NodeFlags.Static) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-								Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
                     }
                     else {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-								Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
                     }
                     return {
                         diagnosticMessage,
@@ -1294,54 +1294,54 @@ module ts {
                     case SyntaxKind.ConstructSignature:
                         // Interfaces cannot have return types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
 
                     case SyntaxKind.CallSignature:
                         // Interfaces cannot have return types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
 
                     case SyntaxKind.IndexSignature:
                         // Interfaces cannot have return types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
+                        Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-									Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-									Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-								Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
                         }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-									Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-									Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
-								Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
                         }
                         else {
                             // Interfaces cannot have return types that cannot be named
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
-								Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
+                            Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
                         }
                         break;
 
                     case SyntaxKind.FunctionDeclaration:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-								Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
-							Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
+                        Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
                         break;
 
                     default:
@@ -1386,56 +1386,56 @@ module ts {
                 switch (node.parent.kind) {
                     case SyntaxKind.Constructor:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-								Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
                         break;
 
                     case SyntaxKind.ConstructSignature:
                         // Interfaces cannot have parameter types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                        Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                         break;
 
                     case SyntaxKind.CallSignature:
                         // Interfaces cannot have parameter types that cannot be named
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                        Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
                         break;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         if (node.parent.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-									Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-									Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-								Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                         }
                         else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-									Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-									Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-								Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
                         }
                         else {
                             // Interfaces cannot have parameter types that cannot be named
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-								Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-								Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                            Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                         }
                         break;
 
                     case SyntaxKind.FunctionDeclaration:
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-							symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-								Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-								Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
-							Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
                         break;
 
                     default:
@@ -1699,8 +1699,8 @@ module ts {
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
                         (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
-							(lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-								(lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
+                        (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
+                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
                         // Encode the last recordedSpan before assigning new
                         encodeLastRecordedSourceMapSpan();
 
@@ -2079,7 +2079,7 @@ module ts {
             function emitLiteral(node: LiteralExpression) {
                 var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
-						node.text;
+                    node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
@@ -2236,17 +2236,17 @@ module ts {
                     emitLiteral(<LiteralExpression>node);
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
-					if (tempNames) {
-						if (tempNames[node.id]) {
-							return emit(tempNames[node.id]);
-						}
+                    if (tempNames) {
+                        if (tempNames[node.id]) {
+                            return emit(tempNames[node.id]);
+                        }
 
-						var tempName = createTempVariable(node);
-						recordTempDeclaration(tempName);
-						tempNames[node.id] = tempName;
-						write(tempName.text);
-						write(" = ");
-					}
+                        var tempName = createTempVariable(node);
+                        recordTempDeclaration(tempName);
+                        tempNames[node.id] = tempName;
+                        write(tempName.text);
+                        write(" = ");
+                    }
                     emit((<ComputedPropertyName>node).expression);
                 }
                 else {
@@ -2458,21 +2458,21 @@ module ts {
 
             function emitComputedPropertyName(node: ComputedPropertyName, tempNames?: Identifier[]) {
                 write("[");
-				if (tempNames) {
-					if (tempNames[node.id]) {
-						emitNode(tempNames[node.id]);
-					} else {
-						var tempName = createTempVariable(node);
-						recordTempDeclaration(tempName);
-						tempNames[node.id] = tempName;
-						write(tempName.text);
-						write(" = ");
-						emit(node.expression);
-					}
-				}
-				else {
-					emit(node.expression);
-				}
+                if (tempNames) {
+                    if (tempNames[node.id]) {
+                        emitNode(tempNames[node.id]);
+                    } else {
+                        var tempName = createTempVariable(node);
+                        recordTempDeclaration(tempName);
+                        tempNames[node.id] = tempName;
+                        write(tempName.text);
+                        write(" = ");
+                        emit(node.expression);
+                    }
+                }
+                else {
+                    emit(node.expression);
+                }
                 write("]");
             }
 
@@ -2866,7 +2866,7 @@ module ts {
 
             function isOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-					getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -3521,8 +3521,8 @@ module ts {
             }
 
             function emitMemberFunctions(node: ClassDeclaration): DecoratorEmitInfo {
-				var computedPropertyNameCache: Identifier[];
-				var propertyDescriptorCache: Identifier[];
+                var computedPropertyNameCache: Identifier[];
+                var propertyDescriptorCache: Identifier[];
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -3533,10 +3533,10 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-						emitTargetOfClassElement(node, member);
-						if (member.decorators && !computedPropertyNameCache && (<MethodDeclaration>member).name.kind === SyntaxKind.ComputedPropertyName) {
-							computedPropertyNameCache = [];
-						}
+                        emitTargetOfClassElement(node, member);
+                        if (member.decorators && !computedPropertyNameCache && (<MethodDeclaration>member).name.kind === SyntaxKind.ComputedPropertyName) {
+                            computedPropertyNameCache = [];
+                        }
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name, member.decorators ? computedPropertyNameCache : undefined);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
@@ -3550,34 +3550,34 @@ module ts {
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-							var tempDescriptor: Identifier;
-							if (member.decorators) {
-								if (!propertyDescriptorCache) {
-									propertyDescriptorCache = [];
-								}
-								tempDescriptor = createTempVariable(node);
-								recordTempDeclaration(tempDescriptor);
-								propertyDescriptorCache[accessors.firstAccessor.id] = tempDescriptor;
-								propertyDescriptorCache[accessors.lastAccessor.id] = tempDescriptor;
-							}
+                            var tempDescriptor: Identifier;
+                            if (member.decorators) {
+                                if (!propertyDescriptorCache) {
+                                    propertyDescriptorCache = [];
+                                }
+                                tempDescriptor = createTempVariable(node);
+                                recordTempDeclaration(tempDescriptor);
+                                propertyDescriptorCache[accessors.firstAccessor.id] = tempDescriptor;
+                                propertyDescriptorCache[accessors.lastAccessor.id] = tempDescriptor;
+                            }
                             writeLine();
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-							emitTargetOfClassElement(node, member);
+                            emitTargetOfClassElement(node, member);
                             write(", ");
 
-							if ((member.decorators || accessors.lastAccessor.decorators) && !computedPropertyNameCache && (<AccessorDeclaration>member).name.kind === SyntaxKind.ComputedPropertyName) {
-								computedPropertyNameCache = [];
-							}
+                            if ((member.decorators || accessors.lastAccessor.decorators) && !computedPropertyNameCache && (<AccessorDeclaration>member).name.kind === SyntaxKind.ComputedPropertyName) {
+                                computedPropertyNameCache = [];
+                            }
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name, member.decorators ? computedPropertyNameCache : undefined);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", ");
-							if (tempDescriptor) {
-								write(tempDescriptor.text);
-								write(" = ");
-							}
-							write("{");
+                            if (tempDescriptor) {
+                                write(tempDescriptor.text);
+                                write(" = ");
+                            }
+                            write("{");
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
@@ -3612,9 +3612,9 @@ module ts {
                         }
                     }
                 });
-				if (computedPropertyNameCache || propertyDescriptorCache) {
-					return { computedPropertyNameCache, propertyDescriptorCache };
-				}
+                if (computedPropertyNameCache || propertyDescriptorCache) {
+                    return { computedPropertyNameCache, propertyDescriptorCache };
+                }
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -3626,12 +3626,12 @@ module ts {
                     write("_super");
                 }
                 write(") {");
-				var saveTempCount = tempCount;
-				var saveTempVariables = tempVariables;
-				var saveTempParameters = tempParameters;
-				tempCount = 0;
-				tempVariables = undefined;
-				tempParameters = undefined;
+                var saveTempCount = tempCount;
+                var saveTempVariables = tempVariables;
+                var saveTempParameters = tempParameters;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
                 increaseIndent();
                 scopeEmitStart(node);
                 if (baseTypeNode) {
@@ -3647,12 +3647,12 @@ module ts {
                 var temps = emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
-				emitDecoratorsOfClass(node, temps);
-				emitTempDeclarations(/*newLine*/ true);
-				writeLine();
-				tempCount = saveTempCount;
-				tempVariables = saveTempVariables;
-				tempParameters = saveTempParameters;
+                emitDecoratorsOfClass(node, temps);
+                emitTempDeclarations(/*newLine*/ true);
+                writeLine();
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
                 function emitClassReturnStatement() {
                     write("return ");
                     emitNode(node.name);
@@ -3753,303 +3753,303 @@ module ts {
                 }
             }
 
-			function emitTargetOfClassElement(node: ClassDeclaration, member: Node) {
-				emitNode(node.name);
-				if (!(member.flags & NodeFlags.Static)) {
-					write(".prototype");
-				}
-			}
+            function emitTargetOfClassElement(node: ClassDeclaration, member: Node) {
+                emitNode(node.name);
+                if (!(member.flags & NodeFlags.Static)) {
+                    write(".prototype");
+                }
+            }
 
-			function getDecoratorsOfMember(node: ClassDeclaration, member: ClassElement) {
-				switch (member.kind) {
-					case SyntaxKind.MethodDeclaration:
-					case SyntaxKind.PropertyDeclaration:
-						return member.decorators;
-					case SyntaxKind.GetAccessor:
-					case SyntaxKind.SetAccessor:
-						var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
-						if (member === accessors.firstAccessor) {
-							var decorators = accessors.firstAccessor.decorators;
-							if (member !== accessors.lastAccessor && accessors.lastAccessor.decorators) {
-								if (decorators) {
-									return decorators.concat(accessors.lastAccessor.decorators);
-								}
-								return accessors.lastAccessor.decorators;
-							}
-						}
-						break;
-				}
-				return undefined;
-			}
+            function getDecoratorsOfMember(node: ClassDeclaration, member: ClassElement) {
+                switch (member.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                        return member.decorators;
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
+                        if (member === accessors.firstAccessor) {
+                            var decorators = accessors.firstAccessor.decorators;
+                            if (member !== accessors.lastAccessor && accessors.lastAccessor.decorators) {
+                                if (decorators) {
+                                    return decorators.concat(accessors.lastAccessor.decorators);
+                                }
+                                return accessors.lastAccessor.decorators;
+                            }
+                        }
+                        break;
+                }
+                return undefined;
+            }
 
-			function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number, info: DecoratorEmitInfo) {
-				var decorators = parameter.decorators;
-				if (!decorators) {
-					return;
-				}
+            function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number, info: DecoratorEmitInfo) {
+                var decorators = parameter.decorators;
+                if (!decorators) {
+                    return;
+                }
 
-				var name = parameter.name;
+                var name = parameter.name;
 
-				write("// ");
-				if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
-					if (node.kind === SyntaxKind.Constructor) {
-						emitNode((<ClassDeclaration>node.parent).name);
-					}
-					else {
-						emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
-						var saveEmit = emit;
-						emit = emitNode;
-						emitMemberAccessForPropertyName(node.name);
-						emit = saveEmit;
-					}
-				}
-				else {
-					emitNode(node.name);
-				}
-				write(" parameter #");
-				write(String(parameterIndex));
-				if (name.kind === SyntaxKind.Identifier) {
-					write(" (");
-					emitNode(name);
-					write(")");
-				}
-				write(" decorators:");
-				writeLine();
+                write("// ");
+                if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (node.kind === SyntaxKind.Constructor) {
+                        emitNode((<ClassDeclaration>node.parent).name);
+                    }
+                    else {
+                        emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
+                        var saveEmit = emit;
+                        emit = emitNode;
+                        emitMemberAccessForPropertyName(node.name);
+                        emit = saveEmit;
+                    }
+                }
+                else {
+                    emitNode(node.name);
+                }
+                write(" parameter #");
+                write(String(parameterIndex));
+                if (name.kind === SyntaxKind.Identifier) {
+                    write(" (");
+                    emitNode(name);
+                    write(")");
+                }
+                write(" decorators:");
+                writeLine();
 
-				emitStart(node);
-				var decoratorCount = decorators.length;
-				for (var i = 0; i < decoratorCount; i++) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					emit(decorator.expression);
-					write("(");
-					if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
-						if (node.kind === SyntaxKind.Constructor) {
-							emitNode((<ClassDeclaration>node.parent).name);
-						}
-						else if (node.kind === SyntaxKind.SetAccessor) {
-							emitNode(info.propertyDescriptorCache[node.id]);
-							write(".set");
-						}					
-						else {
-							emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
-							emitMemberAccessForPropertyName(node.name, info.computedPropertyNameCache);
-						}
-					}
-					write(", ");
-					write(String(parameterIndex));
-					write(", ");
-					emitEnd(decorator);
-					if (i < decoratorCount - 1) {
-						increaseIndent();
-						writeLine();
-						write("void ");
-					}
-				}
-				write("void 0");
-				for (var i = decoratorCount - 1; i >= 0; i--) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					write(")");
-					emitEnd(decorator);
-					if (i < decorators.length - 1) {
-						decreaseIndent();
-					}
-				}
-				write(";");
-				emitEnd(node);
-				writeLine();
-			}
+                emitStart(node);
+                var decoratorCount = decorators.length;
+                for (var i = 0; i < decoratorCount; i++) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    emit(decorator.expression);
+                    write("(");
+                    if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
+                        if (node.kind === SyntaxKind.Constructor) {
+                            emitNode((<ClassDeclaration>node.parent).name);
+                        }
+                        else if (node.kind === SyntaxKind.SetAccessor) {
+                            emitNode(info.propertyDescriptorCache[node.id]);
+                            write(".set");
+                        }					
+                        else {
+                            emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
+                            emitMemberAccessForPropertyName(node.name, info.computedPropertyNameCache);
+                        }
+                    }
+                    write(", ");
+                    write(String(parameterIndex));
+                    write(", ");
+                    emitEnd(decorator);
+                    if (i < decoratorCount - 1) {
+                        increaseIndent();
+                        writeLine();
+                        write("void ");
+                    }
+                }
+                write("void 0");
+                for (var i = decoratorCount - 1; i >= 0; i--) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    write(")");
+                    emitEnd(decorator);
+                    if (i < decorators.length - 1) {
+                        decreaseIndent();
+                    }
+                }
+                write(";");
+                emitEnd(node);
+                writeLine();
+            }
 
-			function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, info: DecoratorEmitInfo) {
-				forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex, info));
-			}
+            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, info: DecoratorEmitInfo) {
+                forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex, info));
+            }
 
-			function emitDecoratorsOfMembers(node: ClassDeclaration, info: DecoratorEmitInfo) {
-				forEach(node.members, member => emitDecoratorsOfMember(node, member, info));
-			}
+            function emitDecoratorsOfMembers(node: ClassDeclaration, info: DecoratorEmitInfo) {
+                forEach(node.members, member => emitDecoratorsOfMember(node, member, info));
+            }
 
-			function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, info: DecoratorEmitInfo) {
-				var name = member.name;
-				var decorators = getDecoratorsOfMember(node, member);
-				if (!decorators) {
-					return;
-				}
+            function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, info: DecoratorEmitInfo) {
+                var name = member.name;
+                var decorators = getDecoratorsOfMember(node, member);
+                if (!decorators) {
+                    return;
+                }
 
-				if (name.kind === SyntaxKind.ComputedPropertyName && !info.computedPropertyNameCache) {
-					info.computedPropertyNameCache = [];
-				}
+                if (name.kind === SyntaxKind.ComputedPropertyName && !info.computedPropertyNameCache) {
+                    info.computedPropertyNameCache = [];
+                }
 
-				switch (member.kind) {
-					case SyntaxKind.MethodDeclaration:
-						emitDecoratorsOfParameters(<MethodDeclaration>member, info);
-						break;
-					case SyntaxKind.GetAccessor:
-					case SyntaxKind.SetAccessor:
-						var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
-						if (accessors.setAccessor) {
-							emitDecoratorsOfParameters(accessors.setAccessor, info);
-						}
-						break;
-				}
+                switch (member.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                        emitDecoratorsOfParameters(<MethodDeclaration>member, info);
+                        break;
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
+                        if (accessors.setAccessor) {
+                            emitDecoratorsOfParameters(accessors.setAccessor, info);
+                        }
+                        break;
+                }
 
-				write("// ");
-				emitTargetOfClassElement(node, member);
-				var saveEmit = emit;
-				emit = emitNode;
-				emitMemberAccessForPropertyName(name);
-				emit = saveEmit;
-				write(" decorators:");
-				writeLine();
+                write("// ");
+                emitTargetOfClassElement(node, member);
+                var saveEmit = emit;
+                emit = emitNode;
+                emitMemberAccessForPropertyName(name);
+                emit = saveEmit;
+                write(" decorators:");
+                writeLine();
 
-				var useDescriptors = languageVersion > ScriptTarget.ES3;
-				if (useDescriptors) {
-					if (info.propertyDescriptorCache && info.propertyDescriptorCache[member.id]) {
-						workingVariable = info.propertyDescriptorCache[member.id];
-					}
-					else {
-						if (!info.workingVariable) {
-							info.workingVariable = createTempVariable(node);
-							recordTempDeclaration(info.workingVariable);
-						}
-						workingVariable = info.workingVariable;
-						if (member.kind !== SyntaxKind.PropertyDeclaration) {
-							emitNode(workingVariable);
-							write(" = ");
-							write("Object.getOwnPropertyDescriptor(");
-							emitTargetOfClassElement(node, member);
-							write(", ");
-							emitExpressionForPropertyName(name, info.computedPropertyNameCache);
-							write(");");
-							writeLine();
-						}
-					}
-				}
+                var useDescriptors = languageVersion > ScriptTarget.ES3;
+                if (useDescriptors) {
+                    if (info.propertyDescriptorCache && info.propertyDescriptorCache[member.id]) {
+                        workingVariable = info.propertyDescriptorCache[member.id];
+                    }
+                    else {
+                        if (!info.workingVariable) {
+                            info.workingVariable = createTempVariable(node);
+                            recordTempDeclaration(info.workingVariable);
+                        }
+                        workingVariable = info.workingVariable;
+                        if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                            emitNode(workingVariable);
+                            write(" = ");
+                            write("Object.getOwnPropertyDescriptor(");
+                            emitTargetOfClassElement(node, member);
+                            write(", ");
+                            emitExpressionForPropertyName(name, info.computedPropertyNameCache);
+                            write(");");
+                            writeLine();
+                        }
+                    }
+                }
 
-				var workingVariable: Identifier;
-				var decoratorCount = decorators.length;
-				for (var i = 0; i < decoratorCount; i++) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					if (useDescriptors) {
-						emitNode(workingVariable);
-						write(" = ");
-					}
-					emit(decorator.expression);
-					write("(");
-					emitTargetOfClassElement(node, member);
-					write(", ");
-					emitExpressionForPropertyName(name, info.computedPropertyNameCache);
-					write(", ");
-					if (i < decoratorCount - 1) {
-						increaseIndent();
-						writeLine();
-						if (!useDescriptors) {
-							write("void ");
-						}
-					}
-					emitEnd(decorator);
-				}
+                var workingVariable: Identifier;
+                var decoratorCount = decorators.length;
+                for (var i = 0; i < decoratorCount; i++) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    if (useDescriptors) {
+                        emitNode(workingVariable);
+                        write(" = ");
+                    }
+                    emit(decorator.expression);
+                    write("(");
+                    emitTargetOfClassElement(node, member);
+                    write(", ");
+                    emitExpressionForPropertyName(name, info.computedPropertyNameCache);
+                    write(", ");
+                    if (i < decoratorCount - 1) {
+                        increaseIndent();
+                        writeLine();
+                        if (!useDescriptors) {
+                            write("void ");
+                        }
+                    }
+                    emitEnd(decorator);
+                }
 
-				var hasInitialDescriptor: boolean;
-				if (!useDescriptors || member.kind === SyntaxKind.PropertyDeclaration) {
-					hasInitialDescriptor = false;
-					write("void 0");
-				}
-				else {
-					hasInitialDescriptor = true;
-					emitNode(workingVariable);
-				}
+                var hasInitialDescriptor: boolean;
+                if (!useDescriptors || member.kind === SyntaxKind.PropertyDeclaration) {
+                    hasInitialDescriptor = false;
+                    write("void 0");
+                }
+                else {
+                    hasInitialDescriptor = true;
+                    emitNode(workingVariable);
+                }
 
-				for (var i = decoratorCount - 1; i >= 0; i--) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					write(")");
-					if (useDescriptors && (i < decoratorCount - 1 || hasInitialDescriptor)) {
-						write(" || ");
-						emitNode(workingVariable);
-					}
-					if (i < decoratorCount - 1) {
-						decreaseIndent();
-					}
-					emitEnd(decorator);
-				}
+                for (var i = decoratorCount - 1; i >= 0; i--) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    write(")");
+                    if (useDescriptors && (i < decoratorCount - 1 || hasInitialDescriptor)) {
+                        write(" || ");
+                        emitNode(workingVariable);
+                    }
+                    if (i < decoratorCount - 1) {
+                        decreaseIndent();
+                    }
+                    emitEnd(decorator);
+                }
 
-				emitStart(member);
-				write(";");
-				if (useDescriptors) {
-					writeLine();
-					write("if (");
-					emitNode(workingVariable);
-					write(" !== void 0) {");
-					increaseIndent();
-					writeLine();
-					write("Object.defineProperty(");
-					emitTargetOfClassElement(node, member);
-					write(", ");
-					emitExpressionForPropertyName(name, info.computedPropertyNameCache);
-					write(", ");
-					emitNode(workingVariable);
-					write(");");
-					decreaseIndent();
-					writeLine();
-					write("}");
-					writeLine();
-				}
-				emitEnd(member);
-				writeLine();
-			}
+                emitStart(member);
+                write(";");
+                if (useDescriptors) {
+                    writeLine();
+                    write("if (");
+                    emitNode(workingVariable);
+                    write(" !== void 0) {");
+                    increaseIndent();
+                    writeLine();
+                    write("Object.defineProperty(");
+                    emitTargetOfClassElement(node, member);
+                    write(", ");
+                    emitExpressionForPropertyName(name, info.computedPropertyNameCache);
+                    write(", ");
+                    emitNode(workingVariable);
+                    write(");");
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                    writeLine();
+                }
+                emitEnd(member);
+                writeLine();
+            }
 
-			function emitDecoratorsOfConstructor(node: ClassDeclaration, info: DecoratorEmitInfo) {
-				var decorators = node.decorators;
-				if (!node.decorators) {
-					return;
-				}
-				
-				var constructor = getFirstConstructorWithBody(node);
-				if (constructor) {
-					emitDecoratorsOfParameters(constructor, info);
-				}
+            function emitDecoratorsOfConstructor(node: ClassDeclaration, info: DecoratorEmitInfo) {
+                var decorators = node.decorators;
+                if (!node.decorators) {
+                    return;
+                }
+                
+                var constructor = getFirstConstructorWithBody(node);
+                if (constructor) {
+                    emitDecoratorsOfParameters(constructor, info);
+                }
 
-				write("// ");
-				emitNode(node.name);
-				write(" decorators");
-				writeLine();
+                write("// ");
+                emitNode(node.name);
+                write(" decorators");
+                writeLine();
 
-				emitStart(node);
-				for (var i = 0; i < decorators.length; i++) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					emitNode(node.name);
-					write(" = ");
-					emit(decorators[i].expression);
-					write("(");
-					emitEnd(decorator);
-					if (i < decorators.length - 1) {
-						increaseIndent();
-						writeLine();
-					}
-				}
-				emitNode(node.name);
-				for (var i = decorators.length - 1; i >= 0; i--) {
-					var decorator = decorators[i];
-					emitStart(decorator);
-					write(") || ");
-					emitNode(node.name);
-					emitEnd(decorator);
-					if (i < decorators.length - 1) {
-						decreaseIndent();
-					}
-				}
-				write(";");
-				emitEnd(node);
-				writeLine();
-			}
+                emitStart(node);
+                for (var i = 0; i < decorators.length; i++) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    emitNode(node.name);
+                    write(" = ");
+                    emit(decorators[i].expression);
+                    write("(");
+                    emitEnd(decorator);
+                    if (i < decorators.length - 1) {
+                        increaseIndent();
+                        writeLine();
+                    }
+                }
+                emitNode(node.name);
+                for (var i = decorators.length - 1; i >= 0; i--) {
+                    var decorator = decorators[i];
+                    emitStart(decorator);
+                    write(") || ");
+                    emitNode(node.name);
+                    emitEnd(decorator);
+                    if (i < decorators.length - 1) {
+                        decreaseIndent();
+                    }
+                }
+                write(";");
+                emitEnd(node);
+                writeLine();
+            }
 
-			function emitDecoratorsOfClass(node: ClassDeclaration, info: DecoratorEmitInfo) {
-				emitDecoratorsOfMembers(node, info);
-				emitDecoratorsOfConstructor(node, info);
-			}
+            function emitDecoratorsOfClass(node: ClassDeclaration, info: DecoratorEmitInfo) {
+                emitDecoratorsOfMembers(node, info);
+                emitDecoratorsOfConstructor(node, info);
+            }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitPinnedOrTripleSlashComments(node);

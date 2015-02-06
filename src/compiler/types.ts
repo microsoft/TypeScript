@@ -232,7 +232,7 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
-		IncompleteDeclaration,
+        IncompleteDeclaration,
 
         // Module references
         ExternalModuleReference,
