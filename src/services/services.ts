@@ -406,7 +406,7 @@ module ts {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
                     (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
-                    isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
+                        isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
@@ -807,7 +807,7 @@ module ts {
                             if ((<Declaration>node).name) {
                                 namedDeclarations.push(<Declaration>node);
                             }
-                            // fall through
+                        // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.VariableDeclarationList:
@@ -828,7 +828,7 @@ module ts {
                             if (!(node.flags & NodeFlags.AccessibilityModifier)) {
                                 break;
                             }
-                            // fall through
+                        // fall through
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.BindingElement:
                             if (isBindingPattern((<VariableDeclaration>node).name)) {
@@ -895,7 +895,7 @@ module ts {
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
-        
+
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -920,7 +920,7 @@ module ts {
 
         dispose(): void;
     }
- 
+
     export interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: string; // ClassificationTypeNames
@@ -1031,7 +1031,7 @@ module ts {
         text: string;
         kind: string;
     }
-    
+
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
@@ -1086,6 +1086,7 @@ module ts {
 
     export interface CompletionInfo {
         isMemberCompletion: boolean;
+        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
         entries: CompletionEntry[];
     }
 
@@ -1432,9 +1433,9 @@ module ts {
     }
 
     export function getDefaultCompilerOptions(): CompilerOptions {
-        // Set "ScriptTarget.Latest" target by default for language service
+        // Always default to "ScriptTarget.ES5" for the language service
         return {
-            target: ScriptTarget.Latest,
+            target: ScriptTarget.ES5,
             module: ModuleKind.None,
         };
     }
@@ -1611,7 +1612,7 @@ module ts {
     function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string) {
         sourceFile.version = version;
         sourceFile.scriptSnapshot = scriptSnapshot;
-    } 
+    }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
@@ -1934,7 +1935,7 @@ module ts {
         // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
         return position <= token.getStart(sourceFile) &&
             (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-            isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
+                isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
 
         function isInsideCommentRange(comments: CommentRange[]): boolean {
             return forEach(comments, comment => {
@@ -1976,7 +1977,7 @@ module ts {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    var keywordCompletions:CompletionEntry[] = [];
+    var keywordCompletions: CompletionEntry[] = [];
     for (var i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
         keywordCompletions.push({
             name: tokenToString(i),
@@ -2323,6 +2324,7 @@ module ts {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
                 var isMemberCompletion = true;
+                var isNewIdentifierLocation = false;
 
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
@@ -2359,6 +2361,7 @@ module ts {
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
 
                     var contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
@@ -2375,6 +2378,7 @@ module ts {
                 else {
                     // Get scope members
                     isMemberCompletion = false;
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
@@ -2392,6 +2396,8 @@ module ts {
 
             return {
                 isMemberCompletion,
+                isNewIdentifierLocation,
+                isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
 
@@ -2417,6 +2423,64 @@ module ts {
                     isRightOfIllegalDot(previousToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
+                if (previousToken) {
+                    var containingNodeKind = previousToken.parent.kind;
+                    switch (previousToken.kind) {
+                        case SyntaxKind.CommaToken:
+                            return containingNodeKind === SyntaxKind.CallExpression                         // func( a, |
+                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |   public, protected, private keywords are allowed here, so show completion
+                                || containingNodeKind === SyntaxKind.NewExpression                          // new C(a, |
+                                || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression;                      // var x = (a, |
+
+              
+                        case SyntaxKind.OpenParenToken:
+                            return containingNodeKind === SyntaxKind.CallExpression               // func( |
+                                || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
+                                || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression;     // var x = (a|
+
+                        case SyntaxKind.OpenBracketToken:
+                            return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
+
+                        case SyntaxKind.ModuleKeyword:                               // module | 
+                            return true;
+
+                        case SyntaxKind.DotToken:
+                            return containingNodeKind === SyntaxKind.ModuleDeclaration; // module A.|
+
+                        case SyntaxKind.OpenBraceToken:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
+
+                        case SyntaxKind.EqualsToken:
+                            return containingNodeKind === SyntaxKind.VariableDeclaration // var x = a|
+                            || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+
+                        case SyntaxKind.TemplateHead:
+                            return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
+
+                        case SyntaxKind.TemplateMiddle:
+                            return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
+
+                        case SyntaxKind.PublicKeyword:
+                        case SyntaxKind.PrivateKeyword:
+                        case SyntaxKind.ProtectedKeyword:
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration; // class A{ public |
+                    }
+
+                    // Previous token may have been a keyword that was converted to an identifier.
+                    switch (previousToken.getText()) {
+                        case "public":
+                        case "protected":
+                        case "private":
+                            return true;
+                    }
+                }
+
+                return false;
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
@@ -2465,7 +2529,6 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.CallSignature:
@@ -2485,28 +2548,54 @@ module ts {
                                 containingNodeKind === SyntaxKind.VariableDeclarationList ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
                                 containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
-                                isFunction(containingNodeKind);
+                                isFunction(containingNodeKind) ||
+                                containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface A<T, |
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||       //  var [x, y|
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x, y|
+
+                        case SyntaxKind.DotToken:
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;       // var [.|
+
+                        case SyntaxKind.OpenBracketToken:
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x|
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface a { |
+                                containingNodeKind === SyntaxKind.TypeLiteral ||               // var x : { |
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x|
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
-                                previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
+                                (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
+                                 previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  var x : { a; |
+
+                        case SyntaxKind.LessThanToken:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
+                                isFunction(containingNodeKind);
+
+                        case SyntaxKind.StaticKeyword:
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+
+                        case SyntaxKind.DotDotDotToken:
+                            return containingNodeKind === SyntaxKind.Parameter ||
+                                containingNodeKind === SyntaxKind.Constructor ||
+                                (previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.StaticKeyword:
-                        case SyntaxKind.DotDotDotToken:
+                        case SyntaxKind.ProtectedKeyword:
                             return containingNodeKind === SyntaxKind.Parameter;
 
                         case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.ModuleKeyword:
                         case SyntaxKind.EnumKeyword:
                         case SyntaxKind.InterfaceKeyword:
                         case SyntaxKind.FunctionKeyword:
@@ -2514,6 +2603,9 @@ module ts {
                         case SyntaxKind.GetKeyword:
                         case SyntaxKind.SetKeyword:
                         case SyntaxKind.ImportKeyword:
+                        case SyntaxKind.LetKeyword:
+                        case SyntaxKind.ConstKeyword:
+                        case SyntaxKind.YieldKeyword:
                             return true;
                     }
 
@@ -2522,10 +2614,12 @@ module ts {
                         case "class":
                         case "interface":
                         case "enum":
-                        case "module":
                         case "function":
                         case "var":
-                            // TODO: add let and const
+                        case "static":
+                        case "let":
+                        case "const":
+                        case "yield":
                             return true;
                     }
                 }
@@ -5185,7 +5279,7 @@ module ts {
                     var parentElement = token.parent;
 
                     var childNodes = parentElement.getChildren(sourceFile);
-                    for (var i = 0, n = childNodes.length; i < n; i++) {33
+                    for (var i = 0, n = childNodes.length; i < n; i++) {
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
@@ -5210,14 +5304,14 @@ module ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
-                    case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
-                    case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
+                    case ts.SyntaxKind.OpenBraceToken:      return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken:      return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken:    return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken:       return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken:     return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken:     return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken:   return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken:    return ts.SyntaxKind.LessThanToken;
                 }
 
                 return undefined;
@@ -5436,39 +5530,49 @@ module ts {
                 var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
-                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
-                    if (kind) {
-                        return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                            getSymbolModifiers(symbol),
-                            createTextSpan(node.getStart(), node.getWidth()));
+                if (symbol) {
+                    var declarations = symbol.getDeclarations();
+                    if (declarations && declarations.length > 0) {
+                        // Disallow rename for elements that are defined in the standard TypeScript library.
+                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
+                        for (var i = 0; i < declarations.length; i++) {
+                            var sourceFile = declarations[i].getSourceFile();
+                            if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
+                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                            }
+                        }
+
+                        var kind = getSymbolKind(symbol, typeInfoResolver, node);
+                        if (kind) {
+                            return {
+                                canRename: true,
+                                localizedErrorMessage: undefined,
+                                displayName: symbol.name,
+                                fullDisplayName: typeInfoResolver.getFullyQualifiedName(symbol),
+                                kind: kind,
+                                kindModifiers: getSymbolModifiers(symbol),
+                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
+                            };
+                        }
                     }
                 }
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
 
+            function endsWith(string: string, value: string): boolean {
+                return string.lastIndexOf(value) + value.length === string.length;
+            }
+
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
                     canRename: false,
-                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key),
+                    localizedErrorMessage: localizedErrorMessage,
                     displayName: undefined,
                     fullDisplayName: undefined,
                     kind: undefined,
                     kindModifiers: undefined,
                     triggerSpan: undefined
-                };
-            }
-
-            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TextSpan): RenameInfo {
-                return {
-                    canRename: true,
-                    localizedErrorMessage: undefined,
-                    displayName,
-                    fullDisplayName,
-                    kind,
-                    kindModifiers,
-                    triggerSpan
                 };
             }
         }
@@ -5622,41 +5726,41 @@ module ts {
 
                 if (!isTrivia(token)) {
                     if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                            token = SyntaxKind.RegularExpressionLiteral;
-                        }
+                         if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                             token = SyntaxKind.RegularExpressionLiteral;
+                         }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
-                        token = SyntaxKind.Identifier;
+                             token = SyntaxKind.Identifier;
                     }
                     else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
-                        // We have two keywords in a row.  Only treat the second as a keyword if 
-                        // it's a sequence that could legally occur in the language.  Otherwise
-                        // treat it as an identifier.  This way, if someone writes "private var"
-                        // we recognize that 'var' is actually an identifier here.
-                        token = SyntaxKind.Identifier;
+                             // We have two keywords in a row.  Only treat the second as a keyword if 
+                             // it's a sequence that could legally occur in the language.  Otherwise
+                             // treat it as an identifier.  This way, if someone writes "private var"
+                             // we recognize that 'var' is actually an identifier here.
+                             token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
                              token === SyntaxKind.LessThanToken) {
-                        // Could be the start of something generic.  Keep track of that by bumping 
-                        // up the current count of generic contexts we may be in.
-                        angleBracketStack++;
+                             // Could be the start of something generic.  Keep track of that by bumping 
+                             // up the current count of generic contexts we may be in.
+                             angleBracketStack++;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
-                        // If we think we're currently in something generic, then mark that that
-                        // generic entity is complete.
-                        angleBracketStack--;
+                             // If we think we're currently in something generic, then mark that that
+                             // generic entity is complete.
+                             angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
                              token === SyntaxKind.BooleanKeyword) {
-                        if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
-                            // If it looks like we're could be in something generic, don't classify this 
-                            // as a keyword.  We may just get overwritten by the syntactic classifier,
-                            // causing a noisy experience for the user.
-                            token = SyntaxKind.Identifier;
-                        }
+                             if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
+                                 // If it looks like we're could be in something generic, don't classify this 
+                                 // as a keyword.  We may just get overwritten by the syntactic classifier,
+                                 // causing a noisy experience for the user.
+                                 token = SyntaxKind.Identifier;
+                             }
                     }
 
                     lastNonTriviaToken = token;

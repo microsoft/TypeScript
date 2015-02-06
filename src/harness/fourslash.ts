@@ -664,7 +664,16 @@ module FourSlash {
 
                 Harness.IO.log(errorMsg);
                 this.raiseError("Completion list is not empty at Caret");
+            }
+        }
 
+        public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
+            var completions = this.getCompletionListAtCaret();
+
+            if ((completions && !completions.isNewIdentifierLocation) && !negative) {
+                this.raiseError("Expected builder completion entry");
+            } else if ((completions && completions.isNewIdentifierLocation) && negative) {
+                this.raiseError("Un-expected builder completion entry");
             }
         }
 

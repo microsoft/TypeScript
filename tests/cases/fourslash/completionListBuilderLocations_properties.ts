@@ -2,10 +2,13 @@
 
 ////var aa = 1;
 
-////module /*moduleName1*/
+////class A1 {
+////    public static /*property1*/
+////}
 
-////module a/*moduleName2*/
-
+////class A2 {
+////    public static a/*property2*/
+////}
 
 test.markers().forEach((m) => {
     goTo.position(m.position, m.fileName);
