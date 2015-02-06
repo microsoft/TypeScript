@@ -191,6 +191,10 @@ module ts {
                 return visitNode(cbNode, (<ForInStatement>node).initializer) ||
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
+            case SyntaxKind.ForOfStatement:
+                return visitNode(cbNode, (<ForOfStatement>node).initializer) ||
+                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
+                    visitNode(cbNode, (<ForOfStatement>node).statement);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
