@@ -9354,6 +9354,8 @@ module ts {
                 // This has to be instantiated module
                 var externalSymbolInfo = getSymbolInfoForModuleSpecifierOfImportDeclaration(node);
                 if (externalSymbolInfo) {
+                    /// TODO(shkamat): this will always be instantiated for external module file 
+                    // May be we should check with the statements
                     if (!isInstantiatedModule(<ModuleDeclaration | SourceFile>externalSymbolInfo.externalModuleSymbol.declarations[0], compilerOptions.preserveConstEnums)) {
                         error(node.moduleSpecifier, Diagnostics.Import_declaration_without_import_clause_references_external_module_0_that_is_not_instantiated);
                     }
