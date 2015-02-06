@@ -342,16 +342,16 @@ module ts {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
 
-    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number {
+    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
-            0;
+            Comparison.EqualTo;
     }
 
-    function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): number {
+    function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.
             var string1 = typeof text1 === "string" ? text1 : text1.messageText;
@@ -368,14 +368,14 @@ module ts {
 
         if (!text1 && !text2) {
             // if the chains are done, then these messages are the same.
-            return 0;
+            return Comparison.EqualTo;
         }
 
         // We still have one chain remaining.  The shorter chain should come first.
-        return text1 ? 1 : -1;
+        return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[]{
         return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 

@@ -165,7 +165,7 @@ module ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
             return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
@@ -206,11 +206,11 @@ module ts {
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile);
         }
 
-        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
         }
 
@@ -229,7 +229,7 @@ module ts {
             return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
         }
 
-        function getGlobalDiagnostics(): Diagnostic[]{
+        function getGlobalDiagnostics(): Diagnostic[] {
             var typeChecker = getDiagnosticsProducingTypeChecker();
 
             var allDiagnostics: Diagnostic[] = [];
