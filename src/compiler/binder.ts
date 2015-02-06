@@ -97,7 +97,7 @@ module ts {
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     var nameExpression = (<ComputedPropertyName>node.name).expression;
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return "__@" + (<PropertyAccessExpression>nameExpression).name.text;
+                    return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
                 }
                 return (<Identifier | LiteralExpression>node.name).text;
             }

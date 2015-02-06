@@ -5787,8 +5787,8 @@ module ts {
 
             // See if we can index as a property.
             if (node.argumentExpression) {
-                if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                    var name = (<LiteralExpression>node.argumentExpression).text;
+                var name = getPropertyNameForIndexedAccess(node.argumentExpression);
+                if (name !== undefined) {
                     var prop = getPropertyOfType(objectType, name);
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
@@ -5830,6 +5830,36 @@ module ts {
             error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_or_any);
 
             return unknownType;
+        }
+
+        /**
+         * If indexArgumentExpression is a string literal or number literal, returns its text.
+         * If indexArgumentExpression is a well known symbol, returns the property name corresponding
+         *    to this symbol.
+         * Otherwise, returns undefined.
+         */
+        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression) {
+            if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
+                return (<LiteralExpression>indexArgumentExpression).text;
+            }
+            if (isWellKnownSymbolSyntactically(indexArgumentExpression)) {
+                var leftHandSide = (<PropertyAccessExpression>indexArgumentExpression).expression;
+                Debug.assert((<Identifier>leftHandSide).text === "Symbol");
+                // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
+                // global Symbol object
+                var leftHandSideSymbol = resolveName(indexArgumentExpression, (<Identifier>leftHandSide).text,
+                    SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                if (leftHandSideSymbol === globalESSymbolConstructorSymbol) {
+                    // Make sure the property type is the primitive symbol type
+                    var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
+                    var esSymbolConstructorPropertyType = getTypeOfPropertyOfType(globalESSymbolConstructorType, rightHandSideName);
+                    if (esSymbolConstructorPropertyType && esSymbolConstructorPropertyType.flags & TypeFlags.ESSymbol) {
+                        return getPropertyNameForKnownSymbolName(rightHandSideName);
+                    }
+                }
+            }
+
+            return undefined;
         }
 
         function resolveUntypedCall(node: CallLikeExpression): Signature {
@@ -10334,7 +10364,7 @@ module ts {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
-                globalESSymbolConstructorType = getTypeOfGlobalSymbol(globalESSymbolConstructorSymbol, /*arity*/ 0);
+                globalESSymbolConstructorType = getTypeOfSymbol(globalESSymbolConstructorSymbol);
             }
             else {
                 globalTemplateStringsArrayType = unknownType;

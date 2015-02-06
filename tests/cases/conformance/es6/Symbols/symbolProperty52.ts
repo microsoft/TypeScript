@@ -4,3 +4,5 @@ var obj = {
 };
 
 obj = {};
+
+obj[Symbol.nonsense];

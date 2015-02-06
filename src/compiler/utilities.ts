@@ -852,6 +852,10 @@ module ts {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }
 
+    export function getPropertyNameForKnownSymbolName(symbolName: string): string {
+        return "__@" + symbolName;
+    }
+
     /**
      * Includes the word "Symbol" with unicode escapes
      */
