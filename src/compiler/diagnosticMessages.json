@@ -749,7 +749,7 @@
         "category": "Error",
         "code": 2341
     },
-    "An index expression argument must be of type 'string', 'number', or 'any'.": {
+    "An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.": {
         "category": "Error",
         "code": 2342
     },

@@ -5827,7 +5827,7 @@ module ts {
             }
 
             // REVIEW: Users should know the type that was actually used.
-            error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_or_any);
+            error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_symbol_or_any);
 
             return unknownType;
         }
