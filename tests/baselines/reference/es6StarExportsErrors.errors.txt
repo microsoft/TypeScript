@@ -1,0 +1,8 @@
+tests/cases/compiler/es6StarExportsErrors.ts(2,15): error TS1141: String literal expected.
+
+
+==== tests/cases/compiler/es6StarExportsErrors.ts (1 errors) ====
+    
+    export * from 10;
+                  ~~
+!!! error TS1141: String literal expected.

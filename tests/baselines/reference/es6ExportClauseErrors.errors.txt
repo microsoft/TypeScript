@@ -1,0 +1,49 @@
+tests/cases/compiler/es6ExportClauseErrors.ts(2,17): error TS1141: String literal expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(3,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(3,12): error TS1109: Expression expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(4,16): error TS1003: Identifier expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(4,18): error TS1109: Expression expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(5,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(5,12): error TS2304: Cannot find name 'as'.
+tests/cases/compiler/es6ExportClauseErrors.ts(5,15): error TS1005: ';' expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(5,15): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/es6ExportClauseErrors.ts(5,17): error TS1128: Declaration or statement expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(6,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ExportClauseErrors.ts(6,12): error TS2304: Cannot find name 'as'.
+tests/cases/compiler/es6ExportClauseErrors.ts(6,17): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/es6ExportClauseErrors.ts (13 errors) ====
+    
+    export { } from 10;
+                    ~~
+!!! error TS1141: String literal expected.
+    export { * };
+             ~
+!!! error TS1003: Identifier expected.
+               ~
+!!! error TS1109: Expression expected.
+    export { a1 as * };
+                   ~
+!!! error TS1003: Identifier expected.
+                     ~
+!!! error TS1109: Expression expected.
+    export { * as b };
+             ~
+!!! error TS1003: Identifier expected.
+               ~~
+!!! error TS2304: Cannot find name 'as'.
+                  ~
+!!! error TS1005: ';' expected.
+                  ~
+!!! error TS2304: Cannot find name 'b'.
+                    ~
+!!! error TS1128: Declaration or statement expected.
+    export { * as * };
+             ~
+!!! error TS1003: Identifier expected.
+               ~~
+!!! error TS2304: Cannot find name 'as'.
+                    ~
+!!! error TS1109: Expression expected.
+    

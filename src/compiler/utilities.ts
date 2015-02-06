@@ -286,6 +286,10 @@ module ts {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
     }
 
+    export function isDefault(node: Node): boolean {
+        return !!(node.flags & NodeFlags.Default);
+    }
+
     export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
@@ -838,6 +842,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;

@@ -1,0 +1,5 @@
+=== tests/cases/compiler/es6ExportDefaultFunctionDeclaration.ts ===
+
+export default function b() {
+>b : () => void
+}

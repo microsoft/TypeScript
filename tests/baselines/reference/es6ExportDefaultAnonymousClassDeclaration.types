@@ -1,0 +1,6 @@
+=== tests/cases/compiler/es6ExportDefaultAnonymousClassDeclaration.ts ===
+
+export default class {
+    member = 10;
+>member : number
+}

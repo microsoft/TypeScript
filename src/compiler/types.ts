@@ -236,7 +236,11 @@ module ts {
         ImportClause,
         NamespaceImport,
         NamedImports,
-        ImportSpecifier,
+        ImportOrExportSpecifier,
+        ExportAll,
+        ExportClauseDeclaration,
+        ExportClause,
+        DefaultAssignmentExpression,
 
         // Module references
         ExternalModuleReference,
@@ -299,8 +303,9 @@ module ts {
         Let =               0x00000800,  // Variable declaration
         Const =             0x00001000,  // Variable declaration
         OctalLiteral =      0x00002000,
+        Default =           0x00004000,  // default
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -893,12 +898,27 @@ module ts {
     }
 
     export interface NamedImports extends Node {
-        elements: NodeArray<ImportSpecifier>;
+        elements: NodeArray<ImportOrExportSpecifier>;
     }
 
-    export interface ImportSpecifier extends Declaration {
+    export interface ImportOrExportSpecifier extends Declaration {
         propertyName?: Identifier; // Property name to be imported from module
         name: Identifier; // element name to be imported in the scope
+    }
+
+    export interface ExportAll extends Declaration, ModuleElement {
+        moduleSpecifier: StringLiteralExpression;
+    }
+
+    export type ExportClause = NamedImports;
+    
+    export interface ExportClauseDeclaration extends Declaration, ModuleElement {
+        exportClause: ExportClause;
+        moduleSpecifier?: StringLiteralExpression;
+    }
+
+    export interface DefaultAssignmentExpression extends Statement, ModuleElement {
+        expression: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

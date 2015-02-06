@@ -287,7 +287,7 @@ module ts {
         TypeArguments,           // Type arguments in type argument list
         TupleElementTypes,       // Element types in tuple element type list
         HeritageClauses,         // Heritage clauses for a class or interface declaration.
-        ImportSpecifiers,        // Named import clause's import specifier list
+        ImportOrExportSpecifier, // Named import clause's import specifier list or Export clause's export specifier list
         Count                    // Number of parsing contexts
     }
 
@@ -319,7 +319,7 @@ module ts {
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
             case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
-            case ParsingContext.ImportSpecifiers:       return Diagnostics.Identifier_expected;
+            case ParsingContext.ImportOrExportSpecifier: return Diagnostics.Identifier_expected;
         }
     };
 
@@ -332,6 +332,7 @@ module ts {
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
         }
         return 0;
     }
@@ -1392,7 +1393,30 @@ module ts {
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
+            // default function/class is modifier while default anythingElse is not
+            if (token === SyntaxKind.DefaultKeyword) {
+                // default is modifier if it is followed by class or function
+                return nextTokenIsClassOrFunctionKeyword();
+            }
+
+            var isTokenExport = token === SyntaxKind.ExportKeyword;
+
             nextToken();
+            if (isTokenExport) {
+                // If this is export default
+                // export default function/class makes export as well as default modifier
+                // export default AnythingElse makes both export and default not modifier
+                if (token === SyntaxKind.DefaultKeyword) {
+                    // default is modifier if it is followed by class or function
+                    return lookAhead(nextTokenIsClassOrFunctionKeyword);
+                }
+
+                if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
+                    // Export is not modifier if it is followed by '*' or '{'
+                    return false;
+                }
+            }
+            
             return canFollowModifier();
         }
 
@@ -1401,6 +1425,11 @@ module ts {
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
                 || isLiteralPropertyName();
+        }
+
+        function nextTokenIsClassOrFunctionKeyword(): boolean {
+            nextToken();
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -1452,7 +1481,7 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
-                case ParsingContext.ImportSpecifiers:
+                case ParsingContext.ImportOrExportSpecifier:
                     return isIdentifierOrKeyword();
             }
 
@@ -1490,7 +1519,7 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
-                case ParsingContext.ImportSpecifiers:
+                case ParsingContext.ImportOrExportSpecifier:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -4194,7 +4223,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = parseIdentifier();
+            node.name = isDefault(node) ? parseOptionalIdentifier() : parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
@@ -4370,7 +4399,7 @@ module ts {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseIdentifier();
+            node.name = isDefault(node) ? parseOptionalIdentifier() : parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4647,12 +4676,12 @@ module ts {
             // ImportsList:
             //  ImportSpecifier
             //  ImportsList, ImportSpecifier
-            namedImports.elements = parseBracketedList(ParsingContext.ImportSpecifiers, parseImportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            namedImports.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifier, parseImportOrExportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
             return finishNode(namedImports);
         }
 
-        function parseImportSpecifier(): ImportSpecifier {
-            var node = <ImportSpecifier>createNode(SyntaxKind.ImportSpecifier);
+        function parseImportOrExportSpecifier(): ImportOrExportSpecifier {
+            var node = <ImportOrExportSpecifier>createNode(SyntaxKind.ImportOrExportSpecifier);
             // ImportSpecifier:
             //  ImportedBinding
             //  IdentifierName as ImportedBinding
@@ -4688,6 +4717,53 @@ module ts {
             return finishNode(node);
         }
 
+        function parseExportAll(fullStart: number, modifiers: ModifiersArray): ExportAll {
+            var node = <ExportAll>createNode(SyntaxKind.ExportAll, fullStart);
+            setModifiers(node, modifiers);
+            parseExpected(SyntaxKind.AsteriskToken);
+            parseExpected(SyntaxKind.FromKeyword);
+            node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseExportClauseDeclaration(fullStart: number, modifiers: ModifiersArray): ExportClauseDeclaration {
+            var node = <ExportClauseDeclaration>createNode(SyntaxKind.ExportClauseDeclaration, fullStart);
+            setModifiers(node, modifiers);
+
+            var exportClause = <ExportClause>createNode(SyntaxKind.ExportClause);
+
+            // ExportClause:
+            //  { }
+            //  { ExportsList }
+            //  { ExportsList, }
+            // ExportsList:
+            //  ExportSpecifier
+            //  ExportsList, ExportSpecifier
+            // ExportSpecifier:
+            //  IdentifierName
+            //  IdentifierName as  IdentifierName
+
+            exportClause.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifier, parseImportOrExportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            node.exportClause = finishNode(exportClause);
+
+            if (parseOptional(SyntaxKind.FromKeyword)) {
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseDefaultAssignmentExpression(fullStart: number, modifiers: ModifiersArray): DefaultAssignmentExpression {
+            var node = <DefaultAssignmentExpression>createNode(SyntaxKind.DefaultAssignmentExpression, fullStart);
+            setModifiers(node, modifiers);
+            // ExportDeclaration: 
+            //  export default [lookahead != { function, class }]  AssignmentExpression[In];
+            node.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4716,7 +4792,7 @@ module ts {
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
+                    return lookAhead(nextTokenFollowingExportMakesDeclaration);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4747,9 +4823,13 @@ module ts {
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
         }
 
-        function nextTokenIsEqualsTokenOrDeclarationStart() {
+        function nextTokenFollowingExportMakesDeclaration() {
             nextToken();
-            return token === SyntaxKind.EqualsToken || isDeclarationStart();
+            return token === SyntaxKind.EqualsToken ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken ||
+                token === SyntaxKind.DefaultKeyword ||
+                isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4768,6 +4848,19 @@ module ts {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     return parseExportAssignmentTail(fullStart, modifiers);
+                }
+                if (token === SyntaxKind.AsteriskToken) {
+                    return parseExportAll(fullStart, modifiers);
+                }
+                if (token === SyntaxKind.OpenBraceToken) {
+                    return parseExportClauseDeclaration(fullStart, modifiers);
+                }
+            }
+
+            if (parseOptional(SyntaxKind.DefaultKeyword)) {
+                if (token !== SyntaxKind.FunctionKeyword &&
+                    token !== SyntaxKind.ClassKeyword) {
+                    return parseDefaultAssignmentExpression(fullStart, modifiers);
                 }
             }
 
@@ -4872,9 +4965,13 @@ module ts {
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
+                || node.flags & NodeFlags.Default
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ImportDeclaration
+                || node.kind === SyntaxKind.ExportAll
+                || node.kind === SyntaxKind.ExportClauseDeclaration
+                || node.kind === SyntaxKind.DefaultAssignmentExpression
                     ? node
                     : undefined);
         }
