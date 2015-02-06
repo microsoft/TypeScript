@@ -2818,7 +2818,6 @@ module ts {
 
             function emitExpressionStatement(node: ExpressionStatement) {
                 emitParenthesizedIf(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
-                emitParenthesized(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
                 write(";");
             }
 
