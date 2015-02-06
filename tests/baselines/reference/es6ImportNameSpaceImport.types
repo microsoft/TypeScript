@@ -7,3 +7,9 @@ export var a = 10;
 import * as nameSpaceBinding from "es6ImportNameSpaceImport_0";
 >nameSpaceBinding : typeof nameSpaceBinding
 
+var x = nameSpaceBinding.a;
+>x : number
+>nameSpaceBinding.a : number
+>nameSpaceBinding : typeof nameSpaceBinding
+>a : number
+
