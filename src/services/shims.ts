@@ -672,6 +672,8 @@ module ts {
                 "getEmitOutput('" + fileName + "')",
                 () => {
                     var output = this.languageService.getEmitOutput(fileName);
+                    // Shim the API changes for 1.5 release. This should be removed once
+                    // TypeScript 1.5 has shipped.
                     (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
                     return output;
                 });
