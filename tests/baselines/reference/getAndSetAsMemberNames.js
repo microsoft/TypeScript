@@ -57,8 +57,7 @@ var C5 = (function () {
         return true;
     };
     Object.defineProperty(C5.prototype, "t", {
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });

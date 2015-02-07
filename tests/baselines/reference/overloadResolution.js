@@ -158,8 +158,7 @@ var s = fn3('', '', '');
 var n = fn3('', '', 3);
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3(); // Error
-function fn4() {
-}
+function fn4() { }
 fn4('', 3);
 fn4(3, ''); // Error
 fn4('', 3); // Error

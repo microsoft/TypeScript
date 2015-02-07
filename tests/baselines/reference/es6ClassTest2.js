@@ -240,12 +240,7 @@ var SplatMonster = (function () {
             args[_i - 0] = arguments[_i];
         }
     }
-    SplatMonster.prototype.roar = function (name) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-    };
+    SplatMonster.prototype.roar = function (name) { };
     return SplatMonster;
 })();
 function foo() {
@@ -302,10 +297,8 @@ var Visibility = (function () {
         this.x = 1;
         this.y = 2;
     }
-    Visibility.prototype.foo = function () {
-    };
-    Visibility.prototype.bar = function () {
-    };
+    Visibility.prototype.foo = function () { };
+    Visibility.prototype.bar = function () { };
     return Visibility;
 })();
 var BaseClassWithConstructor = (function () {

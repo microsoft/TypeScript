@@ -16,14 +16,12 @@ class C2<T> {
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function () {
-    };
+    C.prototype.f = function () { };
     return C;
 })();
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.f = function (x) {
-    };
+    C2.prototype.f = function (x) { };
     return C2;
 })();

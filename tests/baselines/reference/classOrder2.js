@@ -39,8 +39,7 @@ var A = (function (_super) {
 var B = (function () {
     function B() {
     }
-    B.prototype.bar = function () {
-    };
+    B.prototype.bar = function () { };
     return B;
 })();
 var a = new A();

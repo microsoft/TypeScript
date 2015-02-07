@@ -53,15 +53,13 @@ var Y_1 = (function () {
     }
     return Y_1;
 })();
-function foo(arg) {
-}
+function foo(arg) { }
 var a = new Y();
 var b = new X();
 a = b; // ok
 foo(a); // ok
 var a2 = new Y_1();
 var b2 = new X_1();
-function foo2(arg) {
-}
+function foo2(arg) { }
 a2 = b2; // should error
 foo2(a2); // should error

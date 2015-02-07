@@ -7,7 +7,6 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype[public] = function () {
-    };
+    C.prototype[public] = function () { };
     return C;
 })();

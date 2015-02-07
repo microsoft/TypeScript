@@ -37,8 +37,7 @@ var C = (function () {
         get: function () {
             return 1;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

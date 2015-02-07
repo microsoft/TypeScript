@@ -63,10 +63,8 @@ a().x;
 (typeof A).x;
 (-A).x;
 new (A());
-(function () {
-})();
-(function foo() {
-})();
+(function () { })();
+(function foo() { })();
 (-A).x;
 // nested cast, should keep one pair of parenthese
 (-A).x;

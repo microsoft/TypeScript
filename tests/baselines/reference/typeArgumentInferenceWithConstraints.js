@@ -107,65 +107,55 @@ var arr: any[];
 
 //// [typeArgumentInferenceWithConstraints.js]
 // Generic call with no parameters
-function noParams() {
-}
+function noParams() { }
 noParams();
 noParams();
 noParams();
 // Generic call with parameters but none use type parameter type
-function noGenericParams(n) {
-}
+function noGenericParams(n) { }
 noGenericParams(''); // Valid
 noGenericParams('');
 noGenericParams(''); // Error
 // Generic call with multiple type parameters and only one used in parameter type annotation
-function someGenerics1(n, m) {
-}
+function someGenerics1(n, m) { }
 someGenerics1(3, 4); // Valid
 someGenerics1(3, 4); // Error
 someGenerics1(3, 4); // Error
 someGenerics1(3, 4);
 // Generic call with argument of function type whose parameter is of type parameter type
-function someGenerics2a(n) {
-}
+function someGenerics2a(n) { }
 someGenerics2a(function (n) { return n; });
 someGenerics2a(function (n) { return n; });
 someGenerics2a(function (n) { return n.substr(0); });
-function someGenerics2b(n) {
-}
+function someGenerics2b(n) { }
 someGenerics2b(function (n, x) { return n; });
 someGenerics2b(function (n, t) { return n; });
 someGenerics2b(function (n, t) { return n.substr(t * t); });
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
-function someGenerics3(producer) {
-}
+function someGenerics3(producer) { }
 someGenerics3(function () { return ''; }); // Error
 someGenerics3(function () { return undefined; });
 someGenerics3(function () { return 3; }); // Error
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
-function someGenerics4(n, f) {
-}
+function someGenerics4(n, f) { }
 someGenerics4(4, function () { return null; }); // Valid
 someGenerics4('', function () { return 3; });
 someGenerics4('', function (x) { return ''; }); // Error
 someGenerics4(null, null);
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
-function someGenerics5(n, f) {
-}
+function someGenerics5(n, f) { }
 someGenerics5(4, function () { return null; }); // Valid
 someGenerics5('', function () { return 3; });
 someGenerics5('', function (x) { return ''; }); // Error
 someGenerics5(null, null); // Error
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
-function someGenerics6(a, b, c) {
-}
+function someGenerics6(a, b, c) { }
 someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Valid
 someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Error
 someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 // Generic call with multiple arguments of function types that each have parameters of different generic type
-function someGenerics7(a, b, c) {
-}
+function someGenerics7(a, b, c) { }
 someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Valid, types of n are <any, string, any> respectively
 someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });

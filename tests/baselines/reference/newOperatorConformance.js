@@ -104,8 +104,7 @@ function newFn2(s) {
     var p;
 }
 // Construct expression of void returning function
-function fnVoid() {
-}
+function fnVoid() { }
 var t = new fnVoid();
 var t;
 // Chained new expressions
