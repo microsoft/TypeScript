@@ -19,12 +19,5 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, Symbol.hasInstance, {
-        get: function () {
-            return "";
-        },
-        enumerable: true,
-        configurable: true
-    });
     return C;
 })();

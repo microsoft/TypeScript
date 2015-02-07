@@ -275,7 +275,7 @@ module ts {
         var firstAccessor: AccessorDeclaration;
         var getAccessor: AccessorDeclaration;
         var setAccessor: AccessorDeclaration;
-        if (accessor.name.kind === SyntaxKind.ComputedPropertyName) {
+        if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
                 getAccessor = accessor;
@@ -289,19 +289,22 @@ module ts {
         }
         else {
             forEach(node.members,(member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                    (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
-                    (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    if (!firstAccessor) {
-                        firstAccessor = <AccessorDeclaration>member;
-                    }
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    var memberName = getPropertyNameForPropertyNameNode(member.name);
+                    var accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    if (memberName === accessorName) {
+                        if (!firstAccessor) {
+                            firstAccessor = <AccessorDeclaration>member;
+                        }
 
-                    if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                        getAccessor = <AccessorDeclaration>member;
-                    }
+                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            getAccessor = <AccessorDeclaration>member;
+                        }
 
-                    if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                        setAccessor = <AccessorDeclaration>member;
+                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            setAccessor = <AccessorDeclaration>member;
+                        }
                     }
                 }
             });

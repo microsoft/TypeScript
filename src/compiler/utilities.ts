@@ -852,6 +852,21 @@ module ts {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }
 
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return (<Identifier | LiteralExpression>name).text;
+        }
+        if (name.kind === SyntaxKind.ComputedPropertyName) {
+            var nameExpression = (<ComputedPropertyName>name).expression;
+            if (isWellKnownSymbolSyntactically(nameExpression)) {
+                var rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+        }
+
+        return undefined;
+    }
+
     export function getPropertyNameForKnownSymbolName(symbolName: string): string {
         return "__@" + symbolName;
     }

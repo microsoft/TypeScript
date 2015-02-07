@@ -19,10 +19,6 @@ var C = (function () {
         get: function () {
             return "";
         },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, Symbol.hasInstance, {
         // Should take a string
         set: function (x) {
         },
