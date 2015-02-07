@@ -9,8 +9,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype[Symbol.isRegExp] = function (x) {
-    };
+    C.prototype[Symbol.isRegExp] = function (x) { };
     return C;
 })();
 

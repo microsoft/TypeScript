@@ -13,8 +13,7 @@ var C = (function () {
     function C() {
         this[Symbol()] = 0;
     }
-    C.prototype[Symbol()] = function () {
-    };
+    C.prototype[Symbol()] = function () { };
     Object.defineProperty(C.prototype, Symbol(), {
         get: function () {
             return 0;

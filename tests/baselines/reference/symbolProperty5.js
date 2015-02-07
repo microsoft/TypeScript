@@ -10,8 +10,7 @@ var x = {
 //// [symbolProperty5.js]
 var x = {
     [Symbol.iterator]: 0,
-    [Symbol.isRegExp]() {
-    },
+    [Symbol.isRegExp]() { },
     get [Symbol.toStringTag]() {
         return 0;
     }

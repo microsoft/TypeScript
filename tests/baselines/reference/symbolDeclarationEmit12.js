@@ -18,8 +18,7 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype[Symbol.toPrimitive] = function (x) {
-        };
+        C.prototype[Symbol.toPrimitive] = function (x) { };
         C.prototype[Symbol.isConcatSpreadable] = function () {
             return undefined;
         };
@@ -27,8 +26,7 @@ var M;
             get: function () {
                 return undefined;
             },
-            set: function (x) {
-            },
+            set: function (x) { },
             enumerable: true,
             configurable: true
         });

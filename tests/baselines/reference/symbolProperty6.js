@@ -13,8 +13,7 @@ var C = (function () {
     function C() {
         this[Symbol.iterator] = 0;
     }
-    C.prototype[Symbol.isRegExp] = function () {
-    };
+    C.prototype[Symbol.isRegExp] = function () { };
     Object.defineProperty(C.prototype, Symbol.toStringTag, {
         get: function () {
             return 0;

@@ -9,8 +9,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype[Symbol.iterator] = function () {
-    };
+    C.prototype[Symbol.iterator] = function () { };
     return C;
 })();
 (new C)[Symbol.iterator];

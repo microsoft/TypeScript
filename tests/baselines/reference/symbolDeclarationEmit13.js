@@ -16,8 +16,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C.prototype, Symbol.toStringTag, {
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });
