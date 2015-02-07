@@ -1742,8 +1742,8 @@ module ts {
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
                         (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
-                        (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
+                            (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
+                                (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
                         // Encode the last recordedSpan before assigning new
                         encodeLastRecordedSourceMapSpan();
 
@@ -1994,7 +1994,7 @@ module ts {
                         break;
                     }
                     // _a .. _h, _j ... _z, _0, _1, ...
-                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0: 1) + CharacterCodes.a) : tempCount - 25);
+                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
                 var result = <Identifier>createNode(SyntaxKind.Identifier);
@@ -2054,6 +2054,49 @@ module ts {
             function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>): void {
                 if (nodeList.hasTrailingComma) {
                     write(",");
+                }
+            }
+
+            function emitLinePreservingList(parent: Node, nodes: NodeArray<Node>, allowTrailingComma: boolean, spacesBetweenBraces: boolean) {
+                Debug.assert(nodes.length > 0);
+                increaseIndent();
+                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                    if (spacesBetweenBraces) {
+                        write(" ");
+                    }
+                }
+                else {
+                    writeLine();
+                }
+
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    if (i) {
+                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                            write(", ");
+                        }
+                        else {
+                            write(",");
+                            writeLine();
+                        }
+                    }
+
+                    emit(nodes[i]);
+                }
+
+                var closeTokenIsOnSameLineAsLastElement = nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes));
+
+                if (nodes.hasTrailingComma && allowTrailingComma) {
+                    write(",");
+                }
+
+                decreaseIndent();
+                if (closeTokenIsOnSameLineAsLastElement) {
+                    if (spacesBetweenBraces) {
+                        write(" ");
+                    }
+                }
+                else {
+                    writeLine();
                 }
             }
 
@@ -2122,7 +2165,7 @@ module ts {
             function emitLiteral(node: LiteralExpression) {
                 var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
-                    node.text;
+                        node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
@@ -2423,6 +2466,10 @@ module ts {
                 return true;
             }
 
+            function isSpreadElementExpression(node: Node) {
+                return node.kind === SyntaxKind.SpreadElementExpression;
+            }
+
             function emitArrayLiteral(node: ArrayLiteralExpression) {
                 var elements = node.elements;
                 var length = elements.length;
@@ -2430,13 +2477,14 @@ module ts {
                     write("[]");
                     return;
                 }
-                if (languageVersion >= ScriptTarget.ES6) {
+
+                if (languageVersion >= ScriptTarget.ES6 || !forEach(elements, isSpreadElementExpression)) {
                     write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
+                    emitLinePreservingList(node, elements, /*allowTrailingComma:*/ true, /*spacesBetweenBraces:*/ false);
                     write("]");
                     return;
                 }
+
                 var pos = 0;
                 var group = 0;
                 while (pos < length) {
@@ -2459,7 +2507,7 @@ module ts {
                             i++;
                         }
                         write("[");
-                        emitList(elements, pos, i - pos, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        emitList(elements, pos, i - pos, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
                             /*trailingComma*/ elements.hasTrailingComma);
                         write("]");
                         pos = i;
@@ -2475,15 +2523,7 @@ module ts {
                 write("{");
                 var properties = node.properties;
                 if (properties.length) {
-                    var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
-                    if (!multiLine) {
-                        write(" ");
-                    }
-                    emitList(properties, 0, properties.length, /*multiLine*/ multiLine,
-                        /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
-                    if (!multiLine) {
-                        write(" ");
-                    }
+                    emitLinePreservingList(node, properties, /*allowTrailingComma:*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces:*/ true);
                 }
                 write("}");
             }
@@ -2713,7 +2753,7 @@ module ts {
                 emit(node.whenFalse);
             }
 
-            function isSingleLineBlock(node: Node) {
+            function isSingleLineEmptyBlock(node: Node) {
                 if (node && node.kind === SyntaxKind.Block) {
                     var block = <Block>node;
                     return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
@@ -2721,7 +2761,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
-                if (isSingleLineBlock(node)) {
+                if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -2895,9 +2935,14 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
-            function isOnSameLine(node1: Node, node2: Node) {
+            function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-                getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function nodeEndPositionsAreOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
+                    getLineOfLocalPosition(currentSourceFile, node2.end);
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
@@ -2914,7 +2959,7 @@ module ts {
                 else {
                     write("default:");
                 }
-                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                if (node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
                     write(" ");
                     emit(node.statements[0]);
                 }
@@ -3404,7 +3449,7 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                if (isSingleLineBlock(node.body) || !node.body) {
+                if (isSingleLineEmptyBlock(node.body) || !node.body) {
                     write(" { }");
                 }
                 else if (node.body.kind === SyntaxKind.Block) {
@@ -3449,7 +3494,7 @@ module ts {
 
                 // If we didn't have to emit any preamble code, then attempt to keep the arrow
                 // function on one line.
-                if (!preambleEmitted && isOnSameLine(node, body)) {
+                if (!preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
                     write(" ");
                     emitStart(body);
                     write("return ");
