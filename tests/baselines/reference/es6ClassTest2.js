@@ -243,9 +243,7 @@ var SplatMonster = (function () {
     SplatMonster.prototype.roar = function (name) { };
     return SplatMonster;
 })();
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var PrototypeMonster = (function () {
     function PrototypeMonster() {
         this.age = 1;

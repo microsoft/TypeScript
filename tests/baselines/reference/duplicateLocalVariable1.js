@@ -361,9 +361,7 @@ var TestRunner = (function () {
         this.tests = [];
     }
     TestRunner.arrayCompare = function (arg1, arg2) {
-        return (arg1.every(function (val, index) {
-            return val === arg2[index];
-        }));
+        return (arg1.every(function (val, index) { return val === arg2[index]; }));
     };
     TestRunner.prototype.addTest = function (test) {
         this.tests.push(test);
@@ -410,23 +408,11 @@ exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();
     // First 3 are for simple harness validation
-    testRunner.addTest(new TestCase("Basic test", function () {
-        return true;
-    }));
-    testRunner.addTest(new TestCase("Test for any error", function () {
-        throw new Error();
-        return false;
-    }, ""));
-    testRunner.addTest(new TestCase("Test RegEx error message match", function () {
-        throw new Error("Should also pass");
-        return false;
-    }, "Should [also]+ pass"));
-    testRunner.addTest(new TestCase("Test array compare true", function () {
-        return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]);
-    }));
-    testRunner.addTest(new TestCase("Test array compare false", function () {
-        return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]);
-    }));
+    testRunner.addTest(new TestCase("Basic test", function () { return true; }));
+    testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
+    testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
+    testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
+    testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
     // File detection tests
     testRunner.addTest(new TestCase("Check file exists", function () {
         return FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test.txt");
@@ -516,9 +502,7 @@ exports.tests = (function () {
         var fb = new FileManager.FileBuffer(14);
         fb.writeUtf16leBom();
         var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];
-        chars.forEach(function (val) {
-            fb.writeUtf16CodePoint(val, false);
-        });
+        chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });
         fb.save(filename);
         var savedFile = new FileManager.FileBuffer(filename);
         if (savedFile.encoding !== 'utf16le') {
@@ -573,9 +557,7 @@ exports.tests = (function () {
         var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";
         var fb = new FileManager.FileBuffer(15);
         var chars = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
-        chars.forEach(function (val) {
-            fb.writeUtf8CodePoint(val);
-        });
+        chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });
         fb.save(filename);
         var savedFile = new FileManager.FileBuffer(filename);
         if (savedFile.encoding !== 'utf8') {

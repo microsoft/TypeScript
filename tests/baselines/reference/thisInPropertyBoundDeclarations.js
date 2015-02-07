@@ -100,15 +100,11 @@ var A = (function () {
             }
         };
         this.prop4 = {
-            a: function () {
-                return this;
-            }
+            a: function () { return this; }
         };
         this.prop5 = function () {
             return {
-                a: function () {
-                    return this;
-                }
+                a: function () { return this; }
             };
         };
     }
@@ -123,15 +119,11 @@ var B = (function () {
         this.prop4 = '  ' + function () {
         } + ' ' + (function () { return function () { return function () { return _this; }; }; });
         this.prop5 = {
-            a: function () {
-                return _this;
-            }
+            a: function () { return _this; }
         };
         this.prop6 = function () {
             return {
-                a: function () {
-                    return _this;
-                }
+                a: function () { return _this; }
             };
         };
     }

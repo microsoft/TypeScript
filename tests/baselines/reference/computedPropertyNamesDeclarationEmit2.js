@@ -11,9 +11,7 @@ var C = (function () {
     }
     C["" + ""] = function () { };
     Object.defineProperty(C, "" + "", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });

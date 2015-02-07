@@ -31,13 +31,9 @@ var C = (function () {
         this.a = a;
         this.b = b;
     }
-    C.fn = function () {
-        return this;
-    };
+    C.fn = function () { return this; };
     Object.defineProperty(C, "x", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         set: function (v) { },
         enumerable: true,
         configurable: true

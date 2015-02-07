@@ -80,9 +80,7 @@ function Point(x, y) {
     this.x = x;
     this.y = y;
 }
-function EF1(a, b) {
-    return a + b;
-}
+function EF1(a, b) { return a + b; }
 var x = EF1(1, 2);
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);

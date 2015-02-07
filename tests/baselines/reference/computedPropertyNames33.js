@@ -10,9 +10,7 @@ class C<T> {
 }
 
 //// [computedPropertyNames33.js]
-function foo() {
-    return '';
-}
+function foo() { return ''; }
 var C = (function () {
     function C() {
     }

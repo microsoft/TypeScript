@@ -3487,19 +3487,34 @@ module ts {
                 write(" {");
                 scopeEmitStart(node);
 
+                var outPos = writer.getTextPos();
                 increaseIndent();
                 emitDetachedComments(body.statements);
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
-
                 emitFunctionBodyPreamble(node);
-                emitLinesStartingAt(body.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
-
-                writeLine();
-                emitLeadingCommentsOfPosition(body.statements.end);
                 decreaseIndent();
-                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                var preambleEmitted = writer.getTextPos() !== outPos;
 
+                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                    for (var i = 0, n = body.statements.length; i < n; i++) {
+                        write(" ");
+                        emit(body.statements[i]);
+                    }
+                    emitTempDeclarations(/*newLine*/ false);
+                    write(" ");
+                    emitLeadingCommentsOfPosition(body.statements.end);
+                }
+                else {
+                    increaseIndent();
+                    emitLinesStartingAt(body.statements, startIndex);
+                    emitTempDeclarations(/*newLine*/ true);
+
+                    writeLine();
+                    emitLeadingCommentsOfPosition(body.statements.end);
+                    decreaseIndent();
+                }
+
+                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
                 scopeEmitEnd();
             }
 

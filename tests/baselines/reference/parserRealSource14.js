@@ -607,9 +607,7 @@ var TypeScript;
         };
         AstPath.prototype.clone = function () {
             var clone = new AstPath();
-            clone.asts = this.asts.map(function (value) {
-                return value;
-            });
+            clone.asts = this.asts.map(function (value) { return value; });
             clone.top = this.top;
             return clone;
         };

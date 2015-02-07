@@ -6,6 +6,4 @@ interface I<T> {
 }
 
 //// [computedPropertyNames35.js]
-function foo() {
-    return '';
-}
+function foo() { return ''; }

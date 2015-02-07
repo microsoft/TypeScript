@@ -54,16 +54,10 @@ var c8 = new C4<any>(b);
 
 //// [constraintSatisfactionWithAny.js]
 // any is not a valid type argument unless there is no constraint, or the constraint is any
-function foo(x) {
-    return null;
-}
-function foo2(x) {
-    return null;
-}
+function foo(x) { return null; }
+function foo2(x) { return null; }
 //function foo3<T extends T[]>(x: T): T { return null; }
-function foo4(x) {
-    return null;
-}
+function foo4(x) { return null; }
 var a;
 foo(a);
 foo2(a);
