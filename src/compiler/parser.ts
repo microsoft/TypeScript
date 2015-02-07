@@ -1878,7 +1878,7 @@ module ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -1892,11 +1892,24 @@ module ts {
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
                     }
+
                     commaStart = -1; // Back to the state where the last token was not a comma
                     if (isListTerminator(kind)) {
                         break;
                     }
+
+                    // We didn't get a comma, and the list wasn't terminated, explicitly parse
+                    // out a comma so we give a good error message.
                     parseExpected(SyntaxKind.CommaToken);
+                    
+                    // If the token was a semicolon, and the caller allows that, then skip it and
+                    // continue.  This ensures we get back on track and don't result in tons of
+                    // parse errors.  For example, this can happen when people do things like use 
+                    // a semicolon to delimit object literal members.   Note: we'll have already
+                    // reported an error when we called parseExpected above.
+                    if (considerSemicolonAsDelimeter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                        nextToken();
+                    }
                     continue;
                 }
 
@@ -3598,7 +3611,7 @@ module ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter:*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
