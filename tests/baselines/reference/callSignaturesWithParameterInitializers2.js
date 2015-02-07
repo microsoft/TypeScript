@@ -28,29 +28,21 @@ b.foo(1);
 //// [callSignaturesWithParameterInitializers2.js]
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors
-function foo(x) {
-    if (x === void 0) { x = 1; }
-}
+function foo(x) { }
 foo(1);
 foo();
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
-        if (x === void 0) { x = 1; }
-    };
+    C.prototype.foo = function (x) { };
     return C;
 })();
 var c;
 c.foo();
 c.foo(1);
 var b = {
-    foo: function (x) {
-        if (x === void 0) { x = 1; }
-    },
-    foo: function (x) {
-        if (x === void 0) { x = 1; }
-    }
+    foo: function (x) { },
+    foo: function (x) { }
 };
 b.foo();
 b.foo(1);

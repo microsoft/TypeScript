@@ -2713,7 +2713,21 @@ module ts {
                 emit(node.whenFalse);
             }
 
+            function isSingleLineBlock(node: Node) {
+                if (node && node.kind === SyntaxKind.Block) {
+                    var block = <Block>node;
+                    return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
+                }
+            }
+
             function emitBlock(node: Block) {
+                if (isSingleLineBlock(node)) {
+                    emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    return;
+                }
+
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
                 scopeEmitStart(node.parent);
@@ -2884,6 +2898,11 @@ module ts {
             function isOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
                 getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -3385,73 +3404,79 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                write(" {");
-                scopeEmitStart(node);
-
-                if (!node.body) {
-                    writeLine();
-                    write("}");
+                if (isSingleLineBlock(node.body)) {
+                    write(" { }");
                 }
                 else {
-                    increaseIndent();
+                    write(" {");
+                    scopeEmitStart(node);
 
-                    emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
-
-                    var startIndex = 0;
-                    if (node.body.kind === SyntaxKind.Block) {
-                        startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-                    }
-                    var outPos = writer.getTextPos();
-
-                    emitCaptureThisForNodeIfNecessary(node);
-                    emitDefaultValueAssignments(node);
-                    emitRestParameter(node);
-                    if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-                        decreaseIndent();
-                        write(" ");
-                        emitStart(node.body);
-                        write("return ");
-
-                        // Don't emit comments on this body.  We'll have already taken care of it above 
-                        // when we called emitDetachedComments.
-                        emitNode(node.body, /*disableComments:*/ true);
-                        emitEnd(node.body);
-                        write(";");
-                        emitTempDeclarations(/*newLine*/ false);
-                        write(" ");
-                        emitStart(node.body);
+                    if (!node.body) {
+                        writeLine();
                         write("}");
-                        emitEnd(node.body);
                     }
                     else {
+                        increaseIndent();
+
+                        emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+
+                        var startIndex = 0;
                         if (node.body.kind === SyntaxKind.Block) {
-                            emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                            startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                         }
-                        else {
-                            writeLine();
-                            emitLeadingComments(node.body);
+                        var outPos = writer.getTextPos();
+
+                        emitCaptureThisForNodeIfNecessary(node);
+                        emitDefaultValueAssignments(node);
+                        emitRestParameter(node);
+                        if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
+                            decreaseIndent();
+                            write(" ");
+                            emitStart(node.body);
                             write("return ");
-                            emit(node.body, /*disableComments:*/ true);
+
+                            // Don't emit comments on this body.  We'll have already taken care of it above 
+                            // when we called emitDetachedComments.
+                            emitNode(node.body, /*disableComments:*/ true);
+                            emitEnd(node.body);
                             write(";");
-                            emitTrailingComments(node.body);
-                        }
-                        emitTempDeclarations(/*newLine*/ true);
-                        writeLine();
-                        if (node.body.kind === SyntaxKind.Block) {
-                            emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-                            decreaseIndent();
-                            emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
-                        }
-                        else {
-                            decreaseIndent();
+                            emitTempDeclarations(/*newLine*/ false);
+                            write(" ");
                             emitStart(node.body);
                             write("}");
                             emitEnd(node.body);
                         }
+                        else {
+                            if (node.body.kind === SyntaxKind.Block) {
+                                emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                            }
+                            else {
+                                writeLine();
+                                emitLeadingComments(node.body);
+                                write("return ");
+                                emit(node.body, /*disableComments:*/ true);
+                                write(";");
+                                emitTrailingComments(node.body);
+                            }
+                            emitTempDeclarations(/*newLine*/ true);
+                            writeLine();
+                            if (node.body.kind === SyntaxKind.Block) {
+                                emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                                decreaseIndent();
+                                emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
+                            }
+                            else {
+                                decreaseIndent();
+                                emitStart(node.body);
+                                write("}");
+                                emitEnd(node.body);
+                            }
+                        }
                     }
+
+                    scopeEmitEnd();
                 }
 
-                scopeEmitEnd();
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);

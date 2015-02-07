@@ -19,8 +19,7 @@ var C = (function () {
             return "foo";
         } // ok
         ,
-        set: function (foo) {
-        } // ok - type inferred from getter return statement
+        set: function (foo) { } // ok - type inferred from getter return statement
         ,
         enumerable: true,
         configurable: true
@@ -30,8 +29,7 @@ var C = (function () {
             return "foo";
         } // ok
         ,
-        set: function (bar) {
-        } // ok - type must be declared
+        set: function (bar) { } // ok - type must be declared
         ,
         enumerable: true,
         configurable: true
@@ -40,9 +38,7 @@ var C = (function () {
 })();
 var o1 = { get Foo() {
     return 0;
-}, set Foo(val) {
-} }; // ok - types agree (inference)
+}, set Foo(val) { } }; // ok - types agree (inference)
 var o2 = { get Foo() {
     return 0;
-}, set Foo(val) {
-} }; // ok - types agree
+}, set Foo(val) { } }; // ok - types agree

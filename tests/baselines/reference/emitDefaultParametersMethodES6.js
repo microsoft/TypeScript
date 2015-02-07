@@ -20,14 +20,10 @@ class E {
 var C = (function () {
     function C(t, z, x, y = "hello") {
     }
-    C.prototype.foo = function (x, t = false) {
-    };
-    C.prototype.foo1 = function (x, t = false, ...rest) {
-    };
-    C.prototype.bar = function (t = false) {
-    };
-    C.prototype.boo = function (t = false, ...rest) {
-    };
+    C.prototype.foo = function (x, t = false) { };
+    C.prototype.foo1 = function (x, t = false, ...rest) { };
+    C.prototype.bar = function (t = false) { };
+    C.prototype.boo = function (t = false, ...rest) { };
     return C;
 })();
 var D = (function () {

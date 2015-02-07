@@ -46,8 +46,7 @@ var a;
 x = a;
 var b;
 x = b;
-x = { f: function () {
-} };
+x = { f: function () { } };
 var M;
 (function (M) {
     M.x = 1;

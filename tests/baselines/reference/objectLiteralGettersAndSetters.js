@@ -143,35 +143,28 @@ var getter2 = { get x() {
 } };
 var getter2;
 // Set accessor only, type of the property is the param type of the set accessor
-var setter1 = { set x(n) {
-} };
+var setter1 = { set x(n) { } };
 var setter1;
 // Set accessor only, type of the property is Any for an unannotated set accessor
-var setter2 = { set x(n) {
-} };
+var setter2 = { set x(n) { } };
 var setter2;
 var anyVar;
 // Get and set accessor with matching type annotations
 var sameType1 = { get x() {
     return undefined;
-}, set x(n) {
-} };
+}, set x(n) { } };
 var sameType2 = { get x() {
     return undefined;
-}, set x(n) {
-} };
+}, set x(n) { } };
 var sameType3 = { get x() {
     return undefined;
-}, set x(n) {
-} };
+}, set x(n) { } };
 var sameType4 = { get x() {
     return undefined;
-}, set x(n) {
-} };
+}, set x(n) { } };
 // Type of unannotated get accessor return type is the type annotation of the set accessor param
 var setParamType1 = {
-    set n(x) {
-    },
+    set n(x) { },
     get n() {
         return function (t) {
             var p;
@@ -186,8 +179,7 @@ var setParamType2 = {
             var p = t;
         };
     },
-    set n(x) {
-    }
+    set n(x) { }
 };
 // Type of unannotated set accessor parameter is the return type annotation of the get accessor
 var getParamType1 = {

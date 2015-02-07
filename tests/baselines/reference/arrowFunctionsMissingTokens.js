@@ -69,16 +69,11 @@ module okay {
 //// [arrowFunctionsMissingTokens.js]
 var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
-    var a = function () {
-    };
-    var b = function () {
-    };
-    var c = function (x) {
-    };
-    var d = function (x, y) {
-    };
-    var e = function (x, y) {
-    };
+    var a = function () { };
+    var b = function () { };
+    var c = function (x) { };
+    var d = function (x, y) { };
+    var e = function (x, y) { };
 })(missingArrowsWithCurly || (missingArrowsWithCurly = {}));
 var missingCurliesWithArrow;
 (function (missingCurliesWithArrow) {
@@ -127,14 +122,9 @@ var ce_nEst_pas_une_arrow_function;
 })(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
 var okay;
 (function (okay) {
-    var a = function () {
-    };
-    var b = function () {
-    };
-    var c = function (x) {
-    };
-    var d = function (x, y) {
-    };
-    var e = function (x, y) {
-    };
+    var a = function () { };
+    var b = function () { };
+    var c = function (x) { };
+    var d = function (x, y) { };
+    var e = function (x, y) { };
 })(okay || (okay = {}));

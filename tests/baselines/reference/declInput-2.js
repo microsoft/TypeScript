@@ -47,10 +47,8 @@ var M;
         D.prototype.m252 = function () {
             return null;
         }; // don't generate
-        D.prototype.m26 = function (i) {
-        };
-        D.prototype.m262 = function (i) {
-        };
+        D.prototype.m26 = function (i) { };
+        D.prototype.m262 = function (i) { };
         D.prototype.m3 = function () {
             return new C();
         };

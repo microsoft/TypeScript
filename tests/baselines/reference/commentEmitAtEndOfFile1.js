@@ -16,7 +16,6 @@ var f = '';
 // test #2
 var foo;
 (function (foo) {
-    function bar() {
-    }
+    function bar() { }
 })(foo || (foo = {}));
 // test #4 

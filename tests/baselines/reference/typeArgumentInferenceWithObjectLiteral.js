@@ -37,8 +37,7 @@ var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
 
 
 //// [typeArgumentInferenceWithObjectLiteral.js]
-function foo(x) {
-}
+function foo(x) { }
 var s;
 // Calls below should infer string for T and then assign that type to the value parameter
 foo({

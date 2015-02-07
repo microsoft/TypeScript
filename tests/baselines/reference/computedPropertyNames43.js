@@ -48,8 +48,7 @@ var D = (function (_super) {
         configurable: true
     });
     Object.defineProperty(D.prototype, "set1", {
-        set: function (p) {
-        },
+        set: function (p) { },
         enumerable: true,
         configurable: true
     });

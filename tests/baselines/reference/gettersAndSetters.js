@@ -46,10 +46,8 @@ var C = (function () {
     function C() {
         this.fooBack = "";
         this.bazBack = "";
-        this.get = function () {
-        }; // ok
-        this.set = function () {
-        }; // ok
+        this.get = function () { }; // ok
+        this.set = function () { }; // ok
     }
     Object.defineProperty(C.prototype, "Foo", {
         get: function () {

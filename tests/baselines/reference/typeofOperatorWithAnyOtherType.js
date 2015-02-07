@@ -80,8 +80,7 @@ var ANY;
 var ANY1;
 var ANY2 = ["", ""];
 var obj;
-var obj1 = { x: "a", y: function () {
-} };
+var obj1 = { x: "a", y: function () { } };
 function foo() {
     var a;
     return a;

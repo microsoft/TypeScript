@@ -361,12 +361,7 @@ false ? null : function () {
     return 108;
 });
 // Function Parameters
-function foo() {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
-    }
-}
+function foo() { }
 foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
     return 112;
 }, function (a) { return 113; }, function (a, b) { return 114; }, function (a) { return 115; }, function (a) {
