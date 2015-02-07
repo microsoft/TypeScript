@@ -7,7 +7,7 @@ interface Symbol {
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface SymbolConstructor {
@@ -230,7 +230,7 @@ interface ArrayLike<T> {
 
 interface Array<T> {
     /** Iterator */
-    // [Symbol.iterator] (): Iterator<T>;
+    [Symbol.iterator] (): Iterator<T>;
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
@@ -329,7 +329,7 @@ interface ArrayConstructor {
 
 interface String {
     /** Iterator */
-    // [Symbol.iterator] (): Iterator<string>;
+    [Symbol.iterator] (): Iterator<string>;
 
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
@@ -447,12 +447,12 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    //[Symbol.iterator](): Iterator<T>;
+    [Symbol.iterator](): Iterator<T>;
     next(): IteratorResult<T>;
 }
 
 interface Iterable<T> {
-  //[Symbol.iterator](): Iterator<T>;
+    [Symbol.iterator](): Iterator<T>;
 }
 
 interface GeneratorFunction extends Function {
@@ -474,7 +474,7 @@ interface Generator<T> extends Iterator<T> {
     next(value?: any): IteratorResult<T>;
     throw (exception: any): IteratorResult<T>;
     return (value: T): IteratorResult<T>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface Math {
@@ -588,11 +588,11 @@ interface Math {
       */
     cbrt(x: number): number;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface RegExp {
-    // [Symbol.isRegExp]: boolean;
+    [Symbol.isRegExp]: boolean;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
@@ -649,8 +649,8 @@ interface Map<K, V> {
     set(key: K, value?: V): Map<K, V>;
     size: number;
     values(): Iterator<V>;
-    // [Symbol.iterator]():Iterator<[K,V]>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.iterator]():Iterator<[K,V]>;
+    [Symbol.toStringTag]: string;
 }
 
 interface MapConstructor {
@@ -666,7 +666,7 @@ interface WeakMap<K, V> {
     get(key: K): V;
     has(key: K): boolean;
     set(key: K, value?: V): WeakMap<K, V>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface WeakMapConstructor {
@@ -686,8 +686,8 @@ interface Set<T> {
     keys(): Iterator<T>;
     size: number;
     values(): Iterator<T>;
-    // [Symbol.iterator]():Iterator<T>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.iterator]():Iterator<T>;
+    [Symbol.toStringTag]: string;
 }
 
 interface SetConstructor {
@@ -702,7 +702,7 @@ interface WeakSet<T> {
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface WeakSetConstructor {
@@ -713,7 +713,7 @@ interface WeakSetConstructor {
 declare var WeakSet: WeakSetConstructor;
 
 interface JSON {
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 /**
@@ -733,7 +733,7 @@ interface ArrayBuffer {
       */
     slice(begin: number, end?: number): ArrayBuffer;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface ArrayBufferConstructor {
@@ -870,7 +870,7 @@ interface DataView {
       */
     setUint32(byteOffset: number, value: number, littleEndian: boolean): void;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface DataViewConstructor {
@@ -1137,7 +1137,7 @@ interface Int8Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int8ArrayConstructor {
@@ -1427,7 +1427,7 @@ interface Uint8Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint8ArrayConstructor {
@@ -1717,7 +1717,7 @@ interface Uint8ClampedArray {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -2007,7 +2007,7 @@ interface Int16Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int16ArrayConstructor {
@@ -2297,7 +2297,7 @@ interface Uint16Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint16ArrayConstructor {
@@ -2587,7 +2587,7 @@ interface Int32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int32ArrayConstructor {
@@ -2877,7 +2877,7 @@ interface Uint32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint32ArrayConstructor {
@@ -3167,7 +3167,7 @@ interface Float32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Float32ArrayConstructor {
@@ -3457,7 +3457,7 @@ interface Float64Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Float64ArrayConstructor {
