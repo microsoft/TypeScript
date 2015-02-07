@@ -96,7 +96,6 @@ module ts {
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
         var globalESSymbolType: ObjectType;
-        var globalESSymbolConstructorType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -3032,6 +3031,10 @@ module ts {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), 0);
         }
 
+        function getGlobalESSymbolConstructorSymbol() {
+            return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
+        }
+
         function createArrayType(elementType: Type): Type {
             // globalArrayType will be undefined if we get here during creation of the Array type. This for example happens if
             // user code augments the Array type with call or construct signatures that have an array type as the return type.
@@ -5541,12 +5544,7 @@ module ts {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else if (isWellKnownSymbolSyntactically(node.expression)) {
-                    // If it's not ES6, error 
-                    // Check that Symbol corresponds to  global symbol, and that property exists, and that it's a symbol
-                }
-                else {
-                    // Some syntactic forms require that the property name be a well known symbol.
-                    // Will move the grammar checks here.
+                    checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>node.expression, links.resolvedType, /*reportError*/ true);
                 }
             }
 
@@ -5795,7 +5793,7 @@ module ts {
 
             // See if we can index as a property.
             if (node.argumentExpression) {
-                var name = getPropertyNameForIndexedAccess(node.argumentExpression);
+                var name = getPropertyNameForIndexedAccess(node.argumentExpression, indexType);
                 if (name !== undefined) {
                     var prop = getPropertyOfType(objectType, name);
                     if (prop) {
@@ -5846,12 +5844,12 @@ module ts {
          *    to this symbol, as long as it is a proper symbol reference.
          * Otherwise, returns undefined.
          */
-        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression): string {
+        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression, indexArgumentType: Type): string {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
             }
-            if (languageVersion >= ScriptTarget.ES6 && isWellKnownSymbolSyntactically(indexArgumentExpression)) {
-                if (checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>indexArgumentExpression, /*reportError*/ false)) {
+            if (isWellKnownSymbolSyntactically(indexArgumentExpression)) {
+                if (checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
                     var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
                     return getPropertyNameForKnownSymbolName(rightHandSideName);
                 }
@@ -5862,31 +5860,52 @@ module ts {
 
         /**
          * A proper symbol reference requires the following:
-         *   1. The language version is at least ES6
-         *   2. The expression is of the form Symbol.<identifier>
-         *   3. Symbol in this context resolves to the global Symbol object
-         *   4. The property access denotes a property that is present on the global Symbol object
-         *   5. The property on the global Symbol object is of the primitive type symbol.
+         *   1. The expression is of the form Symbol.<identifier>
+         *   2. Symbol in this context resolves to the global Symbol object
+         *   3. The property access denotes a property that is present on the global Symbol object
+         *   4. The property on the global Symbol object is of the primitive type symbol.
          */
-        function checkSymbolNameIsProperSymbolReference(wellKnownSymbolName: PropertyAccessExpression, reportError: boolean): boolean {
-            if (languageVersion < ScriptTarget.ES6) {
+        function checkSymbolNameIsProperSymbolReference(wellKnownSymbolName: PropertyAccessExpression, propertyNameType: Type, reportError: boolean): boolean {
+            if (propertyNameType === unknownType) {
+                // There is already an error, so no need to report one.
                 return false;
             }
 
             Debug.assert(isWellKnownSymbolSyntactically(wellKnownSymbolName));
+
+            // Make sure the property type is the primitive symbol type
+            if ((propertyNameType.flags & TypeFlags.ESSymbol) === 0) {
+                if (reportError) {
+                    error(wellKnownSymbolName, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(wellKnownSymbolName));
+                }
+                return false;
+            }
+
             // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
             // global Symbol object
             var leftHandSide = (<PropertyAccessExpression>wellKnownSymbolName).expression;
+            // Look up the global symbol, but don't report an error, since checking the actual expression
+            // would have reported an error.
             var leftHandSideSymbol = resolveName(wellKnownSymbolName, (<Identifier>leftHandSide).text,
                 SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-            if (leftHandSideSymbol !== globalESSymbolConstructorSymbol) {
+            if (!leftHandSideSymbol) {
                 return false;
             }
             
-            // Make sure the property type is the primitive symbol type
-            var rightHandSideName = (<Identifier>(<PropertyAccessExpression>wellKnownSymbolName).name).text;
-            var esSymbolConstructorPropertyType = getTypeOfPropertyOfType(globalESSymbolConstructorType, rightHandSideName);
-            return !!(esSymbolConstructorPropertyType && esSymbolConstructorPropertyType.flags & TypeFlags.ESSymbol);
+            var globalESSymbol = getGlobalESSymbolConstructorSymbol();
+            if (!globalESSymbol) {
+                // Already errored when we tried to look up the symbol
+                return false;
+            }
+
+            if (leftHandSideSymbol !== globalESSymbol) {
+                if (reportError) {
+                    error(leftHandSide, Diagnostics.Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object);
+                }
+                return false;
+            }
+
+            return true;
         }
 
         function resolveUntypedCall(node: CallLikeExpression): Signature {
@@ -10391,13 +10410,15 @@ module ts {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
-                globalESSymbolConstructorType = getTypeOfSymbol(globalESSymbolConstructorSymbol);
             }
             else {
                 globalTemplateStringsArrayType = unknownType;
-                globalESSymbolType = unknownType;
-                globalESSymbolConstructorSymbol = unknownSymbol;
-                globalESSymbolConstructorType = unknownType;
+
+                // Consider putting Symbol interface in lib.d.ts. On the plus side, putting it in lib.d.ts would make it
+                // extensible for Polyfilling Symbols. But putting it into lib.d.ts could also break users that have
+                // a global Symbol already, particularly if it is a class.
+                globalESSymbolType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+                globalESSymbolConstructorSymbol = undefined;
             }
 
             anyArrayType = createArrayType(anyType);

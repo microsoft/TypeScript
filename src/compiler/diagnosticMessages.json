@@ -1217,6 +1217,14 @@
         "category": "Error",
         "code": 2469
     },
+    "'Symbol' reference does not refer to the global Symbol constructor object.": {
+        "category": "Error",
+        "code": 2470
+    },
+    "A computed property name of the form '{0}' must be of type 'symbol'.": {
+        "category": "Error",
+        "code": 2471
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

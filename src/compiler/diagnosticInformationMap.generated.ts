@@ -306,6 +306,8 @@ module ts {
         A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type: { code: 2467, category: DiagnosticCategory.Error, key: "A computed property name cannot reference a type parameter from its containing type." },
         Cannot_find_global_value_0: { code: 2468, category: DiagnosticCategory.Error, key: "Cannot find global value '{0}'." },
         The_0_operator_cannot_be_applied_to_a_value_of_type_symbol: { code: 2469, category: DiagnosticCategory.Error, key: "The '{0}' operator cannot be applied to a value of type 'symbol'." },
+        Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object: { code: 2470, category: DiagnosticCategory.Error, key: "'Symbol' reference does not refer to the global Symbol constructor object." },
+        A_computed_property_name_of_the_form_0_must_be_of_type_symbol: { code: 2471, category: DiagnosticCategory.Error, key: "A computed property name of the form '{0}' must be of type 'symbol'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
