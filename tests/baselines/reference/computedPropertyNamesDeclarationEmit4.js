@@ -5,3 +5,8 @@ var v: {
 
 //// [computedPropertyNamesDeclarationEmit4.js]
 var v;
+
+
+//// [computedPropertyNamesDeclarationEmit4.d.ts]
+declare var v: {
+};

@@ -67,7 +67,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     function emitFile(fileName: string) {
         var output = services.getEmitOutput(fileName);
 
-        if (output.emitOutputStatus === ts.EmitReturnStatus.Succeeded) {
+        if (!output.emitSkipped) {
             console.log(`Emitting ${fileName}`);
         }
         else {
@@ -88,7 +88,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${diagnostic.messageText}`);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);

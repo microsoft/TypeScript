@@ -1798,6 +1798,10 @@
         "category": "Error",
         "code": 8000
     },
+    "You cannot rename elements that are defined in the standard TypeScript library.": {
+        "category": "Error",
+        "code": 8001
+    },
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000

@@ -125,9 +125,12 @@ module Harness.LanguageService {
         
         constructor(protected cancellationToken: ts.CancellationToken = CancellationToken.None,
             protected settings = ts.getDefaultCompilerOptions()) { 
-        
         }
-        
+
+        public getNewLine(): string {
+            return "\r\n";
+        }
+
         public getFilenames(): string[] {
             var fileNames: string[] = [];
             ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });

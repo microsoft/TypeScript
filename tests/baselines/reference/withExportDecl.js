@@ -101,3 +101,31 @@ define(["require", "exports"], function (require, exports) {
     var eVar22;
     exports.eVar3 = 10, exports.eVar4, exports.eVar5;
 });
+
+
+//// [withExportDecl.d.ts]
+export declare var exportedSimpleVar: any;
+export declare var exportedVarWithInitialValue: number;
+export declare var exportedWithComplicatedValue: {
+    x: number;
+    y: number;
+    desc: string;
+};
+export declare var exportedDeclaredVar: number;
+export declare var exportedArrayVar: {
+    x: number;
+    y: string;
+}[];
+export declare function exportedFunction(): {
+    x: string;
+    y: string;
+    n: number;
+};
+export declare module m2 {
+    var a: number;
+}
+export declare module m3 {
+    function foo(): string;
+}
+export declare var eVar1: any, eVar2: number;
+export declare var eVar3: number, eVar4: any, eVar5: any;

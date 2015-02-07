@@ -524,7 +524,9 @@ module FourSlash {
             }
 
             errors.forEach(function (error: ts.Diagnostic) {
-                Harness.IO.log("  minChar: " + error.start + ", limChar: " + (error.start + error.length) + ", message: " + error.messageText + "\n");
+                Harness.IO.log("  minChar: " + error.start +
+                    ", limChar: " + (error.start + error.length) +
+                    ", message: " + ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine) + "\n");
             });
         }
 
@@ -1157,16 +1159,24 @@ module FourSlash {
                     // Loop through all the emittedFiles and emit them one by one
                     emitFiles.forEach(emitFile => {
                         var emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
-                        var emitOutputStatus = emitOutput.emitOutputStatus;
                         // Print emitOutputStatus in readable format
-                        resultString += "EmitOutputStatus : " + ts.EmitReturnStatus[emitOutputStatus];
-                        resultString += "\n";
+                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + ts.sys.newLine;
+
+                        if (emitOutput.emitSkipped) {
+                            resultString += "Diagnostics:" + ts.sys.newLine;
+                            var diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
+                            for (var i = 0, n = diagnostics.length; i < n; i++) {
+                                resultString += "  " + diagnostics[0].messageText + ts.sys.newLine;
+                            }
+                        }
+
                         emitOutput.outputFiles.forEach((outputFile, idx, array) => {
-                            var fileName = "FileName : " + outputFile.name + "\n";
+                            var fileName = "FileName : " + outputFile.name + ts.sys.newLine;
                             resultString = resultString + fileName + outputFile.text;
                         });
-                        resultString += "\n";
+                        resultString += ts.sys.newLine;
                     });
+
                     return resultString;
                 },
                 true /* run immediately */);
@@ -1198,7 +1208,10 @@ module FourSlash {
 
             if (errorList.length) {
                 errorList.forEach(err => {
-                    Harness.IO.log("start: " + err.start + ", length: " + err.length + ", message: " + err.messageText);
+                    Harness.IO.log(
+                        "start: " + err.start +
+                        ", length: " + err.length +
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine));
                 });
             }
         }
@@ -1416,14 +1429,14 @@ module FourSlash {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            var incrementalSyntaxDiagnostics = ts.getSyntacticDiagnostics(incrementalSourceFile);
+            var incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
 
             // Check syntactic structure
             var content = this.getFileContent(this.activeFile.fileName);
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
-            var referenceSyntaxDiagnostics = ts.getSyntacticDiagnostics(referenceSourceFile);
+            var referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
@@ -2171,13 +2184,13 @@ module FourSlash {
             ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
         var program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
-        var checker = ts.createTypeChecker(program, /*produceDiagnostics*/ true);
 
-        var errors = program.getDiagnostics().concat(checker.getDiagnostics());
-        if (errors.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => e.messageText).join('\r\n'));
+        var diagnostics = ts.getPreEmitDiagnostics(program);
+        if (diagnostics.length > 0) {
+            throw new Error('Error compiling ' + fileName + ': ' +
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
-        program.emitFiles();
+        program.emit();
         result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test
