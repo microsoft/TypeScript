@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts(2,9): error TS1188: 'symbol' indexers are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts(2,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts (1 errors) ====
     var x: {
         [s: symbol]: string;
-            ~~~~~~
-!!! error TS1188: 'symbol' indexers are only available when targeting ECMAScript 6 and higher.
+         ~
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }

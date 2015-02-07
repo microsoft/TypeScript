@@ -10651,15 +10651,7 @@ module ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
-                if (parameter.type.kind === SyntaxKind.SymbolKeyword) {
-                    if (languageVersion < ScriptTarget.ES6) {
-                        return grammarErrorOnNode(parameter.type, Diagnostics.symbol_indexers_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
-                    // No error for parameter type
-                }
-                else {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_or_symbol);
-                }
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
