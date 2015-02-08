@@ -4896,15 +4896,17 @@ module ts {
 
         /*Transitively mark all linked imports as referenced*/
         function markLinkedImportsAsReferenced(node: ImportEqualsDeclaration): void {
-            var nodeLinks = getNodeLinks(node);
-            while (nodeLinks.importOnRightSide) {
-                var rightSide = nodeLinks.importOnRightSide;
-                nodeLinks.importOnRightSide = undefined;
+            if (node) {
+                var nodeLinks = getNodeLinks(node);
+                while (nodeLinks.importOnRightSide) {
+                    var rightSide = nodeLinks.importOnRightSide;
+                    nodeLinks.importOnRightSide = undefined;
 
-                getSymbolLinks(rightSide).referenced = true;
-                Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
+                    getSymbolLinks(rightSide).referenced = true;
+                    Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
 
-                nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportEqualsDeclaration))
+                    nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportEqualsDeclaration))
+                }
             }
         }
 
