@@ -442,12 +442,15 @@ module ts {
             return result;
         }
 
+        function isImportSymbolDeclaration(node: Node): boolean {
+            return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+                node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+                node.kind === SyntaxKind.NamespaceImport ||
+                node.kind === SyntaxKind.ImportSpecifier;
+        }
+
         function getDeclarationOfImportSymbol(symbol: Symbol): Declaration {
-            return forEach(symbol.declarations, d =>
-                d.kind === SyntaxKind.ImportEqualsDeclaration ||
-                d.kind === SyntaxKind.ImportClause ||
-                d.kind === SyntaxKind.NamespaceImport ||
-                d.kind === SyntaxKind.ImportSpecifier ? d : undefined);
+            return forEach(symbol.declarations, d => isImportSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -4915,42 +4918,47 @@ module ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
-              error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
             }
 
             if (symbol.flags & SymbolFlags.Import) {
-                var symbolLinks = getSymbolLinks(symbol);
-                symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+
+                //var symbolLinks = getSymbolLinks(symbol);
+                //if (!symbolLinks.referenced) {
+                //    if (!isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol))) {
+                //        symbolLinks.referenced = true;
+                //    }
+                //}
 
                 // TODO: AndersH: This needs to be simplified. In an import of the form "import x = a.b.c;" we only need
                 // to resolve "a" and mark it as referenced. If "b" and/or "c" are aliases, we would be able to access them
                 // unless they're exported, and in that case they're already implicitly referenced.
 
-                //var symbolLinks = getSymbolLinks(symbol);
-                //if (!symbolLinks.referenced) {
-                //    var importOrExportAssignment = getLeftSideOfImportEqualsOrExportAssignment(node);
+                var symbolLinks = getSymbolLinks(symbol);
+                if (!symbolLinks.referenced) {
+                    var importOrExportAssignment = getLeftSideOfImportEqualsOrExportAssignment(node);
 
-                //    // decision about whether import is referenced can be made now if
-                //    // - import that are used anywhere except right side of import declarations
-                //    // - imports that are used on the right side of exported import declarations
-                //    // for other cases defer decision until the check of left side
-                //    if (!importOrExportAssignment ||
-                //        (importOrExportAssignment.flags & NodeFlags.Export) ||
-                //        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
-                //        // Mark the import as referenced so that we emit it in the final .js file.
-                //        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                //        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
-                //    }
-                //    else {
-                //        var nodeLinks = getNodeLinks(importOrExportAssignment);
-                //        Debug.assert(!nodeLinks.importOnRightSide);
-                //        nodeLinks.importOnRightSide = symbol;
-                //    }
-                //}
+                    // decision about whether import is referenced can be made now if
+                    // - import that are used anywhere except right side of import declarations
+                    // - imports that are used on the right side of exported import declarations
+                    // for other cases defer decision until the check of left side
+                    if (!importOrExportAssignment ||
+                        (importOrExportAssignment.flags & NodeFlags.Export) ||
+                        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
+                        // Mark the import as referenced so that we emit it in the final .js file.
+                        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                    }
+                    else {
+                        var nodeLinks = getNodeLinks(importOrExportAssignment);
+                        Debug.assert(!nodeLinks.importOnRightSide);
+                        nodeLinks.importOnRightSide = symbol;
+                    }
+                }
                 
-                //if (symbolLinks.referenced) {
-                //    markLinkedImportsAsReferenced(<ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration));
-                //}
+                if (symbolLinks.referenced) {
+                    markLinkedImportsAsReferenced(<ImportEqualsDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportEqualsDeclaration));
+                }
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -10108,7 +10116,7 @@ module ts {
                     // Make sure the name in question does not collide with an import.
                     if (symbolWithRelevantName.flags & SymbolFlags.Import) {
                         var importEqualsDeclarationWithRelevantName = <ImportEqualsDeclaration>getDeclarationOfKind(symbolWithRelevantName, SyntaxKind.ImportEqualsDeclaration);
-                        if (isReferencedImportEqualsDeclaration(importEqualsDeclarationWithRelevantName)) {
+                        if (isReferencedImportDeclaration(importEqualsDeclarationWithRelevantName)) {
                             return false;
                         }
                     }
@@ -10182,17 +10190,19 @@ module ts {
             return isConstEnumSymbol(s) || s.constEnumOnlyModule;
         }
 
-        function isReferencedImportEqualsDeclaration(node: ImportEqualsDeclaration): boolean {
-            var symbol = getSymbolOfNode(node);
-            if (getSymbolLinks(symbol).referenced) {
-                return true;
+        function isReferencedImportDeclaration(node: Node): boolean {
+            if (isImportSymbolDeclaration(node)) {
+                var symbol = getSymbolOfNode(node);
+                if (getSymbolLinks(symbol).referenced) {
+                    return true;
+                }
+                // logic below will answer 'true' for exported import declaration in a nested module that itself is not exported.
+                // As a consequence this might cause emitting extra.
+                if (node.kind === SyntaxKind.ImportEqualsDeclaration && node.flags & NodeFlags.Export && isImportResolvedToValue(symbol)) {
+                    return true;
+                }
             }
-            // logic below will answer 'true' for exported import declaration in a nested module that itself is not exported.
-            // As a consequence this might cause emitting extra.
-            if (node.flags & NodeFlags.Export) {
-                return isImportResolvedToValue(symbol);
-            }
-            return false;
+            return forEachChild(node, isReferencedImportDeclaration);
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
@@ -10266,7 +10276,7 @@ module ts {
                 getLocalNameOfContainer,
                 getExpressionNamePrefix,
                 getExportAssignmentName,
-                isReferencedImportEqualsDeclaration,
+                isReferencedImportDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
@@ -10440,7 +10450,7 @@ module ts {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
             }
-            else if (node.kind === SyntaxKind.ImportEqualsDeclaration && flags & NodeFlags.Ambient) {
+            else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {

@@ -4600,32 +4600,22 @@ module ts {
             var node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
             parseExpected(SyntaxKind.RequireKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-
-            // We allow arbitrary expressions here, even though the grammar only allows string 
-            // literals.  We check to ensure that it is only a string literal later in the grammar
-            // walker.
-            node.expression = parseExpression();
-
-            // Ensure the string being required is in our 'identifier' table.  This will ensure 
-            // that features like 'find refs' will look inside this file when search for its name.
-            if (node.expression.kind === SyntaxKind.StringLiteral) {
-                internIdentifier((<LiteralExpression>node.expression).text);
-            }
-
+            node.expression = parseModuleSpecifier();
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
 
-        function parseModuleSpecifier(): StringLiteralExpression {
-            // ModuleSpecifier:
-            //  StringLiteral
-            if (token === SyntaxKind.StringLiteral) {
-                // Ensure the string being required is in our 'identifier' table.  This will ensure 
-                // that features like 'find refs' will look inside this file when search for its name.
-                return <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
+        function parseModuleSpecifier(): Expression {
+            // We allow arbitrary expressions here, even though the grammar only allows string 
+            // literals.  We check to ensure that it is only a string literal later in the grammar
+            // walker.
+            var result = parseExpression();
+            // Ensure the string being required is in our 'identifier' table.  This will ensure 
+            // that features like 'find refs' will look inside this file when search for its name.
+            if (result.kind === SyntaxKind.StringLiteral) {
+                internIdentifier((<LiteralExpression>result).text);
             }
-
-            parseErrorAtCurrentToken(Diagnostics.String_literal_expected);
+            return result;
         }
 
         function parseNamespaceImport(): NamespaceImport {

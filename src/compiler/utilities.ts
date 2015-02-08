@@ -597,6 +597,22 @@ module ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    function extractStringLiteral(node: Expression): StringLiteralExpression {
+        return node && node.kind === SyntaxKind.StringLiteral ? <StringLiteralExpression>node : undefined;
+    }
+
+    export function getImportedModuleName(node: Node): StringLiteralExpression {
+        if (node.kind === SyntaxKind.ImportDeclaration) {
+            return extractStringLiteral((<ImportDeclaration>node).moduleSpecifier);
+        }
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            var reference = (<ImportEqualsDeclaration>node).moduleReference;
+            if (reference.kind === SyntaxKind.ExternalModuleReference) {
+                return extractStringLiteral((<ExternalModuleReference>reference).expression);
+            }
+        }
+    }
+
     export function hasDotDotDotToken(node: Node) {
         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
     }
@@ -674,6 +690,9 @@ module ts {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.NamespaceImport:
                 return true;
         }
         return false;

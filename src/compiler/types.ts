@@ -880,7 +880,7 @@ module ts {
     // ImportClause information is shown at its declaration below.
     export interface ImportDeclaration extends Statement, ModuleElement {
         importClause?: ImportClause;
-        moduleSpecifier: StringLiteralExpression;
+        moduleSpecifier: Expression;
     }
 
     // In case of: 
@@ -1166,7 +1166,7 @@ module ts {
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportEqualsDeclaration(node: ImportEqualsDeclaration): boolean;
+        isReferencedImportDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;

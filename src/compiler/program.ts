@@ -349,21 +349,6 @@ module ts {
             });
         }
 
-        function getImportedModuleName(node: Node): StringLiteralExpression {
-            if (node.kind === SyntaxKind.ImportDeclaration) {
-                return (<ImportDeclaration>node).moduleSpecifier;
-            }
-            if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                var reference = (<ImportEqualsDeclaration>node).moduleReference;
-                if (reference.kind === SyntaxKind.ExternalModuleReference) {
-                    var expr = (<ExternalModuleReference>reference).expression;
-                    if (expr && expr.kind === SyntaxKind.StringLiteral) {
-                        return <StringLiteralExpression>expr;
-                    }
-                }
-            }
-        }
-
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
                 if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) {

@@ -20,7 +20,7 @@ module ts {
             return ModuleInstanceState.ConstEnumOnly;
         }
         // 3. non - exported import declarations
-        else if (node.kind === SyntaxKind.ImportEqualsDeclaration && !(node.flags & NodeFlags.Export)) {
+        else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && !(node.flags & NodeFlags.Export)) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 4. other uninstantiated module declarations.
@@ -207,7 +207,8 @@ module ts {
                 exportKind |= SymbolFlags.ExportNamespace;
             }
 
-            if (getCombinedNodeFlags(node) & NodeFlags.Export || (node.kind !== SyntaxKind.ImportEqualsDeclaration && isAmbientContext(container))) {
+            if (getCombinedNodeFlags(node) & NodeFlags.Export ||
+                (node.kind !== SyntaxKind.ImportDeclaration && node.kind !== SyntaxKind.ImportEqualsDeclaration && isAmbientContext(container))) {
                 if (exportKind) {
                     var local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
