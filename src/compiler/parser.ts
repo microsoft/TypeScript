@@ -508,6 +508,7 @@ module ts {
         return;
 
         function visitNode(child: IncrementalNode) {
+            Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and 
                 // end, forward or backward appropriately.
@@ -531,9 +532,11 @@ module ts {
             }
 
             // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+            Debug.assert(fullEnd < changeStart);
         }
 
         function visitArray(array: IncrementalNodeArray) {
+            Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
