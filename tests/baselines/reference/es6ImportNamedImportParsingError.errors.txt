@@ -1,4 +1,5 @@
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,10): error TS1141: String literal expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,12): error TS1109: Expression expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,14): error TS2304: Cannot find name 'from'.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,19): error TS1005: ';' expected.
@@ -8,6 +9,7 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,8): error TS1128: D
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,16): error TS2304: Cannot find name 'from'.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(3,21): error TS1005: ';' expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,13): error TS1005: 'from' expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,13): error TS1141: String literal expected.
 tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: ';' expected.
 
 
@@ -17,10 +19,12 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: 
     export var x = a;
     export var m = a;
     
-==== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts (11 errors) ====
+==== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts (13 errors) ====
     import { * } from "es6ImportNamedImportParsingError_0";
              ~
 !!! error TS1003: Identifier expected.
+             ~
+!!! error TS1141: String literal expected.
                ~
 !!! error TS1109: Expression expected.
                  ~~~~
@@ -42,5 +46,7 @@ tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: 
     import { a }, from "es6ImportNamedImportParsingError_0";
                 ~
 !!! error TS1005: 'from' expected.
+                ~~~~~~
+!!! error TS1141: String literal expected.
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1005: ';' expected.
