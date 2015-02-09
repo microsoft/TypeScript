@@ -4844,13 +4844,15 @@ module ts {
         }
 
         /// Syntactic features
-        function getCurrentSourceFile(fileName: string): SourceFile {
+        function getSourceFile(fileName: string): SourceFile {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
         function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
             // Get node at the location
-            var node = getTouchingPropertyName(getCurrentSourceFile(fileName), startPos);
+            var node = getTouchingPropertyName(sourceFile, startPos);
 
             if (!node) {
                 return;
@@ -4904,11 +4906,15 @@ module ts {
 
         function getBreakpointStatementAtPosition(fileName: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(fileName), position);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
-        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(fileName));
+        function getNavigationBarItems(fileName: string): NavigationBarItem[]{
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -4986,7 +4992,7 @@ module ts {
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Make a scanner we can get trivia from.
             var triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
@@ -5204,12 +5210,12 @@ module ts {
 
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             var result: TextSpan[] = [];
 
             var token = getTouchingToken(sourceFile, position);
@@ -5263,7 +5269,7 @@ module ts {
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
             var start = new Date().getTime();
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
@@ -5275,17 +5281,17 @@ module ts {
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
@@ -5539,7 +5545,7 @@ module ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
-            getSourceFile: getCurrentSourceFile,
+            getSourceFile,
             getProgram
         };
     }
