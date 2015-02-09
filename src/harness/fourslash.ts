@@ -246,7 +246,7 @@ module FourSlash {
 
     export class TestState {
         // Language service instance
-        private languageServiceAdaptorHost: Harness.LanguageService.LanguageServiceAdaptorHost;
+        private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
         private languageService: ts.LanguageService;
         private cancellationToken: TestCancellationToken;
 
@@ -272,32 +272,28 @@ module FourSlash {
         private addMatchedInputFile(referenceFilePath: string) {
             var inputFile = this.inputFiles[referenceFilePath];
             if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
-                this.languageServiceAdaptorHost.addScript(referenceFilePath, inputFile);
+                this.languageServiceAdapterHost.addScript(referenceFilePath, inputFile);
             }
         }
 
-        private getLanguageServiceAdaptor(testType: FourSlashTestType):
-            { new (cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdaptor } {
+        private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
             switch (testType) {
                 case FourSlashTestType.Native:
-                    return Harness.LanguageService.NativeLanugageServiceAdaptor;
-                    break;
+                    return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return Harness.LanguageService.ShimLanugageServiceAdaptor;
-                    break;
+                    return new Harness.LanguageService.ShimLanugageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
         }
 
         constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
-            // Create a new Services Adaptor
+            // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             var compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            var languageserviceAdaptorFactory = this.getLanguageServiceAdaptor(testType);
-            var languageServiceAdaptor = new languageserviceAdaptorFactory(this.cancellationToken, compilationOptions);
-            this.languageServiceAdaptorHost = languageServiceAdaptor.getHost();
-            this.languageService = languageServiceAdaptor.getLanguageService();
+            var languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+            this.languageServiceAdapterHost = languageServiceAdapter.getHost();
+            this.languageService = languageServiceAdapter.getLanguageService();
 
             // Initialize the language service with all the scripts
             var startResolveFileRef: FourSlashFile;
@@ -315,16 +311,16 @@ module FourSlash {
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
-                this.languageServiceAdaptorHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
+                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
 
-                var resolvedResult = languageServiceAdaptor.getPreProcessedFileInfo(startResolveFileRef.fileName, startResolveFileRef.content);
+                var resolvedResult = languageServiceAdapter.getPreProcessedFileInfo(startResolveFileRef.fileName, startResolveFileRef.content);
                 var referencedFiles: ts.FileReference[] = resolvedResult.referencedFiles;
                 var importedFiles: ts.FileReference[] = resolvedResult.importedFiles;
 
                 // Add triple reference files into language-service host
                 ts.forEach(referencedFiles, referenceFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
-                    var referenceFilePath = this.basePath+ '/' + referenceFile.fileName;
+                    var referenceFilePath = this.basePath + '/' + referenceFile.fileName;
                     this.addMatchedInputFile(referenceFilePath);
                 });
 
@@ -338,16 +334,16 @@ module FourSlash {
 
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
-                    this.languageServiceAdaptorHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
                 }
             } else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
                     if (!Harness.isLibraryFile(fileName)) {
-                        this.languageServiceAdaptorHost.addScript(fileName, this.inputFiles[fileName]);
+                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName]);
                     }
                 });
-                this.languageServiceAdaptorHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
             }
 
             this.formatCodeOptions = {
@@ -376,7 +372,7 @@ module FourSlash {
         }
 
         private getFileContent(fileName: string): string {
-            var script = this.languageServiceAdaptorHost.getScriptInfo(fileName);
+            var script = this.languageServiceAdapterHost.getScriptInfo(fileName);
             return script.content;
         }
 
@@ -464,7 +460,7 @@ module FourSlash {
         private getAllDiagnostics(): ts.Diagnostic[] {
             var diagnostics: ts.Diagnostic[] = [];
 
-            var fileNames = this.languageServiceAdaptorHost.getFilenames();
+            var fileNames = this.languageServiceAdapterHost.getFilenames();
             for (var i = 0, n = fileNames.length; i < n; i++) {
                 diagnostics.push.apply(this.getDiagnostics(fileNames[i]));
             }
@@ -1255,7 +1251,7 @@ module FourSlash {
         }
 
         public printContext() {
-            ts.forEach(this.languageServiceAdaptorHost.getFilenames(), Harness.IO.log);
+            ts.forEach(this.languageServiceAdapterHost.getFilenames(), Harness.IO.log);
         }
 
         public deleteChar(count = 1) {
@@ -1268,7 +1264,7 @@ module FourSlash {
 
             for (var i = 0; i < count; i++) {
                 // Make the edit
-                this.languageServiceAdaptorHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
+                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
 
                 if (i % checkCadence === 0) {
@@ -1295,7 +1291,7 @@ module FourSlash {
         public replace(start: number, length: number, text: string) {
             this.taoInvalidReason = 'replace NYI';
 
-            this.languageServiceAdaptorHost.editScript(this.activeFile.fileName, start, start + length, text);
+            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, start, start + length, text);
             this.updateMarkersForEdit(this.activeFile.fileName, start, start + length, text);
             this.checkPostEditInvariants();
         }
@@ -1310,7 +1306,7 @@ module FourSlash {
             for (var i = 0; i < count; i++) {
                 offset--;
                 // Make the edit
-                this.languageServiceAdaptorHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
+                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
 
                 if (i % checkCadence === 0) {
@@ -1355,7 +1351,7 @@ module FourSlash {
             for (var i = 0; i < text.length; i++) {
                 // Make the edit
                 var ch = text.charAt(i);
-                this.languageServiceAdaptorHost.editScript(this.activeFile.fileName, offset, offset, ch);
+                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset, ch);
                 this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
 
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
@@ -1398,7 +1394,7 @@ module FourSlash {
 
             var start = this.currentCaretPosition;
             var offset = this.currentCaretPosition;
-            this.languageServiceAdaptorHost.editScript(this.activeFile.fileName, offset, offset, text);
+            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset, text);
             this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, text);
             this.checkPostEditInvariants();
             offset += text.length;
@@ -1461,7 +1457,7 @@ module FourSlash {
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             var oldContent = this.getFileContent(this.activeFile.fileName);
             for (var j = 0; j < edits.length; j++) {
-                this.languageServiceAdaptorHost.editScript(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
+                this.languageServiceAdapterHost.editScript(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
                 this.updateMarkersForEdit(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
                 var change = (edits[j].span.start - ts.textSpanEnd(edits[j].span)) + edits[j].newText.length;
                 runningOffset += change;
@@ -1742,8 +1738,8 @@ module FourSlash {
 
             function jsonMismatchString() {
                 return ts.sys.newLine +
-                    "expected: '" + ts.sys.newLine + JSON.stringify(expected,(k, v) => v, 2) + "'" + ts.sys.newLine +
-                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual,(k, v) => v, 2) + "'";
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k, v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -2017,7 +2013,7 @@ module FourSlash {
             // The current caret position (in line/col terms)
             var line = this.getCurrentCaretFilePosition().line;
             // The line/col of the start of this line
-            var pos = this.languageServiceAdaptorHost.lineColToPosition(this.activeFile.fileName, line, 1);
+            var pos = this.languageServiceAdapterHost.lineColToPosition(this.activeFile.fileName, line, 1);
             // The index of the current file
 
             // The text from the start of the line to the end of the file
@@ -2037,7 +2033,7 @@ module FourSlash {
         }
 
         private getCurrentCaretFilePosition() {
-            var result = this.languageServiceAdaptorHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
+            var result = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
             if (result.line >= 0) {
                 result.line++;
             }
@@ -2097,7 +2093,7 @@ module FourSlash {
                 var name = <string>indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
-                name = name.indexOf('/') === -1 ? (this.basePath + '/'  + name) : name;
+                name = name.indexOf('/') === -1 ? (this.basePath + '/' + name) : name;
 
                 var availableNames: string[] = [];
                 var foundIt = false;
@@ -2124,7 +2120,7 @@ module FourSlash {
         }
 
         private getLineColStringAtPosition(position: number) {
-            var pos = this.languageServiceAdaptorHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
+            var pos = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 
@@ -2285,7 +2281,7 @@ module FourSlash {
                                 currentFileName = fileName;
                             }
 
-                            currentFileName = basePath +  '/' + match[2];
+                            currentFileName = basePath + '/' + match[2];
                             currentFileOptions[match[1]] = match[2];
                         } else {
                             // Add other fileMetadata flag

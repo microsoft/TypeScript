@@ -113,14 +113,14 @@ module Harness.LanguageService {
         }
     }
 
-    export interface LanguageServiceAdaptor {
-        getHost(): LanguageServiceAdaptorHost;
+    export interface LanguageServiceAdapter {
+        getHost(): LanguageServiceAdapterHost;
         getLanguageService(): ts.LanguageService;
         getClassifier(): ts.Classifier;
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
     }
 
-    class LanguageServiceHostBase  {
+    export class LanguageServiceAdapterHost  {
         protected fileNameToScript: ts.Map<ScriptInfo> = {};
         
         constructor(protected cancellationToken: ts.CancellationToken = CancellationToken.None,
@@ -194,11 +194,8 @@ module Harness.LanguageService {
         }
     }
 
-    export interface LanguageServiceAdaptorHost extends LanguageServiceHostBase {
-    }
-
-    /// Native adabtor
-    class NativeLanguageServiceHost extends LanguageServiceHostBase implements ts.LanguageServiceHost { 
+    /// Native adapter
+    class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost { 
         getCompilationSettings(): ts.CompilerOptions { return this.settings; }
         getCancellationToken(): ts.CancellationToken { return this.cancellationToken; }
         getCurrentDirectory(): string { return ""; }
@@ -217,7 +214,7 @@ module Harness.LanguageService {
         error(s: string): void { }
     }
 
-    export class NativeLanugageServiceAdaptor implements LanguageServiceAdaptor {
+    export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) { 
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
@@ -228,8 +225,8 @@ module Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
     }
 
-    /// Shim adabtor
-    class ShimLanguageServiceHost extends LanguageServiceHostBase implements ts.LanguageServiceShimHost {
+    /// Shim adapter
+    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost {
         private nativeHost: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -261,7 +258,8 @@ module Harness.LanguageService {
     }
 
     class ClassifierShimProxy implements ts.Classifier { 
-        constructor(private shim: ts.ClassifierShim) { }
+        constructor(private shim: ts.ClassifierShim) {
+        }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
             var result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split('\n');
             var entries: ts.ClassificationInfo[] = [];
@@ -288,7 +286,7 @@ module Harness.LanguageService {
         }
     }
 
-    function unwrappJSONCallResult(result: string): any {
+    function unwrapJSONCallResult(result: string): any {
         var parsedResult = JSON.parse(result);
         if (parsedResult.error) {
             throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
@@ -300,7 +298,8 @@ module Harness.LanguageService {
     }
 
     class LanguageServiceShimProxy implements ts.LanguageService {
-        constructor(private shim: ts.LanguageServiceShim) { }
+        constructor(private shim: ts.LanguageServiceShim) {
+        }
         private unwrappJSONCallResult(result: string): any {
             var parsedResult = JSON.parse(result);
             if (parsedResult.error) {
@@ -312,93 +311,93 @@ module Harness.LanguageService {
             this.shim.cleanupSemanticCache();
         }
         getSyntacticDiagnostics(fileName: string): ts.Diagnostic[] {
-            return unwrappJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
+            return unwrapJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
         }
         getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
-            return unwrappJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
+            return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
-            return unwrappJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
+            return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
         }
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
-            return unwrappJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
+            return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }
         getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
-            return unwrappJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
+            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
         }
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
-            return unwrappJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
-            return unwrappJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
+            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
         }
         getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
-            return unwrappJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
         }
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): ts.TextSpan {
-            return unwrappJSONCallResult(this.shim.getNameOrDottedNameSpan(fileName, startPos, endPos));
+            return unwrapJSONCallResult(this.shim.getNameOrDottedNameSpan(fileName, startPos, endPos));
         }
         getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
-            return unwrappJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
         }
         getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
-            return unwrappJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
+            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
         }
         getRenameInfo(fileName: string, position: number): ts.RenameInfo {
-            return unwrappJSONCallResult(this.shim.getRenameInfo(fileName, position));
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
         }
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
-            return unwrappJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
-            return unwrappJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
         }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-            return unwrappJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
         }
         getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-            return unwrappJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
         }
         getNavigateToItems(searchValue: string): ts.NavigateToItem[] {
-            return unwrappJSONCallResult(this.shim.getNavigateToItems(searchValue));
+            return unwrapJSONCallResult(this.shim.getNavigateToItems(searchValue));
         }
         getNavigationBarItems(fileName: string): ts.NavigationBarItem[] {
-            return unwrappJSONCallResult(this.shim.getNavigationBarItems(fileName));
+            return unwrapJSONCallResult(this.shim.getNavigationBarItems(fileName));
         }
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
-            return unwrappJSONCallResult(this.shim.getOutliningSpans(fileName));
+            return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }
         getTodoComments(fileName: string, descriptors: ts.TodoCommentDescriptor[]): ts.TodoComment[] {
-            return unwrappJSONCallResult(this.shim.getTodoComments(fileName, JSON.stringify(descriptors)));
+            return unwrapJSONCallResult(this.shim.getTodoComments(fileName, JSON.stringify(descriptors)));
         }
         getBraceMatchingAtPosition(fileName: string, position: number): ts.TextSpan[] {
-            return unwrappJSONCallResult(this.shim.getBraceMatchingAtPosition(fileName, position));
+            return unwrapJSONCallResult(this.shim.getBraceMatchingAtPosition(fileName, position));
         }
         getIndentationAtPosition(fileName: string, position: number, options: ts.EditorOptions): number {
-            return unwrappJSONCallResult(this.shim.getIndentationAtPosition(fileName, position, JSON.stringify(options)));
+            return unwrapJSONCallResult(this.shim.getIndentationAtPosition(fileName, position, JSON.stringify(options)));
         }
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
-            return unwrappJSONCallResult(this.shim.getFormattingEditsForRange(fileName, start, end, JSON.stringify(options)));
+            return unwrapJSONCallResult(this.shim.getFormattingEditsForRange(fileName, start, end, JSON.stringify(options)));
         }
         getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
-            return unwrappJSONCallResult(this.shim.getFormattingEditsForDocument(fileName, JSON.stringify(options)));
+            return unwrapJSONCallResult(this.shim.getFormattingEditsForDocument(fileName, JSON.stringify(options)));
         }
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
-            return unwrappJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
+            return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
-            return unwrappJSONCallResult(this.shim.getEmitOutput(fileName));
+            return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
         getProgram(): ts.Program {
-            throw new Error("Program can not be marshalled accross the shim layer.");
+            throw new Error("Program can not be marshaled across the shim layer.");
         }
         getSourceFile(fileName: string): ts.SourceFile {
-            throw new Error("SourceFile can not be marshalled accross the shim layer.");
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
     }
 
-    export class ShimLanugageServiceAdaptor implements LanguageServiceAdaptor {
+    export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
@@ -416,7 +415,7 @@ module Harness.LanguageService {
             };
 
             var coreServicesShim = this.factory.createCoreServicesShim(this.host);
-            shimResult = unwrappJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
+            shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
             var convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
