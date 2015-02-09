@@ -683,6 +683,22 @@ module ts {
         }
     }
 
+    function checkChangeRange(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean) {
+        var oldText = sourceFile.text;
+        if (textChangeRange) {
+            Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+
+            if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                var oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
+                var newTextPrefix = newText.substr(0, textChangeRange.span.start);
+                Debug.assert(oldTextPrefix === newTextPrefix);
+
+                var oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
+                var newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
+                Debug.assert(oldTextSuffix === newTextSuffix);
+            }
+        }
+    }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
@@ -696,21 +712,7 @@ module ts {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 
-        var oldText = sourceFile.text;
-        if (textChangeRange) {
-            Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
-
-            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
-                var newTextPrefix = newText.substr(0, textChangeRange.span.start);
-                Debug.assert(oldTextPrefix === newTextPrefix);
-
-                var oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
-                var newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
-                Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
-
+        checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
         if (textChangeRangeIsUnchanged(textChangeRange)) {
             // if the text didn't change, then we can just return our current source file as-is.
             return sourceFile;
@@ -722,11 +724,13 @@ module ts {
             return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
+        var oldText = sourceFile.text;
         var syntaxCursor = createSyntaxCursor(sourceFile);
 
         // Make the actual change larger so that we know to reparse anything whose lookahead 
         // might have intersected the change.
         var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+        checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
 
         // Ensure that extending the affected range only moved the start of the change range 
         // earlier in the file.
