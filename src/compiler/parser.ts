@@ -850,7 +850,7 @@ module ts {
                     // Much of the time the parser will need the very next node in the array that 
                     // we just returned a node from.So just simply check for that case and move 
                     // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
+                    if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
                         currentArrayIndex++;
                         current = currentArray[currentArrayIndex];
                     }
@@ -886,6 +886,7 @@ module ts {
 
             // Recurse into the source file to find the highest node at this position.
             forEachChild(sourceFile, visitNode, visitArray);
+            return;
 
             function visitNode(node: Node) {
                 if (position >= node.pos && position < node.end) {
