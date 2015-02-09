@@ -1548,64 +1548,45 @@ module ts {
     }
 
     class SyntaxTreeCache {
-        private hostCache: HostCache;
-
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentFileName: string = "";
-        private currentFileVersion: string = null;
-        private currentSourceFile: SourceFile = null;
+        private currentFileName: string;
+        private currentFileVersion: string;
+        private currentFileScriptSnapshot: IScriptSnapshot;
+        private currentSourceFile: SourceFile;
 
         constructor(private host: LanguageServiceHost) {
         }
 
-        private log(message: string) {
-            if (this.host.log) {
-                this.host.log(message);
+        public getCurrentSourceFile(fileName: string): SourceFile {
+            var scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            if (!scriptSnapshot) {
+                // The host does not know about this file.
+                throw new Error("Could not find file: '" + fileName + "'.");
             }
-        }
 
-        private initialize(fileName: string) {
-            // ensure that both source file and syntax tree are either initialized or not initialized
-            var start = new Date().getTime();
-            this.hostCache = new HostCache(this.host);
-            this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
-
-            var version = this.hostCache.getVersion(fileName);
+            var version = this.host.getScriptVersion(fileName);
             var sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var start = new Date().getTime();
+                // This is a new file, just parse it
                 sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
-                this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var editRange = this.hostCache.getChangeRange(fileName, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
-
-                var start = new Date().getTime();
+                // This is the same file, just a newer version. Incrementally parse the file.
+                var editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
-                this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFileName = fileName;
+                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentSourceFile = sourceFile;
             }
-        }
 
-        public getCurrentSourceFile(fileName: string): SourceFile {
-            this.initialize(fileName);
             return this.currentSourceFile;
-        }
-
-        public getCurrentScriptSnapshot(fileName: string): IScriptSnapshot {
-            return this.getCurrentSourceFile(fileName).scriptSnapshot;
         }
     }
 
