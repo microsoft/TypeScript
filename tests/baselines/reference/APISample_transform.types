@@ -4580,13 +4580,14 @@ declare module "typescript" {
 >SyntaxKind : SyntaxKind
 >NodeFlags : NodeFlags
 
-    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile;
->updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange) => SourceFile
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+>updateSourceFile : (sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean) => SourceFile
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >newText : string
 >textChangeRange : TextChangeRange
 >TextChangeRange : TextChangeRange
+>aggressiveChecks : boolean
 >SourceFile : SourceFile
 
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
@@ -5991,8 +5992,8 @@ declare module "typescript" {
     var disableIncrementalParsing: boolean;
 >disableIncrementalParsing : boolean
 
-    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
->updateLanguageServiceSourceFile : (sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
+    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+>updateLanguageServiceSourceFile : (sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean) => SourceFile
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >scriptSnapshot : IScriptSnapshot
@@ -6000,6 +6001,7 @@ declare module "typescript" {
 >version : string
 >textChangeRange : TextChangeRange
 >TextChangeRange : TextChangeRange
+>aggressiveChecks : boolean
 >SourceFile : SourceFile
 
     function createDocumentRegistry(): DocumentRegistry;
