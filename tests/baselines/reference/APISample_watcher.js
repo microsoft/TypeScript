@@ -1070,6 +1070,7 @@ declare module "typescript" {
         declaredType?: Type;
         mapper?: TypeMapper;
         referenced?: boolean;
+        exportAssignChecked?: boolean;
         exportAssignSymbol?: Symbol;
         unionType?: UnionType;
     }

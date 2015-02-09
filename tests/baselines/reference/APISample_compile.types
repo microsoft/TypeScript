@@ -3235,6 +3235,9 @@ declare module "typescript" {
         referenced?: boolean;
 >referenced : boolean
 
+        exportAssignChecked?: boolean;
+>exportAssignChecked : boolean
+
         exportAssignSymbol?: Symbol;
 >exportAssignSymbol : Symbol
 >Symbol : Symbol

@@ -1,9 +1,0 @@
-=== tests/cases/compiler/es6ImportDefaultBindingInEs5_0.ts ===
-
-export var a = 10;
->a : number
-
-=== tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts ===
-import defaultBinding from "es6ImportDefaultBindingInEs5_0";
->defaultBinding : typeof defaultBinding
-
