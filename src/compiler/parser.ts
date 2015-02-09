@@ -1657,8 +1657,8 @@ module ts {
             return result;
         }
 
-        function parseListElement<T extends Node>(kind: ParsingContext, parseElement: () => T): T {
-            var node = currentNode(kind);
+        function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
+            var node = currentNode(parsingContext);
             if (node) {
                 return <T>consumeNode(node);
             }
@@ -1815,29 +1815,10 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
-
-                    // Keep in sync with isStatement:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.Block:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.EmptyStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.DebuggerStatement:
                         return true;
                 }
+
+                return isReusableStatement(node);
             }
 
             return false;
