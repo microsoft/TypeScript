@@ -371,8 +371,8 @@ module ts {
         return false;
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
-        if (element.length) {
+    function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+        if (isArray) {
             visitArray(<IncrementalNodeArray>element);
         }
         else {
@@ -511,7 +511,7 @@ module ts {
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and 
                 // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(child, /*isArray:*/ false, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
@@ -537,7 +537,7 @@ module ts {
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
-                moveElementEntirelyPastChangeRange(array, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
             }
             else {
                 // Check if the element intersects the change range.  If it does, then it is not
