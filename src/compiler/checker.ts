@@ -4912,7 +4912,13 @@ module ts {
                     getSymbolLinks(rightSide).referenced = true;
                     Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
 
-                    nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportEqualsDeclaration))
+                    var importEqualsDeclaration = getDeclarationOfKind(rightSide, SyntaxKind.ImportEqualsDeclaration);
+                    if (importEqualsDeclaration) {
+                        nodeLinks = getNodeLinks(importEqualsDeclaration);
+                    }
+                    else {
+                        break;
+                    }
                 }
             }
         }

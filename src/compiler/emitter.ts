@@ -780,12 +780,26 @@ module ts {
                         writeTextOfNode(currentSourceFile,(<NamespaceImport>node.importClause.namedBindings).name);
                         write(" ");
                     }
+                    else {
+                        write("{");
+                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportSpecifier);
+                        write(" } ");
+                    }
                 }
                 write("from ");
             }
             writeTextOfNode(currentSourceFile, node.moduleSpecifier);
             write(";");
             writer.writeLine();
+        }
+
+        function emitImportSpecifier(node: ImportSpecifier) {
+            write(" ");
+            if (node.propertyName) {
+                writeTextOfNode(currentSourceFile, node.propertyName);
+                write(" as ");
+            }
+            writeTextOfNode(currentSourceFile, node.name);
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
