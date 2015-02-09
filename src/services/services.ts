@@ -1624,7 +1624,7 @@ module ts {
 
     export var disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
@@ -1648,7 +1648,7 @@ module ts {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later

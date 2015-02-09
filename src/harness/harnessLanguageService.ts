@@ -115,7 +115,7 @@ module Harness.LanguageService {
             version: string,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            var result = ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
+            var result = ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange, /*aggressiveChecks:*/ true);
             Utils.assertInvariants(result, /*parent:*/ undefined);
             return result;
         }

@@ -357,20 +357,40 @@ module ts {
         forEachChild(sourceFile, walk);
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
+    function shouldCheckNode(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.Identifier:
+                return true;
+        }
+
+        return false;
+    }
+
+    function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
         if (element.length) {
             visitArray(<IncrementalNodeArray>element);
         }
         else {
             visitNode(<IncrementalNode>element);
         }
+        return;
 
         function visitNode(node: IncrementalNode) {
+            if (aggressiveChecks && shouldCheckNode(node)) {
+                var text = oldText.substring(node.pos, node.end);
+            }
+
             // Ditch any existing LS children we may have created.  This way we can avoid 
             // moving them forward.
             node._children = undefined;
             node.pos += delta;
             node.end += delta;
+
+            if (aggressiveChecks && shouldCheckNode(node)) {
+                Debug.assert(text === newText.substring(node.pos, node.end));
+            }
 
             forEachChild(node, visitNode, visitArray);
         }
@@ -459,14 +479,24 @@ module ts {
         }
     }
 
-    function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
+    function updateTokenPositionsAndMarkElements(
+        node: IncrementalNode,
+        changeStart: number,
+        changeRangeOldEnd: number,
+        changeRangeNewEnd: number,
+        delta: number,
+        oldText: string,
+        newText: string,
+        aggressiveChecks: boolean): void {
+
         visitNode(node);
+        return;
 
         function visitNode(child: IncrementalNode) {
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and 
                 // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, delta);
+                moveElementEntirelyPastChangeRange(child, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
@@ -490,7 +520,7 @@ module ts {
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
-                moveElementEntirelyPastChangeRange(array, delta);
+                moveElementEntirelyPastChangeRange(array, delta, oldText, newText, aggressiveChecks);
             }
             else {
                 // Check if the element intersects the change range.  If it does, then it is not
@@ -512,7 +542,6 @@ module ts {
             }
         }
     }
-
 
     function extendToAffectedRange(sourceFile: SourceFile, changeRange: TextChangeRange): TextChangeRange {
         // Consider the following code:
@@ -650,7 +679,9 @@ module ts {
     // from this SourceFile that are being held onto may change as a result (including 
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
-    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile {
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
+        aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
+
         if (textChangeRangeIsUnchanged(textChangeRange)) {
             // if the text didn't change, then we can just return our current source file as-is.
             return sourceFile;
@@ -662,11 +693,18 @@ module ts {
             return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
+        var oldText = sourceFile.text;
         var syntaxCursor = createSyntaxCursor(sourceFile);
 
         // Make the actual change larger so that we know to reparse anything whose lookahead 
         // might have intersected the change.
         var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+
+        // Ensure that extending the affected range only moved the start of the change range 
+        // earlier in the file.
+        Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+        Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
+        Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
 
         // The is the amount the nodes after the edit range need to be adjusted.  It can be 
         // positive (if the edit added characters), negative (if the edit deleted characters)
@@ -693,7 +731,7 @@ module ts {
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
         updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-            changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta);
+            changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
 
         // Now that we've set up our internal incremental state just proceed and parse the
         // source file in the normal fashion.  When possible the parser will retrieve and
