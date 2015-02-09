@@ -400,6 +400,7 @@ module ts {
         }
 
         function visitArray(array: IncrementalNodeArray) {
+            array._children = undefined;
             array.pos += delta;
             array.end += delta;
 
@@ -412,6 +413,7 @@ module ts {
     function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
         Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
         Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+        Debug.assert(element.pos <= element.end);
 
         // We have an element that intersects the change range in some way.  It may have its
         // start, or its end (or both) in the changed range.  We want to adjust any part
@@ -522,6 +524,7 @@ module ts {
             var fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 child.intersectsChange = true;
+                child._children = undefined;
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -541,25 +544,27 @@ module ts {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
                 moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
+                return;
             }
-            else {
-                // Check if the element intersects the change range.  If it does, then it is not
-                // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                // be able to use.
-                var fullEnd = array.end;
-                if (fullEnd >= changeStart) {
-                    array.intersectsChange = true;
 
-                    // Adjust the pos or end (or both) of the intersecting array accordingly.
-                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                    for (var i = 0, n = array.length; i < n; i++) {
-                        visitNode(array[i]);
-                    }
+            // Check if the element intersects the change range.  If it does, then it is not
+            // reusable.  Also, we'll need to recurse to see what constituent portions we may
+            // be able to use.
+            var fullEnd = array.end;
+            if (fullEnd >= changeStart) {
+                array.intersectsChange = true;
+                array._children = undefined;
+
+                // Adjust the pos or end (or both) of the intersecting array accordingly.
+                adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                for (var i = 0, n = array.length; i < n; i++) {
+                    visitNode(array[i]);
                 }
-                // else {
-                // Otherwise, the array is entirely before the change range.  No need to do anything with it.
-                // }
+                return;
             }
+
+            // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+            Debug.assert(fullEnd < changeStart);
         }
     }
 
