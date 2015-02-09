@@ -583,6 +583,10 @@
         "category": "Error",
         "code": 1188
     },
+    "External module '{0}' has no default export or export assignment.": {
+        "category": "Error",
+        "code": 1189
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

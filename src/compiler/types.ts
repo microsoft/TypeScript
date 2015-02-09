@@ -1280,6 +1280,7 @@ module ts {
         declaredType?: Type;           // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;           // Type mapper for instantiation alias
         referenced?: boolean;          // True if alias symbol has been referenced as a value
+        exportAssignChecked?: boolean; // True if export assignment was checked
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
         unionType?: UnionType;         // Containing union type for union property
     }

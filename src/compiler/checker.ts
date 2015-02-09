@@ -454,18 +454,26 @@ module ts {
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
-            return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ?
-                resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)) :
-                getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+            if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                var moduleSymbol = resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node));
+                var exportAssignmentSymbol = moduleSymbol && getResolvedExportAssignmentSymbol(moduleSymbol);
+                return exportAssignmentSymbol || moduleSymbol;
+            }
+            return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
         }
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
-            // TODO: Verify that returned symbol originates in "export default" statement
-            return resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+            var moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+            if (moduleSymbol) {
+                var exportAssignmentSymbol = getResolvedExportAssignmentSymbol(moduleSymbol);
+                if (!exportAssignmentSymbol) {
+                    error(node.name, Diagnostics.External_module_0_has_no_default_export_or_export_assignment, symbolToString(moduleSymbol));
+                }
+                return exportAssignmentSymbol;
+            }
         }
 
         function getTargetOfNamespaceImport(node: NamespaceImport): Symbol {
-            // TODO: Verify that returned symbol does not originate in "export default" statement
             return resolveExternalModuleName(node, (<ImportDeclaration>node.parent.parent).moduleSpecifier);
         }
 
@@ -598,7 +606,7 @@ module ts {
             if (!isRelative) {
                 var symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
                 if (symbol) {
-                    return getResolvedExportSymbol(symbol);
+                    return symbol;
                 }
             }
             while (true) {
@@ -611,7 +619,7 @@ module ts {
             }
             if (sourceFile) {
                 if (sourceFile.symbol) {
-                    return getResolvedExportSymbol(sourceFile.symbol);
+                    return sourceFile.symbol;
                 }
                 error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.fileName);
                 return;
@@ -619,7 +627,7 @@ module ts {
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
-        function getResolvedExportSymbol(moduleSymbol: Symbol): Symbol {
+        function getResolvedExportAssignmentSymbol(moduleSymbol: Symbol): Symbol {
             var symbol = getExportAssignmentSymbol(moduleSymbol);
             if (symbol) {
                 if (symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) {
@@ -629,18 +637,16 @@ module ts {
                     return resolveImport(symbol);
                 }
             }
-            return moduleSymbol;
         }
 
         function getExportAssignmentSymbol(symbol: Symbol): Symbol {
             checkTypeOfExportAssignmentSymbol(symbol);
-            var symbolLinks = getSymbolLinks(symbol);
-            return symbolLinks.exportAssignSymbol === unknownSymbol ? undefined : symbolLinks.exportAssignSymbol;
+            return getSymbolLinks(symbol).exportAssignSymbol;
         }
 
         function checkTypeOfExportAssignmentSymbol(containerSymbol: Symbol): void {
             var symbolLinks = getSymbolLinks(containerSymbol);
-            if (!symbolLinks.exportAssignSymbol) {
+            if (!symbolLinks.exportAssignChecked) {
                 var exportInformation = collectExportInformationForSourceFileOrModule(containerSymbol);
                 if (exportInformation.exportAssignments.length) {
                     if (exportInformation.exportAssignments.length > 1) {
@@ -660,8 +666,9 @@ module ts {
                         var meaning = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
                         var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, node.exportName);
                     }
+                    symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
                 }
-                symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
+                symbolLinks.exportAssignChecked = true;
             }
         }
 
@@ -9284,12 +9291,11 @@ module ts {
                         for (var i = 0, n = statements.length; i < n; i++) {
                             var statement = statements[i];
 
+                            // TODO: AndersH: No reason to do a separate pass over the statements for this check, we should
+                            // just fold it into checkExportAssignment.
                             if (statement.kind === SyntaxKind.ExportAssignment) {
                                 // Export assignments are not allowed in an internal module
                                 grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
-                            }
-                            else if (isExternalModuleImportEqualsDeclaration(statement)) {
-                                grammarErrorOnNode(getExternalModuleImportEqualsDeclarationExpression(statement), Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                             }
                         }
                     }
@@ -10197,7 +10203,7 @@ module ts {
 
         function getExportAssignmentName(node: SourceFile): string {
             var symbol = getExportAssignmentSymbol(getSymbolOfNode(node));
-            return symbol && symbolIsValue(symbol) && !isConstEnumSymbol(symbol) ? symbolToString(symbol): undefined;
+            return symbol && symbol !== unknownSymbol && symbolIsValue(symbol) && !isConstEnumSymbol(symbol) ? symbolToString(symbol): undefined;
         }
 
         function isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean {
