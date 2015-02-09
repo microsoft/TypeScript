@@ -579,6 +579,10 @@
         "category": "Error",
         "code": 1187
     },
+    "An import declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1188
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

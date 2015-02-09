@@ -597,18 +597,14 @@ module ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
-    function extractStringLiteral(node: Expression): StringLiteralExpression {
-        return node && node.kind === SyntaxKind.StringLiteral ? <StringLiteralExpression>node : undefined;
-    }
-
-    export function getImportedModuleName(node: Node): StringLiteralExpression {
+    export function getImportedModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
-            return extractStringLiteral((<ImportDeclaration>node).moduleSpecifier);
+            return (<ImportDeclaration>node).moduleSpecifier;
         }
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             var reference = (<ImportEqualsDeclaration>node).moduleReference;
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
-                return extractStringLiteral((<ExternalModuleReference>reference).expression);
+                return (<ExternalModuleReference>reference).expression;
             }
         }
     }

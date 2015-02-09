@@ -9336,18 +9336,78 @@ module ts {
             return <Identifier>node;
         }
 
-        function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // Grammar checking
-            checkGrammarModifiers(node);
+        function checkExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration): boolean {
+            var moduleName = getImportedModuleName(node);
+            if (getFullWidth(moduleName) !== 0 && moduleName.kind !== SyntaxKind.StringLiteral) {
+                error(moduleName, Diagnostics.String_literal_expected);
+                return false;
+            }
+            var inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
+            if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
+                error(moduleName, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                return false;
+            }
+            if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {
+                // TypeScript 1.0 spec (April 2013): 12.1.6
+                // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
+                // other external modules only through top - level external module names.
+                // Relative external module names are not permitted.
+                error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
+                return false;
+            }
+            return true;
+        }
 
+        function checkImportSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
+            var symbol = getSymbolOfNode(node);
+            var target = resolveImport(symbol);
+            if (target !== unknownSymbol) {
+                var excludedMeanings =
+                    (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
+                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
+                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                if (target.flags & excludedMeanings) {
+                    error(node, Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0, symbolToString(symbol));
+                }
+            }
+        }
+
+        function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-            var symbol = getSymbolOfNode(node);
-            var target: Symbol;
-            
+            checkImportSymbol(node);
+        }
+
+        function checkImportDeclaration(node: ImportDeclaration) {
+            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+                grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
+            }
+            if (checkExternalImportDeclaration(node)) {
+                var importClause = node.importClause;
+                if (importClause) {
+                    if (importClause.name) {
+                        // TODO: Check that import references an export default instance
+                        checkImportBinding(importClause);
+                    }
+                    if (importClause.namedBindings) {
+                        // TODO: Check that import references an export namespace
+                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                            checkImportBinding(<NamespaceImport>importClause.namedBindings);
+                        }
+                        else {
+                            forEach((<NamedImports>importClause.namedBindings).elements, checkImportBinding);
+                        }
+                    }
+                }
+            }
+        }
+
+        function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node)) {
-                target = resolveImport(symbol);
-                // Import declaration for an internal module
+                checkImportBinding(node);
+                var symbol = getSymbolOfNode(node);
+                var target = resolveImport(symbol);
                 if (target !== unknownSymbol) {
                     if (target.flags & SymbolFlags.Value) {
                         // Target is a value symbol, check that it is not hidden by a local declaration with the same name and
@@ -9366,44 +9426,8 @@ module ts {
                 }
             }
             else {
-                var moduleNameExpr = getExternalModuleImportEqualsDeclarationExpression(node);
-                if (moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
-                    grammarErrorOnNode(moduleNameExpr, Diagnostics.String_literal_expected);
-                }
-                // Import declaration for an external module
-                if (node.parent.kind === SyntaxKind.SourceFile) {
-                    target = resolveImport(symbol);
-                }
-                else if (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral) {
-                    // TypeScript 1.0 spec (April 2013): 12.1.6
-                    // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
-                    // other external modules only through top - level external module names.
-                    // Relative external module names are not permitted.
-                    if (moduleNameExpr.kind === SyntaxKind.StringLiteral) {
-                        if (isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
-                            error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
-                            target = unknownSymbol;
-                        }
-                        else {
-                            target = resolveImport(symbol);
-                        }
-                    }
-                    else {
-                        target = unknownSymbol;
-                    }
-                }
-                else {
-                    // Parent is an internal module (syntax error is already reported)
-                    target = unknownSymbol;
-                }
-            }
-            if (target !== unknownSymbol) {
-                var excludedMeanings =
-                    (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
-                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
-                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
-                if (target.flags & excludedMeanings) {
-                    error(node, Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0, symbolToString(symbol));
+                if (checkExternalImportDeclaration(node)) {
+                    checkImportBinding(node);
                 }
             }
         }
@@ -9509,6 +9533,8 @@ module ts {
                     return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return checkModuleDeclaration(<ModuleDeclaration>node);
+                case SyntaxKind.ImportDeclaration:
+                    return checkImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return checkImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportAssignment:
@@ -10347,6 +10373,7 @@ module ts {
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.Parameter:
                     break;

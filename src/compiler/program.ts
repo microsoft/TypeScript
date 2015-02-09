@@ -352,21 +352,22 @@ module ts {
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
                 if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    var nameLiteral = getImportedModuleName(node);
-                    var moduleName = nameLiteral && nameLiteral.text;
-                    if (moduleName) {
-                        var searchPath = basePath;
-                        while (true) {
-                            var searchName = normalizePath(combinePaths(searchPath, moduleName));
-                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) {
-                                break;
+                    var moduleNameExpr = getImportedModuleName(node);
+                    if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
+                        var moduleNameText = (<LiteralExpression>moduleNameExpr).text;
+                        if (moduleNameText) {
+                            var searchPath = basePath;
+                            while (true) {
+                                var searchName = normalizePath(combinePaths(searchPath, moduleNameText));
+                                if (findModuleSourceFile(searchName + ".ts", moduleNameExpr) || findModuleSourceFile(searchName + ".d.ts", moduleNameExpr)) {
+                                    break;
+                                }
+                                var parentPath = getDirectoryPath(searchPath);
+                                if (parentPath === searchPath) {
+                                    break;
+                                }
+                                searchPath = parentPath;
                             }
-
-                            var parentPath = getDirectoryPath(searchPath);
-                            if (parentPath === searchPath) {
-                                break;
-                            }
-                            searchPath = parentPath;
                         }
                     }
                 }
@@ -397,7 +398,7 @@ module ts {
                 }
             });
 
-            function findModuleSourceFile(fileName: string, nameLiteral: LiteralExpression) {
+            function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }

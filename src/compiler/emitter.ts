@@ -3898,7 +3898,7 @@ module ts {
             }
 
             function emitRequire(moduleName: Expression) {
-                if (moduleName) {
+                if (moduleName.kind === SyntaxKind.StringLiteral) {
                     write("require(");
                     emitStart(moduleName);
                     emitLiteral(<LiteralExpression>moduleName);
@@ -4080,8 +4080,8 @@ module ts {
                 forEach(externalImports, info => {
                     write(", ");
                     var moduleName = getImportedModuleName(info.importNode);
-                    if (moduleName) {
-                        emitLiteral(moduleName);
+                    if (moduleName.kind === SyntaxKind.StringLiteral) {
+                        emitLiteral(<LiteralExpression>moduleName);
                     }
                     else {
                         write("\"\"");
