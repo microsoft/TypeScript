@@ -4718,7 +4718,13 @@ module ts {
                         var pathMatchResult = pathRegex.exec(comment);
                         var nameMatchResult = nameRegex.exec(comment);
                         if (pathMatchResult) {
-                            amdDependencies.push({path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined });
+                            var amdDependency = {path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            // AMD dependencies with names have to go first in define header
+                            if (nameMatchResult) {
+                                amdDependencies.push(amdDependency);
+                            } else {
+                                amdDependencies.unshift(amdDependency);
+                            }
                         }
                     }
                 }
