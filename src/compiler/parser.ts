@@ -580,6 +580,7 @@ module ts {
         // start of the tree.
         for (var i = 0; start > 0 && i <= maxLookahead; i++) {
             var nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+            Debug.assert(nearestNode.pos <= start);
             var position = nearestNode.pos;
 
             start = Math.max(0, position - 1);
@@ -936,7 +937,6 @@ module ts {
         var identifiers: Map<string> = {};
         var identifierCount = 0;
         var nodeCount = 0;
-        var scanner: Scanner;
         var token: SyntaxKind;
 
         var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
@@ -1029,7 +1029,7 @@ module ts {
         var parseErrorBeforeNextFinishedNode: boolean = false;
 
         // Create and prime the scanner before parsing the source elements.
-        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
         token = nextToken();
 
         processReferenceComments(sourceFile);
