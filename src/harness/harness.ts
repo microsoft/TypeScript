@@ -19,6 +19,7 @@
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
+/// <reference path='runnerbase.ts'/>
 
 declare var require: any;
 declare var process: any;
@@ -690,8 +691,6 @@ module Harness {
             break;
     }
 }
-
-
 
 module Harness {
     var tcServicesFileName = "typescriptServices.js";
