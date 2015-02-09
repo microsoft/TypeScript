@@ -56,8 +56,7 @@ var BugExhibition = (function () {
     function BugExhibition() {
     }
     BugExhibition.prototype.exhibitBug = function () {
-        function localFunction() {
-        }
+        function localFunction() { }
         var x;
         x = localFunction;
     };
@@ -68,8 +67,7 @@ var BugExhibition2 = (function () {
     }
     Object.defineProperty(BugExhibition2, "exhibitBug", {
         get: function () {
-            function localFunction() {
-            }
+            function localFunction() { }
             var x;
             x = localFunction;
             return null;
@@ -83,8 +81,7 @@ var BugExhibition3 = (function () {
     function BugExhibition3() {
     }
     BugExhibition3.prototype.exhibitBug = function () {
-        function localGenericFunction(u) {
-        }
+        function localGenericFunction(u) { }
         var x;
         x = localGenericFunction;
     };
@@ -94,8 +91,7 @@ var C = (function () {
     function C() {
     }
     C.prototype.exhibit = function () {
-        var funcExpr = function (u) {
-        };
+        var funcExpr = function (u) { };
         var x;
         x = funcExpr;
     };
@@ -104,8 +100,7 @@ var C = (function () {
 var M;
 (function (M) {
     function exhibitBug() {
-        function localFunction() {
-        }
+        function localFunction() { }
         var x;
         x = localFunction;
     }
@@ -114,8 +109,7 @@ var M;
 var E;
 (function (E) {
     E[E["A"] = (function () {
-        function localFunction() {
-        }
+        function localFunction() { }
         var x;
         x = localFunction;
         return 0;

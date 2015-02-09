@@ -68,8 +68,7 @@ var C1 = (function () {
         get: function () {
             return 0;
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -77,8 +76,7 @@ var C1 = (function () {
         return this.sx;
     };
     Object.defineProperty(C1, "staticSetter", {
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });

@@ -17,7 +17,6 @@ interface I {
 var C = (function () {
     function C() {
     }
-    C.v = function () {
-    };
+    C.v = function () { };
     return C;
 })();

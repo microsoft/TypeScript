@@ -18,14 +18,9 @@ function fn() {
     catch (x) {
         var x;
     }
-    try {
-    }
-    finally {
-    }
-    try {
-    }
-    catch (z) {
-    }
-    finally {
-    }
+    try { }
+    finally { }
+    try { }
+    catch (z) { }
+    finally { }
 }

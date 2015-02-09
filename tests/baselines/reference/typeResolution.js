@@ -224,24 +224,21 @@ define(["require", "exports"], function (require, exports) {
                 var ClassA = (function () {
                     function ClassA() {
                     }
-                    ClassA.prototype.AisIn1_2_2 = function () {
-                    };
+                    ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
                 })();
                 SubSubModule2.ClassA = ClassA;
                 var ClassB = (function () {
                     function ClassB() {
                     }
-                    ClassB.prototype.BisIn1_2_2 = function () {
-                    };
+                    ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
                 })();
                 SubSubModule2.ClassB = ClassB;
                 var ClassC = (function () {
                     function ClassC() {
                     }
-                    ClassC.prototype.CisIn1_2_2 = function () {
-                    };
+                    ClassC.prototype.CisIn1_2_2 = function () { };
                     return ClassC;
                 })();
                 SubSubModule2.ClassC = ClassC;
@@ -250,8 +247,7 @@ define(["require", "exports"], function (require, exports) {
         var ClassA = (function () {
             function ClassA() {
             }
-            ClassA.prototype.AisIn1 = function () {
-            };
+            ClassA.prototype.AisIn1 = function () { };
             return ClassA;
         })();
         var NotExportedModule;
@@ -271,8 +267,7 @@ define(["require", "exports"], function (require, exports) {
             var ClassA = (function () {
                 function ClassA() {
                 }
-                ClassA.prototype.AisIn2_3 = function () {
-                };
+                ClassA.prototype.AisIn2_3 = function () { };
                 return ClassA;
             })();
             SubModule3.ClassA = ClassA;

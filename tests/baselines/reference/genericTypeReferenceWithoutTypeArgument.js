@@ -95,9 +95,7 @@ var D3 = (function () {
     }
     return D3;
 })();
-function h(x) {
-}
-function i(x) {
-}
+function h(x) { }
+function i(x) { }
 var j = null;
 var k = null;

@@ -156,8 +156,7 @@ var r2 = foo2(r2arg);
 var r2a = [r2arg, r2arg2];
 var r2b = [r2arg2, r2arg];
 var r3arg = function (x) { return null; };
-var r3arg2 = function (x) {
-};
+var r3arg2 = function (x) { };
 var r3 = foo3(r3arg);
 var r3a = [r3arg, r3arg2];
 var r3b = [r3arg2, r3arg];

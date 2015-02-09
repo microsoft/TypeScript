@@ -51,7 +51,6 @@ var array3 = [null, undefined];
 var array4 = [null, undefined];
 var array5 = [null, undefined];
 var objLit;
-function anyReturnFunc() {
-}
+function anyReturnFunc() { }
 var obj0 = new objLit(1);
 var obj1 = anyReturnFunc();

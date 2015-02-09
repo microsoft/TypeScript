@@ -172,14 +172,10 @@ var SomeBase = (function () {
         this.privateMember = 0;
         this.publicMember = 0;
     }
-    SomeBase.prototype.privateFunc = function () {
-    };
-    SomeBase.prototype.publicFunc = function () {
-    };
-    SomeBase.privateStaticFunc = function () {
-    };
-    SomeBase.publicStaticFunc = function () {
-    };
+    SomeBase.prototype.privateFunc = function () { };
+    SomeBase.prototype.publicFunc = function () { };
+    SomeBase.privateStaticFunc = function () { };
+    SomeBase.publicStaticFunc = function () { };
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
     return SomeBase;

@@ -13,8 +13,7 @@ A.a();
 //// [qualifiedModuleLocals.js]
 var A;
 (function (A) {
-    function b() {
-    }
+    function b() { }
     function a() {
         A.b();
     }

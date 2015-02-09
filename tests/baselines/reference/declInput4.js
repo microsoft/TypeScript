@@ -38,8 +38,7 @@ var M;
         D.prototype.m242 = function () {
             return null;
         };
-        D.prototype.m26 = function (i) {
-        };
+        D.prototype.m26 = function (i) { };
         return D;
     })();
     M.D = D;

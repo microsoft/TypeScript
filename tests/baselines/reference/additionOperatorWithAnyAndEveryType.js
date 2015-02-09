@@ -40,13 +40,11 @@ var r19 = a + { a: '' };
 var r20 = a + ((a: string) => { return a });
 
 //// [additionOperatorWithAnyAndEveryType.js]
-function foo() {
-}
+function foo() { }
 var C = (function () {
     function C() {
     }
-    C.foo = function () {
-    };
+    C.foo = function () { };
     return C;
 })();
 var E;
