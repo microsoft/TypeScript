@@ -1625,23 +1625,6 @@ module ts {
     export var disableIncrementalParsing = false;
 
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
-        if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
-            var oldText = sourceFile.scriptSnapshot;
-            var newText = scriptSnapshot;
-
-            Debug.assert((oldText.getLength() - textChangeRange.span.length + textChangeRange.newLength) === newText.getLength());
-
-            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.getText(0, textChangeRange.span.start);
-                var newTextPrefix = newText.getText(0, textChangeRange.span.start);
-                Debug.assert(oldTextPrefix === newTextPrefix);
-
-                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span), oldText.getLength());
-                var newTextSuffix = newText.getText(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
-                Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
-
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
