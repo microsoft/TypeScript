@@ -336,11 +336,16 @@ module ts {
     }
 
     function fixupParentReferences(sourceFile: SourceFile) {
-        // normally parent references are set during binding.
-        // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
-        // walk over the nodes and set parent references
+        // normally parent references are set during binding. However, for clients that only need
+        // a syntax tree, and no semantic features, then the binding process is an unnecessary 
+        // overhead.  This functions allows us to set all the parents, without all the expense of
+        // binding.
+
         var parent: Node = sourceFile;
-        function walk(n: Node): void {
+        forEachChild(sourceFile, visitNode);
+        return;
+
+        function visitNode(n: Node): void {
             // walk down setting parents that differ from the parent we think it should be.  This
             // allows us to quickly bail out of setting parents for subtrees during incremental 
             // parsing
@@ -349,12 +354,10 @@ module ts {
 
                 var saveParent = parent;
                 parent = n;
-                forEachChild(n, walk);
+                forEachChild(n, visitNode);
                 parent = saveParent;
             }
         }
-
-        forEachChild(sourceFile, walk);
     }
 
     function shouldCheckNode(node: Node) {
@@ -721,7 +724,7 @@ module ts {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
         var oldText = sourceFile.text;
@@ -744,8 +747,8 @@ module ts {
         var delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
 
         // If we added or removed characters during the edit, then we need to go and adjust all
-        // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
-        // or they may move backward (if we deleted chars).
+        // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they 
+        // may move backward (if we deleted chars).
         //
         // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
         // to reuse are already at the appropriate position in the new text.  That way when we
@@ -1045,6 +1048,7 @@ module ts {
             fixupParentReferences(sourceFile);
         }
 
+        syntaxCursor = undefined;
         return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
