@@ -1535,16 +1535,6 @@ module ts {
             var file = this.getEntry(fileName);
             return file && file.scriptSnapshot;
         }
-
-        public getChangeRange(fileName: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
-            var currentVersion = this.getVersion(fileName);
-            if (lastKnownVersion === currentVersion) {
-                return unchangedTextChangeRange; // "No changes"
-            }
-
-            var scriptSnapshot = this.getScriptSnapshot(fileName);
-            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
-        }
     }
 
     class SyntaxTreeCache {
@@ -2062,7 +2052,7 @@ module ts {
                         }
 
                         // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostCache.getChangeRange(fileName, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
                         return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
                     }
                 }
