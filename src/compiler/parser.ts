@@ -1924,9 +1924,13 @@ module ts {
         }
 
         function isReusableParameter(node: Node) {
-            // TODO: this most likely needs the same initializer check that 
-            // isReusableVariableDeclaration has.
-            return node.kind === SyntaxKind.Parameter;
+            if (node.kind !== SyntaxKind.Parameter) {
+                return false;
+            }
+
+            // See the comment in isReusableVariableDeclaration for why we do this.
+            var parameter = <ParameterDeclaration>node;
+            return parameter.initializer === undefined;
         }
 
         // Returns true if we should abort parsing.
