@@ -393,6 +393,7 @@ module ts {
             }
 
             forEachChild(node, visitNode, visitArray);
+            checkNodePositions(node, aggressiveChecks);
         }
 
         function visitArray(array: IncrementalNodeArray) {
@@ -479,8 +480,19 @@ module ts {
         }
     }
 
+    function checkNodePositions(node: Node, aggressiveChecks: boolean) {
+        if (aggressiveChecks) {
+            var pos = node.pos;
+            forEachChild(node, child => {
+                Debug.assert(child.pos >= pos);
+                pos = child.end;
+            });
+            Debug.assert(pos <= node.end);
+        }
+    }
+
     function updateTokenPositionsAndMarkElements(
-        node: IncrementalNode,
+        sourceFile: IncrementalNode,
         changeStart: number,
         changeRangeOldEnd: number,
         changeRangeNewEnd: number,
@@ -489,7 +501,7 @@ module ts {
         newText: string,
         aggressiveChecks: boolean): void {
 
-        visitNode(node);
+        visitNode(sourceFile);
         return;
 
         function visitNode(child: IncrementalNode) {
@@ -510,6 +522,8 @@ module ts {
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                 forEachChild(child, visitNode, visitArray);
+
+                checkNodePositions(child, aggressiveChecks);
                 return;
             }
 
