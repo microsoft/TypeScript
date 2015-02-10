@@ -16,7 +16,6 @@ var List = (function () {
         this.Foo(); // no error
         List.Foo();
     };
-    List.Foo = function () {
-    };
+    List.Foo = function () { };
     return List;
 })();

@@ -37,10 +37,9 @@ var C = (function (_super) {
     }
     C.prototype.foo = function () {
         var _this = this;
-        (function () {
+        (() => {
             var obj = {
-                [_super.prototype.bar.call(_this)]() {
-                } // needs capture
+                [_super.prototype.bar.call(_this)]() { } // needs capture
             };
         });
         return 0;

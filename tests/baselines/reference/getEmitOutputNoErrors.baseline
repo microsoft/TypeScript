@@ -1,5 +1,5 @@
-EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile.js
+EmitSkipped: false
+FileName : tests/cases/fourslash/inputFile.js
 var x;
 var M = (function () {
     function M() {

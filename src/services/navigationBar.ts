@@ -404,9 +404,9 @@ module ts.NavigationBar {
                 }
 
                 hasGlobalNode = true;
-                var rootName = isExternalModule(node) ?
-                    "\"" + escapeString(getBaseFilename(removeFileExtension(normalizePath(node.filename)))) + "\"" :
-                    "<global>"
+                var rootName = isExternalModule(node)
+                    ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
+                    : "<global>"
 
                 return getNavigationBarItem(rootName,
                     ts.ScriptElementKind.moduleElement,

@@ -94,57 +94,46 @@ var arr: any[];
 
 //// [taggedTemplateStringsTypeArgumentInferenceES6.js]
 // Generic tag with one parameter
-function noParams(n) {
-}
+function noParams(n) { }
 noParams ``;
 // Generic tag with parameter which does not use type parameter
-function noGenericParams(n) {
-}
+function noGenericParams(n) { }
 noGenericParams ``;
 // Generic tag with multiple type parameters and only one used in parameter type annotation
-function someGenerics1a(n, m) {
-}
+function someGenerics1a(n, m) { }
 someGenerics1a `${3}`;
-function someGenerics1b(n, m) {
-}
+function someGenerics1b(n, m) { }
 someGenerics1b `${3}`;
 // Generic tag with argument of function type whose parameter is of type parameter type
-function someGenerics2a(strs, n) {
-}
-someGenerics2a `${function (n) { return n; }}`;
-function someGenerics2b(strs, n) {
-}
-someGenerics2b `${function (n, x) { return n; }}`;
+function someGenerics2a(strs, n) { }
+someGenerics2a `${(n) => { return n; }}`;
+function someGenerics2b(strs, n) { }
+someGenerics2b `${(n, x) => { return n; }}`;
 // Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
-function someGenerics3(strs, producer) {
-}
-someGenerics3 `${function () { return ''; }}`;
-someGenerics3 `${function () { return undefined; }}`;
-someGenerics3 `${function () { return 3; }}`;
+function someGenerics3(strs, producer) { }
+someGenerics3 `${() => { return ''; }}`;
+someGenerics3 `${() => { return undefined; }}`;
+someGenerics3 `${() => { return 3; }}`;
 // 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
-function someGenerics4(strs, n, f) {
-}
-someGenerics4 `${4}${function () { return null; }}`;
-someGenerics4 `${''}${function () { return 3; }}`;
+function someGenerics4(strs, n, f) { }
+someGenerics4 `${4}${() => { return null; }}`;
+someGenerics4 `${''}${() => { return 3; }}`;
 someGenerics4 `${null}${null}`;
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
-function someGenerics5(strs, n, f) {
-}
-someGenerics5 `${4} ${function () { return null; }}`;
-someGenerics5 `${''}${function () { return 3; }}`;
+function someGenerics5(strs, n, f) { }
+someGenerics5 `${4} ${() => { return null; }}`;
+someGenerics5 `${''}${() => { return 3; }}`;
 someGenerics5 `${null}${null}`;
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
-function someGenerics6(strs, a, b, c) {
-}
-someGenerics6 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
-someGenerics6 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
-someGenerics6 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
+function someGenerics6(strs, a, b, c) { }
+someGenerics6 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics6 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics6 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
 // Generic tag with multiple arguments of function types that each have parameters of different generic type
-function someGenerics7(strs, a, b, c) {
-}
-someGenerics7 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
-someGenerics7 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
-someGenerics7 `${function (n) { return n; }}${function (n) { return n; }}${function (n) { return n; }}`;
+function someGenerics7(strs, a, b, c) { }
+someGenerics7 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics7 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics7 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) {
     return n;

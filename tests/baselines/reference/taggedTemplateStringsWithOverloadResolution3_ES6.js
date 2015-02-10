@@ -103,8 +103,7 @@ var s = fn3 `${''}${''}${''}`;
 var n = fn3 `${''}${''}${3}`;
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
 fn3 ``; // Error
-function fn4() {
-}
+function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
 fn4 `${''}${3}`;
 fn4 `${3}${''}`;
@@ -118,5 +117,5 @@ fn4 `${null}${true}`;
 function fn5() {
     return undefined;
 }
-fn5 `${function (n) { return n.toFixed(); }}`; // will error; 'n' should have type 'string'.
-fn5 `${function (n) { return n.substr(0); }}`;
+fn5 `${(n) => { return n.toFixed(); }}`; // will error; 'n' should have type 'string'.
+fn5 `${(n) => { return n.substr(0); }}`;

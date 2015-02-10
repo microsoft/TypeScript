@@ -15,15 +15,12 @@ and limitations under the License.
 
 var ts;
 (function (ts) {
-    (function (EmitReturnStatus) {
-        EmitReturnStatus[EmitReturnStatus["Succeeded"] = 0] = "Succeeded";
-        EmitReturnStatus[EmitReturnStatus["AllOutputGenerationSkipped"] = 1] = "AllOutputGenerationSkipped";
-        EmitReturnStatus[EmitReturnStatus["JSGeneratedWithSemanticErrors"] = 2] = "JSGeneratedWithSemanticErrors";
-        EmitReturnStatus[EmitReturnStatus["DeclarationGenerationSkipped"] = 3] = "DeclarationGenerationSkipped";
-        EmitReturnStatus[EmitReturnStatus["EmitErrorsEncountered"] = 4] = "EmitErrorsEncountered";
-        EmitReturnStatus[EmitReturnStatus["CompilerOptionsErrors"] = 5] = "CompilerOptionsErrors";
-    })(ts.EmitReturnStatus || (ts.EmitReturnStatus = {}));
-    var EmitReturnStatus = ts.EmitReturnStatus;
+    (function (ExitStatus) {
+        ExitStatus[ExitStatus["Success"] = 0] = "Success";
+        ExitStatus[ExitStatus["DiagnosticsPresent_OutputsSkipped"] = 1] = "DiagnosticsPresent_OutputsSkipped";
+        ExitStatus[ExitStatus["DiagnosticsPresent_OutputsGenerated"] = 2] = "DiagnosticsPresent_OutputsGenerated";
+    })(ts.ExitStatus || (ts.ExitStatus = {}));
+    var ExitStatus = ts.ExitStatus;
     (function (DiagnosticCategory) {
         DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";
         DiagnosticCategory[DiagnosticCategory["Error"] = 1] = "Error";
@@ -130,6 +127,12 @@ var ts;
         return result;
     }
     ts.sum = sum;
+    function addRange(to, from) {
+        for (var i = 0, n = from.length; i < n; i++) {
+            to.push(from[i]);
+        }
+    }
+    ts.addRange = addRange;
     function lastOrUndefined(array) {
         if (array.length === 0) {
             return undefined;
@@ -261,8 +264,7 @@ var ts;
             length: length,
             messageText: text,
             category: message.category,
-            code: message.code,
-            isEarly: message.isEarly
+            code: message.code
         };
     }
     ts.createFileDiagnostic = createFileDiagnostic;
@@ -277,8 +279,7 @@ var ts;
             length: undefined,
             messageText: text,
             category: message.category,
-            code: message.code,
-            isEarly: message.isEarly
+            code: message.code
         };
     }
     ts.createCompilerDiagnostic = createCompilerDiagnostic;
@@ -301,34 +302,6 @@ var ts;
         return headChain;
     }
     ts.concatenateDiagnosticMessageChains = concatenateDiagnosticMessageChains;
-    function flattenDiagnosticChain(file, start, length, diagnosticChain, newLine) {
-        Debug.assert(start >= 0, "start must be non-negative, is " + start);
-        Debug.assert(length >= 0, "length must be non-negative, is " + length);
-        var code = diagnosticChain.code;
-        var category = diagnosticChain.category;
-        var messageText = "";
-        var indent = 0;
-        while (diagnosticChain) {
-            if (indent) {
-                messageText += newLine;
-                for (var i = 0; i < indent; i++) {
-                    messageText += "  ";
-                }
-            }
-            messageText += diagnosticChain.messageText;
-            indent++;
-            diagnosticChain = diagnosticChain.next;
-        }
-        return {
-            file: file,
-            start: start,
-            length: length,
-            code: code,
-            category: category,
-            messageText: messageText
-        };
-    }
-    ts.flattenDiagnosticChain = flattenDiagnosticChain;
     function compareValues(a, b) {
         if (a === b)
             return 0 /* EqualTo */;
@@ -339,13 +312,33 @@ var ts;
         return a < b ? -1 /* LessThan */ : 1 /* GreaterThan */;
     }
     ts.compareValues = compareValues;
-    function getDiagnosticFilename(diagnostic) {
-        return diagnostic.file ? diagnostic.file.filename : undefined;
+    function getDiagnosticFileName(diagnostic) {
+        return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
     function compareDiagnostics(d1, d2) {
-        return compareValues(getDiagnosticFilename(d1), getDiagnosticFilename(d2)) || compareValues(d1.start, d2.start) || compareValues(d1.length, d2.length) || compareValues(d1.code, d2.code) || compareValues(d1.messageText, d2.messageText) || 0;
+        return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) || compareValues(d1.start, d2.start) || compareValues(d1.length, d2.length) || compareValues(d1.code, d2.code) || compareMessageText(d1.messageText, d2.messageText) || 0 /* EqualTo */;
     }
     ts.compareDiagnostics = compareDiagnostics;
+    function compareMessageText(text1, text2) {
+        while (text1 && text2) {
+            var string1 = typeof text1 === "string" ? text1 : text1.messageText;
+            var string2 = typeof text2 === "string" ? text2 : text2.messageText;
+            var res = compareValues(string1, string2);
+            if (res) {
+                return res;
+            }
+            text1 = typeof text1 === "string" ? undefined : text1.next;
+            text2 = typeof text2 === "string" ? undefined : text2.next;
+        }
+        if (!text1 && !text2) {
+            return 0 /* EqualTo */;
+        }
+        return text1 ? 1 /* GreaterThan */ : -1 /* LessThan */;
+    }
+    function sortAndDeduplicateDiagnostics(diagnostics) {
+        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
+    }
+    ts.sortAndDeduplicateDiagnostics = sortAndDeduplicateDiagnostics;
     function deduplicateSortedDiagnostics(diagnostics) {
         if (diagnostics.length < 2) {
             return diagnostics;
@@ -437,8 +430,8 @@ var ts;
         return normalizedPathComponents(path, rootLength);
     }
     ts.getNormalizedPathComponents = getNormalizedPathComponents;
-    function getNormalizedAbsolutePath(filename, currentDirectory) {
-        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
+    function getNormalizedAbsolutePath(fileName, currentDirectory) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
     ts.getNormalizedAbsolutePath = getNormalizedAbsolutePath;
     function getNormalizedPathFromPathComponents(pathComponents) {
@@ -506,11 +499,11 @@ var ts;
         return absolutePath;
     }
     ts.getRelativePathToDirectoryOrUrl = getRelativePathToDirectoryOrUrl;
-    function getBaseFilename(path) {
+    function getBaseFileName(path) {
         var i = path.lastIndexOf(ts.directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
-    ts.getBaseFilename = getBaseFilename;
+    ts.getBaseFileName = getBaseFileName;
     function combinePaths(path1, path2) {
         if (!(path1 && path1.length))
             return path2;
@@ -570,6 +563,10 @@ var ts;
         }
     }
     ts.escapeString = escapeString;
+    function getDefaultLibFileName(options) {
+        return options.target === 2 /* ES6 */ ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+    ts.getDefaultLibFileName = getDefaultLibFileName;
     function Symbol(flags, name) {
         this.flags = flags;
         this.name = name;
@@ -875,87 +872,87 @@ var ts;
     ts.Diagnostics = {
         Unterminated_string_literal: { code: 1002, category: 1 /* Error */, key: "Unterminated string literal." },
         Identifier_expected: { code: 1003, category: 1 /* Error */, key: "Identifier expected." },
-        _0_expected: { code: 1005, category: 1 /* Error */, key: "'{0}' expected.", isEarly: true },
+        _0_expected: { code: 1005, category: 1 /* Error */, key: "'{0}' expected." },
         A_file_cannot_have_a_reference_to_itself: { code: 1006, category: 1 /* Error */, key: "A file cannot have a reference to itself." },
-        Trailing_comma_not_allowed: { code: 1009, category: 1 /* Error */, key: "Trailing comma not allowed.", isEarly: true },
+        Trailing_comma_not_allowed: { code: 1009, category: 1 /* Error */, key: "Trailing comma not allowed." },
         Asterisk_Slash_expected: { code: 1010, category: 1 /* Error */, key: "'*/' expected." },
         Unexpected_token: { code: 1012, category: 1 /* Error */, key: "Unexpected token." },
-        Catch_clause_parameter_cannot_have_a_type_annotation: { code: 1013, category: 1 /* Error */, key: "Catch clause parameter cannot have a type annotation.", isEarly: true },
-        A_rest_parameter_must_be_last_in_a_parameter_list: { code: 1014, category: 1 /* Error */, key: "A rest parameter must be last in a parameter list.", isEarly: true },
-        Parameter_cannot_have_question_mark_and_initializer: { code: 1015, category: 1 /* Error */, key: "Parameter cannot have question mark and initializer.", isEarly: true },
-        A_required_parameter_cannot_follow_an_optional_parameter: { code: 1016, category: 1 /* Error */, key: "A required parameter cannot follow an optional parameter.", isEarly: true },
-        An_index_signature_cannot_have_a_rest_parameter: { code: 1017, category: 1 /* Error */, key: "An index signature cannot have a rest parameter.", isEarly: true },
-        An_index_signature_parameter_cannot_have_an_accessibility_modifier: { code: 1018, category: 1 /* Error */, key: "An index signature parameter cannot have an accessibility modifier.", isEarly: true },
-        An_index_signature_parameter_cannot_have_a_question_mark: { code: 1019, category: 1 /* Error */, key: "An index signature parameter cannot have a question mark.", isEarly: true },
-        An_index_signature_parameter_cannot_have_an_initializer: { code: 1020, category: 1 /* Error */, key: "An index signature parameter cannot have an initializer.", isEarly: true },
-        An_index_signature_must_have_a_type_annotation: { code: 1021, category: 1 /* Error */, key: "An index signature must have a type annotation.", isEarly: true },
-        An_index_signature_parameter_must_have_a_type_annotation: { code: 1022, category: 1 /* Error */, key: "An index signature parameter must have a type annotation.", isEarly: true },
-        An_index_signature_parameter_type_must_be_string_or_number: { code: 1023, category: 1 /* Error */, key: "An index signature parameter type must be 'string' or 'number'.", isEarly: true },
+        Catch_clause_parameter_cannot_have_a_type_annotation: { code: 1013, category: 1 /* Error */, key: "Catch clause parameter cannot have a type annotation." },
+        A_rest_parameter_must_be_last_in_a_parameter_list: { code: 1014, category: 1 /* Error */, key: "A rest parameter must be last in a parameter list." },
+        Parameter_cannot_have_question_mark_and_initializer: { code: 1015, category: 1 /* Error */, key: "Parameter cannot have question mark and initializer." },
+        A_required_parameter_cannot_follow_an_optional_parameter: { code: 1016, category: 1 /* Error */, key: "A required parameter cannot follow an optional parameter." },
+        An_index_signature_cannot_have_a_rest_parameter: { code: 1017, category: 1 /* Error */, key: "An index signature cannot have a rest parameter." },
+        An_index_signature_parameter_cannot_have_an_accessibility_modifier: { code: 1018, category: 1 /* Error */, key: "An index signature parameter cannot have an accessibility modifier." },
+        An_index_signature_parameter_cannot_have_a_question_mark: { code: 1019, category: 1 /* Error */, key: "An index signature parameter cannot have a question mark." },
+        An_index_signature_parameter_cannot_have_an_initializer: { code: 1020, category: 1 /* Error */, key: "An index signature parameter cannot have an initializer." },
+        An_index_signature_must_have_a_type_annotation: { code: 1021, category: 1 /* Error */, key: "An index signature must have a type annotation." },
+        An_index_signature_parameter_must_have_a_type_annotation: { code: 1022, category: 1 /* Error */, key: "An index signature parameter must have a type annotation." },
+        An_index_signature_parameter_type_must_be_string_or_number: { code: 1023, category: 1 /* Error */, key: "An index signature parameter type must be 'string' or 'number'." },
         A_class_or_interface_declaration_can_only_have_one_extends_clause: { code: 1024, category: 1 /* Error */, key: "A class or interface declaration can only have one 'extends' clause." },
         An_extends_clause_must_precede_an_implements_clause: { code: 1025, category: 1 /* Error */, key: "An 'extends' clause must precede an 'implements' clause." },
         A_class_can_only_extend_a_single_class: { code: 1026, category: 1 /* Error */, key: "A class can only extend a single class." },
         A_class_declaration_can_only_have_one_implements_clause: { code: 1027, category: 1 /* Error */, key: "A class declaration can only have one 'implements' clause." },
-        Accessibility_modifier_already_seen: { code: 1028, category: 1 /* Error */, key: "Accessibility modifier already seen.", isEarly: true },
-        _0_modifier_must_precede_1_modifier: { code: 1029, category: 1 /* Error */, key: "'{0}' modifier must precede '{1}' modifier.", isEarly: true },
-        _0_modifier_already_seen: { code: 1030, category: 1 /* Error */, key: "'{0}' modifier already seen.", isEarly: true },
-        _0_modifier_cannot_appear_on_a_class_element: { code: 1031, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a class element.", isEarly: true },
+        Accessibility_modifier_already_seen: { code: 1028, category: 1 /* Error */, key: "Accessibility modifier already seen." },
+        _0_modifier_must_precede_1_modifier: { code: 1029, category: 1 /* Error */, key: "'{0}' modifier must precede '{1}' modifier." },
+        _0_modifier_already_seen: { code: 1030, category: 1 /* Error */, key: "'{0}' modifier already seen." },
+        _0_modifier_cannot_appear_on_a_class_element: { code: 1031, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a class element." },
         An_interface_declaration_cannot_have_an_implements_clause: { code: 1032, category: 1 /* Error */, key: "An interface declaration cannot have an 'implements' clause." },
         super_must_be_followed_by_an_argument_list_or_member_access: { code: 1034, category: 1 /* Error */, key: "'super' must be followed by an argument list or member access." },
-        Only_ambient_modules_can_use_quoted_names: { code: 1035, category: 1 /* Error */, key: "Only ambient modules can use quoted names.", isEarly: true },
-        Statements_are_not_allowed_in_ambient_contexts: { code: 1036, category: 1 /* Error */, key: "Statements are not allowed in ambient contexts.", isEarly: true },
-        A_declare_modifier_cannot_be_used_in_an_already_ambient_context: { code: 1038, category: 1 /* Error */, key: "A 'declare' modifier cannot be used in an already ambient context.", isEarly: true },
-        Initializers_are_not_allowed_in_ambient_contexts: { code: 1039, category: 1 /* Error */, key: "Initializers are not allowed in ambient contexts.", isEarly: true },
-        _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a module element.", isEarly: true },
-        A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: 1 /* Error */, key: "A 'declare' modifier cannot be used with an interface declaration.", isEarly: true },
+        Only_ambient_modules_can_use_quoted_names: { code: 1035, category: 1 /* Error */, key: "Only ambient modules can use quoted names." },
+        Statements_are_not_allowed_in_ambient_contexts: { code: 1036, category: 1 /* Error */, key: "Statements are not allowed in ambient contexts." },
+        A_declare_modifier_cannot_be_used_in_an_already_ambient_context: { code: 1038, category: 1 /* Error */, key: "A 'declare' modifier cannot be used in an already ambient context." },
+        Initializers_are_not_allowed_in_ambient_contexts: { code: 1039, category: 1 /* Error */, key: "Initializers are not allowed in ambient contexts." },
+        _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a module element." },
+        A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: 1 /* Error */, key: "A 'declare' modifier cannot be used with an interface declaration." },
         A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file: { code: 1046, category: 1 /* Error */, key: "A 'declare' modifier is required for a top level declaration in a .d.ts file." },
-        A_rest_parameter_cannot_be_optional: { code: 1047, category: 1 /* Error */, key: "A rest parameter cannot be optional.", isEarly: true },
-        A_rest_parameter_cannot_have_an_initializer: { code: 1048, category: 1 /* Error */, key: "A rest parameter cannot have an initializer.", isEarly: true },
-        A_set_accessor_must_have_exactly_one_parameter: { code: 1049, category: 1 /* Error */, key: "A 'set' accessor must have exactly one parameter.", isEarly: true },
-        A_set_accessor_cannot_have_an_optional_parameter: { code: 1051, category: 1 /* Error */, key: "A 'set' accessor cannot have an optional parameter.", isEarly: true },
-        A_set_accessor_parameter_cannot_have_an_initializer: { code: 1052, category: 1 /* Error */, key: "A 'set' accessor parameter cannot have an initializer.", isEarly: true },
-        A_set_accessor_cannot_have_rest_parameter: { code: 1053, category: 1 /* Error */, key: "A 'set' accessor cannot have rest parameter.", isEarly: true },
-        A_get_accessor_cannot_have_parameters: { code: 1054, category: 1 /* Error */, key: "A 'get' accessor cannot have parameters.", isEarly: true },
-        Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1056, category: 1 /* Error */, key: "Accessors are only available when targeting ECMAScript 5 and higher.", isEarly: true },
-        Enum_member_must_have_initializer: { code: 1061, category: 1 /* Error */, key: "Enum member must have initializer.", isEarly: true },
-        An_export_assignment_cannot_be_used_in_an_internal_module: { code: 1063, category: 1 /* Error */, key: "An export assignment cannot be used in an internal module.", isEarly: true },
-        Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: 1 /* Error */, key: "Ambient enum elements can only have integer literal initializers.", isEarly: true },
+        A_rest_parameter_cannot_be_optional: { code: 1047, category: 1 /* Error */, key: "A rest parameter cannot be optional." },
+        A_rest_parameter_cannot_have_an_initializer: { code: 1048, category: 1 /* Error */, key: "A rest parameter cannot have an initializer." },
+        A_set_accessor_must_have_exactly_one_parameter: { code: 1049, category: 1 /* Error */, key: "A 'set' accessor must have exactly one parameter." },
+        A_set_accessor_cannot_have_an_optional_parameter: { code: 1051, category: 1 /* Error */, key: "A 'set' accessor cannot have an optional parameter." },
+        A_set_accessor_parameter_cannot_have_an_initializer: { code: 1052, category: 1 /* Error */, key: "A 'set' accessor parameter cannot have an initializer." },
+        A_set_accessor_cannot_have_rest_parameter: { code: 1053, category: 1 /* Error */, key: "A 'set' accessor cannot have rest parameter." },
+        A_get_accessor_cannot_have_parameters: { code: 1054, category: 1 /* Error */, key: "A 'get' accessor cannot have parameters." },
+        Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1056, category: 1 /* Error */, key: "Accessors are only available when targeting ECMAScript 5 and higher." },
+        Enum_member_must_have_initializer: { code: 1061, category: 1 /* Error */, key: "Enum member must have initializer." },
+        An_export_assignment_cannot_be_used_in_an_internal_module: { code: 1063, category: 1 /* Error */, key: "An export assignment cannot be used in an internal module." },
+        Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: 1 /* Error */, key: "Ambient enum elements can only have integer literal initializers." },
         Unexpected_token_A_constructor_method_accessor_or_property_was_expected: { code: 1068, category: 1 /* Error */, key: "Unexpected token. A constructor, method, accessor, or property was expected." },
-        A_declare_modifier_cannot_be_used_with_an_import_declaration: { code: 1079, category: 1 /* Error */, key: "A 'declare' modifier cannot be used with an import declaration.", isEarly: true },
+        A_declare_modifier_cannot_be_used_with_an_import_declaration: { code: 1079, category: 1 /* Error */, key: "A 'declare' modifier cannot be used with an import declaration." },
         Invalid_reference_directive_syntax: { code: 1084, category: 1 /* Error */, key: "Invalid 'reference' directive syntax." },
-        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher: { code: 1085, category: 1 /* Error */, key: "Octal literals are not available when targeting ECMAScript 5 and higher.", isEarly: true },
-        An_accessor_cannot_be_declared_in_an_ambient_context: { code: 1086, category: 1 /* Error */, key: "An accessor cannot be declared in an ambient context.", isEarly: true },
-        _0_modifier_cannot_appear_on_a_constructor_declaration: { code: 1089, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a constructor declaration.", isEarly: true },
-        _0_modifier_cannot_appear_on_a_parameter: { code: 1090, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a parameter.", isEarly: true },
-        Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement: { code: 1091, category: 1 /* Error */, key: "Only a single variable declaration is allowed in a 'for...in' statement.", isEarly: true },
-        Type_parameters_cannot_appear_on_a_constructor_declaration: { code: 1092, category: 1 /* Error */, key: "Type parameters cannot appear on a constructor declaration.", isEarly: true },
-        Type_annotation_cannot_appear_on_a_constructor_declaration: { code: 1093, category: 1 /* Error */, key: "Type annotation cannot appear on a constructor declaration.", isEarly: true },
-        An_accessor_cannot_have_type_parameters: { code: 1094, category: 1 /* Error */, key: "An accessor cannot have type parameters.", isEarly: true },
-        A_set_accessor_cannot_have_a_return_type_annotation: { code: 1095, category: 1 /* Error */, key: "A 'set' accessor cannot have a return type annotation.", isEarly: true },
-        An_index_signature_must_have_exactly_one_parameter: { code: 1096, category: 1 /* Error */, key: "An index signature must have exactly one parameter.", isEarly: true },
-        _0_list_cannot_be_empty: { code: 1097, category: 1 /* Error */, key: "'{0}' list cannot be empty.", isEarly: true },
-        Type_parameter_list_cannot_be_empty: { code: 1098, category: 1 /* Error */, key: "Type parameter list cannot be empty.", isEarly: true },
-        Type_argument_list_cannot_be_empty: { code: 1099, category: 1 /* Error */, key: "Type argument list cannot be empty.", isEarly: true },
-        Invalid_use_of_0_in_strict_mode: { code: 1100, category: 1 /* Error */, key: "Invalid use of '{0}' in strict mode.", isEarly: true },
-        with_statements_are_not_allowed_in_strict_mode: { code: 1101, category: 1 /* Error */, key: "'with' statements are not allowed in strict mode.", isEarly: true },
-        delete_cannot_be_called_on_an_identifier_in_strict_mode: { code: 1102, category: 1 /* Error */, key: "'delete' cannot be called on an identifier in strict mode.", isEarly: true },
-        A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement: { code: 1104, category: 1 /* Error */, key: "A 'continue' statement can only be used within an enclosing iteration statement.", isEarly: true },
-        A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement: { code: 1105, category: 1 /* Error */, key: "A 'break' statement can only be used within an enclosing iteration or switch statement.", isEarly: true },
-        Jump_target_cannot_cross_function_boundary: { code: 1107, category: 1 /* Error */, key: "Jump target cannot cross function boundary.", isEarly: true },
-        A_return_statement_can_only_be_used_within_a_function_body: { code: 1108, category: 1 /* Error */, key: "A 'return' statement can only be used within a function body.", isEarly: true },
-        Expression_expected: { code: 1109, category: 1 /* Error */, key: "Expression expected.", isEarly: true },
-        Type_expected: { code: 1110, category: 1 /* Error */, key: "Type expected.", isEarly: true },
-        A_class_member_cannot_be_declared_optional: { code: 1112, category: 1 /* Error */, key: "A class member cannot be declared optional.", isEarly: true },
-        A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: 1 /* Error */, key: "A 'default' clause cannot appear more than once in a 'switch' statement.", isEarly: true },
-        Duplicate_label_0: { code: 1114, category: 1 /* Error */, key: "Duplicate label '{0}'", isEarly: true },
-        A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement: { code: 1115, category: 1 /* Error */, key: "A 'continue' statement can only jump to a label of an enclosing iteration statement.", isEarly: true },
-        A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement: { code: 1116, category: 1 /* Error */, key: "A 'break' statement can only jump to a label of an enclosing statement.", isEarly: true },
-        An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode: { code: 1117, category: 1 /* Error */, key: "An object literal cannot have multiple properties with the same name in strict mode.", isEarly: true },
-        An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name: { code: 1118, category: 1 /* Error */, key: "An object literal cannot have multiple get/set accessors with the same name.", isEarly: true },
-        An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: 1 /* Error */, key: "An object literal cannot have property and accessor with the same name.", isEarly: true },
-        An_export_assignment_cannot_have_modifiers: { code: 1120, category: 1 /* Error */, key: "An export assignment cannot have modifiers.", isEarly: true },
-        Octal_literals_are_not_allowed_in_strict_mode: { code: 1121, category: 1 /* Error */, key: "Octal literals are not allowed in strict mode.", isEarly: true },
-        A_tuple_type_element_list_cannot_be_empty: { code: 1122, category: 1 /* Error */, key: "A tuple type element list cannot be empty.", isEarly: true },
-        Variable_declaration_list_cannot_be_empty: { code: 1123, category: 1 /* Error */, key: "Variable declaration list cannot be empty.", isEarly: true },
+        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher: { code: 1085, category: 1 /* Error */, key: "Octal literals are not available when targeting ECMAScript 5 and higher." },
+        An_accessor_cannot_be_declared_in_an_ambient_context: { code: 1086, category: 1 /* Error */, key: "An accessor cannot be declared in an ambient context." },
+        _0_modifier_cannot_appear_on_a_constructor_declaration: { code: 1089, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a constructor declaration." },
+        _0_modifier_cannot_appear_on_a_parameter: { code: 1090, category: 1 /* Error */, key: "'{0}' modifier cannot appear on a parameter." },
+        Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement: { code: 1091, category: 1 /* Error */, key: "Only a single variable declaration is allowed in a 'for...in' statement." },
+        Type_parameters_cannot_appear_on_a_constructor_declaration: { code: 1092, category: 1 /* Error */, key: "Type parameters cannot appear on a constructor declaration." },
+        Type_annotation_cannot_appear_on_a_constructor_declaration: { code: 1093, category: 1 /* Error */, key: "Type annotation cannot appear on a constructor declaration." },
+        An_accessor_cannot_have_type_parameters: { code: 1094, category: 1 /* Error */, key: "An accessor cannot have type parameters." },
+        A_set_accessor_cannot_have_a_return_type_annotation: { code: 1095, category: 1 /* Error */, key: "A 'set' accessor cannot have a return type annotation." },
+        An_index_signature_must_have_exactly_one_parameter: { code: 1096, category: 1 /* Error */, key: "An index signature must have exactly one parameter." },
+        _0_list_cannot_be_empty: { code: 1097, category: 1 /* Error */, key: "'{0}' list cannot be empty." },
+        Type_parameter_list_cannot_be_empty: { code: 1098, category: 1 /* Error */, key: "Type parameter list cannot be empty." },
+        Type_argument_list_cannot_be_empty: { code: 1099, category: 1 /* Error */, key: "Type argument list cannot be empty." },
+        Invalid_use_of_0_in_strict_mode: { code: 1100, category: 1 /* Error */, key: "Invalid use of '{0}' in strict mode." },
+        with_statements_are_not_allowed_in_strict_mode: { code: 1101, category: 1 /* Error */, key: "'with' statements are not allowed in strict mode." },
+        delete_cannot_be_called_on_an_identifier_in_strict_mode: { code: 1102, category: 1 /* Error */, key: "'delete' cannot be called on an identifier in strict mode." },
+        A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement: { code: 1104, category: 1 /* Error */, key: "A 'continue' statement can only be used within an enclosing iteration statement." },
+        A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement: { code: 1105, category: 1 /* Error */, key: "A 'break' statement can only be used within an enclosing iteration or switch statement." },
+        Jump_target_cannot_cross_function_boundary: { code: 1107, category: 1 /* Error */, key: "Jump target cannot cross function boundary." },
+        A_return_statement_can_only_be_used_within_a_function_body: { code: 1108, category: 1 /* Error */, key: "A 'return' statement can only be used within a function body." },
+        Expression_expected: { code: 1109, category: 1 /* Error */, key: "Expression expected." },
+        Type_expected: { code: 1110, category: 1 /* Error */, key: "Type expected." },
+        A_class_member_cannot_be_declared_optional: { code: 1112, category: 1 /* Error */, key: "A class member cannot be declared optional." },
+        A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: 1 /* Error */, key: "A 'default' clause cannot appear more than once in a 'switch' statement." },
+        Duplicate_label_0: { code: 1114, category: 1 /* Error */, key: "Duplicate label '{0}'" },
+        A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement: { code: 1115, category: 1 /* Error */, key: "A 'continue' statement can only jump to a label of an enclosing iteration statement." },
+        A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement: { code: 1116, category: 1 /* Error */, key: "A 'break' statement can only jump to a label of an enclosing statement." },
+        An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode: { code: 1117, category: 1 /* Error */, key: "An object literal cannot have multiple properties with the same name in strict mode." },
+        An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name: { code: 1118, category: 1 /* Error */, key: "An object literal cannot have multiple get/set accessors with the same name." },
+        An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: 1 /* Error */, key: "An object literal cannot have property and accessor with the same name." },
+        An_export_assignment_cannot_have_modifiers: { code: 1120, category: 1 /* Error */, key: "An export assignment cannot have modifiers." },
+        Octal_literals_are_not_allowed_in_strict_mode: { code: 1121, category: 1 /* Error */, key: "Octal literals are not allowed in strict mode." },
+        A_tuple_type_element_list_cannot_be_empty: { code: 1122, category: 1 /* Error */, key: "A tuple type element list cannot be empty." },
+        Variable_declaration_list_cannot_be_empty: { code: 1123, category: 1 /* Error */, key: "Variable declaration list cannot be empty." },
         Digit_expected: { code: 1124, category: 1 /* Error */, key: "Digit expected." },
         Hexadecimal_digit_expected: { code: 1125, category: 1 /* Error */, key: "Hexadecimal digit expected." },
         Unexpected_end_of_text: { code: 1126, category: 1 /* Error */, key: "Unexpected end of text." },
@@ -967,53 +964,53 @@ var ts;
         Enum_member_expected: { code: 1132, category: 1 /* Error */, key: "Enum member expected." },
         Type_reference_expected: { code: 1133, category: 1 /* Error */, key: "Type reference expected." },
         Variable_declaration_expected: { code: 1134, category: 1 /* Error */, key: "Variable declaration expected." },
-        Argument_expression_expected: { code: 1135, category: 1 /* Error */, key: "Argument expression expected.", isEarly: true },
+        Argument_expression_expected: { code: 1135, category: 1 /* Error */, key: "Argument expression expected." },
         Property_assignment_expected: { code: 1136, category: 1 /* Error */, key: "Property assignment expected." },
         Expression_or_comma_expected: { code: 1137, category: 1 /* Error */, key: "Expression or comma expected." },
         Parameter_declaration_expected: { code: 1138, category: 1 /* Error */, key: "Parameter declaration expected." },
         Type_parameter_declaration_expected: { code: 1139, category: 1 /* Error */, key: "Type parameter declaration expected." },
         Type_argument_expected: { code: 1140, category: 1 /* Error */, key: "Type argument expected." },
-        String_literal_expected: { code: 1141, category: 1 /* Error */, key: "String literal expected.", isEarly: true },
-        Line_break_not_permitted_here: { code: 1142, category: 1 /* Error */, key: "Line break not permitted here.", isEarly: true },
+        String_literal_expected: { code: 1141, category: 1 /* Error */, key: "String literal expected." },
+        Line_break_not_permitted_here: { code: 1142, category: 1 /* Error */, key: "Line break not permitted here." },
         or_expected: { code: 1144, category: 1 /* Error */, key: "'{' or ';' expected." },
-        Modifiers_not_permitted_on_index_signature_members: { code: 1145, category: 1 /* Error */, key: "Modifiers not permitted on index signature members.", isEarly: true },
+        Modifiers_not_permitted_on_index_signature_members: { code: 1145, category: 1 /* Error */, key: "Modifiers not permitted on index signature members." },
         Declaration_expected: { code: 1146, category: 1 /* Error */, key: "Declaration expected." },
-        Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: 1 /* Error */, key: "Import declarations in an internal module cannot reference an external module.", isEarly: true },
+        Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: 1 /* Error */, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: 1148, category: 1 /* Error */, key: "Cannot compile external modules unless the '--module' flag is provided." },
-        Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: 1149, category: 1 /* Error */, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
-        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.", isEarly: true },
+        File_name_0_differs_from_already_included_file_name_1_only_in_casing: { code: 1149, category: 1 /* Error */, key: "File name '{0}' differs from already included file name '{1}' only in casing" },
+        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         var_let_or_const_expected: { code: 1152, category: 1 /* Error */, key: "'var', 'let' or 'const' expected." },
-        let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1153, category: 1 /* Error */, key: "'let' declarations are only available when targeting ECMAScript 6 and higher.", isEarly: true },
-        const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1154, category: 1 /* Error */, key: "'const' declarations are only available when targeting ECMAScript 6 and higher.", isEarly: true },
-        const_declarations_must_be_initialized: { code: 1155, category: 1 /* Error */, key: "'const' declarations must be initialized", isEarly: true },
-        const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: 1 /* Error */, key: "'const' declarations can only be declared inside a block.", isEarly: true },
-        let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: 1 /* Error */, key: "'let' declarations can only be declared inside a block.", isEarly: true },
-        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher.", isEarly: true },
+        let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1153, category: 1 /* Error */, key: "'let' declarations are only available when targeting ECMAScript 6 and higher." },
+        const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1154, category: 1 /* Error */, key: "'const' declarations are only available when targeting ECMAScript 6 and higher." },
+        const_declarations_must_be_initialized: { code: 1155, category: 1 /* Error */, key: "'const' declarations must be initialized" },
+        const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: 1 /* Error */, key: "'const' declarations can only be declared inside a block." },
+        let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: 1 /* Error */, key: "'let' declarations can only be declared inside a block." },
+        Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: 1 /* Error */, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Unterminated_template_literal: { code: 1160, category: 1 /* Error */, key: "Unterminated template literal." },
         Unterminated_regular_expression_literal: { code: 1161, category: 1 /* Error */, key: "Unterminated regular expression literal." },
-        An_object_member_cannot_be_declared_optional: { code: 1162, category: 1 /* Error */, key: "An object member cannot be declared optional.", isEarly: true },
-        yield_expression_must_be_contained_within_a_generator_declaration: { code: 1163, category: 1 /* Error */, key: "'yield' expression must be contained_within a generator declaration.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_enums: { code: 1164, category: 1 /* Error */, key: "Computed property names are not allowed in enums.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_an_ambient_context: { code: 1165, category: 1 /* Error */, key: "Computed property names are not allowed in an ambient context.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_class_property_declarations: { code: 1166, category: 1 /* Error */, key: "Computed property names are not allowed in class property declarations.", isEarly: true },
-        Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1167, category: 1 /* Error */, key: "Computed property names are only available when targeting ECMAScript 6 and higher.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_method_overloads: { code: 1168, category: 1 /* Error */, key: "Computed property names are not allowed in method overloads.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_interfaces: { code: 1169, category: 1 /* Error */, key: "Computed property names are not allowed in interfaces.", isEarly: true },
-        Computed_property_names_are_not_allowed_in_type_literals: { code: 1170, category: 1 /* Error */, key: "Computed property names are not allowed in type literals.", isEarly: true },
+        An_object_member_cannot_be_declared_optional: { code: 1162, category: 1 /* Error */, key: "An object member cannot be declared optional." },
+        yield_expression_must_be_contained_within_a_generator_declaration: { code: 1163, category: 1 /* Error */, key: "'yield' expression must be contained_within a generator declaration." },
+        Computed_property_names_are_not_allowed_in_enums: { code: 1164, category: 1 /* Error */, key: "Computed property names are not allowed in enums." },
+        Computed_property_names_are_not_allowed_in_an_ambient_context: { code: 1165, category: 1 /* Error */, key: "Computed property names are not allowed in an ambient context." },
+        Computed_property_names_are_not_allowed_in_class_property_declarations: { code: 1166, category: 1 /* Error */, key: "Computed property names are not allowed in class property declarations." },
+        Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1167, category: 1 /* Error */, key: "Computed property names are only available when targeting ECMAScript 6 and higher." },
+        Computed_property_names_are_not_allowed_in_method_overloads: { code: 1168, category: 1 /* Error */, key: "Computed property names are not allowed in method overloads." },
+        Computed_property_names_are_not_allowed_in_interfaces: { code: 1169, category: 1 /* Error */, key: "Computed property names are not allowed in interfaces." },
+        Computed_property_names_are_not_allowed_in_type_literals: { code: 1170, category: 1 /* Error */, key: "Computed property names are not allowed in type literals." },
         A_comma_expression_is_not_allowed_in_a_computed_property_name: { code: 1171, category: 1 /* Error */, key: "A comma expression is not allowed in a computed property name." },
-        extends_clause_already_seen: { code: 1172, category: 1 /* Error */, key: "'extends' clause already seen.", isEarly: true },
-        extends_clause_must_precede_implements_clause: { code: 1173, category: 1 /* Error */, key: "'extends' clause must precede 'implements' clause.", isEarly: true },
-        Classes_can_only_extend_a_single_class: { code: 1174, category: 1 /* Error */, key: "Classes can only extend a single class.", isEarly: true },
-        implements_clause_already_seen: { code: 1175, category: 1 /* Error */, key: "'implements' clause already seen.", isEarly: true },
-        Interface_declaration_cannot_have_implements_clause: { code: 1176, category: 1 /* Error */, key: "Interface declaration cannot have 'implements' clause.", isEarly: true },
+        extends_clause_already_seen: { code: 1172, category: 1 /* Error */, key: "'extends' clause already seen." },
+        extends_clause_must_precede_implements_clause: { code: 1173, category: 1 /* Error */, key: "'extends' clause must precede 'implements' clause." },
+        Classes_can_only_extend_a_single_class: { code: 1174, category: 1 /* Error */, key: "Classes can only extend a single class." },
+        implements_clause_already_seen: { code: 1175, category: 1 /* Error */, key: "'implements' clause already seen." },
+        Interface_declaration_cannot_have_implements_clause: { code: 1176, category: 1 /* Error */, key: "Interface declaration cannot have 'implements' clause." },
         Binary_digit_expected: { code: 1177, category: 1 /* Error */, key: "Binary digit expected." },
         Octal_digit_expected: { code: 1178, category: 1 /* Error */, key: "Octal digit expected." },
         Unexpected_token_expected: { code: 1179, category: 1 /* Error */, key: "Unexpected token. '{' expected." },
         Property_destructuring_pattern_expected: { code: 1180, category: 1 /* Error */, key: "Property destructuring pattern expected." },
         Array_element_destructuring_pattern_expected: { code: 1181, category: 1 /* Error */, key: "Array element destructuring pattern expected." },
-        A_destructuring_declaration_must_have_an_initializer: { code: 1182, category: 1 /* Error */, key: "A destructuring declaration must have an initializer.", isEarly: true },
-        Destructuring_declarations_are_not_allowed_in_ambient_contexts: { code: 1183, category: 1 /* Error */, key: "Destructuring declarations are not allowed in ambient contexts.", isEarly: true },
-        An_implementation_cannot_be_declared_in_ambient_contexts: { code: 1184, category: 1 /* Error */, key: "An implementation cannot be declared in ambient contexts.", isEarly: true },
+        A_destructuring_declaration_must_have_an_initializer: { code: 1182, category: 1 /* Error */, key: "A destructuring declaration must have an initializer." },
+        Destructuring_declarations_are_not_allowed_in_ambient_contexts: { code: 1183, category: 1 /* Error */, key: "Destructuring declarations are not allowed in ambient contexts." },
+        An_implementation_cannot_be_declared_in_ambient_contexts: { code: 1184, category: 1 /* Error */, key: "An implementation cannot be declared in ambient contexts." },
         Modifiers_cannot_appear_here: { code: 1184, category: 1 /* Error */, key: "Modifiers cannot appear here." },
         Merge_conflict_marker_encountered: { code: 1185, category: 1 /* Error */, key: "Merge conflict marker encountered." },
         A_rest_element_cannot_have_an_initializer: { code: 1186, category: 1 /* Error */, key: "A rest element cannot have an initializer." },
@@ -1155,10 +1152,10 @@ var ts;
         Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses: { code: 2445, category: 1 /* Error */, key: "Property '{0}' is protected and only accessible within class '{1}' and its subclasses." },
         Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1: { code: 2446, category: 1 /* Error */, key: "Property '{0}' is protected and only accessible through an instance of class '{1}'." },
         The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead: { code: 2447, category: 1 /* Error */, key: "The '{0}' operator is not allowed for boolean types. Consider using '{1}' instead." },
-        Block_scoped_variable_0_used_before_its_declaration: { code: 2448, category: 1 /* Error */, key: "Block-scoped variable '{0}' used before its declaration.", isEarly: true },
-        The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant: { code: 2449, category: 1 /* Error */, key: "The operand of an increment or decrement operator cannot be a constant.", isEarly: true },
-        Left_hand_side_of_assignment_expression_cannot_be_a_constant: { code: 2450, category: 1 /* Error */, key: "Left-hand side of assignment expression cannot be a constant.", isEarly: true },
-        Cannot_redeclare_block_scoped_variable_0: { code: 2451, category: 1 /* Error */, key: "Cannot redeclare block-scoped variable '{0}'.", isEarly: true },
+        Block_scoped_variable_0_used_before_its_declaration: { code: 2448, category: 1 /* Error */, key: "Block-scoped variable '{0}' used before its declaration." },
+        The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant: { code: 2449, category: 1 /* Error */, key: "The operand of an increment or decrement operator cannot be a constant." },
+        Left_hand_side_of_assignment_expression_cannot_be_a_constant: { code: 2450, category: 1 /* Error */, key: "Left-hand side of assignment expression cannot be a constant." },
+        Cannot_redeclare_block_scoped_variable_0: { code: 2451, category: 1 /* Error */, key: "Cannot redeclare block-scoped variable '{0}'." },
         An_enum_member_cannot_have_a_numeric_name: { code: 2452, category: 1 /* Error */, key: "An enum member cannot have a numeric name." },
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly: { code: 2453, category: 1 /* Error */, key: "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly." },
         Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: 1 /* Error */, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
@@ -1244,12 +1241,12 @@ var ts;
         Parameter_0_of_exported_function_has_or_is_using_private_name_1: { code: 4078, category: 1 /* Error */, key: "Parameter '{0}' of exported function has or is using private name '{1}'." },
         Exported_type_alias_0_has_or_is_using_private_name_1: { code: 4081, category: 1 /* Error */, key: "Exported type alias '{0}' has or is using private name '{1}'." },
         Enum_declarations_must_all_be_const_or_non_const: { code: 4082, category: 1 /* Error */, key: "Enum declarations must all be const or non-const." },
-        In_const_enum_declarations_member_initializer_must_be_constant_expression: { code: 4083, category: 1 /* Error */, key: "In 'const' enum declarations member initializer must be constant expression.", isEarly: true },
+        In_const_enum_declarations_member_initializer_must_be_constant_expression: { code: 4083, category: 1 /* Error */, key: "In 'const' enum declarations member initializer must be constant expression." },
         const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment: { code: 4084, category: 1 /* Error */, key: "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment." },
-        A_const_enum_member_can_only_be_accessed_using_a_string_literal: { code: 4085, category: 1 /* Error */, key: "A const enum member can only be accessed using a string literal.", isEarly: true },
+        A_const_enum_member_can_only_be_accessed_using_a_string_literal: { code: 4085, category: 1 /* Error */, key: "A const enum member can only be accessed using a string literal." },
         const_enum_member_initializer_was_evaluated_to_a_non_finite_value: { code: 4086, category: 1 /* Error */, key: "'const' enum member initializer was evaluated to a non-finite value." },
         const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN: { code: 4087, category: 1 /* Error */, key: "'const' enum member initializer was evaluated to disallowed value 'NaN'." },
-        Property_0_does_not_exist_on_const_enum_1: { code: 4088, category: 1 /* Error */, key: "Property '{0}' does not exist on 'const' enum '{1}'.", isEarly: true },
+        Property_0_does_not_exist_on_const_enum_1: { code: 4088, category: 1 /* Error */, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: 1 /* Error */, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: 1 /* Error */, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: 1 /* Error */, key: "Cannot read file '{0}': {1}" },
@@ -1304,6 +1301,7 @@ var ts;
         File_0_not_found: { code: 6053, category: 1 /* Error */, key: "File '{0}' not found." },
         File_0_must_have_extension_ts_or_d_ts: { code: 6054, category: 1 /* Error */, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: 2 /* Message */, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
+        Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: 2 /* Message */, key: "Do not emit declarations for code that has an '@internal' annotation." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: 1 /* Error */, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: 1 /* Error */, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: 1 /* Error */, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -1321,8 +1319,10 @@ var ts;
         _0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7023, category: 1 /* Error */, key: "'{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: 1 /* Error */, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         You_cannot_rename_this_element: { code: 8000, category: 1 /* Error */, key: "You cannot rename this element." },
-        yield_expressions_are_not_currently_supported: { code: 9000, category: 1 /* Error */, key: "'yield' expressions are not currently supported.", isEarly: true },
-        Generators_are_not_currently_supported: { code: 9001, category: 1 /* Error */, key: "Generators are not currently supported.", isEarly: true }
+        You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library: { code: 8001, category: 1 /* Error */, key: "You cannot rename elements that are defined in the standard TypeScript library." },
+        yield_expressions_are_not_currently_supported: { code: 9000, category: 1 /* Error */, key: "'yield' expressions are not currently supported." },
+        Generators_are_not_currently_supported: { code: 9001, category: 1 /* Error */, key: "Generators are not currently supported." },
+        The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 9002, category: 1 /* Error */, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." }
     };
 })(ts || (ts = {}));
 var ts;
@@ -1508,12 +1508,20 @@ var ts;
         return result;
     }
     ts.computeLineStarts = computeLineStarts;
-    function getPositionFromLineAndCharacter(lineStarts, line, character) {
+    function getPositionFromLineAndCharacter(sourceFile, line, character) {
+        return computePositionFromLineAndCharacter(getLineStarts(sourceFile), line, character);
+    }
+    ts.getPositionFromLineAndCharacter = getPositionFromLineAndCharacter;
+    function computePositionFromLineAndCharacter(lineStarts, line, character) {
         ts.Debug.assert(line > 0 && line <= lineStarts.length);
         return lineStarts[line - 1] + character - 1;
     }
-    ts.getPositionFromLineAndCharacter = getPositionFromLineAndCharacter;
-    function getLineAndCharacterOfPosition(lineStarts, position) {
+    ts.computePositionFromLineAndCharacter = computePositionFromLineAndCharacter;
+    function getLineStarts(sourceFile) {
+        return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
+    }
+    ts.getLineStarts = getLineStarts;
+    function computeLineAndCharacterOfPosition(lineStarts, position) {
         var lineNumber = ts.binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             lineNumber = (~lineNumber) - 1;
@@ -1523,12 +1531,11 @@ var ts;
             character: position - lineStarts[lineNumber] + 1
         };
     }
-    ts.getLineAndCharacterOfPosition = getLineAndCharacterOfPosition;
-    function positionToLineAndCharacter(text, pos) {
-        var lineStarts = computeLineStarts(text);
-        return getLineAndCharacterOfPosition(lineStarts, pos);
+    ts.computeLineAndCharacterOfPosition = computeLineAndCharacterOfPosition;
+    function getLineAndCharacterOfPosition(sourceFile, position) {
+        return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
-    ts.positionToLineAndCharacter = positionToLineAndCharacter;
+    ts.getLineAndCharacterOfPosition = getLineAndCharacterOfPosition;
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     function isWhiteSpace(ch) {
         return ch === 32 /* space */ || ch === 9 /* tab */ || ch === 11 /* verticalTab */ || ch === 12 /* formFeed */ || ch === 160 /* nonBreakingSpace */ || ch === 5760 /* ogham */ || ch >= 8192 /* enQuad */ && ch <= 8203 /* zeroWidthSpace */ || ch === 8239 /* narrowNoBreakSpace */ || ch === 8287 /* mathematicalSpace */ || ch === 12288 /* ideographicSpace */ || ch === 65279 /* byteOrderMark */;
@@ -2515,8 +2522,8 @@ var ts;
     ts.getSourceFileOfNode = getSourceFileOfNode;
     function nodePosToString(node) {
         var file = getSourceFileOfNode(node);
-        var loc = file.getLineAndCharacterFromPosition(node.pos);
-        return file.filename + "(" + loc.line + "," + loc.character + ")";
+        var loc = ts.getLineAndCharacterOfPosition(file, node.pos);
+        return file.fileName + "(" + loc.line + "," + loc.character + ")";
     }
     ts.nodePosToString = nodePosToString;
     function getStartPosOfNode(node) {
@@ -2580,12 +2587,19 @@ var ts;
         return ts.createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
     ts.createDiagnosticForNode = createDiagnosticForNode;
-    function createDiagnosticForNodeFromMessageChain(node, messageChain, newLine) {
+    function createDiagnosticForNodeFromMessageChain(node, messageChain) {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = ts.skipTrivia(file.text, node.pos);
         var length = node.end - start;
-        return ts.flattenDiagnosticChain(file, start, length, messageChain, newLine);
+        return {
+            file: file,
+            start: start,
+            length: length,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText
+        };
     }
     ts.createDiagnosticForNodeFromMessageChain = createDiagnosticForNodeFromMessageChain;
     function getErrorSpanForNode(node) {
@@ -3055,7 +3069,7 @@ var ts;
     ts.getHeritageClause = getHeritageClause;
     function tryResolveScriptReference(host, sourceFile, reference) {
         if (!host.getCompilerOptions().noResolve) {
-            var referenceFileName = ts.isRootedDiskPath(reference.filename) ? reference.filename : ts.combinePaths(ts.getDirectoryPath(sourceFile.filename), reference.filename);
+            var referenceFileName = ts.isRootedDiskPath(reference.fileName) ? reference.fileName : ts.combinePaths(ts.getDirectoryPath(sourceFile.fileName), reference.fileName);
             referenceFileName = ts.getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
@@ -3110,7 +3124,7 @@ var ts;
                         fileReference: {
                             pos: start,
                             end: end,
-                            filename: matchResult[3]
+                            fileName: matchResult[3]
                         },
                         isNoDefaultLib: false
                     };
@@ -3148,21 +3162,6 @@ var ts;
         return false;
     }
     ts.isModifier = isModifier;
-    function createEmitHostFromProgram(program) {
-        var compilerHost = program.getCompilerHost();
-        return {
-            getCanonicalFileName: compilerHost.getCanonicalFileName,
-            getCommonSourceDirectory: program.getCommonSourceDirectory,
-            getCompilerOptions: program.getCompilerOptions,
-            getCurrentDirectory: compilerHost.getCurrentDirectory,
-            getNewLine: compilerHost.getNewLine,
-            getSourceFile: program.getSourceFile,
-            getSourceFiles: program.getSourceFiles,
-            isEmitBlocked: program.isEmitBlocked,
-            writeFile: compilerHost.writeFile
-        };
-    }
-    ts.createEmitHostFromProgram = createEmitHostFromProgram;
     function textSpanEnd(span) {
         return span.start + span.length;
     }
@@ -3272,10 +3271,76 @@ var ts;
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), newEndN - oldStartN);
     }
     ts.collapseTextChangeRangesAcrossMultipleVersions = collapseTextChangeRangesAcrossMultipleVersions;
+    function createDiagnosticCollection() {
+        var nonFileDiagnostics = [];
+        var fileDiagnostics = {};
+        var diagnosticsModified = false;
+        var modificationCount = 0;
+        return {
+            add: add,
+            getGlobalDiagnostics: getGlobalDiagnostics,
+            getDiagnostics: getDiagnostics,
+            getModificationCount: getModificationCount
+        };
+        function getModificationCount() {
+            return modificationCount;
+        }
+        function add(diagnostic) {
+            var diagnostics;
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                if (!diagnostics) {
+                    diagnostics = [];
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                }
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+            diagnostics.push(diagnostic);
+            diagnosticsModified = true;
+            modificationCount++;
+        }
+        function getGlobalDiagnostics() {
+            sortAndDeduplicate();
+            return nonFileDiagnostics;
+        }
+        function getDiagnostics(fileName) {
+            sortAndDeduplicate();
+            if (fileName) {
+                return fileDiagnostics[fileName] || [];
+            }
+            var allDiagnostics = [];
+            function pushDiagnostic(d) {
+                allDiagnostics.push(d);
+            }
+            ts.forEach(nonFileDiagnostics, pushDiagnostic);
+            for (var key in fileDiagnostics) {
+                if (ts.hasProperty(fileDiagnostics, key)) {
+                    ts.forEach(fileDiagnostics[key], pushDiagnostic);
+                }
+            }
+            return ts.sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+        function sortAndDeduplicate() {
+            if (!diagnosticsModified) {
+                return;
+            }
+            diagnosticsModified = false;
+            nonFileDiagnostics = ts.sortAndDeduplicateDiagnostics(nonFileDiagnostics);
+            for (var key in fileDiagnostics) {
+                if (ts.hasProperty(fileDiagnostics, key)) {
+                    fileDiagnostics[key] = ts.sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+                }
+            }
+        }
+    }
+    ts.createDiagnosticCollection = createDiagnosticCollection;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
     var nodeConstructors = new Array(209 /* Count */);
+    ts.parseTime = 0;
     function getNodeConstructor(kind) {
         return nodeConstructors[kind] || (nodeConstructors[kind] = ts.objectAllocator.getNodeConstructor(kind));
     }
@@ -3512,6 +3577,155 @@ var ts;
         }
         forEachChild(sourceFile, walk);
     }
+    function moveElementEntirelyPastChangeRange(element, delta) {
+        if (element.length) {
+            visitArray(element);
+        }
+        else {
+            visitNode(element);
+        }
+        function visitNode(node) {
+            node._children = undefined;
+            node.pos += delta;
+            node.end += delta;
+            forEachChild(node, visitNode, visitArray);
+        }
+        function visitArray(array) {
+            array.pos += delta;
+            array.end += delta;
+            for (var i = 0, n = array.length; i < n; i++) {
+                visitNode(array[i]);
+            }
+        }
+    }
+    function adjustIntersectingElement(element, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
+        ts.Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+        ts.Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+        element.pos = Math.min(element.pos, changeRangeNewEnd);
+        if (element.end >= changeRangeOldEnd) {
+            element.end += delta;
+        }
+        else {
+            element.end = Math.min(element.end, changeRangeNewEnd);
+        }
+        ts.Debug.assert(element.pos <= element.end);
+        if (element.parent) {
+            ts.Debug.assert(element.pos >= element.parent.pos);
+            ts.Debug.assert(element.end <= element.parent.end);
+        }
+    }
+    function updateTokenPositionsAndMarkElements(node, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
+        visitNode(node);
+        function visitNode(child) {
+            if (child.pos > changeRangeOldEnd) {
+                moveElementEntirelyPastChangeRange(child, delta);
+                return;
+            }
+            var fullEnd = child.end;
+            if (fullEnd >= changeStart) {
+                child.intersectsChange = true;
+                adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                forEachChild(child, visitNode, visitArray);
+                return;
+            }
+        }
+        function visitArray(array) {
+            if (array.pos > changeRangeOldEnd) {
+                moveElementEntirelyPastChangeRange(array, delta);
+            }
+            else {
+                var fullEnd = array.end;
+                if (fullEnd >= changeStart) {
+                    array.intersectsChange = true;
+                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        visitNode(array[i]);
+                    }
+                }
+            }
+        }
+    }
+    function extendToAffectedRange(sourceFile, changeRange) {
+        var maxLookahead = 1;
+        var start = changeRange.span.start;
+        for (var i = 0; start > 0 && i <= maxLookahead; i++) {
+            var nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+            var position = nearestNode.pos;
+            start = Math.max(0, position - 1);
+        }
+        var finalSpan = ts.createTextSpanFromBounds(start, ts.textSpanEnd(changeRange.span));
+        var finalLength = changeRange.newLength + (changeRange.span.start - start);
+        return ts.createTextChangeRange(finalSpan, finalLength);
+    }
+    function findNearestNodeStartingBeforeOrAtPosition(sourceFile, position) {
+        var bestResult = sourceFile;
+        var lastNodeEntirelyBeforePosition;
+        forEachChild(sourceFile, visit);
+        if (lastNodeEntirelyBeforePosition) {
+            var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+            if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                bestResult = lastChildOfLastEntireNodeBeforePosition;
+            }
+        }
+        return bestResult;
+        function getLastChild(node) {
+            while (true) {
+                var lastChild = getLastChildWorker(node);
+                if (lastChild) {
+                    node = lastChild;
+                }
+                else {
+                    return node;
+                }
+            }
+        }
+        function getLastChildWorker(node) {
+            var last = undefined;
+            forEachChild(node, function (child) {
+                if (ts.nodeIsPresent(child)) {
+                    last = child;
+                }
+            });
+            return last;
+        }
+        function visit(child) {
+            if (ts.nodeIsMissing(child)) {
+                return;
+            }
+            if (child.pos <= position) {
+                if (child.pos >= bestResult.pos) {
+                    bestResult = child;
+                }
+                if (position < child.end) {
+                    forEachChild(child, visit);
+                    return true;
+                }
+                else {
+                    ts.Debug.assert(child.end <= position);
+                    lastNodeEntirelyBeforePosition = child;
+                }
+            }
+            else {
+                ts.Debug.assert(child.pos > position);
+                return true;
+            }
+        }
+    }
+    function updateSourceFile(sourceFile, newText, textChangeRange) {
+        if (ts.textChangeRangeIsUnchanged(textChangeRange)) {
+            return sourceFile;
+        }
+        if (sourceFile.statements.length === 0) {
+            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, undefined, true);
+        }
+        var syntaxCursor = createSyntaxCursor(sourceFile);
+        var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+        var delta = ts.textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
+        updateTokenPositionsAndMarkElements(sourceFile, changeRange.span.start, ts.textSpanEnd(changeRange.span), ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)), delta);
+        var result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, true);
+        return result;
+    }
+    ts.updateSourceFile = updateSourceFile;
     function isEvalOrArgumentsIdentifier(node) {
         return node.kind === 64 /* Identifier */ && (node.text === "eval" || node.text === "arguments");
     }
@@ -3579,207 +3793,47 @@ var ts;
             }
         }
     }
-    function createSourceFile(filename, sourceText, languageVersion, setParentNodes) {
+    function createSourceFile(fileName, sourceText, languageVersion, setParentNodes) {
         if (setParentNodes === void 0) { setParentNodes = false; }
-        var parsingContext;
-        var identifiers;
+        var start = new Date().getTime();
+        var result = parseSourceFile(fileName, sourceText, languageVersion, undefined, setParentNodes);
+        ts.parseTime += new Date().getTime() - start;
+        return result;
+    }
+    ts.createSourceFile = createSourceFile;
+    function parseSourceFile(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes) {
+        if (setParentNodes === void 0) { setParentNodes = false; }
+        var parsingContext = 0;
+        var identifiers = {};
         var identifierCount = 0;
         var nodeCount = 0;
-        var lineStarts;
-        var syntacticDiagnostics;
         var scanner;
         var token;
-        var syntaxCursor;
-        var contextFlags;
-        var parseErrorBeforeNextFinishedNode;
-        var sourceFile;
-        return parseSourceFile(sourceText, setParentNodes);
-        function parseSourceFile(text, setParentNodes) {
-            sourceText = text;
-            parsingContext = 0;
-            identifiers = {};
-            lineStarts = undefined;
-            syntacticDiagnostics = undefined;
-            contextFlags = 0;
-            parseErrorBeforeNextFinishedNode = false;
-            sourceFile = createNode(207 /* SourceFile */, 0);
-            sourceFile.referenceDiagnostics = [];
-            sourceFile.parseDiagnostics = [];
-            sourceFile.semanticDiagnostics = [];
-            scanner = ts.createScanner(languageVersion, true, sourceText, scanError);
-            token = nextToken();
-            sourceFile.flags = ts.fileExtensionIs(filename, ".d.ts") ? 1024 /* DeclarationFile */ : 0;
-            sourceFile.end = sourceText.length;
-            sourceFile.filename = ts.normalizePath(filename);
-            sourceFile.text = sourceText;
-            sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-            sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-            sourceFile.getLineStarts = getLineStarts;
-            sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-            sourceFile.update = update;
-            processReferenceComments(sourceFile);
-            sourceFile.statements = parseList(0 /* SourceElements */, true, parseSourceElement);
-            ts.Debug.assert(token === 1 /* EndOfFileToken */);
-            sourceFile.endOfFileToken = parseTokenNode();
-            setExternalModuleIndicator(sourceFile);
-            sourceFile.nodeCount = nodeCount;
-            sourceFile.identifierCount = identifierCount;
-            sourceFile.languageVersion = languageVersion;
-            sourceFile.identifiers = identifiers;
-            if (setParentNodes) {
-                fixupParentReferences(sourceFile);
-            }
-            return sourceFile;
+        var sourceFile = createNode(207 /* SourceFile */, 0);
+        sourceFile.pos = 0;
+        sourceFile.end = sourceText.length;
+        sourceFile.text = sourceText;
+        sourceFile.parseDiagnostics = [];
+        sourceFile.bindDiagnostics = [];
+        sourceFile.languageVersion = languageVersion;
+        sourceFile.fileName = ts.normalizePath(fileName);
+        sourceFile.flags = ts.fileExtensionIs(sourceFile.fileName, ".d.ts") ? 1024 /* DeclarationFile */ : 0;
+        var contextFlags = 0;
+        var parseErrorBeforeNextFinishedNode = false;
+        scanner = ts.createScanner(languageVersion, true, sourceText, scanError);
+        token = nextToken();
+        processReferenceComments(sourceFile);
+        sourceFile.statements = parseList(0 /* SourceElements */, true, parseSourceElement);
+        ts.Debug.assert(token === 1 /* EndOfFileToken */);
+        sourceFile.endOfFileToken = parseTokenNode();
+        setExternalModuleIndicator(sourceFile);
+        sourceFile.nodeCount = nodeCount;
+        sourceFile.identifierCount = identifierCount;
+        sourceFile.identifiers = identifiers;
+        if (setParentNodes) {
+            fixupParentReferences(sourceFile);
         }
-        function update(newText, textChangeRange) {
-            if (ts.textChangeRangeIsUnchanged(textChangeRange)) {
-                return sourceFile;
-            }
-            if (sourceFile.statements.length === 0) {
-                return parseSourceFile(newText, true);
-            }
-            syntaxCursor = createSyntaxCursor(sourceFile);
-            var changeRange = extendToAffectedRange(textChangeRange);
-            var delta = ts.textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
-            updateTokenPositionsAndMarkElements(sourceFile, changeRange.span.start, ts.textSpanEnd(changeRange.span), ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)), delta);
-            var result = parseSourceFile(newText, true);
-            syntaxCursor = undefined;
-            return result;
-        }
-        function updateTokenPositionsAndMarkElements(node, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
-            visitNode(node);
-            function visitNode(child) {
-                if (child.pos > changeRangeOldEnd) {
-                    moveElementEntirelyPastChangeRange(child, delta);
-                    return;
-                }
-                var fullEnd = child.end;
-                if (fullEnd >= changeStart) {
-                    child.intersectsChange = true;
-                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                    forEachChild(child, visitNode, visitArray);
-                    return;
-                }
-            }
-            function visitArray(array) {
-                if (array.pos > changeRangeOldEnd) {
-                    moveElementEntirelyPastChangeRange(array, delta);
-                }
-                else {
-                    var fullEnd = array.end;
-                    if (fullEnd >= changeStart) {
-                        array.intersectsChange = true;
-                        adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                        for (var i = 0, n = array.length; i < n; i++) {
-                            visitNode(array[i]);
-                        }
-                    }
-                }
-            }
-        }
-        function adjustIntersectingElement(element, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
-            ts.Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
-            ts.Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
-            element.pos = Math.min(element.pos, changeRangeNewEnd);
-            if (element.end >= changeRangeOldEnd) {
-                element.end += delta;
-            }
-            else {
-                element.end = Math.min(element.end, changeRangeNewEnd);
-            }
-            ts.Debug.assert(element.pos <= element.end);
-            if (element.parent) {
-                ts.Debug.assert(element.pos >= element.parent.pos);
-                ts.Debug.assert(element.end <= element.parent.end);
-            }
-        }
-        function moveElementEntirelyPastChangeRange(element, delta) {
-            if (element.length) {
-                visitArray(element);
-            }
-            else {
-                visitNode(element);
-            }
-            function visitNode(node) {
-                node._children = undefined;
-                node.pos += delta;
-                node.end += delta;
-                forEachChild(node, visitNode, visitArray);
-            }
-            function visitArray(array) {
-                array.pos += delta;
-                array.end += delta;
-                for (var i = 0, n = array.length; i < n; i++) {
-                    visitNode(array[i]);
-                }
-            }
-        }
-        function extendToAffectedRange(changeRange) {
-            var maxLookahead = 1;
-            var start = changeRange.span.start;
-            for (var i = 0; start > 0 && i <= maxLookahead; i++) {
-                var nearestNode = findNearestNodeStartingBeforeOrAtPosition(start);
-                var position = nearestNode.pos;
-                start = Math.max(0, position - 1);
-            }
-            var finalSpan = ts.createTextSpanFromBounds(start, ts.textSpanEnd(changeRange.span));
-            var finalLength = changeRange.newLength + (changeRange.span.start - start);
-            return ts.createTextChangeRange(finalSpan, finalLength);
-        }
-        function findNearestNodeStartingBeforeOrAtPosition(position) {
-            var bestResult = sourceFile;
-            var lastNodeEntirelyBeforePosition;
-            forEachChild(sourceFile, visit);
-            if (lastNodeEntirelyBeforePosition) {
-                var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
-                    bestResult = lastChildOfLastEntireNodeBeforePosition;
-                }
-            }
-            return bestResult;
-            function getLastChild(node) {
-                while (true) {
-                    var lastChild = getLastChildWorker(node);
-                    if (lastChild) {
-                        node = lastChild;
-                    }
-                    else {
-                        return node;
-                    }
-                }
-            }
-            function getLastChildWorker(node) {
-                var last = undefined;
-                forEachChild(node, function (child) {
-                    if (ts.nodeIsPresent(child)) {
-                        last = child;
-                    }
-                });
-                return last;
-            }
-            function visit(child) {
-                if (ts.nodeIsMissing(child)) {
-                    return;
-                }
-                if (child.pos <= position) {
-                    if (child.pos >= bestResult.pos) {
-                        bestResult = child;
-                    }
-                    if (position < child.end) {
-                        forEachChild(child, visit);
-                        return true;
-                    }
-                    else {
-                        ts.Debug.assert(child.end <= position);
-                        lastNodeEntirelyBeforePosition = child;
-                    }
-                }
-                else {
-                    ts.Debug.assert(child.pos > position);
-                    return true;
-                }
-            }
-        }
+        return sourceFile;
         function setContextFlag(val, flag) {
             if (val) {
                 contextFlags |= flag;
@@ -3847,15 +3901,6 @@ var ts;
         }
         function inDisallowInContext() {
             return (contextFlags & 2 /* DisallowIn */) !== 0;
-        }
-        function getLineStarts() {
-            return lineStarts || (lineStarts = ts.computeLineStarts(sourceText));
-        }
-        function getLineAndCharacterFromSourcePosition(position) {
-            return ts.getLineAndCharacterOfPosition(getLineStarts(), position);
-        }
-        function getPositionFromSourceLineAndCharacter(line, character) {
-            return ts.getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
         function parseErrorAtCurrentToken(message, arg0) {
             var start = scanner.getTokenPos();
@@ -6292,7 +6337,7 @@ var ts;
             return isDeclarationStart() ? parseDeclaration() : parseStatement();
         }
         function processReferenceComments(sourceFile) {
-            var triviaScanner = ts.createScanner(languageVersion, false, sourceText);
+            var triviaScanner = ts.createScanner(sourceFile.languageVersion, false, sourceText);
             var referencedFiles = [];
             var amdDependencies = [];
             var amdModuleName;
@@ -6315,7 +6360,7 @@ var ts;
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(ts.createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.parseDiagnostics.push(ts.createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -6323,7 +6368,7 @@ var ts;
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(ts.createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, ts.Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.parseDiagnostics.push(ts.createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, ts.Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
@@ -6341,15 +6386,7 @@ var ts;
         function setExternalModuleIndicator(sourceFile) {
             sourceFile.externalModuleIndicator = ts.forEach(sourceFile.statements, function (node) { return node.flags & 1 /* Export */ || node.kind === 197 /* ImportDeclaration */ && node.moduleReference.kind === 199 /* ExternalModuleReference */ || node.kind === 198 /* ExportAssignment */ ? node : undefined; });
         }
-        function getSyntacticDiagnostics() {
-            if (syntacticDiagnostics === undefined) {
-                syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
-            }
-            ts.Debug.assert(syntacticDiagnostics !== undefined);
-            return syntacticDiagnostics;
-        }
     }
-    ts.createSourceFile = createSourceFile;
     function isLeftHandSideExpression(expr) {
         if (expr) {
             switch (expr.kind) {
@@ -6386,6 +6423,7 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
+    ts.bindTime = 0;
     function getModuleInstanceState(node) {
         if (node.kind === 192 /* InterfaceDeclaration */ || node.kind === 193 /* TypeAliasDeclaration */) {
             return 0 /* NonInstantiated */;
@@ -6425,6 +6463,12 @@ var ts;
     }
     ts.hasDynamicName = hasDynamicName;
     function bindSourceFile(file) {
+        var start = new Date().getTime();
+        bindSourceFileWorker(file);
+        ts.bindTime += new Date().getTime() - start;
+    }
+    ts.bindSourceFile = bindSourceFile;
+    function bindSourceFileWorker(file) {
         var parent;
         var container;
         var blockScopeContainer;
@@ -6489,9 +6533,9 @@ var ts;
                     }
                     var message = symbol.flags & 2 /* BlockScopedVariable */ ? ts.Diagnostics.Cannot_redeclare_block_scoped_variable_0 : ts.Diagnostics.Duplicate_identifier_0;
                     ts.forEach(symbol.declarations, function (declaration) {
-                        file.semanticDiagnostics.push(ts.createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(ts.createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticDiagnostics.push(ts.createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(ts.createDiagnosticForNode(node.name, message, getDisplayName(node)));
                     symbol = createSymbol(0, name);
                 }
             }
@@ -6506,7 +6550,7 @@ var ts;
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticDiagnostics.push(ts.createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0], ts.Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
+                    file.bindDiagnostics.push(ts.createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0], ts.Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
                 }
                 symbol.exports[prototypeSymbol.name] = prototypeSymbol;
                 prototypeSymbol.parent = symbol;
@@ -6770,7 +6814,7 @@ var ts;
                     break;
                 case 207 /* SourceFile */:
                     if (ts.isExternalModule(node)) {
-                        bindAnonymousDeclaration(node, 512 /* ValueModule */, '"' + ts.removeFileExtension(node.filename) + '"', true);
+                        bindAnonymousDeclaration(node, 512 /* ValueModule */, '"' + ts.removeFileExtension(node.fileName) + '"', true);
                         break;
                     }
                 case 170 /* Block */:
@@ -6808,13 +6852,13 @@ var ts;
             }
         }
     }
-    ts.bindSourceFile = bindSourceFile;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
     var nextSymbolId = 1;
     var nextNodeId = 1;
     var nextMergeId = 1;
+    ts.checkTime = 0;
     function createTypeChecker(host, produceDiagnostics) {
         var Symbol = ts.objectAllocator.getSymbolConstructor();
         var Type = ts.objectAllocator.getTypeConstructor();
@@ -6853,12 +6897,12 @@ var ts;
             getContextualType: getContextualType,
             getFullyQualifiedName: getFullyQualifiedName,
             getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue,
+            getConstantValue: getConstantValue,
             isValidPropertyAccess: isValidPropertyAccess,
             getSignatureFromDeclaration: getSignatureFromDeclaration,
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            getEmitResolver: function () { return emitResolver; }
+            getEmitResolver: getEmitResolver
         };
         var undefinedSymbol = createSymbol(4 /* Property */ | 67108864 /* Transient */, "undefined");
         var argumentsSymbol = createSymbol(4 /* Property */ | 67108864 /* Transient */, "arguments");
@@ -6898,8 +6942,7 @@ var ts;
         var symbolLinks = [];
         var nodeLinks = [];
         var potentialThisCollisions = [];
-        var diagnostics = [];
-        var diagnosticsModified = false;
+        var diagnostics = ts.createDiagnosticCollection();
         var primitiveTypeInfo = {
             "string": {
                 type: stringType,
@@ -6914,13 +6957,13 @@ var ts;
                 flags: 8 /* Boolean */
             }
         };
-        function addDiagnostic(diagnostic) {
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+        function getEmitResolver(sourceFile) {
+            getDiagnostics(sourceFile);
+            return emitResolver;
         }
         function error(location, message, arg0, arg1, arg2) {
             var diagnostic = location ? ts.createDiagnosticForNode(location, message, arg0, arg1, arg2) : ts.createCompilerDiagnostic(message, arg0, arg1, arg2);
-            addDiagnostic(diagnostic);
+            diagnostics.add(diagnostic);
         }
         function createSymbol(flags, name) {
             return new Symbol(flags, name);
@@ -7272,7 +7315,7 @@ var ts;
                 return;
             }
             var moduleReferenceLiteral = moduleReferenceExpression;
-            var searchPath = ts.getDirectoryPath(getSourceFile(location).filename);
+            var searchPath = ts.getDirectoryPath(getSourceFile(location).fileName);
             var moduleName = ts.escapeIdentifier(moduleReferenceLiteral.text);
             if (!moduleName)
                 return;
@@ -7284,8 +7327,8 @@ var ts;
                 }
             }
             while (true) {
-                var filename = ts.normalizePath(ts.combinePaths(searchPath, moduleName));
-                var sourceFile = host.getSourceFile(filename + ".ts") || host.getSourceFile(filename + ".d.ts");
+                var fileName = ts.normalizePath(ts.combinePaths(searchPath, moduleName));
+                var sourceFile = host.getSourceFile(fileName + ".ts") || host.getSourceFile(fileName + ".d.ts");
                 if (sourceFile || isRelative)
                     break;
                 var parentPath = ts.getDirectoryPath(searchPath);
@@ -7297,7 +7340,7 @@ var ts;
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleReferenceLiteral, ts.Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, ts.Diagnostics.File_0_is_not_an_external_module, sourceFile.fileName);
                 return;
             }
             error(moduleReferenceLiteral, ts.Diagnostics.Cannot_find_external_module_0, moduleName);
@@ -7669,7 +7712,7 @@ var ts;
                 }
                 writer.writeSymbol(symbol.name, symbol);
             }
-            function buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags) {
+            function buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags, typeFlags) {
                 var parentSymbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol) {
                     if (parentSymbol) {
@@ -7709,7 +7752,9 @@ var ts;
                         }
                     }
                 }
-                if (enclosingDeclaration && !(symbol.flags & 262144 /* TypeParameter */)) {
+                var isTypeParameter = symbol.flags & 262144 /* TypeParameter */;
+                var typeFormatFlag = 128 /* UseFullyQualifiedType */ & typeFlags;
+                if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
                     walkSymbol(symbol, meaning);
                     return;
                 }
@@ -7726,7 +7771,7 @@ var ts;
                         writeTypeReference(type, flags);
                     }
                     else if (type.flags & (1024 /* Class */ | 2048 /* Interface */ | 128 /* Enum */ | 512 /* TypeParameter */)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, 793056 /* Type */);
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, 793056 /* Type */, 0 /* None */, flags);
                     }
                     else if (type.flags & 8192 /* Tuple */) {
                         writeTupleType(type);
@@ -7789,15 +7834,15 @@ var ts;
                 }
                 function writeAnonymousType(type, flags) {
                     if (type.symbol && type.symbol.flags & (32 /* Class */ | 384 /* Enum */ | 512 /* ValueModule */)) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     else if (typeStack && ts.contains(typeStack, type)) {
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, 793056 /* Type */);
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, 793056 /* Type */, 0 /* None */, flags);
                         }
                         else {
                             writeKeyword(writer, 110 /* AnyKeyword */);
@@ -7821,10 +7866,10 @@ var ts;
                         }
                     }
                 }
-                function writeTypeofSymbol(type) {
+                function writeTypeofSymbol(type, typeFormatFlags) {
                     writeKeyword(writer, 96 /* TypeOfKeyword */);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, 107455 /* Value */);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, 107455 /* Value */, 0 /* None */, typeFormatFlags);
                 }
                 function getIndexerParameterName(type, indexKind, fallbackName) {
                     var declaration = getIndexDeclarationOfSymbol(type.symbol, indexKind);
@@ -9677,7 +9722,7 @@ var ts;
                 if (containingMessageChain) {
                     errorInfo = ts.concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
-                addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
+                diagnostics.add(ts.createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
             }
             return result !== 0 /* False */;
             function reportError(message, arg0, arg1, arg2) {
@@ -9760,7 +9805,13 @@ var ts;
                 }
                 if (reportErrors) {
                     headMessage = headMessage || ts.Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    reportError(headMessage, typeToString(source), typeToString(target));
+                    var sourceType = typeToString(source);
+                    var targetType = typeToString(target);
+                    if (sourceType === targetType) {
+                        sourceType = typeToString(source, undefined, 128 /* UseFullyQualifiedType */);
+                        targetType = typeToString(target, undefined, 128 /* UseFullyQualifiedType */);
+                    }
+                    reportError(headMessage, sourceType, targetType);
                 }
                 return 0 /* False */;
             }
@@ -10453,6 +10504,9 @@ var ts;
                 return true;
             }
             function inferFromTypes(source, target) {
+                if (source === anyFunctionType) {
+                    return;
+                }
                 if (target.flags & 512 /* TypeParameter */) {
                     var typeParameters = context.typeParameters;
                     for (var i = 0; i < typeParameters.length; i++) {
@@ -10878,6 +10932,9 @@ var ts;
         }
         function checkIdentifier(node) {
             var symbol = getResolvedSymbol(node);
+            if (symbol === argumentsSymbol && ts.getContainingFunction(node).kind === 157 /* ArrowFunction */) {
+                error(node, ts.Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+            }
             if (symbol.flags & 8388608 /* Import */) {
                 var symbolLinks = getSymbolLinks(symbol);
                 if (!symbolLinks.referenced) {
@@ -10914,7 +10971,7 @@ var ts;
             var needToCaptureLexicalThis = false;
             if (container.kind === 157 /* ArrowFunction */) {
                 container = ts.getThisContainer(container, false);
-                needToCaptureLexicalThis = true;
+                needToCaptureLexicalThis = (languageVersion < 2 /* ES6 */);
             }
             switch (container.kind) {
                 case 195 /* ModuleDeclaration */:
@@ -11477,9 +11534,9 @@ var ts;
                         return false;
                     }
                     else {
-                        var diagnosticsCount = diagnostics.length;
+                        var modificationCount = diagnostics.getModificationCount();
                         checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.length === diagnosticsCount;
+                        return diagnostics.getModificationCount() === modificationCount;
                     }
                 }
             }
@@ -11621,19 +11678,18 @@ var ts;
         function inferTypeArguments(signature, args, excludeArgument) {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, false);
-            var mapper = createInferenceMapper(context);
+            var inferenceMapper = createInferenceMapper(context);
             for (var i = 0; i < args.length; i++) {
                 if (args[i].kind === 168 /* OmittedExpression */) {
                     continue;
                 }
-                if (!excludeArgument || excludeArgument[i] === undefined) {
-                    var parameterType = getTypeAtPosition(signature, i);
-                    if (i === 0 && args[i].parent.kind === 153 /* TaggedTemplateExpression */) {
-                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                        continue;
-                    }
-                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                var parameterType = getTypeAtPosition(signature, i);
+                if (i === 0 && args[i].parent.kind === 153 /* TaggedTemplateExpression */) {
+                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                    continue;
                 }
+                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
@@ -11642,7 +11698,7 @@ var ts;
                     }
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
                     }
                 }
             }
@@ -12024,6 +12080,9 @@ var ts;
         }
         function getReturnTypeFromBody(func, contextualMapper) {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            if (!func.body) {
+                return unknownType;
+            }
             if (func.body.kind !== 170 /* Block */) {
                 var type = checkExpressionCached(func.body, contextualMapper);
             }
@@ -12089,7 +12148,7 @@ var ts;
             if (!hasGrammarError && node.kind === 156 /* FunctionExpression */) {
                 checkGrammarFunctionName(node.name) || checkGrammarForGenerator(node);
             }
-            if (contextualMapper === identityMapper) {
+            if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
             var links = getNodeLinks(node);
@@ -12602,7 +12661,7 @@ var ts;
                 case 154 /* TypeAssertionExpression */:
                     return checkTypeAssertion(node);
                 case 155 /* ParenthesizedExpression */:
-                    return checkExpression(node.expression);
+                    return checkExpression(node.expression, contextualMapper);
                 case 156 /* FunctionExpression */:
                 case 157 /* ArrowFunction */:
                     return checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
@@ -13777,7 +13836,7 @@ var ts;
                             var typeName2 = typeToString(base);
                             var errorInfo = ts.chainDiagnosticMessages(undefined, ts.Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = ts.chainDiagnosticMessages(errorInfo, ts.Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
+                            diagnostics.add(ts.createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
                     }
                 }
@@ -14297,6 +14356,11 @@ var ts;
             }
         }
         function checkSourceFile(node) {
+            var start = new Date().getTime();
+            checkSourceFileWorker(node);
+            ts.checkTime += new Date().getTime() - start;
+        }
+        function checkSourceFileWorker(node) {
             var links = getNodeLinks(node);
             if (!(links.flags & 1 /* TypeChecked */)) {
                 checkGrammarSourceFile(node);
@@ -14321,27 +14385,18 @@ var ts;
                 links.flags |= 1 /* TypeChecked */;
             }
         }
-        function getSortedDiagnostics() {
-            ts.Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
-            if (diagnosticsModified) {
-                diagnostics.sort(ts.compareDiagnostics);
-                diagnostics = ts.deduplicateSortedDiagnostics(diagnostics);
-                diagnosticsModified = false;
-            }
-            return diagnostics;
-        }
         function getDiagnostics(sourceFile) {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
-                return ts.filter(getSortedDiagnostics(), function (d) { return d.file === sourceFile; });
+                return diagnostics.getDiagnostics(sourceFile.fileName);
             }
             ts.forEach(host.getSourceFiles(), checkSourceFile);
-            return getSortedDiagnostics();
+            return diagnostics.getDiagnostics();
         }
         function getGlobalDiagnostics() {
             throwIfNonDiagnosticsProducing();
-            return ts.filter(getSortedDiagnostics(), function (d) { return !d.file; });
+            return diagnostics.getGlobalDiagnostics();
         }
         function throwIfNonDiagnosticsProducing() {
             if (!produceDiagnostics) {
@@ -14751,9 +14806,6 @@ var ts;
             }
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
-        function hasSemanticErrors(sourceFile) {
-            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
-        }
         function isImportResolvedToValue(symbol) {
             var target = resolveImport(symbol);
             return target !== unknownSymbol && target.flags & 107455 /* Value */ && !isConstEnumOrConstEnumOnlyModule(target);
@@ -14787,6 +14839,9 @@ var ts;
             return getNodeLinks(node).enumMemberValue;
         }
         function getConstantValue(node) {
+            if (node.kind === 206 /* EnumMember */) {
+                return getEnumMemberValue(node);
+            }
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & 8 /* EnumMember */)) {
                 var declaration = symbol.valueDeclaration;
@@ -14816,9 +14871,7 @@ var ts;
                 getExportAssignmentName: getExportAssignmentName,
                 isReferencedImportDeclaration: isReferencedImportDeclaration,
                 getNodeCheckFlags: getNodeCheckFlags,
-                getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
-                hasSemanticErrors: hasSemanticErrors,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeOfDeclaration: writeTypeOfDeclaration,
@@ -14832,7 +14885,6 @@ var ts;
         function initializeTypeChecker() {
             ts.forEach(host.getSourceFiles(), function (file) {
                 ts.bindSourceFile(file);
-                ts.forEach(file.semanticDiagnostics, addDiagnostic);
             });
             ts.forEach(host.getSourceFiles(), function (file) {
                 if (!ts.isExternalModule(file)) {
@@ -15495,13 +15547,13 @@ var ts;
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = ts.createScanner(languageVersion, true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
-                diagnostics.push(ts.createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                diagnostics.add(ts.createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
         function grammarErrorAtPos(sourceFile, start, length, message, arg0, arg1, arg2) {
             if (!hasParseDiagnostics(sourceFile)) {
-                diagnostics.push(ts.createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                diagnostics.add(ts.createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -15510,7 +15562,7 @@ var ts;
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = ts.getErrorSpanForNode(node);
                 var start = span.end > span.pos ? ts.skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.push(ts.createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                diagnostics.add(ts.createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -15603,7 +15655,7 @@ var ts;
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = ts.createScanner(languageVersion, true, sourceFile.text);
                 scanToken(scanner, node.pos);
-                diagnostics.push(ts.createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                diagnostics.add(ts.createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -15627,7 +15679,7 @@ var ts;
     }
     function shouldEmitToOwnFile(sourceFile, compilerOptions) {
         if (!ts.isDeclarationFile(sourceFile)) {
-            if ((ts.isExternalModule(sourceFile) || !compilerOptions.out) && !ts.fileExtensionIs(sourceFile.filename, ".js")) {
+            if ((ts.isExternalModule(sourceFile) || !compilerOptions.out) && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
                 return true;
             }
             return false;
@@ -15699,7 +15751,7 @@ var ts;
         };
     }
     function getLineOfLocalPosition(currentSourceFile, pos) {
-        return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
+        return ts.getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
     function emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments) {
         if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos && getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
@@ -15727,14 +15779,14 @@ var ts;
     }
     function writeCommentRange(currentSourceFile, writer, comment, newLine) {
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === 42 /* asterisk */) {
-            var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
-            var lastLine = currentSourceFile.getLineStarts().length;
+            var firstCommentLineAndCharacter = ts.getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+            var lastLine = ts.getLineStarts(currentSourceFile).length;
             var firstCommentLineIndent;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, 1);
+                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : ts.getPositionFromLineAndCharacter(currentSourceFile, currentLine + 1, 1);
                 if (pos !== comment.pos) {
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, 1), comment.pos);
+                        firstCommentLineIndent = calculateIndent(ts.getPositionFromLineAndCharacter(currentSourceFile, firstCommentLineAndCharacter.line, 1), comment.pos);
                     }
                     var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
                     var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
@@ -15829,7 +15881,7 @@ var ts;
         };
     }
     function getSourceFilePathInNewDir(sourceFile, host, newDirPath) {
-        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, host.getCurrentDirectory());
+        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return ts.combinePaths(newDirPath, sourceFilePath);
     }
@@ -15839,13 +15891,13 @@ var ts;
             var emitOutputFilePathWithoutExtension = ts.removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
         }
         else {
-            var emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.filename);
+            var emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
         }
         return emitOutputFilePathWithoutExtension + extension;
     }
-    function writeFile(host, diagnostics, filename, data, writeByteOrderMark) {
-        host.writeFile(filename, data, writeByteOrderMark, function (hostErrorMessage) {
-            diagnostics.push(ts.createCompilerDiagnostic(ts.Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
+    function writeFile(host, diagnostics, fileName, data, writeByteOrderMark) {
+        host.writeFile(fileName, data, writeByteOrderMark, function (hostErrorMessage) {
+            diagnostics.push(ts.createCompilerDiagnostic(ts.Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         });
     }
     function emitDeclarations(host, resolver, diagnostics, jsFilePath, root) {
@@ -15863,7 +15915,61 @@ var ts;
         var reportedDeclarationError = false;
         var emitJsDocComments = compilerOptions.removeComments ? function (declaration) {
         } : writeJsDocComments;
+        var emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         var aliasDeclarationEmitInfo = [];
+        var referencePathsOutput = "";
+        if (root) {
+            if (!compilerOptions.noResolve) {
+                var addedGlobalFileReference = false;
+                ts.forEach(root.referencedFiles, function (fileReference) {
+                    var referencedFile = ts.tryResolveScriptReference(host, root, fileReference);
+                    if (referencedFile && ((referencedFile.flags & 1024 /* DeclarationFile */) || shouldEmitToOwnFile(referencedFile, compilerOptions) || !addedGlobalFileReference)) {
+                        writeReferencePath(referencedFile);
+                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                            addedGlobalFileReference = true;
+                        }
+                    }
+                });
+            }
+            emitSourceFile(root);
+        }
+        else {
+            var emittedReferencedFiles = [];
+            ts.forEach(host.getSourceFiles(), function (sourceFile) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if (!compilerOptions.noResolve) {
+                        ts.forEach(sourceFile.referencedFiles, function (fileReference) {
+                            var referencedFile = ts.tryResolveScriptReference(host, sourceFile, fileReference);
+                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) && !ts.contains(emittedReferencedFiles, referencedFile))) {
+                                writeReferencePath(referencedFile);
+                                emittedReferencedFiles.push(referencedFile);
+                            }
+                        });
+                    }
+                    emitSourceFile(sourceFile);
+                }
+            });
+        }
+        return {
+            reportedDeclarationError: reportedDeclarationError,
+            aliasDeclarationEmitInfo: aliasDeclarationEmitInfo,
+            synchronousDeclarationOutput: writer.getText(),
+            referencePathsOutput: referencePathsOutput
+        };
+        function hasInternalAnnotation(range) {
+            var text = currentSourceFile.text;
+            var comment = text.substring(range.pos, range.end);
+            return comment.indexOf("@internal") >= 0;
+        }
+        function stripInternal(node) {
+            if (node) {
+                var leadingCommentRanges = ts.getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                if (ts.forEach(leadingCommentRanges, hasInternalAnnotation)) {
+                    return;
+                }
+                emitNode(node);
+            }
+        }
         function createAndSetNewTextWriterWithSymbolWriter() {
             var writer = createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
@@ -15944,7 +16050,7 @@ var ts;
         }
         function emitLines(nodes) {
             for (var i = 0, n = nodes.length; i < n; i++) {
-                emitNode(nodes[i]);
+                emit(nodes[i]);
             }
         }
         function emitSeparatedList(nodes, separator, eachNodeEmitFn) {
@@ -16193,7 +16299,7 @@ var ts;
         function emitEnumMemberDeclaration(node) {
             emitJsDocComments(node);
             writeTextOfNode(currentSourceFile, node.name);
-            var enumMemberValue = resolver.getEnumMemberValue(node);
+            var enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
                 write(enumMemberValue.toString());
@@ -16441,7 +16547,7 @@ var ts;
             }
             function getTypeAnnotationFromAccessor(accessor) {
                 if (accessor) {
-                    return accessor.kind === 130 /* GetAccessor */ ? accessor.type : accessor.parameters[0].type;
+                    return accessor.kind === 130 /* GetAccessor */ ? accessor.type : accessor.parameters.length > 0 ? accessor.parameters[0].type : undefined;
                 }
             }
             function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult) {
@@ -16675,50 +16781,11 @@ var ts;
                     return emitSourceFile(node);
             }
         }
-        var referencePathsOutput = "";
         function writeReferencePath(referencedFile) {
-            var declFileName = referencedFile.flags & 1024 /* DeclarationFile */ ? referencedFile.filename : shouldEmitToOwnFile(referencedFile, compilerOptions) ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") : ts.removeFileExtension(compilerOptions.out) + ".d.ts";
+            var declFileName = referencedFile.flags & 1024 /* DeclarationFile */ ? referencedFile.fileName : shouldEmitToOwnFile(referencedFile, compilerOptions) ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") : ts.removeFileExtension(compilerOptions.out) + ".d.ts";
             declFileName = ts.getRelativePathToDirectoryOrUrl(ts.getDirectoryPath(ts.normalizeSlashes(jsFilePath)), declFileName, host.getCurrentDirectory(), host.getCanonicalFileName, false);
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
-        if (root) {
-            if (!compilerOptions.noResolve) {
-                var addedGlobalFileReference = false;
-                ts.forEach(root.referencedFiles, function (fileReference) {
-                    var referencedFile = ts.tryResolveScriptReference(host, root, fileReference);
-                    if (referencedFile && ((referencedFile.flags & 1024 /* DeclarationFile */) || shouldEmitToOwnFile(referencedFile, compilerOptions) || !addedGlobalFileReference)) {
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
-                        }
-                    }
-                });
-            }
-            emitNode(root);
-        }
-        else {
-            var emittedReferencedFiles = [];
-            ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    if (!compilerOptions.noResolve) {
-                        ts.forEach(sourceFile.referencedFiles, function (fileReference) {
-                            var referencedFile = ts.tryResolveScriptReference(host, sourceFile, fileReference);
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) && !ts.contains(emittedReferencedFiles, referencedFile))) {
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-                    emitNode(sourceFile);
-                }
-            });
-        }
-        return {
-            reportedDeclarationError: reportedDeclarationError,
-            aliasDeclarationEmitInfo: aliasDeclarationEmitInfo,
-            synchronousDeclarationOutput: writer.getText(),
-            referencePathsOutput: referencePathsOutput
-        };
     }
     function getDeclarationDiagnostics(host, resolver, targetSourceFile) {
         var diagnostics = [];
@@ -16733,6 +16800,32 @@ var ts;
         var sourceMapDataList = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics = [];
         var newLine = host.getNewLine();
+        if (targetSourceFile === undefined) {
+            ts.forEach(host.getSourceFiles(), function (sourceFile) {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
+                    emitFile(jsFilePath, sourceFile);
+                }
+            });
+            if (compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+        else {
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+                emitFile(jsFilePath, targetSourceFile);
+            }
+            else if (!ts.isDeclarationFile(targetSourceFile) && compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+        diagnostics = ts.sortAndDeduplicateDiagnostics(diagnostics);
+        return {
+            emitSkipped: false,
+            diagnostics: diagnostics,
+            sourceMaps: sourceMapDataList
+        };
         function emitJavaScript(jsFilePath, root) {
             var writer = createTextWriter(newLine);
             var write = writer.write;
@@ -16769,6 +16862,22 @@ var ts;
             var scopeEmitEnd = function () {
             };
             var sourceMapData;
+            if (compilerOptions.sourceMap) {
+                initializeEmitterWithSourceMaps();
+            }
+            if (root) {
+                emit(root);
+            }
+            else {
+                ts.forEach(host.getSourceFiles(), function (sourceFile) {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        emit(sourceFile);
+                    }
+                });
+            }
+            writeLine();
+            writeEmittedFiles(writer.getText(), compilerOptions.emitBOM);
+            return;
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir;
                 var sourceMapSourceIndex = -1;
@@ -16838,7 +16947,7 @@ var ts;
                     }
                 }
                 function recordSourceMapSpan(pos) {
-                    var sourceLinePos = currentSourceFile.getLineAndCharacterFromPosition(pos);
+                    var sourceLinePos = ts.getLineAndCharacterOfPosition(currentSourceFile, pos);
                     var emittedLine = writer.getLine();
                     var emittedColumn = writer.getColumn();
                     if (!lastRecordedSourceMapSpan || lastRecordedSourceMapSpan.emittedLine != emittedLine || lastRecordedSourceMapSpan.emittedColumn != emittedColumn || (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex && (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line || (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
@@ -16873,9 +16982,9 @@ var ts;
                 }
                 function recordNewSourceFileStart(node) {
                     var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
-                    sourceMapData.sourceMapSources.push(ts.getRelativePathToDirectoryOrUrl(sourcesDirectoryPath, node.filename, host.getCurrentDirectory(), host.getCanonicalFileName, true));
+                    sourceMapData.sourceMapSources.push(ts.getRelativePathToDirectoryOrUrl(sourcesDirectoryPath, node.fileName, host.getCurrentDirectory(), host.getCanonicalFileName, true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
-                    sourceMapData.inputSourceFileNames.push(node.filename);
+                    sourceMapData.inputSourceFileNames.push(node.fileName);
                 }
                 function recordScopeNameOfNode(node, scopeName) {
                     function recordScopeNameIndex(scopeNameIndex) {
@@ -16953,7 +17062,7 @@ var ts;
                     sourceMapDataList.push(sourceMapData);
                     writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL, writeByteOrderMark);
                 }
-                var sourceMapJsFile = ts.getBaseFilename(ts.normalizeSlashes(jsFilePath));
+                var sourceMapJsFile = ts.getBaseFileName(ts.normalizeSlashes(jsFilePath));
                 sourceMapData = {
                     sourceMapFilePath: jsFilePath + ".map",
                     jsSourceMappingURL: sourceMapJsFile + ".map",
@@ -17146,7 +17255,6 @@ var ts;
                     ts.forEachChild(node, emit);
                     return;
                 }
-                ts.Debug.assert(node.parent.kind !== 153 /* TaggedTemplateExpression */);
                 var emitOuterParens = ts.isExpression(node.parent) && templateNeedsParens(node, node.parent);
                 if (emitOuterParens) {
                     write("(");
@@ -17180,16 +17288,14 @@ var ts;
                         case 151 /* CallExpression */:
                         case 152 /* NewExpression */:
                             return parent.expression === template;
+                        case 153 /* TaggedTemplateExpression */:
                         case 155 /* ParenthesizedExpression */:
                             return false;
-                        case 153 /* TaggedTemplateExpression */:
-                            ts.Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
                         default:
                             return comparePrecedenceToBinaryPlus(parent) !== -1 /* LessThan */;
                     }
                 }
                 function comparePrecedenceToBinaryPlus(expression) {
-                    ts.Debug.assert(languageVersion < 2 /* ES6 */);
                     switch (expression.kind) {
                         case 163 /* BinaryExpression */:
                             switch (expression.operator) {
@@ -17434,8 +17540,11 @@ var ts;
             function tryEmitConstantValue(node) {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === 149 /* PropertyAccessExpression */ ? ts.declarationNameToString(node.name) : ts.getTextOfNode(node.argumentExpression);
-                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    write(constantValue.toString());
+                    if (!compilerOptions.removeComments) {
+                        var propertyName = node.kind === 149 /* PropertyAccessExpression */ ? ts.declarationNameToString(node.name) : ts.getTextOfNode(node.argumentExpression);
+                        write(" /* " + propertyName + " */");
+                    }
                     return true;
                 }
                 return false;
@@ -17497,7 +17606,6 @@ var ts;
                 }
             }
             function emitTaggedTemplateExpression(node) {
-                ts.Debug.assert(languageVersion >= 2 /* ES6 */, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
                 write(" ");
                 emit(node.template);
@@ -18107,6 +18215,9 @@ var ts;
                 emit(node.name);
                 emitSignatureAndBody(node);
             }
+            function shouldEmitAsArrowFunction(node) {
+                return node.kind === 157 /* ArrowFunction */ && languageVersion >= 2 /* ES6 */;
+            }
             function emitFunctionDeclaration(node) {
                 if (ts.nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -18114,7 +18225,9 @@ var ts;
                 if (node.kind !== 128 /* MethodDeclaration */ && node.kind !== 127 /* MethodSignature */) {
                     emitLeadingComments(node);
                 }
-                write("function ");
+                if (!shouldEmitAsArrowFunction(node)) {
+                    write("function ");
+                }
                 if (node.kind === 190 /* FunctionDeclaration */ || (node.kind === 156 /* FunctionExpression */ && node.name)) {
                     emit(node.name);
                 }
@@ -18142,6 +18255,13 @@ var ts;
                 write(")");
                 decreaseIndent();
             }
+            function emitSignatureParametersForArrow(node) {
+                if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
+                    emit(node.parameters[0]);
+                    return;
+                }
+                emitSignatureParameters(node);
+            }
             function emitSignatureAndBody(node) {
                 var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
@@ -18149,57 +18269,69 @@ var ts;
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-                emitSignatureParameters(node);
-                write(" {");
-                scopeEmitStart(node);
-                increaseIndent();
-                emitDetachedComments(node.body.kind === 170 /* Block */ ? node.body.statements : node.body);
-                var startIndex = 0;
-                if (node.body.kind === 170 /* Block */) {
-                    startIndex = emitDirectivePrologues(node.body.statements, true);
-                }
-                var outPos = writer.getTextPos();
-                emitCaptureThisForNodeIfNecessary(node);
-                emitDefaultValueAssignments(node);
-                emitRestParameter(node);
-                if (node.body.kind !== 170 /* Block */ && outPos === writer.getTextPos()) {
-                    decreaseIndent();
-                    write(" ");
-                    emitStart(node.body);
-                    write("return ");
-                    emitNode(node.body, true);
-                    emitEnd(node.body);
-                    write(";");
-                    emitTempDeclarations(false);
-                    write(" ");
-                    emitStart(node.body);
-                    write("}");
-                    emitEnd(node.body);
+                if (shouldEmitAsArrowFunction(node)) {
+                    emitSignatureParametersForArrow(node);
+                    write(" =>");
                 }
                 else {
-                    if (node.body.kind === 170 /* Block */) {
-                        emitLinesStartingAt(node.body.statements, startIndex);
-                    }
-                    else {
-                        writeLine();
-                        emitLeadingComments(node.body);
-                        write("return ");
-                        emit(node.body, true);
-                        write(";");
-                        emitTrailingComments(node.body);
-                    }
-                    emitTempDeclarations(true);
+                    emitSignatureParameters(node);
+                }
+                write(" {");
+                scopeEmitStart(node);
+                if (!node.body) {
                     writeLine();
+                    write("}");
+                }
+                else {
+                    increaseIndent();
+                    emitDetachedComments(node.body.kind === 170 /* Block */ ? node.body.statements : node.body);
+                    var startIndex = 0;
                     if (node.body.kind === 170 /* Block */) {
-                        emitLeadingCommentsOfPosition(node.body.statements.end);
-                        decreaseIndent();
-                        emitToken(15 /* CloseBraceToken */, node.body.statements.end);
+                        startIndex = emitDirectivePrologues(node.body.statements, true);
                     }
-                    else {
+                    var outPos = writer.getTextPos();
+                    emitCaptureThisForNodeIfNecessary(node);
+                    emitDefaultValueAssignments(node);
+                    emitRestParameter(node);
+                    if (node.body.kind !== 170 /* Block */ && outPos === writer.getTextPos()) {
                         decreaseIndent();
+                        write(" ");
+                        emitStart(node.body);
+                        write("return ");
+                        emitNode(node.body, true);
+                        emitEnd(node.body);
+                        write(";");
+                        emitTempDeclarations(false);
+                        write(" ");
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
+                    }
+                    else {
+                        if (node.body.kind === 170 /* Block */) {
+                            emitLinesStartingAt(node.body.statements, startIndex);
+                        }
+                        else {
+                            writeLine();
+                            emitLeadingComments(node.body);
+                            write("return ");
+                            emit(node.body, true);
+                            write(";");
+                            emitTrailingComments(node.body);
+                        }
+                        emitTempDeclarations(true);
+                        writeLine();
+                        if (node.body.kind === 170 /* Block */) {
+                            emitLeadingCommentsOfPosition(node.body.statements.end);
+                            decreaseIndent();
+                            emitToken(15 /* CloseBraceToken */, node.body.statements.end);
+                        }
+                        else {
+                            decreaseIndent();
+                            emitStart(node.body);
+                            write("}");
+                            emitEnd(node.body);
+                        }
                     }
                 }
                 scopeEmitEnd();
@@ -18536,16 +18668,26 @@ var ts;
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
-                if (node.initializer && !ts.isConst(enumParent)) {
-                    emit(node.initializer);
-                }
-                else {
-                    write(resolver.getEnumMemberValue(node).toString());
-                }
+                writeEnumMemberDeclarationValue(node);
                 write("] = ");
                 emitExpressionForPropertyName(node.name);
                 emitEnd(node);
                 write(";");
+            }
+            function writeEnumMemberDeclarationValue(member) {
+                if (!member.initializer || ts.isConst(member.parent)) {
+                    var value = resolver.getConstantValue(member);
+                    if (value !== undefined) {
+                        write(value.toString());
+                        return;
+                    }
+                }
+                if (member.initializer) {
+                    emit(member.initializer);
+                }
+                else {
+                    write("undefined");
+                }
             }
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration) {
                 if (moduleDeclaration.body.kind === 195 /* ModuleDeclaration */) {
@@ -19052,21 +19194,6 @@ var ts;
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, pinnedComments);
                 emitComments(currentSourceFile, writer, pinnedComments, true, newLine, writeComment);
             }
-            if (compilerOptions.sourceMap) {
-                initializeEmitterWithSourceMaps();
-            }
-            if (root) {
-                emit(root);
-            }
-            else {
-                ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
-                    }
-                });
-            }
-            writeLine();
-            writeEmittedFiles(writer.getText(), compilerOptions.emitBOM);
         }
         function writeDeclarationFile(jsFilePath, sourceFile) {
             var emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
@@ -19084,75 +19211,18 @@ var ts;
                 writeFile(host, diagnostics, ts.removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
-        var hasSemanticErrors = false;
-        var isEmitBlocked = false;
-        if (targetSourceFile === undefined) {
-            hasSemanticErrors = resolver.hasSemanticErrors();
-            isEmitBlocked = host.isEmitBlocked();
-            ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
-            if (compilerOptions.out) {
-                emitFile(compilerOptions.out);
-            }
-        }
-        else {
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                hasSemanticErrors = resolver.hasSemanticErrors(targetSourceFile);
-                isEmitBlocked = host.isEmitBlocked(targetSourceFile);
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-                emitFile(jsFilePath, targetSourceFile);
-            }
-            else if (!ts.isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                    if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        hasSemanticErrors = hasSemanticErrors || resolver.hasSemanticErrors(sourceFile);
-                        isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
-                    }
-                });
-                emitFile(compilerOptions.out);
-            }
-        }
         function emitFile(jsFilePath, sourceFile) {
-            if (!isEmitBlocked) {
-                emitJavaScript(jsFilePath, sourceFile);
-                if (!hasSemanticErrors && compilerOptions.declaration) {
-                    writeDeclarationFile(jsFilePath, sourceFile);
-                }
+            emitJavaScript(jsFilePath, sourceFile);
+            if (compilerOptions.declaration) {
+                writeDeclarationFile(jsFilePath, sourceFile);
             }
         }
-        diagnostics.sort(ts.compareDiagnostics);
-        diagnostics = ts.deduplicateSortedDiagnostics(diagnostics);
-        var hasEmitterError = ts.forEach(diagnostics, function (diagnostic) { return diagnostic.category === 1 /* Error */; });
-        var emitResultStatus;
-        if (isEmitBlocked) {
-            emitResultStatus = 1 /* AllOutputGenerationSkipped */;
-        }
-        else if (hasEmitterError) {
-            emitResultStatus = 4 /* EmitErrorsEncountered */;
-        }
-        else if (hasSemanticErrors && compilerOptions.declaration) {
-            emitResultStatus = 3 /* DeclarationGenerationSkipped */;
-        }
-        else if (hasSemanticErrors && !compilerOptions.declaration) {
-            emitResultStatus = 2 /* JSGeneratedWithSemanticErrors */;
-        }
-        else {
-            emitResultStatus = 0 /* Succeeded */;
-        }
-        return {
-            emitResultStatus: emitResultStatus,
-            diagnostics: diagnostics,
-            sourceMaps: sourceMapDataList
-        };
     }
     ts.emitFiles = emitFiles;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
+    ts.emitTime = 0;
     function createCompilerHost(options) {
         var currentDirectory;
         var existingDirectories = {};
@@ -19160,9 +19230,9 @@ var ts;
             return ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
         var unsupportedFileEncodingErrorCode = -2147024809;
-        function getSourceFile(filename, languageVersion, onError) {
+        function getSourceFile(fileName, languageVersion, onError) {
             try {
-                var text = ts.sys.readFile(filename, options.charset);
+                var text = ts.sys.readFile(fileName, options.charset);
             }
             catch (e) {
                 if (onError) {
@@ -19170,7 +19240,7 @@ var ts;
                 }
                 text = "";
             }
-            return text !== undefined ? ts.createSourceFile(filename, text, languageVersion) : undefined;
+            return text !== undefined ? ts.createSourceFile(fileName, text, languageVersion) : undefined;
         }
         function writeFile(fileName, data, writeByteOrderMark, onError) {
             function directoryExists(directoryPath) {
@@ -19202,7 +19272,7 @@ var ts;
         }
         return {
             getSourceFile: getSourceFile,
-            getDefaultLibFilename: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), options.target === 2 /* ES6 */ ? "lib.es6.d.ts" : "lib.d.ts"); },
+            getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
             writeFile: writeFile,
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = ts.sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
@@ -19211,142 +19281,202 @@ var ts;
         };
     }
     ts.createCompilerHost = createCompilerHost;
+    function getPreEmitDiagnostics(program) {
+        var diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+        return ts.sortAndDeduplicateDiagnostics(diagnostics);
+    }
+    ts.getPreEmitDiagnostics = getPreEmitDiagnostics;
+    function flattenDiagnosticMessageText(messageText, newLine) {
+        if (typeof messageText === "string") {
+            return messageText;
+        }
+        else {
+            var diagnosticChain = messageText;
+            var result = "";
+            var indent = 0;
+            while (diagnosticChain) {
+                if (indent) {
+                    result += newLine;
+                    for (var i = 0; i < indent; i++) {
+                        result += "  ";
+                    }
+                }
+                result += diagnosticChain.messageText;
+                indent++;
+                diagnosticChain = diagnosticChain.next;
+            }
+            return result;
+        }
+    }
+    ts.flattenDiagnosticMessageText = flattenDiagnosticMessageText;
     function createProgram(rootNames, options, host) {
         var program;
         var files = [];
         var filesByName = {};
-        var errors = [];
+        var diagnostics = ts.createDiagnosticCollection();
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory;
+        host = host || createCompilerHost(options);
         ts.forEach(rootNames, function (name) { return processRootFile(name, false); });
         if (!seenNoDefaultLib) {
-            processRootFile(host.getDefaultLibFilename(options), true);
+            processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
-        errors.sort(ts.compareDiagnostics);
         var diagnosticsProducingTypeChecker;
         var noDiagnosticsTypeChecker;
-        var emitHost;
         program = {
             getSourceFile: getSourceFile,
             getSourceFiles: function () { return files; },
             getCompilerOptions: function () { return options; },
-            getCompilerHost: function () { return host; },
-            getDiagnostics: getDiagnostics,
+            getSyntacticDiagnostics: getSyntacticDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
+            getSemanticDiagnostics: getSemanticDiagnostics,
             getDeclarationDiagnostics: getDeclarationDiagnostics,
             getTypeChecker: getTypeChecker,
+            getDiagnosticsProducingTypeChecker: getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: function () { return commonSourceDirectory; },
-            emitFiles: invokeEmitter,
-            isEmitBlocked: isEmitBlocked,
-            getCurrentDirectory: host.getCurrentDirectory
+            emit: emit,
+            getCurrentDirectory: host.getCurrentDirectory,
+            getNodeCount: function () { return getDiagnosticsProducingTypeChecker().getNodeCount(); },
+            getIdentifierCount: function () { return getDiagnosticsProducingTypeChecker().getIdentifierCount(); },
+            getSymbolCount: function () { return getDiagnosticsProducingTypeChecker().getSymbolCount(); },
+            getTypeCount: function () { return getDiagnosticsProducingTypeChecker().getTypeCount(); }
         };
         return program;
-        function getEmitHost() {
-            return emitHost || (emitHost = ts.createEmitHostFromProgram(program));
-        }
-        function hasEarlyErrors(sourceFile) {
-            return ts.forEach(getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile), function (d) { return d.isEarly; });
-        }
-        function isEmitBlocked(sourceFile) {
-            return getDiagnostics(sourceFile).length !== 0 || hasEarlyErrors(sourceFile) || (options.noEmitOnError && getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0);
+        function getEmitHost(writeFileCallback) {
+            return {
+                getCanonicalFileName: host.getCanonicalFileName,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
+                getCompilerOptions: program.getCompilerOptions,
+                getCurrentDirectory: host.getCurrentDirectory,
+                getNewLine: host.getNewLine,
+                getSourceFile: program.getSourceFile,
+                getSourceFiles: program.getSourceFiles,
+                writeFile: writeFileCallback || host.writeFile
+            };
         }
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = ts.createTypeChecker(program, true));
         }
-        function getTypeChecker(produceDiagnostics) {
-            if (produceDiagnostics) {
-                return getDiagnosticsProducingTypeChecker();
-            }
-            else {
-                return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = ts.createTypeChecker(program, produceDiagnostics));
-            }
+        function getTypeChecker() {
+            return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = ts.createTypeChecker(program, false));
         }
         function getDeclarationDiagnostics(targetSourceFile) {
-            var typeChecker = getDiagnosticsProducingTypeChecker();
-            typeChecker.getDiagnostics(targetSourceFile);
-            var resolver = typeChecker.getEmitResolver();
+            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
             return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
-        function invokeEmitter(targetSourceFile) {
-            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
-            return ts.emitFiles(resolver, getEmitHost(), targetSourceFile);
+        function emit(sourceFile, writeFileCallback) {
+            if (options.noEmitOnError && getPreEmitDiagnostics(this).length > 0) {
+                return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
+            }
+            var start = new Date().getTime();
+            var emitResult = ts.emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile), getEmitHost(writeFileCallback), sourceFile);
+            ts.emitTime += new Date().getTime() - start;
+            return emitResult;
         }
-        function getSourceFile(filename) {
-            filename = host.getCanonicalFileName(filename);
-            return ts.hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
+        function getSourceFile(fileName) {
+            fileName = host.getCanonicalFileName(fileName);
+            return ts.hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
-        function getDiagnostics(sourceFile) {
-            return sourceFile ? ts.filter(errors, function (e) { return e.file === sourceFile; }) : errors;
+        function getDiagnosticsHelper(sourceFile, getDiagnostics) {
+            if (sourceFile) {
+                return getDiagnostics(sourceFile);
+            }
+            var allDiagnostics = [];
+            ts.forEach(program.getSourceFiles(), function (sourceFile) {
+                ts.addRange(allDiagnostics, getDiagnostics(sourceFile));
+            });
+            return ts.sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+        function getSyntacticDiagnostics(sourceFile) {
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile);
+        }
+        function getSemanticDiagnostics(sourceFile) {
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
+        }
+        function getSyntacticDiagnosticsForFile(sourceFile) {
+            return sourceFile.parseDiagnostics;
+        }
+        function getSemanticDiagnosticsForFile(sourceFile) {
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+            ts.Debug.assert(!!sourceFile.bindDiagnostics);
+            var bindDiagnostics = sourceFile.bindDiagnostics;
+            var checkDiagnostics = typeChecker.getDiagnostics(sourceFile);
+            var programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+            return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
         }
         function getGlobalDiagnostics() {
-            return ts.filter(errors, function (e) { return !e.file; });
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+            var allDiagnostics = [];
+            ts.addRange(allDiagnostics, typeChecker.getGlobalDiagnostics());
+            ts.addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+            return ts.sortAndDeduplicateDiagnostics(allDiagnostics);
         }
-        function hasExtension(filename) {
-            return ts.getBaseFilename(filename).indexOf(".") >= 0;
+        function hasExtension(fileName) {
+            return ts.getBaseFileName(fileName).indexOf(".") >= 0;
         }
-        function processRootFile(filename, isDefaultLib) {
-            processSourceFile(ts.normalizePath(filename), isDefaultLib);
+        function processRootFile(fileName, isDefaultLib) {
+            processSourceFile(ts.normalizePath(fileName), isDefaultLib);
         }
-        function processSourceFile(filename, isDefaultLib, refFile, refPos, refEnd) {
+        function processSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd) {
             if (refEnd !== undefined && refPos !== undefined) {
                 var start = refPos;
                 var length = refEnd - refPos;
             }
             var diagnostic;
-            if (hasExtension(filename)) {
-                if (!options.allowNonTsExtensions && !ts.fileExtensionIs(filename, ".ts")) {
+            if (hasExtension(fileName)) {
+                if (!options.allowNonTsExtensions && !ts.fileExtensionIs(host.getCanonicalFileName(fileName), ".ts")) {
                     diagnostic = ts.Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
-                else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = ts.Diagnostics.File_0_not_found;
                 }
-                else if (refFile && host.getCanonicalFileName(filename) === host.getCanonicalFileName(refFile.filename)) {
+                else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                     diagnostic = ts.Diagnostics.A_file_cannot_have_a_reference_to_itself;
                 }
             }
             else {
-                if (options.allowNonTsExtensions && !findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = ts.Diagnostics.File_0_not_found;
                 }
-                else if (!findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(fileName + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = ts.Diagnostics.File_0_not_found;
-                    filename += ".ts";
+                    fileName += ".ts";
                 }
             }
             if (diagnostic) {
                 if (refFile) {
-                    errors.push(ts.createFileDiagnostic(refFile, start, length, diagnostic, filename));
+                    diagnostics.add(ts.createFileDiagnostic(refFile, start, length, diagnostic, fileName));
                 }
                 else {
-                    errors.push(ts.createCompilerDiagnostic(diagnostic, filename));
+                    diagnostics.add(ts.createCompilerDiagnostic(diagnostic, fileName));
                 }
             }
         }
-        function findSourceFile(filename, isDefaultLib, refFile, refStart, refLength) {
-            var canonicalName = host.getCanonicalFileName(filename);
+        function findSourceFile(fileName, isDefaultLib, refFile, refStart, refLength) {
+            var canonicalName = host.getCanonicalFileName(fileName);
             if (ts.hasProperty(filesByName, canonicalName)) {
-                return getSourceFileFromCache(filename, canonicalName, false);
+                return getSourceFileFromCache(fileName, canonicalName, false);
             }
             else {
-                var normalizedAbsolutePath = ts.getNormalizedAbsolutePath(filename, host.getCurrentDirectory());
+                var normalizedAbsolutePath = ts.getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
                 var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
                 if (ts.hasProperty(filesByName, canonicalAbsolutePath)) {
                     return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, true);
                 }
-                var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, function (hostErrorMessage) {
+                var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, function (hostErrorMessage) {
                     if (refFile) {
-                        errors.push(ts.createFileDiagnostic(refFile, refStart, refLength, ts.Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                        diagnostics.add(ts.createFileDiagnostic(refFile, refStart, refLength, ts.Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
-                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                        diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
                     filesByName[canonicalAbsolutePath] = file;
                     if (!options.noResolve) {
-                        var basePath = ts.getDirectoryPath(filename);
+                        var basePath = ts.getDirectoryPath(fileName);
                         processReferencedFiles(file, basePath);
                         processImportedModules(file, basePath);
                     }
@@ -19356,18 +19486,15 @@ var ts;
                     else {
                         files.push(file);
                     }
-                    ts.forEach(file.getSyntacticDiagnostics(), function (e) {
-                        errors.push(e);
-                    });
                 }
             }
             return file;
-            function getSourceFileFromCache(filename, canonicalName, useAbsolutePath) {
+            function getSourceFileFromCache(fileName, canonicalName, useAbsolutePath) {
                 var file = filesByName[canonicalName];
                 if (file && host.useCaseSensitiveFileNames()) {
-                    var sourceFileName = useAbsolutePath ? ts.getNormalizedAbsolutePath(file.filename, host.getCurrentDirectory()) : file.filename;
+                    var sourceFileName = useAbsolutePath ? ts.getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
-                        errors.push(ts.createFileDiagnostic(refFile, refStart, refLength, ts.Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, sourceFileName));
+                        diagnostics.add(ts.createFileDiagnostic(refFile, refStart, refLength, ts.Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                     }
                 }
                 return file;
@@ -19375,8 +19502,8 @@ var ts;
         }
         function processReferencedFiles(file, basePath) {
             ts.forEach(file.referencedFiles, function (ref) {
-                var referencedFilename = ts.isRootedDiskPath(ref.filename) ? ref.filename : ts.combinePaths(basePath, ref.filename);
-                processSourceFile(ts.normalizePath(referencedFilename), false, file, ref.pos, ref.end);
+                var referencedFileName = ts.isRootedDiskPath(ref.fileName) ? ref.fileName : ts.combinePaths(basePath, ref.fileName);
+                processSourceFile(ts.normalizePath(referencedFileName), false, file, ref.pos, ref.end);
             });
         }
         function processImportedModules(file, basePath) {
@@ -19415,17 +19542,17 @@ var ts;
                     });
                 }
             });
-            function findModuleSourceFile(filename, nameLiteral) {
-                return findSourceFile(filename, false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
+            function findModuleSourceFile(fileName, nameLiteral) {
+                return findSourceFile(fileName, false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }
         function verifyCompilerOptions() {
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 if (options.mapRoot) {
-                    errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 if (options.sourceRoot) {
-                    errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 return;
             }
@@ -19434,19 +19561,19 @@ var ts;
                 var externalModuleErrorSpan = ts.getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = ts.skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
                 var errorLength = externalModuleErrorSpan.end - errorStart;
-                errors.push(ts.createFileDiagnostic(firstExternalModule, errorStart, errorLength, ts.Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                diagnostics.add(ts.createFileDiagnostic(firstExternalModule, errorStart, errorLength, ts.Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
             if (options.outDir || options.sourceRoot || (options.mapRoot && (!options.out || firstExternalModule !== undefined))) {
                 var commonPathComponents;
                 ts.forEach(files, function (sourceFile) {
-                    if (!(sourceFile.flags & 1024 /* DeclarationFile */) && !ts.fileExtensionIs(sourceFile.filename, ".js")) {
-                        var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.filename, host.getCurrentDirectory());
+                    if (!(sourceFile.flags & 1024 /* DeclarationFile */) && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
+                        var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
                         sourcePathComponents.pop();
                         if (commonPathComponents) {
                             for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
                                 if (commonPathComponents[i] !== sourcePathComponents[i]) {
                                     if (i === 0) {
-                                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                                        diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                                         return;
                                     }
                                     commonPathComponents.length = i;
@@ -19469,10 +19596,10 @@ var ts;
             }
             if (options.noEmit) {
                 if (options.out || options.outDir) {
-                    errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
                 }
                 if (options.declaration) {
-                    errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
         }
@@ -19612,6 +19739,12 @@ var ts;
             description: ts.Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures
         },
         {
+            name: "stripInternal",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
+            experimental: true
+        },
+        {
             name: "target",
             shortName: "t",
             type: { "es3": 0 /* ES3 */, "es5": 1 /* ES5 */, "es6": 2 /* ES6 */ },
@@ -19634,7 +19767,7 @@ var ts;
     ];
     function parseCommandLine(commandLine) {
         var options = {};
-        var filenames = [];
+        var fileNames = [];
         var errors = [];
         var shortOptionNames = {};
         var optionNameMap = {};
@@ -19647,7 +19780,7 @@ var ts;
         parseStrings(commandLine);
         return {
             options: options,
-            filenames: filenames,
+            fileNames: fileNames,
             errors: errors
         };
         function parseStrings(args) {
@@ -19693,14 +19826,14 @@ var ts;
                     }
                 }
                 else {
-                    filenames.push(s);
+                    fileNames.push(s);
                 }
             }
         }
-        function parseResponseFile(filename) {
-            var text = ts.sys.readFile(filename);
+        function parseResponseFile(fileName) {
+            var text = ts.sys.readFile(fileName);
             if (!text) {
-                errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_not_found, filename));
+                errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_not_found, fileName));
                 return;
             }
             var args = [];
@@ -19720,7 +19853,7 @@ var ts;
                         pos++;
                     }
                     else {
-                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unterminated_quoted_string_in_response_file_0, filename));
+                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
                     }
                 }
                 else {
@@ -19733,9 +19866,9 @@ var ts;
         }
     }
     ts.parseCommandLine = parseCommandLine;
-    function readConfigFile(filename) {
+    function readConfigFile(fileName) {
         try {
-            var text = ts.sys.readFile(filename);
+            var text = ts.sys.readFile(fileName);
             return /\S/.test(text) ? JSON.parse(text) : {};
         }
         catch (e) {
@@ -19746,7 +19879,7 @@ var ts;
         var errors = [];
         return {
             options: getCompilerOptions(),
-            filenames: getFiles(),
+            fileNames: getFiles(),
             errors: errors
         };
         function getCompilerOptions() {
@@ -19858,7 +19991,7 @@ var ts;
     function countLines(program) {
         var count = 0;
         ts.forEach(program.getSourceFiles(), function (file) {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += ts.getLineAndCharacterOfPosition(file, file.end).line;
         });
         return count;
     }
@@ -19873,11 +20006,11 @@ var ts;
     function reportDiagnostic(diagnostic) {
         var output = "";
         if (diagnostic.file) {
-            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
+            var loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            output += diagnostic.file.fileName + "(" + loc.line + "," + loc.character + "): ";
         }
         var category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + ts.sys.newLine;
+        output += category + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
         ts.sys.write(output);
     }
     function reportDiagnostics(diagnostics) {
@@ -19911,26 +20044,26 @@ var ts;
     }
     function findConfigFile() {
         var searchPath = ts.normalizePath(ts.sys.getCurrentDirectory());
-        var filename = "tsconfig.json";
+        var fileName = "tsconfig.json";
         while (true) {
-            if (ts.sys.fileExists(filename)) {
-                return filename;
+            if (ts.sys.fileExists(fileName)) {
+                return fileName;
             }
             var parentPath = ts.getDirectoryPath(searchPath);
             if (parentPath === searchPath) {
                 break;
             }
             searchPath = parentPath;
-            filename = "../" + filename;
+            fileName = "../" + fileName;
         }
         return undefined;
     }
     function executeCommandLine(args) {
         var commandLine = ts.parseCommandLine(args);
-        var configFilename;
+        var configFileName;
         var configFileWatcher;
         var cachedProgram;
-        var rootFilenames;
+        var rootFileNames;
         var compilerOptions;
         var compilerHost;
         var hostGetSourceFile;
@@ -19938,93 +20071,93 @@ var ts;
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return ts.sys.exit(5 /* CompilerOptionsErrors */);
+            return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
         }
         if (commandLine.options.version) {
             reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Version_0, version));
-            return ts.sys.exit(0 /* Succeeded */);
+            return ts.sys.exit(0 /* Success */);
         }
         if (commandLine.options.help) {
             printVersion();
             printHelp();
-            return ts.sys.exit(0 /* Succeeded */);
+            return ts.sys.exit(0 /* Success */);
         }
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
                 reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
             }
-            configFilename = ts.normalizePath(ts.combinePaths(commandLine.options.project, "tsconfig.json"));
-            if (commandLine.filenames.length !== 0) {
+            configFileName = ts.normalizePath(ts.combinePaths(commandLine.options.project, "tsconfig.json"));
+            if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
             }
         }
-        else if (commandLine.filenames.length === 0 && isJSONSupported()) {
-            configFilename = findConfigFile();
+        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+            configFileName = findConfigFile();
         }
-        if (commandLine.filenames.length === 0 && !configFilename) {
+        if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
-            return ts.sys.exit(5 /* CompilerOptionsErrors */);
+            return ts.sys.exit(0 /* Success */);
         }
         if (commandLine.options.watch) {
             if (!ts.sys.watchFile) {
                 reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
             }
-            if (configFilename) {
-                configFileWatcher = ts.sys.watchFile(configFilename, configFileChanged);
+            if (configFileName) {
+                configFileWatcher = ts.sys.watchFile(configFileName, configFileChanged);
             }
         }
         performCompilation();
         function performCompilation() {
             if (!cachedProgram) {
-                if (configFilename) {
-                    var configObject = ts.readConfigFile(configFilename);
+                if (configFileName) {
+                    var configObject = ts.readConfigFile(configFileName);
                     if (!configObject) {
-                        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Unable_to_open_file_0, configFilename));
-                        return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Unable_to_open_file_0, configFileName));
+                        return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
                     }
-                    var configParseResult = ts.parseConfigFile(configObject, ts.getDirectoryPath(configFilename));
+                    var configParseResult = ts.parseConfigFile(configObject, ts.getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
-                        return ts.sys.exit(5 /* CompilerOptionsErrors */);
+                        return ts.sys.exit(1 /* DiagnosticsPresent_OutputsSkipped */);
                     }
-                    rootFilenames = configParseResult.filenames;
+                    rootFileNames = configParseResult.fileNames;
                     compilerOptions = ts.extend(commandLine.options, configParseResult.options);
                 }
                 else {
-                    rootFilenames = commandLine.filenames;
+                    rootFileNames = commandLine.fileNames;
                     compilerOptions = commandLine.options;
                 }
                 compilerHost = ts.createCompilerHost(compilerOptions);
                 hostGetSourceFile = compilerHost.getSourceFile;
                 compilerHost.getSourceFile = getSourceFile;
             }
-            var compileResult = compile(rootFilenames, compilerOptions, compilerHost);
+            var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
             if (!commandLine.options.watch) {
                 return ts.sys.exit(compileResult.exitStatus);
             }
             setCachedProgram(compileResult.program);
             reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
-        function getSourceFile(filename, languageVersion, onError) {
+        function getSourceFile(fileName, languageVersion, onError) {
             if (cachedProgram) {
-                var sourceFile = cachedProgram.getSourceFile(filename);
+                var sourceFile = cachedProgram.getSourceFile(fileName);
                 if (sourceFile && sourceFile.fileWatcher) {
                     return sourceFile;
                 }
             }
-            var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
+            var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && commandLine.options.watch) {
-                sourceFile.fileWatcher = ts.sys.watchFile(sourceFile.filename, function () { return sourceFileChanged(sourceFile); });
+                sourceFile.fileWatcher = ts.sys.watchFile(sourceFile.fileName, function () { return sourceFileChanged(sourceFile); });
             }
             return sourceFile;
         }
@@ -20063,61 +20196,62 @@ var ts;
         }
     }
     ts.executeCommandLine = executeCommandLine;
-    function compile(filenames, compilerOptions, compilerHost) {
-        var parseStart = new Date().getTime();
-        var program = ts.createProgram(filenames, compilerOptions, compilerHost);
-        var bindStart = new Date().getTime();
-        var errors = program.getDiagnostics();
-        var exitStatus;
-        if (errors.length) {
-            var checkStart = bindStart;
-            var emitStart = bindStart;
-            var reportStart = bindStart;
-            exitStatus = 1 /* AllOutputGenerationSkipped */;
-        }
-        else {
-            var checker = program.getTypeChecker(true);
-            var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
-            if (program.isEmitBlocked()) {
-                exitStatus = 1 /* AllOutputGenerationSkipped */;
-            }
-            else if (compilerOptions.noEmit) {
-                exitStatus = 0 /* Succeeded */;
-            }
-            else {
-                var emitStart = new Date().getTime();
-                var emitOutput = program.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
-                var reportStart = new Date().getTime();
-                errors = ts.concatenate(errors, emitErrors);
-            }
-        }
-        reportDiagnostics(errors);
+    function compile(fileNames, compilerOptions, compilerHost) {
+        ts.parseTime = 0;
+        ts.bindTime = 0;
+        ts.checkTime = 0;
+        ts.emitTime = 0;
+        var start = new Date().getTime();
+        var program = ts.createProgram(fileNames, compilerOptions, compilerHost);
+        var exitStatus = compileProgram();
+        var end = start - new Date().getTime();
         if (compilerOptions.listFiles) {
             ts.forEach(program.getSourceFiles(), function (file) {
-                ts.sys.write(file.filename + ts.sys.newLine);
+                ts.sys.write(file.fileName + ts.sys.newLine);
             });
         }
         if (compilerOptions.diagnostics) {
             var memoryUsed = ts.sys.getMemoryUsage ? ts.sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
-            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportCountStatistic("Nodes", program.getNodeCount());
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
-            reportTimeStatistic("Parse time", bindStart - parseStart);
-            reportTimeStatistic("Bind time", checkStart - bindStart);
-            reportTimeStatistic("Check time", emitStart - checkStart);
-            reportTimeStatistic("Emit time", reportStart - emitStart);
-            reportTimeStatistic("Total time", reportStart - parseStart);
+            reportTimeStatistic("Parse time", ts.parseTime);
+            reportTimeStatistic("Bind time", ts.bindTime);
+            reportTimeStatistic("Check time", ts.checkTime);
+            reportTimeStatistic("Emit time", ts.emitTime);
+            reportTimeStatistic("Total time", start - end);
         }
         return { program: program, exitStatus: exitStatus };
+        function compileProgram() {
+            var diagnostics = program.getSyntacticDiagnostics();
+            reportDiagnostics(diagnostics);
+            if (diagnostics.length === 0) {
+                var diagnostics = program.getGlobalDiagnostics();
+                reportDiagnostics(diagnostics);
+                if (diagnostics.length === 0) {
+                    var diagnostics = program.getSemanticDiagnostics();
+                    reportDiagnostics(diagnostics);
+                }
+            }
+            if (compilerOptions.noEmit) {
+                return diagnostics.length ? 1 /* DiagnosticsPresent_OutputsSkipped */ : 0 /* Success */;
+            }
+            var emitOutput = program.emit();
+            reportDiagnostics(emitOutput.diagnostics);
+            if (emitOutput.emitSkipped) {
+                return 1 /* DiagnosticsPresent_OutputsSkipped */;
+            }
+            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+                2 /* DiagnosticsPresent_OutputsGenerated */;
+            }
+            return 0 /* Success */;
+        }
     }
     function printVersion() {
         ts.sys.write(getDiagnosticText(ts.Diagnostics.Version_0, version) + ts.sys.newLine);
@@ -20137,7 +20271,7 @@ var ts;
         output += padding + "tsc @args.txt" + ts.sys.newLine;
         output += ts.sys.newLine;
         output += getDiagnosticText(ts.Diagnostics.Options_Colon) + ts.sys.newLine;
-        var optsList = ts.optionDeclarations.slice();
+        var optsList = ts.filter(ts.optionDeclarations.slice(), function (v) { return !v.experimental; });
         optsList.sort(function (a, b) { return ts.compareValues(a.name.toLowerCase(), b.name.toLowerCase()); });
         var marginLength = 0;
         var usageColumn = [];

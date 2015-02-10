@@ -45,8 +45,7 @@ var x;
 var x = 2;
 if (true) {
     var x = 3;
-    for (var x = 0;;) {
-    }
+    for (var x = 0;;) { }
 }
 var x = undefined;
 // new declaration space, making redeclaring x as a string valid

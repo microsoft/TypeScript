@@ -54,8 +54,7 @@ var D = (function (_super) {
     D.prototype.other = function (x) {
         return x;
     };
-    D.prototype.bar = function () {
-    };
+    D.prototype.bar = function () { };
     return D;
 })(C);
 var c;

@@ -27,8 +27,7 @@ var M;
         return XX;
     })();
     M.XX = XX;
-    function f(y) {
-    }
+    function f(y) { }
     M.f = f;
     var a;
     f({ x: a }); // ok

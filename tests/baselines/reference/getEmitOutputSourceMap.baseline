@@ -1,6 +1,6 @@
-EmitOutputStatus : Succeeded
-Filename : tests/cases/fourslash/inputFile.js.map
-{"version":3,"file":"inputFile.js","sourceRoot":"","sources":["inputFile.ts"],"names":["M","M.constructor"],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,IAAM,CAAC;IAAPA,SAAMA,CAACA;IAGPC,CAACA;IAADD,QAACA;AAADA,CAACA,AAHD,IAGC"}Filename : tests/cases/fourslash/inputFile.js
+EmitSkipped: false
+FileName : tests/cases/fourslash/inputFile.js.map
+{"version":3,"file":"inputFile.js","sourceRoot":"","sources":["inputFile.ts"],"names":["M","M.constructor"],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,IAAM,CAAC;IAAPA,SAAMA,CAACA;IAGPC,CAACA;IAADD,QAACA;AAADA,CAACA,AAHD,IAGC"}FileName : tests/cases/fourslash/inputFile.js
 var x = 109;
 var foo = "hello world";
 var M = (function () {

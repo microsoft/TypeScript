@@ -5,6 +5,8 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    /* @internal */ export var checkTime = 0;
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
@@ -48,12 +50,12 @@ module ts {
             getContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
-            getEnumMemberValue,
+            getConstantValue,
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            getEmitResolver: () => emitResolver,
+            getEmitResolver,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -104,8 +106,7 @@ module ts {
         var nodeLinks: NodeLinks[] = [];
         var potentialThisCollisions: Node[] = [];
 
-        var diagnostics: Diagnostic[] = [];
-        var diagnosticsModified: boolean = false;
+        var diagnostics = createDiagnosticCollection();
 
         var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
             "string": {
@@ -122,16 +123,18 @@ module ts {
             }
         };
 
-        function addDiagnostic(diagnostic: Diagnostic) {
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+        function getEmitResolver(sourceFile?: SourceFile) {
+            // Ensure we have all the type information in place for this file so that all the
+            // emitter questions of this resolver will return the right information.
+            getDiagnostics(sourceFile);
+            return emitResolver;
         }
 
         function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
-            addDiagnostic(diagnostic);
+            diagnostics.add(diagnostic);
         }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
@@ -538,7 +541,7 @@ module ts {
             }
 
             var moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
-            var searchPath = getDirectoryPath(getSourceFile(location).filename);
+            var searchPath = getDirectoryPath(getSourceFile(location).fileName);
 
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
@@ -553,8 +556,8 @@ module ts {
                 }
             }
             while (true) {
-                var filename = normalizePath(combinePaths(searchPath, moduleName));
-                var sourceFile = host.getSourceFile(filename + ".ts") || host.getSourceFile(filename + ".d.ts");
+                var fileName = normalizePath(combinePaths(searchPath, moduleName));
+                var sourceFile = host.getSourceFile(fileName + ".ts") || host.getSourceFile(fileName + ".d.ts");
                 if (sourceFile || isRelative) break;
                 var parentPath = getDirectoryPath(searchPath);
                 if (parentPath === searchPath) break;
@@ -564,7 +567,7 @@ module ts {
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.fileName);
                 return;
             }
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
@@ -3479,7 +3482,8 @@ module ts {
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
-                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
             }
             return result !== Ternary.False;
 
@@ -4340,6 +4344,9 @@ module ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
+                if (source === anyFunctionType) {
+                    return;
+                }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference
                     var typeParameters = context.typeParameters;
@@ -4858,6 +4865,16 @@ module ts {
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
+            // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
+            // Although in down-level emit of arrow function, we emit it using function expression which means that
+            // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
+            // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
+            // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
+            // can explicitly bound arguments objects
+            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
+              error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+            }
+
             if (symbol.flags & SymbolFlags.Import) {
                 var symbolLinks = getSymbolLinks(symbol);
                 if (!symbolLinks.referenced) {
@@ -4912,7 +4929,9 @@ module ts {
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
-                needToCaptureLexicalThis = true;
+
+                // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
+                needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
 
             switch (container.kind) {
@@ -5690,9 +5709,9 @@ module ts {
                         return false;
                     }
                     else {
-                        var diagnosticsCount = diagnostics.length;
+                        var modificationCount = diagnostics.getModificationCount();
                         checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.length === diagnosticsCount
+                        return diagnostics.getModificationCount() === modificationCount;
                     }
                 }
             }
@@ -5904,28 +5923,31 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
-            var mapper = createInferenceMapper(context);
-            // First infer from arguments that are not context sensitive
+            var inferenceMapper = createInferenceMapper(context);
+
+            // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
+            // wildcards for all context sensitive function expressions.
             for (var i = 0; i < args.length; i++) {
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
-                if (!excludeArgument || excludeArgument[i] === undefined) {
-                    var parameterType = getTypeAtPosition(signature, i);
-
-                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                        continue;
-                    }
-
-                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                var parameterType = getTypeAtPosition(signature, i);
+                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                    continue;
                 }
+                // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                // context sensitive function expressions as wildcards
+                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
-            // Next, infer from those context sensitive arguments that are no longer excluded
+            // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
+            // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
+            // as we construct types for contextually typed parameters)
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
                     if (args[i].kind === SyntaxKind.OmittedExpression) {
@@ -5934,10 +5956,11 @@ module ts {
                     // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
                     }
                 }
             }
+
             var inferredTypes = getInferredTypes(context);
             // Inference has failed if the inferenceFailureType type is in list of inferences
             context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
@@ -6534,6 +6557,9 @@ module ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            if (!func.body) {
+                return unknownType;
+            }
             if (func.body.kind !== SyntaxKind.Block) {
                 var type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
@@ -6631,7 +6657,7 @@ module ts {
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper) {
+            if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
             var links = getNodeLinks(node);
@@ -7305,7 +7331,7 @@ module ts {
                 case SyntaxKind.TypeAssertionExpression:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return checkExpression((<ParenthesizedExpression>node).expression);
+                    return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
@@ -8905,7 +8931,7 @@ module ts {
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
                     }
                 }
@@ -9520,8 +9546,14 @@ module ts {
             }
         }
 
-        // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
+            var start = new Date().getTime();
+            checkSourceFileWorker(node);
+            checkTime += new Date().getTime() - start;
+        }
+
+        // Fully type check a source file and collect the relevant diagnostics.
+        function checkSourceFileWorker(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 // Grammar checking
@@ -9556,30 +9588,19 @@ module ts {
             }
         }
 
-        function getSortedDiagnostics(): Diagnostic[]{
-            Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
-
-            if (diagnosticsModified) {
-                diagnostics.sort(compareDiagnostics);
-                diagnostics = deduplicateSortedDiagnostics(diagnostics);
-                diagnosticsModified = false;
-            }
-            return diagnostics;
-        }
-
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
-                return filter(getSortedDiagnostics(), d => d.file === sourceFile);
+                return diagnostics.getDiagnostics(sourceFile.fileName);
             }
             forEach(host.getSourceFiles(), checkSourceFile);
-            return getSortedDiagnostics();
+            return diagnostics.getDiagnostics();
         }
 
-        function getGlobalDiagnostics(): Diagnostic[]{
+        function getGlobalDiagnostics(): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
-            return filter(getSortedDiagnostics(), d => !d.file);
+            return diagnostics.getGlobalDiagnostics();
         }
 
         function throwIfNonDiagnosticsProducing() {
@@ -9603,7 +9624,7 @@ module ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
             var symbols: SymbolTable = {};
             var memberFlags: NodeFlags = 0;
             function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
@@ -9989,7 +10010,7 @@ module ts {
             return getNamedMembers(propsByName);
         }
 
-        function getRootSymbols(symbol: Symbol): Symbol[]{
+        function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
@@ -10097,11 +10118,6 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors(sourceFile?: SourceFile) {
-            // Return true if there is any semantic error in a file or globally
-            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
-        }
-
         function isImportResolvedToValue(symbol: Symbol): boolean {
             var target = resolveImport(symbol);
             // const enums and modules that contain only const enums are not considered values from the emit perespective
@@ -10155,7 +10171,11 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number {
+        function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number {
+            if (node.kind === SyntaxKind.EnumMember) {
+                return getEnumMemberValue(<EnumMember>node);
+            }
+
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
@@ -10194,9 +10214,7 @@ module ts {
                 getExportAssignmentName,
                 isReferencedImportDeclaration,
                 getNodeCheckFlags,
-                getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticErrors,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
@@ -10212,14 +10230,15 @@ module ts {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticDiagnostics, addDiagnostic);
             });
+
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
                     extendSymbolTable(globals, file.locals);
                 }
             });
+
             // Initialize special symbols
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
@@ -11013,14 +11032,14 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
 
         function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             if (!hasParseDiagnostics(sourceFile)) {
-                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11030,7 +11049,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = getErrorSpanForNode(node);
                 var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11164,7 +11183,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;
             }
         }

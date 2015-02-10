@@ -13,7 +13,6 @@ var A = (function () {
     return A;
 })();
 var x;
-(function (a) {
-});
+(function (a) { });
 var y;
 (function () { return null; });
