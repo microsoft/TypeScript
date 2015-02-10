@@ -4757,16 +4757,22 @@ module ts {
             var amdDependencies: string[] = [];
             var amdModuleName: string;
 
-            // Keep scanning all the leading trivia in the file until we get to something that 
-            // isn't trivia.  Any single line comment will be analyzed to see if it is a 
-            // reference comment.
+            // Have we found anything that isn't a comment or whitespace?
+            var hasEncounteredNonTrivia = false;
+
+            // Scan the file for single line comments to analyse for references comments
             while (true) {
                 var kind = triviaScanner.scan();
+
+                if (kind === SyntaxKind.EndOfFileToken) {
+                    break;
+                }
                 if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
                     continue;
                 }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
-                    break;
+                    hasEncounteredNonTrivia = true;
+                    continue;
                 }
 
                 var range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
@@ -4774,6 +4780,11 @@ module ts {
                 var comment = sourceText.substring(range.pos, range.end);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
+                    if (hasEncounteredNonTrivia) {
+                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.References_must_appear_before_any_other_code));
+                        continue;
+                    }
+
                     var fileReference = referencePathMatchResult.fileReference;
                     sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     var diagnosticMessage = referencePathMatchResult.diagnosticMessage;

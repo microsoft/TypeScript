@@ -1813,5 +1813,9 @@
     "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
         "category": "Error",
         "code": 9002
+    },
+    "References must appear before any other code.": {
+      "category": "Error",
+      "code": 9003
     }
 }
