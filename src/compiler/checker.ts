@@ -10141,62 +10141,149 @@ module ts {
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
-                    var symbolWithRelevantName = node.locals[name];
-                    if (symbolWithRelevantName.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    // We conservatively include import symbols to cover cases where they're emitted as locals
+                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Import)) {
                         return false;
-                    }
-                    
-                    // An import can be emitted too, if it is referenced as a value.
-                    // Make sure the name in question does not collide with an import.
-                    if (symbolWithRelevantName.flags & SymbolFlags.Import) {
-                        var importEqualsDeclarationWithRelevantName = <ImportEqualsDeclaration>getDeclarationOfKind(symbolWithRelevantName, SyntaxKind.ImportEqualsDeclaration);
-                        if (isReferencedImportDeclaration(importEqualsDeclarationWithRelevantName)) {
-                            return false;
-                        }
                     }
                 }
             }
             return true;
         }
 
-        function getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string {
-            var links = getNodeLinks(container);
-            if (!links.localModuleName) {
-                var prefix = "";
-                var name = unescapeIdentifier(container.name.text);
-                while (!isUniqueLocalName(escapeIdentifier(prefix + name), container)) {
-                    prefix += "_";
-                }
-                links.localModuleName = prefix + getTextOfNode(container.name);
+        function getGeneratedNamesForSourceFile(sourceFile: SourceFile): Map<string> {
+            var links = getNodeLinks(sourceFile);
+            var generatedNames = links.generatedNames;
+            if (!generatedNames) {
+                generatedNames = links.generatedNames = {};
+                generateNames(sourceFile);
             }
-            return links.localModuleName;
+            return generatedNames;
+
+            function generateNames(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                        generateNameForModuleOrEnum(<ModuleDeclaration>node);
+                        generateNames((<ModuleDeclaration>node).body);
+                        break;
+                    case SyntaxKind.EnumDeclaration:
+                        generateNameForModuleOrEnum(<EnumDeclaration>node);
+                        break;
+                    case SyntaxKind.ImportDeclaration:
+                        generateNameForImportDeclaration(<ImportDeclaration>node);
+                        break;
+                    case SyntaxKind.SourceFile:
+                    case SyntaxKind.ModuleBlock:
+                        forEach((<SourceFile | ModuleBlock>node).statements, generateNames);
+                        break;
+                }
+            }
+
+            function isExistingName(name: string) {
+                return hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
+            }
+
+            function makeUniqueName(baseName: string): string {
+                // First try '_name'
+                if (baseName.charCodeAt(0) !== CharacterCodes._) {
+                    var baseName = "_" + baseName;
+                    if (!isExistingName(baseName)) {
+                        return baseName;
+                    }
+                }
+                // Find the first unique '_name_n', where n is a positive number
+                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+                    baseName += "_";
+                }
+                var i = 1;
+                while (true) {
+                    name = baseName + i;
+                    if (!isExistingName(name)) {
+                        return name;
+                    }
+                    i++;
+                }
+            }
+
+            function assignGeneratedName(node: Node, name: string) {
+                generatedNames[name] = name;
+                getNodeLinks(node).generatedName = unescapeIdentifier(name);
+            }
+
+            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    var name = node.name.text;
+                    // Use module/enum name itself if it is unique, otherwise make a unique variation
+                    assignGeneratedName(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
+                }
+            }
+
+            function generateNameForImportDeclaration(node: ImportDeclaration) {
+                if (node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+                    var expr = getImportedModuleName(node);
+                    var baseName = expr.kind === SyntaxKind.StringLiteral ?
+                        escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+                    assignGeneratedName(node, makeUniqueName(baseName));
+                }
+            }
         }
 
-        function getLocalNameForSymbol(symbol: Symbol, location: Node): string {
+        function getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration) {
+            var links = getNodeLinks(node);
+            if (!links.generatedName) {
+                getGeneratedNamesForSourceFile(getSourceFile(node));
+            }
+            return links.generatedName;
+        }
+
+        function getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string {
+            return getGeneratedNameForNode(container);
+        }
+
+        function getLocalNameForImportDeclaration(node: ImportDeclaration): string {
+            return getGeneratedNameForNode(node);
+        }
+
+        function getImportNameSubstitution(symbol: Symbol): string {
+            var declaration = getDeclarationOfImportSymbol(symbol);
+            if (declaration && declaration.kind === SyntaxKind.ImportSpecifier) {
+                var moduleName = getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent);
+                var propertyName = (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
+                return moduleName + "." + unescapeIdentifier(propertyName.text);
+            }
+        }
+
+        function getExportNameSubstitution(symbol: Symbol, location: Node): string {
+            if (isExternalModuleSymbol(symbol.parent)) {
+                return "exports." + unescapeIdentifier(symbol.name);
+            }
             var node = location;
+            var containerSymbol = getParentOfSymbol(symbol);
             while (node) {
-                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === symbol) {
-                    return getLocalNameOfContainer(<ModuleDeclaration | EnumDeclaration>node);
+                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === containerSymbol) {
+                    return getGeneratedNameForNode(<ModuleDeclaration | EnumDeclaration>node) + "." + unescapeIdentifier(symbol.name);
                 }
                 node = node.parent;
             }
-            Debug.fail("getLocalNameForSymbol failed");
         }
 
-        function getExpressionNamePrefix(node: Identifier): string {
+        function getExpressionNameSubstitution(node: Identifier): string {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
-                // In general, we need to prefix an identifier with its parent name if it references
-                // an exported entity from another module declaration. If we reference an exported
-                // entity within the same module declaration, then whether we prefix depends on the
-                // kind of entity. SymbolFlags.ExportHasLocal encompasses all the kinds that we
-                // do NOT prefix.
+                // Whan an identifier resolves to a parented symbol, it references an exported entity from
+                // another declaration of the same internal module.
+                if (symbol.parent) {
+                    return getExportNameSubstitution(symbol, node.parent);
+                }
+                // If we reference an exported entity within the same module declaration, then whether
+                // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
+                // kinds that we do NOT prefix.
                 var exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
                 if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                    symbol = exportSymbol;
+                    return getExportNameSubstitution(exportSymbol, node.parent);
                 }
-                if (symbol.parent) {
-                    return isExternalModuleSymbol(symbol.parent) ? "exports" : getLocalNameForSymbol(getParentOfSymbol(symbol), node.parent);
+                // Named imports from ES6 import declarations are rewritten
+                if (symbol.flags & SymbolFlags.Import) {
+                    return getImportNameSubstitution(symbol);
                 }
             }
         }
@@ -10302,13 +10389,14 @@ module ts {
         }
 
         function isUnknownIdentifier(location: Node, name: string): boolean {
-            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
+                !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 
         function createResolver(): EmitResolver {
             return {
-                getLocalNameOfContainer,
-                getExpressionNamePrefix,
+                getGeneratedNameForNode,
+                getExpressionNameSubstitution,
                 getExportAssignmentName,
                 isReferencedImportDeclaration,
                 getNodeCheckFlags,

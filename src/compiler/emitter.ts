@@ -20,7 +20,6 @@ module ts {
         importNode: ImportDeclaration | ImportEqualsDeclaration;
         declarationNode?: ImportEqualsDeclaration | ImportClause | NamespaceImport;
         namedImports?: NamedImports;
-        tempName?: Identifier;  // Temporary name for module instance
     }
 
     interface SymbolAccessibilityDiagnostic {
@@ -2338,12 +2337,13 @@ module ts {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                var prefix = resolver.getExpressionNamePrefix(node);
-                if (prefix) {
-                    write(prefix);
-                    write(".");
+                var substitution = resolver.getExpressionNameSubstitution(node);
+                if (substitution) {
+                    write(substitution);
                 }
-                writeTextOfNode(currentSourceFile, node);
+                else {
+                    writeTextOfNode(currentSourceFile, node);
+                }
             }
 
             function emitIdentifier(node: Identifier) {
@@ -2526,7 +2526,7 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNameSubstitution(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -2964,7 +2964,7 @@ module ts {
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
-                    write(container ? resolver.getLocalNameOfContainer(container) : "exports");
+                    write(container ? resolver.getGeneratedNameForNode(container) : "exports");
                     write(".");
                 }
                 emitNode(node.name);
@@ -3771,7 +3771,7 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getLocalNameOfContainer(node));
+                write(resolver.getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") {");
                 increaseIndent();
@@ -3802,9 +3802,9 @@ module ts {
             function emitEnumMember(node: EnumMember) {
                 var enumParent = <EnumDeclaration>node.parent;
                 emitStart(node);
-                write(resolver.getLocalNameOfContainer(enumParent));
+                write(resolver.getGeneratedNameForNode(enumParent));
                 write("[");
-                write(resolver.getLocalNameOfContainer(enumParent));
+                write(resolver.getGeneratedNameForNode(enumParent));
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
@@ -3860,7 +3860,7 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getLocalNameOfContainer(node));
+                write(resolver.getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
@@ -3918,23 +3918,6 @@ module ts {
                 emitRequire(moduleName);
             }
 
-            function emitNamedImportAssignments(namedImports: NamedImports, moduleReference: Identifier) {
-                var elements = namedImports.elements;
-                for (var i = 0; i < elements.length; i++) {
-                    var element = elements[i];
-                    if (resolver.isReferencedImportDeclaration(element)) {
-                        writeLine();
-                        if (!(element.flags & NodeFlags.Export)) write("var ");
-                        emitModuleMemberName(element);
-                        write(" = ");
-                        emit(moduleReference);
-                        write(".");
-                        emit(element.propertyName || element.name);
-                        write(";");
-                    }
-                }
-            }
-
             function emitImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 var info = getExternalImportInfo(node);
                 if (info) {
@@ -3943,7 +3926,7 @@ module ts {
                     if (compilerOptions.module !== ModuleKind.AMD) {
                         emitLeadingComments(node);
                         emitStart(node);
-                        var moduleName = getImportedModuleName(info.importNode);
+                        var moduleName = getImportedModuleName(node);
                         if (declarationNode) {
                             if (!(declarationNode.flags & NodeFlags.Export)) write("var ");
                             emitModuleMemberName(declarationNode);
@@ -3952,10 +3935,9 @@ module ts {
                         }
                         else if (namedImports) {
                             write("var ");
-                            emit(info.tempName);
+                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
                             write(" = ");
                             emitRequire(moduleName);
-                            emitNamedImportAssignments(namedImports, info.tempName);
                         }
                         else {
                             emitRequire(moduleName);
@@ -3971,9 +3953,6 @@ module ts {
                                 emit(declarationNode.name);
                                 write(";");
                             }
-                        }
-                        else if (namedImports) {
-                            emitNamedImportAssignments(namedImports, info.tempName);
                         }
                     }
                 }
@@ -4027,7 +4006,8 @@ module ts {
                         }
                         return {
                             importNode: <ImportDeclaration>node,
-                            namedImports: <NamedImports>importClause.namedBindings
+                            namedImports: <NamedImports>importClause.namedBindings,
+                            localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
                         };
                     }
                     return {
@@ -4042,9 +4022,6 @@ module ts {
                     var info = createExternalImportInfo(node);
                     if (info) {
                         if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedImportDeclaration(node)) {
-                            if (!info.declarationNode) {
-                                info.tempName = createTempVariable(sourceFile);
-                            }
                             externalImports.push(info);
                         }
                     }
@@ -4095,7 +4072,12 @@ module ts {
                 write("], function (require, exports");
                 forEach(externalImports, info => {
                     write(", ");
-                    emit(info.declarationNode ? info.declarationNode.name : info.tempName);
+                    if (info.declarationNode) {
+                        emit(info.declarationNode.name);
+                    }
+                    else {
+                        write(resolver.getGeneratedNameForNode(<ImportDeclaration>info.importNode));
+                    }
                 });
                 write(") {");
                 increaseIndent();
