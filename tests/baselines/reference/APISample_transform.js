@@ -934,8 +934,8 @@ declare module "typescript" {
         errorModuleName?: string;
     }
     interface EmitResolver {
-        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
-        getExpressionNamePrefix(node: Identifier): string;
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
+        getExpressionNameSubstitution(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
@@ -1060,7 +1060,8 @@ declare module "typescript" {
         enumMemberValue?: number;
         isIllegalTypeReferenceInConstraint?: boolean;
         isVisible?: boolean;
-        localModuleName?: string;
+        generatedName?: string;
+        generatedNames?: Map<string>;
         assignmentChecks?: Map<boolean>;
         hasReportedStatementInAmbientContext?: boolean;
         importOnRightSide?: Symbol;

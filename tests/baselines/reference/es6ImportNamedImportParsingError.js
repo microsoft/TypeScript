@@ -20,10 +20,9 @@ exports.m = exports.a;
 from;
 "es6ImportNamedImportParsingError_0";
 {
-    a;
+    _module_1.a;
 }
 from;
 "es6ImportNamedImportParsingError_0";
-var _a = require();
-var a = _a.a;
+var _module_1 = require();
 "es6ImportNamedImportParsingError_0";

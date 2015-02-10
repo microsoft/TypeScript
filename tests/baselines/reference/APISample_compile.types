@@ -2882,14 +2882,15 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
->getLocalNameOfContainer : (container: EnumDeclaration | ModuleDeclaration) => string
->container : EnumDeclaration | ModuleDeclaration
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
+>getGeneratedNameForNode : (node: EnumDeclaration | ModuleDeclaration | ImportDeclaration) => string
+>node : EnumDeclaration | ModuleDeclaration | ImportDeclaration
 >ModuleDeclaration : ModuleDeclaration
 >EnumDeclaration : EnumDeclaration
+>ImportDeclaration : ImportDeclaration
 
-        getExpressionNamePrefix(node: Identifier): string;
->getExpressionNamePrefix : (node: Identifier) => string
+        getExpressionNameSubstitution(node: Identifier): string;
+>getExpressionNameSubstitution : (node: Identifier) => string
 >node : Identifier
 >Identifier : Identifier
 
@@ -3313,8 +3314,12 @@ declare module "typescript" {
         isVisible?: boolean;
 >isVisible : boolean
 
-        localModuleName?: string;
->localModuleName : string
+        generatedName?: string;
+>generatedName : string
+
+        generatedNames?: Map<string>;
+>generatedNames : Map<string>
+>Map : Map<T>
 
         assignmentChecks?: Map<boolean>;
 >assignmentChecks : Map<boolean>

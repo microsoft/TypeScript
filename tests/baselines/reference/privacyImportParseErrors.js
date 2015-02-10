@@ -566,14 +566,14 @@ var glo_im4_private_v4_private = glo_im4_private.f1();
 exports.glo_im1_public = glo_M1_public;
 exports.glo_im2_public = glo_M3_private;
 var m2;
-(function (m2) {
+(function (_m2) {
     var m4;
     (function (m4) {
         var a = 10;
     })(m4 || (m4 = {}));
 })(m2 || (m2 = {}));
 var m3;
-(function (m3) {
+(function (_m3) {
     var m4;
     (function (m4) {
         var a = 10;
