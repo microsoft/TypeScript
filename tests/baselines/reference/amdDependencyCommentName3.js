@@ -10,6 +10,6 @@ m1.f();
 ///<amd-dependency path='bar' name='b'/>
 ///<amd-dependency path='foo'/>
 ///<amd-dependency path='goo' name='c'/>
-define(["require", "exports", "m2", "goo", "bar", "foo"], function (require, exports, m1, c, b) {
+define(["require", "exports", "m2", "bar", "goo", "foo"], function (require, exports, m1, b, c) {
     m1.f();
 });

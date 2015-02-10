@@ -3902,11 +3902,25 @@ module ts {
                     }
                 });
             }
+            
+            function sortAMDModules(amdModules: {name: string; path: string}[]) {
+                // AMD modules with declared variable names goes first
+                return amdModules.sort((moduleA, moduleB) => {
+                    if (moduleA.name == moduleB.name) {
+                        return 0;
+                    } else if (moduleA.name == undefined) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+            }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
                 write("define(");
+                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
