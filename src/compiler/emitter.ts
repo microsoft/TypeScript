@@ -774,6 +774,13 @@ module ts {
             }
             write("import ");
             if (node.importClause) {
+                if (node.importClause.name) {
+                    writeTextOfNode(currentSourceFile, node.importClause.name);
+                    if (node.importClause.namedBindings) {
+                        write(",");
+                    }
+                    write(" ");
+                }
                 if (node.importClause.namedBindings) {
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");

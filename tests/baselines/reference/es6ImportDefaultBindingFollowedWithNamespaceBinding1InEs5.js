@@ -1,21 +1,24 @@
-//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.ts] ////
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1InEs5.ts] ////
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts]
 
-export var a = 10;
+var a = 10;
+export = a;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts]
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
-var x: number = nameSpaceBinding.a;
+var x: number = defaultBinding;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.js]
-exports.a = 10;
+var a = 10;
+module.exports = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
 var defaultBinding = require("es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
-var x = nameSpaceBinding.a;
+var x = defaultBinding;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.d.ts]
-export declare var a: number;
+declare var a: number;
+export = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.d.ts]
 import defaultBinding, * as nameSpaceBinding from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
