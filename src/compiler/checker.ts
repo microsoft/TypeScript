@@ -10916,9 +10916,32 @@ module ts {
                     }
                 }
             }
+
+            var checkLetConstNames =  languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
+
+            // 1. LexicalDeclaration : LetOrConst BindingList ;
+            // It is a Syntax Error if the BoundNames of BindingList contains "let".
+            // 2. ForDeclaration: ForDeclaration : LetOrConst ForBinding
+            // It is a Syntax Error if the BoundNames of ForDeclaration contains "let".
+
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
             // and its Identifier is eval or arguments 
-            return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            return (checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name)) ||
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+        }
+
+        function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
+            if (name.kind === SyntaxKind.Identifier) {
+                if ((<Identifier>name).text === "let") {
+                    return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
+                }
+            }
+            else {
+                var elements = (<BindingPattern>name).elements;
+                for (var i = 0; i < elements.length; ++i) {
+                    checkGrammarNameInLetOrConstDeclarations(elements[i].name);
+                }
+            }
         }
 
         function checkGrammarVariableDeclarationList(declarationList: VariableDeclarationList): boolean {
