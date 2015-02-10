@@ -773,6 +773,16 @@ module ts {
                 write("export ");
             }
             write("import ");
+            if (node.importClause) {
+                if (node.importClause.namedBindings) {
+                    if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        write("* as ");
+                        writeTextOfNode(currentSourceFile,(<NamespaceImport>node.importClause.namedBindings).name);
+                        write(" ");
+                    }
+                }
+                write("from ");
+            }
             writeTextOfNode(currentSourceFile, node.moduleSpecifier);
             write(";");
             writer.writeLine();
