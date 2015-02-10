@@ -1513,6 +1513,10 @@
         "category": "Error",
         "code": 4088
     },
+    "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
+        "category": "Error",
+        "code": 4089
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
