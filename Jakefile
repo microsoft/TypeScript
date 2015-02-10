@@ -183,7 +183,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
                 fail(sourceFiles[i] + " does not exist!");
         }
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
-    }
+    }    
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
 }
@@ -292,8 +292,8 @@ for (var i in libraryTargets) {
 // tslib
 var tslibSource = path.join(libraryDirectory, "tslib.js");
 var tslibTarget = path.join(builtLocalDirectory, "tslib.js");
-file(tslibTarget, [copyright, tslibSource], function() {
-	concatenateFiles(tslibTarget, [copyright, tslibSource]);
+file(tslibTarget, [builtLocalDirectory, copyright, tslibSource], function() {
+    concatenateFiles(tslibTarget, [copyright, tslibSource]);
 })
 
 // Lib target to build the library files
