@@ -766,6 +766,18 @@ module ts {
             }
         }
 
+        function emitImportDeclaration(node: ImportDeclaration) {
+            // TODO(shkamat): Do the changes so that we emit only if declaration is visible
+            emitJsDocComments(node);
+            if (node.flags & NodeFlags.Export) {
+                write("export ");
+            }
+            write("import ");
+            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            write(";");
+            writer.writeLine();
+        }
+
         function emitModuleDeclaration(node: ModuleDeclaration) {
             if (resolver.isDeclarationVisible(node)) {
                 emitJsDocComments(node);
@@ -1483,6 +1495,8 @@ module ts {
                     return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return emitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ImportDeclaration:
+                    return emitImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.SourceFile:
                     return emitSourceFile(<SourceFile>node);
             }
