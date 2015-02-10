@@ -95,6 +95,8 @@ module ts {
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
+        getInlineInfo(fileName: string): string;
+
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
@@ -441,6 +443,15 @@ module ts {
                 () => {
                     var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
+                });
+        }
+
+        public getInlineInfo(fileName: string): string {
+            return this.forwardJSONCall(
+                `getInlineInfo('${fileName}')`,
+                () => {
+                    var inlineInfo = this.languageService.getInlineInfo(fileName);
+                    return inlineInfo;
                 });
         }
 

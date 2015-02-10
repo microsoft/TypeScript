@@ -885,6 +885,8 @@ module ts {
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
+        getInlineInfo(fileName: string): InlineInfo[];
+
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
@@ -1038,6 +1040,11 @@ module ts {
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+    }
+
+    export interface InlineInfo {
+        position: number;
+        displayParts: SymbolDisplayPart[];
     }
 
     export interface RenameInfo {
@@ -5245,6 +5252,41 @@ module ts {
             }
         }
 
+        function getInlineInfo(fileName: string): InlineInfo[] {
+            synchronizeHostData();
+
+            fileName = normalizeSlashes(fileName);
+
+            var sourceFile = getValidSourceFile(fileName);
+
+            cancellationToken.throwIfCancellationRequested();
+
+            var result: InlineInfo[] = [];
+
+            forEachChild(sourceFile, function aggregateUnannotatedNodes(node) {
+                switch (node.kind) {
+                    case SyntaxKind.Parameter:
+                        if (!(<ParameterDeclaration>node).type) {
+                            result.push(nodeToInlineInfo(<ParameterDeclaration>node));
+                        }
+                }
+
+                forEachChild(node, aggregateUnannotatedNodes);
+            });
+
+            return result;
+        }
+
+        function nodeToInlineInfo(node: Declaration): InlineInfo {
+            var position = node.getEnd();
+            var type = typeInfoResolver.getTypeAtLocation(node);
+
+            return {
+                position,
+                displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node))
+            };
+        }
+
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             fileName = normalizeSlashes(fileName);
@@ -5572,6 +5614,7 @@ module ts {
             getCompletionsAtPosition,
             getCompletionEntryDetails,
             getSignatureHelpItems,
+            getInlineInfo,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
             getReferencesAtPosition,
