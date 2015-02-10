@@ -736,6 +736,16 @@ module ts {
             return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
+        // Make sure we're not trying to incrementally update a source file more than once.  Once
+        // we do an update the original source file is considered unusbale from that point onwards. 
+        //
+        // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
+        // tree and give them new positions and parents.  From that point on, trusting the old
+        // tree at all is not possible as far too much of it may violate invariants.
+        var incrementalSourceFile = <IncrementalNode><Node>sourceFile;
+        Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
+        incrementalSourceFile.hasBeenIncrementallyParsed = true;
+
         var oldText = sourceFile.text;
         var syntaxCursor = createSyntaxCursor(sourceFile);
 
@@ -774,7 +784,7 @@ module ts {
         //
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
-        updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
+        updateTokenPositionsAndMarkElements(incrementalSourceFile,
             changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
 
         // Now that we've set up our internal incremental state just proceed and parse the
@@ -815,6 +825,7 @@ module ts {
     }
 
     interface IncrementalNode extends Node, IncrementalElement {
+        hasBeenIncrementallyParsed: boolean
     }
 
     interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {

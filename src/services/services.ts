@@ -2022,6 +2022,12 @@ module ts {
                 return;
             }
 
+            // IMPORTANT - It is critical from this moment onward that we do not check 
+            // cancellation tokens.  We are about to mutate source files from a previous program
+            // instance.  If we cancel midway through, we may end up in an inconsistent state where
+            // the program points to old source files that have been invalidated because of 
+            // incremental parsing.
+
             var oldSettings = program && program.getCompilerOptions();
             var newSettings = hostCache.compilationSettings();
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
@@ -2056,8 +2062,6 @@ module ts {
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
-                cancellationToken.throwIfCancellationRequested();
-
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
@@ -5363,9 +5367,6 @@ module ts {
             cancellationToken.throwIfCancellationRequested();
 
             var fileContents = sourceFile.text;
-
-            cancellationToken.throwIfCancellationRequested();
-
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
