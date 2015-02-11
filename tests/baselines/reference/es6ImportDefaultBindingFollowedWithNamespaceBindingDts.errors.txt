@@ -1,0 +1,12 @@
+tests/cases/compiler/client.ts(1,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+
+
+==== tests/cases/compiler/server.ts (0 errors) ====
+    
+    export class a { }
+    
+==== tests/cases/compiler/client.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding  from "server";
+           ~~~~~~~~~~~~~~
+!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x = new nameSpaceBinding.a();
