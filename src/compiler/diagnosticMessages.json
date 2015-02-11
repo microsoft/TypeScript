@@ -1220,6 +1220,10 @@
         "category": "Error",
         "code": 2471
     },
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 2472
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1524,6 +1528,10 @@
     "Property '{0}' does not exist on 'const' enum '{1}'.": {
         "category": "Error",
         "code": 4088
+    },
+    "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
+        "category": "Error",
+        "code": 4089
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
