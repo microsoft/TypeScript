@@ -315,22 +315,25 @@ module ts {
         // If this node was parsed in the parameters of a generator.
         GeneratorParameter = 1 << 3,
 
+        // If this node was parsed as part of a decorator
+        Decorator = 1 << 4,
+
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.  
-        ThisNodeHasError = 1 << 4,
+        ThisNodeHasError = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an 
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 5,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 6
+        HasAggregatedChildData = 1 << 7
     }
 
     export const enum RelationComparisonResult {
