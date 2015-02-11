@@ -1,0 +1,12 @@
+=== tests/cases/compiler/sourceMapVariableWithCommentsInsideModule.ts ===
+module Q {
+>Q : typeof Q
+
+    function P() {
+>P : () => void
+
+        // Test this
+        var a = 1;
+>a : number
+    }
+}
