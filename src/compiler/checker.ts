@@ -1588,65 +1588,6 @@ module ts {
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
-            function getContainingExternalModule(node: Node) {
-                for (; node; node = node.parent) {
-                    if (node.kind === SyntaxKind.ModuleDeclaration) {
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return node;
-                        }
-                    }
-                    else if (node.kind === SyntaxKind.SourceFile) {
-                        return isExternalModule(<SourceFile>node) ? node : undefined;
-                    }
-                }
-                Debug.fail("getContainingModule cant reach here");
-            }
-
-            function isUsedInExportAssignment(node: Node) {
-                // Get source File and see if it is external module and has export assigned symbol
-                var externalModule = getContainingExternalModule(node);
-                if (externalModule) {
-                    // This is export assigned symbol node
-                    var externalModuleSymbol = getSymbolOfNode(externalModule);
-                    var exportAssignmentSymbol = getExportAssignmentSymbol(externalModuleSymbol);
-                    var resolvedExportSymbol: Symbol;
-                    var symbolOfNode = getSymbolOfNode(node);
-                    if (isSymbolUsedInExportAssignment(symbolOfNode)) {
-                        return true;
-                    }
-
-                    // if symbolOfNode is import declaration, resolve the symbol declaration and check
-                    if (symbolOfNode.flags & SymbolFlags.Import) {
-                        return isSymbolUsedInExportAssignment(resolveImport(symbolOfNode));
-                    }
-                }
-
-                // Check if the symbol is used in export assignment
-                function isSymbolUsedInExportAssignment(symbol: Symbol) {
-                    if (exportAssignmentSymbol === symbol) {
-                        return true;
-                    }
-
-                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Import)) {
-                        // if export assigned symbol is import declaration, resolve the import
-                        resolvedExportSymbol = resolvedExportSymbol || resolveImport(exportAssignmentSymbol);
-                        if (resolvedExportSymbol === symbol) {
-                            return true;
-                        }
-
-                        // Container of resolvedExportSymbol is visible
-                        return forEach(resolvedExportSymbol.declarations, (current: Node) => {
-                            while (current) {
-                                if (current === node) {
-                                    return true;
-                                }
-                                current = current.parent;
-                            }
-                        });
-                    }
-                }
-            }
-
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -1662,7 +1603,7 @@ module ts {
                         // If the node is not exported or it is not ambient module element (except import declaration)
                         if (!(getCombinedNodeFlags(node) & NodeFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
-                            return isGlobalSourceFile(parent) || isUsedInExportAssignment(node);
+                            return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
                         return isDeclarationVisible(<Declaration>parent);
@@ -1696,11 +1637,11 @@ module ts {
                         return isDeclarationVisible(<Declaration>node.parent);
                     
                     // Default binding, import specifier and namespace import is visible 
-                    // only if the import declaration is exported or it is used in export assignment
+                    // only on demand so by default it is not visible
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.ImportSpecifier:
-                        return (node.name && isUsedInExportAssignment(node));
+                        return false;
 
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
@@ -1719,6 +1660,34 @@ module ts {
                     links.isVisible = !!determineIfDeclarationIsVisible();
                 }
                 return links.isVisible;
+            }
+        }
+
+        function setDeclarationsOfIdentifierAsVisible(node: Identifier): Node[]{
+            if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
+                var exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+                var result: Node[] = [];
+                buildVisibleNodeList(exportSymbol.declarations);
+                return result;
+            }
+
+            function buildVisibleNodeList(declarations: Declaration[]) {
+                forEach(declarations, declaration => {
+                    getNodeLinks(declaration).isVisible = true;
+                    var resultNode = getAnyImportSyntax(declaration) || declaration;
+                    if (!contains(result, resultNode)) {
+                        result.push(resultNode);
+                    }
+
+                    if (isInternalModuleImportEqualsDeclaration(declaration)) {
+                        // Add the referenced top container visible
+                        var internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
+                        var firstIdentifier = getFirstIdentifier(internalModuleReference);
+                        var importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
+                            Diagnostics.Cannot_find_name_0, firstIdentifier);
+                        buildVisibleNodeList(importSymbol.declarations);
+                    }
+                });
             }
         }
 
@@ -10349,6 +10318,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                setDeclarationsOfIdentifierAsVisible
             };
         }
 

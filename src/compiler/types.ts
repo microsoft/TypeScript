@@ -1172,6 +1172,7 @@ module ts {
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
+        setDeclarationsOfIdentifierAsVisible(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;

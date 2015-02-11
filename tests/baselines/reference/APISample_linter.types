@@ -3068,6 +3068,12 @@ declare module "typescript" {
 >node : Declaration
 >Declaration : Declaration
 
+        setDeclarationsOfIdentifierAsVisible(node: Identifier): Node[];
+>setDeclarationsOfIdentifierAsVisible : (node: Identifier) => Node[]
+>node : Identifier
+>Identifier : Identifier
+>Node : Node
+
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
 >isImplementationOfOverload : (node: FunctionLikeDeclaration) => boolean
 >node : FunctionLikeDeclaration

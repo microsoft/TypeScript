@@ -1,0 +1,23 @@
+=== tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
+
+module m {
+>m : typeof m
+
+    export module c {
+>c : typeof x
+
+        export class c {
+>c : c
+        }
+    }
+    import x = c;
+>x : typeof x
+>c : typeof x
+
+    export var a: typeof x;
+>a : typeof x
+>x : typeof x
+}
+export = m;
+>m : typeof m
+
