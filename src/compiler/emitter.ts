@@ -3612,9 +3612,7 @@ module ts {
                         }
                     }
                 });
-                if (computedPropertyNameCache || propertyDescriptorCache) {
-                    return { computedPropertyNameCache, propertyDescriptorCache };
-                }
+                return { computedPropertyNameCache, propertyDescriptorCache };
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
