@@ -1,5 +1,6 @@
 // @target: es6
 // @module: commonjs
+// @declaration: true
 
 // @filename: es6ImportNamedImportInIndirectExportAssignment_0.ts
 export module a {

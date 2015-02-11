@@ -27,3 +27,14 @@ var _a = require("es6ImportNamedImportInIndirectExportAssignment_0");
 var a = _a.a;
 var x = a;
 module.exports = x;
+
+
+//// [es6ImportNamedImportInIndirectExportAssignment_0.d.ts]
+export declare module a {
+    class c {
+    }
+}
+//// [es6ImportNamedImportInIndirectExportAssignment_1.d.ts]
+import { a } from "es6ImportNamedImportInIndirectExportAssignment_0";
+import x = a;
+export = x;

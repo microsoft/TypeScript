@@ -14,3 +14,10 @@ exports.a = 10;
 var _a = require("es6ImportNamedImportInExportAssignment_0");
 var a = _a.a;
 module.exports = a;
+
+
+//// [es6ImportNamedImportInExportAssignment_0.d.ts]
+export declare var a: number;
+//// [es6ImportNamedImportInExportAssignment_1.d.ts]
+import { a } from "es6ImportNamedImportInExportAssignment_0";
+export = a;
