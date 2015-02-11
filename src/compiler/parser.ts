@@ -223,6 +223,8 @@ module ts {
                 return visitNode(cbNode, (<CatchClause>node).name) ||
                     visitNode(cbNode, (<CatchClause>node).type) ||
                     visitNode(cbNode, (<CatchClause>node).block);
+            case SyntaxKind.Decorator:
+                return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
                 return visitNodes(cbNode, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||

@@ -401,6 +401,26 @@ module ts {
                             break loop;
                         }
                         break;
+                    case SyntaxKind.Decorator:
+                        if (location.parent) {
+                            lastLocation = location;
+                            var grandparent = location.parent.parent;
+                            if (location.parent.kind === SyntaxKind.Parameter) {
+                                // Parameter decorators are resolved in the context of their great-grandparent
+                                if (grandparent) {
+                                    location = grandparent.parent;
+                                }
+                                else {
+                                    break loop;
+                                }
+                            }
+                            else {
+                                // all other decorators are resolved in the context of their grandparent
+                                location = grandparent;
+                            }
+                            continue;
+                        }
+                        break;
                 }
                 lastLocation = location;
                 location = location.parent;
@@ -7413,6 +7433,7 @@ module ts {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
+            checkDecorators(node);
             checkTypeParameters(node.typeParameters);
 
             forEach(node.parameters, checkParameter);
@@ -8014,6 +8035,18 @@ module ts {
                         return SymbolFlags.ExportValue;
                 }
             }
+        }
+
+        function checkDecorators(node: Node): void {
+            if (node.decorators) {
+                checkGrammarDecorators(node);
+                forEach(node.decorators, checkDecorator);
+            }
+        }
+
+        function checkDecorator(node: Decorator): void {
+            var type = checkExpression(node.expression);
+            // TODO: check the type of the expression
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
@@ -8733,7 +8766,7 @@ module ts {
         function checkClassDeclaration(node: ClassDeclaration) {
             // Grammar checking
             checkGrammarClassDeclarationHeritageClauses(node);
-
+            checkDecorators(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -10538,6 +10571,32 @@ module ts {
         function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
             return checkGrammarForDisallowedTrailingComma(arguments) ||
                 checkGrammarForOmittedArgument(node, arguments);
+        }
+
+        function checkGrammarDecorators(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    return false;
+
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node.parent.kind === SyntaxKind.ClassDeclaration;
+
+                case SyntaxKind.Parameter:
+                    switch (node.kind) {
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.Constructor:
+                            return true;
+                    }
+                    break;
+            }
+
+            return grammarErrorOnNode(node, Diagnostics.Decorators_cannot_appear_here);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
