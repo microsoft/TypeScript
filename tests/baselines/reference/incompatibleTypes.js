@@ -102,8 +102,7 @@ var C4 = (function () {
     }
     return C4;
 })();
-function if1(a) {
-}
+function if1(a) { }
 var c1;
 var c2;
 if1(c1);

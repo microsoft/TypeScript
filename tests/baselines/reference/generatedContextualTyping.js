@@ -1195,55 +1195,18 @@ var x120 = (function () {
     }
     return x120;
 })();
-function x121(parm) {
-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
-}
-function x122(parm) {
-    if (parm === void 0) { parm = function () {
-        return [d1, d2];
-    }; }
-}
-function x123(parm) {
-    if (parm === void 0) { parm = function named() {
-        return [d1, d2];
-    }; }
-}
-function x124(parm) {
-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
-}
-function x125(parm) {
-    if (parm === void 0) { parm = function () {
-        return [d1, d2];
-    }; }
-}
-function x126(parm) {
-    if (parm === void 0) { parm = function named() {
-        return [d1, d2];
-    }; }
-}
-function x127(parm) {
-    if (parm === void 0) { parm = [d1, d2]; }
-}
-function x128(parm) {
-    if (parm === void 0) { parm = [d1, d2]; }
-}
-function x129(parm) {
-    if (parm === void 0) { parm = [d1, d2]; }
-}
-function x130(parm) {
-    if (parm === void 0) { parm = { n: [d1, d2] }; }
-}
-function x131(parm) {
-    if (parm === void 0) { parm = function (n) {
-        var n;
-        return null;
-    }; }
-}
-function x132(parm) {
-    if (parm === void 0) { parm = { func: function (n) {
-        return [d1, d2];
-    } }; }
-}
+function x121(parm) { }
+function x122(parm) { }
+function x123(parm) { }
+function x124(parm) { }
+function x125(parm) { }
+function x126(parm) { }
+function x127(parm) { }
+function x128(parm) { }
+function x129(parm) { }
+function x130(parm) { }
+function x131(parm) { }
+function x132(parm) { }
 function x133() {
     return function () { return [d1, d2]; };
 }
@@ -1842,63 +1805,51 @@ var x319 = true ? function (n) {
 var x320 = true ? { func: function (n) {
     return [d1, d2];
 } } : undefined;
-function x321(n) {
-}
+function x321(n) { }
 ;
 x321(function () { return [d1, d2]; });
-function x322(n) {
-}
+function x322(n) { }
 ;
 x322(function () {
     return [d1, d2];
 });
-function x323(n) {
-}
+function x323(n) { }
 ;
 x323(function named() {
     return [d1, d2];
 });
-function x324(n) {
-}
+function x324(n) { }
 ;
 x324(function () { return [d1, d2]; });
-function x325(n) {
-}
+function x325(n) { }
 ;
 x325(function () {
     return [d1, d2];
 });
-function x326(n) {
-}
+function x326(n) { }
 ;
 x326(function named() {
     return [d1, d2];
 });
-function x327(n) {
-}
+function x327(n) { }
 ;
 x327([d1, d2]);
-function x328(n) {
-}
+function x328(n) { }
 ;
 x328([d1, d2]);
-function x329(n) {
-}
+function x329(n) { }
 ;
 x329([d1, d2]);
-function x330(n) {
-}
+function x330(n) { }
 ;
 x330({ n: [d1, d2] });
-function x331(n) {
-}
+function x331(n) { }
 ;
 x331(function (n) {
     var n;
     return null;
 });
-function x332(n) {
-}
+function x332(n) { }
 ;
 x332({ func: function (n) {
     return [d1, d2];
@@ -1940,52 +1891,40 @@ var x344 = function (n) { return n; };
 x344({ func: function (n) {
     return [d1, d2];
 } });
-var x345 = function (n) {
-};
+var x345 = function (n) { };
 x345(function () { return [d1, d2]; });
-var x346 = function (n) {
-};
+var x346 = function (n) { };
 x346(function () {
     return [d1, d2];
 });
-var x347 = function (n) {
-};
+var x347 = function (n) { };
 x347(function named() {
     return [d1, d2];
 });
-var x348 = function (n) {
-};
+var x348 = function (n) { };
 x348(function () { return [d1, d2]; });
-var x349 = function (n) {
-};
+var x349 = function (n) { };
 x349(function () {
     return [d1, d2];
 });
-var x350 = function (n) {
-};
+var x350 = function (n) { };
 x350(function named() {
     return [d1, d2];
 });
-var x351 = function (n) {
-};
+var x351 = function (n) { };
 x351([d1, d2]);
-var x352 = function (n) {
-};
+var x352 = function (n) { };
 x352([d1, d2]);
-var x353 = function (n) {
-};
+var x353 = function (n) { };
 x353([d1, d2]);
-var x354 = function (n) {
-};
+var x354 = function (n) { };
 x354({ n: [d1, d2] });
-var x355 = function (n) {
-};
+var x355 = function (n) { };
 x355(function (n) {
     var n;
     return null;
 });
-var x356 = function (n) {
-};
+var x356 = function (n) { };
 x356({ func: function (n) {
     return [d1, d2];
 } });

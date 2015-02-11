@@ -73,25 +73,14 @@ function outside() {
         var b;
     }
 }
-function defaultArgFunction(a, b) {
-    if (a === void 0) { a = function () {
-        return b;
-    }; }
-    if (b === void 0) { b = 1; }
-}
-function defaultArgArrow(a, b) {
-    if (a === void 0) { a = function () { return function () { return b; }; }; }
-    if (b === void 0) { b = 3; }
-}
+function defaultArgFunction(a, b) { }
+function defaultArgArrow(a, b) { }
 var C = (function () {
     function C(a, b) {
         if (a === void 0) { a = b; }
         if (b === void 0) { b = 1; }
     }
-    C.prototype.method = function (a, b) {
-        if (a === void 0) { a = b; }
-        if (b === void 0) { b = 1; }
-    };
+    C.prototype.method = function (a, b) { };
     return C;
 })();
 // Function expressions

@@ -25,8 +25,7 @@ var C = (function () {
         /**
          * Setter.
          */
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

@@ -52,8 +52,7 @@ var D = (function (_super) {
     D.prototype.other = function (x) {
         return x;
     };
-    D.prototype.bar = function () {
-    };
+    D.prototype.bar = function () { };
     return D;
 })(C);
 var D2 = (function (_super) {
@@ -68,7 +67,6 @@ var D2 = (function (_super) {
     D2.prototype.other = function (x) {
         return x;
     };
-    D2.prototype.bar = function () {
-    };
+    D2.prototype.bar = function () { };
     return D2;
 })(C);

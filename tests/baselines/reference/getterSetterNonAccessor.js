@@ -13,8 +13,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 function getFunc() {
     return 0;
 }
-function setFunc(v) {
-}
+function setFunc(v) { }
 Object.defineProperty({}, "0", ({
     get: getFunc,
     set: setFunc,

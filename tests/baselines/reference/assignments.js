@@ -53,8 +53,7 @@ var E;
 })(E || (E = {}));
 E = null; // Error
 0 /* A */ = null; // OK per spec, Error per implementation (509581)
-function fn() {
-}
+function fn() { }
 fn = null; // Should be error
 var v;
 v = null; // OK

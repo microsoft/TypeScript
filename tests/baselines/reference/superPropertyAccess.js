@@ -45,22 +45,19 @@ var __extends = this.__extends || function (d, b) {
 };
 var MyBase = (function () {
     function MyBase() {
-        this.m2 = function () {
-        };
+        this.m2 = function () { };
         this.d1 = 42;
         this.d2 = 42;
     }
     MyBase.prototype.m1 = function (a) {
         return a;
     };
-    MyBase.prototype.p1 = function () {
-    };
+    MyBase.prototype.p1 = function () { };
     Object.defineProperty(MyBase.prototype, "value", {
         get: function () {
             return 0;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

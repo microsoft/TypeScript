@@ -2431,22 +2431,10 @@ module ts {
                 return true;
             }
 
-            function emitArrayLiteral(node: ArrayLiteralExpression) {
-                var elements = node.elements;
-                var length = elements.length;
-                if (length === 0) {
-                    write("[]");
-                    return;
-                }
-                if (languageVersion >= ScriptTarget.ES6) {
-                    write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
-                    write("]");
-                    return;
-                }
+            function emitListWithSpread(elements: Expression[], multiLine: boolean, trailingComma: boolean) {
                 var pos = 0;
                 var group = 0;
+                var length = elements.length;
                 while (pos < length) {
                     // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
                     if (group === 1) {
@@ -2467,8 +2455,7 @@ module ts {
                             i++;
                         }
                         write("[");
-                        emitList(elements, pos, i - pos, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
-                            /*trailingComma*/ elements.hasTrailingComma);
+                        emitList(elements, pos, i - pos, multiLine, trailingComma && i === length);
                         write("]");
                         pos = i;
                     }
@@ -2476,6 +2463,23 @@ module ts {
                 }
                 if (group > 1) {
                     write(")");
+                }
+            }
+
+            function emitArrayLiteral(node: ArrayLiteralExpression) {
+                var elements = node.elements;
+                if (elements.length === 0) {
+                    write("[]");
+                }
+                else if (languageVersion >= ScriptTarget.ES6) {
+                    write("[");
+                    emitList(elements, 0, elements.length, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma);
+                    write("]");
+                }
+                else {
+                    emitListWithSpread(elements, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma);
                 }
             }
 
@@ -2573,7 +2577,80 @@ module ts {
                 write("]");
             }
 
+            function hasSpreadElement(elements: Expression[]) {
+                return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
+            }
+
+            function skipParentheses(node: Expression): Expression {
+                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression) {
+                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
+                }
+                return node;
+            }
+
+            function emitCallTarget(node: Expression): Expression {
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
+                    emit(node);
+                    return node;
+                }
+                var temp = createTempVariable(node);
+                recordTempDeclaration(temp);
+                write("(");
+                emit(temp);
+                write(" = ");
+                emit(node);
+                write(")");
+                return temp;
+            }
+
+            function emitCallWithSpread(node: CallExpression) {
+                var target: Expression;
+                var expr = skipParentheses(node.expression);
+                if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
+                    write(".");
+                    emit((<PropertyAccessExpression>expr).name);
+                }
+                else if (expr.kind === SyntaxKind.ElementAccessExpression) {
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
+                    write("[");
+                    emit((<ElementAccessExpression>expr).argumentExpression);
+                    write("]");
+                }
+                else if (expr.kind === SyntaxKind.SuperKeyword) {
+                    target = expr;
+                    write("_super");
+                }
+                else {
+                    emit(node.expression);
+                }
+                write(".apply(");
+                if (target) {
+                    if (target.kind === SyntaxKind.SuperKeyword) {
+                        // Calls of form super(...) and super.foo(...)
+                        emitThis(target);
+                    }
+                    else {
+                        // Calls of form obj.foo(...)
+                        emit(target);
+                    }
+                }
+                else {
+                    // Calls of form foo(...)
+                    write("void 0");
+                }
+                write(", ");
+                emitListWithSpread(node.arguments, /*multiLine*/ false, /*trailingComma*/ false);
+                write(")");
+            }
+
             function emitCallExpression(node: CallExpression) {
+                if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
+                    emitCallWithSpread(node);
+                    return;
+                }
                 var superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
                     write("_super");
@@ -2721,7 +2798,21 @@ module ts {
                 emit(node.whenFalse);
             }
 
+            function isSingleLineBlock(node: Node) {
+                if (node && node.kind === SyntaxKind.Block) {
+                    var block = <Block>node;
+                    return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
+                }
+            }
+
             function emitBlock(node: Block) {
+                if (isSingleLineBlock(node)) {
+                    emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    return;
+                }
+
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
                 scopeEmitStart(node.parent);
@@ -2891,6 +2982,11 @@ module ts {
 
             function isOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
                     getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
@@ -3393,73 +3489,79 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                write(" {");
-                scopeEmitStart(node);
-
-                if (!node.body) {
-                    writeLine();
-                    write("}");
+                if (isSingleLineBlock(node.body)) {
+                    write(" { }");
                 }
                 else {
-                    increaseIndent();
+                    write(" {");
+                    scopeEmitStart(node);
 
-                    emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
-
-                    var startIndex = 0;
-                    if (node.body.kind === SyntaxKind.Block) {
-                        startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-                    }
-                    var outPos = writer.getTextPos();
-
-                    emitCaptureThisForNodeIfNecessary(node);
-                    emitDefaultValueAssignments(node);
-                    emitRestParameter(node);
-                    if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-                        decreaseIndent();
-                        write(" ");
-                        emitStart(node.body);
-                        write("return ");
-
-                        // Don't emit comments on this body.  We'll have already taken care of it above 
-                        // when we called emitDetachedComments.
-                        emitNode(node.body, /*disableComments:*/ true);
-                        emitEnd(node.body);
-                        write(";");
-                        emitTempDeclarations(/*newLine*/ false);
-                        write(" ");
-                        emitStart(node.body);
+                    if (!node.body) {
+                        writeLine();
                         write("}");
-                        emitEnd(node.body);
                     }
                     else {
+                        increaseIndent();
+
+                        emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+
+                        var startIndex = 0;
                         if (node.body.kind === SyntaxKind.Block) {
-                            emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                            startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                         }
-                        else {
-                            writeLine();
-                            emitLeadingComments(node.body);
+                        var outPos = writer.getTextPos();
+
+                        emitCaptureThisForNodeIfNecessary(node);
+                        emitDefaultValueAssignments(node);
+                        emitRestParameter(node);
+                        if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
+                            decreaseIndent();
+                            write(" ");
+                            emitStart(node.body);
                             write("return ");
-                            emit(node.body, /*disableComments:*/ true);
+
+                            // Don't emit comments on this body.  We'll have already taken care of it above 
+                            // when we called emitDetachedComments.
+                            emitNode(node.body, /*disableComments:*/ true);
+                            emitEnd(node.body);
                             write(";");
-                            emitTrailingComments(node.body);
-                        }
-                        emitTempDeclarations(/*newLine*/ true);
-                        writeLine();
-                        if (node.body.kind === SyntaxKind.Block) {
-                            emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-                            decreaseIndent();
-                            emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
-                        }
-                        else {
-                            decreaseIndent();
+                            emitTempDeclarations(/*newLine*/ false);
+                            write(" ");
                             emitStart(node.body);
                             write("}");
                             emitEnd(node.body);
                         }
+                        else {
+                            if (node.body.kind === SyntaxKind.Block) {
+                                emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                            }
+                            else {
+                                writeLine();
+                                emitLeadingComments(node.body);
+                                write("return ");
+                                emit(node.body, /*disableComments:*/ true);
+                                write(";");
+                                emitTrailingComments(node.body);
+                            }
+                            emitTempDeclarations(/*newLine*/ true);
+                            writeLine();
+                            if (node.body.kind === SyntaxKind.Block) {
+                                emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                                decreaseIndent();
+                                emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
+                            }
+                            else {
+                                decreaseIndent();
+                                emitStart(node.body);
+                                write("}");
+                                emitEnd(node.body);
+                            }
+                        }
                     }
+
+                    scopeEmitEnd();
                 }
 
-                scopeEmitEnd();
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);

@@ -9,13 +9,11 @@ var C2 = (function () {
     }
     return C2;
 })();
-{
-} // error
+{ } // error
 var C6 = (function () {
     function C6() {
     }
     return C6;
 })();
 [];
-{
-} // error
+{ } // error

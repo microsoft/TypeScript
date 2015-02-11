@@ -41,18 +41,13 @@ var arg0 = null; // error at "arg0"
 var anyArray = [null, undefined]; // error at array literal
 var objL; // error at "y,z"
 var funcL;
-function temp1(arg1) {
-} // error at "temp1"
-function testFunctionExprC(subReplace) {
-}
-function testFunctionExprC2(eq) {
-}
+function temp1(arg1) { } // error at "temp1"
+function testFunctionExprC(subReplace) { }
+function testFunctionExprC2(eq) { }
 ;
-function testObjLiteral(objLit) {
-}
+function testObjLiteral(objLit) { }
 ;
-function testFuncLiteral(funcLit) {
-}
+function testFuncLiteral(funcLit) { }
 ;
 // this should not be an error
 testFunctionExprC2(function (v1, v2) { return 1; });
@@ -61,8 +56,7 @@ testFuncLiteral(funcL);
 var k = temp1(null);
 var result = temp1(arg0);
 var result1 = temp1(anyArray);
-function noError(variable, array) {
-}
+function noError(variable, array) { }
 noError(null, []);
 noError(undefined, []);
 noError(null, [null, undefined]);

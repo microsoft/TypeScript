@@ -41,10 +41,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.thing = function () {
-    };
-    C.other = function () {
-    };
+    C.prototype.thing = function () { };
+    C.other = function () { };
     return C;
 })();
 var D = (function (_super) {
@@ -62,10 +60,8 @@ var r4 = D.other();
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.thing = function (x) {
-    };
-    C2.other = function (x) {
-    };
+    C2.prototype.thing = function (x) { };
+    C2.other = function (x) { };
     return C2;
 })();
 var D2 = (function (_super) {
