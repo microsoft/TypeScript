@@ -641,12 +641,12 @@ module ts {
 
         function getExportAssignmentSymbol(symbol: Symbol): Symbol {
             checkTypeOfExportAssignmentSymbol(symbol);
-            return getSymbolLinks(symbol).exportAssignSymbol;
+            return getSymbolLinks(symbol).exportAssignmentSymbol;
         }
 
         function checkTypeOfExportAssignmentSymbol(containerSymbol: Symbol): void {
             var symbolLinks = getSymbolLinks(containerSymbol);
-            if (!symbolLinks.exportAssignChecked) {
+            if (!symbolLinks.exportAssignmentChecked) {
                 var exportInformation = collectExportInformationForSourceFileOrModule(containerSymbol);
                 if (exportInformation.exportAssignments.length) {
                     if (exportInformation.exportAssignments.length > 1) {
@@ -666,9 +666,9 @@ module ts {
                         var meaning = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
                         var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, node.exportName);
                     }
-                    symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
+                    symbolLinks.exportAssignmentSymbol = exportSymbol || unknownSymbol;
                 }
-                symbolLinks.exportAssignChecked = true;
+                symbolLinks.exportAssignmentChecked = true;
             }
         }
 
@@ -10190,7 +10190,7 @@ module ts {
                 if (baseName.charCodeAt(0) !== CharacterCodes._) {
                     var baseName = "_" + baseName;
                     if (!isExistingName(baseName)) {
-                        return baseName;
+                        return generatedNames[baseName] = baseName;
                     }
                 }
                 // Find the first unique '_name_n', where n is a positive number
@@ -10201,14 +10201,13 @@ module ts {
                 while (true) {
                     name = baseName + i;
                     if (!isExistingName(name)) {
-                        return name;
+                        return generatedNames[name] = name;
                     }
                     i++;
                 }
             }
 
             function assignGeneratedName(node: Node, name: string) {
-                generatedNames[name] = name;
                 getNodeLinks(node).generatedName = unescapeIdentifier(name);
             }
 
