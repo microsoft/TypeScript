@@ -14,29 +14,16 @@ function foo12<T extends undefined>(test: T) { }
 function foo13<T extends void>(test: T) { }
 
 //// [typeParameterConstraints1.js]
-function foo1(test) {
-}
-function foo2(test) {
-}
-function foo3(test) {
-}
-function foo4(test) {
-} // valid
-function foo5(test) {
-} // valid
-function foo6(test) {
-}
-function foo7(test) {
-} // valid
-function foo8(test) {
-}
-function foo9(test) {
-}
-function foo10(test) {
-}
-function foo11(test) {
-}
-function foo12(test) {
-}
-function foo13(test) {
-}
+function foo1(test) { }
+function foo2(test) { }
+function foo3(test) { }
+function foo4(test) { } // valid
+function foo5(test) { } // valid
+function foo6(test) { }
+function foo7(test) { } // valid
+function foo8(test) { }
+function foo9(test) { }
+function foo10(test) { }
+function foo11(test) { }
+function foo12(test) { }
+function foo13(test) { }

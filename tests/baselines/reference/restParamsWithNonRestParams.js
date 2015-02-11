@@ -7,24 +7,9 @@ function foo3(a?:string, ...b:number[]){}
 foo3(); // error but shouldn't be
 
 //// [restParamsWithNonRestParams.js]
-function foo() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
-    }
-}
+function foo() { }
 foo(); // ok
-function foo2(a) {
-    var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
-    }
-}
+function foo2(a) { }
 foo2(); // should be an error
-function foo3(a) {
-    var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
-    }
-}
+function foo3(a) { }
 foo3(); // error but shouldn't be

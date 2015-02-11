@@ -88,8 +88,7 @@ var Foo = (function () {
 var testClass1 = (function () {
     function testClass1() {
     }
-    testClass1.prototype.method = function () {
-    };
+    testClass1.prototype.method = function () { };
     return testClass1;
 })();
 var tc1 = new testClass1();
@@ -112,8 +111,7 @@ var testClass3 = (function () {
         return null;
     }; // error: could not find symbol V
     Object.defineProperty(testClass3.prototype, "a", {
-        set: function (value) {
-        } // error: could not find symbol V
+        set: function (value) { } // error: could not find symbol V
         ,
         enumerable: true,
         configurable: true
@@ -125,8 +123,7 @@ function testFunction1() {
     return null;
 } // error: could not find symbol V
 // in paramter types
-function testFunction2(p) {
-} // error: could not find symbol V
+function testFunction2(p) { } // error: could not find symbol V
 // in var type annotation
 var f; // error: could not find symbol V
 // in constraints
@@ -138,8 +135,7 @@ var testClass4 = (function () {
 var testClass6 = (function () {
     function testClass6() {
     }
-    testClass6.prototype.method = function () {
-    }; // error: could not find symbol V
+    testClass6.prototype.method = function () { }; // error: could not find symbol V
     return testClass6;
 })();
 // in extends clause

@@ -118,8 +118,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var r3 = foo3(a); // any
-function f() {
-}
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;

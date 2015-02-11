@@ -39,32 +39,30 @@ var M;
     var c = (function () {
         function c() {
         }
-        c.prototype.fn = function (M, p) {
-            if (p === void 0) { p = _M.x; }
-        };
+        c.prototype.fn = function (M, p) { };
         return c;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_1) {
     var d = (function () {
         function d() {
         }
         d.prototype.fn2 = function () {
             var M;
-            var p = _M.x;
+            var p = _M_1.x;
         };
         return d;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_2) {
     var e = (function () {
         function e() {
         }
         e.prototype.fn3 = function () {
             function M() {
-                var p = _M.x;
+                var p = _M_2.x;
             }
         };
         return e;

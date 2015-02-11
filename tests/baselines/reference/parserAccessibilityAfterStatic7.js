@@ -9,7 +9,6 @@ static public intI() {}
 var Outer = (function () {
     function Outer() {
     }
-    Outer.intI = function () {
-    };
+    Outer.intI = function () { };
     return Outer;
 })();

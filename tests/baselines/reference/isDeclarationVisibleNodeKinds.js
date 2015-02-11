@@ -80,59 +80,59 @@ var schema;
 })(schema || (schema = {}));
 // Constructor types
 var schema;
-(function (_schema) {
+(function (_schema_1) {
     function createValidator2(schema) {
         return undefined;
     }
-    _schema.createValidator2 = createValidator2;
+    _schema_1.createValidator2 = createValidator2;
 })(schema || (schema = {}));
 // union types
 var schema;
-(function (_schema) {
+(function (_schema_2) {
     function createValidator3(schema) {
         return undefined;
     }
-    _schema.createValidator3 = createValidator3;
+    _schema_2.createValidator3 = createValidator3;
 })(schema || (schema = {}));
 // Array types
 var schema;
-(function (_schema) {
+(function (_schema_3) {
     function createValidator4(schema) {
         return undefined;
     }
-    _schema.createValidator4 = createValidator4;
+    _schema_3.createValidator4 = createValidator4;
 })(schema || (schema = {}));
 // TypeLiterals
 var schema;
-(function (_schema) {
+(function (_schema_4) {
     function createValidator5(schema) {
         return undefined;
     }
-    _schema.createValidator5 = createValidator5;
+    _schema_4.createValidator5 = createValidator5;
 })(schema || (schema = {}));
 // Tuple types
 var schema;
-(function (_schema) {
+(function (_schema_5) {
     function createValidator6(schema) {
         return undefined;
     }
-    _schema.createValidator6 = createValidator6;
+    _schema_5.createValidator6 = createValidator6;
 })(schema || (schema = {}));
 // Paren Types
 var schema;
-(function (_schema) {
+(function (_schema_6) {
     function createValidator7(schema) {
         return undefined;
     }
-    _schema.createValidator7 = createValidator7;
+    _schema_6.createValidator7 = createValidator7;
 })(schema || (schema = {}));
 // Type reference
 var schema;
-(function (_schema) {
+(function (_schema_7) {
     function createValidator8(schema) {
         return undefined;
     }
-    _schema.createValidator8 = createValidator8;
+    _schema_7.createValidator8 = createValidator8;
 })(schema || (schema = {}));
 var schema;
 (function (schema) {

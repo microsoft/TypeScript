@@ -3,6 +3,5 @@ do { } while (false);
 var n;
 
 //// [doWhileLoop.js]
-do {
-} while (false);
+do { } while (false);
 var n;

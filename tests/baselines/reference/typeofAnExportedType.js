@@ -93,8 +93,7 @@ var E = exports.E;
 exports.r10;
 exports.r11;
 exports.r12;
-function foo() {
-}
+function foo() { }
 exports.foo = foo;
 var foo;
 (function (foo) {

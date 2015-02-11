@@ -19,8 +19,7 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype.salt = function () {
-        };
+        C.prototype.salt = function () { };
         return C;
     })();
     M.C = C;

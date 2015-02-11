@@ -3,10 +3,9 @@ tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,17)
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,23): error TS1005: ',' expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,24): error TS1136: Property assignment expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,32): error TS1005: ':' expected.
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(5,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts (6 errors) ====
+==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts (5 errors) ====
     // private indexers not allowed
     
     var x = {
@@ -22,8 +21,6 @@ tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(5,1):
                                    ~
 !!! error TS1005: ':' expected.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     
     var y: {
         private[x: string]: string;

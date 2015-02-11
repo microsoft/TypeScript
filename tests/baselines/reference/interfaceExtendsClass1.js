@@ -35,8 +35,7 @@ var Button = (function (_super) {
     function Button() {
         _super.apply(this, arguments);
     }
-    Button.prototype.select = function () {
-    };
+    Button.prototype.select = function () { };
     return Button;
 })(Control);
 var TextBox = (function (_super) {
@@ -44,8 +43,7 @@ var TextBox = (function (_super) {
     function TextBox() {
         _super.apply(this, arguments);
     }
-    TextBox.prototype.select = function () {
-    };
+    TextBox.prototype.select = function () { };
     return TextBox;
 })(Control);
 var Image = (function (_super) {
@@ -58,7 +56,6 @@ var Image = (function (_super) {
 var Location = (function () {
     function Location() {
     }
-    Location.prototype.select = function () {
-    };
+    Location.prototype.select = function () { };
     return Location;
 })();

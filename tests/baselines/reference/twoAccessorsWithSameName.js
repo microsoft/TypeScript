@@ -51,8 +51,7 @@ var D = (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -65,8 +64,7 @@ var E = (function () {
         get: function () {
             return 1;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -85,6 +83,5 @@ var y = {
     get x() {
         return 1;
     },
-    set x(v) {
-    }
+    set x(v) { }
 };

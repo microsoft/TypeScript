@@ -21,7 +21,6 @@ foo(function () {
     return 0;
 });
 foo((1), { return: 0 });
-;
 foo(function (x) {
     return x;
 });
@@ -33,15 +32,7 @@ var y = x, number;
 x * x;
 false ? (function () { return null; }) : null;
 // missing fatarrow
-var x1 = function () {
-};
-var x2 = function (a) {
-};
-var x3 = function (a) {
-};
-var x4 = function () {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-};
+var x1 = function () { };
+var x2 = function (a) { };
+var x3 = function (a) { };
+var x4 = function () { };
