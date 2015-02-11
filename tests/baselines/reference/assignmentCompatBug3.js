@@ -53,8 +53,7 @@ var C = (function () {
     });
     return C;
 })();
-function foo(test) {
-}
+function foo(test) { }
 var x;
 var y;
 foo(x);

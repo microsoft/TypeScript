@@ -12,4 +12,3 @@ edit.disableFormatting();
 goTo.marker('1');
 
 edit.insert("    compareTo(): number;\n");
-diagnostics.validateTypesAtPositions(168,84,53,118,22);

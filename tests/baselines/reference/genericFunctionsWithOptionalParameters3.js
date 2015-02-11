@@ -19,8 +19,7 @@ var r5 = utils.mapReduce(c, f1, f2);
 var Collection = (function () {
     function Collection() {
     }
-    Collection.prototype.add = function (x) {
-    };
+    Collection.prototype.add = function (x) { };
     return Collection;
 })();
 var utils;

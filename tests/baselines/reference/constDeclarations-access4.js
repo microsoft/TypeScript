@@ -67,11 +67,9 @@ M.x--;
 M["x"] = 0;
 // OK
 var a = M.x + 1;
-function f(v) {
-}
+function f(v) { }
 f(M.x);
-if (M.x) {
-}
+if (M.x) { }
 M.x;
 (M.x);
 -M.x;

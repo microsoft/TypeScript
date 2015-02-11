@@ -46,10 +46,8 @@ function foo(x) {
     return x;
 }
 foo(1);
-foo(function () {
-}, 1);
-foo(1, function () {
-});
+foo(function () { }, 1);
+foo(1, function () { });
 function foo2(x) {
     return x;
 }

@@ -12,6 +12,7 @@ declare var process: any;
 declare var console: any;
 declare var fs: any;
 declare var path: any;
+declare var os: any;
 
 import ts = require("typescript");
 
@@ -45,18 +46,17 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
 
     // Query for early errors
-    var errors = program.getDiagnostics();
-    // Do not generate code in the presence of early errors
-    if (!errors.length) {
-        // Type check and get semantic errors
-        var checker = program.getTypeChecker(true);
-        errors = checker.getDiagnostics();
-        // Generate output
-        program.emitFiles();
-    }
+    var errors = ts.getPreEmitDiagnostics(program);
+    var emitResult = program.emit();
+
+    errors = errors.concat(emitResult.diagnostics);
+
     return {
         outputs: outputs,
-        errors: errors.map(function (e) { return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + e.messageText; })
+        errors: errors.map(function (e) {
+            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
+                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
+        })
     };
 }
 

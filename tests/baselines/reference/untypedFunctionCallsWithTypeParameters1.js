@@ -64,8 +64,7 @@ var C = (function () {
         this.prototype = null;
         this.length = 1;
         this.arguments = null;
-        this.caller = function () {
-        };
+        this.caller = function () { };
     }
     return C;
 })();

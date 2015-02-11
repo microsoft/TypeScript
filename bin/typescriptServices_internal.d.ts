@@ -35,6 +35,7 @@ declare module ts {
     function concatenate<T>(array1: T[], array2: T[]): T[];
     function deduplicate<T>(array: T[]): T[];
     function sum(array: any[], prop: string): number;
+    function addRange<T>(to: T[], from: T[]): void;
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
@@ -67,9 +68,9 @@ declare module ts {
     function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain;
-    function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic;
     function compareValues<T>(a: T, b: T): Comparison;
-    function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number;
+    function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison;
+    function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function normalizeSlashes(path: string): string;
     function getRootLength(path: string): number;
@@ -79,10 +80,10 @@ declare module ts {
     function isUrl(path: string): boolean;
     function isRootedDiskPath(path: string): boolean;
     function getNormalizedPathComponents(path: string, currentDirectory: string): string[];
-    function getNormalizedAbsolutePath(filename: string, currentDirectory: string): string;
+    function getNormalizedAbsolutePath(fileName: string, currentDirectory: string): string;
     function getNormalizedPathFromPathComponents(pathComponents: string[]): string;
     function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean): string;
-    function getBaseFilename(path: string): string;
+    function getBaseFileName(path: string): string;
     function combinePaths(path1: string, path2: string): string;
     function fileExtensionIs(path: string, extension: string): boolean;
     function removeFileExtension(path: string): string;
@@ -92,6 +93,7 @@ declare module ts {
      * Note that this doesn't actually wrap the input in double quotes.
      */
     function escapeString(s: string): string;
+    function getDefaultLibFileName(options: CompilerOptions): string;
     interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
@@ -147,11 +149,10 @@ declare module ts {
     }
     interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
     }
     function getSingleLineStringWriter(): StringSymbolWriter;
     function releaseStringWriter(writer: StringSymbolWriter): void;
@@ -170,7 +171,7 @@ declare module ts {
     function unescapeIdentifier(identifier: string): string;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
-    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic;
+    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
     function getErrorSpanForNode(node: Node): Node;
     function isExternalModule(file: SourceFile): boolean;
     function isDeclarationFile(file: SourceFile): boolean;
@@ -216,7 +217,6 @@ declare module ts {
     function isKeyword(token: SyntaxKind): boolean;
     function isTrivia(token: SyntaxKind): boolean;
     function isModifier(token: SyntaxKind): boolean;
-    function createEmitHostFromProgram(program: Program): EmitHost;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
@@ -246,7 +246,7 @@ declare module ts {
 declare module ts {
     var optionDeclarations: CommandLineOption[];
     function parseCommandLine(commandLine: string[]): ParsedCommandLine;
-    function readConfigFile(filename: string): any;
+    function readConfigFile(fileName: string): any;
     function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module ts {

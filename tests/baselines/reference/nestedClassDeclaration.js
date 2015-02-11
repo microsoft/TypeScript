@@ -30,8 +30,7 @@ var C2 = (function () {
     }
     return C2;
 })();
-function foo() {
-}
+function foo() { }
 var C3 = (function () {
     function C3() {
     }

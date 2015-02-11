@@ -13,8 +13,7 @@ var C99 = (function () {
         get: function () {
             return 0;
         },
-        set: function (n) {
-        } // error - accessors do not agree in visibility
+        set: function (n) { } // error - accessors do not agree in visibility
         ,
         enumerable: true,
         configurable: true

@@ -10,7 +10,7 @@
 
 module ts {
 
-    export var servicesVersion = "0.5"
+    export var servicesVersion = "0.4"
 
     export interface Node {
         getSourceFile(): SourceFile;
@@ -64,7 +64,6 @@ module ts {
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromLineAndCharacter(line: number, character: number): number;
-        getSyntacticDiagnostics(): Diagnostic[];
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -733,7 +732,7 @@ module ts {
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
-        public semanticDiagnostics: Diagnostic[];
+        public bindDiagnostics: Diagnostic[];
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -746,10 +745,6 @@ module ts {
         public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
-
-        public getSyntacticDiagnostics(): Diagnostic[]{
-            return getSyntacticDiagnostics(this);
-        }
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
@@ -1128,7 +1123,7 @@ module ts {
 
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputStatus: EmitReturnStatus;
+        emitSkipped: boolean;
     }
 
     export const enum OutputFileType {
@@ -1629,31 +1624,14 @@ module ts {
 
     export var disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile {
-        if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
-            var oldText = sourceFile.scriptSnapshot;
-            var newText = scriptSnapshot;
-
-            Debug.assert((oldText.getLength() - textChangeRange.span.length + textChangeRange.newLength) === newText.getLength());
-
-            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.getText(0, textChangeRange.span.start);
-                var newTextPrefix = newText.getText(0, textChangeRange.span.start);
-                Debug.assert(oldTextPrefix === newTextPrefix);
-
-                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span), oldText.getLength());
-                var newTextSuffix = newText.getText(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
-                Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
-
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -2025,10 +2003,6 @@ module ts {
             return sourceFile;
         }
 
-        function getDiagnosticsProducingTypeChecker() {
-            return program.getTypeChecker(/*produceDiagnostics:*/ true);
-        }
-
         function getRuleProvider(options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
@@ -2047,6 +2021,12 @@ module ts {
             if (programUpToDate()) {
                 return;
             }
+
+            // IMPORTANT - It is critical from this moment onward that we do not check 
+            // cancellation tokens.  We are about to mutate source files from a previous program
+            // instance.  If we cancel midway through, we may end up in an inconsistent state where
+            // the program points to old source files that have been invalidated because of 
+            // incremental parsing.
 
             var oldSettings = program && program.getCompilerOptions();
             var newSettings = hostCache.compilationSettings();
@@ -2077,13 +2057,11 @@ module ts {
             }
 
             program = newProgram;
-            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+            typeInfoResolver = program.getTypeChecker();
 
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
-                cancellationToken.throwIfCancellationRequested();
-
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
@@ -2156,7 +2134,7 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+                typeInfoResolver = program.getTypeChecker();
             }
         }
 
@@ -2173,7 +2151,7 @@ module ts {
 
             fileName = normalizeSlashes(fileName);
 
-            return program.getDiagnostics(getValidSourceFile(fileName));
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
         /**
@@ -2184,19 +2162,19 @@ module ts {
             synchronizeHostData();
 
             fileName = normalizeSlashes(fileName)
-            var compilerOptions = program.getCompilerOptions();
-            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            var allDiagnostics = checker.getDiagnostics(targetSourceFile);
-            if (compilerOptions.declaration) {
-                // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
+            var semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile);
+            if (!program.getCompilerOptions().declaration) {
+                return semanticDiagnostics;
             }
-            return allDiagnostics
+
+            // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+            var declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
+            return semanticDiagnostics.concat(declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -3070,7 +3048,7 @@ module ts {
                 addPrefixForAnyFunctionOrVar(symbol, "enum member");
                 var declaration = symbol.declarations[0];
                 if (declaration.kind === SyntaxKind.EnumMember) {
-                    var constantValue = typeResolver.getEnumMemberValue(<EnumMember>declaration);
+                    var constantValue = typeResolver.getConstantValue(<EnumMember>declaration);
                     if (constantValue !== undefined) {
                         displayParts.push(spacePart());
                         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4763,16 +4741,11 @@ module ts {
                 });
             }
 
-            // Get an emit host from our program, but override the writeFile functionality to
-            // call our local writer function.
-            var emitHost = createEmitHostFromProgram(program);
-            emitHost.writeFile = writeFile;
-
-            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
+            var emitOutput = program.emit(sourceFile, writeFile);
 
             return {
                 outputFiles,
-                emitOutputStatus: emitOutput.emitResultStatus
+                emitSkipped: emitOutput.emitSkipped
             };
         }
 
@@ -5394,9 +5367,6 @@ module ts {
             cancellationToken.throwIfCancellationRequested();
 
             var fileContents = sourceFile.text;
-
-            cancellationToken.throwIfCancellationRequested();
-
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
@@ -5544,39 +5514,49 @@ module ts {
                 var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
-                if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
-                    if (kind) {
-                        return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
-                            getSymbolModifiers(symbol),
-                            createTextSpan(node.getStart(), node.getWidth()));
+                if (symbol) {
+                    var declarations = symbol.getDeclarations();
+                    if (declarations && declarations.length > 0) {
+                        // Disallow rename for elements that are defined in the standard TypeScript library.
+                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
+                        for (var i = 0; i < declarations.length; i++) {
+                            var sourceFile = declarations[i].getSourceFile();
+                            if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
+                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                            }
+                        }
+
+                        var kind = getSymbolKind(symbol, typeInfoResolver, node);
+                        if (kind) {
+                            return {
+                                canRename: true,
+                                localizedErrorMessage: undefined,
+                                displayName: symbol.name,
+                                fullDisplayName: typeInfoResolver.getFullyQualifiedName(symbol),
+                                kind: kind,
+                                kindModifiers: getSymbolModifiers(symbol),
+                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
+                            };
+                        }
                     }
                 }
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
 
+            function endsWith(string: string, value: string): boolean {
+                return string.lastIndexOf(value) + value.length === string.length;
+            }
+
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
                     canRename: false,
-                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key),
+                    localizedErrorMessage: localizedErrorMessage,
                     displayName: undefined,
                     fullDisplayName: undefined,
                     kind: undefined,
                     kindModifiers: undefined,
                     triggerSpan: undefined
-                };
-            }
-
-            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TextSpan): RenameInfo {
-                return {
-                    canRename: true,
-                    localizedErrorMessage: undefined,
-                    displayName,
-                    fullDisplayName,
-                    kind,
-                    kindModifiers,
-                    triggerSpan
                 };
             }
         }

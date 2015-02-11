@@ -7,7 +7,6 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.m = function () {
-    };
+    C.m = function () { };
     return C;
 })();

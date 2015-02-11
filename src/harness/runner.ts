@@ -61,10 +61,13 @@ if (testConfigFile !== '') {
                 runners.push(new ProjectRunner());
                 break;
             case 'fourslash':
-                runners.push(new FourslashRunner());
+                runners.push(new FourSlashRunner(FourSlashTestType.Native));
+                break;
+            case 'fourslash-shims':
+                runners.push(new FourSlashRunner(FourSlashTestType.Shims));
                 break;
             case 'fourslash-generated':
-                 runners.push(new GeneratedFourslashRunner());
+                runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
                 break;
             case 'rwc':
                 runners.push(new RWCRunner());
@@ -90,7 +93,8 @@ if (runners.length === 0) {
     }
 
     // language services
-    runners.push(new FourslashRunner());
+    runners.push(new FourSlashRunner(FourSlashTestType.Native));
+    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
     //runners.push(new GeneratedFourslashRunner());
 }
 

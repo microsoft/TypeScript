@@ -1,4 +1,4 @@
-EmitOutputStatus : Succeeded
+EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile3.js
 exports.foo = 10;
 exports.bar = "hello world";

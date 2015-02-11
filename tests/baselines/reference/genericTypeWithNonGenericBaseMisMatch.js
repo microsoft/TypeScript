@@ -13,8 +13,7 @@ var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 var X = (function () {
     function X() {
     }
-    X.prototype.f = function (a) {
-    };
+    X.prototype.f = function (a) { };
     return X;
 })();
 var x = new X();

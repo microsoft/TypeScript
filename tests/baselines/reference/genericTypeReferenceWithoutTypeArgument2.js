@@ -76,9 +76,7 @@ var D2 = (function (_super) {
     }
     return D2;
 })(M.C);
-function h(x) {
-}
-function i(x) {
-}
+function h(x) { }
+function i(x) { }
 var j = null;
 var k = null;

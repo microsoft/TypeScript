@@ -2,5 +2,4 @@
 var v = { get [e]() { } };
 
 //// [parserComputedPropertyName4.js]
-var v = { get [e]() {
-} };
+var v = { get [e]() { } };

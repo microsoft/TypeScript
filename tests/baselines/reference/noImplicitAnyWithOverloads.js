@@ -10,8 +10,7 @@ function callb(a) { }
 callb((a) => { a.foo; }); // error, chose first overload
 
 //// [noImplicitAnyWithOverloads.js]
-function callb(a) {
-}
+function callb(a) { }
 callb(function (a) {
     a.foo;
 }); // error, chose first overload

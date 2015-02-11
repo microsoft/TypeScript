@@ -36,8 +36,7 @@ var C = (function (_super) {
                 // Ideally, we would capture this. But the reference is
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
-                [(_super.call(this), "prop")]() {
-                }
+                [(_super.call(this), "prop")]() { }
             };
         });
     }
