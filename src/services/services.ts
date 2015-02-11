@@ -5278,7 +5278,7 @@ module ts {
         }
 
         function nodeToInlineInfo(node: Declaration): InlineInfo {
-            var position = node.getEnd();
+            var position = node.name.getEnd();
             var type = typeInfoResolver.getTypeAtLocation(node);
 
             var displayParts = typeToDisplayParts(typeInfoResolver, type, getContainerNode(node));
