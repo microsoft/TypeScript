@@ -1149,3 +1149,84 @@ interface ArrayConstructor {
 }
 
 declare var Array: ArrayConstructor;
+
+interface TypedPropertyDescriptor<T> {
+    enumerable?: boolean;
+    configurable?: boolean;
+    writable?: boolean;
+    value?: T;
+    get?: () => T;
+    set?: (value: T) => void;
+}
+
+declare const enum DecoratorTargets {
+    class = 0x1,
+    interface = 0x2,
+    function = 0x3,
+    method = 0x4,
+    accessor = 0x5,
+    property = 0x6,
+    parameter = 0x7,
+    all = DecoratorTargets.class | DecoratorTargets.interface | DecoratorTargets.function | DecoratorTargets.method | DecoratorTargets.accessor | DecoratorTargets.property | DecoratorTargets.parameter
+}
+
+interface DecoratorFunction { <TFunction extends Function>(target: TFunction): TFunction | void; }
+interface ArgumentDecoratorFunction { (target: Function, parameterIndex: number): void; }
+interface MemberDecoratorFunction { <T>(target: Function | Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }
+
+/**
+  * Built-in decorator. Used to define the valid usage of a decorator.
+  */
+@decorator({ ambient: true, allowOn: DecoratorTargets.function, allowMultiple: false })
+declare function decorator(options?: {
+    /**
+      * Valid targets for this decorator.
+      *
+      * default: DecoratorTargets.all
+      */
+    allowOn?: DecoratorTargets;
+
+    /**
+      * Indicates whether multiple applications are allowed on the same declaration or not.
+      *
+      * default: true
+      */
+    allowMultiple?: boolean;
+
+    /**
+      * Indicates whether the decorator is used for design-time only and should not be applied to emitted code.
+      *
+      * default: false
+      */
+    ambient?: boolean;
+}): DecoratorFunction;
+
+/**
+  * Built-in decorator. Emits the serialized type of the target in the argument position of the decorated parameter.
+  */
+@decorator({ ambient: true, allowOn: DecoratorTargets.parameter, allowMultiple: false })
+declare function type(): DecoratorFunction;
+
+/**
+  * Built-in decorator. Emits the serialized types of the parameters of the target in the argument position of the decorated parameter.
+  */
+@decorator({ ambient: true, allowOn: DecoratorTargets.parameter, allowMultiple: false })
+declare function paramTypes(): DecoratorFunction;
+
+/**
+  * Built-in decorator. Emits the serialized return type of the target in the argument position of the decorated parameter.
+  */
+@decorator({ ambient: true, allowOn: DecoratorTargets.parameter, allowMultiple: false })
+declare function returnType(): DecoratorFunction;
+
+/**
+  * Built-in decorator. Does not emit any calls to the target if the provided condition is true.
+  */
+@decorator({ ambient: true, allowOn: DecoratorTargets.function | DecoratorTargets.method, allowMultiple: false })
+declare function conditional(condition: string): DecoratorFunction;
+
+/**
+  * Built-in decorator. Any usage of the target is treated as an error during compilation.
+  */
+@decorator({ ambient: true, allowMultiple: false })
+declare function obsolete(message?: string): DecoratorFunction;

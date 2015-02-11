@@ -583,6 +583,10 @@
         "category": "Error",
         "code": 1188
     },
+    "Decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
+        "category": "Error",
+        "code": 1189
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

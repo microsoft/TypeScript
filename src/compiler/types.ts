@@ -1268,6 +1268,7 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed  = 0x00000080,
+        EmitDecorate        = 0x00000100,
     }
 
     export interface NodeLinks {

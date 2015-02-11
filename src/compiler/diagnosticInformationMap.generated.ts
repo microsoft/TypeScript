@@ -148,6 +148,7 @@ module ts {
         A_rest_element_cannot_have_an_initializer: { code: 1186, category: DiagnosticCategory.Error, key: "A rest element cannot have an initializer." },
         A_parameter_property_may_not_be_a_binding_pattern: { code: 1187, category: DiagnosticCategory.Error, key: "A parameter property may not be a binding pattern." },
         Decorators_cannot_appear_here: { code: 1188, category: DiagnosticCategory.Error, key: "Decorators cannot appear here." },
+        Decorators_are_only_supported_on_class_members_when_targeting_ECMAScript_5_or_higher: { code: 1189, category: DiagnosticCategory.Error, key: "Decorators are only supported on class members when targeting ECMAScript 5 or higher." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

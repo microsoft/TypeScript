@@ -226,7 +226,7 @@ module ts {
             case SyntaxKind.Decorator:
                 return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
-                return visitNodes(cbNode, node.decorators) ||
+                return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ClassDeclaration>node).name) ||
                     visitNodes(cbNodes, (<ClassDeclaration>node).typeParameters) ||
@@ -310,6 +310,12 @@ module ts {
         False,
         True,
         Unknown
+    }
+
+    interface SignatureResult {
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        parameters?: NodeArray<ParameterDeclaration>;
+        type?: TypeNode;
     }
 
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
@@ -884,7 +890,7 @@ module ts {
         var nodeCount = 0;
         var scanner: Scanner;
         var token: SyntaxKind;
-
+        
         var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
         sourceFile.pos = sourceFile.end = 0;
@@ -1323,6 +1329,13 @@ module ts {
             }
 
             return node;
+        }
+
+        function createMissingNodeAtPosition(pos: number, kind: SyntaxKind, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+            parseErrorAtPosition(pos, 0, diagnosticMessage, arg0);
+            var result = createNode(kind, pos);
+            (<Identifier>result).text = "";
+            return finishNode(result, pos);
         }
 
         function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
@@ -2763,10 +2776,16 @@ module ts {
             //      AssignmentExpression[in] 
             //      Expression[in] , AssignmentExpression[in]
 
+            // clear the decorator context when parsing Expression, as it should be unambiguous when parsing a decorator
+            var saveDecoratorContext = inDecoratorContext();
+            if (saveDecoratorContext) setDecoratorContext(false);
+
             var expr = parseAssignmentExpressionOrHigher();
             while (parseOptional(SyntaxKind.CommaToken)) {
                 expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
             }
+
+            if (saveDecoratorContext) setDecoratorContext(true);
             return expr;
         }
 
@@ -3439,12 +3458,14 @@ module ts {
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
-            var isInDecoratorContext = inDecoratorContext();
             while (true) {
                 expression = parseMemberExpressionRest(expression);
-                if (isInDecoratorContext && (token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenParenToken) && expression.kind === SyntaxKind.ElementAccessExpression) {
+                if (inDecoratorContext() &&
+                    parsingContext === ParsingContext.ClassMembers &&
+                    (token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenParenToken) &&
+                    (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.Identifier)) {
                     // TODO(rbuckton): switch to tryParse and reuse the parsed signature information?
-                    var result = lookAhead(parseCoverCallExpressionOrComputedPropertyNamedMethod);
+                    var result = lookAhead(isStartOfMethodSignature);
                     if (result) {
                         return expression;
                     }
@@ -3478,35 +3499,26 @@ module ts {
             }
         }
 
-        function parseCoverCallExpressionOrComputedPropertyNamedMethod() {
-            // try to parse it as a signature, if successful and we are followed by an open brace, then this is a computed property named method
-            var typeParameters: NodeArray<TypeParameterDeclaration>;
+        function isStartOfMethodSignature() {
+            // try to parse it as a signature, if successful and we are followed by an open brace or semicolon, this is really a method signature
             var parameters: NodeArray<ParameterDeclaration>;
             var type: TypeNode;
-            if (token === SyntaxKind.LessThanToken) {
-                typeParameters = parseTypeParameters();
-                if (!typeParameters) {
-                    return undefined;
-                }
+            if (token === SyntaxKind.LessThanToken && !parseTypeParameters()) {
+                // failed to parse type parameters here, this is not a method
+                return false;                
             }
             if (token === SyntaxKind.OpenParenToken) {
-                var parameters = parseParameterList(/*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ true);
-                if (!parameters) {
-                    return undefined;
+                if (!parseParameterList(/*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ true)) {
+                    // failed to parse a parameter list here, this is not a method
+                    return false;
                 }
-                if (token === SyntaxKind.ColonToken) {
+                if (token === SyntaxKind.ColonToken || token === SyntaxKind.SemicolonToken || token === SyntaxKind.OpenBraceToken) {
+                    // found a type annotation, semicolon, or open brace, this is a method signature
                     type = parseTypeAnnotation();
-                    if (!type) {
-                        return undefined;
-                    }
-                }
-                if (token === SyntaxKind.OpenBraceToken || token === SyntaxKind.SemicolonToken) {
-                    // this is a signature, not a call expression
-                    return { typeParameters, parameters, type };
+                    return true;
                 }
             }
-
-            return undefined;
+            return false;
         }
 
         function parseArgumentList() {
@@ -4344,127 +4356,6 @@ module ts {
             }
         }
 
-        function reparsePropertyOrMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassElement {
-            // We may have parsed a decorator with an ElementAccess that we need to reinterpret as a computed property name
-            var lastDecorator = decorators[decorators.length - 1];
-            var expression = lastDecorator.expression;
-
-            var callExpression: CallExpression;
-            if (expression.kind === SyntaxKind.CallExpression) {
-                callExpression = <CallExpression>expression;
-                expression = callExpression.expression;
-            }
-
-            var elementAccessExpression: ElementAccessExpression;
-            if (expression.kind === SyntaxKind.ElementAccessExpression) {
-                elementAccessExpression = <ElementAccessExpression>expression;
-            }
-
-            if (elementAccessExpression) {
-                // update last decorator expression and end
-                lastDecorator.expression = elementAccessExpression.expression;
-                lastDecorator.end = elementAccessExpression.expression.end;
-
-                var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, elementAccessExpression.pos);
-                computedPropertyName.expression = elementAccessExpression.argumentExpression;
-                finishNode(computedPropertyName, elementAccessExpression.end);
-
-                var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
-                if (callExpression) {
-                    // reinterpret as a computed property method?
-                    var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
-                    method.decorators = decorators;
-                    setModifiers(method, modifiers);
-                    method.name = computedPropertyName;
-                    method.questionToken = questionToken;
-                    reclassifyCallExpressionAsSignature(callExpression, method);
-                    method.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
-                    return finishNode(method);
-                }
-                else {
-                    if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                        return parseMethodDeclaration(fullStart, decorators, modifiers, /*asteriskToken*/ undefined, computedPropertyName, questionToken, Diagnostics.or_expected);
-                    }
-
-                    // reinterpret as a computed property declaration
-                    var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
-                    property.decorators = decorators;
-                    setModifiers(property, modifiers);
-                    property.name = computedPropertyName;
-                    property.type = parseTypeAnnotation();
-                    property.initializer = allowInAnd(parseNonParameterInitializer);
-                    parseSemicolon();
-                    return finishNode(property);
-                }
-            }
-
-            // 'isClassMemberStart' should have hinted not to attempt parsing.
-            Debug.fail("Should not have attempted to parse class member declaration.");
-        }
-
-        function reclassifyTypeArgumentsAsTypeParameters(typeArguments: NodeArray<TypeNode>): NodeArray<TypeParameterDeclaration> {
-            var typeParameters = <NodeArray<TypeParameterDeclaration>>[];
-            typeParameters.pos = typeArguments.pos;
-            typeParameters.end = typeArguments.end;
-            for (var i = 0; i < typeArguments.length; i++) {
-                var typeArgument = typeArguments[i];
-                var typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, typeArgument.pos);
-                Debug.assert(typeArgument.kind === SyntaxKind.TypeReference);
-                var typeReference = <TypeReferenceNode>typeArgument;
-                Debug.assert(typeReference.typeName.kind === SyntaxKind.Identifier);
-                typeParameter.name = <Identifier>typeReference.typeName;
-                finishNode(typeParameter, typeArgument.end);
-                typeParameters.push(typeParameter);
-            }
-            return typeParameters;
-        }
-
-        function reclassifyArgumentsAsParameters(arguments: NodeArray<Expression>): NodeArray<ParameterDeclaration> {
-            var parameters = <NodeArray<ParameterDeclaration>>[];
-            parameters.pos = arguments.pos;
-            parameters.end = arguments.end;
-            for (var i = 0; i < arguments.length; i++) {
-                var argument = arguments[i];
-
-                // TODO: Object literal as object binding
-                // TODO: Array literal as array binding
-                var name: Identifier;
-                var initializer: Expression;
-                if (argument.kind === SyntaxKind.Identifier) {
-                    name = <Identifier>argument;
-                }
-                else if (argument.kind === SyntaxKind.BinaryExpression) {
-                    var binaryExpression = <BinaryExpression>argument;
-                    Debug.assert(binaryExpression.operator === SyntaxKind.EqualsToken);
-                    if (binaryExpression.left.kind === SyntaxKind.Identifier) {
-                        name = <Identifier>binaryExpression.left;
-                        initializer = binaryExpression.right;
-                    }
-                    else {
-                        Debug.fail("Invalid attempt to reclassify expression.");
-                    }
-                }
-                else {
-                    Debug.fail("Invalid attempt to reclassify expression.");
-                }
-
-                var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, argument.pos);
-                parameter.name = name;
-                parameter.initializer = initializer;
-                finishNode(parameter, argument.end);
-                parameters.push(parameter);
-            }
-            return parameters;
-        }
-
-        function reclassifyCallExpressionAsSignature(node: CallExpression, signature: SignatureDeclaration): void {
-            if (node.typeArguments) {
-                signature.typeParameters = reclassifyTypeArgumentsAsTypeParameters(node.typeArguments);
-            }
-            signature.parameters = reclassifyArgumentsAsParameters(node.arguments);
-            signature.type = parseTypeAnnotation();
-        }
-
         function parseNonParameterInitializer() {
             return parseInitializer(/*inParameter*/ false);
         }
@@ -4586,6 +4477,200 @@ module ts {
             return modifiers;
         }
 
+        function extractCallExpressionFromDecoratorTail(decorator: Decorator): CallExpression {
+            // We could have greedily parsed a method signature name as a call expression, so we extract it from the decorator.
+            var expression = decorator.expression;
+            if (expression.kind === SyntaxKind.CallExpression) {
+                decorator.expression = (<CallExpression>expression).expression;
+                decorator.end = decorator.expression.end;
+                return <CallExpression>expression;
+            }
+            return undefined;
+        }
+
+        function extractDeclarationNameFromDecoratorTail(decorator: Decorator): DeclarationName {
+            var expression = decorator.expression;
+            var name: DeclarationName;
+            switch (expression.kind) {
+                case SyntaxKind.Identifier:
+                    // We could have greedily parsed a property name as an identifier, so 
+                    // we extract it from the decorator for a better editor experience:
+                    //      @
+                    //      id() {}
+                    //
+                    decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+                    name = <Identifier>expression;
+                    break;
+
+                case SyntaxKind.PropertyAccessExpression:
+                    // We could have greedily parsed a property name as a property access, so we extract it from the decorator
+                    // for a better editor experience.
+                    var propExpr = <PropertyAccessExpression>expression;
+                    if (nodeIsMissing(propExpr.name)) {
+                        name = <Identifier>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
+                    }
+                    else {
+                        name = propExpr.name;
+                        propExpr.name = <Identifier>createMissingNodeAtPosition(name.pos, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
+                        propExpr.end = propExpr.name.end;
+                    }
+                    break;
+
+                case SyntaxKind.ArrayLiteralExpression:
+                    // We could have greedily parsed a computed property name as an array literal expression, so 
+                    // we extract it from the decorator for a better editor experience:
+                    //      @
+                    //      ["computed"]() {}
+                    //
+                    var arrayExpr = <ArrayLiteralExpression>expression;
+                    decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+
+                    var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, arrayExpr.pos);
+                    if (arrayExpr.elements.length === 0) {
+                        computedPropertyName.expression = <Expression>createMissingNodeAtPosition(arrayExpr.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+                    }
+                    else {
+                        computedPropertyName.expression = arrayExpr.elements[0];
+                        for (var i = 1; i < arrayExpr.elements.length; i++) {
+                            var commaExpr = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, computedPropertyName.expression.pos);
+                            commaExpr.operator = SyntaxKind.CommaToken;
+                            commaExpr.left = computedPropertyName.expression;
+                            commaExpr.right = arrayExpr.elements[i];
+                            computedPropertyName.expression = finishNode(commaExpr, commaExpr.right.end);
+                        }
+                    }
+                    name = finishNode(computedPropertyName, arrayExpr.end);
+                    break;
+
+                case SyntaxKind.ElementAccessExpression:
+                    // We could have greedily parsed a computed property name as an element access, so we extract it from the decorator.
+                    var elementExpr = <ElementAccessExpression>expression;
+                    decorator.expression = elementExpr.expression;
+
+                    var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, elementExpr.argumentExpression.pos);
+                    computedPropertyName.expression = elementExpr.argumentExpression;
+                    name = finishNode(computedPropertyName, elementExpr.end);
+                    break;
+
+                default:
+                    return undefined;
+            }
+
+            decorator.end = decorator.expression.end;
+            return name;
+        }
+
+        function reparseTypeArgumentsAsTypeParameters(typeArguments: NodeArray<TypeNode>): NodeArray<TypeParameterDeclaration> {
+            var typeParameters = <NodeArray<TypeParameterDeclaration>>[];
+            typeParameters.pos = typeArguments.pos;
+            typeParameters.end = typeArguments.end;
+            for (var i = 0; i < typeArguments.length; i++) {
+                var typeArgument = typeArguments[i];
+                var typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, typeArgument.pos);
+                Debug.assert(typeArgument.kind === SyntaxKind.TypeReference);
+                var typeReference = <TypeReferenceNode>typeArgument;
+                Debug.assert(typeReference.typeName.kind === SyntaxKind.Identifier);
+                typeParameter.name = <Identifier>typeReference.typeName;
+                finishNode(typeParameter, typeArgument.end);
+                typeParameters.push(typeParameter);
+            }
+            return typeParameters;
+        }
+
+        function reparseArgumentsAsParameters(argumentList: NodeArray<Expression>): NodeArray<ParameterDeclaration> {
+            var parameters = <NodeArray<ParameterDeclaration>>[];
+            parameters.pos = argumentList.pos;
+            parameters.end = argumentList.end;
+            for (var i = 0; i < argumentList.length; i++) {
+                var argument = argumentList[i];
+
+                // TODO: Object literal as object binding
+                // TODO: Array literal as array binding
+                var name: Identifier;
+                var initializer: Expression;
+                if (argument.kind === SyntaxKind.Identifier) {
+                    name = <Identifier>argument;
+                }
+                else if (argument.kind === SyntaxKind.BinaryExpression) {
+                    var binaryExpression = <BinaryExpression>argument;
+                    Debug.assert(binaryExpression.operator === SyntaxKind.EqualsToken);
+                    if (binaryExpression.left.kind === SyntaxKind.Identifier) {
+                        name = <Identifier>binaryExpression.left;
+                        initializer = binaryExpression.right;
+                    }
+                    else {
+                        Debug.fail("Invalid attempt to reclassify expression.");
+                    }
+                }
+                else {
+                    Debug.fail("Invalid attempt to reclassify expression.");
+                }
+
+                var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, argument.pos);
+                parameter.name = name;
+                parameter.initializer = initializer;
+                finishNode(parameter, argument.end);
+                parameters.push(parameter);
+            }
+            return parameters;
+        }
+
+        function reparseCallExpressionAsSignature(node: CallExpression, signature: SignatureDeclaration): void {
+            if (node.typeArguments) {
+                signature.typeParameters = reparseTypeArgumentsAsTypeParameters(node.typeArguments);
+            }
+            signature.parameters = reparseArgumentsAsParameters(node.arguments);
+            signature.type = parseTypeAnnotation();
+        }
+
+        function reparseClassElement(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassElement {
+            // We may have parsed a decorator that greedily included part of the member as its expression. 
+            var lastDecorator = decorators[decorators.length - 1];
+            
+            // TODO(rbuckton): pull out the call expression or declaration name from the consise body of an arrow function
+
+            // If we parsed a call expression, extract the call expression to reparse as a signature
+            var callExpression = extractCallExpressionFromDecoratorTail(lastDecorator);
+
+            // Extract the declaration name from the decorator
+            var name = extractDeclarationNameFromDecoratorTail(lastDecorator);
+            if (name) {
+                var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+                if (callExpression) {
+                    // Reparse as a computed property method
+                    var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
+                    method.decorators = decorators;
+                    setModifiers(method, modifiers);
+                    method.name = name;
+                    method.questionToken = questionToken;
+                    reparseCallExpressionAsSignature(callExpression, method);
+                    method.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
+                    return finishNode(method);
+                }
+                else {
+                    if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                        return parseMethodDeclaration(fullStart, decorators, modifiers, /*asteriskToken*/ undefined, name, questionToken, Diagnostics.or_expected);
+                    }
+
+                    // Reparse as a computed property declaration
+                    var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
+                    property.decorators = decorators;
+                    setModifiers(property, modifiers);
+                    property.name = name;
+                    property.type = parseTypeAnnotation();
+                    property.initializer = allowInAnd(parseNonParameterInitializer);
+                    parseSemicolon();
+                    return finishNode(property);
+                }
+            }
+
+            // We couldn't reparse this node, so attach the decorators to an incomplete declaration
+            var incomplete = <ClassElement>createNode(SyntaxKind.IncompleteDeclaration, fullStart);
+            incomplete.decorators = decorators;
+            setModifiers(incomplete, modifiers);
+            return incomplete;
+        }
+
         function parseClassElement(): ClassElement {
             var fullStart = getNodePos();
             var decorators = parseDecorators();
@@ -4616,7 +4701,7 @@ module ts {
             }
 
             if (decorators) {
-                return reparsePropertyOrMethodDeclaration(fullStart, decorators, modifiers);
+                return reparseClassElement(fullStart, decorators, modifiers);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
