@@ -5281,9 +5281,13 @@ module ts {
             var position = node.getEnd();
             var type = typeInfoResolver.getTypeAtLocation(node);
 
+            var displayParts = typeToDisplayParts(typeInfoResolver, type, getContainerNode(node));
+            displayParts.unshift(displayPart(" ", SymbolDisplayPartKind.space));
+            displayParts.unshift(displayPart(":", SymbolDisplayPartKind.punctuation));
+
             return {
                 position,
-                displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node))
+                displayParts
             };
         }
 
