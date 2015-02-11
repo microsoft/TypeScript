@@ -5274,7 +5274,10 @@ module ts {
                         break;
                     default:
                         if (isAnyFunction(node) && node.kind !== SyntaxKind.Constructor && !(<SignatureDeclaration>node).type) {
-                            result.push(signatureDeclarationLikeToInlineInfo(<SignatureDeclaration>node));
+                            var signatureInlineInfo = signatureDeclarationLikeToInlineInfo(<SignatureDeclaration>node);
+                            if (signatureInlineInfo) {
+                                result.push(signatureInlineInfo);
+                            }
                         }
                 }
 
@@ -5301,6 +5304,10 @@ module ts {
         function signatureDeclarationLikeToInlineInfo(node: SignatureDeclaration): InlineInfo {
             var children = node.getChildren();
             var closeParen = forEach(children, child => child.kind === SyntaxKind.CloseParenToken && child);
+
+            if (!closeParen) {
+                return undefined;
+            }
 
             var position = closeParen.getEnd();
             var signature = typeInfoResolver.getSignatureFromDeclaration(node);
