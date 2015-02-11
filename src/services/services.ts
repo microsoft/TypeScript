@@ -5266,8 +5266,15 @@ module ts {
             forEachChild(sourceFile, function aggregateUnannotatedNodes(node) {
                 switch (node.kind) {
                     case SyntaxKind.Parameter:
-                        if (!(<ParameterDeclaration>node).type) {
-                            result.push(nodeToInlineInfo(<ParameterDeclaration>node));
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                        if (!(<VariableLikeDeclaration>node).type) {
+                            result.push(variableLikeDeclarationToInlineInfo(<VariableLikeDeclaration>node));
+                        }
+                        break;
+                    default:
+                        if (isAnyFunction(node) && node.kind !== SyntaxKind.Constructor && !(<SignatureDeclaration>node).type) {
+                            result.push(signatureDeclarationLikeToInlineInfo(<SignatureDeclaration>node));
                         }
                 }
 
@@ -5277,11 +5284,29 @@ module ts {
             return result;
         }
 
-        function nodeToInlineInfo(node: Declaration): InlineInfo {
+        function variableLikeDeclarationToInlineInfo(node: VariableLikeDeclaration): InlineInfo {
             var position = node.name.getEnd();
             var type = typeInfoResolver.getTypeAtLocation(node);
 
             var displayParts = typeToDisplayParts(typeInfoResolver, type, getContainerNode(node));
+            displayParts.unshift(displayPart(" ", SymbolDisplayPartKind.space));
+            displayParts.unshift(displayPart(":", SymbolDisplayPartKind.punctuation));
+
+            return {
+                position,
+                displayParts
+            };
+        }
+
+        function signatureDeclarationLikeToInlineInfo(node: SignatureDeclaration): InlineInfo {
+            var children = node.getChildren();
+            var closeParen = forEach(children, child => child.kind === SyntaxKind.CloseParenToken && child);
+
+            var position = closeParen.getEnd();
+            var signature = typeInfoResolver.getSignatureFromDeclaration(node);
+            var returnType = typeInfoResolver.getReturnTypeOfSignature(signature);
+
+            var displayParts = typeToDisplayParts(typeInfoResolver, returnType, getContainerNode(node));
             displayParts.unshift(displayPart(" ", SymbolDisplayPartKind.space));
             displayParts.unshift(displayPart(":", SymbolDisplayPartKind.punctuation));
 

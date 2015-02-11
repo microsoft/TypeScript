@@ -371,9 +371,6 @@ module ts {
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
