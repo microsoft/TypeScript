@@ -848,6 +848,11 @@ module ts {
             !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
     }
 
+    /**
+     * Checks if the expression is of the form:
+     *    Symbol.name
+     * where Symbol is literally the word "Symbol", and name is any identifierName
+     */
     export function isWellKnownSymbolSyntactically(node: Expression): boolean {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }

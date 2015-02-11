@@ -304,7 +304,7 @@ module ts {
         super_cannot_be_referenced_in_a_computed_property_name: { code: 2466, category: DiagnosticCategory.Error, key: "'super' cannot be referenced in a computed property name." },
         A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type: { code: 2467, category: DiagnosticCategory.Error, key: "A computed property name cannot reference a type parameter from its containing type." },
         Cannot_find_global_value_0: { code: 2468, category: DiagnosticCategory.Error, key: "Cannot find global value '{0}'." },
-        The_0_operator_cannot_be_applied_to_a_value_of_type_symbol: { code: 2469, category: DiagnosticCategory.Error, key: "The '{0}' operator cannot be applied to a value of type 'symbol'." },
+        The_0_operator_cannot_be_applied_to_type_symbol: { code: 2469, category: DiagnosticCategory.Error, key: "The '{0}' operator cannot be applied to type 'symbol'." },
         Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object: { code: 2470, category: DiagnosticCategory.Error, key: "'Symbol' reference does not refer to the global Symbol constructor object." },
         A_computed_property_name_of_the_form_0_must_be_of_type_symbol: { code: 2471, category: DiagnosticCategory.Error, key: "A computed property name of the form '{0}' must be of type 'symbol'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },

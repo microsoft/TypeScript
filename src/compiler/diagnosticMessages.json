@@ -1208,7 +1208,7 @@
         "category": "Error",
         "code": 2468
     },
-    "The '{0}' operator cannot be applied to a value of type 'symbol'.": {
+    "The '{0}' operator cannot be applied to type 'symbol'.": {
         "category": "Error",
         "code": 2469
     },

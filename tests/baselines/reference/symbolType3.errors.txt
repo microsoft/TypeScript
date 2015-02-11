@@ -1,9 +1,9 @@
 tests/cases/conformance/es6/Symbols/symbolType3.ts(5,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/es6/Symbols/symbolType3.ts(6,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(7,3): error TS2469: The '+' operator cannot be applied to a value of type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(8,3): error TS2469: The '-' operator cannot be applied to a value of type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(9,3): error TS2469: The '~' operator cannot be applied to a value of type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(12,2): error TS2469: The '+' operator cannot be applied to a value of type 'symbol'.
+tests/cases/conformance/es6/Symbols/symbolType3.ts(7,3): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+tests/cases/conformance/es6/Symbols/symbolType3.ts(8,3): error TS2469: The '-' operator cannot be applied to type 'symbol'.
+tests/cases/conformance/es6/Symbols/symbolType3.ts(9,3): error TS2469: The '~' operator cannot be applied to type 'symbol'.
+tests/cases/conformance/es6/Symbols/symbolType3.ts(12,2): error TS2469: The '+' operator cannot be applied to type 'symbol'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolType3.ts (6 errors) ====
@@ -19,15 +19,15 @@ tests/cases/conformance/es6/Symbols/symbolType3.ts(12,2): error TS2469: The '+' 
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     + Symbol();
       ~~~~~~~~
-!!! error TS2469: The '+' operator cannot be applied to a value of type 'symbol'.
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
     - Symbol();
       ~~~~~~~~
-!!! error TS2469: The '-' operator cannot be applied to a value of type 'symbol'.
+!!! error TS2469: The '-' operator cannot be applied to type 'symbol'.
     ~ Symbol();
       ~~~~~~~~
-!!! error TS2469: The '~' operator cannot be applied to a value of type 'symbol'.
+!!! error TS2469: The '~' operator cannot be applied to type 'symbol'.
     ! Symbol();
     
     +(Symbol() || 0);
      ~~~~~~~~~~~~~~~
-!!! error TS2469: The '+' operator cannot be applied to a value of type 'symbol'.
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.

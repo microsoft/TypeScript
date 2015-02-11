@@ -2502,9 +2502,9 @@ module ts {
             return getPropertiesOfObjectType(getApparentType(type));
         }
 
-        // For a type parameter, return the base constraint of the type parameter. For the string, number, and
-        // boolean primitive types, return the corresponding object types.Otherwise return the type itself.
-        // Note that the apparent type of a union type is the union type itself.
+        // For a type parameter, return the base constraint of the type parameter. For the string, number,
+        // boolean, and symbol primitive types, return the corresponding object types.Otherwise return the
+        // type itself. Note that the apparent type of a union type is the union type itself.
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
@@ -5543,8 +5543,8 @@ module ts {
                 if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
-                else if (isWellKnownSymbolSyntactically(node.expression)) {
-                    checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>node.expression, links.resolvedType, /*reportError*/ true);
+                else {
+                    checkThatExpressionIsProperSymbolReference(node.expression, links.resolvedType, /*reportError*/ true);
                 }
             }
 
@@ -5848,11 +5848,9 @@ module ts {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
             }
-            if (isWellKnownSymbolSyntactically(indexArgumentExpression)) {
-                if (checkSymbolNameIsProperSymbolReference(<PropertyAccessExpression>indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
-                    var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
-                    return getPropertyNameForKnownSymbolName(rightHandSideName);
-                }
+            if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
+                var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
             }
 
             return undefined;
@@ -5860,34 +5858,33 @@ module ts {
 
         /**
          * A proper symbol reference requires the following:
-         *   1. The expression is of the form Symbol.<identifier>
-         *   2. Symbol in this context resolves to the global Symbol object
-         *   3. The property access denotes a property that is present on the global Symbol object
-         *   4. The property on the global Symbol object is of the primitive type symbol.
+         *   1. The property access denotes a property that exists
+         *   2. The expression is of the form Symbol.<identifier>
+         *   3. The property access is of the primitive type symbol.
+         *   4. Symbol in this context resolves to the global Symbol object
          */
-        function checkSymbolNameIsProperSymbolReference(wellKnownSymbolName: PropertyAccessExpression, propertyNameType: Type, reportError: boolean): boolean {
-            if (propertyNameType === unknownType) {
+        function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
+            if (expressionType === unknownType) {
                 // There is already an error, so no need to report one.
                 return false;
             }
 
-            Debug.assert(isWellKnownSymbolSyntactically(wellKnownSymbolName));
+            if (!isWellKnownSymbolSyntactically(expression)) {
+                return false;
+            }
 
             // Make sure the property type is the primitive symbol type
-            if ((propertyNameType.flags & TypeFlags.ESSymbol) === 0) {
+            if ((expressionType.flags & TypeFlags.ESSymbol) === 0) {
                 if (reportError) {
-                    error(wellKnownSymbolName, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(wellKnownSymbolName));
+                    error(expression, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(expression));
                 }
                 return false;
             }
 
             // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
             // global Symbol object
-            var leftHandSide = (<PropertyAccessExpression>wellKnownSymbolName).expression;
-            // Look up the global symbol, but don't report an error, since checking the actual expression
-            // would have reported an error.
-            var leftHandSideSymbol = resolveName(wellKnownSymbolName, (<Identifier>leftHandSide).text,
-                SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            var leftHandSide = <Identifier>(<PropertyAccessExpression>expression).expression;
+            var leftHandSideSymbol = getResolvedSymbol(leftHandSide);
             if (!leftHandSideSymbol) {
                 return false;
             }
@@ -6936,7 +6933,7 @@ module ts {
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                     if (hasSomeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
-                        error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_a_value_of_type_symbol, tokenToString(node.operator));
+                        error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
                     return numberType;
                 case SyntaxKind.ExclamationToken:
@@ -7270,7 +7267,7 @@ module ts {
                     hasSomeTypeOfKind(rightType, TypeFlags.ESSymbol) ? node.right :
                     undefined;
                 if (offendingSymbolOperand) {
-                    error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_a_value_of_type_symbol, tokenToString(operator));
+                    error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
                     return false;
                 }
 
@@ -7362,6 +7359,9 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
@@ -7373,6 +7373,9 @@ module ts {
             // Grammar checking
             checkGrammarMethod(node);
 
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
@@ -8185,6 +8188,9 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 // This check will account for methods in class/interface declarations,
                 // as well as accessors in classes/object literals
@@ -8420,6 +8426,9 @@ module ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
@@ -11159,6 +11168,9 @@ module ts {
                 var inAmbientContext = isInAmbientContext(enumDecl);
                 for (var i = 0, n = enumDecl.members.length; i < n; i++) {
                     var node = enumDecl.members[i];
+                    // Do not use hasDynamicName here, because that returns false for well known symbols.
+                    // We want to perform checkComputedPropertyName for all computed properties, including
+                    // well known symbols.
                     if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                         hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
                     }
