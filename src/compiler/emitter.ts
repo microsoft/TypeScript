@@ -3904,11 +3904,11 @@ module ts {
             }
             
             function sortAMDModules(amdModules: {name: string; path: string}[]) {
-                // AMD modules with declared variable names goes first
+                // AMD modules with declared variable names go first
                 return amdModules.sort((moduleA, moduleB) => {
-                    if (moduleA.name == moduleB.name) {
+                    if (moduleA.name === moduleB.name) {
                         return 0;
-                    } else if (moduleA.name == undefined) {
+                    } else if (!moduleA.name) {
                         return 1;
                     } else {
                         return -1;
