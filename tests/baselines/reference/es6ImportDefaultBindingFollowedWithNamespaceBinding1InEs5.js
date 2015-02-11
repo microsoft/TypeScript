@@ -21,4 +21,3 @@ var x = defaultBinding;
 declare var a: number;
 export = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.d.ts]
-import defaultBinding, * as nameSpaceBinding from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";

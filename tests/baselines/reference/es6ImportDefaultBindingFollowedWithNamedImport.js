@@ -44,9 +44,3 @@ export declare var a: number;
 export declare var x: number;
 export declare var m: number;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]
-import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
-import defaultBinding2, { a } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
-import defaultBinding3, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
-import defaultBinding4, { x,  a as y } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
-import defaultBinding5, { x as z } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
-import defaultBinding6, { m } from "es6ImportDefaultBindingFollowedWithNamedImport_0";

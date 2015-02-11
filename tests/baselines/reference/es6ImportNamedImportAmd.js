@@ -91,15 +91,3 @@ export declare var z1: number;
 export declare var z2: number;
 export declare var aaaa: number;
 //// [es6ImportNamedImportAmd_1.d.ts]
-import { } from "es6ImportNamedImportAmd_0";
-import { a } from "es6ImportNamedImportAmd_0";
-import { a as b } from "es6ImportNamedImportAmd_0";
-import { x,  a as y } from "es6ImportNamedImportAmd_0";
-import { x as z } from "es6ImportNamedImportAmd_0";
-import { m } from "es6ImportNamedImportAmd_0";
-import { a1,  x1 } from "es6ImportNamedImportAmd_0";
-import { a1 as a11,  x1 as x11 } from "es6ImportNamedImportAmd_0";
-import { z1 } from "es6ImportNamedImportAmd_0";
-import { z2 as z3 } from "es6ImportNamedImportAmd_0";
-import { aaaa } from "es6ImportNamedImportAmd_0";
-import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";

@@ -35,10 +35,11 @@ module ts {
     }
 
     interface AliasDeclarationEmitInfo {
-        declaration: ImportEqualsDeclaration;
+        declaration: AnyImportSyntax;
         outputPos: number;
         indent: number;
         asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
+        isVisible?: boolean;
     }
 
     interface DeclarationEmit {
@@ -392,6 +393,21 @@ module ts {
             }
 
             emitSourceFile(root);
+
+            // create asynchronous output for the importDeclarations
+            if (aliasDeclarationEmitInfo.length) {
+                var oldWriter = writer;
+                forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
+                    if (aliasEmitInfo.isVisible) {
+                        Debug.assert(aliasEmitInfo.declaration.kind === SyntaxKind.ImportDeclaration);
+                        createAndSetNewTextWriterWithSymbolWriter();
+                        Debug.assert(aliasEmitInfo.indent === 0);
+                        writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.declaration);
+                        aliasEmitInfo.asynchronousOutput = writer.getText();
+                    }
+                });
+                setWriter(oldWriter);
+            }
         }
         else {
             // Emit references corresponding to this file
@@ -465,9 +481,9 @@ module ts {
             decreaseIndent = newWriter.decreaseIndent;
         }
 
-        function writeAsychronousImportEqualsDeclarations(importEqualsDeclarations: ImportEqualsDeclaration[]) {
+        function writeAsychronousImportEqualsDeclarations(anyImportSyntax: AnyImportSyntax[]) {
             var oldWriter = writer;
-            forEach(importEqualsDeclarations, aliasToWrite => {
+            forEach(anyImportSyntax, aliasToWrite => {
                 var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
                 // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
                 // then we don't need to write it at this point. We will write it when we actually see its declaration
@@ -477,12 +493,19 @@ module ts {
                 // Writing of function bar would mark alias declaration foo as visible but we haven't yet visited that declaration so do nothing, 
                 // we would write alias foo declaration when we visit it since it would now be marked as visible
                 if (aliasEmitInfo) {
-                    createAndSetNewTextWriterWithSymbolWriter();
-                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
-                        increaseIndent();
+                    if (aliasToWrite.kind === SyntaxKind.ImportEqualsDeclaration) {
+                        createAndSetNewTextWriterWithSymbolWriter();
+                        for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                            increaseIndent();
+                        }
+                        writeImportEqualsDeclaration(<ImportEqualsDeclaration>aliasToWrite);
+                        aliasEmitInfo.asynchronousOutput = writer.getText();
                     }
-                    writeImportEqualsDeclaration(aliasToWrite);
-                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                    else {
+                        // we have to create asynchronous output only after we have collected complete information 
+                        // because it is possible to enable multiple bindings as asynchronously visible
+                        aliasEmitInfo.isVisible = true;
+                    }
                 }
             });
             setWriter(oldWriter);
@@ -724,15 +747,15 @@ module ts {
         }
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            var nodeEmitInfo = {
-                declaration: node,
-                outputPos: writer.getTextPos(),
-                indent: writer.getIndent(),
-                hasWritten: resolver.isDeclarationVisible(node)
-            };
-            aliasDeclarationEmitInfo.push(nodeEmitInfo);
-            if (nodeEmitInfo.hasWritten) {
+            if (resolver.isDeclarationVisible(node)) {
                 writeImportEqualsDeclaration(node);
+            }
+            else {
+                 aliasDeclarationEmitInfo.push({
+                     declaration: node,
+                     outputPos: writer.getTextPos(),
+                     indent: writer.getIndent(),
+                 });
             }
         }
 
@@ -767,33 +790,58 @@ module ts {
         }
 
         function emitImportDeclaration(node: ImportDeclaration) {
-            // TODO(shkamat): Do the changes so that we emit only if declaration is visible
+            if (node.importClause) {
+                aliasDeclarationEmitInfo.push({
+                    declaration: node,
+                    outputPos: writer.getTextPos(),
+                    indent: writer.getIndent(),
+                    isVisible: (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) ||
+                    isVisibleNamedBinding(node.importClause.namedBindings)
+                });
+            }
+            else {
+                writeImportDeclaration(node);
+            }
+        }
+
+        function isVisibleNamedBinding(namedBindings: NamespaceImport | NamedImports): boolean {
+            if (namedBindings) {
+                if (namedBindings.kind === SyntaxKind.NamespaceImport) {
+                    return resolver.isDeclarationVisible(<NamespaceImport>namedBindings);
+                }
+                else {
+                    return forEach((<NamedImports>namedBindings).elements, namedImport => resolver.isDeclarationVisible(namedImport));
+                }
+            }
+        }
+
+        function writeImportDeclaration(node: ImportDeclaration) {
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
                 write("export ");
             }
             write("import ");
             if (node.importClause) {
-                if (node.importClause.name) {
+                var beforeDefaultBindingEmitPos = writer.getTextPos();
+                if (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) {
                     writeTextOfNode(currentSourceFile, node.importClause.name);
-                    if (node.importClause.namedBindings) {
-                        write(",");
-                    }
-                    write(" ");
                 }
-                if (node.importClause.namedBindings) {
+                if (node.importClause.namedBindings && isVisibleNamedBinding(node.importClause.namedBindings)) {
+                    if (beforeDefaultBindingEmitPos !== writer.getTextPos()) {
+                        // If the default binding was emitted, write the separated
+                        write(", ");
+                    }
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");
                         writeTextOfNode(currentSourceFile,(<NamespaceImport>node.importClause.namedBindings).name);
-                        write(" ");
                     }
                     else {
                         write("{");
                         emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportSpecifier);
-                        write(" } ");
+                        write(" }");
                     }
                 }
-                write("from ");
+                write(" from ");
             }
             writeTextOfNode(currentSourceFile, node.moduleSpecifier);
             write(";");
@@ -801,12 +849,14 @@ module ts {
         }
 
         function emitImportSpecifier(node: ImportSpecifier) {
-            write(" ");
-            if (node.propertyName) {
-                writeTextOfNode(currentSourceFile, node.propertyName);
-                write(" as ");
+            if (resolver.isDeclarationVisible(node)) {
+                write(" ");
+                if (node.propertyName) {
+                    writeTextOfNode(currentSourceFile, node.propertyName);
+                    write(" as ");
+                }
+                writeTextOfNode(currentSourceFile, node.name);
             }
-            writeTextOfNode(currentSourceFile, node.name);
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {

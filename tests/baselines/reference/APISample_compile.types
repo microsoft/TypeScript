@@ -2854,6 +2854,11 @@ declare module "typescript" {
         CannotBeNamed = 2,
 >CannotBeNamed : SymbolAccessibility
     }
+    type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+>ImportEqualsDeclaration : ImportEqualsDeclaration
+
     interface SymbolVisibilityResult {
 >SymbolVisibilityResult : SymbolVisibilityResult
 
@@ -2861,9 +2866,9 @@ declare module "typescript" {
 >accessibility : SymbolAccessibility
 >SymbolAccessibility : SymbolAccessibility
 
-        aliasesToMakeVisible?: ImportEqualsDeclaration[];
->aliasesToMakeVisible : ImportEqualsDeclaration[]
->ImportEqualsDeclaration : ImportEqualsDeclaration
+        aliasesToMakeVisible?: AnyImportSyntax[];
+>aliasesToMakeVisible : (ImportEqualsDeclaration | ImportDeclaration)[]
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
 
         errorSymbolName?: string;
 >errorSymbolName : string

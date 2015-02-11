@@ -449,6 +449,19 @@ module ts {
                 node.kind === SyntaxKind.ImportSpecifier;
         }
 
+        function getAnyImportSyntax(node: Node): AnyImportSyntax {
+            if (isImportSymbolDeclaration(node)) {
+                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    return <ImportEqualsDeclaration>node;
+                }
+
+                while (node.kind !== SyntaxKind.ImportDeclaration) {
+                    node = node.parent;
+                }
+                return <ImportDeclaration>node;
+            }
+        }
+
         function getDeclarationOfImportSymbol(symbol: Symbol): Declaration {
             return forEach(symbol.declarations, d => isImportSymbolDeclaration(d) ? d : undefined);
         }
@@ -990,7 +1003,7 @@ module ts {
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
-            var aliasesToMakeVisible: ImportEqualsDeclaration[];
+            var aliasesToMakeVisible: AnyImportSyntax[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
@@ -998,19 +1011,21 @@ module ts {
 
             function getIsDeclarationVisible(declaration: Declaration) {
                 if (!isDeclarationVisible(declaration)) {
-                    // Mark the unexported alias as visible if its parent is visible 
+                    // Mark the non exported alias as visible if its parent is visible 
                     // because these kind of aliases can be used to name types in declaration file
-                    if (declaration.kind === SyntaxKind.ImportEqualsDeclaration &&
-                        !(declaration.flags & NodeFlags.Export) &&
-                        isDeclarationVisible(<Declaration>declaration.parent)) {
+
+                    var anyImportSyntax = getAnyImportSyntax(declaration);
+                    if (anyImportSyntax &&
+                        !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
+                        isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
                         getNodeLinks(declaration).isVisible = true;
                         if (aliasesToMakeVisible) {
-                            if (!contains(aliasesToMakeVisible, declaration)) {
-                                aliasesToMakeVisible.push(<ImportEqualsDeclaration>declaration);
+                            if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
+                                aliasesToMakeVisible.push(anyImportSyntax);
                             }
                         }
                         else {
-                            aliasesToMakeVisible = [<ImportEqualsDeclaration>declaration];
+                            aliasesToMakeVisible = [anyImportSyntax];
                         }
                         return true;
                     }
@@ -1680,6 +1695,13 @@ module ts {
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
                     
+                    // Default binding, import specifier and namespace import is visible 
+                    // only if the import declaration is exported or it is used in export assignment
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.ImportSpecifier:
+                        return (node.name && isUsedInExportAssignment(node));
+
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
                     // Source file is always visible

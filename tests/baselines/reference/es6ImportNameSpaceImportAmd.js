@@ -23,5 +23,3 @@ define(["require", "exports", "es6ImportNameSpaceImportAmd_0"], function (requir
 //// [es6ImportNameSpaceImportAmd_0.d.ts]
 export declare var a: number;
 //// [es6ImportNameSpaceImportAmd_1.d.ts]
-import * as nameSpaceBinding from "es6ImportNameSpaceImportAmd_0";
-import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0";
