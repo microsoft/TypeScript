@@ -1,2 +1,2 @@
 //// [sourceMapVariableWithCommentsNotInModule.js.map]
-{"version":3,"file":"sourceMapVariableWithCommentsNotInModule.js","sourceRoot":"","sources":["sourceMapVariableWithCommentsNotInModule.ts"],"names":["P"],"mappings":"AAAA,SAAS,CAAC;IAENA,AADAA,YAAYA;QACRA,CAACA,GAAGA,CAACA,CAACA;AACdA,CAACA"}
+{"version":3,"file":"sourceMapVariableWithCommentsNotInModule.js","sourceRoot":"","sources":["sourceMapVariableWithCommentsNotInModule.ts"],"names":["P"],"mappings":"AAAA,SAAS,CAAC;IACNA,YAAYA;IACZA,IAAIA,CAACA,GAAGA,CAACA,CAACA;AACdA,CAACA"}

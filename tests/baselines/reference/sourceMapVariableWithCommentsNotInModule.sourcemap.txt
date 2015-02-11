@@ -22,34 +22,33 @@ sourceFile:sourceMapVariableWithCommentsNotInModule.ts
 ---
 >>>    // Test this
 1->^^^^
-2 >    
-3 >    ^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^
 1->() {
-  >    // Test this
   >    
-2 >    
-3 >    // Test this
-1->Emitted(2, 5) Source(3, 5) + SourceIndex(0) name (P)
-2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (P)
-3 >Emitted(2, 17) Source(2, 17) + SourceIndex(0) name (P)
+2 >    // Test this
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (P)
+2 >Emitted(2, 17) Source(2, 17) + SourceIndex(0) name (P)
 ---
 >>>    var a = 1;
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^
-4 >            ^
-5 >             ^
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^
+6 >             ^
 1 >
-  >    var 
-2 >        a
-3 >          = 
-4 >            1
-5 >             ;
-1 >Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (P)
-2 >Emitted(3, 10) Source(3, 10) + SourceIndex(0) name (P)
-3 >Emitted(3, 13) Source(3, 13) + SourceIndex(0) name (P)
-4 >Emitted(3, 14) Source(3, 14) + SourceIndex(0) name (P)
-5 >Emitted(3, 15) Source(3, 15) + SourceIndex(0) name (P)
+  >    
+2 >    var 
+3 >        a
+4 >          = 
+5 >            1
+6 >             ;
+1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0) name (P)
+2 >Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (P)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0) name (P)
+4 >Emitted(3, 13) Source(3, 13) + SourceIndex(0) name (P)
+5 >Emitted(3, 14) Source(3, 14) + SourceIndex(0) name (P)
+6 >Emitted(3, 15) Source(3, 15) + SourceIndex(0) name (P)
 ---
 >>>}
 1 >
