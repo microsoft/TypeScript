@@ -41,12 +41,18 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>        var b = [];
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^
-3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, 
-2 >        ...b: string[]
+2 >        ...
+3 >            b
+4 >             : string[]
 1 >Emitted(3, 9) Source(2, 42) + SourceIndex(0) name (Greeter.constructor)
-2 >Emitted(3, 20) Source(2, 56) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(3, 13) Source(2, 45) + SourceIndex(0) name (Greeter.constructor)
+3 >Emitted(3, 14) Source(2, 46) + SourceIndex(0) name (Greeter.constructor)
+4 >Emitted(3, 20) Source(2, 56) + SourceIndex(0) name (Greeter.constructor)
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^

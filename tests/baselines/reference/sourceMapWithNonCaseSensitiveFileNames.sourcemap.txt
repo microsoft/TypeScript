@@ -10,17 +10,12 @@ sourceFile:app.ts
 -------------------------------------------------------------------
 >>>// Note in the out result we are using same folder name only different in casing
 1 >
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >// Note in the out result we are using same folder name only different in casing
-  >// Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
-  >
-2 >
-3 >// Note in the out result we are using same folder name only different in casing
-1 >Emitted(1, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-3 >Emitted(1, 81) Source(1, 81) + SourceIndex(0)
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >// Note in the out result we are using same folder name only different in casing
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 81) Source(1, 81) + SourceIndex(0)
 ---
 >>>// Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
 1->
@@ -32,14 +27,17 @@ sourceFile:app.ts
 2 >Emitted(2, 107) Source(2, 107) + SourceIndex(0)
 ---
 >>>var c = (function () {
-1 >^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
 1 >
-  >class 
-2 >    c
-1 >Emitted(3, 5) Source(3, 7) + SourceIndex(0)
-2 >Emitted(3, 6) Source(3, 8) + SourceIndex(0)
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >class 
+3 >    c
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 6) Source(3, 8) + SourceIndex(0)
 ---
 >>>    function c() {
 1->^^^^

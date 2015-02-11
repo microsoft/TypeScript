@@ -126,24 +126,36 @@ sourceFile:sourceMapValidationFunctions.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^
-4 >                        ^^^^^^
+4 >                        ^
+5 >                         ^^^
+6 >                            ^^
 1->
 2 >    n = 10
 3 >                     
-4 >                        n = 10
+4 >                        n
+5 >                          = 
+6 >                            10
 1->Emitted(7, 5) Source(6, 35) + SourceIndex(0) name (greet2)
 2 >Emitted(7, 22) Source(6, 41) + SourceIndex(0) name (greet2)
 3 >Emitted(7, 25) Source(6, 35) + SourceIndex(0) name (greet2)
-4 >Emitted(7, 31) Source(6, 41) + SourceIndex(0) name (greet2)
+4 >Emitted(7, 26) Source(6, 36) + SourceIndex(0) name (greet2)
+5 >Emitted(7, 29) Source(6, 39) + SourceIndex(0) name (greet2)
+6 >Emitted(7, 31) Source(6, 41) + SourceIndex(0) name (greet2)
 ---
 >>>    var restParams = [];
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^
+3 >        ^^^^^^^^^^
+4 >                  ^^^^^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, x?: string, 
-2 >    ...restParams: string[]
+2 >    ...
+3 >        restParams
+4 >                  : string[]
 1 >Emitted(8, 5) Source(6, 55) + SourceIndex(0) name (greet2)
-2 >Emitted(8, 25) Source(6, 78) + SourceIndex(0) name (greet2)
+2 >Emitted(8, 9) Source(6, 58) + SourceIndex(0) name (greet2)
+3 >Emitted(8, 19) Source(6, 68) + SourceIndex(0) name (greet2)
+4 >Emitted(8, 25) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -253,24 +265,36 @@ sourceFile:sourceMapValidationFunctions.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^
-4 >                        ^^^^^^
+4 >                        ^
+5 >                         ^^^
+6 >                            ^^
 1->
 2 >    n = 10
 3 >                     
-4 >                        n = 10
+4 >                        n
+5 >                          = 
+6 >                            10
 1->Emitted(16, 5) Source(10, 32) + SourceIndex(0) name (foo)
 2 >Emitted(16, 22) Source(10, 38) + SourceIndex(0) name (foo)
 3 >Emitted(16, 25) Source(10, 32) + SourceIndex(0) name (foo)
-4 >Emitted(16, 31) Source(10, 38) + SourceIndex(0) name (foo)
+4 >Emitted(16, 26) Source(10, 33) + SourceIndex(0) name (foo)
+5 >Emitted(16, 29) Source(10, 36) + SourceIndex(0) name (foo)
+6 >Emitted(16, 31) Source(10, 38) + SourceIndex(0) name (foo)
 ---
 >>>    var restParams = [];
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^
+3 >        ^^^^^^^^^^
+4 >                  ^^^^^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, x?: string, 
-2 >    ...restParams: string[]
+2 >    ...
+3 >        restParams
+4 >                  : string[]
 1 >Emitted(17, 5) Source(10, 52) + SourceIndex(0) name (foo)
-2 >Emitted(17, 25) Source(10, 75) + SourceIndex(0) name (foo)
+2 >Emitted(17, 9) Source(10, 55) + SourceIndex(0) name (foo)
+3 >Emitted(17, 19) Source(10, 65) + SourceIndex(0) name (foo)
+4 >Emitted(17, 25) Source(10, 75) + SourceIndex(0) name (foo)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^

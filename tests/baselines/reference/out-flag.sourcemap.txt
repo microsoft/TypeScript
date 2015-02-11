@@ -19,28 +19,27 @@ sourceFile:out-flag.ts
 ---
 >>>// my class comments
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^
-4 >                    ^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^
+3 >                    ^^^^^^^^^->
 1->
   >
-  >// my class comments
   >
-2 >
-3 >// my class comments
-1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
-3 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
+2 >// my class comments
+1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
 ---
 >>>var MyClass = (function () {
-1->^^^^
-2 >    ^^^^^^^
-3 >           ^^^^^^^^^^^^^^->
 1->
-  >class 
-2 >    MyClass
-1->Emitted(3, 5) Source(4, 7) + SourceIndex(0)
-2 >Emitted(3, 12) Source(4, 14) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^->
+1->
+  >
+2 >class 
+3 >    MyClass
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(3, 12) Source(4, 14) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^

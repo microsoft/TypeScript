@@ -449,18 +449,24 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>            var restGreetings /* more greeting */ = [];
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^^^^^^^^^^^
-4 >                                                 ^^^^^^
-5 >                                                       ^^^^^->
+2 >            ^^^^
+3 >                ^^^^^^^^^^^^^
+4 >                             ^
+5 >                              ^^^^^^^^^^^^^^^^^^^
+6 >                                                 ^^^^^^
+7 >                                                       ^^^^^->
 1->, 
-2 >            ...restGreetings 
-3 >                              /* more greeting */
-4 >                                                 : string[]
+2 >            ...
+3 >                restGreetings
+4 >                              
+5 >                              /* more greeting */
+6 >                                                 : string[]
 1->Emitted(21, 13) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-2 >Emitted(21, 31) Source(21, 54) + SourceIndex(0) name (Foo.Bar.foo2)
-3 >Emitted(21, 50) Source(21, 73) + SourceIndex(0) name (Foo.Bar.foo2)
-4 >Emitted(21, 56) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
+2 >Emitted(21, 17) Source(21, 40) + SourceIndex(0) name (Foo.Bar.foo2)
+3 >Emitted(21, 30) Source(21, 53) + SourceIndex(0) name (Foo.Bar.foo2)
+4 >Emitted(21, 31) Source(21, 54) + SourceIndex(0) name (Foo.Bar.foo2)
+5 >Emitted(21, 50) Source(21, 73) + SourceIndex(0) name (Foo.Bar.foo2)
+6 >Emitted(21, 56) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^^^^^
@@ -469,7 +475,6 @@ sourceFile:sourceMapValidationClasses.ts
 4 >                             ^^^^^^^^^^^^^^^^^^^^^^
 5 >                                                   ^
 6 >                                                    ^^^^
-7 >                                                        ^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                 ...restGreetings /* more greeting */: string[]
 3 >                            
@@ -483,19 +488,13 @@ sourceFile:sourceMapValidationClasses.ts
 5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
 6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
->>>                restGreetings /* more greeting */[_i - 1] = arguments[_i];
-1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^^^^^^^^^^^
-4 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
-1->
-2 >                ...restGreetings 
-3 >                              /* more greeting */
-4 >                                                 : string[]
-1->Emitted(23, 17) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-2 >Emitted(23, 31) Source(21, 54) + SourceIndex(0) name (Foo.Bar.foo2)
-3 >Emitted(23, 50) Source(21, 73) + SourceIndex(0) name (Foo.Bar.foo2)
-4 >Emitted(23, 75) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
+>>>                restGreetings[_i - 1] = arguments[_i];
+1 >^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >                ...restGreetings /* more greeting */: string[]
+1 >Emitted(23, 17) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
+2 >Emitted(23, 55) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            }
 >>>            var greeters = []; /* inline block comment */
@@ -504,26 +503,26 @@ sourceFile:sourceMapValidationClasses.ts
 3 >                ^^^^^^^^
 4 >                        ^^^
 5 >                           ^^
-6 >                             ^^
-7 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                         
+6 >                             ^
+7 >                              ^
+8 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >) {
   >        
 2 >            var 
 3 >                greeters
 4 >                        : Greeter[] = 
 5 >                           []
-6 >                             ; 
-7 >                               /* inline block comment */
-8 >                                                         
+6 >                             ;
+7 >                               
+8 >                               /* inline block comment */
 1 >Emitted(25, 13) Source(22, 9) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(25, 17) Source(22, 13) + SourceIndex(0) name (Foo.Bar.foo2)
 3 >Emitted(25, 25) Source(22, 21) + SourceIndex(0) name (Foo.Bar.foo2)
 4 >Emitted(25, 28) Source(22, 35) + SourceIndex(0) name (Foo.Bar.foo2)
 5 >Emitted(25, 30) Source(22, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-6 >Emitted(25, 32) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
-7 >Emitted(25, 58) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
-8 >Emitted(25, 58) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+6 >Emitted(25, 31) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+7 >Emitted(25, 32) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
+8 >Emitted(25, 58) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            greeters[0] = new Greeter(greeting);
 1 >^^^^^^^^^^^^
@@ -539,7 +538,7 @@ sourceFile:sourceMapValidationClasses.ts
 11>                                              ^
 12>                                               ^
 13>                                                ^^^^^^^^^^^^^->
-1 > /* inline block comment */
+1 >
   >        
 2 >            greeters
 3 >                    [
@@ -762,16 +761,12 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>        // This is simple signle line comment
 1->^^^^^^^^
-2 >        
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-  >    // This is simple signle line comment
   >    
-2 >        
-3 >        // This is simple signle line comment
-1->Emitted(33, 9) Source(33, 5) + SourceIndex(0) name (Foo.Bar)
-2 >Emitted(33, 9) Source(32, 5) + SourceIndex(0) name (Foo.Bar)
-3 >Emitted(33, 46) Source(32, 42) + SourceIndex(0) name (Foo.Bar)
+2 >        // This is simple signle line comment
+1->Emitted(33, 9) Source(32, 5) + SourceIndex(0) name (Foo.Bar)
+2 >Emitted(33, 46) Source(32, 42) + SourceIndex(0) name (Foo.Bar)
 ---
 >>>        for (var j = 0; j < b.length; j++) {
 1 >^^^^^^^^
