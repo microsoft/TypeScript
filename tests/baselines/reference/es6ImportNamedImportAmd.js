@@ -53,31 +53,19 @@ define(["require", "exports"], function (require, exports) {
     exports.aaaa = 10;
 });
 //// [es6ImportNamedImportAmd_1.js]
-define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, _a, _b, _c, _d, _e, _f, _g, _h, _j) {
-    var a = _a.a;
-    var xxxx = a;
-    var b = _b.a;
-    var xxxx = b;
-    var x = _c.x;
-    var y = _c.a;
-    var xxxx = x;
-    var xxxx = y;
-    var z = _d.x;
-    var xxxx = z;
-    var m = _e.m;
-    var xxxx = m;
-    var a1 = _f.a1;
-    var x1 = _f.x1;
-    var xxxx = a1;
-    var xxxx = x1;
-    var a11 = _g.a1;
-    var x11 = _g.x1;
-    var xxxx = a11;
-    var xxxx = x11;
-    var z1 = _h.z1;
-    var z111 = z1;
-    var z3 = _j.z2;
-    var z2 = z3; // z2 shouldn't give redeclare error
+define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, _es6ImportNamedImportAmd_0_1, _es6ImportNamedImportAmd_0_2, _es6ImportNamedImportAmd_0_3, _es6ImportNamedImportAmd_0_4, _es6ImportNamedImportAmd_0_5, _es6ImportNamedImportAmd_0_6, _es6ImportNamedImportAmd_0_7, _es6ImportNamedImportAmd_0_8, _es6ImportNamedImportAmd_0_9) {
+    var xxxx = _es6ImportNamedImportAmd_0_1.a;
+    var xxxx = _es6ImportNamedImportAmd_0_2.a;
+    var xxxx = _es6ImportNamedImportAmd_0_3.x;
+    var xxxx = _es6ImportNamedImportAmd_0_3.a;
+    var xxxx = _es6ImportNamedImportAmd_0_4.x;
+    var xxxx = _es6ImportNamedImportAmd_0_5.m;
+    var xxxx = _es6ImportNamedImportAmd_0_6.a1;
+    var xxxx = _es6ImportNamedImportAmd_0_6.x1;
+    var xxxx = _es6ImportNamedImportAmd_0_7.a1;
+    var xxxx = _es6ImportNamedImportAmd_0_7.x1;
+    var z111 = _es6ImportNamedImportAmd_0_8.z1;
+    var z2 = _es6ImportNamedImportAmd_0_9.z2; // z2 shouldn't give redeclare error
 });
 
 

@@ -11,8 +11,7 @@ export = a;
 //// [es6ImportNamedImportInExportAssignment_0.js]
 exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
-var _a = require("es6ImportNamedImportInExportAssignment_0");
-var a = _a.a;
+var _es6ImportNamedImportInExportAssignment_0 = require("es6ImportNamedImportInExportAssignment_0");
 module.exports = a;
 
 

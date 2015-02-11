@@ -63,16 +63,16 @@ var x11 = (function () {
 exports.x11 = x11;
 //// [client.js]
 var defaultBinding2 = require("server");
-exports.x1 = new a();
+exports.x1 = new _server_1.a();
 var defaultBinding3 = require("server");
-exports.x2 = new b();
+exports.x2 = new _server_2.a11();
 var defaultBinding4 = require("server");
-exports.x4 = new x();
-exports.x5 = new y();
+exports.x4 = new _server_3.x();
+exports.x5 = new _server_3.a12();
 var defaultBinding5 = require("server");
-exports.x3 = new z();
+exports.x3 = new _server_4.x11();
 var defaultBinding6 = require("server");
-exports.x6 = new m();
+exports.x6 = new _server_5.m();
 
 
 //// [server.d.ts]

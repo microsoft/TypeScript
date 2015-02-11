@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
     exports.b = 10;
 });
 //// [es6ImportWithoutFromClauseAmd_2.js]
-define(["require", "exports", "es6ImportWithoutFromClauseAmd_0", "es6ImportWithoutFromClauseAmd_2"], function (require, exports, _c, _d) {
+define(["require", "exports", "es6ImportWithoutFromClauseAmd_0", "es6ImportWithoutFromClauseAmd_2"], function (require, exports, , ) {
     var _a = 10;
     var _b = 10;
 });

@@ -36,9 +36,8 @@ var C2 = (function () {
 })();
 exports.C2 = C2;
 //// [client.js]
-var _a = require("server");
-var C = _a.C; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
-exports.cVal = new C();
+var _server = require("server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+exports.cVal = new _server.C();
 
 
 //// [server.d.ts]

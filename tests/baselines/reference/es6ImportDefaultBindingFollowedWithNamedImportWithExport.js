@@ -29,12 +29,12 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [client.js]
 define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, defaultBinding2, defaultBinding3, defaultBinding4, defaultBinding5, defaultBinding6) {
-    exports.x1 = a;
-    exports.x1 = b;
-    exports.x1 = x;
-    exports.x1 = y;
-    exports.x1 = z;
-    exports.x1 = m;
+    exports.x1 = _server_1.a;
+    exports.x1 = _server_2.a;
+    exports.x1 = _server_3.x;
+    exports.x1 = _server_3.a;
+    exports.x1 = _server_4.x;
+    exports.x1 = _server_5.m;
 });
 
 

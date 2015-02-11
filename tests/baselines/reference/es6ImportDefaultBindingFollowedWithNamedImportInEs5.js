@@ -27,16 +27,16 @@ exports.x = exports.a;
 exports.m = exports.a;
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.js]
 var defaultBinding2 = require("es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = a;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1.a;
 var defaultBinding3 = require("es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = b;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_2.a;
 var defaultBinding4 = require("es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = x;
-var x1 = y;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_3.x;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_3.a;
 var defaultBinding5 = require("es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = z;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4.x;
 var defaultBinding6 = require("es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = m;
+var x1 = _es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5.m;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.d.ts]

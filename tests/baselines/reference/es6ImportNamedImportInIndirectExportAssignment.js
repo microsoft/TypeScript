@@ -23,9 +23,8 @@ var a;
     a.c = c;
 })(a = exports.a || (exports.a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
-var _a = require("es6ImportNamedImportInIndirectExportAssignment_0");
-var a = _a.a;
-var x = a;
+var _es6ImportNamedImportInIndirectExportAssignment_0 = require("es6ImportNamedImportInIndirectExportAssignment_0");
+var x = _es6ImportNamedImportInIndirectExportAssignment_0.a;
 module.exports = x;
 
 
