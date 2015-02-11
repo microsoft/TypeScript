@@ -1070,8 +1070,8 @@ declare module "typescript" {
         declaredType?: Type;
         mapper?: TypeMapper;
         referenced?: boolean;
-        exportAssignChecked?: boolean;
-        exportAssignSymbol?: Symbol;
+        exportAssignmentChecked?: boolean;
+        exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {

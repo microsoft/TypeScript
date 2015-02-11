@@ -3380,11 +3380,11 @@ declare module "typescript" {
         referenced?: boolean;
 >referenced : boolean
 
-        exportAssignChecked?: boolean;
->exportAssignChecked : boolean
+        exportAssignmentChecked?: boolean;
+>exportAssignmentChecked : boolean
 
-        exportAssignSymbol?: Symbol;
->exportAssignSymbol : Symbol
+        exportAssignmentSymbol?: Symbol;
+>exportAssignmentSymbol : Symbol
 >Symbol : Symbol
 
         unionType?: UnionType;
