@@ -6840,13 +6840,17 @@ declare var CSSImportRule: {
     new(): CSSImportRule;
 }
 
+interface CustomEventInit extends EventInit {
+    detail?: any;
+}
+
 interface CustomEvent extends Event {
     detail: any;
     initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any): void;
 }
 declare var CustomEvent: {
     prototype: CustomEvent;
-    new(): CustomEvent;
+    new(type: string, eventInitDict?: CustomEventInit): CustomEvent;
 }
 
 interface HTMLBaseFontElement extends HTMLElement, DOML2DeprecatedColorProperty {
@@ -7320,6 +7324,11 @@ interface SVGUseElement extends SVGElement, SVGStylable, SVGTransformable, SVGLa
 declare var SVGUseElement: {
     prototype: SVGUseElement;
     new(): SVGUseElement;
+}
+
+interface EventInit {
+    bubbles?: boolean;
+    cancelable?: boolean;
 }
 
 interface Event {
