@@ -1,5 +1,6 @@
 ﻿/// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\server\client.ts' />
 /// <reference path='harness.ts' />
 
 module Harness.LanguageService {
@@ -23,18 +24,18 @@ module Harness.LanguageService {
             this.version++;
         }
 
-        public editContent(minChar: number, limChar: number, newText: string): void {
+        public editContent(start: number, end: number, newText: string): void {
             // Apply edits
-            var prefix = this.content.substring(0, minChar);
+            var prefix = this.content.substring(0, start);
             var middle = newText;
-            var suffix = this.content.substring(limChar);
+            var suffix = this.content.substring(end);
             this.setContent(prefix + middle + suffix);
 
             // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
                 textChangeRange: ts.createTextChangeRange(
-                    ts.createTextSpanFromBounds(minChar, limChar), newText.length)
+                    ts.createTextSpanFromBounds(start, end), newText.length)
             });
 
             // Update version #
@@ -127,9 +128,7 @@ module Harness.LanguageService {
             protected settings = ts.getDefaultCompilerOptions()) { 
         }
 
-        public getNewLine(): string {
-            return "\r\n";
-        }
+        public getNewLine(): string {            return "\r\n";        }
 
         public getFilenames(): string[] {
             var fileNames: string[] = [];
@@ -145,20 +144,10 @@ module Harness.LanguageService {
             this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
         }
 
-        public updateScript(fileName: string, content: string) {
+        public editScript(fileName: string, start: number, end: number, newText: string) {
             var script = this.getScriptInfo(fileName);
             if (script !== null) {
-                script.updateContent(content);
-                return;
-            }
-
-            this.addScript(fileName, content);
-        }
-
-        public editScript(fileName: string, minChar: number, limChar: number, newText: string) {
-            var script = this.getScriptInfo(fileName);
-            if (script !== null) {
-                script.editContent(minChar, limChar, newText);
+                script.editContent(start, end, newText);
                 return;
             }
 
@@ -236,8 +225,7 @@ module Harness.LanguageService {
         getFilenames(): string[] { return this.nativeHost.getFilenames(); }
         getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
         addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
-        updateScript(fileName: string, content: string): void { return this.nativeHost.updateScript(fileName, content); }
-        editScript(fileName: string, minChar: number, limChar: number, newText: string): void { this.nativeHost.editScript(fileName, minChar, limChar, newText); }
+        editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
         lineColToPosition(fileName: string, line: number, col: number): number { return this.nativeHost.lineColToPosition(fileName, line, col); }
         positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToZeroBasedLineCol(fileName, position); }
 
@@ -441,6 +429,44 @@ module Harness.LanguageService {
 
             return convertResult;
         }
+    }
+
+    // Server adapter
+    class ServerLanguageServiceHost extends NativeLanguageServiceHost {
+        private client: ts.server.SessionClient;
+        constructor(cancellationToken: ts.CancellationToken, settings: ts.CompilerOptions) {
+            super(cancellationToken, settings);
+        }
+
+        setClient(client: ts.server.SessionClient) { 
+            this.client = client;
+        }
+
+        addScript(fileName: string, content: string): void {
+            super.addScript(fileName, content);
+            this.client.openFile(fileName);
+        }
+
+        editScript(fileName: string, start: number, end: number, newText: string) {
+            super.editScript(fileName, start, end, newText);
+            this.client.changeFile(fileName, start, end, newText);
+        }
+    }
+
+    export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
+        private host: ServerLanguageServiceHost;
+        private client: ts.server.SessionClient;
+        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+            debugger;
+
+            this.host = new ServerLanguageServiceHost(cancellationToken, options);
+            this.client = new ts.server.SessionClient(this.host);
+            this.host.setClient(this.client);
+        }
+        getHost() { return this.host; }
+        getLanguageService(): ts.LanguageService { return this.client; }
+        getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }
  

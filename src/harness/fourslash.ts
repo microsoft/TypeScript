@@ -282,6 +282,8 @@ module FourSlash {
                     return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
                     return new Harness.LanguageService.ShimLanugageServiceAdapter(cancellationToken, compilationOptions);
+                case FourSlashTestType.Server:
+                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
