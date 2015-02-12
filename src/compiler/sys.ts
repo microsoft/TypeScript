@@ -18,6 +18,8 @@ module ts {
         readDirectory(path: string, extension?: string): string[];
         getMemoryUsage? (): number;
         exit(exitCode?: number): void;
+        getModififedTime? (fileName: string): Date;
+        stat? (fileName: string, callback?: (err: any, stats: any) => any): void;
     }
 
     export interface FileWatcher {
@@ -303,6 +305,13 @@ module ts {
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
+                },
+                getModififedTime(fileName: string): Date { 
+                    var stats = _fs.statSync(fileName);
+                    return stats.mtime;
+                },
+                stat(fileName: string, callback?: (err: any, stats: any) => any) { 
+                    _fs.stat(fileName, callback);
                 }
             };
         }
