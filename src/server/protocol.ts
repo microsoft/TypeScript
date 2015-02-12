@@ -333,7 +333,7 @@ module ts.server {
         return true;
     }
 
-    module CommandNames {
+    export module CommandNames {
         export var Abbrev = "abbrev";
         export var Change = "change";
         export var Close = "close";
@@ -350,6 +350,7 @@ module ts.server {
         export var Rename = "rename";
         export var Saveto = "saveto";
         export var Type = "type";
+        export var Brace = "brace";
         export var Unknown = "unknown";
     }
 
@@ -1056,6 +1057,38 @@ module ts.server {
             }
         }
 
+        getMatchingBrace(line: number, col: number, rawfile: string, reqSeq = 0) {
+           var file = ts.normalizePath(rawfile);
+            var project = this.projectService.getProjectForFile(file);
+            if (project) {
+                var compilerService = project.compilerService;
+                var pos = compilerService.host.lineColToPosition(file, line, col);
+                var spans: ts.TextSpan[];
+                try {
+                    spans = compilerService.languageService.getBraceMatchingAtPosition(file, pos);
+                }
+                catch (err) {
+                    this.logError(err, CommandNames.Brace);
+                    spans = undefined;
+                }
+                if (spans) {
+                    var bakedSpans: ServerProtocol.TextSpan[] = spans.map(span => ({
+                        start: span &&
+                        compilerService.host.positionToLineCol(file, span.start),
+                        end: span &&
+                        compilerService.host.positionToLineCol(file, span.start + span.length)
+                    }));
+                    this.output(bakedSpans, CommandNames.Brace, reqSeq);
+                }
+                else {
+                    this.output(undefined, CommandNames.Brace, reqSeq, "no matching braces");
+                }
+            }
+            else { 
+                this.output(undefined, CommandNames.Brace, reqSeq, "no matching braces");
+            }
+        }
+
         executeJSONcmd(cmd: string) {
             try {
                 var req = <ServerProtocol.Request>JSON.parse(cmd);
@@ -1141,6 +1174,11 @@ module ts.server {
                     }
                     case CommandNames.Abbrev: { 
                         this.sendAbbrev();
+                        break;
+                    }
+                    case CommandNames.Brace: {
+                        var defArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
+                        this.getMatchingBrace(defArgs.line, defArgs.col, defArgs.file, req.seq);
                         break;
                     }
                     default: {

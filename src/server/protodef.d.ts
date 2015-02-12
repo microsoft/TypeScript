@@ -89,13 +89,20 @@ declare module ServerProtocol {
        Object found in response messages defining a span of text in
        source code.
     */
-    export interface CodeSpan {
-        /** File containing the definition */
-        file: string;
+    export interface TextSpan { 
         /** First character of the definition */
         start: LineCol;
         /** One character past last character of the definition */
         end: LineCol;
+    }
+
+    /**
+       Object found in response messages defining a span of text in
+       a specific source file.
+    */
+    export interface CodeSpan extends TextSpan {
+        /** File containing the definition */
+        file: string;
     }
 
     /**
@@ -582,6 +589,21 @@ declare module ServerProtocol {
             [fullString: string]: string;
         }
     }
+
+
+    /** Response to "brace" request. */
+    export interface BraceResponse extends Response {
+        body?: TextSpan[];
+    }
+
+    /**
+       Brace matching request; value of command field is "brace".
+       Return response giving the code locations of matching braces
+       found in file at location line, col.
+    */
+    export interface BraceRequest extends CodeLocationRequest {
+    }
+
 }
 
 

@@ -488,7 +488,24 @@ module ts.server {
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
-            throw new Error("Not Implemented Yet.");
+            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var args: ServerProtocol.CodeLocationRequestArgs = {
+                file: fileName,
+                line: lineCol.line,
+                col: lineCol.col,
+            };
+
+            var request = this.processRequest<ServerProtocol.BraceRequest>(CommandNames.Brace, args);
+            var response = this.processResponse<ServerProtocol.BraceResponse>(request);
+
+            return response.body.map(entry => {
+                var start = this.lineColToPosition(fileName, entry.start);
+                var end = this.lineColToPosition(fileName, entry.end);
+                return {
+                    start: start,
+                    length: end - start,
+                };
+            });
         }
 
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number {
