@@ -125,7 +125,7 @@ module ts.server {
         }
 
         private setupExpantionTable(): void {
-            var request = this.processRequest("abbrev");
+            var request = this.processRequest<ServerProtocol.AbbrevRequest>(CommandNames.Abbrev);
             var response = this.processResponse<ServerProtocol.AbbrevResponse>(request);
             var abbriviationTable = response.body;
 
@@ -198,20 +198,7 @@ module ts.server {
             return fileName;
         }
 
-        private processRequest(command: "abbrev"): ServerProtocol.AbbrevRequest;
-        private processRequest(command: "open", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.OpenRequest;
-        private processRequest(command: "close", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.CloseRequest;
-        private processRequest(command: "change", arguments: ServerProtocol.ChangeRequestArgs): ServerProtocol.ChangeRequest;
-        private processRequest(command: "quickinfo", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.QuickInfoRequest;
-        private processRequest(command: "format", arguments: ServerProtocol.FormatRequestArgs): ServerProtocol.FormatRequest;
-        private processRequest(command: "formatonkey", arguments: ServerProtocol.FormatOnKeyRequestArgs): ServerProtocol.FormatRequest;
-        private processRequest(command: "definition", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.DefinitionRequest;
-        private processRequest(command: "references", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.ReferencesRequest;
-        private processRequest(command: "completions", arguments: ServerProtocol.CompletionsRequestArgs): ServerProtocol.CompletionsRequest;
-        private processRequest(command: "navto", arguments: ServerProtocol.NavtoRequestArgs): ServerProtocol.NavtoRequest;
-        private processRequest(command: "saveto", arguments: ServerProtocol.SavetoRequestArgs): ServerProtocol.SavetoRequest;
-        private processRequest(command: string, arguments?: any): ServerProtocol.Request;
-        private processRequest(command: string, arguments: any): ServerProtocol.Request {
+        private processRequest<T extends ServerProtocol.Request>(command: string, arguments?: any): T {
             var request: ServerProtocol.Request = {
                 seq: this.sequence++,
                 type: "request",
@@ -221,7 +208,7 @@ module ts.server {
 
             this.session.executeJSONcmd(JSON.stringify(request));
 
-            return request;
+            return <T>request;
         }
 
         private processResponse<T extends ServerProtocol.Response>(request: ServerProtocol.Request): T {
@@ -271,37 +258,37 @@ module ts.server {
         }
 
         openFile(fileName: string): void {
-            this.processRequest("open", {
-                file: fileName
-            });
+            var args: ServerProtocol.FileRequestArgs = { file: fileName };
+            this.processRequest(CommandNames.Open, args);
         }
 
         closeFile(fileName: string): void {
-            this.processRequest("close", {
-                file: fileName
-            });
+            var args: ServerProtocol.FileRequestArgs = { file: fileName };
+            this.processRequest(CommandNames.Close, args);
         }
 
         changeFile(fileName: string, start: number, end: number, newText: string): void {
             var lineCol = this.positionToOneBasedLineCol(fileName, start);
-
-            this.processRequest("change", {
+            var args: ServerProtocol.ChangeRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
                 insertLen: end - start,
                 deleteLen: end - start,
                 insertString: newText
-            });
+            };
+
+            this.processRequest(CommandNames.Change, args);
         }
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
-            var request = this.processRequest("quickinfo", {
+            var args: ServerProtocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: 0,
                 col: 1
-            });
+            };
 
+            var request = this.processRequest<ServerProtocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
             var response = this.processResponse<ServerProtocol.QuickInfoResponse>(request);
 
             var start = this.lineColToPosition(fileName, response.body.start);
@@ -320,12 +307,13 @@ module ts.server {
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var request = this.processRequest("completions", {
+            var args: ServerProtocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
-            });
+            };
 
+            var request = this.processRequest<ServerProtocol.CompletionsRequest>(CommandNames.Completions, args);
             var response = this.processResponse<ServerProtocol.CompletionsResponse>(request);
 
             return {
@@ -336,11 +324,12 @@ module ts.server {
         }
 
         getNavigateToItems(searchTerm: string): NavigateToItem[] {
-            var request = this.processRequest("navto", {
-                searchTerm, 
+            var args: ServerProtocol.NavtoRequestArgs = {
+                searchTerm,
                 file: this.host.getFileNames()[0]
-            });
-           
+            };
+
+            var request = this.processRequest<ServerProtocol.NavtoRequest>(CommandNames.Navto, args);
             var response = this.processResponse<ServerProtocol.NavtoResponse>(request);
 
             return response.body.map(entry => {
@@ -364,15 +353,16 @@ module ts.server {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
             var startLineCol = this.positionToOneBasedLineCol(fileName, start);
             var endLineCol = this.positionToOneBasedLineCol(fileName, end);
-            // TODO: handle FormatCodeOptions
-            var request = this.processRequest("format", {
+            var args: ServerProtocol.FormatRequestArgs = {
                 file: fileName,
                 line: startLineCol.line,
                 col: startLineCol.col,
                 endLine: endLineCol.line,
                 endCol: endLineCol.col,
-            });
+            };
 
+            // TODO: handle FormatCodeOptions
+            var request = this.processRequest<ServerProtocol.FormatRequest>(CommandNames.Format, args);
             var response = this.processResponse<ServerProtocol.FormatResponse>(request);
 
             return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
@@ -384,27 +374,31 @@ module ts.server {
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            // TODO: handle FormatCodeOptions
-            var request = this.processRequest("formatonkey", {
+            var args: ServerProtocol.FormatOnKeyRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
                 key: key
-            });
+            };
 
+            // TODO: handle FormatCodeOptions
+            var request = this.processRequest<ServerProtocol.FormatOnKeyRequest>(CommandNames.Formatonkey, args);
             var response = this.processResponse<ServerProtocol.FormatResponse>(request);
+
             return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
         }
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var request = this.processRequest("definition", {
+            var args: ServerProtocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
-            });
+            };
 
+            var request = this.processRequest<ServerProtocol.DefinitionRequest>(CommandNames.Definition, args);
             var response = this.processResponse<ServerProtocol.DefinitionResponse>(request);
+
             return response.body.map(entry => {
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
@@ -421,12 +415,13 @@ module ts.server {
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var request = this.processRequest("references", {
+            var args: ServerProtocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
-            });
+            };
 
+            var request = this.processRequest<ServerProtocol.ReferencesRequest>(CommandNames.References, args);
             var response = this.processResponse<ServerProtocol.ReferencesResponse>(request);
 
             return response.body.refs.map(entry => {
