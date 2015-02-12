@@ -8,6 +8,7 @@ var child_process = require("child_process");
 // Variables
 var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
+var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -90,6 +91,15 @@ var servicesSources = [
     return path.join(servicesDirectory, f);
 }));
 
+var serverSources = [
+    "node.d.ts",
+    "editorServices.ts",
+    "protocol.ts",
+    "server.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+});
+
 var definitionsRoots = [
     "compiler/types.d.ts",
     "compiler/scanner.d.ts",
@@ -130,6 +140,12 @@ var harnessSources = [
     "services/preProcessFile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
+})).concat([
+    "protocol.ts",
+    "client.ts",
+    "editorServices.ts",
+].map(function (f) {
+    return path.join(serverDirectory, f);
 }));
 
 var librarySourceMap = [
@@ -382,9 +398,12 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
                 jake.rmRf(tempDirPath, {silent: true});
            });
 
+var serverFile = path.join(builtLocalDirectory, "typescriptServer.js");
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
