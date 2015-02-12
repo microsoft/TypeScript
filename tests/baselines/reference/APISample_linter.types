@@ -2342,9 +2342,16 @@ declare module "typescript" {
         text: string;
 >text : string
 
-        amdDependencies: string[];
->amdDependencies : string[]
+        amdDependencies: {
+>amdDependencies : { path: string; name: string; }[]
 
+            path: string;
+>path : string
+
+            name: string;
+>name : string
+
+        }[];
         amdModuleName: string;
 >amdModuleName : string
 

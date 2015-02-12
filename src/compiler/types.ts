@@ -888,7 +888,7 @@ module ts {
         fileName: string;
         text: string;
 
-        amdDependencies: string[];
+        amdDependencies: {path: string; name: string}[];
         amdModuleName: string;
         referencedFiles: FileReference[];
 

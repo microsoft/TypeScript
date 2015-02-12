@@ -4061,11 +4061,25 @@ module ts {
                     }
                 });
             }
+            
+            function sortAMDModules(amdModules: {name: string; path: string}[]) {
+                // AMD modules with declared variable names go first
+                return amdModules.sort((moduleA, moduleB) => {
+                    if (moduleA.name === moduleB.name) {
+                        return 0;
+                    } else if (!moduleA.name) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+            }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
                 write("define(");
+                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
@@ -4075,7 +4089,7 @@ module ts {
                     emitLiteral(<LiteralExpression>getExternalModuleImportDeclarationExpression(imp));
                 });
                 forEach(node.amdDependencies, amdDependency => {
-                    var text = "\"" + amdDependency + "\"";
+                    var text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
                 });
@@ -4083,6 +4097,12 @@ module ts {
                 forEach(imports, imp => {
                     write(", ");
                     emit(imp.name);
+                });
+                forEach(node.amdDependencies, amdDependency => {
+                    if (amdDependency.name) {
+                        write(", ");
+                        write(amdDependency.name);
+                    }
                 });
                 write(") {");
                 increaseIndent();

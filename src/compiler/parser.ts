@@ -4751,7 +4751,7 @@ module ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             var triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
-            var amdDependencies: string[] = [];
+            var amdDependencies: {path: string; name: string}[] = [];
             var amdModuleName: string;
 
             // Keep scanning all the leading trivia in the file until we get to something that 
@@ -4791,10 +4791,17 @@ module ts {
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
 
-                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
+                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s/gim;
+                    var pathRegex = /\spath\s*=\s*('|")(.+?)\1/gim;
+                    var nameRegex = /\sname\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
-                        amdDependencies.push(amdDependencyMatchResult[2]);
+                        var pathMatchResult = pathRegex.exec(comment);
+                        var nameMatchResult = nameRegex.exec(comment);
+                        if (pathMatchResult) {
+                            var amdDependency = {path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            amdDependencies.push(amdDependency);
+                        }
                     }
                 }
             }
