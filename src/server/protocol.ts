@@ -9,11 +9,6 @@ module ts {
         displayString?: string;
         docString?: string;
     }
-
-    export interface System {
-        getModififedTime? (fileName: string): Date;
-        stat? (path: string, callback?: (err: any, stats: any) => any): void;
-    }
 }
 
 module ts.server {
