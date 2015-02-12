@@ -2,57 +2,119 @@
 
 module ts.server {
 
-    export interface SessionClientHost extends LanguageServiceHost { 
+    export interface SessionClientHost extends LanguageServiceHost {
         lineColToPosition(fileName: string, line: number, col: number): number;
         positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter;
     }
 
-    export class SessionClient implements LanguageService {
-        private session: Session;
-        private sequence: number;
-        private lastReply: string;
+    class SessionClientHostProxy implements ServerHost, Logger  {
+        args: string[] = [];
+        newLine: string;
+        useCaseSensitiveFileNames: boolean = false;
+        lastReply: string;
 
         constructor(private host: SessionClientHost) {
+            this.newLine = this.host.getNewLine();
+        }
+
+        write(message: string): void {
+            this.lastReply = message;
+        }
+
+        readFile(fileName: string): string {
+            var snapshot = this.host.getScriptSnapshot(fileName);
+            return snapshot && snapshot.getText(0, snapshot.getLength());
+        }
+
+        writeFile(name: string, text:string, writeByteOrderMark: boolean): void {
+        }
+
+        resolvePath(path: string): string {
+            return path;
+        }
+
+        fileExists(path: string): boolean {
+            return !!this.host.getScriptSnapshot(path);
+        }
+
+        directoryExists(path: string): boolean {
+            return false;
+        }
+
+        getExecutingFilePath(): string {
+            return "";
+        }
+
+        exit(exitCode: number): void {
+        }
+
+        createDirectory(directoryName: string): void {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getCurrentDirectory(): string {
+            return this.host.getCurrentDirectory();
+        }
+
+        readDirectory(path: string, extension?: string): string[] {
+            throw new Error("Not implemented Yet.");
+        }
+
+        getModififedTime(fileName: string): Date {
+            return new Date();
+        }
+
+        stat(path: string, callback?: (err: any, stats: any) => any) {
+            throw new Error("Not implemented Yet.");
+        }
+
+        lineColToPosition(fileName: string, line: number, col: number): number { 
+            return this.host.lineColToPosition(fileName, line, col);
+        }
+
+        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter { 
+            return this.host.positionToZeroBasedLineCol(fileName, position);
+        }
+
+        getFileLength(fileName: string): number {
+            return this.host.getScriptSnapshot(fileName).getLength();
+        }
+
+        close(): void {
+        }
+
+        info(message: string): void {
+            return this.host.log(message);
+        }
+
+        msg(message: string) {
+            return this.host.log(message);
+        }
+
+        endGroup(): void {
+        }
+
+        perftrc(message: string): void {
+            return this.host.log(message);
+        }
+
+        startGroup(): void {
+        }
+    }
+
+    export class SessionClient implements LanguageService {
+        private session: Session;
+        private sequence: number = 0;
+        private host: SessionClientHostProxy;
+        
+        constructor(host: SessionClientHost) {
             this.sequence = 0;
-
-            this.session = new Session({
-                args: [],
-                newLine: host.getNewLine(),
-                useCaseSensitiveFileNames: true,
-                write: (s) => this.lastReply = s,
-                readFile: (fileName): string => {
-                    var snapshot = host.getScriptSnapshot(fileName);
-                    return snapshot && snapshot.getText(0, snapshot.getLength());
-                },
-                writeFile: (name, text, writeByteOrderMark) => {
-                },
-                resolvePath: (path) => path,
-                fileExists: (path) => !!host.getScriptSnapshot(path),
-                directoryExists: (path) => false,
-                getExecutingFilePath: () => "",
-                exit: (exitCode) => { },
-                createDirectory: (directoryName: string) => { },
-
-                getCurrentDirectory: () => host.getCurrentDirectory(),
-                readDirectory: (path: string, extension?: string) => [],
-                getModififedTime: (fileName: string) => new Date(),
-                stat: (path: string, callback?: (err: any, stats: any) => any) => { throw new Error("Not implemented Yet."); },
-            }, {
-                    close: () => { },
-                    info: (m) => this.host.log(m),
-                    msg: (m) => this.host.log(m),
-                    endGroup: () => { },
-                    perftrc: (m) => this.host.log(m),
-                    startGroup: () => { }
-                }, /* useProtocol */ true, /*prettyJSON*/ true);
+            this.host = new SessionClientHostProxy(host);
+            this.session = new Session(this.host, this.host, /* useProtocol */ true, /*prettyJSON*/ true);
         }
 
         private lineColToPosition(fileName: string, lineCol: ServerProtocol.LineCol): number {
             return this.host.lineColToPosition(fileName, lineCol.line, lineCol.col);
-        }
-
-        private getFileLength(fileName: string): number {
-            return this.host.getScriptSnapshot(fileName).getLength();
         }
 
         private positionToOneBasedLineCol(fileName: string, position: number): ServerProtocol.LineCol {
@@ -103,7 +165,7 @@ module ts.server {
             
             // Read the content length
             var contentLengthPrefix = "Content-Length: ";
-            var lines = this.lastReply.split("\r\n");
+            var lines = this.host.lastReply.split("\r\n");
             Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
 
             var contentLengthText = lines[0];
@@ -120,7 +182,7 @@ module ts.server {
                 var response: T = JSON.parse(responseBody);
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + this.lastReply + ". \r\n  Error detailes: " + e.message);
+                throw new Error("Malformed response: Failed to parse server response: " + this.host.lastReply + ". \r\n  Error detailes: " + e.message);
             }
 
             // verify the sequence numbers
@@ -239,7 +301,7 @@ module ts.server {
         }
 
         getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
-            return this.getFormattingEditsForRange(fileName, 0, this.getFileLength(fileName), options);
+            return this.getFormattingEditsForRange(fileName, 0, this.host.getFileLength(fileName), options);
         }
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {
@@ -371,7 +433,6 @@ module ts.server {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             throw new Error("Not Implemented Yet.");
         }
-
 
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
