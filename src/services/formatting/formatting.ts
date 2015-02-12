@@ -419,6 +419,29 @@ module ts.formatting {
             }
         }
 
+        function getFirstNonDecoratorTokenOfNode(node: Node) {
+            if (node.modifiers && node.modifiers.length) {
+                return node.modifiers[0].kind;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration: return SyntaxKind.ClassKeyword;
+                case SyntaxKind.InterfaceDeclaration: return SyntaxKind.InterfaceKeyword;
+                case SyntaxKind.FunctionDeclaration: return SyntaxKind.FunctionKeyword;
+                case SyntaxKind.EnumDeclaration: return SyntaxKind.EnumDeclaration;
+                case SyntaxKind.GetAccessor: return SyntaxKind.GetKeyword;
+                case SyntaxKind.SetAccessor: return SyntaxKind.SetKeyword;
+                case SyntaxKind.MethodDeclaration:
+                    if ((<MethodDeclaration>node).asteriskToken) {
+                        return SyntaxKind.AsteriskToken;
+                    }
+                    // fall-through
+
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.Parameter:
+                    return (<Declaration>node).name.kind;
+            }
+        }
+
         function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, delta: number): DynamicIndentation {
             return {
                 getIndentationForComment: kind => {
@@ -434,15 +457,23 @@ module ts.formatting {
                     return indentation;
                 },
                 getIndentationForToken: (line, kind) => {
+                    if (nodeStartLine !== line && node.decorators) {
+                        if (kind === getFirstNonDecoratorTokenOfNode(node)) {
+                            // if this token is the first token following the list of decorators, we do not need to indent
+                            return indentation;
+                        }
+                    }
                     switch (kind) {
-                        // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
+                        // open and close brace, 'else' and 'while' (in do statement), and '@' (decorator) tokens have indentation of the parent
                         case SyntaxKind.OpenBraceToken:
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.OpenBracketToken:
                         case SyntaxKind.CloseBracketToken:
                         case SyntaxKind.ElseKeyword:
                         case SyntaxKind.WhileKeyword:
+                        case SyntaxKind.AtToken:
                             return indentation;
+
                         default:
                             // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
                             return nodeStartLine !== line ? indentation + delta : indentation;
