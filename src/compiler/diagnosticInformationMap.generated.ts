@@ -305,6 +305,7 @@ module ts {
         this_cannot_be_referenced_in_a_computed_property_name: { code: 2465, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in a computed property name." },
         super_cannot_be_referenced_in_a_computed_property_name: { code: 2466, category: DiagnosticCategory.Error, key: "'super' cannot be referenced in a computed property name." },
         A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type: { code: 2466, category: DiagnosticCategory.Error, key: "A computed property name cannot reference a type parameter from its containing type." },
+        Cannot_find_global_decorator_function_0: { code: 2467, category: DiagnosticCategory.Error, key: "Cannot find global decorator function '{0}'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },

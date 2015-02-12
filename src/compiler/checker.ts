@@ -82,6 +82,9 @@ module ts {
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
+        var globalTypeDecoratorSymbol: Symbol;
+        var globalParamTypesDecoratorSymbol: Symbol;
+        var globalReturnTypeDecoratorSymbol: Symbol;
 
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
@@ -93,17 +96,10 @@ module ts {
         var globalTemplateStringsArrayType: ObjectType;
 
         var globalTypedPropertyDescriptorType: ObjectType;
-        var globalDecoratorTargetsType: ObjectType;
         var globalDecoratorFunctionType: ObjectType;
-        var globalArgumentDecoratorFunctionType: ObjectType;
+        var globalParameterDecoratorFunctionType: ObjectType;
         var globalMemberDecoratorFunctionType: ObjectType;
-        var globalDecoratorDecorator: ObjectType;
-        var globalTypeDecorator: ObjectType;
-        var globalParamTypesDecorator: ObjectType;
-        var globalReturnTypeDecorator: ObjectType;
-        var globalConditionalDecorator: ObjectType;
-        var globalObsoleteDecorator: ObjectType;
-
+        
         var anyArrayType: Type;
 
         var tupleTypes: Map<TupleType> = {};
@@ -3027,6 +3023,14 @@ module ts {
                 return emptyObjectType;
             }
             return <ObjectType>type;
+        }
+
+        function getGlobalConstEnumSymbol(name: string): Symbol {
+            return resolveName(undefined, name, SymbolFlags.ConstEnum, Diagnostics.Cannot_find_global_type_0, name);
+        }
+
+        function getGlobalDecoratorSymbol(name: string): Symbol {
+            return resolveName(undefined, name, SymbolFlags.Function, Diagnostics.Cannot_find_global_decorator_function_0, name);
         }
 
         function getGlobalSymbol(name: string): Symbol {
@@ -10320,6 +10324,14 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+            globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalSymbol("TypedPropertyDescriptor"), 1);
+            globalDecoratorFunctionType = getGlobalType("DecoratorFunction");
+            globalParameterDecoratorFunctionType = getGlobalType("ParameterDecoratorFunction");
+            globalMemberDecoratorFunctionType = getGlobalType("MemberDecoratorFunction");
+            globalTypeDecoratorSymbol = getGlobalDecoratorSymbol("type");
+            globalParamTypesDecoratorSymbol = getGlobalDecoratorSymbol("paramtypes");
+            globalReturnTypeDecoratorSymbol = getGlobalDecoratorSymbol("returntype");
+
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
             globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6

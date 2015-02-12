@@ -1212,6 +1212,10 @@
         "category": "Error",
         "code": 2466
     },
+    "Cannot find global decorator function '{0}'.": {
+        "category": "Error",
+        "code": 2467
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
