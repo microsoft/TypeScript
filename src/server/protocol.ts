@@ -1136,6 +1136,10 @@ module ts.server {
                         this.navto(navtoArgs.searchTerm, navtoArgs.file, cmd, req.seq);
                         break;
                     }
+                    case CommandNames.Abbrev: { 
+                        this.sendAbbrev();
+                        break;
+                    }
                     default: {
                         this.projectService.log("Unrecognized JSON command: " + cmd);
                         break;

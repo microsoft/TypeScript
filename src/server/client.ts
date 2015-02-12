@@ -106,11 +106,53 @@ module ts.server {
         private session: Session;
         private sequence: number = 0;
         private host: SessionClientHostProxy;
+        private expantionTable: ts.Map<string>;
         
-        constructor(host: SessionClientHost) {
+        constructor(host: SessionClientHost, abbreviate: boolean) {
             this.sequence = 0;
             this.host = new SessionClientHostProxy(host);
-            this.session = new Session(this.host, this.host, /* useProtocol */ true, /*prettyJSON*/ true);
+            this.session = new Session(this.host, this.host, /* useProtocol */ true, /*prettyJSON*/ false);
+            
+            // Setup the abbreviation table 
+            if (abbreviate) { 
+                this.setupExpantionTable()
+            }
+        }
+
+        private setupExpantionTable(): void {
+            var request = this.processRequest("abbrev");
+            var response = this.processResponse<ServerProtocol.AbbrevResponse>(request);
+            var abbriviationTable = response.body;
+
+            Debug.assert(!!abbriviationTable, "Could not setup abbreviation. Abbreviation table was empty.");
+
+            var expantionTable: ts.Map<string> = {};
+            for (var p in abbriviationTable) {
+                if (abbriviationTable.hasOwnProperty(p)) {
+                    expantionTable[abbriviationTable[p]] = p;
+                }
+            }
+            this.expantionTable = expantionTable;
+        }
+
+        private expand<T>(obj: T): T {
+            for (var p in obj) {
+                if (obj.hasOwnProperty(p)) {
+                    if (typeof (<any>obj)[p] === "object") {
+                        // Expand the property value
+                        (<any>obj)[p] = this.expand((<any>obj)[p]);
+                    }
+                    
+                    // Substitute the name if applicaple 
+                    var substitution = ts.lookUp(this.expantionTable, p);
+                    if (substitution) {
+                        (<any>obj)[substitution] = (<any>obj)[p];
+                        (<any>obj)[p] = undefined;
+                    }
+                }
+            }
+
+            return obj;
         }
 
         private lineColToPosition(fileName: string, lineCol: ServerProtocol.LineCol): number {
@@ -135,6 +177,23 @@ module ts.server {
             };
         }
 
+        private getFileNameFromEncodedFile(fileId: ServerProtocol.EncodedFile, fileMapping: ts.Map<string>): string {
+            var fileName: string;
+            if (typeof fileId === "object") {
+                fileName = (<ServerProtocol.IdFile>fileId).file;
+                fileMapping[(<ServerProtocol.IdFile>fileId).id] = fileName;
+            }
+            else if (typeof fileId === "number") {
+                fileName = ts.lookUp(fileMapping, fileId.toString());
+                Debug.assert(!!fileName, "Did not find filename in previous fileID mappings.");
+            }
+            else {
+                Debug.fail("Got unexpedted fileId type.");
+            }
+            return fileName;
+        }
+
+        private processRequest(command: "abbrev"): ServerProtocol.AbbrevRequest;
         private processRequest(command: "open", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.OpenRequest;
         private processRequest(command: "close", arguments: ServerProtocol.FileRequestArgs): ServerProtocol.CloseRequest;
         private processRequest(command: "change", arguments: ServerProtocol.ChangeRequestArgs): ServerProtocol.ChangeRequest;
@@ -146,7 +205,7 @@ module ts.server {
         private processRequest(command: "completions", arguments: ServerProtocol.CompletionsRequestArgs): ServerProtocol.CompletionsRequest;
         private processRequest(command: "navto", arguments: ServerProtocol.NavtoRequestArgs): ServerProtocol.NavtoRequest;
         private processRequest(command: "saveto", arguments: ServerProtocol.SavetoRequestArgs): ServerProtocol.SavetoRequest;
-        private processRequest(command: string, arguments: any): ServerProtocol.Request;
+        private processRequest(command: string, arguments?: any): ServerProtocol.Request;
         private processRequest(command: string, arguments: any): ServerProtocol.Request {
             var request: ServerProtocol.Request = {
                 seq: this.sequence++,
@@ -163,9 +222,13 @@ module ts.server {
         private processResponse<T extends ServerProtocol.Response>(request: ServerProtocol.Request): T {
             debugger;
             
+            var lastMessage = this.host.lastReply;
+            this.host.lastReply = undefined;
+            Debug.assert(!!lastMessage, "Did not recieve any responses.");
+
             // Read the content length
             var contentLengthPrefix = "Content-Length: ";
-            var lines = this.host.lastReply.split("\r\n");
+            var lines = lastMessage.split("\r\n");
             Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
 
             var contentLengthText = lines[0];
@@ -182,7 +245,7 @@ module ts.server {
                 var response: T = JSON.parse(responseBody);
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + this.host.lastReply + ". \r\n  Error detailes: " + e.message);
+                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error detailes: " + e.message);
             }
 
             // verify the sequence numbers
@@ -195,6 +258,10 @@ module ts.server {
 
             Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
+            if (this.expantionTable) { 
+                // Expand the response if abbreviated
+                return this.expand(response);
+            }
             return response;
         }
 
@@ -265,11 +332,15 @@ module ts.server {
 
         getNavigateToItems(seatchTerm: string): NavigateToItem[] {
             var request = this.processRequest("navto", { seatchTerm });
-
+           
             var response = this.processResponse<ServerProtocol.NavtoResponse>(request);
+            var fileMapping: ts.Map<string> = {};
+
             return response.body.map(entry => {
+                var fileName = this.getFileNameFromEncodedFile(entry.file, fileMapping);
                 var start = this.lineColToPosition(entry.file.toString(), entry.start);
                 var end = this.lineColToPosition(entry.file.toString(), entry.end);
+                
                 return {
                     name: entry.name,
                     containerName: entry.containerName,
@@ -277,7 +348,7 @@ module ts.server {
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
-                    fileName: entry.file.toString(),
+                    fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end)
                 };
             });

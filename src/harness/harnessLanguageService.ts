@@ -460,7 +460,7 @@ module Harness.LanguageService {
             debugger;
 
             this.host = new ServerLanguageServiceHost(cancellationToken, options);
-            this.client = new ts.server.SessionClient(this.host);
+            this.client = new ts.server.SessionClient(this.host, /*abbreviate*/ true);
             this.host.setClient(this.client);
         }
         getHost() { return this.host; }
