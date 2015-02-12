@@ -6609,12 +6609,13 @@ module ts {
             }
         }
 
-        function createPromiseType(awaitedType: Type): Type {
+        function createPromiseType(awaitedType: Type, func: FunctionLikeDeclaration): Type {
             if (globalPromiseSymbol) {
                 awaitedType = getAwaitedType(awaitedType, awaitedType);
                 var promiseType = globalPromiseType || getDeclaredTypeOfSymbol(globalPromiseSymbol);
                 return promiseType !== emptyObjectType ? createTypeReference(<GenericType>promiseType, [awaitedType]) : emptyObjectType;
             }
+            error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
             return unknownType;
         }
 
@@ -6631,7 +6632,7 @@ module ts {
                 // Aggregate the types of expressions within all the return statements.
                 var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync);
                 if (types.length === 0) {
-                    return isAsync ? createPromiseType(voidType) : voidType;
+                    return isAsync ? createPromiseType(voidType, func) : voidType;
                 }
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
@@ -6646,7 +6647,7 @@ module ts {
             }
 
             type = getWidenedType(type);
-            return isAsync ? createPromiseType(type) : type;
+            return isAsync ? createPromiseType(type, func) : type;
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
@@ -6777,7 +6778,7 @@ module ts {
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
-            }
+                }
             }
             if (returnType) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
