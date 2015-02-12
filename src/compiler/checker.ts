@@ -1581,8 +1581,15 @@ module ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
-                    case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
+                        return isDeclarationVisible(<Declaration>node.parent.parent);
+                    case SyntaxKind.VariableDeclaration:
+                        if (isBindingPattern(node.name) &&
+                            !(<BindingPattern>node.name).elements.length) {
+                            // If the binding pattern is empty, this variable declaration is not visible
+                            return false;
+                        }
+                        // Otherwise fall through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
