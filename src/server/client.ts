@@ -35,8 +35,8 @@ module ts.server {
 
                 getCurrentDirectory: () => host.getCurrentDirectory(),
                 readDirectory: (path: string, extension?: string) => [],
-                getModififedTime: (fileName) => new Date(),
-                stat: (path, callback) => { throw new Error("Not implemented Yet."); },
+                getModififedTime: (fileName: string) => new Date(),
+                stat: (path: string, callback?: (err: any, stats: any) => any) => { throw new Error("Not implemented Yet."); },
             }, {
                     close: () => { },
                     info: (m) => this.host.log(m),
