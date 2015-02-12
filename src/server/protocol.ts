@@ -1051,6 +1051,9 @@ module ts.server {
                     this.output(undefined, CommandNames.Navto, reqSeq, "no nav items");
                 }
             }
+            else {
+                this.output(undefined, CommandNames.Navto, reqSeq, "no nav items");
+            }
         }
 
         executeJSONcmd(cmd: string) {

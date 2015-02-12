@@ -80,6 +80,10 @@ module ts.server {
             return this.host.getScriptSnapshot(fileName).getLength();
         }
 
+        getFileNames(): string[] {
+            return this.host.getScriptFileNames();
+        }
+
         close(): void {
         }
 
@@ -107,6 +111,7 @@ module ts.server {
         private sequence: number = 0;
         private host: SessionClientHostProxy;
         private expantionTable: ts.Map<string>;
+        private fileMapping: ts.Map<string> = {};
         
         constructor(host: SessionClientHost, abbreviate: boolean) {
             this.sequence = 0;
@@ -177,14 +182,14 @@ module ts.server {
             };
         }
 
-        private getFileNameFromEncodedFile(fileId: ServerProtocol.EncodedFile, fileMapping: ts.Map<string>): string {
+        private getFileNameFromEncodedFile(fileId: ServerProtocol.EncodedFile): string {
             var fileName: string;
             if (typeof fileId === "object") {
                 fileName = (<ServerProtocol.IdFile>fileId).file;
-                fileMapping[(<ServerProtocol.IdFile>fileId).id] = fileName;
+                this.fileMapping[(<ServerProtocol.IdFile>fileId).id] = fileName;
             }
             else if (typeof fileId === "number") {
-                fileName = ts.lookUp(fileMapping, fileId.toString());
+                fileName = ts.lookUp(this.fileMapping, fileId.toString());
                 Debug.assert(!!fileName, "Did not find filename in previous fileID mappings.");
             }
             else {
@@ -330,21 +335,23 @@ module ts.server {
             };
         }
 
-        getNavigateToItems(seatchTerm: string): NavigateToItem[] {
-            var request = this.processRequest("navto", { seatchTerm });
+        getNavigateToItems(searchTerm: string): NavigateToItem[] {
+            var request = this.processRequest("navto", {
+                searchTerm, 
+                file: this.host.getFileNames()[0]
+            });
            
             var response = this.processResponse<ServerProtocol.NavtoResponse>(request);
-            var fileMapping: ts.Map<string> = {};
 
             return response.body.map(entry => {
-                var fileName = this.getFileNameFromEncodedFile(entry.file, fileMapping);
-                var start = this.lineColToPosition(entry.file.toString(), entry.start);
-                var end = this.lineColToPosition(entry.file.toString(), entry.end);
+                var fileName = this.getFileNameFromEncodedFile(entry.file);
+                var start = this.lineColToPosition(fileName, entry.start);
+                var end = this.lineColToPosition(fileName, entry.end);
                 
                 return {
                     name: entry.name,
-                    containerName: entry.containerName,
-                    containerKind: entry.containerKind,
+                    containerName: entry.containerName || "",
+                    containerKind: entry.containerKind || "",
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
