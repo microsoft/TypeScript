@@ -27,7 +27,8 @@
     "preferGlobal": true,
     "main": "./bin/typescript.js",
     "bin": {
-        "tsc": "./bin/tsc"
+        "tsc": "./bin/tsc",
+        "tsserver": "./bin/tsserver"
     },
     "engines": {
         "node": ">=0.8.0"
