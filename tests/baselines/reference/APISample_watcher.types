@@ -5808,6 +5808,15 @@ declare module "typescript" {
 
         InDoubleQuoteStringLiteral = 3,
 >InDoubleQuoteStringLiteral : EndOfLineState
+
+        InTemplateHeadOrNoSubstitutionTemplate = 4,
+>InTemplateHeadOrNoSubstitutionTemplate : EndOfLineState
+
+        InTemplateMiddleOrTail = 5,
+>InTemplateMiddleOrTail : EndOfLineState
+
+        InTemplateSubstitutionPosition = 6,
+>InTemplateSubstitutionPosition : EndOfLineState
     }
     enum TokenClass {
 >TokenClass : TokenClass
@@ -5863,12 +5872,12 @@ declare module "typescript" {
     interface Classifier {
 >Classifier : Classifier
 
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
->getClassificationsForLine : (text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean) => ClassificationResult
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult;
+>getClassificationsForLine : (text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean) => ClassificationResult
 >text : string
 >lexState : EndOfLineState
 >EndOfLineState : EndOfLineState
->classifyKeywordsInGenerics : boolean
+>syntacticClassifierAbsent : boolean
 >ClassificationResult : ClassificationResult
     }
     /**
