@@ -381,6 +381,7 @@ module ts {
         const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN: { code: 4087, category: DiagnosticCategory.Error, key: "'const' enum member initializer was evaluated to disallowed value 'NaN'." },
         Property_0_does_not_exist_on_const_enum_1: { code: 4088, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 4089, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
+        Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 4090, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },
