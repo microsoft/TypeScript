@@ -1,0 +1,12 @@
+tests/cases/compiler/es6ExportAssignment.ts(3,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/compiler/es6ExportAssignment.ts(3,1): error TS1192: Deprecated syntax
+
+
+==== tests/cases/compiler/es6ExportAssignment.ts (2 errors) ====
+    
+    var a = 10;
+    export = a;
+    ~~~~~~~~~~~
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+    ~~~~~~~~~~~
+!!! error TS1192: Deprecated syntax
