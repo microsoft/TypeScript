@@ -10383,7 +10383,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Import) {
+                if ((symbol.flags & SymbolFlags.Import) && isAMDOrCommonjsGen(compilerOptions, languageVersion)) {
                     return getImportNameSubstitution(symbol);
                 }
             }
