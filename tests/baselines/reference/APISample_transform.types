@@ -889,55 +889,64 @@ declare module "typescript" {
         ImportEqualsDeclaration = 199,
 >ImportEqualsDeclaration : SyntaxKind
 
-        ExportAssignment = 200,
->ExportAssignment : SyntaxKind
-
-        ImportDeclaration = 201,
+        ImportDeclaration = 200,
 >ImportDeclaration : SyntaxKind
 
-        ImportClause = 202,
+        ImportClause = 201,
 >ImportClause : SyntaxKind
 
-        NamespaceImport = 203,
+        NamespaceImport = 202,
 >NamespaceImport : SyntaxKind
 
-        NamedImports = 204,
+        NamedImports = 203,
 >NamedImports : SyntaxKind
 
-        ImportSpecifier = 205,
+        ImportSpecifier = 204,
 >ImportSpecifier : SyntaxKind
 
-        ExternalModuleReference = 206,
+        ExportAssignment = 205,
+>ExportAssignment : SyntaxKind
+
+        ExportDeclaration = 206,
+>ExportDeclaration : SyntaxKind
+
+        NamedExports = 207,
+>NamedExports : SyntaxKind
+
+        ExportSpecifier = 208,
+>ExportSpecifier : SyntaxKind
+
+        ExternalModuleReference = 209,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 207,
+        CaseClause = 210,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 208,
+        DefaultClause = 211,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 209,
+        HeritageClause = 212,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 210,
+        CatchClause = 213,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 211,
+        PropertyAssignment = 214,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 212,
+        ShorthandPropertyAssignment = 215,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 213,
+        EnumMember = 216,
 >EnumMember : SyntaxKind
 
-        SourceFile = 214,
+        SourceFile = 217,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 215,
+        SyntaxList = 218,
 >SyntaxList : SyntaxKind
 
-        Count = 216,
+        Count = 219,
 >Count : SyntaxKind
 
         FirstAssignment = 52,
@@ -2292,9 +2301,9 @@ declare module "typescript" {
 >Identifier : Identifier
 
         namedBindings?: NamespaceImport | NamedImports;
->namedBindings : NamespaceImport | NamedImports
+>namedBindings : NamespaceImport | NamedImportsOrExports
 >NamespaceImport : NamespaceImport
->NamedImports : NamedImports
+>NamedImports : NamedImportsOrExports
     }
     interface NamespaceImport extends Declaration {
 >NamespaceImport : NamespaceImport
@@ -2304,17 +2313,38 @@ declare module "typescript" {
 >name : Identifier
 >Identifier : Identifier
     }
-    interface NamedImports extends Node {
->NamedImports : NamedImports
+    interface ExportDeclaration extends Statement, ModuleElement {
+>ExportDeclaration : ExportDeclaration
+>Statement : Statement
+>ModuleElement : ModuleElement
+
+        exportClause?: NamedExports;
+>exportClause : NamedImportsOrExports
+>NamedExports : NamedImportsOrExports
+
+        moduleSpecifier?: Expression;
+>moduleSpecifier : Expression
+>Expression : Expression
+    }
+    interface NamedImportsOrExports extends Node {
+>NamedImportsOrExports : NamedImportsOrExports
 >Node : Node
 
-        elements: NodeArray<ImportSpecifier>;
->elements : NodeArray<ImportSpecifier>
+        elements: NodeArray<ImportOrExportSpecifier>;
+>elements : NodeArray<ImportOrExportSpecifier>
 >NodeArray : NodeArray<T>
->ImportSpecifier : ImportSpecifier
+>ImportOrExportSpecifier : ImportOrExportSpecifier
     }
-    interface ImportSpecifier extends Declaration {
->ImportSpecifier : ImportSpecifier
+    type NamedImports = NamedImportsOrExports;
+>NamedImports : NamedImportsOrExports
+>NamedImportsOrExports : NamedImportsOrExports
+
+    type NamedExports = NamedImportsOrExports;
+>NamedExports : NamedImportsOrExports
+>NamedImportsOrExports : NamedImportsOrExports
+
+    interface ImportOrExportSpecifier extends Declaration {
+>ImportOrExportSpecifier : ImportOrExportSpecifier
 >Declaration : Declaration
 
         propertyName?: Identifier;
@@ -2325,6 +2355,14 @@ declare module "typescript" {
 >name : Identifier
 >Identifier : Identifier
     }
+    type ImportSpecifier = ImportOrExportSpecifier;
+>ImportSpecifier : ImportOrExportSpecifier
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+
+    type ExportSpecifier = ImportOrExportSpecifier;
+>ExportSpecifier : ImportOrExportSpecifier
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+
     interface ExportAssignment extends Statement, ModuleElement {
 >ExportAssignment : ExportAssignment
 >Statement : Statement
@@ -2978,12 +3016,13 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
->getGeneratedNameForNode : (node: EnumDeclaration | ModuleDeclaration | ImportDeclaration) => string
->node : EnumDeclaration | ModuleDeclaration | ImportDeclaration
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+>getGeneratedNameForNode : (node: EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration) => string
+>node : EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration
 >ModuleDeclaration : ModuleDeclaration
 >EnumDeclaration : EnumDeclaration
 >ImportDeclaration : ImportDeclaration
+>ExportDeclaration : ExportDeclaration
 
         getExpressionNameSubstitution(node: Identifier): string;
 >getExpressionNameSubstitution : (node: Identifier) => string
