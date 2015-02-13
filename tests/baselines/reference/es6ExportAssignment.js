@@ -5,4 +5,3 @@ export = a;
 
 //// [es6ExportAssignment.js]
 var a = 10;
-module.exports = a;
