@@ -618,8 +618,8 @@ module ts {
         }
     }
 
-    export function isAMDOrCommonjsGen(compilerOptions: CompilerOptions) {
-        return !!compilerOptions.module || compilerOptions.target < ScriptTarget.ES6;
+    export function isAMDOrCommonjsGen(compilerOptions: CompilerOptions, languageVersion: ScriptTarget) {
+        return !!compilerOptions.module || languageVersion < ScriptTarget.ES6;
     }
 
     export function hasDotDotDotToken(node: Node) {

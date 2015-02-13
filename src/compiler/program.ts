@@ -417,14 +417,15 @@ module ts {
 
             var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModule) {
+                var languageVersion = options.target || ScriptTarget.ES3;
                 if (options.module) {
-                    if (options.target >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6) {
                         // Cannot specify module gen target when in es6 or above
                         diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
                     }
                 }
                 else {
-                    if (options.target < ScriptTarget.ES6) {
+                    if (languageVersion < ScriptTarget.ES6) {
                         // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                         var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                         var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
