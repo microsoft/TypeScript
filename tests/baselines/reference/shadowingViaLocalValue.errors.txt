@@ -1,0 +1,30 @@
+tests/cases/compiler/shadowingViaLocalValue.ts(2,5): error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+tests/cases/compiler/shadowingViaLocalValue.ts(4,13): error TS4090: Cannot initialize outer scope variable 'x' when having block-scoped variable with the same name.
+tests/cases/compiler/shadowingViaLocalValue.ts(9,5): error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS4090: Cannot initialize outer scope variable 'x1' when having block-scoped variable with the same name.
+
+
+==== tests/cases/compiler/shadowingViaLocalValue.ts (4 errors) ====
+    {
+        let x;
+        ~~~
+!!! error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+        {
+            var x = 1;
+                ~
+!!! error TS4090: Cannot initialize outer scope variable 'x' when having block-scoped variable with the same name.
+        }
+    }
+    
+    {
+        let x1;
+        ~~~
+!!! error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+        {
+            for (var x1 = 0; ;);
+                     ~~
+!!! error TS4090: Cannot initialize outer scope variable 'x1' when having block-scoped variable with the same name.
+        }
+    }
+    
+    

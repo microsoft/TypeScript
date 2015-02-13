@@ -8198,19 +8198,26 @@ module ts {
             }
         }
 
-        function checkCollisionWithConstDeclarations(node: VariableLikeDeclaration) {
+        function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
+            // - ScriptBody : StatementList
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
+            // - Block : { StatementList }
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
             // Variable declarations are hoisted to the top of their function scope. They can shadow
             // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
             // by the binder as the declaration scope is different.
             // A non-initialized declaration is a no-op as the block declaration will resolve before the var
             // declaration. the problem is if the declaration has an initializer. this will act as a write to the
             // block declared value. this is fine for let, but not const.
-            //
             // Only consider declarations with initializers, uninitialized var declarations will not 
-            // step on a const variable.
+            // step on a let\const variable.
             // Do not consider let and const declarations, as duplicate block-scoped declarations 
-            // are handled by the binder.
-            // We are only looking for var declarations that step on const declarations from a 
+            // are handled by the binder.            
+            // We are only looking for var declarations that step on let\const declarations from a 
             // different scope. e.g.:
             //      var x = 0;
             //      {
@@ -8219,11 +8226,33 @@ module ts {
             //      }
             if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
-                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
+                if (symbol.flags & (SymbolFlags.FunctionScopedVariable)) {
                     var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                    if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
-                            error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
+                    if (localDeclarationSymbol &&
+                        localDeclarationSymbol !== symbol &&
+                        localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & (NodeFlags.Let | NodeFlags.Const)) {
+                            // here we know that function scoped variable is shadowed by block scoped one
+                            // if they are defined in the same scope - binder has already reported redeclaration error
+                            // otherwise if variable has an initializer - show error that initialization will fail 
+                            // since LHS will be block scoped name instead of function scoped
+
+                            var localVarDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                            var localContainer =
+                                localVarDeclList.parent.kind === SyntaxKind.VariableStatement &&
+                                localVarDeclList.parent.parent;
+
+                            // if block scoped variable is defined in the function\module\source file scope 
+                            // then since function scoped variable is hoised their names will collide
+                            var namesShareScope =
+                                localContainer &&
+                                (localContainer.kind === SyntaxKind.Block && isAnyFunction(localContainer.parent) ||
+                                (localContainer.kind === SyntaxKind.ModuleBlock && localContainer.kind === SyntaxKind.ModuleDeclaration) ||
+                                 localContainer.kind === SyntaxKind.SourceFile);
+
+                            if (!namesShareScope) {
+                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scope_variable_0_when_having_block_scoped_variable_with_the_same_name, symbolToString(localDeclarationSymbol));
+                            }
                         }
                     }
                 }
@@ -8320,7 +8349,9 @@ module ts {
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
-                checkCollisionWithConstDeclarations(node);
+                if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                    checkVarDeclaredNamesNotShadowed(<VariableDeclaration | BindingElement>node);
+                }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
