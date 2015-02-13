@@ -1273,19 +1273,19 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol,
-        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
+        valueDeclaration?: Declaration // First value declaration of the symbol
+        constEnumOnlyModule?: boolean  // True if module contains only const enums or other modules with only const enums
     }
 
     export interface SymbolLinks {
-        target?: Symbol;               // Resolved (non-alias) target of an alias
-        type?: Type;                   // Type of value symbol
-        declaredType?: Type;           // Type of class, interface, enum, or type parameter
-        mapper?: TypeMapper;           // Type mapper for instantiation alias
-        referenced?: boolean;          // True if alias symbol has been referenced as a value
-        exportAssignChecked?: boolean; // True if export assignment was checked
-        exportAssignSymbol?: Symbol;   // Symbol exported from external module
-        unionType?: UnionType;         // Containing union type for union property
+        target?: Symbol;                    // Resolved (non-alias) target of an alias
+        type?: Type;                        // Type of value symbol
+        declaredType?: Type;                // Type of class, interface, enum, or type parameter
+        mapper?: TypeMapper;                // Type mapper for instantiation alias
+        referenced?: boolean;               // True if alias symbol has been referenced as a value
+        exportAssignmentChecked?: boolean;  // True if export assignment was checked
+        exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
+        unionType?: UnionType;              // Containing union type for union property
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
