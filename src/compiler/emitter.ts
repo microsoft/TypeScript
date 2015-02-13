@@ -1568,7 +1568,7 @@ module ts {
             var tempVariables: Identifier[];
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
-            var exportSpecifiers: Map<ExportSpecifier>;
+            var exportSpecifiers: Map<ExportSpecifier[]>;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -3068,17 +3068,18 @@ module ts {
                 emitEnd(node.name);
             }
 
-            function emitExportMemberAssignment(name: Identifier) {
+            function emitExportMemberAssignments(name: Identifier) {
                 if (exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                    var exportName = exportSpecifiers[name.text].name;
-                    writeLine();
-                    emitStart(exportName);
-                    write("exports.");
-                    emitNode(exportName);
-                    emitEnd(exportName);
-                    write(" = ");
-                    emitNode(name);
-                    write(";");
+                    forEach(exportSpecifiers[name.text], specifier => {
+                        writeLine();
+                        emitStart(specifier.name);
+                        write("exports.");
+                        emitNode(specifier.name);
+                        emitEnd(specifier.name);
+                        write(" = ");
+                        emitNode(name);
+                        write(";");
+                    });
                 }
             }
 
@@ -3317,7 +3318,7 @@ module ts {
             function emitExportVariableAssignments(node: VariableDeclaration | BindingElement) {
                 var name = (<VariableLikeDeclaration>node).name;
                 if (name.kind === SyntaxKind.Identifier) {
-                    emitExportMemberAssignment(<Identifier>name);
+                    emitExportMemberAssignments(<Identifier>name);
                 }
                 else if (isBindingPattern(name)) {
                     forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
@@ -3466,7 +3467,7 @@ module ts {
                 }
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile) {
-                    emitExportMemberAssignment((<FunctionDeclaration>node).name);
+                    emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
@@ -3805,7 +3806,7 @@ module ts {
                     write(";");
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
-                    emitExportMemberAssignment(node.name);
+                    emitExportMemberAssignments(node.name);
                 }
 
                 function emitConstructorOfClass() {
@@ -3934,7 +3935,7 @@ module ts {
                     write(";");
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
-                    emitExportMemberAssignment(node.name);
+                    emitExportMemberAssignments(node.name);
                 }
             }
 
@@ -4035,7 +4036,7 @@ module ts {
                 write(" = {}));");
                 emitEnd(node);
                 if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
-                    emitExportMemberAssignment(<Identifier>node.name);
+                    emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
 
@@ -4119,10 +4120,12 @@ module ts {
                 if (node.exportClause && node.moduleSpecifier) {
                     var generatedName = resolver.getGeneratedNameForNode(node);
                     emitStart(node);
-                    write("var ");
-                    write(generatedName);
-                    write(" = ");
-                    emitRequire(getExternalModuleName(node));
+                    if (compilerOptions.module !== ModuleKind.AMD) {
+                        write("var ");
+                        write(generatedName);
+                        write(" = ");
+                        emitRequire(getExternalModuleName(node));
+                    }
                     forEach(node.exportClause.elements, specifier => {
                         writeLine();
                         emitStart(specifier);
@@ -4187,8 +4190,9 @@ module ts {
                 exportSpecifiers = {};
                 forEach(sourceFile.statements, node => {
                     if (node.kind === SyntaxKind.ExportDeclaration && !(<ExportDeclaration>node).moduleSpecifier) {
-                        forEach((<ExportDeclaration>node).exportClause.elements, e => {
-                            exportSpecifiers[(e.propertyName || e.name).text] = e;
+                        forEach((<ExportDeclaration>node).exportClause.elements, specifier => {
+                            var name = (specifier.propertyName || specifier.name).text;
+                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                         });
                     }
                     else {
