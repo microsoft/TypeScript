@@ -16,7 +16,7 @@ var a = (function () {
 })();
 exports.a = a;
 //// [client.js]
-var defaultBinding = require("server");
+var nameSpaceBinding = require("server");
 exports.x = new nameSpaceBinding.a();
 
 
