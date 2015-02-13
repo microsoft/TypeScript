@@ -446,7 +446,8 @@ module ts {
             return node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
                 node.kind === SyntaxKind.NamespaceImport ||
-                node.kind === SyntaxKind.ImportSpecifier;
+                node.kind === SyntaxKind.ImportSpecifier ||
+                node.kind === SyntaxKind.ExportSpecifier;
         }
 
         function getDeclarationOfImportSymbol(symbol: Symbol): Declaration {
@@ -477,10 +478,10 @@ module ts {
             return resolveExternalModuleName(node, (<ImportDeclaration>node.parent.parent).moduleSpecifier);
         }
 
-        function getTargetOfImportSpecifier(node: ImportSpecifier): Symbol {
-            var moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent.parent.parent).moduleSpecifier);
+        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier): Symbol {
+            var moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier);
             if (moduleSymbol) {
-                var name = node.propertyName || node.name;
+                var name = specifier.propertyName || specifier.name;
                 if (name.text) {
                     var symbol = getSymbol(moduleSymbol.exports, name.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
                     if (!symbol) {
@@ -490,6 +491,16 @@ module ts {
                     return symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) ? symbol : resolveImport(symbol);
                 }
             }
+        }
+
+        function getTargetOfImportSpecifier(node: ImportSpecifier): Symbol {
+            return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
+        }
+
+        function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
+            return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
+                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
+                resolveEntityName(node, node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
         function getTargetOfImportDeclaration(node: Declaration): Symbol {
@@ -502,6 +513,8 @@ module ts {
                     return getTargetOfNamespaceImport(<NamespaceImport>node);
                 case SyntaxKind.ImportSpecifier:
                     return getTargetOfImportSpecifier(<ImportSpecifier>node);
+                case SyntaxKind.ExportSpecifier:
+                    return getTargetOfExportSpecifier(<ExportSpecifier>node);
             }
         }
 
@@ -9346,7 +9359,7 @@ module ts {
         }
 
         function checkExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration): boolean {
-            var moduleName = getImportedModuleName(node);
+            var moduleName = getExternalModuleName(node);
             if (getFullWidth(moduleName) !== 0 && moduleName.kind !== SyntaxKind.StringLiteral) {
                 error(moduleName, Diagnostics.String_literal_expected);
                 return false;
@@ -10174,6 +10187,9 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         generateNameForImportDeclaration(<ImportDeclaration>node);
                         break;
+                    case SyntaxKind.ExportDeclaration:
+                        generateNameForExportDeclaration(<ExportDeclaration>node);
+                        break;
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.ModuleBlock:
                         forEach((<SourceFile | ModuleBlock>node).statements, generateNames);
@@ -10219,17 +10235,27 @@ module ts {
                 }
             }
 
+            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
+                var expr = getExternalModuleName(node);
+                var baseName = expr.kind === SyntaxKind.StringLiteral ?
+                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+                assignGeneratedName(node, makeUniqueName(baseName));
+            }
+
             function generateNameForImportDeclaration(node: ImportDeclaration) {
                 if (node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
-                    var expr = getImportedModuleName(node);
-                    var baseName = expr.kind === SyntaxKind.StringLiteral ?
-                        escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
-                    assignGeneratedName(node, makeUniqueName(baseName));
+                    generateNameForImportOrExportDeclaration(node);
+                }
+            }
+
+            function generateNameForExportDeclaration(node: ExportDeclaration) {
+                if (node.moduleSpecifier) {
+                    generateNameForImportOrExportDeclaration(node);
                 }
             }
         }
 
-        function getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration) {
+        function getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration) {
             var links = getNodeLinks(node);
             if (!links.generatedName) {
                 getGeneratedNamesForSourceFile(getSourceFile(node));
@@ -11322,6 +11348,7 @@ module ts {
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
+                node.kind === SyntaxKind.ExportDeclaration ||
                 node.kind === SyntaxKind.ExportAssignment ||
                 (node.flags & NodeFlags.Ambient)) {
 

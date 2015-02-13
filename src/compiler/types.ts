@@ -231,12 +231,15 @@ module ts {
         ModuleDeclaration,
         ModuleBlock,
         ImportEqualsDeclaration,
-        ExportAssignment,
         ImportDeclaration,
         ImportClause,
         NamespaceImport,
         NamedImports,
         ImportSpecifier,
+        ExportAssignment,
+        ExportDeclaration,
+        NamedExports,
+        ExportSpecifier,
 
         // Module references
         ExternalModuleReference,
@@ -898,14 +901,25 @@ module ts {
         name: Identifier;
     }
 
-    export interface NamedImports extends Node {
-        elements: NodeArray<ImportSpecifier>;
+    export interface ExportDeclaration extends Statement, ModuleElement {
+        exportClause?: NamedExports;
+        moduleSpecifier?: Expression;
     }
 
-    export interface ImportSpecifier extends Declaration {
-        propertyName?: Identifier; // Property name to be imported from module
-        name: Identifier; // element name to be imported in the scope
+    export interface NamedImportsOrExports extends Node {
+        elements: NodeArray<ImportOrExportSpecifier>;
     }
+
+    export type NamedImports = NamedImportsOrExports;
+    export type NamedExports = NamedImportsOrExports;
+
+    export interface ImportOrExportSpecifier extends Declaration {
+        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        name: Identifier;           // Declared name
+    }
+
+    export type ImportSpecifier = ImportOrExportSpecifier;
+    export type ExportSpecifier = ImportOrExportSpecifier;
 
     export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
@@ -1163,7 +1177,7 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
         getExpressionNameSubstitution(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: Node): boolean;

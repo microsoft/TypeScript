@@ -351,8 +351,8 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    var moduleNameExpr = getImportedModuleName(node);
+                if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ExportDeclaration) {
+                    var moduleNameExpr = getExternalModuleName(node);
                     if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
                         var moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
