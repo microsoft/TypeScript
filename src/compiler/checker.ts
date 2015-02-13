@@ -316,7 +316,10 @@ module ts {
                         if (!isExternalModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
-                            break loop;
+                            if (!(result.flags & SymbolFlags.Import && getDeclarationOfImportSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
+                                break loop;
+                            }
+                            result = undefined;
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
