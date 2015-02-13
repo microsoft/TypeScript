@@ -10851,7 +10851,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias) {
+                if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
                     return getAliasNameSubstitution(symbol);
                 }
             }
