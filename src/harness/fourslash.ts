@@ -420,6 +420,9 @@ module FourSlash {
             this.activeFile = fileToOpen;
             var fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), '').substr(1);
             this.scenarioActions.push('<OpenFile FileName="" SrcFileId="' + fileName + '" FileId="' + fileName + '" />');
+            
+            // Let the host know that this file is now open
+            this.languageServiceAdapterHost.openFile(fileToOpen.fileName);
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {

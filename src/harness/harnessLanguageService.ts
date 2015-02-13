@@ -154,6 +154,9 @@ module Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
+        public openFile(fileName: string): void {
+        }
+
         /**
           * @param line 1 based index
           * @param col 1 based index
@@ -442,8 +445,8 @@ module Harness.LanguageService {
             this.client = client;
         }
 
-        addScript(fileName: string, content: string): void {
-            super.addScript(fileName, content);
+        openFile(fileName: string): void { 
+            super.openFile(fileName);
             this.client.openFile(fileName);
         }
 

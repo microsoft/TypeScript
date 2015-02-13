@@ -65,7 +65,7 @@ module ts.server {
         }
 
         stat(path: string, callback?: (err: any, stats: any) => any) {
-            throw new Error("Not implemented Yet.");
+            return 0;
         }
 
         lineColToPosition(fileName: string, line: number, col: number): number { 
