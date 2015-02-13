@@ -1,0 +1,16 @@
+error TS1193: Cannot compile external modules into amd or commonjs when targeting es6 or higher.
+
+
+!!! error TS1193: Cannot compile external modules into amd or commonjs when targeting es6 or higher.
+==== tests/cases/compiler/es6ModuleWithModuleGenTargetAmd.ts (0 errors) ====
+    export class A
+    {
+        constructor ()
+        {
+        }
+    
+        public B()
+        {
+            return 42;
+        }
+    }

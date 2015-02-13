@@ -1,0 +1,38 @@
+=== tests/cases/compiler/es6ExportClause.ts ===
+
+class c {
+>c : c
+}
+interface i {
+>i : i
+}
+module m {
+>m : typeof m
+
+    export var x = 10;
+>x : number
+}
+var x = 10;
+>x : number
+
+module uninstantiated {
+>uninstantiated : unknown
+}
+export { c };
+>c : typeof c
+
+export { c as c2 };
+>c : unknown
+>c2 : typeof c
+
+export { i, m as instantiatedModule };
+>i : unknown
+>m : unknown
+>instantiatedModule : typeof m
+
+export { uninstantiated };
+>uninstantiated : unknown
+
+export { x };
+>x : number
+

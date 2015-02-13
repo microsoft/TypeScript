@@ -10,3 +10,4 @@ tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts(1,
            ~~~~~~~~~~~~~~
 !!! error TS1189: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_0"' has no default export or export assignment.
     var x: number = nameSpaceBinding.a;
+    
