@@ -725,7 +725,7 @@ module ts {
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
-        public amdDependencies: string[];
+        public amdDependencies: {name: string; path: string}[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
