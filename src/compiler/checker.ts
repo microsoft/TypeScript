@@ -9358,7 +9358,7 @@ module ts {
             return <Identifier>node;
         }
 
-        function checkExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration): boolean {
+        function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             var moduleName = getExternalModuleName(node);
             if (getFullWidth(moduleName) !== 0 && moduleName.kind !== SyntaxKind.StringLiteral) {
                 error(moduleName, Diagnostics.String_literal_expected);
@@ -9366,7 +9366,9 @@ module ts {
             }
             var inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
             if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
-                error(moduleName, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                error(moduleName, node.kind === SyntaxKind.ExportDeclaration ?
+                    Diagnostics.Export_declarations_are_not_permitted_in_an_internal_module :
+                    Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                 return false;
             }
             if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {
@@ -9374,13 +9376,13 @@ module ts {
                 // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
                 // other external modules only through top - level external module names.
                 // Relative external module names are not permitted.
-                error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
+                error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
                 return false;
             }
             return true;
         }
 
-        function checkImportSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
+        function checkImportSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
             var symbol = getSymbolOfNode(node);
             var target = resolveImport(symbol);
             if (target !== unknownSymbol) {
@@ -9389,7 +9391,10 @@ module ts {
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
                     (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
                 if (target.flags & excludedMeanings) {
-                    error(node, Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0, symbolToString(symbol));
+                    var message = node.kind === SyntaxKind.ExportSpecifier ?
+                        Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
+                        Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
+                    error(node, message, symbolToString(symbol));
                 }
             }
         }
@@ -9404,15 +9409,13 @@ module ts {
             if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
-            if (checkExternalImportDeclaration(node)) {
+            if (checkExternalImportOrExportDeclaration(node)) {
                 var importClause = node.importClause;
                 if (importClause) {
                     if (importClause.name) {
-                        // TODO: Check that import references an export default instance
                         checkImportBinding(importClause);
                     }
                     if (importClause.namedBindings) {
-                        // TODO: Check that import references an export namespace
                         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                             checkImportBinding(<NamespaceImport>importClause.namedBindings);
                         }
@@ -9448,8 +9451,19 @@ module ts {
                 }
             }
             else {
-                if (checkExternalImportDeclaration(node)) {
+                if (checkExternalImportOrExportDeclaration(node)) {
                     checkImportBinding(node);
+                }
+            }
+        }
+
+        function checkExportDeclaration(node: ExportDeclaration) {
+            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+                grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
+            }
+            if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
+                if (node.exportClause) {
+                    forEach(node.exportClause.elements, checkImportSymbol);
                 }
             }
         }
@@ -9559,6 +9573,8 @@ module ts {
                     return checkImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return checkImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                case SyntaxKind.ExportDeclaration:
+                    return checkExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
@@ -10491,12 +10507,13 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ExportAssignment:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.ExportAssignment:
                 case SyntaxKind.Parameter:
                     break;
                 default:

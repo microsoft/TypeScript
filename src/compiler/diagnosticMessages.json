@@ -587,6 +587,14 @@
         "category": "Error",
         "code": 1189
     },
+    "An export declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1190
+    },
+    "Export declarations are not permitted in an internal module.": {
+        "category": "Error",
+        "code": 1191
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1100,7 +1108,7 @@
         "category": "Error",
         "code": 2438
     },
-    "Import declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+    "Import or export declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
         "category": "Error",
         "code": 2439
     },
@@ -1215,6 +1223,10 @@
     "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 2468
+    },
+    "Export declaration conflicts with exported declaration of '{0}'": {
+        "category": "Error",
+        "code": 2469
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
