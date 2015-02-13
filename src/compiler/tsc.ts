@@ -332,7 +332,7 @@ module ts {
         var program = createProgram(fileNames, compilerOptions, compilerHost);
         var exitStatus = compileProgram();
 
-        var end = start - new Date().getTime();
+        var end = new Date().getTime() - start;
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -357,7 +357,7 @@ module ts {
             reportTimeStatistic("Bind time", ts.bindTime);
             reportTimeStatistic("Check time", ts.checkTime);
             reportTimeStatistic("Emit time", ts.emitTime);
-            reportTimeStatistic("Total time", start - end);
+            reportTimeStatistic("Total time", end);
         }
 
         return { program, exitStatus };
