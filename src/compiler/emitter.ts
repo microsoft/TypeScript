@@ -3228,7 +3228,7 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                if (compilerOptions.target >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES6) {
                     emit(node.tag);
                     write(" ");
                     emit(node.template);
@@ -4997,7 +4997,7 @@ module ts {
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     return emitExternalImportDeclaration(node);
                 }
 
@@ -5067,7 +5067,7 @@ module ts {
             }
 
             function emitImportSpecifier(node: ImportSpecifier) {
-                Debug.assert(compilerOptions.target >= ScriptTarget.ES6);
+                Debug.assert(languageVersion >= ScriptTarget.ES6);
                 if (node.propertyName) {
                     emit(node.propertyName);
                     write(" as ");
@@ -5413,7 +5413,7 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (isExternalModule(node)) {
-                    if (compilerOptions.target >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.AMD) {

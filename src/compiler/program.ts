@@ -426,9 +426,11 @@ module ts {
                 return;
             }
 
+            var languageVersion = options.target || ScriptTarget.ES3;
+
             var firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModuleSourceFile && !options.module) {
-                if (!options.module && options.target < ScriptTarget.ES6) {
+                if (!options.module && languageVersion < ScriptTarget.ES6) {
                     // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
                     var span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
                     diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
@@ -436,7 +438,7 @@ module ts {
             }
 
             // Cannot specify module gen target when in es6 or above
-            if (options.module && options.target >= ScriptTarget.ES6) {
+            if (options.module && languageVersion >= ScriptTarget.ES6) {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
             }
 

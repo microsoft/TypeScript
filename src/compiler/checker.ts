@@ -724,7 +724,7 @@ module ts {
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 // A default export hides all other exports in CommonJS and AMD modules
                 var defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
@@ -9902,7 +9902,7 @@ module ts {
                     }
                 }
                 else {
-                    if (compilerOptions.target >= ScriptTarget.ES6) {
+                    if (languageVersion >= ScriptTarget.ES6) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
                     }
@@ -9946,7 +9946,7 @@ module ts {
             }
             checkExternalModuleExports(container);
 
-            if (compilerOptions.target >= ScriptTarget.ES6) {
+            if (languageVersion >= ScriptTarget.ES6) {
                 // export assignment is deprecated in es6 or above
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
             }
