@@ -8250,7 +8250,8 @@ module ts {
                             // otherwise if variable has an initializer - show error that initialization will fail 
                             // since LHS will be block scoped name instead of function scoped
                             if (!namesShareScope) {
-                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, symbolToString(localDeclarationSymbol));
+                                var name = symbolToString(localDeclarationSymbol);
+                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
                             }
                         }
                     }
