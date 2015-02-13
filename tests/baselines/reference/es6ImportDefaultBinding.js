@@ -14,6 +14,7 @@ import defaultBinding2 from "es6ImportDefaultBinding_0"; // elide this import si
 //// [es6ImportDefaultBinding_0.js]
 var a = 10;
 //// [es6ImportDefaultBinding_1.js]
+import defaultBinding from "es6ImportDefaultBinding_0";
 var x = defaultBinding;
 
 

@@ -51,17 +51,26 @@ exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
 //// [es6ImportNamedImport_1.js]
+import { a } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_1.a;
+import { a as b } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_2.a;
+import { x, a as y } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_3.x;
 var xxxx = _es6ImportNamedImport_0_3.a;
+import { x as z } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_4.x;
+import { m } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_5.m;
+import { a1, x1 } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_6.a1;
 var xxxx = _es6ImportNamedImport_0_6.x1;
+import { a1 as a11, x1 as x11 } from "es6ImportNamedImport_0";
 var xxxx = _es6ImportNamedImport_0_7.a1;
 var xxxx = _es6ImportNamedImport_0_7.x1;
+import { z1 } from "es6ImportNamedImport_0";
 var z111 = _es6ImportNamedImport_0_8.z1;
+import { z2 as z3 } from "es6ImportNamedImport_0";
 var z2 = _es6ImportNamedImport_0_9.z2; // z2 shouldn't give redeclare error
 
 

@@ -618,6 +618,10 @@ module ts {
         }
     }
 
+    export function isAMDOrCommonjsGen(compilerOptions: CompilerOptions) {
+        return !!compilerOptions.module || compilerOptions.target < ScriptTarget.ES6;
+    }
+
     export function hasDotDotDotToken(node: Node) {
         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
     }
