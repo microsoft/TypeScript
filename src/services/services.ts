@@ -5517,11 +5517,13 @@ module ts {
                     var declarations = symbol.getDeclarations();
                     if (declarations && declarations.length > 0) {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
-                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
-                        for (var i = 0; i < declarations.length; i++) {
-                            var sourceFile = declarations[i].getSourceFile();
-                            if (sourceFile && isDefaultLibFile(sourceFile.fileName, defaultLibFile)) {
-                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                        var defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+                        if (defaultLibFileName) {
+                            for (var i = 0; i < declarations.length; i++) {
+                                var sourceFile = declarations[i].getSourceFile();
+                                if (sourceFile && ts.normalizePath(sourceFile.fileName) === ts.normalizePath(defaultLibFileName)) {
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                }
                             }
                         }
 
@@ -5542,16 +5544,6 @@ module ts {
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
-
-            function isDefaultLibFile(fileName: string, defaultLibFile: string): boolean {
-                var hasValidPrefix = true;
-                var index = fileName.lastIndexOf(defaultLibFile);
-                if (index - 1 >= 0) {
-                    var prefix = fileName[index - 1];
-                    hasValidPrefix = (prefix === "\\" || prefix === "/");
-                }
-                return index >= 0 && hasValidPrefix && (index + defaultLibFile.length === fileName.length);
-            }
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
