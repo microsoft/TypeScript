@@ -8241,9 +8241,9 @@ module ts {
                             var localContainer =
                                 localVarDeclList.parent.kind === SyntaxKind.VariableStatement &&
                                 localVarDeclList.parent.parent;
-
-                            // if block scoped variable is defined in the function\module\source file scope 
-                            // then since function scoped variable is hoised their names will collide
+                            
+                            // names of block-scoped and function scoped variables can collide only 
+                            // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                             var namesShareScope =
                                 localContainer &&
                                 (localContainer.kind === SyntaxKind.Block && isAnyFunction(localContainer.parent) ||
