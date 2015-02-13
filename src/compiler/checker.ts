@@ -8216,7 +8216,7 @@ module ts {
             // Only consider declarations with initializers, uninitialized var declarations will not 
             // step on a let\const variable.
             // Do not consider let and const declarations, as duplicate block-scoped declarations 
-            // are handled by the binder.            
+            // are handled by the binder.
             // We are only looking for var declarations that step on let\const declarations from a 
             // different scope. e.g.:
             //      var x = 0;
@@ -8226,12 +8226,12 @@ module ts {
             //      }
             if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
-                if (symbol.flags & (SymbolFlags.FunctionScopedVariable)) {
+                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                     var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
                     if (localDeclarationSymbol &&
                         localDeclarationSymbol !== symbol &&
                         localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & (NodeFlags.Let | NodeFlags.Const)) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
                             // here we know that function scoped variable is shadowed by block scoped one
                             // if they are defined in the same scope - binder has already reported redeclaration error
                             // otherwise if variable has an initializer - show error that initialization will fail 
