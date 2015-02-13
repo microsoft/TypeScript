@@ -8214,15 +8214,14 @@ module ts {
             // declaration. the problem is if the declaration has an initializer. this will act as a write to the
             // block declared value. this is fine for let, but not const.
             // Only consider declarations with initializers, uninitialized var declarations will not 
-            // step on a let\const variable.
+            // step on a let/const variable.
             // Do not consider let and const declarations, as duplicate block-scoped declarations 
             // are handled by the binder.
             // We are only looking for var declarations that step on let\const declarations from a 
             // different scope. e.g.:
-            //      var x = 0;
             //      {
-            //          const x = 0;
-            //          var x = 0;
+            //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
+            //          var x = 0; // symbol for this declaration will be 'symbol'
             //      }
             if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
@@ -8232,26 +8231,26 @@ module ts {
                         localDeclarationSymbol !== symbol &&
                         localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
                         if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
-                            // here we know that function scoped variable is shadowed by block scoped one
-                            // if they are defined in the same scope - binder has already reported redeclaration error
-                            // otherwise if variable has an initializer - show error that initialization will fail 
-                            // since LHS will be block scoped name instead of function scoped
 
-                            var localVarDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                            var localContainer =
-                                localVarDeclList.parent.kind === SyntaxKind.VariableStatement &&
-                                localVarDeclList.parent.parent;
+                            var varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                            var container =
+                                varDeclList.parent.kind === SyntaxKind.VariableStatement &&
+                                varDeclList.parent.parent;
                             
                             // names of block-scoped and function scoped variables can collide only 
                             // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                             var namesShareScope =
-                                localContainer &&
-                                (localContainer.kind === SyntaxKind.Block && isAnyFunction(localContainer.parent) ||
-                                (localContainer.kind === SyntaxKind.ModuleBlock && localContainer.kind === SyntaxKind.ModuleDeclaration) ||
-                                 localContainer.kind === SyntaxKind.SourceFile);
+                                container &&
+                                (container.kind === SyntaxKind.Block && isAnyFunction(container.parent) ||
+                                (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
+                                 container.kind === SyntaxKind.SourceFile);
 
+                            // here we know that function scoped variable is shadowed by block scoped one
+                            // if they are defined in the same scope - binder has already reported redeclaration error
+                            // otherwise if variable has an initializer - show error that initialization will fail 
+                            // since LHS will be block scoped name instead of function scoped
                             if (!namesShareScope) {
-                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scope_variable_0_when_having_block_scoped_variable_with_the_same_name, symbolToString(localDeclarationSymbol));
+                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, symbolToString(localDeclarationSymbol));
                             }
                         }
                     }

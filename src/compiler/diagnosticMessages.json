@@ -1517,7 +1517,7 @@
         "category": "Error",
         "code": 4089
     },
-    "Cannot initialize outer scope variable '{0}' when having block-scoped variable with the same name.": {
+    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
         "category": "Error",
         "code": 4090
     },
