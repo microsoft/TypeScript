@@ -157,7 +157,7 @@ module ts.server {
         immediateId: any;
         changeSeq = 0;
 
-        constructor(private host: ServerHost, private logger: Logger, protected useProtocol: boolean, protected prettyJSON: boolean) {
+        constructor(private host: ServerHost, private logger: Logger) {
             this.projectService = new ProjectService(host, logger);
         }
 
@@ -178,13 +178,7 @@ module ts.server {
         }
 
         send(msg: NodeJS._debugger.Message) {
-            var json: string;
-            if (this.prettyJSON) {
-                json = JSON.stringify(msg, null, " ");
-            }
-            else {
-                json = JSON.stringify(msg);
-            }
+            var json = JSON.stringify(msg);
             this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
@@ -229,32 +223,7 @@ module ts.server {
         }
 
         output(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
-            if (this.useProtocol) {
-                this.response(info, cmdName, reqSeq, errorMsg);
-            }
-            else if (this.prettyJSON) {
-                if (!errorMsg) {
-                    this.sendLineToClient(JSON.stringify(info, null, " ").trim());
-                }
-                else {
-                    this.sendLineToClient(JSON.stringify(errorMsg));
-                }
-            } else {
-                if (!errorMsg) {
-                    var infoStr = JSON.stringify(info).trim();
-                    // [8 digits of length,infoStr] + '\n'
-                    var len = infoStr.length + paddedLength + 4;
-                    var lenStr = len.toString();
-                    var padLen = paddedLength - lenStr.length;
-                    for (var i = 0; i < padLen; i++) {
-                        lenStr = '0' + lenStr;
-                    }
-                    this.sendLineToClient("[" + lenStr + "," + infoStr + "]");
-                }
-                else {
-                    this.sendLineToClient(JSON.stringify("error: " + errorMsg));
-                }
-            }
+            this.response(info, cmdName, reqSeq, errorMsg);
         }
 
         semanticCheck(file: string, project: Project) {

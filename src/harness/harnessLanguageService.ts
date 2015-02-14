@@ -583,7 +583,7 @@ module Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             var serverHost = new SessionServerHost(clientHost);
-            var server = new ts.server.Session(serverHost, serverHost, /*useProtocol*/ true, /*prettyJSON*/ false);
+            var server = new ts.server.Session(serverHost, serverHost);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

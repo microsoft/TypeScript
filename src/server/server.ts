@@ -73,26 +73,8 @@ module ts.server {
     }
 
     class IOSession extends Session {
-        protocol: NodeJS._debugger.Protocol;
-
-        constructor(host: ServerHost, logger: ts.server.Logger, useProtocol: boolean, prettyJSON: boolean) {
-            super(host, logger, useProtocol, prettyJSON);
-            if (useProtocol) {
-                this.initProtocol();
-            }
-        }
-
-        initProtocol() {
-            this.protocol = new nodeproto.Protocol();
-            // note: onResponse was named by nodejs authors; we are re-purposing the Protocol
-            // class in this case so that it supports a server instead of a client
-            this.protocol.onResponse = (pkt) => {
-                this.handleRequest(pkt);
-            };
-        }
-
-        handleRequest(req: NodeJS._debugger.Packet) {
-            this.projectService.log("Got JSON msg:\n" + req.raw);
+        constructor(host: ServerHost, logger: ts.server.Logger) {
+            super(host, logger);
         }
 
         listen() {
@@ -114,5 +96,5 @@ module ts.server {
     var logger = new Logger(__dirname + "/.log" + process.pid.toString());
 
     // Start listening
-    new IOSession(ts.sys, logger, /* useProtocol */ true, /* prettyJSON */ false).listen();
+    new IOSession(ts.sys, logger).listen();
 }
