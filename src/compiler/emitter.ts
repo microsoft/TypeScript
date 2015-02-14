@@ -4109,7 +4109,7 @@ module ts {
                     return;
                 }
 
-                if (!(node.flags & NodeFlags.Export)) {
+                if (!(node.flags & NodeFlags.Export) || isEsModuleMemberDeclaration(node)) {
                     emitStart(node);
                     write("var ");
                     emit(node.name);
@@ -4136,7 +4136,10 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    emitEsNamedExportForDeclaration(node);
+                }
+                else if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
                     write("var ");
@@ -4249,16 +4252,20 @@ module ts {
                 write(" = {}));");
                 emitEnd(node);
                 if (isEsModuleMemberDeclaration(node)) {
-                    writeLine();
-                    emitStart(node);
-                    write("export { ");
-                    emit(node.name);
-                    write(" };");
-                    emitEnd(node);
+                    emitEsNamedExportForDeclaration(node);
                 }
                 else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
+            }
+
+            function emitEsNamedExportForDeclaration(node: Declaration) {
+                writeLine();
+                emitStart(node);
+                write("export { ");
+                emit(node.name);
+                write(" };");
+                emitEnd(node);
             }
 
             function emitRequire(moduleName: Expression) {
