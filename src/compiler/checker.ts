@@ -264,7 +264,7 @@ module ts {
                 Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
                 if (symbol.flags & meaning) {
                     return symbol;
-                }
+                }   
 
                 if (symbol.flags & SymbolFlags.Import) {
                     var target = resolveImport(symbol);
@@ -10207,7 +10207,30 @@ module ts {
         }
 
         function isUnknownIdentifier(location: Node, name: string): boolean {
-            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            return !resolveName(location, name, SymbolFlags.Value | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        }
+
+        function getBlockScopedVariableId(n: Identifier): number {
+            Debug.assert(n.parent !== undefined);
+
+            // ignore name parts of property access expressions
+            if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
+                (<PropertyAccessExpression>n.parent).name === n) {
+                return undefined;
+            }
+
+            // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
+            var declarationSymbol: Symbol =
+                (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
+                 n.parent.kind === SyntaxKind.BindingElement
+                    ? getSymbolOfNode(n.parent)
+                    : undefined;
+
+            var symbol = declarationSymbol ||
+                getNodeLinks(n).resolvedSymbol ||
+                resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+
+            return symbol && symbol.flags & SymbolFlags.BlockScopedVariable ? symbol.id : undefined;
         }
 
         function createResolver(): EmitResolver {
@@ -10226,6 +10249,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                getBlockScopedVariableId,
             };
         }
 
@@ -10952,15 +10976,6 @@ module ts {
 
             if (!declarationList.declarations.length) {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
-            }
-
-            if (languageVersion < ScriptTarget.ES6) {
-                if (isLet(declarationList)) {
-                    return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
-                else if (isConst(declarationList)) {
-                    return grammarErrorOnFirstToken(declarationList, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
             }
         }
 
