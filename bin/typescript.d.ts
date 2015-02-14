@@ -1134,6 +1134,7 @@ declare module "typescript" {
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
+        projectRoot?: string;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;

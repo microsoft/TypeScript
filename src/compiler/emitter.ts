@@ -1784,9 +1784,11 @@ module ts {
 
                 function recordNewSourceFileStart(node: SourceFile) {
                     // Add the file to tsFilePaths
-                    // If sourceroot option: Use the relative path corresponding to the common directory path 
-                    // otherwise source locations relative to map file location
-                    var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                    // If sourceroot option: use the relative path corresponding to the project root (if specified) or the common directory path 
+                    // Otherwise source locations relative to map file location
+                    var sourcesDirectoryPath = compilerOptions.sourceRoot
+                        ? compilerOptions.projectRoot || host.getCommonSourceDirectory()
+                        : sourceMapDir;
 
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.fileName,

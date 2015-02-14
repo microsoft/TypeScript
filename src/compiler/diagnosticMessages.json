@@ -1737,6 +1737,10 @@
         "category": "Message",
         "code": 6056
     },
+    "Specifies the directory where the project root is. Paths to source map sources will appear relative to this directory.": {
+        "category": "Message",
+        "code": 6057
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
