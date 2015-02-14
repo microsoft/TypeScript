@@ -1004,6 +1004,10 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isAsyncFunction(node: SignatureDeclaration): boolean {
+        return (node.flags & NodeFlags.Async) !== 0;
+    }
+
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.PublicKeyword:

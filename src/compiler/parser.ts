@@ -300,39 +300,39 @@ module ts {
 
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
         switch (context) {
-            case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.ModuleElements: return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.BlockStatements: return Diagnostics.Statement_expected;
-            case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
+            case ParsingContext.SourceElements:         return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.ModuleElements:         return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.BlockStatements:        return Diagnostics.Statement_expected;
+            case ParsingContext.SwitchClauses:          return Diagnostics.case_or_default_expected;
             case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
-            case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
-            case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences: return Diagnostics.Type_reference_expected;
-            case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
-            case ParsingContext.ObjectBindingElements: return Diagnostics.Property_destructuring_pattern_expected;
-            case ParsingContext.ArrayBindingElements: return Diagnostics.Array_element_destructuring_pattern_expected;
-            case ParsingContext.ArgumentExpressions: return Diagnostics.Argument_expression_expected;
-            case ParsingContext.ObjectLiteralMembers: return Diagnostics.Property_assignment_expected;
-            case ParsingContext.ArrayLiteralMembers: return Diagnostics.Expression_or_comma_expected;
-            case ParsingContext.Parameters: return Diagnostics.Parameter_declaration_expected;
-            case ParsingContext.TypeParameters: return Diagnostics.Type_parameter_declaration_expected;
-            case ParsingContext.TypeArguments: return Diagnostics.Type_argument_expected;
-            case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
-            case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
+            case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+            case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
+            case ParsingContext.TypeReferences:         return Diagnostics.Type_reference_expected;
+            case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
+            case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
+            case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
+            case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
+            case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
+            case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
+            case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
+            case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
+            case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
+            case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
         }
     };
 
     export function modifierToFlag(token: SyntaxKind): NodeFlags {
         switch (token) {
-            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
-            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
-            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
-            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
-            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
-            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
-            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
-            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
+            case SyntaxKind.StaticKeyword:      return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword:      return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword:   return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword:     return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword:      return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword:     return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword:       return NodeFlags.Const;
+            case SyntaxKind.AsyncKeyword:       return NodeFlags.Async;
         }
         return 0;
     }
@@ -960,33 +960,33 @@ module ts {
         var parseErrorBeforeNextFinishedNode: boolean = false;
 
         sourceFile.syntacticDiagnostics = undefined;
-            sourceFile.referenceDiagnostics = [];
-            sourceFile.parseDiagnostics = [];
-            sourceFile.semanticDiagnostics = [];
+        sourceFile.referenceDiagnostics = [];
+        sourceFile.parseDiagnostics = [];
+        sourceFile.semanticDiagnostics = [];
         sourceFile.end = sourceText.length;
         sourceFile.text = sourceText;
 
-            // Create and prime the scanner before parsing the source elements.
-            scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
-            token = nextToken();
+        // Create and prime the scanner before parsing the source elements.
+        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        token = nextToken();
 
-            processReferenceComments(sourceFile);
+        processReferenceComments(sourceFile);
 
-            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-            Debug.assert(token === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = parseTokenNode();
+        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+        Debug.assert(token === SyntaxKind.EndOfFileToken);
+        sourceFile.endOfFileToken = parseTokenNode();
 
-            setExternalModuleIndicator(sourceFile);
+        setExternalModuleIndicator(sourceFile);
 
-            sourceFile.nodeCount = nodeCount;
-            sourceFile.identifierCount = identifierCount;
-            sourceFile.identifiers = identifiers;
+        sourceFile.nodeCount = nodeCount;
+        sourceFile.identifierCount = identifierCount;
+        sourceFile.identifiers = identifiers;
 
-            if (setParentNodes) {
-                fixupParentReferences(sourceFile);
-            }
+        if (setParentNodes) {
+            fixupParentReferences(sourceFile);
+        }
 
-                return sourceFile;
+        return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
@@ -1346,24 +1346,32 @@ module ts {
             var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
-            var explicitFlags = ParserContextFlags.None;
             var ambientFlags = ParserContextFlags.None;
-            if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
-                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+            
+            // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters. 
+            // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
+            if (!inGeneratorParameterContext()) {
+                ambientFlags |= ParserContextFlags.Yield;
+            }
+
+            // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters. 
+            // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
+            if (!inAsyncParameterContext()) {
+                ambientFlags |= ParserContextFlags.Await;
             }
 
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            node.expression = setContextParametersAnd(parseExpression, explicitFlags, ambientFlags);
+            node.expression = setContextParametersAnd(parseExpression, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
-            }
+        }
 
         function allowInAndParseExpression() {
             return allowInAnd(parseExpression);
-            }
+        }
 
         function parseContextualModifier(t: SyntaxKind, isArrowFunction?: boolean): boolean {
             return token === t && tryParse(isArrowFunction
@@ -2166,16 +2174,19 @@ module ts {
             }
         }
 
-        function setContextParameters(explicitFlags: ParserContextFlags = ParserContextFlags.None, ambientFlags: ParserContextFlags = ParserContextFlags.None) {
-            var savedFlags = contextFlags;
-            var generatedFlags = contextFlags & ParserContextFlags.ContextParameterFlags;
-            contextFlags &= ~ParserContextFlags.ContextParameterFlags;
-            contextFlags |= explicitFlags;
-            contextFlags |= generatedFlags & ambientFlags;
-            return savedFlags;
+        function setContextParameters(explicitFlags: ParserContextFlags, ambientFlags: ParserContextFlags) {
+            // setContextParameters atomically returns the value of contextFlags at the time the function was 
+            // called, and updates contextFlags in the following fashion:
+            //
+            // - Any parser-generated flags not in the set of ambient flags are cleared from contextFlags
+            // - Explicit flags are set on contextFlags
+
+            var previousContextFlags = contextFlags;
+            contextFlags = (contextFlags & (ambientFlags | ~ParserContextFlags.ContextParameterFlags)) | explicitFlags;
+            return previousContextFlags;
         }
 
-        function setContextParametersAnd<T>(callback: () => T, explicitFlags?: ParserContextFlags, ambientFlags?: ParserContextFlags): T {
+        function setContextParametersAnd<T>(callback: () => T, explicitFlags: ParserContextFlags, ambientFlags: ParserContextFlags): T {
             var savedFlags = setContextParameters(explicitFlags, ambientFlags);
             var result = callback();
             contextFlags = savedFlags;
@@ -2222,7 +2233,7 @@ module ts {
         function fillSignature(
                 returnToken: SyntaxKind,
                 yieldAndGeneratorParameterContext: boolean,
-            awaitAndAsyncParameterContext: boolean,
+                awaitAndAsyncParameterContext: boolean,
                 requireCompleteParameterList: boolean,
                 signature: SignatureDeclaration): void {
             var returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
@@ -2267,7 +2278,7 @@ module ts {
                 if (awaitAndAsyncParameterContext) {
                     explicitFlags |= ParserContextFlags.Await | ParserContextFlags.AsyncParameter;
                 }
-                var result = setContextParametersAnd(parseDelimitedParameterList, explicitFlags);
+                var result = setContextParametersAnd(parseDelimitedParameterList, explicitFlags, /*ambientFlags*/ ParserContextFlags.None);
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
@@ -2660,7 +2671,7 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var result = setContextParametersAnd(parseTypeWorker, /*explicitFlags*/ ParserContextFlags.None);
+            var result = setContextParametersAnd(parseTypeWorker, /*explicitFlags*/ ParserContextFlags.None, /*ambientFlags*/ ParserContextFlags.None);
             return result;
         }
 
@@ -2754,12 +2765,23 @@ module ts {
             //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
             //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
-            var explicitFlags = ParserContextFlags.None;
+            
+            var parseInitializer = inParameter ? parseParameterInitializer : parseNonParameterInitializer;
             var ambientFlags = ParserContextFlags.None;
-            if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
-                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+            
+            // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters. 
+            // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
+            if (!inGeneratorParameterContext()) {
+                ambientFlags |= ParserContextFlags.Yield;
             }
-            return setContextParametersAnd(inParameter ? parseParameterInitializer : parseNonParameterInitializer, explicitFlags, ambientFlags);
+
+            // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
+            // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
+            if (!inAsyncParameterContext()) {
+                ambientFlags |= ParserContextFlags.Await;
+            }
+
+            return setContextParametersAnd(parseInitializer, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
         }
 
         function parseParameterInitializer() {
@@ -4280,29 +4302,33 @@ module ts {
                     //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
                     //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
                     //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+
+                    // If [GeneratorParameter] is *set* we explicitly set [Yield]. 
+                    // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
                     if (inGeneratorParameterContext()) {
-                        explicitFlags = ParserContextFlags.Yield;
-                    }
-                    else if (inAsyncParameterContext()) {
-                        explicitFlags = ParserContextFlags.Await;
+                        explicitFlags |= ParserContextFlags.Yield;
                     }
                     else {
-                        ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                        ambientFlags |= ParserContextFlags.Yield;
+                    }
+
+                    // If [AsyncParameter] is *set* we explicitly set [Await]. 
+                    // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
+                    if (inAsyncParameterContext()) {
+                        explicitFlags |= ParserContextFlags.Await;
+                    }
+                    else {
+                        ambientFlags |= ParserContextFlags.Await;
                     }
                 }
             }
             else {
                 // VariableDeclaration[In,Yield,Await] : (Modified) 13.2.2
                 //      BindingIdentifier[?Yield,?Await] Initializer[?In]opt
-                //      BindingPattern[Yield,Await] Initializer[?In]
-                //
-                // 13.2.2 always passes [Yield] to BindingPattern. May be a spec bug. Filed as https://bugs.ecmascript.org/show_bug.cgi?id=3743
-                if (isBindingPattern()) {
-                    explicitFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
-                }
-                else {
-                    ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
-                }
+                //      BindingPattern[?Yield,?Await] Initializer[?In]
+                
+                // We always pass the ambient values for [Yield] and [Await]
+                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
             }
             return setContextParametersAnd(parseIdentifierOrPatternWorker, explicitFlags, ambientFlags);
         }
@@ -4550,13 +4576,21 @@ module ts {
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
                 //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
-                var explicitFlags = ParserContextFlags.None;
                 var ambientFlags = ParserContextFlags.None;
-                if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
-                    ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+
+                // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters.
+                // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
+                if (!inGeneratorParameterContext()) {
+                    ambientFlags |= ParserContextFlags.Yield;
                 }
 
-                node.members = setContextParametersAnd(parseClassMembers, explicitFlags, ambientFlags);
+                // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
+                // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
+                if (!inAsyncParameterContext()) {
+                    ambientFlags |= ParserContextFlags.Await;
+                }
+
+                node.members = setContextParametersAnd(parseClassMembers, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4572,15 +4606,22 @@ module ts {
             //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
             if (isHeritageClause()) {
-                var explicitFlags = ParserContextFlags.None;
                 var ambientFlags = ParserContextFlags.None;
                 if (isClassHeritageClause) {
-                    if (!inGeneratorParameterContext() && !inAsyncParameterContext()) {
-                        ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
+                    // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters.
+                    // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
+                    if (!inGeneratorParameterContext()) {
+                        ambientFlags |= ParserContextFlags.Yield;
+                    }
+
+                    // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
+                    // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
+                    if (!inAsyncParameterContext()) {
+                        ambientFlags |= ParserContextFlags.Await;
                     }
                 }
 
-                return setContextParametersAnd(parseHeritageClausesWorker, explicitFlags, ambientFlags);
+                return setContextParametersAnd(parseHeritageClausesWorker, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
             }
 
             return undefined;

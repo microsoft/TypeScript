@@ -183,7 +183,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
                 fail(sourceFiles[i] + " does not exist!");
         }
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
-    }    
+    }
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
 }

@@ -2728,8 +2728,7 @@ module ts {
                     var type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature));
                 }
                 else {
-                    var declaration = <FunctionLikeDeclaration>signature.declaration;
-                    var type = getReturnTypeFromBody(declaration);
+                    var type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
                 }
                 if (signature.resolvedReturnType === resolvingType) {
                     signature.resolvedReturnType = type;
@@ -3580,7 +3579,7 @@ module ts {
                     if (sourceType === targetType) {
                         sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                         targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                }
+                    }
                     reportError(headMessage, sourceType, targetType);
                 }
                 return Ternary.False;
@@ -3677,7 +3676,7 @@ module ts {
                     // errors, we can use the cached value. Otherwise, recompute the relation
                     if (!elaborateErrors || (related === RelationComparisonResult.FailedAndReported)) {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
-                }
+                    }
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
@@ -4177,12 +4176,12 @@ module ts {
                 var propType = getTypeOfSymbol(p);
                 var widenedType = getWidenedType(propType);
                 if (propType !== widenedType) {
-                var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
-                symbol.declarations = p.declarations;
-                symbol.parent = p.parent;
+                    var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
+                    symbol.declarations = p.declarations;
+                    symbol.parent = p.parent;
                     symbol.type = widenedType;
-                symbol.target = p;
-                if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
+                    symbol.target = p;
+                    if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
                     p = symbol;
                 }
                 members[p.name] = p;
@@ -4873,8 +4872,7 @@ module ts {
         function renameSymbol(symbol: Symbol, name: string): void {
             if (!symbolNameOverrides) {
                 symbolNameOverrides = [];
-            }
-            
+            }            
             symbolNameOverrides[symbol.id] = name;
         }
 
@@ -4886,6 +4884,7 @@ module ts {
                     return symbolNameOverrides[links.resolvedSymbol.id];
                 }
             }
+            return undefined;
         }
 
         function checkIdentifier(node: Identifier): Type {
@@ -5584,48 +5583,48 @@ module ts {
             for (var i = 0; i < node.properties.length; i++) {
                 var memberDecl = node.properties[i];
                 var member = memberDecl.symbol;
-                if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
-                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                    isObjectLiteralMethod(memberDecl)) {
-                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                if (memberDecl.kind === SyntaxKind.PropertyAssignment
+                    || memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment
+                    || isObjectLiteralMethod(memberDecl)) {
+                    if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         var type = checkPropertyAssignment(<PropertyAssignment>memberDecl, contextualMapper);
-                        }
-                        else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                            var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
-                        }
-                        else {
-                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                            var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                                ? unknownType
-                                : checkExpression(<Identifier>memberDecl.name, contextualMapper);
-                        }
-                        typeFlags |= type.flags;
-                        var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
-                        prop.declarations = member.declarations;
-                        prop.parent = member.parent;
-                        if (member.valueDeclaration) {
-                            prop.valueDeclaration = member.valueDeclaration;
-                        }
-
-                        prop.type = type;
-                        prop.target = member;
-                        member = prop;
+                    }
+                    else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
+                        var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
                     }
                     else {
-                        // TypeScript 1.0 spec (April 2014)
-                        // A get accessor declaration is processed in the same manner as 
-                        // an ordinary function declaration(section 6.1) with no parameters.
-                        // A set accessor declaration is processed in the same manner 
-                        // as an ordinary function declaration with a single parameter and a Void return type.
+                        Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
+                        var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
+                            ? unknownType
+                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
+                    }
+                    typeFlags |= type.flags;
+                    var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    prop.declarations = member.declarations;
+                    prop.parent = member.parent;
+                    if (member.valueDeclaration) {
+                        prop.valueDeclaration = member.valueDeclaration;
+                    }
+
+                    prop.type = type;
+                    prop.target = member;
+                    member = prop;
+                }
+                else {
+                    // TypeScript 1.0 spec (April 2014)
+                    // A get accessor declaration is processed in the same manner as 
+                    // an ordinary function declaration(section 6.1) with no parameters.
+                    // A set accessor declaration is processed in the same manner 
+                    // as an ordinary function declaration with a single parameter and a Void return type.
                     Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
-                        }
+                }
 
                 if (!hasDynamicName(memberDecl)) {
                     propertiesTable[member.name] = member;
-                        }
+                }
                 propertiesArray.push(member);
-                    }
+            }
 
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
@@ -5644,11 +5643,11 @@ module ts {
                             // created by checkObjectLiteral, since that will be appropriately
                             // contextually typed and resolved.
                             var type = getTypeOfSymbol(propertiesArray[i]);
-                                if (!contains(propTypes, type)) {
-                                    propTypes.push(type);
-                                }
+                            if (!contains(propTypes, type)) {
+                                propTypes.push(type);
                             }
                         }
+                    }
                     var result = propTypes.length ? getUnionType(propTypes) : undefinedType;
                     typeFlags |= result.flags;
                     return result;
@@ -5988,16 +5987,16 @@ module ts {
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
-                    var parameterType = getTypeAtPosition(signature, i);
-                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                        continue;
-                    }
+                var parameterType = getTypeAtPosition(signature, i);
+                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                    continue;
+                }
                 // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                 // context sensitive function expressions as wildcards
                 var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
-                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
-                }
+                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+            }
 
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
             // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
@@ -6140,7 +6139,7 @@ module ts {
 
                 // We already perform checking on the type arguments on the class declaration itself.
                 if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
-            forEach(typeArguments, checkSourceElement);
+                    forEach(typeArguments, checkSourceElement);
                 }
             }
 
@@ -6609,11 +6608,12 @@ module ts {
             }
         }
 
-        function createPromiseType(awaitedType: Type, func: FunctionLikeDeclaration): Type {
+        function createPromiseType(promisedType: Type, func: FunctionLikeDeclaration): Type {
             if (globalPromiseSymbol) {
-                awaitedType = getAwaitedType(awaitedType, awaitedType);
+                // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
+                promisedType = getAwaitedType(promisedType, /*fallbackType*/ promisedType);
                 var promiseType = globalPromiseType || getDeclaredTypeOfSymbol(globalPromiseSymbol);
-                return promiseType !== emptyObjectType ? createTypeReference(<GenericType>promiseType, [awaitedType]) : emptyObjectType;
+                return promiseType !== emptyObjectType ? createTypeReference(<GenericType>promiseType, [promisedType]) : emptyObjectType;
             }
             error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
             return unknownType;
@@ -6624,9 +6624,9 @@ module ts {
             if (!func.body) {
                 return unknownType;
             }
-            var isAsync = !!(func.flags & NodeFlags.Async);
+            var isAsync = isAsyncFunction(func);
             if (func.body.kind !== SyntaxKind.Block) {
-                var type = checkExpressionCached(<Expression>func.body, contextualMapper, isAsync);
+                var type = checkExpressionCached(<Expression>func.body, contextualMapper, /*resolveAwaitedType*/ isAsync);
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
@@ -6727,7 +6727,7 @@ module ts {
             if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
-            var isAsync = !!(node.flags & NodeFlags.Async);
+            var isAsync = isAsyncFunction(node);
             if (isAsync) {
                 emitAwaiter = true;
                 if (languageVersion < ScriptTarget.ES6) {
@@ -6772,9 +6772,14 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            var isAsync = !!(node.flags & NodeFlags.Async);
+            var isAsync = isAsyncFunction(node);
             var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
             if (returnType && isAsync) {
+                // From within an async function you can return either a non-promise value or a promise. Any 
+                // Promise/A+ compatible implementation will always assimilate any foreign promise, so we 
+                // should not be checking assignability of a promise to the return type. Instead, we need to 
+                // check assignability of the awaited type of the concise body against the promised type of 
+                // its return type annotation.
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
@@ -6793,7 +6798,7 @@ module ts {
                     if (returnType) {
                         if (isAsync) {
                             exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
-                    }
+                        }
                         checkTypeAssignableTo(exprType, returnType, node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
@@ -7272,12 +7277,12 @@ module ts {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
                 var parameter = getContainingParameter(node);
-                if (parameter && parameter.parserContextFlags & ParserContextFlags.Yield) {
+                if (parameter && (parameter.parserContextFlags & ParserContextFlags.Yield)) {
                     grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
                 }
                 else {
-                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
-            }
+                    grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+                }
             }
             else {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
@@ -7312,12 +7317,12 @@ module ts {
             return result;
         }
 
-        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper, forAwait?: boolean): Type {
+        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper, resolveAwaitedType?: boolean): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node, contextualMapper);
             }
-            if (forAwait) {
+            if (resolveAwaitedType) {
                 if (!links.resolvedAwaitedType) {
                     links.resolvedAwaitedType = getAwaitedType(links.resolvedType, links.resolvedType);
                 }
@@ -7529,7 +7534,7 @@ module ts {
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
             else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
-                node.kind === SyntaxKind.ConstructSignature) {
+                      node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
@@ -7555,7 +7560,7 @@ module ts {
                             break;
                     }
                 }
-                if (node.flags & NodeFlags.Async) {
+                if (isAsyncFunction(node)) {
                     var promiseConstructor = getPromiseConstructor(node);
                     if (promiseConstructor) {
                         var promiseIdentifier = getFirstIdentifier(promiseConstructor);
@@ -7567,7 +7572,7 @@ module ts {
                             if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
                                 valueLinks.flags |= NodeCheckFlags.PromiseCollision;
                                 error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, promiseName, getTextOfNode(promiseConstructor));
-            }
+                            }
                         }
                     }
                 }
@@ -7754,8 +7759,8 @@ module ts {
                     }
                 }
 
-                    checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
-                }
+                checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
+            }
 
             checkFunctionLikeDeclaration(node);
         }
@@ -8155,6 +8160,8 @@ module ts {
         }
 
         function getAwaitedType(type: Type, fallbackType?: Type, seen: boolean[] = []): Type {
+            // The *promised type* of a `Promise` is the type of its fulfilled value (e.g. `number` in `Promise<number>`).
+            // The *awaited type* of an expression is its *promised type* if the expression is a `Promise`; otherwise, it is the type of the expression
             var seen: boolean[] = [];
             if (!type || !globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
                 return fallbackType;
@@ -8167,9 +8174,12 @@ module ts {
                 var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
                 var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
                 var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
-                if (seen[awaitedType.id]) return fallbackType;
+                if (seen[awaitedType.id]) {
+                    return fallbackType;
+                }
                 return getAwaitedType(awaitedType, /*fallbackType*/ awaitedType, seen);
-            } else {
+            }
+            else {
                 if (isTypeAssignableTo(type, thenableType)) {
                     error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
                 }
@@ -8177,15 +8187,15 @@ module ts {
             }
         }
 
-        function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {
-            // an async function has a valid return type if the type has a construct signature that takes
+        function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {            
+            // This checks that an async function has a valid Promise-compatible return type, and returns the *awaited type* of the promise.
+            // An async function has a valid Promise-compatible return type if the return type has a construct signature that takes
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
             if (globalIPromiseConstructorType) {
                 if (!returnType) {
                     returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
-
                 if (returnType && returnType.symbol) {
                     var links = getSymbolLinks(returnType.symbol);
                     if (!links.promiseType) {
@@ -8480,7 +8490,8 @@ module ts {
                 var isDeclaration = node.kind !== SyntaxKind.Identifier;
                 if (isDeclaration) {
                     error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, identifier.text);
-                } else {
+                }
+                else {
                     error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
                 }
             }
@@ -8497,18 +8508,19 @@ module ts {
         function checkCollisionWithGeneratorVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
             if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5 || isTypeNode(name)) {
                 return;
-                    }
+            }
 
             var identifier = <Identifier>name;
             if (identifier.text !== "__generator") {
                 return;
-                }
+            }
 
             // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
             var isDeclaration = node.kind !== SyntaxKind.Identifier;
             if (isDeclaration) {
                 error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, identifier.text);
-            } else {
+            }
+            else {
                 error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
             }
         }
@@ -8637,16 +8649,16 @@ module ts {
                 if (inBlockOrObjectLiteralExpression(node)) {
                     // disallow all but the `async` modifier here
                     if (node.modifiers.flags & ~NodeFlags.Async) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
                 }
             }
-        }
         }
 
         function inBlockOrObjectLiteralExpression(node: Node) {
             while (node) {
                 if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.ObjectLiteralExpression) {
-                    return node.kind;
+                    return true;
                 }
 
                 node = node.parent;
@@ -8912,7 +8924,7 @@ module ts {
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
-        function checkIndexConstraints(type: Type) { 
+        function checkIndexConstraints(type: Type) {
             var declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
             var declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
 
@@ -8999,7 +9011,7 @@ module ts {
                     error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
                 }
             }
-            }
+        }
 
         function checkTypeNameIsReserved(name: DeclarationName, message: DiagnosticMessage): void {
             // TS 1.0 spec (April 2014): 3.6.1
@@ -9878,19 +9890,24 @@ module ts {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
+
                 if (potentialArgumentsCollisions.length) {
                     forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
                     potentialArgumentsCollisions.length = 0;
                 }
+
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
                 }
+
                 if (emitAwaiter) {
                     links.flags |= NodeCheckFlags.EmitAwaiter;
                 }
+
                 if (emitGenerator) {
                     links.flags |= NodeCheckFlags.EmitGenerator;
                 }
+
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
@@ -10582,7 +10599,7 @@ module ts {
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
 
-            var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
+            var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), /*arity*/ 1);
             if (iPromiseType !== emptyObjectType) {
                 globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
             }
@@ -10600,7 +10617,7 @@ module ts {
                 globalPromiseType = getTypeOfGlobalSymbol(globalPromiseSymbol, 1);
             }
 
-            // thenable type used to verify against a non-promise "thenable" operand to `await`.
+            // thenable type that is used to verify against a non-promise "thenable" operand to `await`.
             var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
             getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
             thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
