@@ -1696,23 +1696,7 @@ module ts {
 
 
             function isExistingName(location: Node, name: string) {
-                if (!resolver.isUnknownIdentifier(location, name)) {
-                    return true;
-                }
-
-                if (currentScopeNames && hasProperty(currentScopeNames, name)) {
-                    return true;
-                }
-
-                var frame = lastFrame;
-                while (frame) {
-                    if (hasProperty(frame.names, name)) {
-                        return true;
-                    }
-                    frame = frame.previous;
-                }
-
-                return false;
+                return !resolver.isUnknownIdentifier(location, name) || (currentScopeNames && hasProperty(currentScopeNames, name));
             }
 
             function initializeEmitterWithSourceMaps() {
