@@ -775,18 +775,14 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                    // scenario 1
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    
-3 >                    ^^^^^^^^^^^^^
-4 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                    ^^^^^^^^^^^^^
+3 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >		    // scenario 1
   >		    
-2 >                    
-3 >                    // scenario 1
-1 >Emitted(43, 21) Source(52, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
-2 >Emitted(43, 21) Source(51, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
-3 >Emitted(43, 34) Source(51, 20) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
+2 >                    // scenario 1
+1 >Emitted(43, 21) Source(51, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
+2 >Emitted(43, 34) Source(51, 20) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
 ---
 >>>                    codeThing.addWidget("addWidget", this);
 1->^^^^^^^^^^^^^^^^^^^^

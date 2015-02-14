@@ -1,0 +1,2 @@
+//// [sourceMapVariableWithCommentsInsideModule.js.map]
+{"version":3,"file":"sourceMapVariableWithCommentsInsideModule.js","sourceRoot":"","sources":["sourceMapVariableWithCommentsInsideModule.ts"],"names":["Q","Q.P"],"mappings":"AAAA,IAAO,CAAC,CAKP;AALD,WAAO,CAAC,EAAC,CAAC;IACNA,SAASA,CAACA;QACNC,YAAYA;QACZA,IAAIA,CAACA,GAAGA,CAACA,CAACA;IACdA,CAACA;AACLD,CAACA,EALM,CAAC,KAAD,CAAC,QAKP"}

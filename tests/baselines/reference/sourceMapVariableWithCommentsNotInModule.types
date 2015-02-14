@@ -1,0 +1,8 @@
+=== tests/cases/compiler/sourceMapVariableWithCommentsNotInModule.ts ===
+function P() {
+>P : () => void
+
+    // Test this
+    var a = 1;
+>a : number
+}

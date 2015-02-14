@@ -170,34 +170,33 @@ sourceFile:../../test.ts
 -------------------------------------------------------------------
 >>>/// <reference path='m1.ts'/>
 1 >
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >/// <reference path='m1.ts'/>
-  >
-2 >
-3 >/// <reference path='m1.ts'/>
-1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-3 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >/// <reference path='m1.ts'/>
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
 ---
 >>>var a1 = 10;
-1 >^^^^
-2 >    ^^
-3 >      ^^^
-4 >         ^^
-5 >           ^
-6 >            ^^^^^^^^^^^^->
 1 >
-  >var 
-2 >    a1
-3 >       = 
-4 >         10
-5 >           ;
-1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
-3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
-4 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
-5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+2 >^^^^
+3 >    ^^
+4 >      ^^^
+5 >         ^^
+6 >           ^
+7 >            ^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    a1
+4 >       = 
+5 >         10
+6 >           ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+4 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+5 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 ---
 >>>var c1 = (function () {
 1->

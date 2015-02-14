@@ -1583,7 +1583,7 @@ module ts {
             var writeComment = writeCommentRange;
 
             /** Emit a node */
-            var emit = emitNode;
+            var emitJavascript = emitJavaScriptWorker;
 
             /** Called just before starting emit of a node */
             var emitStart = function (node: Node) { };
@@ -1615,12 +1615,12 @@ module ts {
             }
 
             if (root) {
-                emit(root);
+                emitNode(root);
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
+                        emitNode(sourceFile);
                     }
                 });
             }
@@ -1957,22 +1957,22 @@ module ts {
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithMap(node: Node) {
+                function emitJavascriptWithMap(node: Node) {
                     if (node) {
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
-                            emitNode(node);
+                            emitJavaScriptWorker(node);
                             recordEmitNodeEndSpan(node);
                         }
                         else {
                             recordNewSourceFileStart(<SourceFile>node);
-                            emitNode(node);
+                            emitJavaScriptWorker(node);
                         }
                     }
                 }
 
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithMap;
+                emitJavascript = emitJavascriptWithMap;
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -2037,7 +2037,7 @@ module ts {
             function emitOptional(prefix: string, node: Node) {
                 if (node) {
                     write(prefix);
-                    emit(node);
+                    emitNode(node);
                 }
             }
 
@@ -2045,7 +2045,7 @@ module ts {
                 if (parenthesized) {
                     write("(");
                 }
-                emit(node);
+                emitNode(node);
                 if (parenthesized) {
                     write(")");
                 }
@@ -2073,7 +2073,7 @@ module ts {
                             write(", ");
                         }
                     }
-                    emit(nodes[start + i]);
+                    emitNode(nodes[start + i]);
                 }
                 if (trailingComma) {
                     write(",");
@@ -2103,7 +2103,7 @@ module ts {
             function emitLinesStartingAt(nodes: Node[], startIndex: number): void {
                 for (var i = startIndex; i < nodes.length; i++) {
                     writeLine();
-                    emit(nodes[i]);
+                    emitNode(nodes[i]);
                 }
             }
 
@@ -2143,7 +2143,7 @@ module ts {
                 // In ES6 mode and above, we can simply emit each portion of a template in order, but in
                 // ES3 & ES5 we must convert the template expression into a series of string concatenations.
                 if (languageVersion >= ScriptTarget.ES6) {
-                    forEachChild(node, emit);
+                    forEachChild(node, emitNode);
                     return;
                 }
 
@@ -2268,8 +2268,8 @@ module ts {
             }
 
             function emitTemplateSpan(span: TemplateSpan) {
-                emit(span.expression);
-                emit(span.literal);
+                emitNode(span.expression);
+                emitNode(span.literal);
             }
 
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
@@ -2279,7 +2279,7 @@ module ts {
                     emitLiteral(<LiteralExpression>node);
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
-                    emit((<ComputedPropertyName>node).expression);
+                    emitNode((<ComputedPropertyName>node).expression);
                 }
                 else {
                     write("\"");
@@ -2388,14 +2388,14 @@ module ts {
 
             function emitBindingElement(node: BindingElement) {
                 if (node.propertyName) {
-                    emit(node.propertyName);
+                    emitNode(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
                     write("...");
                 }
                 if (isBindingPattern(node.name)) {
-                    emit(node.name);
+                    emitNode(node.name);
                 }
                 else {
                     emitModuleMemberName(node);
@@ -2405,7 +2405,7 @@ module ts {
 
             function emitSpreadElementExpression(node: SpreadElementExpression) {
                 write("...");
-                emit((<SpreadElementExpression>node).expression);
+                emitNode((<SpreadElementExpression>node).expression);
             }
 
             function needsParenthesisForPropertyAccess(node: Expression) {
@@ -2494,12 +2494,12 @@ module ts {
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
                 write("[");
-                emit(node.expression);
+                emitNode(node.expression);
                 write("]");
             }
 
             function emitMethod(node: MethodDeclaration) {
-                emit(node.name);
+                emitNode(node.name);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
@@ -2507,13 +2507,13 @@ module ts {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emit(node.name);
+                emitNode(node.name);
                 write(": ");
-                emit(node.initializer);
+                emitNode(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emit(node.name);
+                emitNode(node.name);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export var y;
@@ -2548,24 +2548,24 @@ module ts {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
-                emit(node.expression);
+                emitNode(node.expression);
                 write(".");
-                emit(node.name);
+                emitNode(node.name);
             }
 
             function emitQualifiedName(node: QualifiedName) {
-                emit(node.left);
+                emitNode(node.left);
                 write(".");
-                emit(node.right);
+                emitNode(node.right);
             }
 
             function emitIndexedAccess(node: ElementAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
-                emit(node.expression);
+                emitNode(node.expression);
                 write("[");
-                emit(node.argumentExpression);
+                emitNode(node.argumentExpression);
                 write("]");
             }
 
@@ -2582,15 +2582,15 @@ module ts {
 
             function emitCallTarget(node: Expression): Expression {
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
-                    emit(node);
+                    emitNode(node);
                     return node;
                 }
                 var temp = createTempVariable(node);
                 recordTempDeclaration(temp);
                 write("(");
-                emit(temp);
+                emitNode(temp);
                 write(" = ");
-                emit(node);
+                emitNode(node);
                 write(")");
                 return temp;
             }
@@ -2602,13 +2602,13 @@ module ts {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
                     write(".");
-                    emit((<PropertyAccessExpression>expr).name);
+                    emitNode((<PropertyAccessExpression>expr).name);
                 }
                 else if (expr.kind === SyntaxKind.ElementAccessExpression) {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
                     write("[");
-                    emit((<ElementAccessExpression>expr).argumentExpression);
+                    emitNode((<ElementAccessExpression>expr).argumentExpression);
                     write("]");
                 }
                 else if (expr.kind === SyntaxKind.SuperKeyword) {
@@ -2616,7 +2616,7 @@ module ts {
                     write("_super");
                 }
                 else {
-                    emit(node.expression);
+                    emitNode(node.expression);
                 }
                 write(".apply(");
                 if (target) {
@@ -2626,7 +2626,7 @@ module ts {
                     }
                     else {
                         // Calls of form obj.foo(...)
-                        emit(target);
+                        emitNode(target);
                     }
                 }
                 else {
@@ -2649,7 +2649,7 @@ module ts {
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
+                    emitNode(node.expression);
                     superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall) {
@@ -2670,7 +2670,7 @@ module ts {
 
             function emitNewExpression(node: NewExpression) {
                 write("new ");
-                emit(node.expression);
+                emitNode(node.expression);
                 if (node.arguments) {
                     write("(");
                     emitCommaList(node.arguments);
@@ -2679,9 +2679,9 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                emit(node.tag);
+                emitNode(node.tag);
                 write(" ");
-                emit(node.template);
+                emitNode(node.template);
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
@@ -2710,31 +2710,31 @@ module ts {
                         operand.kind !== SyntaxKind.NewExpression &&
                         !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                         !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
-                        emit(operand);
+                        emitNode(operand);
                         return;
                     }
                 }
                 write("(");
-                emit(node.expression);
+                emitNode(node.expression);
                 write(")");
             }
 
             function emitDeleteExpression(node: DeleteExpression) {
                 write(tokenToString(SyntaxKind.DeleteKeyword));
                 write(" ");
-                emit(node.expression);
+                emitNode(node.expression);
             }
 
             function emitVoidExpression(node: VoidExpression) {
                 write(tokenToString(SyntaxKind.VoidKeyword));
                 write(" ");
-                emit(node.expression);
+                emitNode(node.expression);
             }
 
             function emitTypeOfExpression(node: TypeOfExpression) {
                 write(tokenToString(SyntaxKind.TypeOfKeyword));
                 write(" ");
-                emit(node.expression);
+                emitNode(node.expression);
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -2760,11 +2760,11 @@ module ts {
                         write(" ");
                     }
                 }
-                emit(node.operand);
+                emitNode(node.operand);
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                emit(node.operand);
+                emitNode(node.operand);
                 write(tokenToString(node.operator));
             }
 
@@ -2774,20 +2774,20 @@ module ts {
                     emitDestructuring(node);
                 }
                 else {
-                    emit(node.left);
+                    emitNode(node.left);
                     if (node.operator !== SyntaxKind.CommaToken) write(" ");
                     write(tokenToString(node.operator));
                     write(" ");
-                    emit(node.right);
+                    emitNode(node.right);
                 }
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
-                emit(node.condition);
+                emitNode(node.condition);
                 write(" ? ");
-                emit(node.whenTrue);
+                emitNode(node.whenTrue);
                 write(" : ");
-                emit(node.whenFalse);
+                emitNode(node.whenFalse);
             }
 
             function isSingleLineBlock(node: Node) {
@@ -2825,12 +2825,12 @@ module ts {
             function emitEmbeddedStatement(node: Node) {
                 if (node.kind === SyntaxKind.Block) {
                     write(" ");
-                    emit(<Block>node);
+                    emitNode(<Block>node);
                 }
                 else {
                     increaseIndent();
                     writeLine();
-                    emit(node);
+                    emitNode(node);
                     decreaseIndent();
                 }
             }
@@ -2844,7 +2844,7 @@ module ts {
                 var endPos = emitToken(SyntaxKind.IfKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.expression);
+                emitNode(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
@@ -2852,7 +2852,7 @@ module ts {
                     emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
-                        emit(node.elseStatement);
+                        emitNode(node.elseStatement);
                     }
                     else {
                         emitEmbeddedStatement(node.elseStatement);
@@ -2870,13 +2870,13 @@ module ts {
                     writeLine();
                 }
                 write("while (");
-                emit(node.expression);
+                emitNode(node.expression);
                 write(");");
             }
 
             function emitWhileStatement(node: WhileStatement) {
                 write("while (");
-                emit(node.expression);
+                emitNode(node.expression);
                 write(")");
                 emitEmbeddedStatement(node.statement);
             }
@@ -2901,7 +2901,7 @@ module ts {
                     emitCommaList(variableDeclarationList.declarations);
                 }
                 else if (node.initializer) {
-                    emit(node.initializer);
+                    emitNode(node.initializer);
                 }
                 write(";");
                 emitOptional(" ", node.condition);
@@ -2926,14 +2926,14 @@ module ts {
                             emitToken(SyntaxKind.VarKeyword, endPos);
                         }
                         write(" ");
-                        emit(decl);
+                        emitNode(decl);
                     }
                 }
                 else {
-                    emit(node.initializer);
+                    emitNode(node.initializer);
                 }
                 write(" in ");
-                emit(node.expression);
+                emitNode(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
@@ -2952,7 +2952,7 @@ module ts {
 
             function emitWithStatement(node: WhileStatement) {
                 write("with (");
-                emit(node.expression);
+                emitNode(node.expression);
                 write(")");
                 emitEmbeddedStatement(node.statement);
             }
@@ -2961,7 +2961,7 @@ module ts {
                 var endPos = emitToken(SyntaxKind.SwitchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.expression);
+                emitNode(node.expression);
                 endPos = emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 write(" ");
                 emitToken(SyntaxKind.OpenBraceToken, endPos);
@@ -2985,7 +2985,7 @@ module ts {
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
-                    emit((<CaseClause>node).expression);
+                    emitNode((<CaseClause>node).expression);
                     write(":");
                 }
                 else {
@@ -2993,7 +2993,7 @@ module ts {
                 }
                 if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
                     write(" ");
-                    emit(node.statements[0]);
+                    emitNode(node.statements[0]);
                 }
                 else {
                     increaseIndent();
@@ -3004,18 +3004,18 @@ module ts {
 
             function emitThrowStatement(node: ThrowStatement) {
                 write("throw ");
-                emit(node.expression);
+                emitNode(node.expression);
                 write(";");
             }
 
             function emitTryStatement(node: TryStatement) {
                 write("try ");
-                emit(node.tryBlock);
-                emit(node.catchClause);
+                emitNode(node.tryBlock);
+                emitNode(node.catchClause);
                 if (node.finallyBlock) {
                     writeLine();
                     write("finally ");
-                    emit(node.finallyBlock);
+                    emitNode(node.finallyBlock);
                 }
             }
 
@@ -3024,7 +3024,7 @@ module ts {
                 var endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.name);
+                emitNode(node.name);
                 emitToken(SyntaxKind.CloseParenToken, node.name.end);
                 write(" ");
                 emitBlock(node.block);
@@ -3036,9 +3036,9 @@ module ts {
             }
 
             function emitLabelledStatement(node: LabeledStatement) {
-                emit(node.label);
+                emitNode(node.label);
                 write(": ");
-                emit(node.statement);
+                emitNode(node.statement);
             }
 
             function getContainingModule(node: Node): ModuleDeclaration {
@@ -3049,14 +3049,16 @@ module ts {
             }
 
             function emitModuleMemberName(node: Declaration) {
+                emitLeadingComments(node.name);
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
                     write(container ? resolver.getLocalNameOfContainer(container) : "exports");
                     write(".");
                 }
-                emitNode(node.name);
+                emitJavaScriptWorker(node.name);
                 emitEnd(node.name);
+                emitTrailingComments(node.name);
             }
 
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
@@ -3079,10 +3081,10 @@ module ts {
                         emitModuleMemberName(<Declaration>name.parent);
                     }
                     else {
-                        emit(name);
+                        emitNode(name);
                     }
                     write(" = ");
-                    emit(value);
+                    emitNode(value);
                 }
 
                 function ensureIdentifier(expr: Expression): Expression {
@@ -3223,7 +3225,7 @@ module ts {
                         value = ensureIdentifier(value);
                         emitDestructuringAssignment(target, value);
                         write(", ");
-                        emit(value);
+                        emitNode(value);
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write(")");
                         }
@@ -3281,7 +3283,7 @@ module ts {
                         emitDestructuring(node);
                     }
                     else {
-                        emit(node.name);
+                        emitNode(node.name);
                         emitOptional(" = ", node.initializer);
                     }
                 }
@@ -3315,17 +3317,17 @@ module ts {
                             tempParameters = [];
                         }
                         tempParameters.push(name);
-                        emit(name);
+                        emitNode(name);
                     }
                     else {
-                        emit(node.name);
+                        emitNode(node.name);
                     }
                 }
                 else {
                     if (node.dotDotDotToken) {
                         write("...");
                     }
-                    emit(node.name);
+                    emitNode(node.name);
                     emitOptional(" = ", node.initializer);
                 }
             }
@@ -3343,9 +3345,10 @@ module ts {
                         }
                         else if (p.initializer) {
                             writeLine();
+                            emitLeadingComments(p);
                             emitStart(p);
                             write("if (");
-                            emitNode(p.name);
+                            emitJavaScriptWorker(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
@@ -3355,6 +3358,7 @@ module ts {
                             emitNode(p.initializer);
                             emitEnd(p);
                             write("; }");
+                            emitTrailingComments(p);
                         }
                     });
                 }
@@ -3390,7 +3394,7 @@ module ts {
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNode(restParam.name);
+                    emitJavaScriptWorker(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -3401,7 +3405,7 @@ module ts {
 
             function emitAccessor(node: AccessorDeclaration) {
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
-                emit(node.name);
+                emitNode(node.name);
                 emitSignatureAndBody(node);
             }
 
@@ -3426,7 +3430,7 @@ module ts {
                 }
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
-                    emit(node.name);
+                    emitNode(node.name);
                 }
                 emitSignatureAndBody(node);
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -3458,7 +3462,7 @@ module ts {
             function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
                 // Check whether the parameter list needs parentheses and preserve no-parenthesis
                 if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
-                    emit(node.parameters[0]);
+                    emitNode(node.parameters[0]);
                     return;
                 }
                 emitSignatureParameters(node);
@@ -3514,7 +3518,7 @@ module ts {
 
                             // Don't emit comments on this body.  We'll have already taken care of it above 
                             // when we called emitDetachedComments.
-                            emitNode(node.body, /*disableComments:*/ true);
+                            emitJavaScriptWorker(node.body);
                             emitEnd(node.body);
                             write(";");
                             emitTempDeclarations(/*newLine*/ false);
@@ -3531,7 +3535,9 @@ module ts {
                                 writeLine();
                                 emitLeadingComments(node.body);
                                 write("return ");
-                                emit(node.body, /*disableComments:*/ true);
+                                emitStart(node.body);
+                                emitJavaScriptWorker(node.body);
+                                emitEnd(node.body);
                                 write(";");
                                 emitTrailingComments(node.body);
                             }
@@ -3559,7 +3565,7 @@ module ts {
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emit(node.name);
+                    emitNode(node.name);
                     emitEnd(node);
                     write(";");
                 }
@@ -3590,10 +3596,10 @@ module ts {
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNode(param.name);
+                        emitJavaScriptWorker(param.name);
                         emitEnd(param.name);
                         write(" = ");
-                        emit(param.name);
+                        emitNode(param.name);
                         write(";");
                         emitEnd(param);
                     }
@@ -3603,7 +3609,7 @@ module ts {
             function emitMemberAccessForPropertyName(memberName: DeclarationName) {
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
-                    emitNode(memberName);
+                    emitJavaScriptWorker(memberName);
                     write("]");
                 }
                 else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
@@ -3611,7 +3617,7 @@ module ts {
                 }
                 else {
                     write(".");
-                    emitNode(memberName);
+                    emitJavaScriptWorker(memberName);
                 }
             }
 
@@ -3621,17 +3627,19 @@ module ts {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
+                        emitLeadingComments((<PropertyDeclaration>member).name);
                         emitStart((<PropertyDeclaration>member).name);
                         if (staticFlag) {
-                            emitNode(node.name);
+                            emitJavaScriptWorker(node.name);
                         }
                         else {
                             write("this");
                         }
                         emitMemberAccessForPropertyName((<PropertyDeclaration>member).name);
                         emitEnd((<PropertyDeclaration>member).name);
+                        emitTrailingComments((<PropertyDeclaration>member).name);
                         write(" = ");
-                        emit((<PropertyDeclaration>member).initializer);
+                        emitNode((<PropertyDeclaration>member).initializer);
                         write(";");
                         emitEnd(member);
                         emitTrailingComments(member);
@@ -3649,13 +3657,15 @@ module ts {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
+                        emitLeadingComments((<MethodDeclaration>member).name);
                         emitStart((<MethodDeclaration>member).name);
-                        emitNode(node.name);
+                        emitJavaScriptWorker(node.name);
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
+                        emitTrailingComments((<MethodDeclaration>member).name);
                         write(" = ");
                         emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
@@ -3671,7 +3681,7 @@ module ts {
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitNode(node.name);
+                            emitJavaScriptWorker(node.name);
                             if (!(member.flags & NodeFlags.Static)) {
                                 write(".prototype");
                             }
@@ -3717,7 +3727,7 @@ module ts {
 
             function emitClassDeclaration(node: ClassDeclaration) {
                 write("var ");
-                emit(node.name);
+                emitNode(node.name);
                 write(" = (function (");
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
@@ -3730,7 +3740,7 @@ module ts {
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emit(node.name);
+                    emitNode(node.name);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -3741,7 +3751,7 @@ module ts {
                 writeLine();
                 function emitClassReturnStatement() {
                     write("return ");
-                    emitNode(node.name);
+                    emitJavaScriptWorker(node.name);
                 }
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, emitClassReturnStatement);
                 write(";");
@@ -3752,7 +3762,7 @@ module ts {
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
-                    emit(baseTypeNode.typeName);
+                    emitNode(baseTypeNode.typeName);
                 }
                 write(");");
                 emitEnd(node);
@@ -3761,7 +3771,7 @@ module ts {
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emit(node.name);
+                    emitNode(node.name);
                     emitEnd(node);
                     write(";");
                 }
@@ -3786,7 +3796,7 @@ module ts {
                     }
                     emitStart(<Node>ctor || node);
                     write("function ");
-                    emit(node.name);
+                    emitNode(node.name);
                     emitSignatureParameters(ctor);
                     write(" {");
                     scopeEmitStart(node, "constructor");
@@ -3802,7 +3812,7 @@ module ts {
                             var superCall = findInitialSuperCall(ctor);
                             if (superCall) {
                                 writeLine();
-                                emit(superCall);
+                                emitNode(superCall);
                             }
                         }
                         emitParameterPropertyAssignments(ctor);
@@ -3857,7 +3867,7 @@ module ts {
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
-                    emit(node.name);
+                    emitNode(node.name);
                     emitEnd(node);
                     write(";");
                 }
@@ -3885,7 +3895,7 @@ module ts {
                     writeLine();
                     emitStart(node);
                     write("var ");
-                    emit(node.name);
+                    emitNode(node.name);
                     write(" = ");
                     emitModuleMemberName(node);
                     emitEnd(node);
@@ -3919,7 +3929,7 @@ module ts {
                 }
 
                 if (member.initializer) {
-                    emit(member.initializer);
+                    emitNode(member.initializer);
                 }
                 else {
                     write("undefined");
@@ -3947,7 +3957,7 @@ module ts {
 
                 emitStart(node);
                 write("var ");
-                emit(node.name);
+                emitNode(node.name);
                 write(";");
                 emitEnd(node);
                 writeLine();
@@ -3962,7 +3972,7 @@ module ts {
                     var saveTempVariables = tempVariables;
                     tempCount = 0;
                     tempVariables = undefined;
-                    emit(node.body);
+                    emitNode(node.body);
                     tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                 }
@@ -3972,7 +3982,7 @@ module ts {
                     scopeEmitStart(node);
                     emitCaptureThisForNodeIfNecessary(node);
                     writeLine();
-                    emit(node.body);
+                    emitNode(node.body);
                     decreaseIndent();
                     writeLine();
                     var moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
@@ -3981,7 +3991,7 @@ module ts {
                 }
                 write(")(");
                 if (node.flags & NodeFlags.Export) {
-                    emit(node.name);
+                    emitNode(node.name);
                     write(" = ");
                 }
                 emitModuleMemberName(node);
@@ -4009,7 +4019,7 @@ module ts {
                             emitStart(node);
                             emitModuleMemberName(node);
                             write(" = ");
-                            emit(node.name);
+                            emitNode(node.name);
                             write(";");
                             emitEnd(node);
                             emitTrailingComments(node);
@@ -4023,7 +4033,7 @@ module ts {
                         emitModuleMemberName(node);
                         write(" = ");
                         if (isInternalModuleImportDeclaration(node)) {
-                            emit(node.moduleReference);
+                            emitNode(node.moduleReference);
                         }
                         else {
                             var literal = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
@@ -4092,7 +4102,7 @@ module ts {
                 write("], function (require, exports");
                 forEach(imports, imp => {
                     write(", ");
-                    emit(imp.name);
+                    emitNode(imp.name);
                 });
                 forEach(node.amdDependencies, amdDependency => {
                     if (amdDependency.name) {
@@ -4146,7 +4156,7 @@ module ts {
                         if (startWithNewLine || i > 0) {
                             writeLine();
                         }
-                        emit(statements[i]);
+                        emitNode(statements[i]);
                     }
                     else {
                         // return index of the first non prologue directive
@@ -4198,7 +4208,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNode(node: Node, disableComments?:boolean): void {
+            function emitNode(node: Node): void {
                 if (!node) {
                     return;
                 }
@@ -4207,12 +4217,12 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                var emitComments = !disableComments && shouldEmitLeadingAndTrailingComments(node);
+                var emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node);
+                emitJavascript(node);
 
                 if (emitComments) {
                     emitTrailingComments(node);
@@ -4309,7 +4319,7 @@ module ts {
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
-                        return emit((<TypeAssertion>node).expression);
+                        return emitNode((<TypeAssertion>node).expression);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:

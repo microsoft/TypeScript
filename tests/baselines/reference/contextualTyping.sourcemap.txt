@@ -10,8 +10,7 @@ sourceFile:contextualTyping.ts
 -------------------------------------------------------------------
 >>>// CONTEXT: Class property declaration
 1 >
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >// DEFAULT INTERFACES
   >interface IFoo {
   >    n: number;
@@ -24,23 +23,23 @@ sourceFile:contextualTyping.ts
   >    foo: IFoo;
   >}
   >
-  >// CONTEXT: Class property declaration
   >
-2 >
-3 >// CONTEXT: Class property declaration
-1 >Emitted(1, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(1, 1) Source(13, 1) + SourceIndex(0)
-3 >Emitted(1, 39) Source(13, 39) + SourceIndex(0)
+2 >// CONTEXT: Class property declaration
+1 >Emitted(1, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(1, 39) Source(13, 39) + SourceIndex(0)
 ---
 >>>var C1T5 = (function () {
-1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^->
 1 >
-  >class 
-2 >    C1T5
-1 >Emitted(2, 5) Source(14, 7) + SourceIndex(0)
-2 >Emitted(2, 9) Source(14, 11) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >class 
+3 >    C1T5
+1 >Emitted(2, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(14, 7) + SourceIndex(0)
+3 >Emitted(2, 9) Source(14, 11) + SourceIndex(0)
 ---
 >>>    function C1T5() {
 1->^^^^
@@ -141,17 +140,13 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Module property declaration
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Module property declaration
   >
-2 >
-3 >// CONTEXT: Module property declaration
-1->Emitted(10, 1) Source(21, 1) + SourceIndex(0)
-2 >Emitted(10, 1) Source(20, 1) + SourceIndex(0)
-3 >Emitted(10, 40) Source(20, 40) + SourceIndex(0)
+2 >// CONTEXT: Module property declaration
+1->Emitted(10, 1) Source(20, 1) + SourceIndex(0)
+2 >Emitted(10, 40) Source(20, 40) + SourceIndex(0)
 ---
 >>>var C2T5;
 1 >
@@ -271,38 +266,37 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Variable declaration
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Variable declaration
   >
-2 >
-3 >// CONTEXT: Variable declaration
-1->Emitted(17, 1) Source(28, 1) + SourceIndex(0)
-2 >Emitted(17, 1) Source(27, 1) + SourceIndex(0)
-3 >Emitted(17, 33) Source(27, 33) + SourceIndex(0)
+2 >// CONTEXT: Variable declaration
+1->Emitted(17, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(17, 33) Source(27, 33) + SourceIndex(0)
 ---
 >>>var c3t1 = (function (s) {
-1 >^^^^
-2 >    ^^^^
-3 >        ^^^
-4 >           ^
-5 >            ^^^^^^^^^^
-6 >                      ^
 1 >
-  >var 
-2 >    c3t1
-3 >        : (s: string) => string = 
-4 >           (
-5 >            function(
-6 >                      s
-1 >Emitted(18, 5) Source(28, 5) + SourceIndex(0)
-2 >Emitted(18, 9) Source(28, 9) + SourceIndex(0)
-3 >Emitted(18, 12) Source(28, 35) + SourceIndex(0)
-4 >Emitted(18, 13) Source(28, 36) + SourceIndex(0)
-5 >Emitted(18, 23) Source(28, 45) + SourceIndex(0)
-6 >Emitted(18, 24) Source(28, 46) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^
+5 >           ^
+6 >            ^^^^^^^^^^
+7 >                      ^
+1 >
+  >
+2 >var 
+3 >    c3t1
+4 >        : (s: string) => string = 
+5 >           (
+6 >            function(
+7 >                      s
+1 >Emitted(18, 1) Source(28, 1) + SourceIndex(0)
+2 >Emitted(18, 5) Source(28, 5) + SourceIndex(0)
+3 >Emitted(18, 9) Source(28, 9) + SourceIndex(0)
+4 >Emitted(18, 12) Source(28, 35) + SourceIndex(0)
+5 >Emitted(18, 13) Source(28, 36) + SourceIndex(0)
+6 >Emitted(18, 23) Source(28, 45) + SourceIndex(0)
+7 >Emitted(18, 24) Source(28, 46) + SourceIndex(0)
 ---
 >>>    return s;
 1 >^^^^
@@ -995,27 +989,26 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Class property assignment
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Class property assignment
   >
-2 >
-3 >// CONTEXT: Class property assignment
-1->Emitted(56, 1) Source(56, 1) + SourceIndex(0)
-2 >Emitted(56, 1) Source(55, 1) + SourceIndex(0)
-3 >Emitted(56, 38) Source(55, 38) + SourceIndex(0)
+2 >// CONTEXT: Class property assignment
+1->Emitted(56, 1) Source(55, 1) + SourceIndex(0)
+2 >Emitted(56, 38) Source(55, 38) + SourceIndex(0)
 ---
 >>>var C4T5 = (function () {
-1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^->
 1 >
-  >class 
-2 >    C4T5
-1 >Emitted(57, 5) Source(56, 7) + SourceIndex(0)
-2 >Emitted(57, 9) Source(56, 11) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^
+4 >        ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >class 
+3 >    C4T5
+1 >Emitted(57, 1) Source(56, 1) + SourceIndex(0)
+2 >Emitted(57, 5) Source(56, 7) + SourceIndex(0)
+3 >Emitted(57, 9) Source(56, 11) + SourceIndex(0)
 ---
 >>>    function C4T5() {
 1->^^^^
@@ -1136,17 +1129,13 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Module property assignment
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Module property assignment
   >
-2 >
-3 >// CONTEXT: Module property assignment
-1->Emitted(65, 1) Source(66, 1) + SourceIndex(0)
-2 >Emitted(65, 1) Source(65, 1) + SourceIndex(0)
-3 >Emitted(65, 39) Source(65, 39) + SourceIndex(0)
+2 >// CONTEXT: Module property assignment
+1->Emitted(65, 1) Source(65, 1) + SourceIndex(0)
+2 >Emitted(65, 39) Source(65, 39) + SourceIndex(0)
 ---
 >>>var C5T5;
 1 >
@@ -1286,30 +1275,29 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Variable assignment
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Variable assignment
   >
-2 >
-3 >// CONTEXT: Variable assignment
-1->Emitted(73, 1) Source(74, 1) + SourceIndex(0)
-2 >Emitted(73, 1) Source(73, 1) + SourceIndex(0)
-3 >Emitted(73, 32) Source(73, 32) + SourceIndex(0)
+2 >// CONTEXT: Variable assignment
+1->Emitted(73, 1) Source(73, 1) + SourceIndex(0)
+2 >Emitted(73, 32) Source(73, 32) + SourceIndex(0)
 ---
 >>>var c6t5;
-1 >^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^^^^^^^^^^^^^->
 1 >
-  >var 
-2 >    c6t5: (n: number) => IFoo
-3 >        ;
-1 >Emitted(74, 5) Source(74, 5) + SourceIndex(0)
-2 >Emitted(74, 9) Source(74, 30) + SourceIndex(0)
-3 >Emitted(74, 10) Source(74, 31) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c6t5: (n: number) => IFoo
+4 >        ;
+1 >Emitted(74, 1) Source(74, 1) + SourceIndex(0)
+2 >Emitted(74, 5) Source(74, 5) + SourceIndex(0)
+3 >Emitted(74, 9) Source(74, 30) + SourceIndex(0)
+4 >Emitted(74, 10) Source(74, 31) + SourceIndex(0)
 ---
 >>>c6t5 = function (n) {
 1->
@@ -1366,30 +1354,29 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Array index assignment
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Array index assignment
   >
-2 >
-3 >// CONTEXT: Array index assignment
-1->Emitted(78, 1) Source(78, 1) + SourceIndex(0)
-2 >Emitted(78, 1) Source(77, 1) + SourceIndex(0)
-3 >Emitted(78, 35) Source(77, 35) + SourceIndex(0)
+2 >// CONTEXT: Array index assignment
+1->Emitted(78, 1) Source(77, 1) + SourceIndex(0)
+2 >Emitted(78, 35) Source(77, 35) + SourceIndex(0)
 ---
 >>>var c7t2;
-1 >^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^^^^^^^^^^^^^->
 1 >
-  >var 
-2 >    c7t2: IFoo[]
-3 >        ;
-1 >Emitted(79, 5) Source(78, 5) + SourceIndex(0)
-2 >Emitted(79, 9) Source(78, 17) + SourceIndex(0)
-3 >Emitted(79, 10) Source(78, 18) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^
+4 >        ^
+5 >         ^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c7t2: IFoo[]
+4 >        ;
+1 >Emitted(79, 1) Source(78, 1) + SourceIndex(0)
+2 >Emitted(79, 5) Source(78, 5) + SourceIndex(0)
+3 >Emitted(79, 9) Source(78, 17) + SourceIndex(0)
+4 >Emitted(79, 10) Source(78, 18) + SourceIndex(0)
 ---
 >>>c7t2[0] = ({ n: 1 });
 1->
@@ -2358,30 +2345,29 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Return statement
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Return statement
   >
-2 >
-3 >// CONTEXT: Return statement
-1->Emitted(126, 1) Source(152, 1) + SourceIndex(0)
-2 >Emitted(126, 1) Source(151, 1) + SourceIndex(0)
-3 >Emitted(126, 29) Source(151, 29) + SourceIndex(0)
+2 >// CONTEXT: Return statement
+1->Emitted(126, 1) Source(151, 1) + SourceIndex(0)
+2 >Emitted(126, 29) Source(151, 29) + SourceIndex(0)
 ---
 >>>var c10t5 = function () {
-1 >^^^^
-2 >    ^^^^^
-3 >         ^^^
-4 >            ^^^^^^^^^^^^^^->
 1 >
-  >var 
-2 >    c10t5
-3 >         : () => (n: number) => IFoo = 
-1 >Emitted(127, 5) Source(152, 5) + SourceIndex(0)
-2 >Emitted(127, 10) Source(152, 10) + SourceIndex(0)
-3 >Emitted(127, 13) Source(152, 40) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c10t5
+4 >         : () => (n: number) => IFoo = 
+1 >Emitted(127, 1) Source(152, 1) + SourceIndex(0)
+2 >Emitted(127, 5) Source(152, 5) + SourceIndex(0)
+3 >Emitted(127, 10) Source(152, 10) + SourceIndex(0)
+4 >Emitted(127, 13) Source(152, 40) + SourceIndex(0)
 ---
 >>>    return function (n) {
 1->^^^^
@@ -2448,28 +2434,27 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Newing a class
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                          ^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^->
 1->
   >
-  >// CONTEXT: Newing a class
   >
-2 >
-3 >// CONTEXT: Newing a class
-1->Emitted(132, 1) Source(155, 1) + SourceIndex(0)
-2 >Emitted(132, 1) Source(154, 1) + SourceIndex(0)
-3 >Emitted(132, 27) Source(154, 27) + SourceIndex(0)
+2 >// CONTEXT: Newing a class
+1->Emitted(132, 1) Source(154, 1) + SourceIndex(0)
+2 >Emitted(132, 27) Source(154, 27) + SourceIndex(0)
 ---
 >>>var C11t5 = (function () {
-1->^^^^
-2 >    ^^^^^
-3 >         ^^^^^^^^^^^^^^^->
 1->
-  >class 
-2 >    C11t5
-1->Emitted(133, 5) Source(155, 7) + SourceIndex(0)
-2 >Emitted(133, 10) Source(155, 12) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^^^^^^^^^^^^->
+1->
+  >
+2 >class 
+3 >    C11t5
+1->Emitted(133, 1) Source(155, 1) + SourceIndex(0)
+2 >Emitted(133, 5) Source(155, 7) + SourceIndex(0)
+3 >Emitted(133, 10) Source(155, 12) + SourceIndex(0)
 ---
 >>>    function C11t5(f) {
 1->^^^^
@@ -2598,38 +2583,37 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Type annotated expression
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-  >// CONTEXT: Type annotated expression
   >
-2 >
-3 >// CONTEXT: Type annotated expression
-1->Emitted(142, 1) Source(159, 1) + SourceIndex(0)
-2 >Emitted(142, 1) Source(158, 1) + SourceIndex(0)
-3 >Emitted(142, 38) Source(158, 38) + SourceIndex(0)
+2 >// CONTEXT: Type annotated expression
+1->Emitted(142, 1) Source(158, 1) + SourceIndex(0)
+2 >Emitted(142, 38) Source(158, 38) + SourceIndex(0)
 ---
 >>>var c12t1 = (function (s) {
-1 >^^^^
-2 >    ^^^^^
-3 >         ^^^
-4 >            ^
-5 >             ^^^^^^^^^^
-6 >                       ^
 1 >
-  >var 
-2 >    c12t1
-3 >          = <(s: string) => string> 
-4 >            (
-5 >             function(
-6 >                       s
-1 >Emitted(143, 5) Source(159, 5) + SourceIndex(0)
-2 >Emitted(143, 10) Source(159, 10) + SourceIndex(0)
-3 >Emitted(143, 13) Source(159, 37) + SourceIndex(0)
-4 >Emitted(143, 14) Source(159, 38) + SourceIndex(0)
-5 >Emitted(143, 24) Source(159, 47) + SourceIndex(0)
-6 >Emitted(143, 25) Source(159, 48) + SourceIndex(0)
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^
+6 >             ^^^^^^^^^^
+7 >                       ^
+1 >
+  >
+2 >var 
+3 >    c12t1
+4 >          = <(s: string) => string> 
+5 >            (
+6 >             function(
+7 >                       s
+1 >Emitted(143, 1) Source(159, 1) + SourceIndex(0)
+2 >Emitted(143, 5) Source(159, 5) + SourceIndex(0)
+3 >Emitted(143, 10) Source(159, 10) + SourceIndex(0)
+4 >Emitted(143, 13) Source(159, 37) + SourceIndex(0)
+5 >Emitted(143, 14) Source(159, 38) + SourceIndex(0)
+6 >Emitted(143, 24) Source(159, 47) + SourceIndex(0)
+7 >Emitted(143, 25) Source(159, 48) + SourceIndex(0)
 ---
 >>>    return s;
 1 >^^^^
