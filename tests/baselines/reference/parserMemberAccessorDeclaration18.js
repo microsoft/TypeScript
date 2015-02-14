@@ -8,12 +8,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {
-        set: function () {
-            var a = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                a[_i - 0] = arguments[_i];
-            }
-        },
+        set: function () { },
         enumerable: true,
         configurable: true
     });

@@ -75,25 +75,21 @@ var y;
 var Base = (function () {
     function Base(a) {
     }
-    Base.prototype.b = function (a) {
-    };
+    Base.prototype.b = function (a) { };
     Object.defineProperty(Base.prototype, "c", {
         get: function () {
             return x;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
-    Base.s = function (a) {
-    };
+    Base.s = function (a) { };
     Object.defineProperty(Base, "t", {
         get: function () {
             return x;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -105,25 +101,21 @@ var Derived = (function (_super) {
     function Derived(a) {
         _super.call(this, a);
     }
-    Derived.prototype.b = function (a) {
-    };
+    Derived.prototype.b = function (a) { };
     Object.defineProperty(Derived.prototype, "c", {
         get: function () {
             return y;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
-    Derived.s = function (a) {
-    };
+    Derived.s = function (a) { };
     Object.defineProperty(Derived, "t", {
         get: function () {
             return y;
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });

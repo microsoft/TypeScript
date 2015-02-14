@@ -18,18 +18,14 @@ class D {
 var C = (function () {
     function C(name, ...rest) {
     }
-    C.prototype.bar = function (...rest) {
-    };
-    C.prototype.foo = function (x, ...rest) {
-    };
+    C.prototype.bar = function (...rest) { };
+    C.prototype.foo = function (x, ...rest) { };
     return C;
 })();
 var D = (function () {
     function D(...rest) {
     }
-    D.prototype.bar = function (...rest) {
-    };
-    D.prototype.foo = function (x, ...rest) {
-    };
+    D.prototype.bar = function (...rest) { };
+    D.prototype.foo = function (x, ...rest) { };
     return D;
 })();

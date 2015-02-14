@@ -92,8 +92,7 @@ var M;
 //'this' as type parameter constraint
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
-function genericFunc(x) {
-}
+function genericFunc(x) { }
 genericFunc < this > (undefined); // Should be an error
 var ErrClass3 = (function () {
     function ErrClass3() {

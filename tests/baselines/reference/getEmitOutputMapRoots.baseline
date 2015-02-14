@@ -1,4 +1,4 @@
-EmitOutputStatus : Succeeded
+EmitSkipped: false
 FileName : declSingleFile.js.map
 {"version":3,"file":"declSingleFile.js","sourceRoot":"","sources":["../tests/cases/fourslash/inputFile.ts"],"names":["M","M.constructor"],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,IAAM,CAAC;IAAPA,SAAMA,CAACA;IAGPC,CAACA;IAADD,QAACA;AAADA,CAACA,AAHD,IAGC"}FileName : declSingleFile.js
 var x = 109;

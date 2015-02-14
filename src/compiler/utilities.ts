@@ -25,13 +25,12 @@ module ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
-        writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -164,7 +163,7 @@ module ts {
     export function nodeIsGenerated(node: Node) {
         return node && node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos < 0;
     }
-
+    
     export function nodeIsMissingOrGenerated(node: Node) {
         return nodeIsMissing(node) || nodeIsGenerated(node);
     }
@@ -235,12 +234,19 @@ module ts {
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
-        return flattenDiagnosticChain(file, start, length, messageChain, newLine);
+        return {
+            file,
+            start,
+            length,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText
+        };
     }
 
     export function getErrorSpanForNode(node: Node): Node {
@@ -651,7 +657,7 @@ module ts {
                 return true;
             default:
                 return isLeftHandSideExpression(node);
-        }
+            }
     }
 
     export function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
@@ -868,8 +874,8 @@ module ts {
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ParenthesizedExpression:
                     return false;
-            }
         }
+    }
 
         return !isLeftHandSideExpression(expression);
     }
@@ -1021,21 +1027,6 @@ module ts {
                 return true;
         }
         return false;
-    }
-
-    export function createEmitHostFromProgram(program: Program): EmitHost {
-        var compilerHost = program.getCompilerHost();
-        return {
-            getCanonicalFileName: compilerHost.getCanonicalFileName,
-            getCommonSourceDirectory: program.getCommonSourceDirectory,
-            getCompilerOptions: program.getCompilerOptions,
-            getCurrentDirectory: compilerHost.getCurrentDirectory,
-            getNewLine: compilerHost.getNewLine,
-            getSourceFile: program.getSourceFile,
-            getSourceFiles: program.getSourceFiles,
-            isEmitBlocked: program.isEmitBlocked,
-            writeFile: compilerHost.writeFile,
-        };
     }
 
     export function textSpanEnd(span: TextSpan) {
@@ -1247,6 +1238,86 @@ module ts {
         }
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+    }
+
+    // @internal
+    export function createDiagnosticCollection(): DiagnosticCollection {
+        var nonFileDiagnostics: Diagnostic[] = [];
+        var fileDiagnostics: Map<Diagnostic[]> = {};
+
+        var diagnosticsModified = false;
+        var modificationCount = 0;
+
+        return {
+            add,
+            getGlobalDiagnostics,
+            getDiagnostics,
+            getModificationCount
+        };
+
+        function getModificationCount() {
+            return modificationCount;
+        }
+
+        function add(diagnostic: Diagnostic): void {
+            var diagnostics: Diagnostic[];
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                if (!diagnostics) {
+                    diagnostics = [];
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                }
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+
+            diagnostics.push(diagnostic);
+            diagnosticsModified = true;
+            modificationCount++;
+        }
+
+        function getGlobalDiagnostics(): Diagnostic[] {
+            sortAndDeduplicate();
+            return nonFileDiagnostics;
+        }
+
+        function getDiagnostics(fileName?: string): Diagnostic[] {
+            sortAndDeduplicate();
+            if (fileName) {
+                return fileDiagnostics[fileName] || [];
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            function pushDiagnostic(d: Diagnostic) {
+                allDiagnostics.push(d);
+            }
+
+            forEach(nonFileDiagnostics, pushDiagnostic);
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    forEach(fileDiagnostics[key], pushDiagnostic);
+                }
+            }
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
+        function sortAndDeduplicate() {
+            if (!diagnosticsModified) {
+                return;
+            }
+
+            diagnosticsModified = false;
+            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+                }
+            }
+        }
     }
 
     export function reportUnexpectedNode(node: Node): void {

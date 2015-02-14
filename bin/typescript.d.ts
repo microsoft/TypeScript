@@ -676,7 +676,7 @@ declare module "typescript" {
         exportName: Identifier;
     }
     interface FileReference extends TextRange {
-        filename: string;
+        fileName: string;
     }
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
@@ -684,42 +684,46 @@ declare module "typescript" {
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
-        filename: string;
+        fileName: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-        amdDependencies: string[];
+        amdDependencies: {
+            path: string;
+            name: string;
+        }[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        referenceDiagnostics: Diagnostic[];
-        parseDiagnostics: Diagnostic[];
-        getSyntacticDiagnostics(): Diagnostic[];
-        semanticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node;
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
+    }
+    interface WriteFileCallback {
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
     interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        getCompilerHost(): CompilerHost;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.
+         *
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
     interface SourceMapSpan {
         emittedLine: number;
@@ -740,33 +744,22 @@ declare module "typescript" {
         sourceMapMappings: string;
         sourceMapDecodedMappings: SourceMapSpan[];
     }
-    enum EmitReturnStatus {
-        Succeeded = 0,
-        AllOutputGenerationSkipped = 1,
-        JSGeneratedWithSemanticErrors = 2,
-        DeclarationGenerationSkipped = 3,
-        EmitErrorsEncountered = 4,
-        CompilerOptionsErrors = 5,
+    enum ExitStatus {
+        Success = 0,
+        DiagnosticsPresent_OutputsSkipped = 1,
+        DiagnosticsPresent_OutputsGenerated = 2,
     }
     interface EmitResult {
-        emitResultStatus: EmitReturnStatus;
+        emitSkipped: boolean;
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];
     }
     interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
-        getCompilerHost(): CompilerHost;
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
     interface TypeChecker {
-        getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
-        getNodeCount(): number;
-        getIdentifierCount(): number;
-        getSymbolCount(): number;
-        getTypeCount(): number;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -790,7 +783,7 @@ declare module "typescript" {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        getEnumMemberValue(node: EnumMember): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
@@ -828,6 +821,7 @@ declare module "typescript" {
         WriteOwnNameForAnyLike = 16,
         WriteTypeArgumentsOfSignature = 32,
         InElementType = 64,
+        UseFullyQualifiedType = 128,
     }
     const enum SymbolFormatFlags {
         None = 0,
@@ -855,15 +849,13 @@ declare module "typescript" {
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
-        getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
-        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
     }
     const enum SymbolFlags {
@@ -1099,7 +1091,6 @@ declare module "typescript" {
         key: string;
         category: DiagnosticCategory;
         code: number;
-        isEarly?: boolean;
     }
     interface DiagnosticMessageChain {
         messageText: string;
@@ -1111,13 +1102,9 @@ declare module "typescript" {
         file: SourceFile;
         start: number;
         length: number;
-        messageText: string;
+        messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
     }
     enum DiagnosticCategory {
         Warning = 0,
@@ -1154,6 +1141,7 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1173,7 +1161,7 @@ declare module "typescript" {
     }
     interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
     interface CommandLineOption {
@@ -1184,6 +1172,7 @@ declare module "typescript" {
         description?: DiagnosticMessage;
         paramType?: DiagnosticMessage;
         error?: DiagnosticMessage;
+        experimental?: boolean;
     }
     const enum CharacterCodes {
         nullCharacter = 0,
@@ -1314,10 +1303,10 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
     }
     interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken?(): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
@@ -1358,15 +1347,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
-    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getLineStarts(sourceFile: SourceFile): number[];
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function positionToLineAndCharacter(text: string, pos: number): {
-        line: number;
-        character: number;
-    };
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1382,8 +1370,9 @@ declare module "typescript" {
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function isLeftHandSideExpression(expr: Expression): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
 }
@@ -1392,7 +1381,9 @@ declare module "typescript" {
 }
 declare module "typescript" {
     function createCompilerHost(options: CompilerOptions): CompilerHost;
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
+    function getPreEmitDiagnostics(program: Program): Diagnostic[];
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+    function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {
     var servicesVersion: string;
@@ -1437,11 +1428,14 @@ declare module "typescript" {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
-        isOpen: boolean;
         version: string;
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -1453,12 +1447,6 @@ declare module "typescript" {
         getText(start: number, end: number): string;
         /** Gets the length of this script snapshot. */
         getLength(): number;
-        /**
-         * This call returns the array containing the start position of every line.
-         * i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
-         * always determine this (albeit in a more expensive manner).
-         */
-        getLineStartPositions(): number[];
         /**
          * Gets the TextChangeRange that describe how the text changed between this text and
          * an older version.  This information is used by the incremental parser to determine
@@ -1476,22 +1464,19 @@ declare module "typescript" {
         importedFiles: FileReference[];
         isLibFile: boolean;
     }
-    interface Logger {
-        log(s: string): void;
-        trace(s: string): void;
-        error(s: string): void;
-    }
-    interface LanguageServiceHost extends Logger {
+    interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
-        getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getDefaultLibFileName(options: CompilerOptions): string;
+        log?(s: string): void;
+        trace?(s: string): void;
+        error?(s: string): void;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -1521,7 +1506,8 @@ declare module "typescript" {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
         getEmitOutput(fileName: string): EmitOutput;
-        getSourceFile(filename: string): SourceFile;
+        getProgram(): Program;
+        getSourceFile(fileName: string): SourceFile;
         dispose(): void;
     }
     interface ClassifiedSpan {
@@ -1671,6 +1657,7 @@ declare module "typescript" {
     }
     interface CompletionInfo {
         isMemberCompletion: boolean;
+        isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
     interface CompletionEntry {
@@ -1700,7 +1687,7 @@ declare module "typescript" {
     }
     interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputStatus: EmitReturnStatus;
+        emitSkipped: boolean;
     }
     const enum OutputFileType {
         JavaScript = 0,
@@ -1740,10 +1727,68 @@ declare module "typescript" {
     interface Classifier {
         getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
     }
+    /**
+      * The document registry represents a store of SourceFile objects that can be shared between
+      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+      * of files in the context.
+      * SourceFile objects account for most of the memory usage by the language service. Sharing
+      * the same DocumentRegistry instance between different instances of LanguageService allow
+      * for more efficient memory utilization since all projects will share at least the library
+      * file (lib.d.ts).
+      *
+      * A more advanced use of the document registry is to serialize sourceFile objects to disk
+      * and re-hydrate them when needed.
+      *
+      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
+      * to all subsequent createLanguageService calls.
+      */
     interface DocumentRegistry {
-        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean): SourceFile;
-        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
-        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
+        /**
+          * Request a stored SourceFile with a given fileName and compilationSettings.
+          * The first call to acquire will call createLanguageServiceSourceFile to generate
+          * the SourceFile if was not found in the registry.
+          *
+          * @param fileName The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          */
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+        /**
+          * Request an updated version of an already existing SourceFile with a given fileName
+          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * to get an updated SourceFile.
+          *
+          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
+          * registry originally.
+          *
+          * @param sourceFile The original sourceFile object to update
+          * @param fileName The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
+          * was not found in the registry and a new one was created.
+          */
+        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
+        /**
+          * Informs the DocumentRegistry that a file is not needed any longer.
+          *
+          * Note: It is not allowed to call release on a SourceFile that was not acquired from
+          * this registry originally.
+          *
+          * @param fileName The name of the file to be released
+          * @param compilationSettings The compilation settings used to acquire the file
+          */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
     }
     class ScriptElementKind {
         static unknown: string;
@@ -1814,11 +1859,17 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
-    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
     var disableIncrementalParsing: boolean;
-    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
+    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
-    function createClassifier(host: Logger): Classifier;
+    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry): LanguageService;
+    function createClassifier(): Classifier;
+    /**
+      * Get the path of the default library file (lib.d.ts) as distributed with the typescript
+      * node package.
+      * The functionality is not supported if the ts module is consumed outside of a node module.
+      */
+    function getDefaultLibFilePath(options: CompilerOptions): string;
 }

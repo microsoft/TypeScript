@@ -48,8 +48,7 @@ var C2 = (function () {
     function C2() {
     }
     Object.defineProperty(C2.prototype, "getset1", {
-        set: function (baz) {
-        },
+        set: function (baz) { },
         enumerable: true,
         configurable: true
     });
@@ -62,8 +61,7 @@ var C3 = (function () {
         get: function () {
             return 1;
         },
-        set: function (baz) {
-        },
+        set: function (baz) { },
         enumerable: true,
         configurable: true
     });
@@ -86,8 +84,7 @@ var C5 = (function () {
     function C5() {
     }
     Object.defineProperty(C5.prototype, "getset1", {
-        set: function (baz) {
-        },
+        set: function (baz) { },
         enumerable: true,
         configurable: true
     });
@@ -101,8 +98,7 @@ var C6 = (function () {
             var x;
             return x;
         },
-        set: function (baz) {
-        },
+        set: function (baz) { },
         enumerable: true,
         configurable: true
     });

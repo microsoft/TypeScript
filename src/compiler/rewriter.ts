@@ -320,9 +320,8 @@ module ts {
     }
 
     export module SpreadElementRewriter {
-        export function rewrite(node: ArrayLiteralExpression): LeftHandSideExpression {
+        export function rewrite(elements: NodeArray<Expression>): LeftHandSideExpression {
             var segments: Expression[];
-            var elements = node.elements;
             var length = elements.length;
             var start = 0;
 
@@ -341,7 +340,7 @@ module ts {
             }
 
             if (!segments) {
-                return node;
+                return undefined;
             }
 
             if (start < length) {
@@ -355,7 +354,7 @@ module ts {
 
             var head = Factory.makeLeftHandSideExpression(segments.shift());
             var concatExpression = Factory.createPropertyAccessExpression(head, Factory.createIdentifier("concat"));
-            var callExpression = Factory.createCallExpression(concatExpression, segments, node);
+            var callExpression = Factory.createCallExpression(concatExpression, segments);
             return callExpression;
         }
     }
@@ -556,8 +555,8 @@ module ts {
 
         function visitArrayLiteralExpression(node: ArrayLiteralExpression, state: RewriterState): LeftHandSideExpression {
             if (hasAwaitOrYield(node)) {
-                var rewritten = SpreadElementRewriter.rewrite(node);
-                if (rewritten !== node) {
+                var rewritten = SpreadElementRewriter.rewrite(node.elements);
+                if (rewritten) {
                     return Visitor.visit(rewritten, visitNode, state);
                 }
                 return Factory.updateArrayLiteralExpression(node, Visitor.visitNodes(node.elements, visitNode, state, hasAwaitOrYield, cacheExpression));

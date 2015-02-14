@@ -16,8 +16,7 @@ var foo = (function () {
         configurable: true
     });
     Object.defineProperty(foo, "Bar", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

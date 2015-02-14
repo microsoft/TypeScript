@@ -12,10 +12,12 @@ class TypeWriterWalker {
 
     private checker: ts.TypeChecker;
 
-    constructor(private program: ts.Program) {
+    constructor(private program: ts.Program, fullTypeCheck: boolean) {
         // Consider getting both the diagnostics checker and the non-diagnostics checker to verify 
         // they are consistent.
-        this.checker = program.getTypeChecker(/*produceDiagnostics:*/ true);
+        this.checker = fullTypeCheck
+            ? program.getDiagnosticsProducingTypeChecker()
+            : program.getTypeChecker();
     }
 
     public getTypes(fileName: string): TypeWriterResult[] {

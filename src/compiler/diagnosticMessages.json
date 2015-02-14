@@ -1295,6 +1295,10 @@
         "category": "Error",
         "code": 2503
     },
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 2468
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1600,6 +1604,14 @@
         "category": "Error",
         "code": 4088
     },
+    "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
+        "category": "Error",
+        "code": 4089
+    },
+    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+        "category": "Error",
+        "code": 4090
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1896,6 +1908,10 @@
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
+    },
+    "You cannot rename elements that are defined in the standard TypeScript library.": {
+        "category": "Error",
+        "code": 8001
     },
     "'yield' expressions are not currently supported.": {
         "category": "Error",

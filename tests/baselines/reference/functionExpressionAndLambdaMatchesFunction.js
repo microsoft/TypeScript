@@ -15,8 +15,7 @@ var CDoc = (function () {
         function doSomething(a) {
         }
         doSomething(function () { return undefined; });
-        doSomething(function () {
-        });
+        doSomething(function () { });
     }
     return CDoc;
 })();

@@ -8,21 +8,11 @@ foo(() => true);
 foo(() => { return false; });
 
 //// [emitArrowFunction.js]
-var f1 = function () {
-};
-var f2 = function (x, y) {
-};
-var f3 = function (x, y) {
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
-};
-var f4 = function (x, y, z) {
-    if (z === void 0) { z = 10; }
-};
-function foo(func) {
-}
+var f1 = function () { };
+var f2 = function (x, y) { };
+var f3 = function (x, y) { };
+var f4 = function (x, y, z) { };
+function foo(func) { }
 foo(function () { return true; });
 foo(function () {
     return false;

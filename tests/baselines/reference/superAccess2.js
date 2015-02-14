@@ -34,10 +34,8 @@ var __extends = this.__extends || function (d, b) {
 var P = (function () {
     function P() {
     }
-    P.prototype.x = function () {
-    };
-    P.y = function () {
-    };
+    P.prototype.x = function () { };
+    P.y = function () { };
     return P;
 })();
 var Q = (function (_super) {

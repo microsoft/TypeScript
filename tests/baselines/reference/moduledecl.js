@@ -376,3 +376,137 @@ var m3cVar = new mAmbient.m3.C();
 var m3aVar = mAmbient.m3.aVar;
 var m3bB;
 var m3eVar;
+
+
+//// [moduledecl.d.ts]
+declare module a {
+}
+declare module b.a {
+}
+declare module c.a.b {
+}
+declare module mImport {
+}
+declare module m0 {
+}
+declare module m1 {
+    function f1(): void;
+    function f2(s: string): any;
+    function f2(n: number): any;
+    class c1 {
+        n: any;
+        n2: number;
+        private n3;
+        private n4;
+        a: () => string;
+        private b;
+        private static s1;
+        static s2: any;
+        d(): string;
+        e: {
+            x: number;
+            y: string;
+        };
+        constructor(n: any, n2: number, n3: any, n4: string);
+    }
+    interface i1 {
+        (): Object;
+        [n: number]: c1;
+    }
+}
+declare module m {
+    module m2 {
+        var b: number;
+    }
+    module m3 {
+        var c: number;
+    }
+}
+declare module m {
+    module m25 {
+        module m5 {
+            var c: number;
+        }
+    }
+}
+declare module m13 {
+    module m4 {
+        module m2 {
+            module m3 {
+                var c: number;
+            }
+        }
+        function f(): number;
+    }
+}
+declare module m4 {
+    var b: any;
+}
+declare module m5 {
+    var c: any;
+}
+declare module m43 {
+    var b: any;
+}
+declare module m55 {
+    var c: any;
+}
+declare module "m3" {
+    var b: number;
+}
+declare module exportTests {
+    class C1_public {
+        private f2();
+        f3(): string;
+    }
+    class C3_public {
+        private getC2_private();
+        private setC2_private(arg);
+        private c2;
+        getC1_public(): C1_public;
+        setC1_public(arg: C1_public): void;
+        c1: C1_public;
+    }
+}
+declare module mAmbient {
+    class C {
+        myProp: number;
+    }
+    function foo(): C;
+    var aVar: C;
+    interface B {
+        x: number;
+        y: C;
+    }
+    enum e {
+        x,
+        y,
+        z,
+    }
+    module m3 {
+        class C {
+            myProp: number;
+        }
+        function foo(): C;
+        var aVar: C;
+        interface B {
+            x: number;
+            y: C;
+        }
+        enum e {
+            x,
+            y,
+            z,
+        }
+    }
+}
+declare function foo(): mAmbient.C;
+declare var cVar: mAmbient.C;
+declare var aVar: mAmbient.C;
+declare var bB: mAmbient.B;
+declare var eVar: mAmbient.e;
+declare function m3foo(): mAmbient.m3.C;
+declare var m3cVar: mAmbient.m3.C;
+declare var m3aVar: mAmbient.m3.C;
+declare var m3bB: mAmbient.m3.B;
+declare var m3eVar: mAmbient.m3.e;

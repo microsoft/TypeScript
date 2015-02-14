@@ -126,13 +126,10 @@ var f17 = { a: 0, get b() {
 // Get and set accessor with mismatched type annotations
 var g1 = { get a() {
     return 4;
-}, set a(n) {
-} };
+}, set a(n) { } };
 var g2 = { get a() {
     return 4;
-}, set a(n) {
-} };
+}, set a(n) { } };
 var g3 = { get a() {
     return undefined;
-}, set a(n) {
-} };
+}, set a(n) { } };

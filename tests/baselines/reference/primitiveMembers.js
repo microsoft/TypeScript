@@ -57,8 +57,7 @@ var n3 = 5 || {};
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.bar = function () {
-    };
+    baz.prototype.bar = function () { };
     return baz;
 })();
 var foo = (function (_super) {

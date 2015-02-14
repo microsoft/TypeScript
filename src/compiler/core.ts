@@ -118,6 +118,12 @@ module ts {
         return result;
     }
 
+    export function addRange<T>(to: T[], from: T[]): void {
+        for (var i = 0, n = from.length; i < n; i++) {
+            to.push(from[i]);
+        }
+    } 
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
@@ -325,38 +331,6 @@ module ts {
         return headChain;
     }
 
-    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
-        Debug.assert(start >= 0, "start must be non-negative, is " + start);
-        Debug.assert(length >= 0, "length must be non-negative, is " + length);
-
-        var code = diagnosticChain.code;
-        var category = diagnosticChain.category;
-        var messageText = "";
-
-        var indent = 0;
-        while (diagnosticChain) {
-            if (indent) {
-                messageText += newLine;
-                
-                for (var i = 0; i < indent; i++) {
-                    messageText += "  ";
-                }
-            }
-            messageText += diagnosticChain.messageText;
-            indent++;
-            diagnosticChain = diagnosticChain.next;
-        }
-
-        return {
-            file,
-            start,
-            length,
-            code,
-            category,
-            messageText
-        };
-    }
-
     export function compareValues<T>(a: T, b: T): Comparison {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
@@ -368,13 +342,41 @@ module ts {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
 
-    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number {
+    export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
-            compareValues(d1.messageText, d2.messageText) ||
-            0;
+            compareMessageText(d1.messageText, d2.messageText) ||
+            Comparison.EqualTo;
+    }
+
+    function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
+        while (text1 && text2) {
+            // We still have both chains.
+            var string1 = typeof text1 === "string" ? text1 : text1.messageText;
+            var string2 = typeof text2 === "string" ? text2 : text2.messageText;
+
+            var res = compareValues(string1, string2);
+            if (res) {
+                return res;
+            }
+
+            text1 = typeof text1 === "string" ? undefined : text1.next;
+            text2 = typeof text2 === "string" ? undefined : text2.next;
+        }
+
+        if (!text1 && !text2) {
+            // if the chains are done, then these messages are the same.
+            return Comparison.EqualTo;
+        }
+
+        // We still have one chain remaining.  The shorter chain should come first.
+        return text1 ? Comparison.GreaterThan : Comparison.LessThan;
+    }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[]{
+        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 
     export function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {

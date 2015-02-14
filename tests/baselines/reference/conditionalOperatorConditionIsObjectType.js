@@ -77,8 +77,7 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
-function foo() {
-}
+function foo() { }
 ;
 var C = (function () {
     function C() {

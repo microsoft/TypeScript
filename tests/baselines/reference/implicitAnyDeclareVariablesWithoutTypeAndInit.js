@@ -14,8 +14,7 @@ var x1: any; var y1 = new x1;
 //// [implicitAnyDeclareVariablesWithoutTypeAndInit.js]
 // this should be an error
 var x; // error at "x"
-function func(k) {
-}
+function func(k) { }
 ; //error at "k"
 func(x);
 // this shouldn't be an error

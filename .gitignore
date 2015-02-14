@@ -46,3 +46,4 @@ scripts/ior.js
 scripts/*.js.map
 coverage/
 internal/
+**/.DS_Store
