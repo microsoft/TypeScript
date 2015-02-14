@@ -27,7 +27,8 @@ var m1;
     m1.l = b, m1.m = m1.k;
     let n = m1.k;
     let o = n, p = m1.k;
-})(m1 = m1 || (m1 = {}));
+})(m1 || (m1 = {}));
+export { m1 };
 var m2;
 (function (m2) {
     m2.k = a;

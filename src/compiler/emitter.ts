@@ -3527,10 +3527,15 @@ module ts {
                 }
             }
 
+            function isEsModuleMemberDeclaration(node: Node) {
+                return !!(node.flags & NodeFlags.Export) &&
+                    !generateAmdOrCommonjsModule &&
+                    node.parent.kind === SyntaxKind.SourceFile;
+            }
+
             function emitVariableStatement(node: VariableStatement) {
                 if (!(node.flags & NodeFlags.Export) || // Not exported
-                    (!generateAmdOrCommonjsModule && // ES6 module member
-                        node.parent.kind === SyntaxKind.SourceFile)) {
+                    isEsModuleMemberDeclaration(node)) { // ES6 module member
                     if (node.flags & NodeFlags.Export) {
                         write("export ");
                     }
@@ -4233,7 +4238,8 @@ module ts {
                     scopeEmitEnd();
                 }
                 write(")(");
-                if (node.flags & NodeFlags.Export) {
+                // write moduleDecl = containingModule.m only if it is not exported es6 module member
+                if ((node.flags & NodeFlags.Export) && !isEsModuleMemberDeclaration(node)) {
                     emit(node.name);
                     write(" = ");
                 }
@@ -4242,7 +4248,15 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    writeLine();
+                    emitStart(node);
+                    write("export { ");
+                    emit(node.name);
+                    write(" };");
+                    emitEnd(node);
+                }
+                else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }

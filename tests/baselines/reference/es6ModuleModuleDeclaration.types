@@ -1,0 +1,57 @@
+=== tests/cases/compiler/es6ModuleModuleDeclaration.ts ===
+export module m1 {
+>m1 : typeof m1
+
+    export var a = 10;
+>a : number
+
+    var b = 10;
+>b : number
+
+    export module innerExportedModule {
+>innerExportedModule : typeof innerExportedModule
+
+        export var k = 10;
+>k : number
+
+        var l = 10;
+>l : number
+    }
+    export module innerNonExportedModule {
+>innerNonExportedModule : typeof innerNonExportedModule
+
+        export var x = 10;
+>x : number
+
+        var y = 10;
+>y : number
+    }
+}
+module m2 {
+>m2 : typeof m2
+
+    export var a = 10;
+>a : number
+
+    var b = 10;
+>b : number
+
+    export module innerExportedModule {
+>innerExportedModule : typeof innerExportedModule
+
+        export var k = 10;
+>k : number
+
+        var l = 10;
+>l : number
+    }
+    export module innerNonExportedModule {
+>innerNonExportedModule : typeof innerNonExportedModule
+
+        export var x = 10;
+>x : number
+
+        var y = 10;
+>y : number
+    }
+}

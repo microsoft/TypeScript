@@ -26,7 +26,8 @@ c = c;
 var m;
 (function (m) {
     m.x = 10;
-})(m = m || (m = {}));
+})(m || (m = {}));
+export { m };
 export var x = 10;
 //// [client.js]
 var _server = require("server");
