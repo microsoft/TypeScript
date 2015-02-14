@@ -425,7 +425,8 @@ module ts.server {
             if (projectOptions.compilerOptions) {
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
-            // TODO: format code options        }
+            // TODO: format code options
+        }
     }
 
     export interface ProjectOpenResult {

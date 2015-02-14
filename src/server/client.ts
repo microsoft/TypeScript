@@ -3,172 +3,44 @@
 module ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
-        lineColToPosition(fileName: string, line: number, col: number): number;
-        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter;
-    }
-
-    class SessionClientHostProxy implements ServerHost, Logger  {
-        args: string[] = [];
-        newLine: string;
-        useCaseSensitiveFileNames: boolean = false;
-        lastReply: string;
-
-        constructor(private host: SessionClientHost) {
-            this.newLine = this.host.getNewLine();
-        }
-
-        write(message: string): void {
-            this.lastReply = message;
-        }
-
-        readFile(fileName: string): string {
-            var snapshot = this.host.getScriptSnapshot(fileName);
-            return snapshot && snapshot.getText(0, snapshot.getLength());
-        }
-
-        writeFile(name: string, text:string, writeByteOrderMark: boolean): void {
-        }
-
-        resolvePath(path: string): string {
-            return path;
-        }
-
-        fileExists(path: string): boolean {
-            return !!this.host.getScriptSnapshot(path);
-        }
-
-        directoryExists(path: string): boolean {
-            return false;
-        }
-
-        getExecutingFilePath(): string {
-            return "";
-        }
-
-        exit(exitCode: number): void {
-        }
-
-        createDirectory(directoryName: string): void {
-            throw new Error("Not Implemented Yet.");
-        }
-
-        getCurrentDirectory(): string {
-            return this.host.getCurrentDirectory();
-        }
-
-        readDirectory(path: string, extension?: string): string[] {
-            throw new Error("Not implemented Yet.");
-        }
-
-        getModififedTime(fileName: string): Date {
-            return new Date();
-        }
-
-        stat(path: string, callback?: (err: any, stats: any) => any) {
-            return 0;
-        }
-
-        lineColToPosition(fileName: string, line: number, col: number): number { 
-            return this.host.lineColToPosition(fileName, line, col);
-        }
-
-        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter { 
-            return this.host.positionToZeroBasedLineCol(fileName, position);
-        }
-
-        getFileLength(fileName: string): number {
-            return this.host.getScriptSnapshot(fileName).getLength();
-        }
-
-        getFileNames(): string[] {
-            return this.host.getScriptFileNames();
-        }
-
-        close(): void {
-        }
-
-        info(message: string): void {
-            return this.host.log(message);
-        }
-
-        msg(message: string) {
-            return this.host.log(message);
-        }
-
-        endGroup(): void {
-        }
-
-        perftrc(message: string): void {
-            return this.host.log(message);
-        }
-
-        startGroup(): void {
-        }
+        writeMessage(message: string): void;
     }
 
     export class SessionClient implements LanguageService {
-        private session: Session;
         private sequence: number = 0;
-        private host: SessionClientHostProxy;
-        private expantionTable: ts.Map<string>;
         private fileMapping: ts.Map<string> = {};
+        private lineMaps: ts.Map<number[]> = {};
+        private messages: string[] = [];
         
-        constructor(host: SessionClientHost, abbreviate: boolean) {
-            this.sequence = 0;
-            this.host = new SessionClientHostProxy(host);
-            this.session = new Session(this.host, this.host, /* useProtocol */ true, /*prettyJSON*/ false);
-            
-            // Setup the abbreviation table 
-            if (abbreviate) { 
-                this.setupExpantionTable()
-            }
+        constructor(private host: SessionClientHost) {
         }
 
-        private setupExpantionTable(): void {
-            var request = this.processRequest<ServerProtocol.AbbrevRequest>(CommandNames.Abbrev);
-            var response = this.processResponse<ServerProtocol.AbbrevResponse>(request);
-            var abbriviationTable = response.body;
-
-            Debug.assert(!!abbriviationTable, "Could not setup abbreviation. Abbreviation table was empty.");
-
-            var expantionTable: ts.Map<string> = {};
-            for (var p in abbriviationTable) {
-                if (abbriviationTable.hasOwnProperty(p)) {
-                    expantionTable[abbriviationTable[p]] = p;
-                }
-            }
-            this.expantionTable = expantionTable;
+        public onMessage(message: string): void { 
+            this.messages.push(message);
         }
 
-        private expand<T>(obj: T): T {
-            for (var p in obj) {
-                if (obj.hasOwnProperty(p)) {
-                    if (typeof (<any>obj)[p] === "object") {
-                        // Expand the property value
-                        (<any>obj)[p] = this.expand((<any>obj)[p]);
-                    }
-                    
-                    // Substitute the name if applicaple 
-                    var substitution = ts.lookUp(this.expantionTable, p);
-                    if (substitution) {
-                        (<any>obj)[substitution] = (<any>obj)[p];
-                        (<any>obj)[p] = undefined;
-                    }
-                }
-            }
+        private writeMessage(message: string): void { 
+            this.host.writeMessage(message);
+        }
 
-            return obj;
+        private getLineMap(fileName: string): number[] { 
+            var lineMap = ts.lookUp(this.lineMaps, fileName);
+            if (!lineMap) {
+                var scriptSnapshot = this.host.getScriptSnapshot(fileName);
+                lineMap  = this.lineMaps[fileName] = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+            }
+            return lineMap;
         }
 
         private lineColToPosition(fileName: string, lineCol: ServerProtocol.LineCol): number {
-            return this.host.lineColToPosition(fileName, lineCol.line, lineCol.col);
+            return ts.computePositionFromLineAndCharacter(this.getLineMap(fileName), lineCol.line, lineCol.col);
         }
 
         private positionToOneBasedLineCol(fileName: string, position: number): ServerProtocol.LineCol {
-            var lineCol = this.host.positionToZeroBasedLineCol(fileName, position);
+            var lineCol = ts.computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
             return {
-                line: lineCol.line + 1,
-                col: lineCol.character + 1
+                line: lineCol.line,
+                col: lineCol.character
             };
         }
 
@@ -206,7 +78,7 @@ module ts.server {
                 arguments: arguments
             };
 
-            this.session.executeJSONcmd(JSON.stringify(request));
+            this.writeMessage(JSON.stringify(request));
 
             return <T>request;
         }
@@ -214,8 +86,7 @@ module ts.server {
         private processResponse<T extends ServerProtocol.Response>(request: ServerProtocol.Request): T {
             debugger;
             
-            var lastMessage = this.host.lastReply;
-            this.host.lastReply = undefined;
+            var lastMessage = this.messages.shift();
             Debug.assert(!!lastMessage, "Did not recieve any responses.");
 
             // Read the content length
@@ -250,10 +121,6 @@ module ts.server {
 
             Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
-            if (this.expantionTable) { 
-                // Expand the response if abbreviated
-                return this.expand(response);
-            }
             return response;
         }
 
@@ -268,6 +135,9 @@ module ts.server {
         }
 
         changeFile(fileName: string, start: number, end: number, newText: string): void {
+            // clear the line map after an edit
+            this.lineMaps[fileName] = undefined;
+
             var lineCol = this.positionToOneBasedLineCol(fileName, start);
             var args: ServerProtocol.ChangeRequestArgs = {
                 file: fileName,
@@ -326,7 +196,7 @@ module ts.server {
         getNavigateToItems(searchTerm: string): NavigateToItem[] {
             var args: ServerProtocol.NavtoRequestArgs = {
                 searchTerm,
-                file: this.host.getFileNames()[0]
+                file: this.host.getScriptFileNames()[0]
             };
 
             var request = this.processRequest<ServerProtocol.NavtoRequest>(CommandNames.Navto, args);
@@ -369,7 +239,7 @@ module ts.server {
         }
 
         getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
-            return this.getFormattingEditsForRange(fileName, 0, this.host.getFileLength(fileName), options);
+            return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName).getLength(), options);
         }
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {

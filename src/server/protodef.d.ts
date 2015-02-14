@@ -189,18 +189,6 @@ declare module ServerProtocol {
     }
 
     /**
-       Type request; value of command field is "type". Return response
-       giving the code locations that define the type of the symbol
-       found in file at location line, col.
-    */
-    export interface TypeRequest extends CodeLocationRequest {
-    }
-
-    export interface TypeResponse extends Response {
-        body?: CodeSpan[];
-    }
-
-    /**
        Open request; value of command field is "open". Notify the
        server that the client has file open.  The server will not
        monitor the filesystem for changes in this file and will assume
@@ -483,8 +471,8 @@ declare module ServerProtocol {
         kindModifiers?: string;
         /** 
             The file in which the symbol is found; the value of this
-            field will always be a string unless the client opts-in to
-            file encoding by sending the "abbrev" request.
+            field will always be a string, number of a mapping between
+            a string and a number.
         */
         file: EncodedFile;
         /** The location within file at which the symbol is found*/
@@ -528,27 +516,6 @@ declare module ServerProtocol {
         arguments: ChangeRequestArgs;
     }
 
-    /*
-      The following messages describe an OPTIONAL compression scheme
-       that clients can choose to use.  If a client does not opt-in to
-       this scheme by sending an "abbrev" request, the server will not
-       compress messages.  
-    */
-
-    /**
-       Abbrev request message; value of command field is "abbrev".
-       Server returns an array of mappings from common message field
-       names and common message field string values to shortened
-       versions of these strings.  Once a client opts-in by requesting
-       the abbreviations, the server may send responses whose field
-       names are shortened.  The server may also send file names as
-       instances of AssignFileId, or as file ids, if the corresponding
-       id assignment had been previously returned.  Currently, only
-       responses to the "navto" request can be encoded.
-    */
-    export interface AbbrevRequest extends Request {
-    }
-
     /**
        If an object of this type is returned in place of a string as
        the value of a file field in a response message, add the
@@ -571,25 +538,6 @@ declare module ServerProtocol {
        name.
     */
     export type EncodedFile = number | IdFile | string;
-
-    /**
-       Response to abbrev opt-in request message.  This is a map of
-       string field names and common string field values to shortened
-       strings.  Once the server sends this response, it will assume
-       that it can use the shortened field names and field values.  In
-       addition, the server will assume it can assign ids to file
-       names by returning an AssignFileId instance in place of a file
-       name.  Once an AssignFileId instance is returned, the server
-       may send the file id (a number) in place of the file name.
-    */
-    export interface AbbrevResponse extends Response {
-        body?: {
-            /** Map from full string (either field name or string
-                field value) to shortened string */
-            [fullString: string]: string;
-        }
-    }
-
 
     /** Response to "brace" request. */
     export interface BraceResponse extends Response {

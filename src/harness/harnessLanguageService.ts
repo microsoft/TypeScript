@@ -128,7 +128,9 @@ module Harness.LanguageService {
             protected settings = ts.getDefaultCompilerOptions()) { 
         }
 
-        public getNewLine(): string {            return "\r\n";        }
+        public getNewLine(): string {
+            return "\r\n";
+        }
 
         public getFilenames(): string[] {
             var fileNames: string[] = [];
@@ -435,17 +437,26 @@ module Harness.LanguageService {
     }
 
     // Server adapter
-    class ServerLanguageServiceHost extends NativeLanguageServiceHost {
+    class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost { 
         private client: ts.server.SessionClient;
+
         constructor(cancellationToken: ts.CancellationToken, settings: ts.CompilerOptions) {
             super(cancellationToken, settings);
         }
 
-        setClient(client: ts.server.SessionClient) { 
+        onMessage(message: string): void { 
+        
+        }
+
+        writeMessage(message: string): void { 
+        
+        }
+
+        setClient(client: ts.server.SessionClient) {
             this.client = client;
         }
 
-        openFile(fileName: string): void { 
+        openFile(fileName: string): void {
             super.openFile(fileName);
             this.client.openFile(fileName);
         }
@@ -456,15 +467,135 @@ module Harness.LanguageService {
         }
     }
 
+    class SessionServerHost implements ts.server.ServerHost, ts.server.Logger { 
+        args: string[] = [];
+        newLine: string;
+        useCaseSensitiveFileNames: boolean = false;
+
+        constructor(private host: NativeLanguageServiceHost) {
+            this.newLine = this.host.getNewLine();
+        }
+
+        onMessage(message: string): void { 
+        
+        }
+
+        writeMessage(message: string): void {
+        }
+
+        write(message: string): void { 
+            this.writeMessage(message);
+        }
+
+        readFile(fileName: string): string {
+            var snapshot = this.host.getScriptSnapshot(fileName);
+            return snapshot && snapshot.getText(0, snapshot.getLength());
+        }
+
+        writeFile(name: string, text: string, writeByteOrderMark: boolean): void {
+        }
+
+        resolvePath(path: string): string {
+            return path;
+        }
+
+        fileExists(path: string): boolean {
+            return !!this.host.getScriptSnapshot(path);
+        }
+
+        directoryExists(path: string): boolean {
+            return false;
+        }
+
+        getExecutingFilePath(): string {
+            return "";
+        }
+
+        exit(exitCode: number): void {
+        }
+
+        createDirectory(directoryName: string): void {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getCurrentDirectory(): string {
+            return this.host.getCurrentDirectory();
+        }
+
+        readDirectory(path: string, extension?: string): string[] {
+            throw new Error("Not implemented Yet.");
+        }
+
+        getModififedTime(fileName: string): Date {
+            return new Date();
+        }
+
+        stat(path: string, callback?: (err: any, stats: any) => any) {
+            return 0;
+        }
+
+        lineColToPosition(fileName: string, line: number, col: number): number {
+            return this.host.lineColToPosition(fileName, line, col);
+        }
+
+        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter {
+            return this.host.positionToZeroBasedLineCol(fileName, position);
+        }
+
+        getFileLength(fileName: string): number {
+            return this.host.getScriptSnapshot(fileName).getLength();
+        }
+
+        getFileNames(): string[] {
+            return this.host.getScriptFileNames();
+        }
+
+        close(): void {
+        }
+
+        info(message: string): void {
+            return this.host.log(message);
+        }
+
+        msg(message: string) {
+            return this.host.log(message);
+        }
+
+        endGroup(): void {
+        }
+
+        perftrc(message: string): void {
+            return this.host.log(message);
+        }
+
+        startGroup(): void {
+        }
+    }
+    
     export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
-        private host: ServerLanguageServiceHost;
+        private host: SessionClientHost;
         private client: ts.server.SessionClient;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
-            debugger;
+            // This is the main host that tests use to direct tests
+            var clientHost = new SessionClientHost(cancellationToken, options);
+            var client = new ts.server.SessionClient(clientHost);
 
-            this.host = new ServerLanguageServiceHost(cancellationToken, options);
-            this.client = new ts.server.SessionClient(this.host, /*abbreviate*/ true);
-            this.host.setClient(this.client);
+            // This host is just a proxy for the clientHost, it uses the client
+            // host to answer server queries about files on disk
+            var serverHost = new SessionServerHost(clientHost);
+            var server = new ts.server.Session(serverHost, serverHost, /*useProtocol*/ true, /*prettyJSON*/ false);
+
+            // Fake the connection between the client and the server
+            serverHost.writeMessage = client.onMessage.bind(client);
+            clientHost.writeMessage = server.onMessage.bind(server);
+
+            // Wire the client to the host to get notifications when a file is open
+            // or edited.
+            clientHost.setClient(client);
+
+            // Set the properties
+            this.client = client;
+            this.host = clientHost;
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return this.client; }

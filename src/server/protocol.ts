@@ -33,39 +33,6 @@ module ts.server {
         return spaceCache[n];
     }
 
-    function isTypeName(name: string, suffix?: string) {
-        for (var i = 0, len = typeNames.length; i < len; i++) {
-            if (typeNames[i] == name) {
-                return true;
-            }
-            else if (suffix && ((typeNames[i] + suffix) == name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function parseTypeName(displayParts: ts.SymbolDisplayPart[]) {
-        var len = displayParts.length;
-        for (var i = len - 1; i >= 0; i--) {
-            if (isTypeName(displayParts[i].kind, "Name")) {
-                return displayParts[i].text;
-            }
-        }
-        return undefined;
-    }
-
-    function findExactMatchType(items: ts.NavigateToItem[]) {
-        for (var i = 0, len = items.length; i < len; i++) {
-            var navItem = items[i];
-            if (navItem.matchKind == "exact") {
-                if (isTypeName(navItem.kind)) {
-                    return navItem;
-                }
-            }
-        }
-    }
-
     interface FileStart {
         file: string;
         start: ILineInfo;
@@ -79,14 +46,6 @@ module ts.server {
             return 0;
         }
         else return 1;
-    }
-
-    function printObject(obj: any) {
-        for (var p in obj) {
-            if (obj.hasOwnProperty(p)) {
-                console.log(p + ": " + obj[p]);
-            }
-        }
     }
 
     function compareFileStart(a: FileStart, b: FileStart) {
@@ -128,178 +87,7 @@ module ts.server {
             }
         })
     }
-
-    //function SourceInfo(body: NodeJS._debugger.BreakResponse) {
-    //    var result = body.exception ? 'exception in ' : 'break in ';
-
-    //    if (body.script) {
-    //        if (body.script.name) {
-    //            var name = body.script.name,
-    //                dir = path.resolve() + '/';
-
-    //            // Change path to relative, if possible
-    //            if (name.indexOf(dir) === 0) {
-    //                name = name.slice(dir.length);
-    //            }
-
-    //            result += name;
-    //        } else {
-    //            result += '[unnamed]';
-    //        }
-    //    }
-    //    result += ':';
-    //    result += body.sourceLine + 1;
-
-    //    if (body.exception) result += '\n' + body.exception.text;
-
-    //    return result;
-    //}
-
-    class JsDebugSession {
-        host = 'localhost';
-        port = 5858;
-
-        constructor(public client: NodeJS._debugger.Client) {
-            this.init();
-        }
-
-        cont(cb: NodeJS._debugger.RequestHandler) {
-            this.client.reqContinue(cb);
-        }
-
-        listSrc() {
-            this.client.reqScripts((err: any) => {
-                if (err) {
-                    console.log("rscr error: " + err);
-                }
-                else {
-                    console.log("req scripts");
-                    for (var id in this.client.scripts) {
-                        var script = this.client.scripts[id];
-                        if ((typeof script === "object") && script.name) {
-                            console.log(id + ": " + script.name);
-                        }
-                    }
-                }
-            });
-        }
-
-        findScript(file: string) {
-            if (file) {
-                var script: NodeJS._debugger.ScriptDesc;
-                var scripts = this.client.scripts;
-                var keys: any[] = Object.keys(scripts);
-                var ambiguous = false;
-                for (var v = 0; v < keys.length; v++) {
-                    var id = keys[v];
-                    if (scripts[id] &&
-                        scripts[id].name &&
-                        scripts[id].name.indexOf(file) !== -1) {
-                        if (script) {
-                            ambiguous = true;
-                        }
-                        script = scripts[id];
-                    }
-                }
-                return { script: script, ambiguous: ambiguous };
-            }
-        }
-
-        // TODO: condition
-        setBreakpointOnLine(line: number, file?: string) {
-            if (!file) {
-                file = this.client.currentScript;
-            }
-            var script: NodeJS._debugger.ScriptDesc;
-            var scriptResult = this.findScript(file);
-            if (scriptResult) {
-                if (scriptResult.ambiguous) {
-                    // TODO: send back error
-                    script = undefined;
-                }
-                else {
-                    script = scriptResult.script;
-                }
-            }
-            // TODO: set breakpoint when script not loaded
-            if (script) {
-                var brkmsg: NodeJS._debugger.BreakpointMessageBody = {
-                    type: 'scriptId',
-                    target: script.id,
-                    line: line - 1,
-                }
-                this.client.setBreakpoint(brkmsg,(err, bod) => {
-                    // TODO: remember breakpoint
-                    if (err) {
-                        console.log("Error: set breakpoint: " + err);
-                    }
-                });
-            }
-
-        }
-
-        init() {
-            var connectionAttempts = 0;
-            this.client.on('break',(res: NodeJS._debugger.Event) => {
-                this.handleBreak(res.body);
-            });
-            this.client.on('exception',(res: NodeJS._debugger.Event) => {
-                this.handleBreak(res.body);
-            });
-            this.client.on('error',() => {
-                setTimeout(() => {
-                    ++connectionAttempts;
-                    this.client.connect(this.port, this.host);
-                }, 500);
-            });
-            this.client.once('ready',() => {
-            });
-            this.client.on('unhandledResponse',() => {
-            });
-            this.client.connect(this.port, this.host);
-        }
-
-        evaluate(code: string) {
-            var frame = this.client.currentFrame;
-            this.client.reqFrameEval(code, frame,(err, bod) => {
-                if (err) {
-                    console.log("Error: evaluate: " + err);
-                    return;
-                }
-
-                console.log("Value: " + bod.toString());
-                if (typeof bod === "object") {
-                    printObject(bod);
-                }
-
-                // Request object by handles (and it's sub-properties)
-                this.client.mirrorObject(bod, 3,(err, mirror) => {
-                    if (mirror) {
-                        if (typeof mirror === "object") {
-                            printObject(mirror);
-                        }
-                        console.log(mirror.toString());
-                    }
-                    else {
-                        console.log("undefined");
-                    }
-                });
-
-            });
-        }
-
-        handleBreak(breakInfo: NodeJS._debugger.BreakResponse) {
-            this.client.currentSourceLine = breakInfo.sourceLine;
-            this.client.currentSourceLineText = breakInfo.sourceLineText;
-            this.client.currentSourceColumn = breakInfo.sourceColumn;
-            this.client.currentFrame = 0;
-            this.client.currentScript = breakInfo.script && breakInfo.script.name;
-
-            //console.log(SourceInfo(breakInfo));
-            // TODO: watchers        
-        }
-    }
-
+       
     interface FileRange {
         file?: string;
         start: ILineInfo;
@@ -320,7 +108,7 @@ module ts.server {
     }
 
     interface PendingErrorCheck {
-        filename: string;
+        fileName: string;
         project: Project;
     }
 
@@ -334,7 +122,6 @@ module ts.server {
     }
 
     export module CommandNames {
-        export var Abbrev = "abbrev";
         export var Change = "change";
         export var Close = "close";
         export var Completions = "completions";
@@ -349,22 +136,22 @@ module ts.server {
         export var Reload = "reload";
         export var Rename = "rename";
         export var Saveto = "saveto";
-        export var Type = "type";
         export var Brace = "brace";
         export var Unknown = "unknown";
     }
 
+    module Errors { 
+        export var NoProject = new Error("No Project.");
+        export var NoContent = new Error("No Content.");
+    }
+
     export interface ServerHost extends ts.System {
-        getDebuggerClient? (): NodeJS._debugger.Client;
     }
 
     export class Session {
         projectService: ProjectService;
-        debugSession: JsDebugSession;
         pendingOperation = false;
         fileHash: ts.Map<number> = {};
-        abbrevTable: ts.Map<string>;
-        fetchedAbbrev = false;
         nextFileId = 1;
         errorTimer: NodeJS.Timer;
         immediateId: any;
@@ -372,7 +159,6 @@ module ts.server {
 
         constructor(private host: ServerHost, private logger: Logger, protected useProtocol: boolean, protected prettyJSON: boolean) {
             this.projectService = new ProjectService(host, logger);
-            this.initAbbrevTable();
         }
 
         logError(err: Error, cmd: string) {
@@ -430,51 +216,15 @@ module ts.server {
             this.send(res);
         }
 
-        initAbbrevTable() {
-            this.abbrevTable = {
-                name: "n",
-                kind: "k",
-                fileName: "f",
-                containerName: "cn",
-                containerKind: "ck",
-                kindModifiers: "km",
-                start: "s",
-                end: "e",
-                line: "l",
-                col: "c",
-                "interface": "i",
-                "function": "fn",
-            };
-        }
-
-        encodeFilename(filename: string): ServerProtocol.EncodedFile {
-            if (!this.fetchedAbbrev) {
-                return filename;
+        encodeFilename(fileName: string): ServerProtocol.EncodedFile {
+            var id = ts.lookUp(this.fileHash, fileName);
+            if (!id) {
+                id = this.nextFileId++;
+                this.fileHash[fileName] = id;
+                return { id: id, file: fileName };
             }
             else {
-                var id = ts.lookUp(this.fileHash, filename);
-                if (!id) {
-                    id = this.nextFileId++;
-                    this.fileHash[filename] = id;
-                    return { id: id, file: filename };
-                }
-                else {
-                    return id;
-                }
-            }
-        }
-
-        abbreviate(obj: any) {
-            if (this.fetchedAbbrev && (!this.prettyJSON)) {
-                for (var p in obj) {
-                    if (obj.hasOwnProperty(p)) {
-                        var sub = ts.lookUp(this.abbrevTable, p);
-                        if (sub) {
-                            obj[sub] = obj[p];
-                            obj[p] = undefined;
-                        }
-                    }
-                }
+                return id;
             }
         }
 
@@ -544,10 +294,10 @@ module ts.server {
             var checkOne = () => {
                 if (matchSeq(seq)) {
                     var checkSpec = checkList[index++];
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.filename)) {
-                        this.syntacticCheck(checkSpec.filename, checkSpec.project);
+                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName)) {
+                        this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
-                            this.semanticCheck(checkSpec.filename, checkSpec.project);
+                            this.semanticCheck(checkSpec.fileName, checkSpec.project);
                             this.immediateId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
@@ -564,181 +314,140 @@ module ts.server {
             }
         }
 
-        goToDefinition(line: number, col: number, rawfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        goToDefinition(line: number, col: number, fileName: string): ServerProtocol.CodeSpan[] {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var locs = compilerService.languageService.getDefinitionAtPosition(file, pos);
-                if (locs) {
-                    var info: ServerProtocol.CodeSpan[] = locs.map(def => ({
-                        file: def && def.fileName,
-                        start: def &&
-                        compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
-                        end: def &&
-                        compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
-                    }));
-                    this.output(info, CommandNames.Definition, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Definition, reqSeq, "could not find def");
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
-            else {
-                this.output(undefined, CommandNames.Definition, reqSeq, "no project for " + file);
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+
+            var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
+            if (!definitions) {
+                throw Errors.NoContent;
             }
+
+            return definitions.map(def => ({
+                file: def && def.fileName,
+                start: def &&
+                compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
+                end: def &&
+                compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
+            }));
         }
 
-        rename(line: number, col: number, rawfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        rename(line: number, col: number, fileName: string): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var renameInfo = compilerService.languageService.getRenameInfo(file, pos);
-                if (renameInfo) {
-                    if (renameInfo.canRename) {
-                        var renameLocs = compilerService.languageService.findRenameLocations(file, pos, false, false);
-                        if (renameLocs) {
-                            var bakedRenameLocs = renameLocs.map(loc=> ({
-                                file: loc.fileName,
-                                start: compilerService.host.positionToLineCol(loc.fileName, loc.textSpan.start),
-                                end: compilerService.host.positionToLineCol(loc.fileName, ts.textSpanEnd(loc.textSpan)),
-                            })).sort((a, b) => {
-                                if (a.file < b.file) {
-                                    return -1;
-                                }
-                                else if (a.file > b.file) {
-                                    return 1;
-                                }
-                                else {
-                                    // reverse sort assuming no overlap
-                                    if (a.start.line < b.start.line) {
-                                        return 1;
-                                    }
-                                    else if (a.start.line > b.start.line) {
-                                        return -1;
-                                    }
-                                    else {
-                                        return b.start.col - a.start.col;
-                                    }
-                                }
-                            }).reduce<FileRanges[]>((accum: FileRanges[], cur: FileRange) => {
-                                var curFileAccum: FileRanges;
-                                if (accum.length > 0) {
-                                    curFileAccum = accum[accum.length - 1];
-                                    if (curFileAccum.file != cur.file) {
-                                        curFileAccum = undefined;
-                                    }
-                                }
-                                if (!curFileAccum) {
-                                    curFileAccum = { file: cur.file, locs: [] };
-                                    accum.push(curFileAccum);
-                                }
-                                curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                                return accum;
-                            }, []);
-                            this.output({ info: renameInfo, locs: bakedRenameLocs }, CommandNames.Rename, reqSeq);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+            var renameInfo = compilerService.languageService.getRenameInfo(file, position);
+            if (!renameInfo) {
+                throw Errors.NoContent;
+            }
+
+            if (!renameInfo.canRename) {
+                return {
+                    info: renameInfo,
+                    locs: []
+                };
+            }
+
+            var renameLocs = compilerService.languageService.findRenameLocations(file, position, false, false);
+            if (renameLocs) {
+                var bakedRenameLocs = renameLocs.map(loc=> (<ServerProtocol.CodeSpan>{
+                    file: loc.fileName,
+                    start: compilerService.host.positionToLineCol(loc.fileName, loc.textSpan.start),
+                    end: compilerService.host.positionToLineCol(loc.fileName, ts.textSpanEnd(loc.textSpan)),
+                })).sort((a, b) => {
+                    if (a.file < b.file) {
+                        return -1;
+                    }
+                    else if (a.file > b.file) {
+                        return 1;
+                    }
+                    else {
+                        // reverse sort assuming no overlap
+                        if (a.start.line < b.start.line) {
+                            return 1;
+                        }
+                        else if (a.start.line > b.start.line) {
+                            return -1;
                         }
                         else {
-                            this.output({ info: renameInfo, locs: [] }, CommandNames.Rename, reqSeq);
+                            return b.start.col - a.start.col;
                         }
                     }
-                    else {
-                        this.output(undefined, CommandNames.Rename, reqSeq, renameInfo.localizedErrorMessage);
+                }).reduce((accum, cur) => {
+                    var curFileAccum: FileRanges;
+                    if (accum.length > 0) {
+                        curFileAccum = accum[accum.length - 1];
+                        if (curFileAccum.file != cur.file) {
+                            curFileAccum = undefined;
+                        }
                     }
-                }
-                else {
-                    this.output(undefined, CommandNames.Rename, reqSeq, "no rename information at cursor");
-                }
+                    if (!curFileAccum) {
+                        curFileAccum = { file: cur.file, locs: [] };
+                        accum.push(curFileAccum);
+                    }
+                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
+                    return accum;
+                }, []);
             }
+
+            return { info: renameInfo, locs: bakedRenameLocs };
         }
 
-        findReferences(line: number, col: number, rawfile: string, reqSeq = 0) {
+        findReferences(line: number, col: number, fileName: string): ServerProtocol.ReferencesResponseBody {
             // TODO: get all projects for this file; report refs for all projects deleting duplicates
             // can avoid duplicates by eliminating same ref file from subsequent projects
-            var file = ts.normalizePath(rawfile);
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var refs = compilerService.languageService.getReferencesAtPosition(file, pos);
-                if (refs) {
-                    var nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, pos);
-                    if (nameInfo) {
-                        var displayString = ts.displayPartsToString(nameInfo.displayParts);
-                        var nameSpan = nameInfo.textSpan;
-                        var nameColStart =
-                            compilerService.host.positionToLineCol(file, nameSpan.start).col;
-                        var nameText =
-                            compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-                        var bakedRefs: ServerProtocol.ReferencesResponseItem[] = refs.map((ref) => {
-                            var start = compilerService.host.positionToLineCol(ref.fileName, ref.textSpan.start);
-                            var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
-                            var snap = compilerService.host.getScriptSnapshot(ref.fileName);
-                            var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
-                            return {
-                                file: ref.fileName,
-                                start: start,
-                                lineText: lineText,
-                                end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
-                            };
-                        }).sort(compareFileStart);
-                        var response: ServerProtocol.ReferencesResponseBody = {
-                            refs: bakedRefs,
-                            symbolName: nameText,
-                            symbolStartCol: nameColStart,
-                            symbolDisplayString: displayString
-                        };
-                        this.output(response, CommandNames.References, reqSeq);
-                    }
-                    else {
-                        this.output(undefined, CommandNames.References, reqSeq, "no references at this position");
-                    }
-                }
-                else {
-                    this.output(undefined, CommandNames.References, reqSeq, "no references at this position");
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
-        }
 
-        // TODO: implement this as ls api that can return multiple def sites
-        goToType(line: number, col: number, rawfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
-            var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, pos);
-                var typeLoc: any;
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
 
-                if (quickInfo && (quickInfo.kind == "var") || (quickInfo.kind == "local var")) {
-                    var typeName = parseTypeName(quickInfo.displayParts);
-                    if (typeName) {
-                        var navItems = compilerService.languageService.getNavigateToItems(typeName);
-                        var navItem = findExactMatchType(navItems);
-                        if (navItem) {
-                            typeLoc = {
-                                file: navItem.fileName,
-                                start: compilerService.host.positionToLineCol(navItem.fileName,
-                                    navItem.textSpan.start),
-                                end: compilerService.host.positionToLineCol(navItem.fileName,
-                                    ts.textSpanEnd(navItem.textSpan)),
-                            };
-                        }
-                    }
-                }
-                if (typeLoc) {
-                    this.output([typeLoc], CommandNames.Type, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Type, reqSeq, "no info at this location");
-                }
+            var references = compilerService.languageService.getReferencesAtPosition(file, position);
+            if (!references) {
+                throw Errors.NoContent;
             }
-            else {
-                this.output(undefined, CommandNames.Type, reqSeq, "no project for " + file);
+
+            var nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
+            if (!nameInfo) {
+                throw Errors.NoContent;
             }
+
+            var displayString = ts.displayPartsToString(nameInfo.displayParts);
+            var nameSpan = nameInfo.textSpan;
+            var nameColStart = compilerService.host.positionToLineCol(file, nameSpan.start).col;
+            var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+            var bakedRefs: ServerProtocol.ReferencesResponseItem[] = references.map((ref) => {
+                var start = compilerService.host.positionToLineCol(ref.fileName, ref.textSpan.start);
+                var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
+                var snap = compilerService.host.getScriptSnapshot(ref.fileName);
+                var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                return {
+                    file: ref.fileName,
+                    start: start,
+                    lineText: lineText,
+                    end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                };
+            }).sort(compareFileStart);
+            return {
+                refs: bakedRefs,
+                symbolName: nameText,
+                symbolStartCol: nameColStart,
+                symbolDisplayString: displayString
+            };
         }
 
         openClientFile(rawfile: string) {
@@ -746,173 +455,151 @@ module ts.server {
             this.projectService.openClientFile(file);
         }
 
-        quickInfo(line: number, col: number, rawfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        quickInfo(line: number, col: number, fileName: string): ServerProtocol.QuickInfoResponseBody {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, pos);
-                if (quickInfo) {
-                    var displayString = ts.displayPartsToString(quickInfo.displayParts);
-                    var docString = ts.displayPartsToString(quickInfo.documentation);
-                    var qi: ServerProtocol.QuickInfoResponseBody = {
-                        kind: quickInfo.kind,
-                        kindModifiers: quickInfo.kindModifiers,
-                        start: compilerService.host.positionToLineCol(file, quickInfo.textSpan.start),
-                        end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(quickInfo.textSpan)),
-                        displayString: displayString,
-                        documentation: docString,
-                    };
-                    this.output(qi, CommandNames.Quickinfo, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Quickinfo, reqSeq, "no info")
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+            var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
+            if (!quickInfo) {
+                throw Errors.NoContent;
+            }
+
+            var displayString = ts.displayPartsToString(quickInfo.displayParts);
+            var docString = ts.displayPartsToString(quickInfo.documentation);
+            return {
+                kind: quickInfo.kind,
+                kindModifiers: quickInfo.kindModifiers,
+                start: compilerService.host.positionToLineCol(file, quickInfo.textSpan.start),
+                end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(quickInfo.textSpan)),
+                displayString: displayString,
+                documentation: docString,
+            };
         }
 
-        format(line: number, col: number, endLine: number, endCol: number, rawfile: string, cmd: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        format(line: number, col: number, endLine: number, endCol: number, fileName: string): ServerProtocol.CodeEdit[] {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var endPos = compilerService.host.lineColToPosition(file, endLine, endCol);
-                var edits: ts.TextChange[];
-                // TODO: avoid duplicate code (with formatonkey)
-                try {
-                    edits = compilerService.languageService.getFormattingEditsForRange(file, pos, endPos,
-                        compilerService.formatCodeOptions);
-                }
-                catch (err) {
-                    this.logError(err, cmd);
-                    edits = undefined;
-                }
-                if (edits) {
-                    var bakedEdits: ServerProtocol.CodeEdit[] = edits.map((edit) => {
-                        return {
-                            start: compilerService.host.positionToLineCol(file,
-                                edit.span.start),
-                            end: compilerService.host.positionToLineCol(file,
-                                ts.textSpanEnd(edit.span)),
-                            newText: edit.newText ? edit.newText : ""
-                        };
-                    });
-                    this.output(bakedEdits, CommandNames.Format, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Format, reqSeq, "no edits")
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
+        
+            var compilerService = project.compilerService;
+            var startPosition = compilerService.host.lineColToPosition(file, line, col);
+            var endPosition = compilerService.host.lineColToPosition(file, endLine, endCol);
+            
+            // TODO: avoid duplicate code (with formatonkey)
+            var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition, compilerService.formatCodeOptions);
+            if (!edits) {
+                throw Errors.NoContent;
+            }
+            
+            return edits.map((edit) => {
+                return {
+                    start: compilerService.host.positionToLineCol(file, edit.span.start),
+                    end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(edit.span)),
+                    newText: edit.newText ? edit.newText : ""
+                };
+            });
         }
 
-        formatOnKey(line: number, col: number, key: string, rawfile: string, cmd: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        formatOnKey(line: number, col: number, key: string, fileName: string): ServerProtocol.CodeEdit[] {
+            var file = ts.normalizePath(fileName);
+
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var edits: ts.TextChange[];
-                try {
-                    edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, pos, key,
-                        compilerService.formatCodeOptions);
-                    if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, pos))) {
-                        // TODO: get these options from host
-                        var editorOptions: ts.EditorOptions = {
-                            IndentSize: 4,
-                            TabSize: 4,
-                            NewLineCharacter: "\n",
-                            ConvertTabsToSpaces: true,
-                        };
-                        var indentPosition = compilerService.languageService.getIndentationAtPosition(file, pos, editorOptions);
-                        var spaces = generateSpaces(indentPosition);
-                        if (indentPosition > 0) {
-                            edits.push({ span: ts.createTextSpanFromBounds(pos, pos), newText: spaces });
-                        }
-                    }
-                }
-                catch (err) {
-                    this.logError(err, cmd);
-                    edits = undefined;
-                }
-                if (edits) {
-                    var bakedEdits: ServerProtocol.CodeEdit[] = edits.map((edit) => {
-                        return {
-                            start: compilerService.host.positionToLineCol(file,
-                                edit.span.start),
-                            end: compilerService.host.positionToLineCol(file,
-                                ts.textSpanEnd(edit.span)),
-                            newText: edit.newText ? edit.newText : ""
-                        };
-                    });
-                    this.output(bakedEdits, CommandNames.Formatonkey, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Formatonkey, reqSeq, "no edits")
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+            var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
+                compilerService.formatCodeOptions);
+            if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
+                // TODO: get these options from host
+                var editorOptions: ts.EditorOptions = {
+                    IndentSize: 4,
+                    TabSize: 4,
+                    NewLineCharacter: "\n",
+                    ConvertTabsToSpaces: true,
+                };
+                var indentPosition = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                var spaces = generateSpaces(indentPosition);
+                if (indentPosition > 0) {
+                    edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
                 }
             }
+
+            if (!edits) {
+                throw Errors.NoContent;
+            }
+
+            return edits.map((edit) => {
+                return {
+                    start: compilerService.host.positionToLineCol(file,
+                        edit.span.start),
+                    end: compilerService.host.positionToLineCol(file,
+                        ts.textSpanEnd(edit.span)),
+                    newText: edit.newText ? edit.newText : ""
+                };
+            });
         }
 
-        completions(line: number, col: number, prefix: string, rawfile: string, cmd: string, reqSeq = 0) {
+        completions(line: number, col: number, prefix: string, fileName: string): ServerProtocol.CompletionItem[] {
             if (!prefix) {
                 prefix = "";
             }
-            var file = ts.normalizePath(rawfile);
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            var completions: ts.CompletionInfo = undefined;
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                if (pos >= 0) {
-                    try {
-                        completions = compilerService.languageService.getCompletionsAtPosition(file, pos);
-                    }
-                    catch (err) {
-                        this.logError(err, cmd);
-                        completions = undefined;
-                    }
-                    if (completions) {
-                        var compressedEntries: ServerProtocol.CompletionItem[] =
-                            completions.entries.reduce((accum: ts.CompletionEntryDetails[], entry: ts.CompletionEntry) => {
-                                if (entry.name.indexOf(prefix) == 0) {
-                                    var protoEntry = <ts.CompletionEntryDetails>{};
-                                    protoEntry.name = entry.name;
-                                    protoEntry.kind = entry.kind;
-                                    if (entry.kindModifiers && (entry.kindModifiers.length > 0)) {
-                                        protoEntry.kindModifiers = entry.kindModifiers;
-                                    }
-                                    var details = compilerService.languageService.getCompletionEntryDetails(file, pos, entry.name);
-                                    if (details && (details.documentation) && (details.documentation.length > 0)) {
-                                        protoEntry.documentation = details.documentation;
-                                    }
-                                    if (details && (details.displayParts) && (details.displayParts.length > 0)) {
-                                        protoEntry.displayParts = details.documentation;
-                                    }
-                                    accum.push(protoEntry);
-                                }
-                                return accum;
-                            }, []);
-                        this.output(compressedEntries, CommandNames.Completions, reqSeq);
-                    }
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
-            if (!completions) {
-                this.output(undefined, CommandNames.Completions, reqSeq, "no completions");
-            }
-        }
 
-        geterr(ms: number, files: string[]) {
-            var checkList = files.reduce((accum: PendingErrorCheck[], filename: string) => {
-                filename = ts.normalizePath(filename);
-                var project = this.projectService.getProjectForFile(filename);
-                if (project) {
-                    accum.push({ filename: filename, project: project });
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+        
+            var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
+            if (!completions) {
+                throw Errors.NoContent;
+            }
+
+            return completions.entries.reduce((accum: ts.CompletionEntryDetails[], entry: ts.CompletionEntry) => {
+                if (entry.name.indexOf(prefix) == 0) {
+                    var protoEntry = <ts.CompletionEntryDetails>{};
+                    protoEntry.name = entry.name;
+                    protoEntry.kind = entry.kind;
+                    if (entry.kindModifiers && (entry.kindModifiers.length > 0)) {
+                        protoEntry.kindModifiers = entry.kindModifiers;
+                    }
+                    var details = compilerService.languageService.getCompletionEntryDetails(file, position, entry.name);
+                    if (details && (details.documentation) && (details.documentation.length > 0)) {
+                        protoEntry.documentation = details.documentation;
+                    }
+                    if (details && (details.displayParts) && (details.displayParts.length > 0)) {
+                        protoEntry.displayParts = details.documentation;
+                    }
+                    accum.push(protoEntry);
                 }
                 return accum;
             }, []);
+        }
+                 
+        geterr(delay: number, fileNames: string[]) {
+            var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
+                fileName = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(fileName);
+                if (project) {
+                    accum.push({ fileName, project });
+                }
+                return accum;
+            }, []);
+
             if (checkList.length > 0) {
-                this.updateErrorCheck(checkList, this.changeSeq,(n) => n == this.changeSeq, ms)
+                this.updateErrorCheck(checkList, this.changeSeq,(n) => n == this.changeSeq, delay)
             }
         }
 
@@ -997,352 +684,165 @@ module ts.server {
             }
         }
 
-        navto(searchTerm: string, rawfile: string, cmd: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        navto(searchTerm: string, fileName: string): ServerProtocol.NavtoItem[] {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var navItems: ts.NavigateToItem[];
-                var cancellationToken = <CancellationToken>compilerService.host.getCancellationToken();
-                if (this.pendingOperation) {
-                    cancellationToken.cancel();
-                    cancellationToken.reset();
-                }
-                try {
-                    this.pendingOperation = true;
-                    navItems = sortNavItems(compilerService.languageService.getNavigateToItems(searchTerm));
-                }
-                catch (err) {
-                    this.logError(err, cmd);
-                    navItems = undefined;
-                }
-                this.pendingOperation = false;
-                if (navItems) {
-                    var bakedNavItems: ServerProtocol.NavtoItem[] = navItems.map((navItem) => {
-                        var start = compilerService.host.positionToLineCol(navItem.fileName,
-                            navItem.textSpan.start);
-                        var end = compilerService.host.positionToLineCol(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
-                        this.abbreviate(start);
-                        var bakedItem: ServerProtocol.NavtoItem = {
-                            name: navItem.name,
-                            kind: navItem.kind,
-                            file: this.encodeFilename(navItem.fileName),
-                            start: start,
-                            end: end,
-                        };
-                        if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
-                            bakedItem.kindModifiers = navItem.kindModifiers;
-                        }
-                        if (navItem.matchKind != 'none') {
-                            bakedItem.matchKind = navItem.matchKind;
-                        }
-                        if (navItem.containerName && (navItem.containerName.length > 0)) {
-                            bakedItem.containerName = navItem.containerName;
-                        }
-                        if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                            bakedItem.containerKind = navItem.containerKind;
-                        }
-                        this.abbreviate(bakedItem);
-                        return bakedItem;
-                    });
+            if (!project) {
+                throw Errors.NoProject;
+            }
 
-                    this.output(bakedNavItems, CommandNames.Navto, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Navto, reqSeq, "no nav items");
-                }
+            var compilerService = project.compilerService;
+            var navItems = sortNavItems(compilerService.languageService.getNavigateToItems(searchTerm));
+            if (!navItems) {
+                throw Errors.NoContent;
             }
-            else {
-                this.output(undefined, CommandNames.Navto, reqSeq, "no nav items");
-            }
+
+            return navItems.map((navItem) => {
+                var start = compilerService.host.positionToLineCol(navItem.fileName, navItem.textSpan.start);
+                var end = compilerService.host.positionToLineCol(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                var bakedItem: ServerProtocol.NavtoItem = {
+                    name: navItem.name,
+                    kind: navItem.kind,
+                    file: this.encodeFilename(navItem.fileName),
+                    start: start,
+                    end: end,
+                };
+                if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                    bakedItem.kindModifiers = navItem.kindModifiers;
+                }
+                if (navItem.matchKind != 'none') {
+                    bakedItem.matchKind = navItem.matchKind;
+                }
+                if (navItem.containerName && (navItem.containerName.length > 0)) {
+                    bakedItem.containerName = navItem.containerName;
+                }
+                if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                    bakedItem.containerKind = navItem.containerKind;
+                }
+                return bakedItem;
+            });
         }
 
-        getMatchingBrace(line: number, col: number, rawfile: string, reqSeq = 0) {
-           var file = ts.normalizePath(rawfile);
+        getBraceMatching(line: number, col: number, fileName: string): ServerProtocol.TextSpan[] {
+            var file = ts.normalizePath(fileName);
+            
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var pos = compilerService.host.lineColToPosition(file, line, col);
-                var spans: ts.TextSpan[];
-                try {
-                    spans = compilerService.languageService.getBraceMatchingAtPosition(file, pos);
-                }
-                catch (err) {
-                    this.logError(err, CommandNames.Brace);
-                    spans = undefined;
-                }
-                if (spans) {
-                    var bakedSpans: ServerProtocol.TextSpan[] = spans.map(span => ({
-                        start: span &&
-                        compilerService.host.positionToLineCol(file, span.start),
-                        end: span &&
-                        compilerService.host.positionToLineCol(file, span.start + span.length)
-                    }));
-                    this.output(bakedSpans, CommandNames.Brace, reqSeq);
-                }
-                else {
-                    this.output(undefined, CommandNames.Brace, reqSeq, "no matching braces");
-                }
+            if (!project) {
+                throw Errors.NoProject;
             }
-            else { 
-                this.output(undefined, CommandNames.Brace, reqSeq, "no matching braces");
+            
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+            
+            var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
+            if (!spans) {
+                throw Errors.NoContent;
             }
+            
+            return spans.map(span => ({
+                start: compilerService.host.positionToLineCol(file, span.start),
+                end: compilerService.host.positionToLineCol(file, span.start + span.length)
+            }));
         }
 
-        executeJSONcmd(cmd: string) {
+        onMessage(message: string) {
             try {
-                var req = <ServerProtocol.Request>JSON.parse(cmd);
-                switch (req.command) {
+                var request = <ServerProtocol.Request>JSON.parse(message);
+                var response: any;
+                switch (request.command) {
                     case CommandNames.Definition: {
-                        var defArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.goToDefinition(defArgs.line, defArgs.col, defArgs.file, req.seq);
+                        var defArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        response = this.goToDefinition(defArgs.line, defArgs.col, defArgs.file);
                         break;
                     }
                     case CommandNames.References: {
-                        var refArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.findReferences(refArgs.line, refArgs.col, refArgs.file, req.seq);
+                        var refArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        response = this.findReferences(refArgs.line, refArgs.col, refArgs.file);
                         break;
                     }
                     case CommandNames.Rename: {
-                        var renameArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.rename(renameArgs.line, renameArgs.col, renameArgs.file, req.seq);
-                        break;
-                    }
-                    case CommandNames.Type: {
-                        var typeArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.goToType(typeArgs.line, typeArgs.col, typeArgs.file, req.seq);
+                        var renameArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        response = this.rename(renameArgs.line, renameArgs.col, renameArgs.file);
                         break;
                     }
                     case CommandNames.Open: {
-                        var openArgs = <ServerProtocol.FileRequestArgs>req.arguments;
+                        var openArgs = <ServerProtocol.FileRequestArgs>request.arguments;
                         this.openClientFile(openArgs.file);
                         break;
                     }
                     case CommandNames.Quickinfo: {
-                        var quickinfoArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.quickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file, req.seq);
+                        var quickinfoArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        response = this.quickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
                         break;
                     }
                     case CommandNames.Format: {
-                        var formatArgs = <ServerProtocol.FormatRequestArgs>req.arguments;
-                        this.format(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file,
-                            cmd, req.seq);
+                        var formatArgs = <ServerProtocol.FormatRequestArgs>request.arguments;
+                        response = this.format(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
                         break;
                     }
                     case CommandNames.Formatonkey: {
-                        var formatOnKeyArgs = <ServerProtocol.FormatOnKeyRequestArgs>req.arguments;
-                        this.formatOnKey(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file,
-                            cmd, req.seq);
+                        var formatOnKeyArgs = <ServerProtocol.FormatOnKeyRequestArgs>request.arguments;
+                        response = this.formatOnKey(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
                         break;
                     }
                     case CommandNames.Completions: {
-                        var completionsArgs = <ServerProtocol.CompletionsRequestArgs>req.arguments;
-                        this.completions(req.arguments.line, req.arguments.col, completionsArgs.prefix, req.arguments.file,
-                            cmd, req.seq);
+                        var completionsArgs = <ServerProtocol.CompletionsRequestArgs>request.arguments;
+                        response = this.completions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
                         break;
                     }
                     case CommandNames.Geterr: {
-                        var geterrArgs = <ServerProtocol.GeterrRequestArgs>req.arguments;
-                        this.geterr(geterrArgs.delay, geterrArgs.files);
+                        var geterrArgs = <ServerProtocol.GeterrRequestArgs>request.arguments;
+                        response = this.geterr(geterrArgs.delay, geterrArgs.files);
                         break;
                     }
                     case CommandNames.Change: {
-                        var changeArgs = <ServerProtocol.ChangeRequestArgs>req.arguments;
+                        var changeArgs = <ServerProtocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.col, changeArgs.deleteLen, changeArgs.insertString,
                             changeArgs.file);
                         break;
                     }
                     case CommandNames.Reload: {
-                        var reloadArgs = <ServerProtocol.ReloadRequestArgs>req.arguments;
-                        this.reload(reloadArgs.file, reloadArgs.tmpfile, req.seq);
+                        var reloadArgs = <ServerProtocol.ReloadRequestArgs>request.arguments;
+                        this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
                         break;
                     }
                     case CommandNames.Saveto: {
-                        var savetoArgs = <ServerProtocol.SavetoRequestArgs>req.arguments;
+                        var savetoArgs = <ServerProtocol.SavetoRequestArgs>request.arguments;
                         this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
                         break;
                     }
                     case CommandNames.Close: {
-                        var closeArgs = <ServerProtocol.FileRequestArgs>req.arguments;
+                        var closeArgs = <ServerProtocol.FileRequestArgs>request.arguments;
                         this.closeClientFile(closeArgs.file);
                         break;
                     }
                     case CommandNames.Navto: {
-                        var navtoArgs = <ServerProtocol.NavtoRequestArgs>req.arguments;
-                        this.navto(navtoArgs.searchTerm, navtoArgs.file, cmd, req.seq);
-                        break;
-                    }
-                    case CommandNames.Abbrev: { 
-                        this.sendAbbrev();
+                        var navtoArgs = <ServerProtocol.NavtoRequestArgs>request.arguments;
+                        response = this.navto(navtoArgs.searchTerm, navtoArgs.file);
                         break;
                     }
                     case CommandNames.Brace: {
-                        var defArgs = <ServerProtocol.CodeLocationRequestArgs>req.arguments;
-                        this.getMatchingBrace(defArgs.line, defArgs.col, defArgs.file, req.seq);
+                        var braceArguments = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        response = this.getBraceMatching(braceArguments.line, braceArguments.col, braceArguments.file);
                         break;
                     }
                     default: {
-                        this.projectService.log("Unrecognized JSON command: " + cmd);
+                        this.projectService.log("Unrecognized JSON command: " + message);
+                        this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
                         break;
                     }
                 }
+
+                if (response) {
+                    this.output(response, request.command, request.seq);
+                }
+
             } catch (err) {
-                this.logError(err, cmd);
-            }
-        }
-
-        sendAbbrev(reqSeq = 0) {
-            if (!this.fetchedAbbrev) {
-                this.output(this.abbrevTable, CommandNames.Abbrev, reqSeq);
-            }
-            this.fetchedAbbrev = true;
-        }
-
-        executeCmd(cmd: string) {
-            var line: number, col: number, file: string;
-            var m: string[];
-
-            try {
-                if (m = cmd.match(/^dbg start$/)) {
-                    this.debugSession = new JsDebugSession(this.host.getDebuggerClient());
+                if (err instanceof OperationCanceledException) {
+                    // Handle cancellation exceptions
                 }
-                else if (m = cmd.match(/^dbg cont$/)) {
-                    if (this.debugSession) {
-                        this.debugSession.cont((err, body, res) => {
-                        });
-                    }
-                }
-                else if (m = cmd.match(/^dbg src$/)) {
-                    if (this.debugSession) {
-                        this.debugSession.listSrc();
-                    }
-                }
-                else if (m = cmd.match(/^dbg brk (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    file = ts.normalizePath(m[2]);
-                    if (this.debugSession) {
-                        this.debugSession.setBreakpointOnLine(line, file);
-                    }
-                }
-                else if (m = cmd.match(/^dbg eval (.*)$/)) {
-                    var code = m[1];
-                    if (this.debugSession) {
-                        this.debugSession.evaluate(code);
-                    }
-                }
-                else if (m = cmd.match(/^definition (\d+) (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    file = m[3];
-                    this.goToDefinition(line, col, file);
-                }
-                else if (m = cmd.match(/^rename (\d+) (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    file = m[3];
-                    this.rename(line, col, file);
-                }
-                else if (m = cmd.match(/^type (\d+) (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    file = m[3];
-                    this.goToType(line, col, file);
-                }
-                else if (m = cmd.match(/^open (.*)$/)) {
-                    file = m[1];
-                    this.openClientFile(file);
-                }
-                else if (m = cmd.match(/^references (\d+) (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    file = m[3];
-                    this.findReferences(line, col, file);
-                }
-                else if (m = cmd.match(/^quickinfo (\d+) (\d+) (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    file = m[3];
-                    this.quickInfo(line, col, file);
-                }
-                else if (m = cmd.match(/^format (\d+) (\d+) (\d+) (\d+) (.*)$/)) {
-                    // format line col endLine endCol file
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    var endLine = parseInt(m[3]);
-                    var endCol = parseInt(m[4]);
-                    file = m[5];
-                    this.format(line, col, endLine, endCol, file, cmd);
-                }
-                else if (m = cmd.match(/^formatonkey (\d+) (\d+) (\{\".*\"\})\s* (.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    var key = JSON.parse(m[3].substring(1, m[3].length - 1));
-                    file = m[4];
-                    this.formatOnKey(line, col, key, file, cmd);
-                }
-                else if (m = cmd.match(/^completions (\d+) (\d+) (\{.*\})?\s*(.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    var prefix = "";
-                    file = m[4];
-                    if (m[3]) {
-                        prefix = m[3].substring(1, m[3].length - 1);
-                    }
-                    this.completions(line, col, prefix, file, cmd);
-                }
-                else if (m = cmd.match(/^geterr (\d+) (.*)$/)) {
-                    var ms = parseInt(m[1]);
-                    var rawFiles = m[2];
-                    this.geterr(ms, rawFiles.split(';'));
-                }
-                else if (m = cmd.match(/^change (\d+) (\d+) (\d+) (\d+) (\{\".*\"\})?\s*(.*)$/)) {
-                    line = parseInt(m[1]);
-                    col = parseInt(m[2]);
-                    var deleteLen = parseInt(m[3]);
-                    var insertLen = parseInt(m[4]);
-                    var insertString: string;
-                    if (insertLen) {
-                        insertString = JSON.parse(m[5].substring(1, m[5].length - 1));
-                    }
-                    file = m[6];
-                    this.change(line, col, deleteLen, insertString, file);
-                }
-                else if (m = cmd.match(/^reload (.*) from (.*)$/)) {
-                    this.reload(m[1], m[2]);
-                }
-                // TODO: change this to saveto
-                else if (m = cmd.match(/^save (.*) to (.*)$/)) {
-                    this.saveToTmp(m[1], m[2]);
-                }
-                else if (m = cmd.match(/^close (.*)$/)) {
-                    this.closeClientFile(m[1]);
-                }
-                else if (m = cmd.match(/^navto (\{.*\}) (.*)$/)) {
-                    var searchTerm = m[1];
-                    searchTerm = searchTerm.substring(1, searchTerm.length - 1);
-                    this.navto(searchTerm, m[2], cmd);
-                }
-                else if (m = cmd.match(/^navbar (.*)$/)) {
-                    this.navbar(m[1]);
-                }
-                else if (m = cmd.match(/^abbrev/)) {
-                    this.sendAbbrev();
-                }
-                else if (m = cmd.match(/^pretty/)) {
-                    this.prettyJSON = true;
-                }
-                else if (m = cmd.match(/^printproj/)) {
-                    this.projectService.printProjects();
-                }
-                else if (m = cmd.match(/^fileproj (.*)$/)) {
-                    file = ts.normalizePath(m[1]);
-                    this.projectService.printProjectsForFile(file);
-                }
-                else {
-                    this.output(undefined, CommandNames.Unknown, 0, "Unrecognized command " + cmd);
-                }
-            } catch (err) {
-                this.logError(err, cmd);
+                this.logError(err, message);
+                this.output(undefined, request ? request.command : CommandNames.Unknown, request ? request.seq : 0, "Error processing request. " + err.message);
             }
         }
     }

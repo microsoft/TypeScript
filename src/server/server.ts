@@ -97,17 +97,8 @@ module ts.server {
 
         listen() {
             rl.on('line',(input: string) => {
-                var cmd = input.trim();
-                if (cmd.indexOf("{") == 0) {
-                    // assumption is JSON on single line
-                    // plan is to also carry this protocol
-                    // over tcp, in which case JSON would
-                    // have a Content-Length header
-                    this.executeJSONcmd(cmd);
-                }
-                else {
-                    this.executeCmd(cmd);
-                }
+                var message = input.trim();
+                this.onMessage(message);
             });
 
             rl.on('close',() => {
@@ -122,13 +113,6 @@ module ts.server {
     // TODO: check that this location is writable
     var logger = new Logger(__dirname + "/.log" + process.pid.toString());
 
-    var host: ServerHost = ts.sys;
-
-    // Wire the debugging interface
-    if (!host.getDebuggerClient) {
-        host.getDebuggerClient = () => new nodeproto.Client();
-    }
-
     // Start listening
-    new IOSession(host, logger, /* useProtocol */ true, /* prettyJSON */ false).listen();
+    new IOSession(ts.sys, logger, /* useProtocol */ true, /* prettyJSON */ false).listen();
 }
