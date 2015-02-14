@@ -43,7 +43,7 @@ describe('Colorization', function () {
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
-        var result = classifier.getClassificationsForLine(text, initialEndOfLineState);
+        var result = classifier.getClassificationsForLine(text, initialEndOfLineState, false);
 
         for (var i = 0, n = expectedEntries.length; i < n; i++) {
             var expectedEntry = expectedEntries[i];
