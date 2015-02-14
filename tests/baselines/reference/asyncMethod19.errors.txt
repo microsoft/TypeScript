@@ -1,0 +1,27 @@
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,13): error TS1138: Parameter declaration expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,18): error TS1005: ':' expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,19): error TS1136: Property assignment expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,29): error TS1139: Type parameter declaration expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts(7,33): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod19.ts (5 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var o = {
+      async foo(await): Promise<void> {
+                ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                     ~
+!!! error TS1005: ':' expected.
+                      ~
+!!! error TS1136: Property assignment expected.
+                                ~~~~
+!!! error TS1139: Type parameter declaration expected.
+                                    ~
+!!! error TS1005: ':' expected.
+      }
+    }

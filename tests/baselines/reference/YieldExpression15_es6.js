@@ -5,5 +5,5 @@ var v = () => {
 
 //// [YieldExpression15_es6.js]
 var v = function () {
-    ;
+    yield foo;
 };

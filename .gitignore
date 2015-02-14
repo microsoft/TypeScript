@@ -26,6 +26,8 @@ tests/services/browser/typescriptServices.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests.js
+scripts/processFactory.js
+scripts/processFactory.d.ts
 src/harness/*.js
 rwc-report.html
 *.swp

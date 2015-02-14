@@ -1,0 +1,58 @@
+=== tests/cases/conformance/async/downlevel/awaitForInStatement/awaitForInStatement9.ts ===
+declare class Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+>init : (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: T | IPromise<T>) => void
+>value : T | IPromise<T>
+>T : T
+>IPromise : IPromise<T>
+>T : T
+>reject : (reason?: any) => void
+>reason : any
+
+    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+>then : <TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>) => Promise<TResult>
+>TResult : TResult
+>onfulfilled : (value: T) => TResult | IPromise<TResult>
+>value : T
+>T : T
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>onrejected : (reason: any) => TResult | IPromise<TResult>
+>reason : any
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>Promise : Promise<T>
+>TResult : TResult
+}
+declare var a: any;
+>a : any
+
+declare var o: { i: any };
+>o : { i: any; }
+>i : any
+
+declare var p: Promise<any>;
+>p : Promise<any>
+>Promise : Promise<T>
+
+async function func(): Promise<void> {
+>func : () => Promise<void>
+>Promise : Promise<T>
+
+    "before";
+    for (o.i in a) {
+>o.i : any
+>o : { i: any; }
+>i : any
+>a : any
+
+        "body";
+    }
+    "after";
+}

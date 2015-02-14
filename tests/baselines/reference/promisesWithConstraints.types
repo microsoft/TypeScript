@@ -1,17 +1,17 @@
 === tests/cases/compiler/promisesWithConstraints.ts ===
-interface Promise<T> {
->Promise : Promise<T>
+interface Promise_<T> {
+>Promise_ : Promise_<T>
 >T : T
 
-    then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
+    then<U>(cb: (x: T) => Promise_<U>): Promise_<U>;
+>then : <U>(cb: (x: T) => Promise_<U>) => Promise_<U>
 >U : U
->cb : (x: T) => Promise<U>
+>cb : (x: T) => Promise_<U>
 >x : T
 >T : T
->Promise : Promise<T>
+>Promise_ : Promise_<T>
 >U : U
->Promise : Promise<T>
+>Promise_ : Promise_<T>
 >U : U
 }
 
@@ -20,16 +20,16 @@ interface CPromise<T extends { x: any; }> {
 >T : T
 >x : any
 
-    then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
->then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
+    then<U extends { x: any; }>(cb: (x: T) => Promise_<U>): Promise_<U>;
+>then : <U extends { x: any; }>(cb: (x: T) => Promise_<U>) => Promise_<U>
 >U : U
 >x : any
->cb : (x: T) => Promise<U>
+>cb : (x: T) => Promise_<U>
 >x : T
 >T : T
->Promise : Promise<T>
+>Promise_ : Promise_<T>
 >U : U
->Promise : Promise<T>
+>Promise_ : Promise_<T>
 >U : U
 }
 
@@ -42,25 +42,25 @@ interface Bar { x; y; }
 >x : any
 >y : any
 
-var a: Promise<Foo>;
->a : Promise<Foo>
->Promise : Promise<T>
+var a: Promise_<Foo>;
+>a : Promise_<Foo>
+>Promise_ : Promise_<T>
 >Foo : Foo
 
-var b: Promise<Bar>;
->b : Promise<Bar>
->Promise : Promise<T>
+var b: Promise_<Bar>;
+>b : Promise_<Bar>
+>Promise_ : Promise_<T>
 >Bar : Bar
 
 a = b; // ok
->a = b : Promise<Bar>
->a : Promise<Foo>
->b : Promise<Bar>
+>a = b : Promise_<Bar>
+>a : Promise_<Foo>
+>b : Promise_<Bar>
 
 b = a; // ok
->b = a : Promise<Foo>
->b : Promise<Bar>
->a : Promise<Foo>
+>b = a : Promise_<Foo>
+>b : Promise_<Bar>
+>a : Promise_<Foo>
 
 var a2: CPromise<Foo>;
 >a2 : CPromise<Foo>

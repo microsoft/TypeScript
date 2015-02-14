@@ -93,6 +93,8 @@ module ts {
         "while": SyntaxKind.WhileKeyword,
         "with": SyntaxKind.WithKeyword,
         "yield": SyntaxKind.YieldKeyword,
+        "async": SyntaxKind.AsyncKeyword,
+        "await": SyntaxKind.AwaitKeyword,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
         "(": SyntaxKind.OpenParenToken,
@@ -331,6 +333,7 @@ module ts {
     }
 
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+        if (pos < 0) return pos;
         while (true) {
             var ch = text.charCodeAt(pos);
             switch (ch) {

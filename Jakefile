@@ -38,11 +38,15 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "generator.ts",
+    "rewriter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
     "tsc.ts",
-    "diagnosticInformationMap.generated.ts"
+    "diagnosticInformationMap.generated.ts",
+	"factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 });
@@ -56,10 +60,14 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "generator.ts",
+    "rewriter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
-    "diagnosticInformationMap.generated.ts"
+    "diagnosticInformationMap.generated.ts",
+	"factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
@@ -140,6 +148,7 @@ var librarySourceMap = [
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
         { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
+		{ target: "tslib.d.ts", sources: ["tslib.d.ts"]}
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -280,10 +289,43 @@ for (var i in libraryTargets) {
     })(i);
 }
 
+// tslib
+var tslibSource = path.join(libraryDirectory, "tslib.js");
+var tslibTarget = path.join(builtLocalDirectory, "tslib.js");
+file(tslibTarget, [builtLocalDirectory, copyright, tslibSource], function() {
+    concatenateFiles(tslibTarget, [copyright, tslibSource]);
+})
+
 // Lib target to build the library files
 desc("Builds the library targets");
-task("lib", libraryTargets);
+task("lib", [tslibTarget].concat(libraryTargets));
 
+// Generate factory
+var processFactoryJs = path.join(scriptsDirectory, "processFactory.js");
+var processFactoryTs = path.join(scriptsDirectory, "processFactory.ts");
+var factoryJson = path.join(compilerDirectory, "factory.json");
+var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
+file(processFactoryTs);
+compileFile(processFactoryJs, [processFactoryTs], [processFactoryTs], [], /*useBuiltCompile*/ false);
+file(factoryGeneratedTs, [processFactoryJs, factoryJson], function() {
+    var cmd = "node " + processFactoryJs + " "  + factoryJson;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function(error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    ex.run();
+}, { async: true });
+
+desc("Generates the node factory and visitor in TypeScript based on an input JSON file");
+task("generate-factory", [factoryGeneratedTs]);
 
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");

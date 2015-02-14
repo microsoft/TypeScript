@@ -91,7 +91,7 @@ module ts {
         }
         return result;
     }
-
+    
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;

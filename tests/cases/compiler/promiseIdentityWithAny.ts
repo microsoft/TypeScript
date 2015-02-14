@@ -1,10 +1,10 @@
-interface IPromise<T, V> {
-    then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+interface IPromise1<T, V> {
+    then<U, W>(callback: (x: T) => IPromise1<U, W>): IPromise1<U, W>;
 }
-interface Promise<T, V> {
-    then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
+interface Promise1<T, V> {
+    then<U, W>(callback: (x: T) => Promise1<any, any>): Promise1<any, any>;
 }
 
 // Should be ok because signature type parameters get erased to any
-var x: IPromise<string, number>;
-var x: Promise<string, boolean>;
+var x: IPromise1<string, number>;
+var x: Promise1<string, boolean>;

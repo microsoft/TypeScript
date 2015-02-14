@@ -6,6 +6,6 @@ declare module ng {
     }
 
     interface IQService {
-        all(promises: IPromise < any > []): IPromise<
+        all(promises: IPromise_ < any > []): IPromise_<
 
 //// [parserUnterminatedGeneric2.js]

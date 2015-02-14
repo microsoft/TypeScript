@@ -127,11 +127,27 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": {
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "'{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045
     },
@@ -171,6 +187,14 @@
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Type for 'await' does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1058
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
@@ -187,7 +211,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "'{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -475,7 +499,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "'yield' expression must be contained within a generator declaration.": {
         "category": "Error",
         "code": 1163
     },
@@ -565,19 +589,68 @@
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
-        "code": 1184
+        "code": 1185
     },
     "Merge conflict marker encountered.": {
         "category": "Error",
-        "code": 1185
+        "code": 1186
     },
     "A rest element cannot have an initializer.": {
         "category": "Error",
-        "code": 1186
+        "code": 1187
     },
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
-        "code": 1187
+        "code": 1188
+    },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1301
+    },
+    "'{0}' modifier cannot be used with a module declaration.": {
+        "category": "Error",
+        "code": 1302
+    },
+    "'{0}' modifier cannot be used with an enum declaration.": {
+        "category": "Error",
+        "code": 1303
+    },
+    "'{0}' modifier cannot be used with an export assignment declaration.": {
+        "category": "Error",
+        "code": 1304
+    },
+    "'{0}' modifier cannot be used on a variable statement.": {
+        "category": "Error",
+        "code": 1305
+    },
+    "'{0}' modifier cannot be used with a type declaration.": {
+        "category": "Error",
+        "code": 1306
+    },
+    "'{0}' modifier cannot be used with a parameter declaration.": {
+        "category": "Error",
+        "code": 1307
+    },
+    "'await' expression must be contained within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "'{0}' modifier cannot be used on an object literal element.": {
+        "category": "Error",
+        "code": 1309
+    },
+    "'{0}' expression is not allowed in an initializer.": {
+        "category": "Error",
+        "code": 1310
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1202,7 +1275,25 @@
     },
     "A computed property name cannot reference a type parameter from its containing type.": {
         "category": "Error",
-        "code": 2466
+        "code": 2467
+    },
+
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
+        "category": "Error",
+        "code": 2500
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2501
+    },
+
+    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2503
     },
     "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
@@ -1740,6 +1831,14 @@
     "Do not emit declarations for code that has an '@internal' annotation.": {
         "category": "Message",
         "code": 6056
+    },
+    "Emit async functions when ECMAScript target version is lower than 'ES6' (experimental).": {
+        "category": "Message",
+        "code": 6057
+    },
+    "Do not emit runtime helper functions (e.g. '__extends', '__awaiter'). Assumes manual reference to tslib.js (experimental).": {
+        "category": "Message",
+        "code": 6058
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

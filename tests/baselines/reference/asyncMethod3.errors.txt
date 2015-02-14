@@ -1,0 +1,10 @@
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod3.ts(2,13): error TS2372: Parameter 'await' cannot be referenced in its initializer.
+
+
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod3.ts (1 errors) ====
+    class C {
+      f(await = await) {
+                ~~~~~
+!!! error TS2372: Parameter 'await' cannot be referenced in its initializer.
+      }
+    }

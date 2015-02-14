@@ -8,7 +8,7 @@ class C {
 //// [YieldExpression12_es6.js]
 var C = (function () {
     function C() {
-        ;
+        yield foo;
     }
     return C;
 })();

@@ -712,7 +712,7 @@ module Harness {
         default:
             throw new Error('Unknown context');
     }
-    export var tcServicesFile = IO.readFile(tcServicesFileName);
+    export var tcServicesFile = IO.readFile(tcServicesFileName) + "\n//# sourceURL=" + tcServicesFileName;
 
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
@@ -934,6 +934,7 @@ module Harness {
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
+                options.asyncFunctions = true;
                 options.noErrorTruncation = true;
 
                 if (settingsCallback) {
@@ -1066,6 +1067,14 @@ module Harness {
 
                         case 'includebuiltfile':
                             inputFiles.push({ unitName: setting.value, content: normalizeLineEndings(IO.readFile(libFolder + setting.value), newLine) });
+                            break;
+
+                        case 'nohelpers':
+                            options.noHelpers = setting.value === 'true';
+                            break;
+
+                        case 'asyncfunctions':
+                            options.asyncFunctions = setting.value === 'true';
                             break;
 
                         default:
@@ -1469,7 +1478,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal", "nohelpers", "asyncfunctions"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

@@ -49,6 +49,7 @@ class TypeWriterWalker {
             case ts.SyntaxKind.TypeOfExpression:
             case ts.SyntaxKind.VoidExpression:
             case ts.SyntaxKind.DeleteExpression:
+            case ts.SyntaxKind.AwaitExpression:
             case ts.SyntaxKind.PrefixUnaryExpression:
             case ts.SyntaxKind.PostfixUnaryExpression:
             case ts.SyntaxKind.BinaryExpression:

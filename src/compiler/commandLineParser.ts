@@ -87,6 +87,12 @@ module ts {
             type: "boolean",
         },
         {
+            name: "noHelpers",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_runtime_helper_functions_e_g_extends_awaiter_Assumes_manual_reference_to_tslib_js_experimental,
+            experimental: true
+        },
+        {
             name: "out",
             type: "string",
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,
@@ -147,6 +153,12 @@ module ts {
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
             error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+        },
+        {
+            name: "asyncFunctions",
+            type: "boolean",
+            experimental: true,
+            description: Diagnostics.Emit_async_functions_when_ECMAScript_target_version_is_lower_than_ES6_experimental,
         },
         {
             name: "version",

@@ -4,6 +4,6 @@ function* foo() {
 }
 
 //// [YieldExpression7_es6.js]
-function foo() {
-    ;
+function* foo() {
+    yield foo;
 }

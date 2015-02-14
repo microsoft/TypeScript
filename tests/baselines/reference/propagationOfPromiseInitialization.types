@@ -1,10 +1,10 @@
 === tests/cases/compiler/propagationOfPromiseInitialization.ts ===
-interface IPromise<T> {
->IPromise : IPromise<T>
+interface IPromise1<T> {
+>IPromise1 : IPromise1<T>
 >T : T
 
-    then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
->then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
+    then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise1<TResult>;
+>then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise1<TResult>
 >TResult : TResult
 >successCallback : (promiseValue: T) => TResult
 >promiseValue : T
@@ -13,28 +13,28 @@ interface IPromise<T> {
 >errorCallback : (reason: any) => TResult
 >reason : any
 >TResult : TResult
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 >TResult : TResult
 }
 
-var foo: IPromise<number>;
->foo : IPromise<number>
->IPromise : IPromise<T>
+var foo: IPromise1<number>;
+>foo : IPromise1<number>
+>IPromise1 : IPromise1<T>
 
 foo.then((x) => {
->foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then((x) => {    // x is inferred to be string    x.length;    return 123;}) : IPromise<number>
->foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
->foo.then((x) => {    // x is inferred to be a number    return "asdf";}) : IPromise<string>
->foo.then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
->foo : IPromise<number>
->then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
+>foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then((x) => {    // x is inferred to be string    x.length;    return 123;}) : IPromise1<number>
+>foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise1<TResult>
+>foo.then((x) => {    // x is inferred to be a number    return "asdf";}) : IPromise1<string>
+>foo.then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise1<TResult>
+>foo : IPromise1<number>
+>then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise1<TResult>
 >(x) => {    // x is inferred to be a number    return "asdf";} : (x: number) => string
 >x : number
 
     // x is inferred to be a number
     return "asdf";
 }).then((x) => {
->then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
+>then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise1<TResult>
 >(x) => {    // x is inferred to be string    x.length;    return 123;} : (x: string) => number
 >x : string
 

@@ -4,6 +4,6 @@ function * foo() {
 }
 
 //// [FunctionDeclaration9_es6.js]
-function foo() {
-    var v = { []: foo };
+function* foo() {
+    var v = { [yield]: foo };
 }

@@ -78,6 +78,19 @@ module ts {
         return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0
     }
 
+    export function isAwaitOrYield(node: Node) {
+        return node && (node.kind === SyntaxKind.AwaitExpression || node.kind === SyntaxKind.YieldExpression);
+    }
+
+    export function hasAwaitOrYield(node: Node): boolean {
+        if (!node) {
+            return false;
+        }
+
+        aggregateChildData(node);
+        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasAwaitOrYield) !== 0;
+    }
+
     function aggregateChildData(node: Node): void {
         if (!(node.parserContextFlags & ParserContextFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
@@ -89,6 +102,17 @@ module ts {
             // If so, mark ourselves accordingly. 
             if (thisNodeOrAnySubNodesHasError) {
                 node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
+            }
+
+            // We need to keep track of whether a node contains an 'await' or 'yield' expression to help with later rewriting.
+            // We do not want to copy this past a function boundary, however.
+            if (!isAnyFunction(node)) {
+                var thisNodeOrAnySubNodesHasAwaitOrYield = isAwaitOrYield(node) || 
+                    forEachChild(node, hasAwaitOrYield);
+                
+                if (thisNodeOrAnySubNodesHasAwaitOrYield) {
+                    node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasAwaitOrYield;
+                }
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
@@ -133,10 +157,22 @@ module ts {
             return true;
         }
 
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos >= 0;
+    }
+
+    export function nodeIsGenerated(node: Node) {
+        return node && node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos < 0;
+    }
+    
+    export function nodeIsMissingOrGenerated(node: Node) {
+        return nodeIsMissing(node) || nodeIsGenerated(node);
     }
     
     export function nodeIsPresent(node: Node) {
+        return !nodeIsMissingOrGenerated(node);
+    }
+
+    export function nodeIsPresentOrGenerated(node: Node) {
         return !nodeIsMissing(node);
     }
 
@@ -389,11 +425,41 @@ module ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isObjectLiteralElement(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+
+
+            }
+        }
+
+        return false;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
             if (!node || isAnyFunction(node)) {
                 return <FunctionLikeDeclaration>node;
+            }
+        }
+    }
+
+    export function getContainingParameter(node: Node): ParameterDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isAnyFunction(node)) {
+                break;
+            }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                return <ParameterDeclaration>node;
             }
         }
     }
@@ -511,6 +577,7 @@ module ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.AwaitExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
@@ -578,6 +645,91 @@ module ts {
         return false;
     }
 
+    export function isUnaryExpression(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+                return true;
+            default:
+                return isLeftHandSideExpression(node);
+            }
+    }
+
+    export function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.LabeledStatement:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isLogicalBinary(node: BinaryExpression): boolean {
+        switch (node.operator) {
+            case SyntaxKind.AmpersandAmpersandToken:
+            case SyntaxKind.BarBarToken:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isAssignment(node: BinaryExpression): boolean {
+        switch (node.operator) {
+            case SyntaxKind.EqualsToken:
+            case SyntaxKind.PlusEqualsToken:
+            case SyntaxKind.MinusEqualsToken:
+            case SyntaxKind.AsteriskEqualsToken:
+            case SyntaxKind.SlashEqualsToken:
+            case SyntaxKind.PercentEqualsToken:
+            case SyntaxKind.LessThanLessThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.AmpersandEqualsToken:
+            case SyntaxKind.BarEqualsToken:
+            case SyntaxKind.CaretEqualsToken:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isDestructuringAssignment(node: BinaryExpression): boolean {
+        if (node.operator === SyntaxKind.EqualsToken) {
+            var left = node.left;
+            while (left.kind === SyntaxKind.ParenthesizedExpression) {
+                left = (<ParenthesizedExpression>left).expression;
+            }
+            switch (left.kind) {
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAnyAccessor(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+        }
+
+        return false;
+    }
+
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         var moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -636,8 +788,16 @@ module ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    export function isBindingPattern(node: Node) {
+    export function isTemplateLiteralOrTemplateExpression(node: Node): boolean {
+        return node.kind === SyntaxKind.TemplateExpression || isTemplateLiteralKind(node.kind);
+    }
+
+    export function isBindingPattern(node: Node): boolean {
         return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+    }
+
+    export function isIdentifierOrBindingPattern(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier || isBindingPattern(node);
     }
 
     export function isInAmbientContext(node: Node): boolean {
@@ -694,6 +854,7 @@ module ts {
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.SwitchStatement:
             case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.ThrowStatement:
             case SyntaxKind.TryStatement:
             case SyntaxKind.VariableStatement:
             case SyntaxKind.WhileStatement:
@@ -703,6 +864,20 @@ module ts {
             default:
                 return false;
         }
+    }
+
+    export function needsParenthesisForPropertyAccess(expression: Expression): boolean {
+        if (expression.parent) {
+            switch (expression.parent.kind) {
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ParenthesizedExpression:
+                    return false;
+        }
+    }
+
+        return !isLeftHandSideExpression(expression);
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
@@ -835,6 +1010,10 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isAsyncFunction(node: SignatureDeclaration): boolean {
+        return (node.flags & NodeFlags.Async) !== 0;
+    }
+
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.PublicKeyword:
@@ -844,6 +1023,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.AsyncKeyword:
                 return true;
         }
         return false;
@@ -1139,4 +1319,27 @@ module ts {
             }
         }
     }
+
+    export function reportUnexpectedNode(node: Node): void {
+        var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
+        Debug.fail("Unexpected node: " + nodeKind);
+    }
+
+    export function reportUnexpectedNodeAfterVisit(visited: Node, node: Node): void {
+        var visitedKind = visited ? getSyntaxKind(visited.kind) : "Unknown";
+        var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
+        Debug.fail("Unexpected node after visit: " + visitedKind + ", source: " + nodeKind);
+    }
+
+    function getSyntaxKind(kind: SyntaxKind): string {
+        var nodeKind: string;
+        if (typeof (<any>ts).SyntaxKind === "object") {
+            nodeKind = (<any>ts).SyntaxKind[kind];
+        }
+        else {
+            nodeKind = "SyntaxKind[" + String(kind) + "]";
+        }
+
+        return nodeKind;
+    }    
 }

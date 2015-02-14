@@ -1,0 +1,8 @@
+=== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod4.ts ===
+class C {
+>C : C
+
+  await() {
+>await : () => void
+  }
+}

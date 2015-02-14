@@ -1,0 +1,599 @@
+[
+    {
+        "kind": "StringLiteral",
+        "type": "StringLiteralExpression",
+        "children": [
+            { "name": "text", "type": "string", "readonly": true }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "type": "LiteralExpression",
+        "children": [
+            { "name": "text", "paramName": "value", "type": "number | string", "converter": "String", "readonly": true }
+        ]
+    },
+    {
+        "kind": "Identifier",
+        "type": "Identifier",
+        "children": [
+            { "name": "text", "type": "string", "readonly": true }
+        ]
+    },
+    {
+        "kind": "QualifiedName",
+        "type": "QualifiedName",
+        "children": [
+            { "name": "left", "type": "EntityName" },
+            { "name": "right", "type": "Identifier" }
+        ]
+    },
+    {
+        "type": "ComputedPropertyName",
+        "kind": "ComputedPropertyName",
+        "handlerType": "DeclarationName",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "TypeParameter",
+        "type": "TypeParameterDeclaration",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "constraint", "type": "TypeNode", "optional": true },
+            { "name": "expression", "type": "Expression", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "name": "ParameterDeclaration",
+        "kind": "Parameter",
+        "type": "ParameterDeclaration",
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "initializer", "type": "Expression", "optional": "true" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true },
+            { "name": "dotDotDotToken", "type": "Node", "optional": "true", "readonly": true },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
+        ]
+    },
+    {
+        "kind": "PropertySignature",
+        "type": "PropertyDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
+        ]
+    },
+    {
+        "kind": "PropertyDeclaration",
+        "type": "PropertyDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "initializer", "type": "Expression", "optional": "true" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
+        ]
+    },
+    {
+        "kind": "MethodSignature",
+        "type": "MethodDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true },
+            { "name": "questionToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "MethodDeclaration",
+        "type": "MethodDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "Constructor",
+        "type": "ConstructorDeclaration",
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "GetAccessor",
+        "type": "AccessorDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "SetAccessor",
+        "type": "AccessorDeclaration",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "CallSignature",
+        "type": "SignatureDeclaration",
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "ConstructSignature",
+        "type": "SignatureDeclaration",
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "IndexSignature",
+        "type": "IndexSignatureDeclaration",
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "ObjectBindingPattern",
+        "type": "BindingPattern",
+        "children": [
+            { "name": "elements", "type": "BindingElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "ArrayBindingPattern",
+        "type": "BindingPattern",
+        "children": [
+            { "name": "elements", "type": "BindingElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "BindingElement",
+        "type": "BindingElement",
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "propertyName", "type": "Identifier", "optional": true },
+            { "name": "initializer", "type": "Expression", "optional": true }
+        ]
+    },
+    {
+        "kind": "ArrayLiteralExpression",
+        "type": "ArrayLiteralExpression",
+        "children": [
+            { "name": "elements", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "ObjectLiteralExpression",
+        "type": "ObjectLiteralExpression",
+        "children": [
+            { "name": "properties", "type": "ObjectLiteralElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "PropertyAccessExpression",
+        "type": "PropertyAccessExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "name", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "ElementAccessExpression",
+        "type": "ElementAccessExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "argumentExpression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "CallExpression",
+        "type": "CallExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "arguments", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "NewExpression",
+        "type": "NewExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "arguments", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "TaggedTemplateExpression",
+        "type": "TaggedTemplateExpression",
+        "children": [
+            { "name": "tag", "type": "LeftHandSideExpression" },
+            { "name": "template", "type": "LiteralExpression | TemplateExpression" }
+        ]
+    },
+    {
+        "name": "TypeAssertion",
+        "kind": "TypeAssertionExpression",
+        "type": "TypeAssertion",
+        "children": [
+            { "name": "type", "type": "TypeNode", "readonly": true },
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "ParenthesizedExpression",
+        "type": "ParenthesizedExpression",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "FunctionExpression",
+        "type": "FunctionExpression",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Expression | Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "ArrowFunction",
+        "type": "FunctionExpression",
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Expression | Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "DeleteExpression",
+        "type": "DeleteExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "TypeOfExpression",
+        "type": "TypeOfExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "VoidExpression",
+        "type": "VoidExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "AwaitExpression",
+        "type": "AwaitExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "PrefixUnaryExpression",
+        "type": "PrefixUnaryExpression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "operand", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "PostfixUnaryExpression",
+        "type": "PostfixUnaryExpression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "operand", "type": "LeftHandSideExpression" }
+        ]
+    },
+    {
+        "kind": "BinaryExpression",
+        "type": "BinaryExpression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "left", "type": "Expression" },
+            { "name": "right", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "ConditionalExpression",
+        "type": "ConditionalExpression",
+        "children": [
+            { "name": "condition", "type": "Expression" },
+            { "name": "whenTrue", "type": "Expression" },
+            { "name": "whenFalse", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "TemplateExpression",
+        "type": "TemplateExpression",
+        "children": [
+            { "name": "head", "type": "LiteralExpression" },
+            { "name": "templateSpans", "type": "TemplateSpan", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "YieldExpression",
+        "type": "YieldExpression",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "GeneratedLabel",
+        "type": "GeneratedLabel",
+        "children": [
+            { "name": "label", "type": "Label", "readonly": true },
+            { "name": "labelNumbers", "type": "number[]", "readonly": true }
+        ]
+    },
+    {
+        "kind": "SpreadElementExpression",
+        "type": "SpreadElementExpression",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "OmittedExpression",
+        "type": "Expression",
+        "children": [
+        ]
+    },
+    {
+        "kind": "TemplateSpan",
+        "type": "TemplateSpan",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "literal", "type": "LiteralExpression" }
+        ]
+    },
+    {
+        "kind": "Block",
+        "type": "Block",
+        "children": [
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "VariableStatement",
+        "type": "VariableStatement",
+        "children": [
+            { "name": "declarationList", "type": "VariableDeclarationList" }
+        ]
+    },
+    {
+        "kind": "EmptyStatement",
+        "type": "Statement",
+        "children": [
+        ]
+    },
+    {
+        "kind": "ExpressionStatement",
+        "type": "ExpressionStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "IfStatement",
+        "type": "IfStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "thenStatement", "type": "Statement" },
+            { "name": "elseStatement", "type": "Statement", "optional": true }
+        ]
+    },
+    {
+        "kind": "DoStatement",
+        "type": "DoStatement",
+        "children": [
+            { "name": "statement", "type": "Statement" },
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "WhileStatement",
+        "type": "WhileStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ForStatement",
+        "type": "ForStatement",
+        "children": [
+            { "name": "initializer", "type": "VariableDeclarationList | Expression" },
+            { "name": "condition", "type": "Expression" },
+            { "name": "iterator", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ForInStatement",
+        "type": "ForInStatement",
+        "children": [
+            { "name": "initializer", "type": "VariableDeclarationList | Expression" },
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ContinueStatement",
+        "type": "BreakOrContinueStatement",
+        "children": [
+            { "name": "label", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "BreakStatement",
+        "type": "BreakOrContinueStatement",
+        "children": [
+            { "name": "label", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "ReturnStatement",
+        "type": "ReturnStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "WithStatement",
+        "type": "WithStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "SwitchStatement",
+        "type": "SwitchStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "clauses", "type": "CaseOrDefaultClause", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "LabeledStatement",
+        "type": "LabeledStatement",
+        "children": [
+            { "name": "label", "type": "Identifier" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ThrowStatement",
+        "type": "ThrowStatement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "TryStatement",
+        "type": "TryStatement",
+        "children": [
+            { "name": "tryBlock", "type": "Block" },
+            { "name": "catchClause", "type": "CatchClause" },
+            { "name": "finallyBlock", "type": "Block" }
+        ]
+    },
+    {
+        "kind": "DebuggerStatement",
+        "type": "Statement",
+        "children": [
+        ]
+    },
+    {
+        "kind": "VariableDeclaration",
+        "type": "VariableDeclaration",
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "initializer", "type": "Expression", "optional": true }
+        ]
+    },
+    {
+        "kind": "VariableDeclarationList",
+        "type": "VariableDeclarationList",
+        "children": [
+            { "name": "declarations", "type": "VariableDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "FunctionDeclaration",
+        "type": "FunctionDeclaration",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "CaseClause",
+        "type": "CaseClause",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "DefaultClause",
+        "type": "DefaultClause",
+        "children": [
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "CatchClause",
+        "type": "CatchClause",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "block", "type": "Block" }
+        ]
+    },
+    {
+        "kind": "PropertyAssignment",
+        "type": "PropertyAssignment",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "initializer", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "ShorthandPropertyAssignment",
+        "type": "ShorthandPropertyAssignment",
+        "children": [
+            { "name": "name", "type": "Identifier" }
+        ]
+    }
+]
