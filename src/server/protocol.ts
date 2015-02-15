@@ -536,8 +536,8 @@ module ts.server {
                 throw Errors.NoContent;
             }
 
-            return completions.entries.reduce((accum: ts.CompletionEntryDetails[], entry: ts.CompletionEntry) => {
-                if (entry.name.indexOf(prefix) == 0) {
+            return completions.entries.reduce((result: ts.CompletionEntryDetails[], entry: ts.CompletionEntry) => {
+                if (completions.isMemberCompletion || entry.name.indexOf(prefix) == 0) {
                     var protoEntry = <ts.CompletionEntryDetails>{};
                     protoEntry.name = entry.name;
                     protoEntry.kind = entry.kind;
@@ -551,9 +551,9 @@ module ts.server {
                     if (details && (details.displayParts) && (details.displayParts.length > 0)) {
                         protoEntry.displayParts = details.documentation;
                     }
-                    accum.push(protoEntry);
+                    result.push(protoEntry);
                 }
-                return accum;
+                return result;
             }, []);
         }
                  
