@@ -1121,6 +1121,10 @@ declare module "typescript" {
 >parserContextFlags : ParserContextFlags
 >ParserContextFlags : ParserContextFlags
 
+        modifiers?: ModifiersArray;
+>modifiers : ModifiersArray
+>ModifiersArray : ModifiersArray
+
         id?: number;
 >id : number
 
@@ -1143,10 +1147,6 @@ declare module "typescript" {
         localSymbol?: Symbol;
 >localSymbol : Symbol
 >Symbol : Symbol
-
-        modifiers?: ModifiersArray;
->modifiers : ModifiersArray
->ModifiersArray : ModifiersArray
     }
     interface NodeArray<T> extends Array<T>, TextRange {
 >NodeArray : NodeArray<T>
@@ -2232,10 +2232,18 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >EnumMember : EnumMember
     }
-    interface ModuleDeclaration extends Declaration, ModuleElement {
+    interface ExportContainer {
+>ExportContainer : ExportContainer
+
+        exportStars?: ExportDeclaration[];
+>exportStars : ExportDeclaration[]
+>ExportDeclaration : ExportDeclaration
+    }
+    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
 >ModuleDeclaration : ModuleDeclaration
 >Declaration : Declaration
 >ModuleElement : ModuleElement
+>ExportContainer : ExportContainer
 
         name: Identifier | LiteralExpression;
 >name : Identifier | LiteralExpression
@@ -2386,9 +2394,10 @@ declare module "typescript" {
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
     }
-    interface SourceFile extends Declaration {
+    interface SourceFile extends Declaration, ExportContainer {
 >SourceFile : SourceFile
 >Declaration : Declaration
+>ExportContainer : ExportContainer
 
         statements: NodeArray<ModuleElement>;
 >statements : NodeArray<ModuleElement>
@@ -3017,8 +3026,8 @@ declare module "typescript" {
 >EmitResolver : EmitResolver
 
         getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
->getGeneratedNameForNode : (node: EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration) => string
->node : EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration
+>getGeneratedNameForNode : (node: EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration) => string
+>node : EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration
 >ModuleDeclaration : ModuleDeclaration
 >EnumDeclaration : EnumDeclaration
 >ImportDeclaration : ImportDeclaration
@@ -3381,6 +3390,10 @@ declare module "typescript" {
         unionType?: UnionType;
 >unionType : UnionType
 >UnionType : UnionType
+
+        resolvedExports?: SymbolTable;
+>resolvedExports : SymbolTable
+>SymbolTable : SymbolTable
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol

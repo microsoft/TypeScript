@@ -370,13 +370,13 @@ declare module "typescript" {
         kind: SyntaxKind;
         flags: NodeFlags;
         parserContextFlags?: ParserContextFlags;
+        modifiers?: ModifiersArray;
         id?: number;
         parent?: Node;
         symbol?: Symbol;
         locals?: SymbolTable;
         nextContainer?: Node;
         localSymbol?: Symbol;
-        modifiers?: ModifiersArray;
     }
     interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
@@ -736,7 +736,10 @@ declare module "typescript" {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    interface ModuleDeclaration extends Declaration, ModuleElement {
+    interface ExportContainer {
+        exportStars?: ExportDeclaration[];
+    }
+    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -785,7 +788,7 @@ declare module "typescript" {
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
-    interface SourceFile extends Declaration {
+    interface SourceFile extends Declaration, ExportContainer {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
         fileName: string;
@@ -1046,6 +1049,7 @@ declare module "typescript" {
         exportAssignmentChecked?: boolean;
         exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
+        resolvedExports?: SymbolTable;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }
