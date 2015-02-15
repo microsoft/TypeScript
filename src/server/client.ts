@@ -177,10 +177,11 @@ module ts.server {
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CodeLocationRequestArgs = {
+            var args: ServerProtocol.CompletionsRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
+                prefix: undefined
             };
 
             var request = this.processRequest<ServerProtocol.CompletionsRequest>(CommandNames.Completions, args);
