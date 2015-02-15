@@ -3057,11 +3057,15 @@ module ts {
                 return <ModuleDeclaration>node;
             }
 
+            function emitContainingModuleName(node: Node) {
+                var container = getContainingModule(node);
+                write(container ? resolver.getGeneratedNameForNode(container) : "exports");
+            }
+
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
-                    var container = getContainingModule(node);
-                    write(container ? resolver.getGeneratedNameForNode(container) : "exports");
+                    emitContainingModuleName(node);
                     write(".");
                 }
                 emitNode(node.name);
@@ -3073,7 +3077,8 @@ module ts {
                     forEach(exportSpecifiers[name.text], specifier => {
                         writeLine();
                         emitStart(specifier.name);
-                        write("exports.");
+                        emitContainingModuleName(specifier);
+                        write(".");
                         emitNode(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
@@ -4117,27 +4122,41 @@ module ts {
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (node.exportClause && node.moduleSpecifier) {
-                    var generatedName = resolver.getGeneratedNameForNode(node);
+                if (node.moduleSpecifier) {
                     emitStart(node);
+                    var generatedName = resolver.getGeneratedNameForNode(node);
                     if (compilerOptions.module !== ModuleKind.AMD) {
                         write("var ");
                         write(generatedName);
                         write(" = ");
                         emitRequire(getExternalModuleName(node));
                     }
-                    forEach(node.exportClause.elements, specifier => {
+                    if (node.exportClause) {
+                        // export { x, y, ... }
+                        forEach(node.exportClause.elements, specifier => {
+                            writeLine();
+                            emitStart(specifier);
+                            emitContainingModuleName(specifier);
+                            write(".");
+                            emitNode(specifier.name);
+                            write(" = ");
+                            write(generatedName);
+                            write(".");
+                            emitNode(specifier.propertyName || specifier.name);
+                            write(";");
+                            emitEnd(specifier);
+                        });
+                    }
+                    else {
+                        // export *
+                        var tempName = createTempVariable(node).text;
                         writeLine();
-                        emitStart(specifier);
-                        write("exports.");
-                        emitNode(specifier.name);
-                        write(" = ");
-                        write(generatedName);
-                        write(".");
-                        emitNode(specifier.propertyName || specifier.name);
-                        write(";");
-                        emitEnd(specifier);
-                    });
+                        write("for (var " + tempName + " in " + generatedName + ") if (!");
+                        emitContainingModuleName(node);
+                        write(".hasOwnProperty(" + tempName + ")) ");
+                        emitContainingModuleName(node);
+                        write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                    }
                     emitEnd(node);
                 }
             }

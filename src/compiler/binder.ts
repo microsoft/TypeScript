@@ -316,6 +316,13 @@ module ts {
             }
         }
 
+        function bindExportDeclaration(node: ExportDeclaration) {
+            if (!node.exportClause) {
+                ((<ExportContainer>container).exportStars || ((<ExportContainer>container).exportStars = [])).push(node);
+            }
+            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+        }
+
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
@@ -476,6 +483,9 @@ module ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    bindExportDeclaration(<ExportDeclaration>node);
                     break;
                 case SyntaxKind.ImportClause:
                     if ((<ImportClause>node).name) {

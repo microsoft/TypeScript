@@ -179,7 +179,7 @@ module ts {
             return result;
         }
 
-        function extendSymbol(target: Symbol, source: Symbol) {
+        function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -192,11 +192,11 @@ module ts {
                 });
                 if (source.members) {
                     if (!target.members) target.members = {};
-                    extendSymbolTable(target.members, source.members);
+                    mergeSymbolTable(target.members, source.members);
                 }
                 if (source.exports) {
                     if (!target.exports) target.exports = {};
-                    extendSymbolTable(target.exports, source.exports);
+                    mergeSymbolTable(target.exports, source.exports);
                 }
                 recordMergedSymbol(target, source);
             }
@@ -222,7 +222,7 @@ module ts {
             return result;
         }
 
-        function extendSymbolTable(target: SymbolTable, source: SymbolTable) {
+        function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             for (var id in source) {
                 if (hasProperty(source, id)) {
                     if (!hasProperty(target, id)) {
@@ -233,8 +233,16 @@ module ts {
                         if (!(symbol.flags & SymbolFlags.Merged)) {
                             target[id] = symbol = cloneSymbol(symbol);
                         }
-                        extendSymbol(symbol, source[id]);
+                        mergeSymbol(symbol, source[id]);
                     }
+                }
+            }
+        }
+
+        function extendSymbolTable(target: SymbolTable, source: SymbolTable) {
+            for (var id in source) {
+                if (!hasProperty(target, id)) {
+                    target[id] = source[id];
                 }
             }
         }
@@ -486,7 +494,7 @@ module ts {
             if (moduleSymbol) {
                 var name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    var symbol = getSymbol(moduleSymbol.exports, name.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+                    var symbol = getSymbol(getExportsOfSymbol(moduleSymbol), name.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
                     if (!symbol) {
                         error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
                         return;
@@ -587,7 +595,7 @@ module ts {
             else if (name.kind === SyntaxKind.QualifiedName) {
                 var namespace = resolveEntityName(location,(<QualifiedName>name).left, SymbolFlags.Namespace);
                 if (!namespace || namespace === unknownSymbol || getFullWidth((<QualifiedName>name).right) === 0) return;
-                var symbol = getSymbol(namespace.exports,(<QualifiedName>name).right.text, meaning);
+                var symbol = getSymbol(getExportsOfSymbol(namespace), (<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
                     error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
                         declarationNameToString((<QualifiedName>name).right));
@@ -706,6 +714,41 @@ module ts {
                 hasExportedMember: seenExportedMember,
                 exportAssignments: result
             };
+        }
+
+        function getExportsOfSymbol(symbol: Symbol): SymbolTable {
+            return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports;
+        }
+
+        function getExportsOfModule(symbol: Symbol): SymbolTable {
+            var links = getSymbolLinks(symbol);
+            return links.resolvedExports || (links.resolvedExports = getExportsForModule(symbol));
+        }
+
+        function getExportsForModule(symbol: Symbol): SymbolTable {
+            var result: SymbolTable;
+            var visitedSymbols: Symbol[] = [];
+            visit(symbol);
+            return result;
+
+            function visit(symbol: Symbol) {
+                if (!contains(visitedSymbols, symbol)) {
+                    visitedSymbols.push(symbol);
+                    if (!result) {
+                        result = symbol.exports;
+                    }
+                    else {
+                        extendSymbolTable(result, symbol.exports);
+                    }
+                    forEach(symbol.declarations, node => {
+                        if (node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.ModuleDeclaration) {
+                            forEach((<ExportContainer>node).exportStars, exportStar => {
+                                visit(resolveExternalModuleName(exportStar, exportStar.moduleSpecifier));
+                            });
+                        }
+                    });
+                }
+            }
         }
 
         function getMergedSymbol(symbol: Symbol): Symbol {
@@ -2475,7 +2518,7 @@ module ts {
                 var callSignatures: Signature[] = emptyArray;
                 var constructSignatures: Signature[] = emptyArray;
                 if (symbol.flags & SymbolFlags.HasExports) {
-                    members = symbol.exports;
+                    members = getExportsOfSymbol(symbol);
                 }
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
                     callSignatures = getSignaturesOfSymbol(symbol);
@@ -10468,7 +10511,7 @@ module ts {
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
-                    extendSymbolTable(globals, file.locals);
+                    mergeSymbolTable(globals, file.locals);
                 }
             });
 
