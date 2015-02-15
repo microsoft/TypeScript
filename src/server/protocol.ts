@@ -307,7 +307,7 @@ module ts.server {
             }));
         }
 
-        rename(line: number, col: number, fileName: string): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
+        rename(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -328,47 +328,16 @@ module ts.server {
                 };
             }
 
-            var renameLocs = compilerService.languageService.findRenameLocations(file, position, false, false);
-            if (renameLocs) {
-                var bakedRenameLocs = renameLocs.map(loc=> (<ServerProtocol.CodeSpan>{
-                    file: loc.fileName,
-                    start: compilerService.host.positionToLineCol(loc.fileName, loc.textSpan.start),
-                    end: compilerService.host.positionToLineCol(loc.fileName, ts.textSpanEnd(loc.textSpan)),
-                })).sort((a, b) => {
-                    if (a.file < b.file) {
-                        return -1;
-                    }
-                    else if (a.file > b.file) {
-                        return 1;
-                    }
-                    else {
-                        // reverse sort assuming no overlap
-                        if (a.start.line < b.start.line) {
-                            return 1;
-                        }
-                        else if (a.start.line > b.start.line) {
-                            return -1;
-                        }
-                        else {
-                            return b.start.col - a.start.col;
-                        }
-                    }
-                }).reduce((accum, cur) => {
-                    var curFileAccum: FileRanges;
-                    if (accum.length > 0) {
-                        curFileAccum = accum[accum.length - 1];
-                        if (curFileAccum.file != cur.file) {
-                            curFileAccum = undefined;
-                        }
-                    }
-                    if (!curFileAccum) {
-                        curFileAccum = { file: cur.file, locs: [] };
-                        accum.push(curFileAccum);
-                    }
-                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                    return accum;
-                }, []);
+            var renameLocs = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
+            if (!renameLocs) {
+                throw Errors.NoContent;
             }
+
+            var bakedRenameLocs = renameLocs.map(loc => (<ServerProtocol.CodeSpan>{
+                file: loc.fileName,
+                start: compilerService.host.positionToLineCol(loc.fileName, loc.textSpan.start),
+                end: compilerService.host.positionToLineCol(loc.fileName, ts.textSpanEnd(loc.textSpan)),
+            }));
 
             return { info: renameInfo, locs: bakedRenameLocs };
         }
@@ -731,8 +700,8 @@ module ts.server {
                         break;
                     }
                     case CommandNames.Rename: {
-                        var renameArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
-                        response = this.rename(renameArgs.line, renameArgs.col, renameArgs.file);
+                        var renameArgs = <ServerProtocol.RenameRequestArgs>request.arguments;
+                        response = this.rename(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
                         break;
                     }
                     case CommandNames.Open: {

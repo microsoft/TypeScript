@@ -151,6 +151,12 @@ declare module ServerProtocol {
         body?: ReferencesResponseBody;
     }
 
+    export interface RenameRequestArgs extends CodeLocationRequestArgs {
+        findInComments?: boolean;
+        findInStrings?: boolean;
+    }
+
+
     /**
        Rename request; value of command field is "rename". Return
        response giving the code locations that reference the symbol
@@ -158,6 +164,7 @@ declare module ServerProtocol {
        name of the symbol so that client can print it unambiguously.
     */
     export interface RenameRequest extends CodeLocationRequest {
+        arguments: RenameRequestArgs;
     }
 
     /** Information about the item to be renamed. */

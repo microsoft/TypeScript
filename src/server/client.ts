@@ -322,11 +322,52 @@ module ts.server {
         }
 
         getRenameInfo(fileName: string, position: number): RenameInfo {
-            throw new Error("Not Implemented Yet.");
+            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var args: ServerProtocol.RenameRequestArgs = {
+                file: fileName,
+                line: lineCol.line,
+                col: lineCol.col
+            };
+
+            var request = this.processRequest<ServerProtocol.RenameRequest>(CommandNames.Rename, args);
+            var response = this.processResponse<ServerProtocol.RenameResponse>(request);
+
+            return {
+                canRename: response.body.info.canRename,
+                displayName: response.body.info.displayName,
+                fullDisplayName: response.body.info.fullDisplayName,
+                kind: response.body.info.kind,
+                kindModifiers: response.body.info.kindModifiers,
+                localizedErrorMessage: response.body.info.localizedErrorMessage,
+                triggerSpan: ts.createTextSpanFromBounds(position, position)
+            };
         }
 
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            throw new Error("Not Implemented Yet.");
+            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var args: ServerProtocol.RenameRequestArgs = {
+                file: fileName,
+                line: lineCol.line,
+                col: lineCol.col,
+                findInStrings,
+                findInComments
+            };
+
+            var request = this.processRequest<ServerProtocol.RenameRequest>(CommandNames.Rename, args);
+            var response = this.processResponse<ServerProtocol.RenameResponse>(request);
+
+            if (!response.body.info.canRename) {
+                return [];
+            }
+
+            return response.body.locs.map((entry) => {
+                var start = this.lineColToPosition(entry.file, entry.start);
+                var end = this.lineColToPosition(entry.file, entry.end);
+                return {
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    fileName: entry.file
+                };
+            });
         }
 
         getNavigationBarItems(fileName: string): NavigationBarItem[] {
