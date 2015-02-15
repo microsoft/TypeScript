@@ -301,7 +301,7 @@ module ts.server {
                 return {
                     fileName: entry.file,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    isWriteAccess: false,
+                    isWriteAccess: entry.isWriteAccess,
                 };
             });
         }

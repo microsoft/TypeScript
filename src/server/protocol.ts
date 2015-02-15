@@ -409,6 +409,7 @@ module ts.server {
                     start: start,
                     lineText: lineText,
                     end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                    isWriteAccess: ref.isWriteAccess
                 };
             }).sort(compareFileStart);
             return {

@@ -127,6 +127,9 @@ declare module ServerProtocol {
             loaded the referencing files).
         */
         lineText: string;
+
+        /** True if reference is a write location, false otherwise. */
+        isWriteAccess: boolean;
     }
 
     /** The body of a "references" response message. */
