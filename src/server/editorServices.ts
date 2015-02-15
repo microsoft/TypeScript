@@ -62,18 +62,15 @@ module ts.server {
         children: ScriptInfo[] = [];     // files referenced by this file
 
         defaultProject: Project;      // project to use by default for file
-        mtime: Date;
 
-        constructor(private host: ServerHost, public filename: string, public content: string, public isOpen = false) {
+        fileWatcher: FileWatcher;
+
+        constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.svc = ScriptVersionCache.fromString(content);
-            if (!isOpen) {
-                this.mtime = this.host.getModififedTime(filename);
-            }
         }
 
         close() {
             this.isOpen = false;
-            this.mtime = this.host.getModififedTime(this.filename);
         }
 
         addChild(childInfo: ScriptInfo) {
@@ -203,7 +200,7 @@ module ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript[info.filename] = undefined;
+                this.filenameToScript[info.fileName] = undefined;
             }
         }
 
@@ -212,7 +209,7 @@ module ts.server {
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
                 if (scriptInfo) {
-                    this.filenameToScript[scriptInfo.filename] = scriptInfo;
+                    this.filenameToScript[scriptInfo.fileName] = scriptInfo;
                 }
             }
             else {
@@ -221,9 +218,9 @@ module ts.server {
         }
 
         addRoot(info: ScriptInfo) {
-            var scriptInfo = ts.lookUp(this.filenameToScript, info.filename);
+            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
             if (!scriptInfo) {
-                this.filenameToScript[info.filename] = info;
+                this.filenameToScript[info.fileName] = info;
                 return info;
             }
         }
@@ -363,7 +360,7 @@ module ts.server {
         }
 
         getSourceFile(info: ScriptInfo) {
-            return this.filenameToSourceFile[info.filename];
+            return this.filenameToSourceFile[info.fileName];
         }
 
         getSourceFileFromName(filename: string) {
@@ -439,112 +436,6 @@ module ts.server {
         return copiedList;
     }
 
-    // REVIEW: for now this implementation uses polling.
-    // The advantage of polling is that it works reliably
-    // on all os and with network mounted files.
-    // For 90 referenced files, the average time to detect 
-    // changes is 2*msInterval (by default 5 seconds).
-    // The overhead of this is .04 percent (1/2500) with
-    // average pause of < 1 millisecond (and max
-    // pause less than 1.5 milliseconds); question is
-    // do we anticipate reference sets in the 100s and
-    // do we care about waiting 10-20 seconds to detect
-    // changes for large reference sets? If so, do we want
-    // to increase the chunk size or decrease the interval
-    // time dynamically to match the large reference set?
-    export class WatchedFileSet {
-        watchedFiles: ScriptInfo[] = [];
-        nextFileToCheck = 0;
-        watchTimer: NodeJS.Timer;
-
-        // average async stat takes about 30 microseconds
-        // set chunk size to do 30 files in < 1 millisecond
-        constructor(private host: ServerHost, public fileEvent: (info: ScriptInfo, eventName: string) => void,
-            public msInterval = 2500, public chunkSize = 30) {
-        }
-
-        checkWatchedFileChanged(checkedIndex: number, stats: NodeJS.fs.Stats) {
-            var info = this.watchedFiles[checkedIndex];
-            if (info && (!info.isOpen)) {
-                if (info.mtime.getTime() != stats.mtime.getTime()) {
-                    info.svc.reloadFromFile(info.filename);
-                }
-            }
-        }
-
-        fileDeleted(info: ScriptInfo) {
-            if (this.fileEvent) {
-                this.fileEvent(info, "deleted");
-            }
-        }
-
-        static fileDeleted = 34;
-
-        poll(checkedIndex: number) {
-            var watchedFile = this.watchedFiles[checkedIndex];
-            if (!watchedFile) {
-                return;
-            }
-            if (measurePerf) {
-                var start = process.hrtime();
-            }
-            this.host.stat(watchedFile.filename,(err, stats) => {
-                if (err) {
-                    var msg = err.message;
-                    if (err.errno) {
-                        msg += " errno: " + err.errno.toString();
-                    }
-                    if (err.errno == WatchedFileSet.fileDeleted) {
-                        this.fileDeleted(watchedFile);
-                    }
-                }
-                else {
-                    this.checkWatchedFileChanged(checkedIndex, stats);
-                }
-            });
-            if (measurePerf) {
-                var elapsed = process.hrtime(start);
-                var elapsedNano = 1e9 * elapsed[0] + elapsed[1];
-            }
-        }
-
-        // this implementation uses polling and
-        // stat due to inconsistencies of fs.watch
-        // and efficiency of stat on modern filesystems
-        startWatchTimer() {
-            this.watchTimer = setInterval(() => {
-                var count = 0;
-                var nextToCheck = this.nextFileToCheck;
-                var firstCheck = -1;
-                while ((count < this.chunkSize) && (nextToCheck != firstCheck)) {
-                    this.poll(nextToCheck);
-                    if (firstCheck < 0) {
-                        firstCheck = nextToCheck;
-                    }
-                    nextToCheck++;
-                    if (nextToCheck == this.watchedFiles.length) {
-                        nextToCheck = 0;
-                    }
-                    count++;
-                }
-                this.nextFileToCheck = nextToCheck;
-            }, this.msInterval);
-        }
-
-        // TODO: remove watch file if opened by editor or no longer referenced 
-        // assume normalized and absolute pathname
-        addFile(info: ScriptInfo) {
-            this.watchedFiles.push(info);
-            if (this.watchedFiles.length == 1) {
-                this.startWatchTimer();
-            }
-        }
-
-        removeFile(info: ScriptInfo) {
-            this.watchedFiles = copyListRemovingItem(info, this.watchedFiles);
-        }
-    }
-
     interface ProjectServiceEventHandler {
         (eventName: string, project: Project): void;
     }
@@ -556,19 +447,31 @@ module ts.server {
         openFilesReferenced: ScriptInfo[] = [];
         // projects covering open files
         inferredProjects: Project[] = [];
-        watchedFileSet: WatchedFileSet;
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             if (measurePerf) {
                 calibrateTimer();
             }
             ts.disableIncrementalParsing = true;
-            this.watchedFileSet = new WatchedFileSet(this.host,(info, eventName) => {
-                if (eventName == "deleted") {
-                    this.fileDeletedInFilesystem(info);
-                }
-            });
         }
+
+        watchedFileChanged(fileName: string) {
+            var info = this.filenameToScriptInfo[fileName];
+            if (!info) {
+                this.psLogger.info("Error: got watch notification for unknown file: " + fileName);
+            }
+
+            if (!this.host.fileExists(fileName)) {
+                // File was deleted
+                this.fileDeletedInFilesystem(info);
+            }
+            else {
+                if (info && (!info.isOpen)) {
+                    info.svc.reloadFromFile(info.fileName);
+                }
+            }
+        }
+        
 
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
@@ -587,11 +490,15 @@ module ts.server {
         }
 
         fileDeletedInFilesystem(info: ScriptInfo) {
-            this.psLogger.info(info.filename + " deleted");
-            this.watchedFileSet.removeFile(info);
+            this.psLogger.info(info.fileName + " deleted");
+            
+            if (info.fileWatcher) {
+                info.fileWatcher.close();
+                info.fileWatcher = undefined;
+            }
 
             if (!info.isOpen) {
-                this.filenameToScriptInfo[info.filename] = undefined;
+                this.filenameToScriptInfo[info.fileName] = undefined;
                 var referencingProjects = this.findReferencingProjects(info);
                 for (var i = 0, len = referencingProjects.length; i < len; i++) {
                     referencingProjects[i].removeReferencedFile(info);
@@ -697,13 +604,13 @@ module ts.server {
         /**
          * @param filename is absolute pathname
          */
-        openFile(filename: string, openedByClient = false) {
-            filename = ts.normalizePath(filename);
-            var info = ts.lookUp(this.filenameToScriptInfo, filename);
+        openFile(fileName: string, openedByClient = false) {
+            fileName = ts.normalizePath(fileName);
+            var info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
                 var content: string;
-                if (this.host.fileExists(filename)) {
-                    content = this.host.readFile(filename);
+                if (this.host.fileExists(fileName)) {
+                    content = this.host.readFile(fileName);
                 }
                 if (!content) {
                     if (openedByClient) {
@@ -711,10 +618,10 @@ module ts.server {
                     }
                 }
                 if (content !== undefined) {
-                    info = new ScriptInfo(this.host, filename, content, openedByClient);
-                    this.filenameToScriptInfo[filename] = info;
+                    info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
-                        this.watchedFileSet.addFile(info);
+                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
                     }
                 }
             }
@@ -800,11 +707,11 @@ module ts.server {
             }
             this.psLogger.info("Open file roots: ")
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
-                this.psLogger.info(this.openFileRoots[i].filename);
+                this.psLogger.info(this.openFileRoots[i].fileName);
             }
             this.psLogger.info("Open files referenced: ")
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                this.psLogger.info(this.openFilesReferenced[i].filename);
+                this.psLogger.info(this.openFilesReferenced[i].fileName);
             }
             this.psLogger.endGroup();
         }

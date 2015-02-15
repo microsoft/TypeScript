@@ -488,6 +488,10 @@ module Harness.LanguageService {
         }
 
         readFile(fileName: string): string {
+            if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) { 
+                fileName = Harness.Compiler.defaultLibFileName;
+            }
+             
             var snapshot = this.host.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
@@ -525,29 +529,9 @@ module Harness.LanguageService {
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }
-
-        getModififedTime(fileName: string): Date {
-            return new Date();
-        }
-
-        stat(path: string, callback?: (err: any, stats: any) => any) {
-            return 0;
-        }
-
-        lineColToPosition(fileName: string, line: number, col: number): number {
-            return this.host.lineColToPosition(fileName, line, col);
-        }
-
-        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter {
-            return this.host.positionToZeroBasedLineCol(fileName, position);
-        }
-
-        getFileLength(fileName: string): number {
-            return this.host.getScriptSnapshot(fileName).getLength();
-        }
-
-        getFileNames(): string[] {
-            return this.host.getScriptFileNames();
+        
+        watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher { 
+            return { close() { } };
         }
 
         close(): void {
