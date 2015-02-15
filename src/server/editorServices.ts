@@ -139,13 +139,7 @@ module ts.server {
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
-
-            if (this.compilationSettings && this.compilationSettings.target == ts.ScriptTarget.ES6) {
-                return nodeModuleBinDir + "/lib.es6.d.ts";
-            }
-            else {
-                return nodeModuleBinDir + "/lib.d.ts";
-            }
+            return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
         }
 
         cancel() {
