@@ -152,10 +152,11 @@ module ts.server {
         }
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
+            var lineCol = this.positionToOneBasedLineCol(fileName, position);
             var args: ServerProtocol.CodeLocationRequestArgs = {
                 file: fileName,
-                line: 0,
-                col: 1
+                line: lineCol.line,
+                col: lineCol.col
             };
 
             var request = this.processRequest<ServerProtocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
@@ -168,10 +169,8 @@ module ts.server {
                 kind: response.body.kind,
                 kindModifiers: response.body.kindModifiers,
                 textSpan: ts.createTextSpanFromBounds(start, end),
-                displayParts: undefined,
-                documentation: undefined,
-                documentationString: response.body.documentation,
-                displayString: response.body.displayString
+                displayParts: [{ kind: "text", text: response.body.displayString }],
+                documentation: [{ kind: "text", text: response.body.documentation }]
             };
         }
 
