@@ -12,7 +12,6 @@ module ts.server {
         msg(s: string, type?: string): void;
     }
 
-    var measurePerf = false;
     var lineCollectionCapacity = 4;
     var indentStrings: string[] = [];
     var indentBase = "    ";
@@ -24,37 +23,6 @@ module ts.server {
             }
         }
         return indentStrings[indentAmt];
-    }
-
-    export function printLine(s: string) {
-        ts.sys.write(s + '\n');
-    }
-
-    function showLines(s: string) {
-        var strBuilder = "";
-        for (var i = 0, len = s.length; i < len; i++) {
-            if (s.charCodeAt(i) == 10) {
-                strBuilder += '\\n';
-            }
-            else if (s.charCodeAt(i) == 13) {
-                strBuilder += '\\r';
-            }
-            else {
-                strBuilder += s.charAt(i);
-            }
-        }
-        return strBuilder;
-    }
-
-    function calibrateTimer() {
-        var count = 20;
-        var total = 0;
-        for (var i = 0; i < count; i++) {
-            var start = process.hrtime();
-            var elapsed = process.hrtime(start);
-            var elapsedNano = 1e9 * elapsed[0] + elapsed[1];
-            total += elapsedNano;
-        }
     }
 
     export class ScriptInfo {
@@ -449,10 +417,7 @@ module ts.server {
         inferredProjects: Project[] = [];
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
-            if (measurePerf) {
-                calibrateTimer();
-            }
-            ts.disableIncrementalParsing = true;
+            // ts.disableIncrementalParsing = true;
         }
 
         watchedFileChanged(fileName: string) {
@@ -820,7 +785,6 @@ module ts.server {
         lineCount(): number;
         isLeaf(): boolean;
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
-        print(indentAmt: number): void;
     }
 
     export interface ILineInfo {
@@ -1253,12 +1217,6 @@ module ts.server {
             }
         }
 
-        print() {
-            printLine("index TC " + this.root.charCount() + " TL " + this.root.lineCount());
-            this.root.print(0);
-            printLine("");
-        }
-
         load(lines: string[]) {
             if (lines.length > 0) {
                 var leaves: LineLeaf[] = [];
@@ -1424,15 +1382,6 @@ module ts.server {
             return false;
         }
 
-        print(indentAmt: number) {
-            var strBuilder = getIndent(indentAmt);
-            strBuilder += ("node ch " + this.children.length + " TC " + this.totalChars + " TL " + this.totalLines + " :");
-            printLine(strBuilder);
-            for (var ch = 0, clen = this.children.length; ch < clen; ch++) {
-                this.children[ch].print(indentAmt + 1);
-            }
-        }
-
         updateCounts() {
             this.totalChars = 0;
             this.totalLines = 0;
@@ -1492,9 +1441,6 @@ module ts.server {
                 }
                 var adjustedLength = rangeLength - (childCharCount - adjustedStart);
                 child = this.children[++childIndex];
-                if (!child) {
-                    this.print(2);
-                }
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
                     if (this.execWalk(0, childCharCount, walkFns, childIndex, CharRangeSection.Mid)) {
@@ -1742,11 +1688,6 @@ module ts.server {
 
         lineCount() {
             return 1;
-        }
-
-        print(indentAmt: number) {
-            var strBuilder = getIndent(indentAmt);
-            printLine(strBuilder + showLines(this.text));
         }
     }
 }
