@@ -1,7 +1,7 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="node.d.ts" />
-/// <reference path="protodef.d.ts" />
+/// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
 
 module ts.server {

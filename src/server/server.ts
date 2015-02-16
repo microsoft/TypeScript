@@ -1,5 +1,5 @@
 /// <reference path="node.d.ts" />
-/// <reference path="protocol.ts" />
+/// <reference path="session.ts" />
 
 module ts.server {
     var nodeproto: typeof NodeJS._debugger = require('_debugger');

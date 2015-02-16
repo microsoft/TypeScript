@@ -94,7 +94,8 @@ var servicesSources = [
 var serverSources = [
     "node.d.ts",
     "editorServices.ts",
-    "protocol.ts",
+    "protocol.d.ts",
+    "session.ts",
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
@@ -141,7 +142,8 @@ var harnessSources = [
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
-    "protocol.ts",
+    "protocol.d.ts",
+    "session.ts",
     "client.ts",
     "editorServices.ts",
 ].map(function (f) {

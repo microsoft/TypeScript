@@ -16,7 +16,7 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
-/// <reference path='..\server\protocol.ts' />
+/// <reference path='..\server\session.ts' />
 /// <reference path='..\server\client.ts' />
 /// <reference path='..\server\node.d.ts' />
 /// <reference path='external\mocha.d.ts'/>

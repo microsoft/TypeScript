@@ -1,4 +1,4 @@
-/// <reference path="protocol.ts" />
+/// <reference path="session.ts" />
 
 module ts.server {
 
