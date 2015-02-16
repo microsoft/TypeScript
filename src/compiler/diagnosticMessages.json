@@ -587,6 +587,10 @@
         "category": "Error",
         "code": 1189
     },
+    "Decorator '{0}' is not valid on this declaration type. It is only valid on '{1}' declarations.": {
+        "category": "Error",
+        "code": 1190
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

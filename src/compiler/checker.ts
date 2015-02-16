@@ -62,9 +62,9 @@ module ts {
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         var anyType = createIntrinsicType(TypeFlags.Any, "any");
-        var stringType = createIntrinsicType(TypeFlags.String, "string");
-        var numberType = createIntrinsicType(TypeFlags.Number, "number");
-        var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
+        var stringType = createIntrinsicType(TypeFlags.String, "string", /*boxedType*/ "String");
+        var numberType = createIntrinsicType(TypeFlags.Number, "number", /*boxedType*/ "Number");
+        var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean", /*boxedType*/ "Boolean");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
         var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
@@ -720,9 +720,10 @@ module ts {
             return result;
         }
 
-        function createIntrinsicType(kind: TypeFlags, intrinsicName: string): IntrinsicType {
+        function createIntrinsicType(kind: TypeFlags, intrinsicName: string, boxedName?: string): IntrinsicType {
             var type = <IntrinsicType>createType(kind);
             type.intrinsicName = intrinsicName;
+            type.boxedName = boxedName;
             return type;
         }
 
@@ -8076,8 +8077,51 @@ module ts {
         }
 
         function checkDecorator(node: Decorator): void {
-            var type = checkExpression(node.expression);
-            // TODO: check the type of the expression
+            var expression: Expression = node.expression;
+            var type = checkExpression(expression);
+
+            // check built-in decorators
+
+            // unwrap the identifier for the decorator (if present)
+            var decorator = expression;
+            while (decorator.kind === SyntaxKind.ParenthesizedExpression) {
+                decorator = (<ParenthesizedExpression>decorator).expression;
+            }
+            if (decorator.kind === SyntaxKind.CallExpression) {
+                decorator = (<CallExpression>decorator).expression;
+            }
+            while (decorator.kind === SyntaxKind.ParenthesizedExpression) {
+                decorator = (<ParenthesizedExpression>decorator).expression;
+            }
+
+            // if the identifier points to one of the built-in symbols, add relevant information for later emit.
+            if (decorator.kind === SyntaxKind.Identifier) {
+                var symbol = getResolvedSymbol(<Identifier>decorator);
+                if (symbol === globalTypeDecoratorSymbol
+                    || symbol === globalParamTypesDecoratorSymbol
+                    || symbol === globalReturnTypeDecoratorSymbol) {
+                                        
+                    // these are only valid on a parameter
+                    if (node.parent.kind !== SyntaxKind.Parameter) {
+                        error(decorator, Diagnostics.Decorator_0_is_not_valid_on_this_declaration_type_It_is_only_valid_on_1_declarations, symbol.name, "parameter");
+                    }
+
+                    // TODO(rbuckton): check assignability to the parameter
+                    // TODO(rbuckton): check decorator is only applied to value declaration 
+
+                    if (symbol === globalTypeDecoratorSymbol) {
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedType;
+                    }
+                    else if (symbol === globalParamTypesDecoratorSymbol) {
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedParamTypes;
+                    }
+                    else if (symbol === globalReturnTypeDecoratorSymbol) {
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedReturnType;
+                    }
+                }
+            }
+
+            // TODO(rbuckton): check the type of the expression
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
@@ -8328,6 +8372,7 @@ module ts {
 
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
+            checkDecorators(node);
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
             if (hasDynamicName(node)) {
@@ -10258,6 +10303,90 @@ module ts {
             return undefined;
         }
 
+        function serializeType(type: Type): string {
+            var flags = type.flags;
+            if (flags & TypeFlags.Void) {
+                return "void 0";
+            }
+            else if (flags & TypeFlags.Intrinsic) {
+                var boxedName = (<IntrinsicType>type).boxedName;
+                if (boxedName) {
+                    return boxedName;
+                }
+            }
+            else if (flags & TypeFlags.StringLiteral) {
+                return "String";
+            }
+            else if (flags & TypeFlags.Enum) {
+                return "Number";
+            }
+            else if (flags & TypeFlags.Tuple) {
+                return "Array";
+            }
+            else {
+                var symbol = type.symbol;
+                var declaration = symbol.valueDeclaration;
+                if (declaration) {
+                    var name = declaration.name;
+                    if (name && name.kind === SyntaxKind.Identifier) {
+                        var prefix = getExpressionNamePrefix(<Identifier>name);
+                        if (prefix) {
+                            return prefix + "." + (<Identifier>name).text;
+                        }
+                        return (<Identifier>name).text;
+                    }
+                }
+            }
+
+            var signatures = getSignaturesOfType(type, SignatureKind.Call);
+            if (signatures.length) {
+                return "Function";
+            }
+                        
+            return "Object";
+        }
+
+        function serializeTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration | PropertyDeclaration | ParameterDeclaration): string {
+            var symbol = getSymbolOfNode(node);
+            var type = symbol ? getTypeOfSymbol(symbol) : unknownType;
+            return serializeType(type);
+        }
+        
+        function serializeParameterTypesOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string[]{
+            var valueDeclaration: FunctionLikeDeclaration;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
+            }
+            else if (isAnyFunction(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {                
+                valueDeclaration = <FunctionLikeDeclaration>node;
+            }
+            if (valueDeclaration) {
+                var result: string[];
+                var parameters = valueDeclaration.parameters;
+                var parameterCount = parameters.length;
+                if (parameterCount > 0) {
+                    result = new Array<string>(parameterCount);
+                    for (var i = 0; i < parameterCount; i++) {
+                        result[i] = serializeTypeOfDeclaration(parameters[i]);
+                    }
+                    return result;
+                }
+            }
+            return emptyArray;
+        }
+
+        function serializeReturnTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string {
+            var valueDeclaration: FunctionLikeDeclaration;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                return serializeTypeOfDeclaration(node);
+            }
+            else if (isAnyFunction(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(valueDeclaration));
+                return serializeType(returnType);
+            }
+            return "void 0";
+        }
+
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(declaration);
@@ -10295,6 +10424,10 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                getResolvedSignature,
+                serializeTypeOfDeclaration,
+                serializeParameterTypesOfDeclaration,
+                serializeReturnTypeOfDeclaration
             };
         }
 

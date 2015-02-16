@@ -1145,6 +1145,10 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        getResolvedSignature(node: CallLikeExpression): Signature;
+        serializeTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration | PropertyDeclaration | ParameterDeclaration): string;
+        serializeParameterTypesOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string[];
+        serializeReturnTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string;
     }
 
     export const enum SymbolFlags {
@@ -1258,17 +1262,20 @@ module ts {
     }
 
     export const enum NodeCheckFlags {
-        TypeChecked         = 0x00000001,  // Node has been type checked
-        LexicalThis         = 0x00000002,  // Lexical 'this' reference
-        CaptureThis         = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends         = 0x00000008,  // Emit __extends
-        SuperInstance       = 0x00000010,  // Instance 'super' reference
-        SuperStatic         = 0x00000020,  // Static 'super' reference
-        ContextChecked      = 0x00000040,  // Contextual types have been assigned
+        TypeChecked             = 0x00000001,  // Node has been type checked
+        LexicalThis             = 0x00000002,  // Lexical 'this' reference
+        CaptureThis             = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends             = 0x00000008,  // Emit __extends
+        SuperInstance           = 0x00000010,  // Instance 'super' reference
+        SuperStatic             = 0x00000020,  // Static 'super' reference
+        ContextChecked          = 0x00000040,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed  = 0x00000080,
-        EmitDecorate        = 0x00000100,
+        EnumValuesComputed      = 0x00000080,
+        EmitDecorate            = 0x00000100,  // Emit __extends
+        EmitDecoratedType       = 0x00000200,  // Emit the type of the decorator target as an argument in this parameter position
+        EmitDecoratedParamTypes = 0x00000400,  // Emit the parameter types of the decorator target as an argument in this parameter position
+        EmitDecoratedReturnType = 0x00000800,  // Emit the return type of the decorator target as an argument in this parameter position
     }
 
     export interface NodeLinks {
@@ -1325,6 +1332,7 @@ module ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
+        boxedName: string;      // Name of boxed constructor
     }
 
     // String literal types (TypeFlags.StringLiteral)

@@ -269,14 +269,6 @@ module ts {
         }
     }
 
-    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
-        return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
-                return <ConstructorDeclaration>member;
-            }
-        });
-    }
-
     function getAllAccessorDeclarations(node: ClassDeclaration, accessor: AccessorDeclaration) {
         var firstAccessor: AccessorDeclaration;
         var lastAccessor: AccessorDeclaration;
@@ -2548,7 +2540,7 @@ module ts {
                 write("]");
             }
 
-            function emitCallExpression(node: CallExpression) {
+            function emitCallExpression(node: CallExpression, emitArguments: (args: Expression[], node: CallExpression) => void = emitCommaList) {                
                 var superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
                     write("_super");
@@ -2563,13 +2555,13 @@ module ts {
                     emitThis(node.expression);
                     if (node.arguments.length) {
                         write(", ");
-                        emitCommaList(node.arguments);
+                        emitArguments(node.arguments, node);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitCommaList(node.arguments);
+                    emitArguments(node.arguments, node);
                     write(")");
                 }
             }
@@ -2947,6 +2939,14 @@ module ts {
                 emitEnd(node.name);
             }
 
+            function createVoidZero(): Expression {
+                var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                zero.text = "0";
+                var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                result.expression = zero;
+                return result;
+            }
+
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
@@ -2983,14 +2983,6 @@ module ts {
                         expr = identifier;
                     }
                     return expr;
-                }
-
-                function createVoidZero(): Expression {
-                    var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
-                    zero.text = "0";
-                    var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
-                    result.expression = zero;
-                    return result;
                 }
 
                 function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
@@ -3782,6 +3774,117 @@ module ts {
                 return undefined;
             }
 
+            function shouldEmitSerializedTypeForNode(decorated: Declaration): boolean {
+                switch (decorated.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.Parameter:
+                        return true;
+                }
+                return false;
+            }
+
+            function shouldEmitSerializedParameterTypesOrReturnTypeForNode(decorated: Declaration): boolean {
+                switch (decorated.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return true;
+                }
+                return false;
+            }
+
+            function emitSerializedType(node: ClassDeclaration | PropertyDeclaration | FunctionLikeDeclaration | ParameterDeclaration) {
+                var serializedType = resolver.serializeTypeOfDeclaration(node); 
+                write(serializedType);
+            }
+
+            function emitSerializedParameterTypes(node: ClassDeclaration | FunctionLikeDeclaration) {
+                var serializedTypes = resolver.serializeParameterTypesOfDeclaration(node);
+                write("[");
+                for (var i = 0; i < serializedTypes.length; i++) {
+                    if (i > 0) {
+                        write(", ");
+                    }
+                    write(serializedTypes[i]);
+                }
+                write("]");
+            }
+
+            function emitSerializedReturnType(node: ClassDeclaration | FunctionLikeDeclaration) {
+                var serializedType = resolver.serializeReturnTypeOfDeclaration(node);                
+                write(serializedType);
+            }            
+
+            function emitArgumentsOfDecoratorFactory(args: Expression[], node: CallExpression) {
+                emitCommaList(args);
+
+                var decorator = <Decorator>node.parent;
+                if (!isDeclaration(decorator.parent)) {
+                    return;
+                }
+
+                var decorated = <Declaration>decorator.parent;
+                var signature = resolver.getResolvedSignature(node);
+                var declaration = signature.declaration;
+                if (!declaration) {
+                    return;
+                }
+
+                var argCount = args ? args.length : 0;
+                var parameters = declaration.parameters;
+                var parameterCount = signature.hasRestParameter ? parameters.length - 1 : parameters.length;
+                var lastArg = argCount;
+                for (var i = argCount; i < parameterCount; i++) {
+                    var parameter = parameters[i];
+                    var flags = resolver.getNodeCheckFlags(parameter);
+                    if (flags & (NodeCheckFlags.EmitDecoratedType | NodeCheckFlags.EmitDecoratedParamTypes | NodeCheckFlags.EmitDecoratedReturnType)) {
+                        var shouldEmitCompilerGeneratedArgument = flags & NodeCheckFlags.EmitDecoratedType
+                            ? shouldEmitSerializedTypeForNode
+                            : shouldEmitSerializedParameterTypesOrReturnTypeForNode;
+                        if (shouldEmitCompilerGeneratedArgument(decorated)) {
+                            while (lastArg < i) {
+                                if (i > 0) {
+                                    write(", ");
+                                }
+                                write("void 0");
+                                lastArg++;
+                            }
+                            if (i > 0) {
+                                write(", ");
+                            }
+                            if (flags & NodeCheckFlags.EmitDecoratedType) {
+                                emitSerializedType(<ClassDeclaration | PropertyDeclaration | FunctionLikeDeclaration | ParameterDeclaration>decorated);
+                            }
+                            else if (flags & NodeCheckFlags.EmitDecoratedParamTypes) {
+                                emitSerializedParameterTypes(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                            }
+                            else if (flags & NodeCheckFlags.EmitDecoratedReturnType) {
+                                emitSerializedReturnType(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                            }
+                            lastArg++;
+                        }
+                    }
+                }
+            }
+
+            function emitExpressionOfDecorator(node: Decorator) {
+                var expression = node.expression;
+                if (expression.kind === SyntaxKind.CallExpression) {
+                    var callExpr = <CallExpression>expression;
+                    emitCallExpression(callExpr, emitArgumentsOfDecoratorFactory);
+                }
+                else {
+                    emit(expression);
+                }
+            }
+
             function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number, info: DecoratorEmitInfo) {
                 var decorators = parameter.decorators;
                 if (!decorators) {
@@ -3793,7 +3896,7 @@ module ts {
                 for (var i = 0; i < decoratorCount; i++) {
                     var decorator = decorators[i];
                     emitStart(decorator);
-                    emit(decorator.expression);
+                    emitExpressionOfDecorator(decorator);
                     write("(");
                     if (i < decoratorCount - 1) {
                         write("(");
@@ -3846,16 +3949,6 @@ module ts {
             }
 
             function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, info: DecoratorEmitInfo) {
-                var name = member.name;
-                var decorators = getDecoratorsOfMember(node, member);
-                if (!decorators) {
-                    return;
-                }
-
-                if (name.kind === SyntaxKind.ComputedPropertyName && !info.computedPropertyNameCache) {
-                    info.computedPropertyNameCache = [];
-                }
-
                 switch (member.kind) {
                     case SyntaxKind.MethodDeclaration:
                         emitDecoratorsOfParameters(<MethodDeclaration>member, info);
@@ -3867,6 +3960,16 @@ module ts {
                             emitDecoratorsOfParameters(accessors.setAccessor, info);
                         }
                         break;
+                }
+
+                var name = member.name;
+                var decorators = getDecoratorsOfMember(node, member);
+                if (!decorators) {
+                    return;
+                }
+
+                if (name.kind === SyntaxKind.ComputedPropertyName && !info.computedPropertyNameCache) {
+                    info.computedPropertyNameCache = [];
                 }
 
                 if (languageVersion >= ScriptTarget.ES5) {
@@ -3883,7 +3986,7 @@ module ts {
                         }
                         var decorator = decorators[i];
                         emitStart(decorator);
-                        emit(decorator.expression);
+                        emitExpressionOfDecorator(decorator);
                         emitEnd(decorator);
                     }
                     write("]");
@@ -3898,23 +4001,23 @@ module ts {
             }
 
             function emitDecoratorsOfConstructor(node: ClassDeclaration, info: DecoratorEmitInfo) {
-                var decorators = node.decorators;
-                if (!node.decorators) {
-                    return;
-                }
-                
                 var constructor = getFirstConstructorWithBody(node);
                 if (constructor) {
                     emitDecoratorsOfParameters(constructor, info);
                 }
 
+                var decorators = node.decorators;
+                if (!node.decorators) {
+                    return;
+                }
+                
                 emitStart(node);
                 for (var i = 0; i < decorators.length; i++) {
                     var decorator = decorators[i];
                     emitStart(decorator);
                     emitNode(node.name);
                     write(" = ");
-                    emit(decorators[i].expression);
+                    emitExpressionOfDecorator(decorator);
                     write("(");
                     emitEnd(decorator);
                     if (i < decorators.length - 1) {
