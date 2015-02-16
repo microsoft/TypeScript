@@ -95,100 +95,46 @@ var arr: any[];
 
 //// [taggedTemplateStringsTypeArgumentInference.js]
 // Generic tag with one parameter
-<<<<<<< HEAD
-function noParams(n) {
-}
+function noParams(n) { }
 (_a = [""], _a.raw = [""], noParams(_a));
 // Generic tag with parameter which does not use type parameter
-function noGenericParams(n) {
-}
+function noGenericParams(n) { }
 (_b = [""], _b.raw = [""], noGenericParams(_b));
 // Generic tag with multiple type parameters and only one used in parameter type annotation
-function someGenerics1a(n, m) {
-}
+function someGenerics1a(n, m) { }
 (_c = ["", ""], _c.raw = ["", ""], someGenerics1a(_c, 3));
-function someGenerics1b(n, m) {
-}
+function someGenerics1b(n, m) { }
 (_d = ["", ""], _d.raw = ["", ""], someGenerics1b(_d, 3));
 // Generic tag with argument of function type whose parameter is of type parameter type
-function someGenerics2a(strs, n) {
-}
+function someGenerics2a(strs, n) { }
 (_e = ["", ""], _e.raw = ["", ""], someGenerics2a(_e, function (n) { return n; }));
-function someGenerics2b(strs, n) {
-}
+function someGenerics2b(strs, n) { }
 (_f = ["", ""], _f.raw = ["", ""], someGenerics2b(_f, function (n, x) { return n; }));
 // Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
-function someGenerics3(strs, producer) {
-}
+function someGenerics3(strs, producer) { }
 (_g = ["", ""], _g.raw = ["", ""], someGenerics3(_g, function () { return ''; }));
 (_h = ["", ""], _h.raw = ["", ""], someGenerics3(_h, function () { return undefined; }));
 (_j = ["", ""], _j.raw = ["", ""], someGenerics3(_j, function () { return 3; }));
 // 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
-function someGenerics4(strs, n, f) {
-}
+function someGenerics4(strs, n, f) { }
 (_k = ["", "", ""], _k.raw = ["", "", ""], someGenerics4(_k, 4, function () { return null; }));
 (_l = ["", "", ""], _l.raw = ["", "", ""], someGenerics4(_l, '', function () { return 3; }));
 (_m = ["", "", ""], _m.raw = ["", "", ""], someGenerics4(_m, null, null));
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
-function someGenerics5(strs, n, f) {
-}
+function someGenerics5(strs, n, f) { }
 (_n = ["", " ", ""], _n.raw = ["", " ", ""], someGenerics5(_n, 4, function () { return null; }));
 (_o = ["", "", ""], _o.raw = ["", "", ""], someGenerics5(_o, '', function () { return 3; }));
 (_p = ["", "", ""], _p.raw = ["", "", ""], someGenerics5(_p, null, null));
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
-function someGenerics6(strs, a, b, c) {
-}
+function someGenerics6(strs, a, b, c) { }
 (_q = ["", "", "", ""], _q.raw = ["", "", "", ""], someGenerics6(_q, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 (_r = ["", "", "", ""], _r.raw = ["", "", "", ""], someGenerics6(_r, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 (_s = ["", "", "", ""], _s.raw = ["", "", "", ""], someGenerics6(_s, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 // Generic tag with multiple arguments of function types that each have parameters of different generic type
-function someGenerics7(strs, a, b, c) {
-}
+function someGenerics7(strs, a, b, c) { }
 (_t = ["", "", "", ""], _t.raw = ["", "", "", ""], someGenerics7(_t, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 (_u = ["", "", "", ""], _u.raw = ["", "", "", ""], someGenerics7(_u, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 (_v = ["", "", "", ""], _v.raw = ["", "", "", ""], someGenerics7(_v, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-=======
-function noParams(n) { }
-noParams "";
-// Generic tag with parameter which does not use type parameter
-function noGenericParams(n) { }
-noGenericParams "";
-// Generic tag with multiple type parameters and only one used in parameter type annotation
-function someGenerics1a(n, m) { }
-someGenerics1a "" + 3;
-function someGenerics1b(n, m) { }
-someGenerics1b "" + 3;
-// Generic tag with argument of function type whose parameter is of type parameter type
-function someGenerics2a(strs, n) { }
-someGenerics2a "" + function (n) { return n; };
-function someGenerics2b(strs, n) { }
-someGenerics2b "" + function (n, x) { return n; };
-// Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
-function someGenerics3(strs, producer) { }
-someGenerics3 "" + function () { return ''; };
-someGenerics3 "" + function () { return undefined; };
-someGenerics3 "" + function () { return 3; };
-// 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
-function someGenerics4(strs, n, f) { }
-someGenerics4 "" + 4 + function () { return null; };
-someGenerics4 "" + '' + function () { return 3; };
-someGenerics4 "" + null + null;
-// 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
-function someGenerics5(strs, n, f) { }
-someGenerics5 4 + " " + function () { return null; };
-someGenerics5 "" + '' + function () { return 3; };
-someGenerics5 "" + null + null;
-// Generic tag with multiple arguments of function types that each have parameters of the same generic type
-function someGenerics6(strs, a, b, c) { }
-someGenerics6 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
-someGenerics6 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
-someGenerics6 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
-// Generic tag with multiple arguments of function types that each have parameters of different generic type
-function someGenerics7(strs, a, b, c) { }
-someGenerics7 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
-someGenerics7 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
-someGenerics7 "" + function (n) { return n; } + function (n) { return n; } + function (n) { return n; };
->>>>>>> master
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) {
     return n;
