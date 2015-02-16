@@ -382,6 +382,7 @@ module ts {
         Property_0_does_not_exist_on_const_enum_1: { code: 4088, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 4089, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
         Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 4090, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
+        Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher: { code: 4091, category: DiagnosticCategory.Error, key: "Code in the loop captures block-scoped variable '{0}' in closure. This is natively supported in ECMAScript 6 or higher." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },

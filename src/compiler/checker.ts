@@ -4905,8 +4905,53 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
+            checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
+        }
+
+        function isNameScopeBoundary(n: Node): boolean {
+            return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+        }
+
+        function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
+            if (languageVersion >= ScriptTarget.ES6 || (symbol.flags & SymbolFlags.BlockScopedVariable) === 0) {
+                return;
+            }
+
+            // - check if binding is used in some function 
+            // (stop the walk when reaching container of binding declaration)
+            // - if first check succeeded - check if variable is declared inside the loop
+
+            // var decl -> var decl list -> parent
+            var container = (<VariableDeclaration>symbol.valueDeclaration).parent.parent;
+            if (container.kind === SyntaxKind.VariableStatement) {
+                container = container.parent;
+            }
+            
+            var inFunction = false;
+            var current = node.parent;
+            while (current && current !== container) {
+                if (isAnyFunction(current)) {
+                    inFunction = true;
+                    break;
+                }
+                current = current.parent;
+            }
+
+            if (!inFunction) {
+                return;
+            }
+
+            var current: Node = container;
+            while (current && !isNameScopeBoundary(current)) {
+                if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
+                    getNodeLinks(current).flags |= NodeCheckFlags.BlockScopedBindingCapturedInLoop;
+                    grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                    break;
+                }
+                current = current.parent;
+            }
         }
 
         function captureLexicalThis(node: Node, container: Node): void {
