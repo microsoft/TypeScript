@@ -99,8 +99,6 @@ module ts.server {
         }
 
         private processResponse<T extends ServerProtocol.Response>(request: ServerProtocol.Request): T {
-            debugger;
-            
             var lastMessage = this.messages.shift();
             Debug.assert(!!lastMessage, "Did not recieve any responses.");
 
@@ -217,7 +215,6 @@ module ts.server {
         }
 
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            debugger;
              if (!this.lastCompletionEntry || this.lastCompletionEntry.fileName !== fileName || this.lastCompletionEntry.position !== position) { 
                 this.getCompletionsAtPosition(fileName, position);
             }
