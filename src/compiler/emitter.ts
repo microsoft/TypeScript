@@ -3155,6 +3155,14 @@ module ts {
                 emitEnd(node.name);
             }
 
+            function createVoidZero(): Expression {
+                var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                zero.text = "0";
+                var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                result.expression = zero;
+                return result;
+            }
+
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
@@ -3193,14 +3201,6 @@ module ts {
                         expr = identifier;
                     }
                     return expr;
-                }
-
-                function createVoidZero(): Expression {
-                    var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
-                    zero.text = "0";
-                    var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
-                    result.expression = zero;
-                    return result;
                 }
 
                 function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
@@ -3384,9 +3384,14 @@ module ts {
                     }
                 }
                 else {
-                    renameNonTopLevelLetAndConst(<Identifier>node.name);
+                    var initializeToDefault = renameNonTopLevelLetAndConst(<Identifier>node.name);
                     emitModuleMemberName(node);
-                    emitOptional(" = ", node.initializer);
+
+                    var initializer =
+                        node.initializer ||
+                        (initializeToDefault && createVoidZero());
+
+                    emitOptional(" = ", initializer);
                 }
             }
 
@@ -3417,7 +3422,7 @@ module ts {
                 }
             }
 
-            function renameNonTopLevelLetAndConst(node: Node): void {
+            function renameNonTopLevelLetAndConst(node: Node): boolean {
                 // do not rename if
                 // - language version is ES6+
                 // - node is synthesized (does not have a parent)
@@ -3426,20 +3431,20 @@ module ts {
                 if (languageVersion >= ScriptTarget.ES6 ||
                     !node.parent ||
                     (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
-                    return;
+                    return false;
                 }
 
                 var combinedFlags = getCombinedNodeFlags(node.parent);
                 if (((combinedFlags & NodeFlags.BlockScoped) === 0) || combinedFlags & NodeFlags.Export) {
                     // do not rename exported or non-block scoped variables
-                    return;
+                    return false;
                 }
 
                 // here it is known that node is a block scoped variable
                 var list = getAncestor(node, SyntaxKind.VariableDeclarationList);
                 if (list.parent.kind === SyntaxKind.VariableStatement && list.parent.parent.kind === SyntaxKind.SourceFile) {
                     // do not rename variables that are defined on source file level
-                    return;
+                    return false;
                 }
 
                 var generatedName = makeUniqueName(getEnclosingBlockScopeContainer(node), (<Identifier>node).text);
@@ -3448,6 +3453,8 @@ module ts {
                     generatedBlockScopeNames = [];
                 }
                 generatedBlockScopeNames[symbolId] = generatedName;
+
+                return (combinedFlags & NodeFlags.Let) !== 0;
             }
 
             function emitVariableStatement(node: VariableStatement) {
