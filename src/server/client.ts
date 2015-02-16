@@ -6,11 +6,20 @@ module ts.server {
         writeMessage(message: string): void;
     }
 
+    interface RenameEntry extends RenameInfo {
+        fileName: string;
+        position: number;
+        locations: RenameLocation[];
+        findInStrings: boolean;
+        findInComments: boolean;
+    }
+
     export class SessionClient implements LanguageService {
         private sequence: number = 0;
         private fileMapping: ts.Map<string> = {};
         private lineMaps: ts.Map<number[]> = {};
         private messages: string[] = [];
+        private lastRenameEntry: RenameEntry;
         
         constructor(private host: SessionClientHost) {
         }
@@ -54,7 +63,7 @@ module ts.server {
             };
         }
 
-        private getFileNameFromEncodedFile(fileId: ServerProtocol.EncodedFile): string {
+        private decodeEncodedFileId(fileId: ServerProtocol.EncodedFile): string {
             var fileName: string;
             if (typeof fileId === "object") {
                 fileName = (<ServerProtocol.IdFile>fileId).file;
@@ -203,7 +212,7 @@ module ts.server {
             var response = this.processResponse<ServerProtocol.NavtoResponse>(request);
 
             return response.body.map(entry => {
-                var fileName = this.getFileNameFromEncodedFile(entry.file);
+                var fileName = this.decodeEncodedFileId(entry.file);
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 
@@ -270,12 +279,13 @@ module ts.server {
             var response = this.processResponse<ServerProtocol.DefinitionResponse>(request);
 
             return response.body.map(entry => {
+                var fileName = this.decodeEncodedFileId(entry.file);
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 return {
                     containerKind: "",
                     containerName: "",
-                    fileName: entry.file,
+                    fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: "",
                     name: ""
@@ -295,10 +305,11 @@ module ts.server {
             var response = this.processResponse<ServerProtocol.ReferencesResponse>(request);
 
             return response.body.refs.map(entry => {
+                var fileName = this.decodeEncodedFileId(entry.file);
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 return {
-                    fileName: entry.file,
+                    fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
                 };
@@ -321,29 +332,7 @@ module ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        getRenameInfo(fileName: string, position: number): RenameInfo {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.RenameRequestArgs = {
-                file: fileName,
-                line: lineCol.line,
-                col: lineCol.col
-            };
-
-            var request = this.processRequest<ServerProtocol.RenameRequest>(CommandNames.Rename, args);
-            var response = this.processResponse<ServerProtocol.RenameResponse>(request);
-
-            return {
-                canRename: response.body.info.canRename,
-                displayName: response.body.info.displayName,
-                fullDisplayName: response.body.info.fullDisplayName,
-                kind: response.body.info.kind,
-                kindModifiers: response.body.info.kindModifiers,
-                localizedErrorMessage: response.body.info.localizedErrorMessage,
-                triggerSpan: ts.createTextSpanFromBounds(position, position)
-            };
-        }
-
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+        getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
             var args: ServerProtocol.RenameRequestArgs = {
                 file: fileName,
@@ -356,18 +345,40 @@ module ts.server {
             var request = this.processRequest<ServerProtocol.RenameRequest>(CommandNames.Rename, args);
             var response = this.processResponse<ServerProtocol.RenameResponse>(request);
 
-            if (!response.body.info.canRename) {
-                return [];
+            return this.lastRenameEntry = {
+                canRename: response.body.info.canRename,
+                displayName: response.body.info.displayName,
+                fullDisplayName: response.body.info.fullDisplayName,
+                kind: response.body.info.kind,
+                kindModifiers: response.body.info.kindModifiers,
+                localizedErrorMessage: response.body.info.localizedErrorMessage,
+                triggerSpan: ts.createTextSpanFromBounds(position, position),
+                fileName: fileName,
+                position: position,
+                findInStrings: findInStrings,
+                findInComments: findInComments,
+                locations: response.body.locs.map((entry) => {
+                    var fileName = this.decodeEncodedFileId(entry.file);
+                    var start = this.lineColToPosition(fileName, entry.start);
+                    var end = this.lineColToPosition(fileName, entry.end);
+                    return {
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        fileName: fileName
+                    };
+                })
+            };
+        }
+
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+            if (!this.lastRenameEntry ||
+                this.lastRenameEntry.fileName !== fileName ||
+                this.lastRenameEntry.position !== position ||
+                this.lastRenameEntry.findInStrings != findInStrings ||
+                this.lastRenameEntry.findInComments != findInComments) {
+                this.getRenameInfo(fileName, position, findInStrings, findInComments);
             }
 
-            return response.body.locs.map((entry) => {
-                var start = this.lineColToPosition(entry.file, entry.start);
-                var end = this.lineColToPosition(entry.file, entry.end);
-                return {
-                    textSpan: ts.createTextSpanFromBounds(start, end),
-                    fileName: entry.file
-                };
-            });
+            return this.lastRenameEntry.locations;
         }
 
         decodeNavigationBarItems(items: ServerProtocol.NavigationBarItem[], fileName: string): NavigationBarItem[] {

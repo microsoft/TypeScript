@@ -27,7 +27,7 @@ module ts.server {
     }
 
     interface FileStart {
-        file: string;
+        file: ServerProtocol.EncodedFile;
         start: ILineInfo;
     }
 
@@ -92,9 +92,9 @@ module ts.server {
         locs: FileRange[];
     }
 
-    function formatDiag(file: string, project: Project, diag: ts.Diagnostic) {
+    function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
-            start: project.compilerService.host.positionToLineCol(file, diag.start),
+            start: project.compilerService.host.positionToLineCol(fileName, diag.start),
             len: diag.length,
             text: diag.messageText,
         };
@@ -204,7 +204,7 @@ module ts.server {
             this.send(res);
         }
 
-        encodeFilename(fileName: string): ServerProtocol.EncodedFile {
+        encodeFileName(fileName: string): ServerProtocol.EncodedFile {
             var id = ts.lookUp(this.fileHash, fileName);
             if (!id) {
                 id = this.nextFileId++;
@@ -216,15 +216,15 @@ module ts.server {
             }
         }
 
-        output(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
-            this.response(info, cmdName, reqSeq, errorMsg);
+        output(body: any, commandName: string, requestSequence = 0, errorMessage?: string) {
+            this.response(body, commandName, requestSequence, errorMessage);
         }
 
         semanticCheck(file: string, project: Project) {
             var diags = project.compilerService.languageService.getSemanticDiagnostics(file);
             if (diags) {
                 var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                this.event({ file: this.encodeFileName(file), diagnostics: bakedDiags }, "semanticDiag");
             }
         }
 
@@ -232,7 +232,7 @@ module ts.server {
             var diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
             if (diags) {
                 var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                this.event({ file: this.encodeFileName(file), diagnostics: bakedDiags }, "syntaxDiag");
             }
         }
 
@@ -293,11 +293,9 @@ module ts.server {
             }
 
             return definitions.map(def => ({
-                file: def && def.fileName,
-                start: def &&
-                compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
-                end: def &&
-                compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
+                file: this.encodeFileName(def.fileName),
+                start: compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
+                end: compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
             }));
         }
 
@@ -322,15 +320,15 @@ module ts.server {
                 };
             }
 
-            var renameLocs = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
-            if (!renameLocs) {
+            var renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
+            if (!renameLocations) {
                 throw Errors.NoContent;
             }
 
-            var bakedRenameLocs = renameLocs.map(loc => (<ServerProtocol.CodeSpan>{
-                file: loc.fileName,
-                start: compilerService.host.positionToLineCol(loc.fileName, loc.textSpan.start),
-                end: compilerService.host.positionToLineCol(loc.fileName, ts.textSpanEnd(loc.textSpan)),
+            var bakedRenameLocs = renameLocations.map(location => (<ServerProtocol.CodeSpan>{
+                file: this.encodeFileName(location.fileName),
+                start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
+                end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan)),
             }));
 
             return { info: renameInfo, locs: bakedRenameLocs };
@@ -368,7 +366,7 @@ module ts.server {
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
                 var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                 return {
-                    file: ref.fileName,
+                    file: this.encodeFileName(ref.fileName),
                     start: start,
                     lineText: lineText,
                     end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
@@ -383,8 +381,8 @@ module ts.server {
             };
         }
 
-        openClientFile(rawfile: string) {
-            var file = ts.normalizePath(rawfile);
+        openClientFile(fileName: string) {
+            var file = ts.normalizePath(fileName);
             this.projectService.openClientFile(file);
         }
 
@@ -536,8 +534,8 @@ module ts.server {
             }
         }
 
-        change(line: number, col: number, deleteLen: number, insertString: string, rawfile: string) {
-            var file = ts.normalizePath(rawfile);
+        change(line: number, col: number, deleteLen: number, insertString: string, fileName: string) {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (project) {
                 var compilerService = project.compilerService;
@@ -553,9 +551,9 @@ module ts.server {
             }
         }
 
-        reload(rawfile: string, rawtmpfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
-            var tmpfile = ts.normalizePath(rawtmpfile);
+        reload(fileName: string, tempFileName: string, reqSeq = 0) {
+            var file = ts.normalizePath(fileName);
+            var tmpfile = ts.normalizePath(tempFileName);
             var project = this.projectService.getProjectForFile(file);
             if (project) {
                 this.changeSeq++;
@@ -566,9 +564,9 @@ module ts.server {
             }
         }
 
-        saveToTmp(rawfile: string, rawtmpfile: string) {
-            var file = ts.normalizePath(rawfile);
-            var tmpfile = ts.normalizePath(rawtmpfile);
+        saveToTmp(fileName: string, tempFileName: string) {
+            var file = ts.normalizePath(fileName);
+            var tmpfile = ts.normalizePath(tempFileName);
 
             var project = this.projectService.getProjectForFile(file);
             if (project) {
@@ -576,8 +574,8 @@ module ts.server {
             }
         }
 
-        closeClientFile(rawfile: string) {
-            var file = ts.normalizePath(rawfile);
+        closeClientFile(fileName: string) {
+            var file = ts.normalizePath(fileName);
             this.projectService.closeClientFile(file);
         }
 
@@ -635,7 +633,7 @@ module ts.server {
                 var bakedItem: ServerProtocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
-                    file: this.encodeFilename(navItem.fileName),
+                    file: this.encodeFileName(navItem.fileName),
                     start: start,
                     end: end,
                 };

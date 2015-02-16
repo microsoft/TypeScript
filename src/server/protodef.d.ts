@@ -101,8 +101,12 @@ declare module ServerProtocol {
        a specific source file.
     */
     export interface CodeSpan extends TextSpan {
-        /** File containing the definition */
-        file: string;
+        /** 
+            File containing the definition; the value of this
+            field will always be a string, number of a mapping between
+            a string and a number.
+        */
+        file: EncodedFile;
     }
 
     /**
