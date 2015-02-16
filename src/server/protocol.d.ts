@@ -1,5 +1,5 @@
 /** Declaration module describing the TypeScript Server protocol */
-declare module ServerProtocol {
+declare module ts.server.protocol {
     /** A TypeScript Server message */
     export interface Message {
         /** Sequence number of the message */
@@ -595,9 +595,3 @@ declare module ServerProtocol {
         body?: NavigationBarItem[];
     }
 }
-
-
-
-
-
-

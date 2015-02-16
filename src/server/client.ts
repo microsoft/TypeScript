@@ -47,11 +47,11 @@ module ts.server {
             return lineMap;
         }
 
-        private lineColToPosition(fileName: string, lineCol: ServerProtocol.LineCol): number {
+        private lineColToPosition(fileName: string, lineCol: ts.server.protocol.LineCol): number {
             return ts.computePositionFromLineAndCharacter(this.getLineMap(fileName), lineCol.line, lineCol.col);
         }
 
-        private positionToOneBasedLineCol(fileName: string, position: number): ServerProtocol.LineCol {
+        private positionToOneBasedLineCol(fileName: string, position: number): ts.server.protocol.LineCol {
             var lineCol = ts.computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
             return {
                 line: lineCol.line,
@@ -59,7 +59,7 @@ module ts.server {
             };
         }
 
-        private convertCodeEditsToTextChange(fileName: string, codeEdit: ServerProtocol.CodeEdit): ts.TextChange {
+        private convertCodeEditsToTextChange(fileName: string, codeEdit: ts.server.protocol.CodeEdit): ts.TextChange {
             var start = this.lineColToPosition(fileName, codeEdit.start);
             var end = this.lineColToPosition(fileName, codeEdit.end);
 
@@ -69,11 +69,11 @@ module ts.server {
             };
         }
 
-        private decodeEncodedFileId(fileId: ServerProtocol.EncodedFile): string {
+        private decodeEncodedFileId(fileId: ts.server.protocol.EncodedFile): string {
             var fileName: string;
             if (typeof fileId === "object") {
-                fileName = (<ServerProtocol.IdFile>fileId).file;
-                this.fileMapping[(<ServerProtocol.IdFile>fileId).id] = fileName;
+                fileName = (<ts.server.protocol.IdFile>fileId).file;
+                this.fileMapping[(<ts.server.protocol.IdFile>fileId).id] = fileName;
             }
             else if (typeof fileId === "number") {
                 fileName = ts.lookUp(this.fileMapping, fileId.toString());
@@ -85,8 +85,8 @@ module ts.server {
             return fileName;
         }
 
-        private processRequest<T extends ServerProtocol.Request>(command: string, arguments?: any): T {
-            var request: ServerProtocol.Request = {
+        private processRequest<T extends ts.server.protocol.Request>(command: string, arguments?: any): T {
+            var request: ts.server.protocol.Request = {
                 seq: this.sequence++,
                 type: "request",
                 command: command,
@@ -98,7 +98,7 @@ module ts.server {
             return <T>request;
         }
 
-        private processResponse<T extends ServerProtocol.Response>(request: ServerProtocol.Request): T {
+        private processResponse<T extends ts.server.protocol.Response>(request: ts.server.protocol.Request): T {
             var lastMessage = this.messages.shift();
             Debug.assert(!!lastMessage, "Did not recieve any responses.");
 
@@ -138,12 +138,12 @@ module ts.server {
         }
 
         openFile(fileName: string): void {
-            var args: ServerProtocol.FileRequestArgs = { file: fileName };
+            var args: ts.server.protocol.FileRequestArgs = { file: fileName };
             this.processRequest(CommandNames.Open, args);
         }
 
         closeFile(fileName: string): void {
-            var args: ServerProtocol.FileRequestArgs = { file: fileName };
+            var args: ts.server.protocol.FileRequestArgs = { file: fileName };
             this.processRequest(CommandNames.Close, args);
         }
 
@@ -152,7 +152,7 @@ module ts.server {
             this.lineMaps[fileName] = undefined;
 
             var lineCol = this.positionToOneBasedLineCol(fileName, start);
-            var args: ServerProtocol.ChangeRequestArgs = {
+            var args: ts.server.protocol.ChangeRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
@@ -166,14 +166,14 @@ module ts.server {
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CodeLocationRequestArgs = {
+            var args: ts.server.protocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col
             };
 
-            var request = this.processRequest<ServerProtocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
-            var response = this.processResponse<ServerProtocol.QuickInfoResponse>(request);
+            var request = this.processRequest<ts.server.protocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
+            var response = this.processResponse<ts.server.protocol.QuickInfoResponse>(request);
 
             var start = this.lineColToPosition(fileName, response.body.start);
             var end = this.lineColToPosition(fileName, response.body.end);
@@ -189,15 +189,15 @@ module ts.server {
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CompletionsRequestArgs = {
+            var args: ts.server.protocol.CompletionsRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
                 prefix: undefined
             };
 
-            var request = this.processRequest<ServerProtocol.CompletionsRequest>(CommandNames.Completions, args);
-            var response = this.processResponse<ServerProtocol.CompletionsResponse>(request);
+            var request = this.processRequest<ts.server.protocol.CompletionsRequest>(CommandNames.Completions, args);
+            var response = this.processResponse<ts.server.protocol.CompletionsResponse>(request);
 
             return this.lastCompletionEntry = {
                 isMemberCompletion: false,
@@ -223,13 +223,13 @@ module ts.server {
         }
 
         getNavigateToItems(searchTerm: string): NavigateToItem[] {
-            var args: ServerProtocol.NavtoRequestArgs = {
+            var args: ts.server.protocol.NavtoRequestArgs = {
                 searchTerm,
                 file: this.host.getScriptFileNames()[0]
             };
 
-            var request = this.processRequest<ServerProtocol.NavtoRequest>(CommandNames.Navto, args);
-            var response = this.processResponse<ServerProtocol.NavtoResponse>(request);
+            var request = this.processRequest<ts.server.protocol.NavtoRequest>(CommandNames.Navto, args);
+            var response = this.processResponse<ts.server.protocol.NavtoResponse>(request);
 
             return response.body.map(entry => {
                 var fileName = this.decodeEncodedFileId(entry.file);
@@ -252,7 +252,7 @@ module ts.server {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
             var startLineCol = this.positionToOneBasedLineCol(fileName, start);
             var endLineCol = this.positionToOneBasedLineCol(fileName, end);
-            var args: ServerProtocol.FormatRequestArgs = {
+            var args: ts.server.protocol.FormatRequestArgs = {
                 file: fileName,
                 line: startLineCol.line,
                 col: startLineCol.col,
@@ -261,8 +261,8 @@ module ts.server {
             };
 
             // TODO: handle FormatCodeOptions
-            var request = this.processRequest<ServerProtocol.FormatRequest>(CommandNames.Format, args);
-            var response = this.processResponse<ServerProtocol.FormatResponse>(request);
+            var request = this.processRequest<ts.server.protocol.FormatRequest>(CommandNames.Format, args);
+            var response = this.processResponse<ts.server.protocol.FormatResponse>(request);
 
             return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
         }
@@ -273,7 +273,7 @@ module ts.server {
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.FormatOnKeyRequestArgs = {
+            var args: ts.server.protocol.FormatOnKeyRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
@@ -281,22 +281,22 @@ module ts.server {
             };
 
             // TODO: handle FormatCodeOptions
-            var request = this.processRequest<ServerProtocol.FormatOnKeyRequest>(CommandNames.Formatonkey, args);
-            var response = this.processResponse<ServerProtocol.FormatResponse>(request);
+            var request = this.processRequest<ts.server.protocol.FormatOnKeyRequest>(CommandNames.Formatonkey, args);
+            var response = this.processResponse<ts.server.protocol.FormatResponse>(request);
 
             return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
         }
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CodeLocationRequestArgs = {
+            var args: ts.server.protocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
             };
 
-            var request = this.processRequest<ServerProtocol.DefinitionRequest>(CommandNames.Definition, args);
-            var response = this.processResponse<ServerProtocol.DefinitionResponse>(request);
+            var request = this.processRequest<ts.server.protocol.DefinitionRequest>(CommandNames.Definition, args);
+            var response = this.processResponse<ts.server.protocol.DefinitionResponse>(request);
 
             return response.body.map(entry => {
                 var fileName = this.decodeEncodedFileId(entry.file);
@@ -315,14 +315,14 @@ module ts.server {
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CodeLocationRequestArgs = {
+            var args: ts.server.protocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
             };
 
-            var request = this.processRequest<ServerProtocol.ReferencesRequest>(CommandNames.References, args);
-            var response = this.processResponse<ServerProtocol.ReferencesResponse>(request);
+            var request = this.processRequest<ts.server.protocol.ReferencesRequest>(CommandNames.References, args);
+            var response = this.processResponse<ts.server.protocol.ReferencesResponse>(request);
 
             return response.body.refs.map(entry => {
                 var fileName = this.decodeEncodedFileId(entry.file);
@@ -354,7 +354,7 @@ module ts.server {
 
         getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.RenameRequestArgs = {
+            var args: ts.server.protocol.RenameRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
@@ -362,8 +362,8 @@ module ts.server {
                 findInComments
             };
 
-            var request = this.processRequest<ServerProtocol.RenameRequest>(CommandNames.Rename, args);
-            var response = this.processResponse<ServerProtocol.RenameResponse>(request);
+            var request = this.processRequest<ts.server.protocol.RenameRequest>(CommandNames.Rename, args);
+            var response = this.processResponse<ts.server.protocol.RenameResponse>(request);
 
             return this.lastRenameEntry = {
                 canRename: response.body.info.canRename,
@@ -401,7 +401,7 @@ module ts.server {
             return this.lastRenameEntry.locations;
         }
 
-        decodeNavigationBarItems(items: ServerProtocol.NavigationBarItem[], fileName: string): NavigationBarItem[] {
+        decodeNavigationBarItems(items: ts.server.protocol.NavigationBarItem[], fileName: string): NavigationBarItem[] {
             if (!items) {
                 return [];
             }
@@ -419,12 +419,12 @@ module ts.server {
         }
 
         getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            var args: ServerProtocol.FileRequestArgs = {
+            var args: ts.server.protocol.FileRequestArgs = {
                 file: fileName
             };
 
-            var request = this.processRequest<ServerProtocol.NavBarRequest>(CommandNames.NavBar, args);
-            var response = this.processResponse<ServerProtocol.NavBarResponse>(request);
+            var request = this.processRequest<ts.server.protocol.NavBarRequest>(CommandNames.NavBar, args);
+            var response = this.processResponse<ts.server.protocol.NavBarResponse>(request);
 
             return this.decodeNavigationBarItems(response.body, fileName);
         }
@@ -455,14 +455,14 @@ module ts.server {
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
-            var args: ServerProtocol.CodeLocationRequestArgs = {
+            var args: ts.server.protocol.CodeLocationRequestArgs = {
                 file: fileName,
                 line: lineCol.line,
                 col: lineCol.col,
             };
 
-            var request = this.processRequest<ServerProtocol.BraceRequest>(CommandNames.Brace, args);
-            var response = this.processResponse<ServerProtocol.BraceResponse>(request);
+            var request = this.processRequest<ts.server.protocol.BraceRequest>(CommandNames.Brace, args);
+            var response = this.processResponse<ts.server.protocol.BraceResponse>(request);
 
             return response.body.map(entry => {
                 var start = this.lineColToPosition(fileName, entry.start);

@@ -27,7 +27,7 @@ module ts.server {
     }
 
     interface FileStart {
-        file: ServerProtocol.EncodedFile;
+        file: ts.server.protocol.EncodedFile;
         start: ILineInfo;
     }
 
@@ -188,7 +188,7 @@ module ts.server {
         }
 
         response(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
-            var res: ServerProtocol.Response = {
+            var res: ts.server.protocol.Response = {
                 seq: 0,
                 type: "response",
                 command: cmdName,
@@ -204,7 +204,7 @@ module ts.server {
             this.send(res);
         }
 
-        encodeFileName(fileName: string): ServerProtocol.EncodedFile {
+        encodeFileName(fileName: string): ts.server.protocol.EncodedFile {
             var id = ts.lookUp(this.fileHash, fileName);
             if (!id) {
                 id = this.nextFileId++;
@@ -277,7 +277,7 @@ module ts.server {
             }
         }
 
-        getDefinition(line: number, col: number, fileName: string): ServerProtocol.CodeSpan[] {
+        getDefinition(line: number, col: number, fileName: string): ts.server.protocol.CodeSpan[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -299,7 +299,7 @@ module ts.server {
             }));
         }
 
-        getRenameLocations(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
+        getRenameLocations(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ts.server.protocol.CodeSpan[] } {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -325,7 +325,7 @@ module ts.server {
                 throw Errors.NoContent;
             }
 
-            var bakedRenameLocs = renameLocations.map(location => (<ServerProtocol.CodeSpan>{
+            var bakedRenameLocs = renameLocations.map(location => (<ts.server.protocol.CodeSpan>{
                 file: this.encodeFileName(location.fileName),
                 start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
                 end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan)),
@@ -334,7 +334,7 @@ module ts.server {
             return { info: renameInfo, locs: bakedRenameLocs };
         }
 
-        getReferences(line: number, col: number, fileName: string): ServerProtocol.ReferencesResponseBody {
+        getReferences(line: number, col: number, fileName: string): ts.server.protocol.ReferencesResponseBody {
             // TODO: get all projects for this file; report refs for all projects deleting duplicates
             // can avoid duplicates by eliminating same ref file from subsequent projects
             var file = ts.normalizePath(fileName);
@@ -360,7 +360,7 @@ module ts.server {
             var nameSpan = nameInfo.textSpan;
             var nameColStart = compilerService.host.positionToLineCol(file, nameSpan.start).col;
             var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            var bakedRefs: ServerProtocol.ReferencesResponseItem[] = references.map((ref) => {
+            var bakedRefs: ts.server.protocol.ReferencesResponseItem[] = references.map((ref) => {
                 var start = compilerService.host.positionToLineCol(ref.fileName, ref.textSpan.start);
                 var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
@@ -386,7 +386,7 @@ module ts.server {
             this.projectService.openClientFile(file);
         }
 
-        getQuickInfo(line: number, col: number, fileName: string): ServerProtocol.QuickInfoResponseBody {
+        getQuickInfo(line: number, col: number, fileName: string): ts.server.protocol.QuickInfoResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -412,7 +412,7 @@ module ts.server {
             };
         }
 
-        getFormattingEditsForRange(line: number, col: number, endLine: number, endCol: number, fileName: string): ServerProtocol.CodeEdit[] {
+        getFormattingEditsForRange(line: number, col: number, endLine: number, endCol: number, fileName: string): ts.server.protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -438,7 +438,7 @@ module ts.server {
             });
         }
 
-        getFormattingEditsAfterKeystroke(line: number, col: number, key: string, fileName: string): ServerProtocol.CodeEdit[] {
+        getFormattingEditsAfterKeystroke(line: number, col: number, key: string, fileName: string): ts.server.protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
 
             var project = this.projectService.getProjectForFile(file);
@@ -480,7 +480,7 @@ module ts.server {
             });
         }
 
-        getCompletions(line: number, col: number, prefix: string, fileName: string): ServerProtocol.CompletionItem[] {
+        getCompletions(line: number, col: number, prefix: string, fileName: string): ts.server.protocol.CompletionItem[] {
             if (!prefix) {
                 prefix = "";
             }
@@ -579,7 +579,7 @@ module ts.server {
             this.projectService.closeClientFile(file);
         }
 
-        decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[]): ServerProtocol.NavigationBarItem[] {
+        decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[]): ts.server.protocol.NavigationBarItem[] {
             if (!items) {
                 return undefined;
             }
@@ -598,7 +598,7 @@ module ts.server {
             }));
         }
 
-        getNavigationBarItems(fileName: string): ServerProtocol.NavigationBarItem[] {
+        getNavigationBarItems(fileName: string): ts.server.protocol.NavigationBarItem[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -614,7 +614,7 @@ module ts.server {
             return this.decorateNavigationBarItem(project, fileName, items);
         }
 
-        getNavigateToItems(searchTerm: string, fileName: string): ServerProtocol.NavtoItem[] {
+        getNavigateToItems(searchTerm: string, fileName: string): ts.server.protocol.NavtoItem[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -630,7 +630,7 @@ module ts.server {
             return navItems.map((navItem) => {
                 var start = compilerService.host.positionToLineCol(navItem.fileName, navItem.textSpan.start);
                 var end = compilerService.host.positionToLineCol(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
-                var bakedItem: ServerProtocol.NavtoItem = {
+                var bakedItem: ts.server.protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
                     file: this.encodeFileName(navItem.fileName),
@@ -653,7 +653,7 @@ module ts.server {
             });
         }
 
-        getBraceMatching(line: number, col: number, fileName: string): ServerProtocol.TextSpan[] {
+        getBraceMatching(line: number, col: number, fileName: string): ts.server.protocol.TextSpan[] {
             var file = ts.normalizePath(fileName);
             
             var project = this.projectService.getProjectForFile(file);
@@ -677,87 +677,87 @@ module ts.server {
 
         onMessage(message: string) {
             try {
-                var request = <ServerProtocol.Request>JSON.parse(message);
+                var request = <ts.server.protocol.Request>JSON.parse(message);
                 var response: any;
                 switch (request.command) {
                     case CommandNames.Definition: {
-                        var defArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        var defArgs = <ts.server.protocol.CodeLocationRequestArgs>request.arguments;
                         response = this.getDefinition(defArgs.line, defArgs.col, defArgs.file);
                         break;
                     }
                     case CommandNames.References: {
-                        var refArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        var refArgs = <ts.server.protocol.CodeLocationRequestArgs>request.arguments;
                         response = this.getReferences(refArgs.line, refArgs.col, refArgs.file);
                         break;
                     }
                     case CommandNames.Rename: {
-                        var renameArgs = <ServerProtocol.RenameRequestArgs>request.arguments;
+                        var renameArgs = <ts.server.protocol.RenameRequestArgs>request.arguments;
                         response = this.getRenameLocations(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
                         break;
                     }
                     case CommandNames.Open: {
-                        var openArgs = <ServerProtocol.FileRequestArgs>request.arguments;
+                        var openArgs = <ts.server.protocol.FileRequestArgs>request.arguments;
                         this.openClientFile(openArgs.file);
                         break;
                     }
                     case CommandNames.Quickinfo: {
-                        var quickinfoArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        var quickinfoArgs = <ts.server.protocol.CodeLocationRequestArgs>request.arguments;
                         response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
                         break;
                     }
                     case CommandNames.Format: {
-                        var formatArgs = <ServerProtocol.FormatRequestArgs>request.arguments;
+                        var formatArgs = <ts.server.protocol.FormatRequestArgs>request.arguments;
                         response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
                         break;
                     }
                     case CommandNames.Formatonkey: {
-                        var formatOnKeyArgs = <ServerProtocol.FormatOnKeyRequestArgs>request.arguments;
+                        var formatOnKeyArgs = <ts.server.protocol.FormatOnKeyRequestArgs>request.arguments;
                         response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
                         break;
                     }
                     case CommandNames.Completions: {
-                        var completionsArgs = <ServerProtocol.CompletionsRequestArgs>request.arguments;
+                        var completionsArgs = <ts.server.protocol.CompletionsRequestArgs>request.arguments;
                         response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
                         break;
                     }
                     case CommandNames.Geterr: {
-                        var geterrArgs = <ServerProtocol.GeterrRequestArgs>request.arguments;
+                        var geterrArgs = <ts.server.protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
                         break;
                     }
                     case CommandNames.Change: {
-                        var changeArgs = <ServerProtocol.ChangeRequestArgs>request.arguments;
+                        var changeArgs = <ts.server.protocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.col, changeArgs.deleteLen, changeArgs.insertString,
                             changeArgs.file);
                         break;
                     }
                     case CommandNames.Reload: {
-                        var reloadArgs = <ServerProtocol.ReloadRequestArgs>request.arguments;
+                        var reloadArgs = <ts.server.protocol.ReloadRequestArgs>request.arguments;
                         this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
                         break;
                     }
                     case CommandNames.Saveto: {
-                        var savetoArgs = <ServerProtocol.SavetoRequestArgs>request.arguments;
+                        var savetoArgs = <ts.server.protocol.SavetoRequestArgs>request.arguments;
                         this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
                         break;
                     }
                     case CommandNames.Close: {
-                        var closeArgs = <ServerProtocol.FileRequestArgs>request.arguments;
+                        var closeArgs = <ts.server.protocol.FileRequestArgs>request.arguments;
                         this.closeClientFile(closeArgs.file);
                         break;
                     }
                     case CommandNames.Navto: {
-                        var navtoArgs = <ServerProtocol.NavtoRequestArgs>request.arguments;
+                        var navtoArgs = <ts.server.protocol.NavtoRequestArgs>request.arguments;
                         response = this.getNavigateToItems(navtoArgs.searchTerm, navtoArgs.file);
                         break;
                     }
                     case CommandNames.Brace: {
-                        var braceArguments = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
+                        var braceArguments = <ts.server.protocol.CodeLocationRequestArgs>request.arguments;
                         response = this.getBraceMatching(braceArguments.line, braceArguments.col, braceArguments.file);
                         break;
                     }
                     case CommandNames.NavBar: {
-                        var navBarArgs = <ServerProtocol.FileRequestArgs>request.arguments;
+                        var navBarArgs = <ts.server.protocol.FileRequestArgs>request.arguments;
                         response = this.getNavigationBarItems(navBarArgs.file);
                         break;
                     }
