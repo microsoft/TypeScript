@@ -511,7 +511,7 @@ module ts.server {
                         protoEntry.documentation = details.documentation;
                     }
                     if (details && (details.displayParts) && (details.displayParts.length > 0)) {
-                        protoEntry.displayParts = details.documentation;
+                        protoEntry.displayParts = details.displayParts;
                     }
                     result.push(protoEntry);
                 }

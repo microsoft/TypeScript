@@ -6,6 +6,11 @@ module ts.server {
         writeMessage(message: string): void;
     }
 
+    interface CompletionEntry extends CompletionInfo {
+        fileName: string;
+        position: number;
+    }
+
     interface RenameEntry extends RenameInfo {
         fileName: string;
         position: number;
@@ -19,6 +24,7 @@ module ts.server {
         private fileMapping: ts.Map<string> = {};
         private lineMaps: ts.Map<number[]> = {};
         private messages: string[] = [];
+        private lastCompletionEntry: CompletionEntry;
         private lastRenameEntry: RenameEntry;
         
         constructor(private host: SessionClientHost) {
@@ -195,11 +201,28 @@ module ts.server {
             var request = this.processRequest<ServerProtocol.CompletionsRequest>(CommandNames.Completions, args);
             var response = this.processResponse<ServerProtocol.CompletionsResponse>(request);
 
-            return {
+            return this.lastCompletionEntry = {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(entry => ({ kind: entry.kind, kindModifiers: entry.kindModifiers, name: entry.name }))
+                entries: response.body.map(entry => ({
+                    kind: entry.kind,
+                    kindModifiers: entry.kindModifiers,
+                    name: entry.name,
+                    displayParts: entry.displayParts,
+                    documentation: entry.documentation
+                })),
+                fileName: fileName,
+                position: position
             };
+        }
+
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
+            debugger;
+             if (!this.lastCompletionEntry || this.lastCompletionEntry.fileName !== fileName || this.lastCompletionEntry.position !== position) { 
+                this.getCompletionsAtPosition(fileName, position);
+            }
+
+            return <CompletionEntryDetails>this.lastCompletionEntry.entries.filter(entry => entry.name === entryName)[0];
         }
 
         getNavigateToItems(searchTerm: string): NavigateToItem[] {
@@ -463,10 +486,6 @@ module ts.server {
         }
 
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
-            throw new Error("Not Implemented Yet.");
-        }
-
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             throw new Error("Not Implemented Yet.");
         }
 
