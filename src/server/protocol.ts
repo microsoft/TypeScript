@@ -4,13 +4,6 @@
 /// <reference path="protodef.d.ts" />
 /// <reference path="editorServices.ts" />
 
-module ts {
-    export interface NavigationBarItem {
-        displayString?: string;
-        docString?: string;
-    }
-}
-
 module ts.server {
     var paddedLength = 8;
 
@@ -129,6 +122,7 @@ module ts.server {
         export var Format = "format";
         export var Formatonkey = "formatonkey";
         export var Geterr = "geterr";
+        export var NavBar = "navbar";
         export var Navto = "navto";
         export var Open = "open";
         export var Quickinfo = "quickinfo";
@@ -426,7 +420,7 @@ module ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-        
+
             var compilerService = project.compilerService;
             var startPosition = compilerService.host.lineColToPosition(file, line, col);
             var endPosition = compilerService.host.lineColToPosition(file, endLine, endCol);
@@ -436,7 +430,7 @@ module ts.server {
             if (!edits) {
                 throw Errors.NoContent;
             }
-            
+
             return edits.map((edit) => {
                 return {
                     start: compilerService.host.positionToLineCol(file, edit.span.start),
@@ -500,7 +494,7 @@ module ts.server {
 
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
-        
+
             var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
                 throw Errors.NoContent;
@@ -526,7 +520,7 @@ module ts.server {
                 return result;
             }, []);
         }
-                 
+
         geterr(delay: number, fileNames: string[]) {
             var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
@@ -587,40 +581,39 @@ module ts.server {
             this.projectService.closeClientFile(file);
         }
 
-        decorateNavBarItem(navBarItem: ts.NavigationBarItem, compilerService: CompilerService, file: string) {
-            if (navBarItem.spans.length == 1) {
-                var span = navBarItem.spans[0];
-                var offset = span.start;
-                var textForSpan = compilerService.host.getScriptSnapshot(file).getText(offset, offset + span.length);
-                var adj = textForSpan.indexOf(navBarItem.text);
-                if (adj > 0) {
-                    offset += adj;
-                }
-                var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file,
-                    offset + (navBarItem.text.length / 2));
-                if (quickInfo) {
-                    var displayString = ts.displayPartsToString(quickInfo.displayParts);
-                    var docString = ts.displayPartsToString(quickInfo.documentation);
-                    navBarItem.displayString = displayString;
-                    navBarItem.docString = docString;
-                }
+        decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[]): ServerProtocol.NavigationBarItem[] {
+            if (!items) {
+                return undefined;
             }
-            if (navBarItem.childItems.length > 0) {
-                navBarItem.childItems =
-                navBarItem.childItems.map(navBarItem => this.decorateNavBarItem(navBarItem, compilerService, file));
-            }
-            return navBarItem;
+
+            var compilerService = project.compilerService;
+
+            return items.map(item => ({
+                text: item.text,
+                kind: item.kind,
+                kindModifiers: item.kindModifiers,
+                spans: item.spans.map(span => ({
+                    start: compilerService.host.positionToLineCol(fileName, span.start),
+                    end: compilerService.host.positionToLineCol(fileName, ts.textSpanEnd(span))
+                })),
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
+            }));
         }
 
-        navbar(rawfile: string, reqSeq = 0) {
-            var file = ts.normalizePath(rawfile);
+        navbar(fileName: string): ServerProtocol.NavigationBarItem[] {
+            var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
-            if (project) {
-                var compilerService = project.compilerService;
-                var navBarItems = compilerService.languageService.getNavigationBarItems(file);
-                var bakedNavBarItems = navBarItems.map(navBarItem => this.decorateNavBarItem(navBarItem, compilerService, file));
-                this.sendLineToClient(JSON.stringify(bakedNavBarItems, null, " "));
+            if (!project) {
+                throw Errors.NoProject;
             }
+
+            var compilerService = project.compilerService;
+            var items = compilerService.languageService.getNavigationBarItems(file);
+            if (!items) {
+                throw Errors.NoContent;
+            }
+
+            return this.decorateNavigationBarItem(project, fileName, items);
         }
 
         navto(searchTerm: string, fileName: string): ServerProtocol.NavtoItem[] {
@@ -763,6 +756,11 @@ module ts.server {
                     case CommandNames.Brace: {
                         var braceArguments = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
                         response = this.getBraceMatching(braceArguments.line, braceArguments.col, braceArguments.file);
+                        break;
+                    }
+                    case CommandNames.NavBar: {
+                        var navBarArgs = <ServerProtocol.FileRequestArgs>request.arguments;
+                        response = this.navbar(navBarArgs.file);
                         break;
                     }
                     default: {

@@ -562,6 +562,34 @@ declare module ServerProtocol {
     export interface BraceRequest extends CodeLocationRequest {
     }
 
+    /**
+       NavBar itesm request; value of command field is "navbar".
+       Return response giving the list of navigation bar entries
+       extracted from the requested file.
+      */
+    export interface NavBarRequest extends FileRequest {
+    }
+
+    export interface NavigationBarItem {
+        /** The item's display text */
+        text: string;
+
+        /** The symbol's kind (such as 'className' or 'parameterName') */
+        kind: string;
+
+        /** Optional modifiers for the kind (such as 'public') */
+        kindModifiers?: string;
+
+        /** The definition locations of the item */
+        spans: TextSpan[];
+
+        /** Optional children */
+        childItems?: NavigationBarItem[];
+    }
+
+    export interface NavBarResponse extends Response { 
+        body?: NavigationBarItem[];
+    }
 }
 
 

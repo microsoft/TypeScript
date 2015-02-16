@@ -370,8 +370,32 @@ module ts.server {
             });
         }
 
+        decodeNavigationBarItems(items: ServerProtocol.NavigationBarItem[], fileName: string): NavigationBarItem[] {
+            if (!items) {
+                return [];
+            }
+
+            return items.map(item => ({
+                text: item.text,
+                kind: item.kind,
+                kindModifiers: item.kindModifiers || "",
+                spans: item.spans.map(span=> createTextSpanFromBounds(this.lineColToPosition(fileName, span.start), this.lineColToPosition(fileName, span.end))),
+                childItems: this.decodeNavigationBarItems(item.childItems, fileName),
+                indent: 0,
+                bolded: false,
+                grayed: false
+            }));
+        }
+
         getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            throw new Error("Not Implemented Yet.");
+            var args: ServerProtocol.FileRequestArgs = {
+                file: fileName
+            };
+
+            var request = this.processRequest<ServerProtocol.NavBarRequest>(CommandNames.NavBar, args);
+            var response = this.processResponse<ServerProtocol.NavBarResponse>(request);
+
+            return this.decodeNavigationBarItems(response.body, fileName);
         }
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
