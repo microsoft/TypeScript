@@ -400,7 +400,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
                 jake.rmRf(tempDirPath, {silent: true});
            });
 
-var serverFile = path.join(builtLocalDirectory, "typescriptServer.js");
+var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
 
 // Local target to build the compiler and services
