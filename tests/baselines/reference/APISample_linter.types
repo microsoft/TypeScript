@@ -4512,15 +4512,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionFromOneBasedLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionFromOneBasedLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -4530,8 +4530,8 @@ declare module "typescript" {
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 
-    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
->computeLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
+    function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+>computeOneBasedLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
 >lineStarts : number[]
 >position : number
 
@@ -4542,8 +4542,8 @@ declare module "typescript" {
 >character : number
 
     };
-    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
->getLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
+    function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+>getOneBasedLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >position : number
@@ -4887,8 +4887,8 @@ declare module "typescript" {
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
+        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
+>getPositionFromOneBasedLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 
