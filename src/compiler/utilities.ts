@@ -108,7 +108,7 @@ module ts {
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
-        var loc = getLineAndCharacterOfPosition(file, node.pos);
+        var loc = getOneBasedLineAndCharacterOfPosition(file, node.pos);
         return file.fileName + "(" + loc.line + "," + loc.character + ")";
     }
 

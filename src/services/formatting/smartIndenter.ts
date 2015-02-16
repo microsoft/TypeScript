@@ -303,7 +303,7 @@ module ts.formatting {
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
-            var lineStart = sourceFile.getPositionFromLineAndCharacter(lineAndCharacter.line, 1);
+            var lineStart = sourceFile.getPositionFromOneBasedLineAndCharacter(lineAndCharacter.line, 1);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 

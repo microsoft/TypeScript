@@ -278,11 +278,11 @@ module ts {
         return result;
     }
 
-    export function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionFromLineAndCharacter(getLineStarts(sourceFile), line, character);
+    export function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+        return computePositionFromOneBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    export function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+    export function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number {
         Debug.assert(line > 0 && line <= lineStarts.length);
         return lineStarts[line - 1] + character - 1;
     }
@@ -291,7 +291,7 @@ module ts {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
-    export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
+    export function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         var lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found, 
@@ -306,8 +306,8 @@ module ts {
         };
     }
 
-    export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
-        return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
+    export function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
+        return computeOneBasedLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;

@@ -395,7 +395,7 @@ module FourSlash {
             this.currentCaretPosition = pos;
 
             var lineStarts = ts.computeLineStarts(this.getFileContent(this.activeFile.fileName));
-            var lineCharPos = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
+            var lineCharPos = ts.computeOneBasedLineAndCharacterOfPosition(lineStarts, pos);
             this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 
@@ -2033,7 +2033,7 @@ module FourSlash {
         }
 
         private getCurrentCaretFilePosition() {
-            var result = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
+            var result = this.languageServiceAdapterHost.positionToZeroBasedLineAndCharacter(this.activeFile.fileName, this.currentCaretPosition);
             if (result.line >= 0) {
                 result.line++;
             }
@@ -2120,7 +2120,7 @@ module FourSlash {
         }
 
         private getLineColStringAtPosition(position: number) {
-            var pos = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
+            var pos = this.languageServiceAdapterHost.positionToZeroBasedLineAndCharacter(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 

@@ -63,7 +63,7 @@ module ts {
         getNamedDeclarations(): Declaration[];
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -751,15 +751,15 @@ module ts {
         }
 
         public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
-            return getLineAndCharacterOfPosition(this, position);
+            return getOneBasedLineAndCharacterOfPosition(this, position);
         }
 
         public getLineStarts(): number[] {
             return getLineStarts(this);
         }
 
-        public getPositionFromLineAndCharacter(line: number, character: number): number {
-            return getPositionFromLineAndCharacter(this, line, character);
+        public getPositionFromOneBasedLineAndCharacter(line: number, character: number): number {
+            return getPositionFromOneBasedLineAndCharacter(this, line, character);
         }
 
         public getNamedDeclarations() {
