@@ -72,47 +72,17 @@ module ts.server {
         }
     }
 
-    export class CancellationToken {
-        public static None = new CancellationToken();
-
-        requestPending = false;
-
-        constructor() {
-        }
-
-        cancel() {
-            this.requestPending = true;
-        }
-
-        reset() {
-            this.requestPending = false;
-        }
-
-        public isCancellationRequested() {
-            var temp = this.requestPending;
-            return temp;
-        }
-    }
-
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
 
-        constructor(public host: ServerHost, public project: Project, private cancellationToken: CancellationToken = CancellationToken.None) {
+        constructor(public host: ServerHost, public project: Project) {
         }
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
             return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
-        }
-
-        cancel() {
-            this.cancellationToken.cancel();
-        }
-
-        reset() {
-            this.cancellationToken.reset();
         }
 
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
@@ -152,10 +122,6 @@ module ts.server {
 
         getScriptVersion(filename: string) {
             return this.getScriptInfo(filename).svc.latestVersion().toString();
-        }
-
-        getCancellationToken(): ts.CancellationToken {
-            return this.cancellationToken;
         }
 
         getCurrentDirectory(): string {
@@ -736,7 +702,6 @@ module ts.server {
     }
 
     export class CompilerService {
-        cancellationToken = new CancellationToken();
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
@@ -745,7 +710,7 @@ module ts.server {
         formatCodeOptions: ts.FormatCodeOptions = CompilerService.defaultFormatCodeOptions;
 
         constructor(public project: Project) {
-            this.host = new LSHost(project.projectService.host, project, this.cancellationToken);
+            this.host = new LSHost(project.projectService.host, project);
             // override default ES6 (remove when compiler default back at ES5)
             this.settings.target = ts.ScriptTarget.ES5;
             this.host.setCompilationSettings(this.settings);
