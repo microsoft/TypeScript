@@ -37,9 +37,9 @@ module ts {
         return sourceFile.getLineStarts()[line - 1];
     }
 
-    export function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number {
+    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getLineAndCharacterFromPosition(position).line;
+        var line = sourceFile.getOneBasedLineAndCharacterFromPosition(position).line;
         return lineStarts[line - 1];
     }
 

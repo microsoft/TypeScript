@@ -14,8 +14,8 @@ module ts.BreakpointResolver {
         }
 
         var tokenAtLocation = getTokenAtPosition(sourceFile, position);
-        var lineOfPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
-        if (sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
+        var lineOfPosition = sourceFile.getOneBasedLineAndCharacterFromPosition(position).line;
+        if (sourceFile.getOneBasedLineAndCharacterFromPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
             // eg: var x =10; |--- curser is here
             //     var y = 10; 
@@ -24,7 +24,7 @@ module ts.BreakpointResolver {
             tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
 
             // Its a blank line
-            if (!tokenAtLocation || sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
+            if (!tokenAtLocation || sourceFile.getOneBasedLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
                 return undefined;
             }
         }
@@ -42,7 +42,7 @@ module ts.BreakpointResolver {
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {
-            if (node && lineOfPosition === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
+            if (node && lineOfPosition === sourceFile.getOneBasedLineAndCharacterFromPosition(node.getStart()).line) {
                 return spanInNode(node);
             }
             return spanInNode(otherwiseOnNode);

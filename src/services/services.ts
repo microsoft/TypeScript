@@ -61,7 +61,7 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getOneBasedLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
@@ -612,7 +612,7 @@ module ts {
                     }
 
                     if (paramHelpStringMargin === undefined) {
-                        paramHelpStringMargin = sourceFile.getLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
+                        paramHelpStringMargin = sourceFile.getOneBasedLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
                     }
 
                     // Now consume white spaces max 
@@ -750,7 +750,7 @@ module ts {
             return updateSourceFile(this, newText, textChangeRange);
         }
 
-        public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
+        public getOneBasedLineAndCharacterFromPosition(position: number): LineAndCharacter {
             return getOneBasedLineAndCharacterOfPosition(this, position);
         }
 

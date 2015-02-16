@@ -278,6 +278,10 @@ module ts {
         return result;
     }
 
+    export function getPositionFromZeroBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+        return computePositionFromOneBasedLineAndCharacter(getLineStarts(sourceFile), line + 1, character + 1);
+    }
+
     export function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
         return computePositionFromOneBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
@@ -289,6 +293,11 @@ module ts {
 
     export function getLineStarts(sourceFile: SourceFile): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
+    }
+
+    export function computeZeroBasedLineAndCharacterOfPosition(lineStarts: number[], position: number) {
+        var oneBased = computeOneBasedLineAndCharacterOfPosition(lineStarts, position);
+        return { line: oneBased.line - 1, character: oneBased.character -1 };
     }
 
     export function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number) {
@@ -304,6 +313,10 @@ module ts {
             line: lineNumber + 1,
             character: position - lineStarts[lineNumber] + 1
         };
+    }
+
+    export function getZeroBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
+        return computeZeroBasedLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
     export function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {

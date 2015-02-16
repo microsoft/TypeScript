@@ -24,7 +24,7 @@ module ts.formatting {
                 return 0;
             }
 
-            var lineAtPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
+            var lineAtPosition = sourceFile.getOneBasedLineAndCharacterFromPosition(position).line;
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
@@ -74,7 +74,7 @@ module ts.formatting {
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
-            var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            var start = sourceFile.getOneBasedLineAndCharacterFromPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
@@ -135,10 +135,10 @@ module ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             var containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getLineAndCharacterFromPosition(containingList.pos);
+                return sourceFile.getOneBasedLineAndCharacterFromPosition(containingList.pos);
             }
 
-            return sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
+            return sourceFile.getOneBasedLineAndCharacterFromPosition(parent.getStart(sourceFile));
         }
 
         /*
@@ -204,7 +204,7 @@ module ts.formatting {
         }
 
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
-            return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            return sourceFile.getOneBasedLineAndCharacterFromPosition(n.getStart(sourceFile));
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
@@ -292,7 +292,7 @@ module ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(list[i].end).line;
+                var prevEndLine = sourceFile.getOneBasedLineAndCharacterFromPosition(list[i].end).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
