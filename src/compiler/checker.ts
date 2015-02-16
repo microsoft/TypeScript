@@ -10260,7 +10260,7 @@ module ts {
             }
 
             function isExistingName(name: string) {
-                return hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
+                return hasProperty(globals, name) ||  hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
             }
 
             function makeUniqueName(baseName: string): string {
