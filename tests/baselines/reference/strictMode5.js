@@ -36,8 +36,7 @@ var A = (function () {
             return _this.n();
         };
     };
-    A.prototype.n = function () {
-    };
+    A.prototype.n = function () { };
     return A;
 })();
 function bar(x) {

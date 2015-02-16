@@ -91,8 +91,7 @@ var E;
 exports.r10;
 exports.r11;
 exports.r12;
-function foo() {
-}
+function foo() { }
 var foo;
 (function (foo) {
     foo.y = 1;

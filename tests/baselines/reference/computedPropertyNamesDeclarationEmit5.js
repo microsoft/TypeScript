@@ -9,13 +9,11 @@ var v = {
 //// [computedPropertyNamesDeclarationEmit5.js]
 var v = {
     ["" + ""]: 0,
-    ["" + ""]() {
-    },
+    ["" + ""]() { },
     get ["" + ""]() {
         return 0;
     },
-    set ["" + ""](x) {
-    }
+    set ["" + ""](x) { }
 };
 
 

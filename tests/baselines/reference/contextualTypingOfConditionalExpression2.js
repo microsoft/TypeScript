@@ -38,5 +38,4 @@ var C = (function (_super) {
     }
     return C;
 })(A);
-var x2 = true ? function (a) { return a.foo; } : function (b) {
-};
+var x2 = true ? function (a) { return a.foo; } : function (b) { };

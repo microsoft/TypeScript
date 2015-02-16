@@ -49,6 +49,5 @@ var x = {
     }
 };
 var y = {
-    set b(v) {
-    }
+    set b(v) { }
 };

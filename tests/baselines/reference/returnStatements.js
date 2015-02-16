@@ -59,8 +59,7 @@ function fn8() {
 var C = (function () {
     function C() {
     }
-    C.prototype.dispose = function () {
-    };
+    C.prototype.dispose = function () { };
     return C;
 })();
 var D = (function (_super) {

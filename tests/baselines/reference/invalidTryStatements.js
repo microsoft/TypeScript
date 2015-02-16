@@ -21,16 +21,10 @@ function fn() {
         var x; // ensure x is 'Any'
     }
     // no type annotation allowed
-    try {
-    }
-    catch (z) {
-    }
-    try {
-    }
-    catch (a) {
-    }
-    try {
-    }
-    catch (y) {
-    }
+    try { }
+    catch (z) { }
+    try { }
+    catch (a) { }
+    try { }
+    catch (y) { }
 }

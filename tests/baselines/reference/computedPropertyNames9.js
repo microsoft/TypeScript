@@ -11,8 +11,7 @@ var v = {
 }
 
 //// [computedPropertyNames9.js]
-function f(x) {
-}
+function f(x) { }
 var v = {
     [f("")]: 0,
     [f(0)]: 0,

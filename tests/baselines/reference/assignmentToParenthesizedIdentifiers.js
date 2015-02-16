@@ -103,8 +103,7 @@ M2.M3 = { x: 3 }; // OK
 M2.M3 = { x: '' }; // Error
 (M2).M3 = { x: '' }; // Error
 (M2.M3) = { x: '' }; // Error
-function fn() {
-}
+function fn() { }
 fn = function () { return 3; }; // Bug 823548: Should be error (fn is not a reference)
 (fn) = function () { return 3; }; // Should be error
 function fn2(x, y) {

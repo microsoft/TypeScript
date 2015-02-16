@@ -60,8 +60,7 @@ var NonGeneric;
             get: function () {
                 return 1;
             },
-            set: function (v) {
-            },
+            set: function (v) { },
             enumerable: true,
             configurable: true
         });
@@ -95,8 +94,7 @@ var Generic;
             get: function () {
                 return null;
             },
-            set: function (v) {
-            },
+            set: function (v) { },
             enumerable: true,
             configurable: true
         });

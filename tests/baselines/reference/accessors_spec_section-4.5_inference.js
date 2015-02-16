@@ -50,8 +50,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -59,8 +58,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -68,8 +66,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -77,8 +74,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -86,8 +82,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -95,8 +90,7 @@ var LanguageSpec_section_4_5_inference = (function () {
         get: function () {
             return new B();
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });

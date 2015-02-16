@@ -48,8 +48,7 @@ var C = (function () {
     }
     return C;
 })();
-function f1() {
-}
+function f1() { }
 var M;
 (function (M) {
     M.y = 1;

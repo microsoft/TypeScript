@@ -33,8 +33,7 @@ var y = {
     get a() {
         return 0;
     },
-    set a(v) {
-    },
+    set a(v) { },
     get a() {
         return 0;
     }

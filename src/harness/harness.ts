@@ -19,6 +19,7 @@
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
+/// <reference path='runnerbase.ts'/>
 
 declare var require: any;
 declare var process: any;
@@ -691,8 +692,6 @@ module Harness {
     }
 }
 
-
-
 module Harness {
     var tcServicesFileName = "typescriptServices.js";
 
@@ -796,10 +795,18 @@ module Harness {
             }
         }
 
-        export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants = true) {
+            // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
+            var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+            if (assertInvariants) {
+                Utils.assertInvariants(result, /*parent:*/ undefined);
+            }
+            return result;
+        }
 
+        export var defaultLibFileName = 'lib.d.ts';
+        export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFileName = 'fourslash.ts';
@@ -828,7 +835,7 @@ module Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     var fileName = ts.normalizeSlashes(file.unitName);
-                    filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, scriptTarget);
+                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                 }
             };
             inputFiles.forEach(register);
@@ -845,7 +852,7 @@ module Harness {
                     }
                     else if (fn === fourslashFileName) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
-                        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
+                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                         return fourslashSourceFile;
                     }
                     else {
@@ -921,7 +928,8 @@ module Harness {
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-                currentDirectory?: string) {
+                currentDirectory?: string,
+                assertInvariants = true) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
@@ -1069,7 +1077,7 @@ module Harness {
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
                         var fileName = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, options.target);
+                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target, assertInvariants);
                     }
                 };
                 inputFiles.forEach(register);

@@ -2271,28 +2271,17 @@ var Harness;
     var Logger = (function () {
         function Logger() {
         }
-        Logger.prototype.start = function (fileName, priority) {
-        };
-        Logger.prototype.end = function (fileName) {
-        };
-        Logger.prototype.scenarioStart = function (scenario) {
-        };
-        Logger.prototype.scenarioEnd = function (scenario, error) {
-        };
-        Logger.prototype.testStart = function (test) {
-        };
-        Logger.prototype.pass = function (test) {
-        };
-        Logger.prototype.bug = function (test) {
-        };
-        Logger.prototype.fail = function (test) {
-        };
-        Logger.prototype.error = function (test, error) {
-        };
-        Logger.prototype.comment = function (comment) {
-        };
-        Logger.prototype.verify = function (test, passed, actual, expected, message) {
-        };
+        Logger.prototype.start = function (fileName, priority) { };
+        Logger.prototype.end = function (fileName) { };
+        Logger.prototype.scenarioStart = function (scenario) { };
+        Logger.prototype.scenarioEnd = function (scenario, error) { };
+        Logger.prototype.testStart = function (test) { };
+        Logger.prototype.pass = function (test) { };
+        Logger.prototype.bug = function (test) { };
+        Logger.prototype.fail = function (test) { };
+        Logger.prototype.error = function (test, error) { };
+        Logger.prototype.comment = function (comment) { };
+        Logger.prototype.verify = function (test, passed, actual, expected, message) { };
         return Logger;
     })();
     Harness.Logger = Logger;
@@ -2359,8 +2348,7 @@ var Harness;
                 return false;
             }
         };
-        Runnable.prototype.run = function (done) {
-        };
+        Runnable.prototype.run = function (done) { };
         Runnable.prototype.runBlock = function (done) {
             return this.call(this.block, done);
         };
@@ -2597,16 +2585,11 @@ var Harness;
                 this.description = "";
                 this.results = {};
             }
-            Benchmark.prototype.bench = function (subBench) {
-            };
-            Benchmark.prototype.before = function () {
-            };
-            Benchmark.prototype.beforeEach = function () {
-            };
-            Benchmark.prototype.after = function () {
-            };
-            Benchmark.prototype.afterEach = function () {
-            };
+            Benchmark.prototype.bench = function (subBench) { };
+            Benchmark.prototype.before = function () { };
+            Benchmark.prototype.beforeEach = function () { };
+            Benchmark.prototype.after = function () { };
+            Benchmark.prototype.afterEach = function () { };
             Benchmark.prototype.addTimingFor = function (name, timing) {
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
@@ -3589,8 +3572,7 @@ var Harness;
         TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
             var parser = new TypeScript.Parser();
             parser.setErrorRecovery(null);
-            parser.errorCallback = function (a, b, c, d) {
-            };
+            parser.errorCallback = function (a, b, c, d) { };
             var script = parser.parse(sourceText, fileName, 0);
             return script;
         };

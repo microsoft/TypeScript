@@ -50,8 +50,7 @@ var Base = (function () {
         get: function () {
             return 1;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -71,8 +70,7 @@ var Derived = (function (_super) {
         get: function () {
             return 1;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

@@ -483,6 +483,16 @@ module ts {
                         break;
                     }
                 case SyntaxKind.Block:
+                    // do not treat function block a block-scope container
+                    // all block-scope locals that reside in this block should go to the function locals.
+                    // Otherwise this won't be considered as redeclaration of a block scoped local:
+                    // function foo() {
+                    //  let x;
+                    //  var x;
+                    // }
+                    // 'var x' will be placed into the function locals and 'let x' - into the locals of the block
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isAnyFunction(node.parent));
+                    break;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:

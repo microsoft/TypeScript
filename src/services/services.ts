@@ -10,7 +10,7 @@
 
 module ts {
 
-    export var servicesVersion = "0.5"
+    export var servicesVersion = "0.4"
 
     export interface Node {
         getSourceFile(): SourceFile;
@@ -725,7 +725,7 @@ module ts {
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
-        public amdDependencies: string[];
+        public amdDependencies: {name: string; path: string}[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
@@ -1143,6 +1143,9 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
+        InTemplateHeadOrNoSubstitutionTemplate,
+        InTemplateMiddleOrTail,
+        InTemplateSubstitutionPosition,
     }
 
     export enum TokenClass {
@@ -1168,7 +1171,26 @@ module ts {
     }
 
     export interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
+        /**
+         * Gives lexical classifications of tokens on a line without any syntactic context.
+         * For instance, a token consisting of the text 'string' can be either an identifier
+         * named 'string' or the keyword 'string', however, because this classifier is not aware,
+         * it relies on certain heuristics to give acceptable results. For classifications where
+         * speed trumps accuracy, this function is preferable; however, for true accuracy, the
+         * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
+         * lexical, syntactic, and semantic classifiers may issue the best user experience.
+         *
+         * @param text                      The text of a line to classify.
+         * @param lexState                  The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
+         *                                  certain heuristics may be used in its place; however, if there is a
+         *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
+         *                                  classifications which may be incorrectly categorized will be given
+         *                                  back as Identifiers in order to allow the syntactic classifier to
+         *                                  subsume the classification.
+         */
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
     }
 
     /**
@@ -1624,31 +1646,14 @@ module ts {
 
     export var disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile {
-        if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
-            var oldText = sourceFile.scriptSnapshot;
-            var newText = scriptSnapshot;
-
-            Debug.assert((oldText.getLength() - textChangeRange.span.length + textChangeRange.newLength) === newText.getLength());
-
-            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.getText(0, textChangeRange.span.start);
-                var newTextPrefix = newText.getText(0, textChangeRange.span.start);
-                Debug.assert(oldTextPrefix === newTextPrefix);
-
-                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span), oldText.getLength());
-                var newTextSuffix = newText.getText(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
-                Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
-
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    var newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -2039,6 +2044,12 @@ module ts {
                 return;
             }
 
+            // IMPORTANT - It is critical from this moment onward that we do not check 
+            // cancellation tokens.  We are about to mutate source files from a previous program
+            // instance.  If we cancel midway through, we may end up in an inconsistent state where
+            // the program points to old source files that have been invalidated because of 
+            // incremental parsing.
+
             var oldSettings = program && program.getCompilerOptions();
             var newSettings = hostCache.compilationSettings();
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
@@ -2073,8 +2084,6 @@ module ts {
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
-                cancellationToken.throwIfCancellationRequested();
-
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
@@ -5380,9 +5389,6 @@ module ts {
             cancellationToken.throwIfCancellationRequested();
 
             var fileContents = sourceFile.text;
-
-            cancellationToken.throwIfCancellationRequested();
-
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
@@ -5633,6 +5639,28 @@ module ts {
         noRegexTable[SyntaxKind.TrueKeyword] = true;
         noRegexTable[SyntaxKind.FalseKeyword] = true;
 
+        // Just a stack of TemplateHeads and OpenCurlyBraces, used to perform rudimentary (inexact)
+        // classification on template strings. Because of the context free nature of templates,
+        // the only precise way to classify a template portion would be by propagating the stack across
+        // lines, just as we do with the end-of-line state. However, this is a burden for implementers,
+        // and the behavior is entirely subsumed by the syntactic classifier anyway, so we instead
+        // flatten any nesting when the template stack is non-empty and encode it in the end-of-line state.
+        // Situations in which this fails are
+        //  1) When template strings are nested across different lines:
+        //          `hello ${ `world
+        //          ` }`
+        //
+        //     Where on the second line, you will get the closing of a template,
+        //     a closing curly, and a new template.
+        //
+        //  2) When substitution expressions have curly braces and the curly brace falls on the next line:
+        //          `hello ${ () => {
+        //          return "world" } } `
+        //
+        //     Where on the second line, you will get the 'return' keyword,
+        //     a string literal, and a template end consisting of '} } `'.
+        var templateStack: SyntaxKind[] = [];
+
         function isAccessibilityModifier(kind: SyntaxKind) {
             switch (kind) {
                 case SyntaxKind.PublicKeyword:
@@ -5666,12 +5694,18 @@ module ts {
             // if there are more cases we want the classifier to be better at.
             return true;
         }
-
-        // 'classifyKeywordsInGenerics' should be 'true' when a syntactic classifier is not present.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult {
+        
+        // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
+        // we will be more conservative in order to avoid conflicting with the syntactic classifier.
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
+
+            // Empty out the template stack for reuse.
+            while (templateStack.length > 0) {
+                templateStack.pop();
+            }
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -5690,6 +5724,17 @@ module ts {
                 case EndOfLineState.InMultiLineCommentTrivia:
                     text = "/*\n" + text;
                     offset = 3;
+                    break;
+                case EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate:
+                    text = "`\n" + text;
+                    offset = 2;
+                    break;
+                case EndOfLineState.InTemplateMiddleOrTail:
+                    text = "}\n" + text;
+                    offset = 2;
+                    // fallthrough
+                case EndOfLineState.InTemplateSubstitutionPosition:
+                    templateStack.push(SyntaxKind.TemplateHead);
                     break;
             }
 
@@ -5755,12 +5800,45 @@ module ts {
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
                              token === SyntaxKind.BooleanKeyword) {
-                             if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
-                                 // If it looks like we're could be in something generic, don't classify this 
-                                 // as a keyword.  We may just get overwritten by the syntactic classifier,
-                                 // causing a noisy experience for the user.
-                                 token = SyntaxKind.Identifier;
-                             }
+                        if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
+                            // If it looks like we're could be in something generic, don't classify this 
+                            // as a keyword.  We may just get overwritten by the syntactic classifier,
+                            // causing a noisy experience for the user.
+                            token = SyntaxKind.Identifier;
+                        }
+                    }
+                    else if (token === SyntaxKind.TemplateHead) {
+                        templateStack.push(token);
+                    }
+                    else if (token === SyntaxKind.OpenBraceToken) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack.length > 0) {
+                            templateStack.push(token);
+                        }
+                    }
+                    else if (token === SyntaxKind.CloseBraceToken) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack.length > 0) {
+                            var lastTemplateStackToken = lastOrUndefined(templateStack);
+
+                            if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
+                                token = scanner.reScanTemplateToken();
+
+                                // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
+                                if (token === SyntaxKind.TemplateTail) {
+                                    templateStack.pop();
+                                }
+                                else {
+                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                }
+                            }
+                            else {
+                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
+                                templateStack.pop();
+                            }
+                        }
                     }
 
                     lastNonTriviaToken = token;
@@ -5804,6 +5882,22 @@ module ts {
                         if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
+                    }
+                    else if (isTemplateLiteralKind(token)) {
+                        if (scanner.isUnterminated()) {
+                            if (token === SyntaxKind.TemplateTail) {
+                                result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
+                            }
+                            else if (token === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                                result.finalLexState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
+                            }
+                            else {
+                                Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                            }
+                        }
+                    }
+                    else if (templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
+                        result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
             }
@@ -5908,6 +6002,9 @@ module ts {
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
+                    if (isTemplateLiteralKind(token)) {
+                        return TokenClass.StringLiteral;
+                    }
                     return TokenClass.Identifier;
             }
         }

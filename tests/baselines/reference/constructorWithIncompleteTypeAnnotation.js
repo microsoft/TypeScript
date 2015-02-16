@@ -413,16 +413,13 @@ var BasicFeatures = (function () {
             try {
                 throw null;
             }
-            catch (Exception) {
-            }
+            catch (Exception) { }
         }
         try {
         }
         finally {
-            try {
-            }
-            catch (Exception) {
-            }
+            try { }
+            catch (Exception) { }
         }
         return retVal;
     };
@@ -435,10 +432,8 @@ var BasicFeatures = (function () {
         var c = new CLASS();
         var xx = c;
         retVal += ;
-        try {
-        }
-        catch () {
-        }
+        try { }
+        catch () { }
         Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
@@ -552,8 +547,7 @@ rest: string[];
 {
      & public;
     DefaultValue(value ?  : string = "Hello");
-    {
-    }
+    { }
 }
 var Weekdays;
 (function (Weekdays) {

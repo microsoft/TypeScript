@@ -103,9 +103,14 @@ var s = (_k = ["", ""], _k.raw = ["", ""], fn3(_k, 4));
 var s = (_l = ["", "", "", ""], _l.raw = ["", "", "", ""], fn3(_l, '', '', ''));
 var n = (_m = ["", "", "", ""], _m.raw = ["", "", "", ""], fn3(_m, '', '', 3));
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
+<<<<<<< HEAD
 (_n = [""], _n.raw = [""], fn3(_n)); // Error
 function fn4() {
 }
+=======
+fn3 ""; // Error
+function fn4() { }
+>>>>>>> master
 // Generic overloads with constraints tagged with types that satisfy the constraints
 (_o = ["", "", ""], _o.raw = ["", "", ""], fn4(_o, '', 3));
 (_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, 3, ''));
