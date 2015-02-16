@@ -1533,6 +1533,10 @@
         "category": "Error",
         "code": 4089
     },
+    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+        "category": "Error",
+        "code": 4090
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
