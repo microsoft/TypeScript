@@ -277,7 +277,7 @@ module ts.server {
             }
         }
 
-        goToDefinition(line: number, col: number, fileName: string): ServerProtocol.CodeSpan[] {
+        getDefinition(line: number, col: number, fileName: string): ServerProtocol.CodeSpan[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -301,7 +301,7 @@ module ts.server {
             }));
         }
 
-        rename(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
+        getRenameLocations(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ServerProtocol.CodeSpan[] } {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -336,7 +336,7 @@ module ts.server {
             return { info: renameInfo, locs: bakedRenameLocs };
         }
 
-        findReferences(line: number, col: number, fileName: string): ServerProtocol.ReferencesResponseBody {
+        getReferences(line: number, col: number, fileName: string): ServerProtocol.ReferencesResponseBody {
             // TODO: get all projects for this file; report refs for all projects deleting duplicates
             // can avoid duplicates by eliminating same ref file from subsequent projects
             var file = ts.normalizePath(fileName);
@@ -388,7 +388,7 @@ module ts.server {
             this.projectService.openClientFile(file);
         }
 
-        quickInfo(line: number, col: number, fileName: string): ServerProtocol.QuickInfoResponseBody {
+        getQuickInfo(line: number, col: number, fileName: string): ServerProtocol.QuickInfoResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -414,7 +414,7 @@ module ts.server {
             };
         }
 
-        format(line: number, col: number, endLine: number, endCol: number, fileName: string): ServerProtocol.CodeEdit[] {
+        getFormattingEditsForRange(line: number, col: number, endLine: number, endCol: number, fileName: string): ServerProtocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -440,7 +440,7 @@ module ts.server {
             });
         }
 
-        formatOnKey(line: number, col: number, key: string, fileName: string): ServerProtocol.CodeEdit[] {
+        getFormattingEditsAfterKeystroke(line: number, col: number, key: string, fileName: string): ServerProtocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
 
             var project = this.projectService.getProjectForFile(file);
@@ -482,7 +482,7 @@ module ts.server {
             });
         }
 
-        completions(line: number, col: number, prefix: string, fileName: string): ServerProtocol.CompletionItem[] {
+        getCompletions(line: number, col: number, prefix: string, fileName: string): ServerProtocol.CompletionItem[] {
             if (!prefix) {
                 prefix = "";
             }
@@ -521,7 +521,7 @@ module ts.server {
             }, []);
         }
 
-        geterr(delay: number, fileNames: string[]) {
+        getDiagnostics(delay: number, fileNames: string[]) {
             var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
                 var project = this.projectService.getProjectForFile(fileName);
@@ -600,7 +600,7 @@ module ts.server {
             }));
         }
 
-        navbar(fileName: string): ServerProtocol.NavigationBarItem[] {
+        getNavigationBarItems(fileName: string): ServerProtocol.NavigationBarItem[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -616,7 +616,7 @@ module ts.server {
             return this.decorateNavigationBarItem(project, fileName, items);
         }
 
-        navto(searchTerm: string, fileName: string): ServerProtocol.NavtoItem[] {
+        getNavigateToItems(searchTerm: string, fileName: string): ServerProtocol.NavtoItem[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -684,17 +684,17 @@ module ts.server {
                 switch (request.command) {
                     case CommandNames.Definition: {
                         var defArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
-                        response = this.goToDefinition(defArgs.line, defArgs.col, defArgs.file);
+                        response = this.getDefinition(defArgs.line, defArgs.col, defArgs.file);
                         break;
                     }
                     case CommandNames.References: {
                         var refArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
-                        response = this.findReferences(refArgs.line, refArgs.col, refArgs.file);
+                        response = this.getReferences(refArgs.line, refArgs.col, refArgs.file);
                         break;
                     }
                     case CommandNames.Rename: {
                         var renameArgs = <ServerProtocol.RenameRequestArgs>request.arguments;
-                        response = this.rename(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
+                        response = this.getRenameLocations(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
                         break;
                     }
                     case CommandNames.Open: {
@@ -704,27 +704,27 @@ module ts.server {
                     }
                     case CommandNames.Quickinfo: {
                         var quickinfoArgs = <ServerProtocol.CodeLocationRequestArgs>request.arguments;
-                        response = this.quickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
+                        response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
                         break;
                     }
                     case CommandNames.Format: {
                         var formatArgs = <ServerProtocol.FormatRequestArgs>request.arguments;
-                        response = this.format(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
+                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
                         break;
                     }
                     case CommandNames.Formatonkey: {
                         var formatOnKeyArgs = <ServerProtocol.FormatOnKeyRequestArgs>request.arguments;
-                        response = this.formatOnKey(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
+                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
                         break;
                     }
                     case CommandNames.Completions: {
                         var completionsArgs = <ServerProtocol.CompletionsRequestArgs>request.arguments;
-                        response = this.completions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
+                        response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
                         break;
                     }
                     case CommandNames.Geterr: {
                         var geterrArgs = <ServerProtocol.GeterrRequestArgs>request.arguments;
-                        response = this.geterr(geterrArgs.delay, geterrArgs.files);
+                        response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
                         break;
                     }
                     case CommandNames.Change: {
@@ -750,7 +750,7 @@ module ts.server {
                     }
                     case CommandNames.Navto: {
                         var navtoArgs = <ServerProtocol.NavtoRequestArgs>request.arguments;
-                        response = this.navto(navtoArgs.searchTerm, navtoArgs.file);
+                        response = this.getNavigateToItems(navtoArgs.searchTerm, navtoArgs.file);
                         break;
                     }
                     case CommandNames.Brace: {
@@ -760,7 +760,7 @@ module ts.server {
                     }
                     case CommandNames.NavBar: {
                         var navBarArgs = <ServerProtocol.FileRequestArgs>request.arguments;
-                        response = this.navbar(navBarArgs.file);
+                        response = this.getNavigationBarItems(navBarArgs.file);
                         break;
                     }
                     default: {
