@@ -8903,6 +8903,7 @@ module ts {
                 case "number":
                 case "boolean":
                 case "string":
+                case "symbol":
                 case "void":
                     error(name, message, (<Identifier>name).text);
             }
