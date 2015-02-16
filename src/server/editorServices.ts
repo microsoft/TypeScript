@@ -13,19 +13,8 @@ module ts.server {
     }
 
     var lineCollectionCapacity = 4;
-    var indentStrings: string[] = [];
-    var indentBase = "    ";
-    function getIndent(indentAmt: number) {
-        if (!indentStrings[indentAmt]) {
-            indentStrings[indentAmt] = "";
-            for (var i = 0; i < indentAmt; i++) {
-                indentStrings[indentAmt] += indentBase;
-            }
-        }
-        return indentStrings[indentAmt];
-    }
 
-    export class ScriptInfo {
+    class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
 
@@ -72,7 +61,7 @@ module ts.server {
         }
     }
 
-    export class LSHost implements ts.LanguageServiceHost {
+    class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
@@ -270,7 +259,7 @@ module ts.server {
         }
     }
 
-    export interface ProjectOptions {
+    interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
         formatCodeOptions?: ts.FormatCodeOptions;
@@ -354,7 +343,7 @@ module ts.server {
         }
     }
 
-    export interface ProjectOpenResult {
+    interface ProjectOpenResult {
         success?: boolean;
         errorMsg?: string;
         project?: Project;
@@ -701,7 +690,7 @@ module ts.server {
 
     }
 
-    export class CompilerService {
+    class CompilerService {
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
@@ -745,7 +734,7 @@ module ts.server {
 
     }
 
-    export interface LineCollection {
+    interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): boolean;
@@ -759,7 +748,7 @@ module ts.server {
         leaf?: LineLeaf;
     }
 
-    export enum CharRangeSection {
+    enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -768,7 +757,7 @@ module ts.server {
         PostEnd
     }
 
-    export interface ILineIndexWalker {
+    interface ILineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -994,7 +983,7 @@ module ts.server {
     }
 
     // text change information 
-    export class TextChange {
+    class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -1004,7 +993,7 @@ module ts.server {
         }
     }
 
-    export class ScriptVersionCache {
+    class ScriptVersionCache {
         changes: TextChange[] = [];
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
@@ -1109,7 +1098,7 @@ module ts.server {
         }
     }
 
-    export class LineIndexSnapshot implements ts.IScriptSnapshot {
+    class LineIndexSnapshot implements ts.IScriptSnapshot {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
@@ -1157,8 +1146,7 @@ module ts.server {
         }
     }
 
-
-    export class LineIndex {
+    class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
@@ -1338,7 +1326,7 @@ module ts.server {
         }
     }
 
-    export class LineNode implements LineCollection {
+    class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
         children: LineCollection[] = [];
@@ -1624,7 +1612,7 @@ module ts.server {
         }
     }
 
-    export class LineLeaf implements LineCollection {
+    class LineLeaf implements LineCollection {
         udata: any;
 
         constructor(public text: string) {
