@@ -10764,8 +10764,10 @@ module ts {
                 var variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
                 if (!checkGrammarVariableDeclarationList(variableList)) {
                     if (variableList.declarations.length > 1) {
-                        var keywordText = forInOrOfStatement.kind === SyntaxKind.ForInStatement ? "in" : "of";
-                        return grammarErrorOnFirstToken(variableList.declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_0_statement, keywordText);
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement ?
+                            Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement :
+                            Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
+                        return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
                 }
             }

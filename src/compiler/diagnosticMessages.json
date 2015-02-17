@@ -211,7 +211,7 @@
         "category": "Error",
         "code": 1090
     },
-    "Only a single variable declaration is allowed in a 'for...{0}' statement.": {
+    "Only a single variable declaration is allowed in a 'for...in' statement.": {
         "category": "Error",
         "code": 1091
     },
@@ -578,6 +578,10 @@
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
         "code": 1187
+    },
+    "Only a single variable declaration is allowed in a 'for...of' statement.": {
+        "category": "Error",
+        "code": 1188
     },
 
     "Duplicate identifier '{0}'.": {
