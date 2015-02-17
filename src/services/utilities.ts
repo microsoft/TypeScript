@@ -32,11 +32,6 @@ module ts {
         }
     }
 
-    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
-        return sourceFile.getLineStarts()[line - 1];
-    }
-
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
         var line = sourceFile.getOneBasedLineAndCharacterOfPosition(position).line;

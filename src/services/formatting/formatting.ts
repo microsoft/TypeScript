@@ -74,7 +74,7 @@ module ts.formatting {
         // get the span for the previous\current line
         var span = {
             // get start position for the previous line
-            pos: getStartPositionOfLine(line - 1, sourceFile),
+            pos: getStartPositionOfOneBasedLine(line - 1, sourceFile),
             // get end position for the current line (end value is exclusive so add 1 to the result)
             end: getEndLinePosition(line, sourceFile) + 1
         }
@@ -809,7 +809,7 @@ module ts.formatting {
             else {
                 var tokenStart = sourceFile.getOneBasedLineAndCharacterOfPosition(pos);
                 if (indentation !== tokenStart.character - 1) {
-                    var startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
+                    var startLinePosition = getStartPositionOfOneBasedLine(tokenStart.line, sourceFile);
                     recordReplace(startLinePosition, tokenStart.character - 1, indentationString);
                 }
             }
@@ -833,13 +833,13 @@ module ts.formatting {
                 for (var line = startLine; line < endLine; ++line) {
                     var endOfLine = getEndLinePosition(line, sourceFile);
                     parts.push({ pos: startPos, end: endOfLine });
-                    startPos = getStartPositionOfLine(line + 1, sourceFile);
+                    startPos = getStartPositionOfOneBasedLine(line + 1, sourceFile);
                 }
 
                 parts.push({ pos: startPos, end: commentRange.end });
             }
 
-            var startLinePos = getStartPositionOfLine(startLine, sourceFile);
+            var startLinePos = getStartPositionOfOneBasedLine(startLine, sourceFile);
 
             var nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceColumn(startLinePos, parts[0].pos, sourceFile, options);
@@ -857,7 +857,7 @@ module ts.formatting {
             // shift all parts on the delta size
             var delta = indentation - nonWhitespaceColumnInFirstPart;
             for (var i = startIndex, len = parts.length; i < len; ++i, ++startLine) {
-                var startLinePos = getStartPositionOfLine(startLine, sourceFile);
+                var startLinePos = getStartPositionOfOneBasedLine(startLine, sourceFile);
                 var nonWhitespaceColumn =
                     i === 0
                         ? nonWhitespaceColumnInFirstPart
@@ -876,7 +876,7 @@ module ts.formatting {
 
         function trimTrailingWhitespacesForLines(line1: number, line2: number, range?: TextRangeWithKind) {
             for (var line = line1; line < line2; ++line) {
-                var lineStartPosition = getStartPositionOfLine(line, sourceFile);
+                var lineStartPosition = getStartPositionOfOneBasedLine(line, sourceFile);
                 var lineEndPosition = getEndLinePosition(line, sourceFile);
 
                 // do not trim whitespaces in comments

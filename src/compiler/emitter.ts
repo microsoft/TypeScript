@@ -169,17 +169,18 @@ module ts {
 
     function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            var firstCommentLineAndCharacter = getOneBasedLineAndCharacterOfPosition(currentSourceFile, comment.pos);
-            var lastLine = getLineStarts(currentSourceFile).length;
+            var firstCommentLineAndCharacter = getZeroBasedLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+            var lineCount = getLineStarts(currentSourceFile).length;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : getPositionOfOneBasedLineAndCharacter(currentSourceFile, currentLine + 1, /*character*/1);
+                var nextLineStart = (currentLine + 1) === lineCount
+                    ? currentSourceFile.text.length + 1
+                    : getStartPositionOfZeroBasedLine(currentLine + 1, currentSourceFile);
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getPositionOfOneBasedLineAndCharacter(currentSourceFile, firstCommentLineAndCharacter.line, /*character*/1),
-                            comment.pos);
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfZeroBasedLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
                     }
 
                     // These are number of spaces writer is going to write at current indent
