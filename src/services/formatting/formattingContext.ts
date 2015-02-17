@@ -71,8 +71,8 @@ module ts.formatting {
 
         public TokensAreOnSameLine(): boolean {
             if (this.tokensAreOnSameLine === undefined) {
-                var startLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;
-                var endLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
+                var startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;
+                var endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
                 this.tokensAreOnSameLine = (startLine == endLine);
             }
 
@@ -96,8 +96,8 @@ module ts.formatting {
         }
 
         private NodeIsOnOneLine(node: Node): boolean {
-            var startLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(node.getStart(this.sourceFile)).line;
-            var endLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(node.getEnd()).line;
+            var startLine = this.sourceFile.getLineAndCharacterOfPosition(node.getStart(this.sourceFile)).line;
+            var endLine = this.sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
             return startLine == endLine;
         }
 
@@ -105,8 +105,8 @@ module ts.formatting {
             var openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
             var closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
             if (openBrace && closeBrace) {
-                var startLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(openBrace.getEnd()).line;
-                var endLine = this.sourceFile.getZeroBasedLineAndCharacterOfPosition(closeBrace.getStart(this.sourceFile)).line;
+                var startLine = this.sourceFile.getLineAndCharacterOfPosition(openBrace.getEnd()).line;
+                var endLine = this.sourceFile.getLineAndCharacterOfPosition(closeBrace.getStart(this.sourceFile)).line;
                 return startLine === endLine;
             }
             return false;

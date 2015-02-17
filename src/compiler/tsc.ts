@@ -86,7 +86,7 @@ module ts {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = getZeroBasedLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
             output += diagnostic.file.fileName + "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
         }

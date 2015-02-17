@@ -169,11 +169,11 @@ module Harness.LanguageService {
           * @param line 0 based index
           * @param col 0 based index
           */
-        public positionToZeroBasedLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
+        public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            return ts.computeZeroBasedLineAndCharacterOfPosition(script.lineMap, position);
+            return ts.computeLineAndCharacterOfPosition(script.lineMap, position);
         }
     }
 
@@ -221,7 +221,7 @@ module Harness.LanguageService {
         addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
         updateScript(fileName: string, content: string): void { return this.nativeHost.updateScript(fileName, content); }
         editScript(fileName: string, minChar: number, limChar: number, newText: string): void { this.nativeHost.editScript(fileName, minChar, limChar, newText); }
-        positionToZeroBasedLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToZeroBasedLineAndCharacter(fileName, position); }
+        positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.CancellationToken { return this.nativeHost.getCancellationToken(); }

@@ -67,14 +67,14 @@ module ts.formatting {
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
-        var line = sourceFile.getZeroBasedLineAndCharacterOfPosition(position).line;
+        var line = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (line === 0) {
             return [];
         }
         // get the span for the previous\current line
         var span = {
             // get start position for the previous line
-            pos: getStartPositionOfZeroBasedLine(line - 1, sourceFile),
+            pos: getStartPositionOfLine(line - 1, sourceFile),
             // get end position for the current line (end value is exclusive so add 1 to the result)
             end: getEndLinePosition(line, sourceFile) + 1
         }
@@ -283,7 +283,7 @@ module ts.formatting {
         var previousLine = Constants.Unknown;
         var childKind = SyntaxKind.Unknown;
         while (n) {
-            var line = sourceFile.getZeroBasedLineAndCharacterOfPosition(n.getStart(sourceFile)).line;
+            var line = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile)).line;
             if (previousLine !== Constants.Unknown && line !== previousLine) {
                 break;
             }
@@ -327,7 +327,7 @@ module ts.formatting {
         formattingScanner.advance();
 
         if (formattingScanner.isOnToken()) {
-            var startLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
+            var startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
             var delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
         }
@@ -357,7 +357,7 @@ module ts.formatting {
                 }
             }
             else {
-                var startLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(startPos).line;
+                var startLine = sourceFile.getLineAndCharacterOfPosition(startPos).line;
                 var startLinePosition = getLineStartPositionForPosition(startPos, sourceFile);
                 var column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, startPos, sourceFile, options);
                 if (startLine !== parentStartLine || startPos === column) {
@@ -521,7 +521,7 @@ module ts.formatting {
 
                 var childStartPos = child.getStart(sourceFile);
 
-                var childStart = sourceFile.getZeroBasedLineAndCharacterOfPosition(childStartPos);
+                var childStart = sourceFile.getLineAndCharacterOfPosition(childStartPos);
 
                 // if child is a list item - try to get its indentation
                 var childIndentationAmount = Constants.Unknown;
@@ -594,7 +594,7 @@ module ts.formatting {
                         }
                         else if (tokenInfo.token.kind === listStartToken) {
                             // consume list start token
-                            startLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(tokenInfo.token.pos).line;
+                            startLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
                             var indentation =
                                 computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, startLine);
 
@@ -641,7 +641,7 @@ module ts.formatting {
                 var lineAdded: boolean;
                 var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
 
-                var tokenStart = sourceFile.getZeroBasedLineAndCharacterOfPosition(currentTokenInfo.token.pos);
+                var tokenStart = sourceFile.getLineAndCharacterOfPosition(currentTokenInfo.token.pos);
                 if (isTokenInRange) {
                     var rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save prevStartLine since processRange will overwrite this value with current ones
@@ -674,7 +674,7 @@ module ts.formatting {
                                 continue;
                             }
 
-                            var triviaStartLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(triviaItem.pos).line;
+                            var triviaStartLine = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos).line;
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
                                     var commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
@@ -712,7 +712,7 @@ module ts.formatting {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
                 if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
-                    var triviaItemStart = sourceFile.getZeroBasedLineAndCharacterOfPosition(triviaItem.pos);
+                    var triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
                     processRange(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);
                 }
             }
@@ -729,7 +729,7 @@ module ts.formatting {
             if (!rangeHasError && !previousRangeHasError) {
                 if (!previousRange) {
                     // trim whitespaces starting from the beginning of the span up to the current line
-                    var originalStart = sourceFile.getZeroBasedLineAndCharacterOfPosition(originalRange.pos);
+                    var originalStart = sourceFile.getLineAndCharacterOfPosition(originalRange.pos);
                     trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
                 }
                 else {
@@ -807,9 +807,9 @@ module ts.formatting {
                 recordReplace(pos, 0, indentationString);
             }
             else {
-                var tokenStart = sourceFile.getZeroBasedLineAndCharacterOfPosition(pos);
+                var tokenStart = sourceFile.getLineAndCharacterOfPosition(pos);
                 if (indentation !== tokenStart.character) {
-                    var startLinePosition = getStartPositionOfZeroBasedLine(tokenStart.line, sourceFile);
+                    var startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
                     recordReplace(startLinePosition, tokenStart.character, indentationString);
                 }
             }
@@ -817,8 +817,8 @@ module ts.formatting {
 
         function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
             // split comment in lines
-            var startLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(commentRange.pos).line;
-            var endLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(commentRange.end).line;
+            var startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
+            var endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
 
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {
@@ -833,13 +833,13 @@ module ts.formatting {
                 for (var line = startLine; line < endLine; ++line) {
                     var endOfLine = getEndLinePosition(line, sourceFile);
                     parts.push({ pos: startPos, end: endOfLine });
-                    startPos = getStartPositionOfZeroBasedLine(line + 1, sourceFile);
+                    startPos = getStartPositionOfLine(line + 1, sourceFile);
                 }
 
                 parts.push({ pos: startPos, end: commentRange.end });
             }
 
-            var startLinePos = getStartPositionOfZeroBasedLine(startLine, sourceFile);
+            var startLinePos = getStartPositionOfLine(startLine, sourceFile);
 
             var nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceColumn(startLinePos, parts[0].pos, sourceFile, options);
@@ -857,7 +857,7 @@ module ts.formatting {
             // shift all parts on the delta size
             var delta = indentation - nonWhitespaceColumnInFirstPart;
             for (var i = startIndex, len = parts.length; i < len; ++i, ++startLine) {
-                var startLinePos = getStartPositionOfZeroBasedLine(startLine, sourceFile);
+                var startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 var nonWhitespaceColumn =
                     i === 0
                         ? nonWhitespaceColumnInFirstPart
@@ -876,7 +876,7 @@ module ts.formatting {
 
         function trimTrailingWhitespacesForLines(line1: number, line2: number, range?: TextRangeWithKind) {
             for (var line = line1; line < line2; ++line) {
-                var lineStartPosition = getStartPositionOfZeroBasedLine(line, sourceFile);
+                var lineStartPosition = getStartPositionOfLine(line, sourceFile);
                 var lineEndPosition = getEndLinePosition(line, sourceFile);
 
                 // do not trim whitespaces in comments

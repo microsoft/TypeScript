@@ -61,9 +61,9 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getZeroBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -612,7 +612,7 @@ module ts {
                     }
 
                     if (paramHelpStringMargin === undefined) {
-                        paramHelpStringMargin = sourceFile.getZeroBasedLineAndCharacterOfPosition(firstLineParamHelpStringPos).character;
+                        paramHelpStringMargin = sourceFile.getLineAndCharacterOfPosition(firstLineParamHelpStringPos).character;
                     }
 
                     // Now consume white spaces max 
@@ -750,16 +750,16 @@ module ts {
             return updateSourceFile(this, newText, textChangeRange);
         }
 
-        public getZeroBasedLineAndCharacterOfPosition(position: number): LineAndCharacter {
-            return ts.getZeroBasedLineAndCharacterOfPosition(this, position);
+        public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+            return ts.getLineAndCharacterOfPosition(this, position);
         }
 
         public getLineStarts(): number[] {
             return getLineStarts(this);
         }
 
-        public getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number {
-            return ts.getPositionOfZeroBasedLineAndCharacter(this, line, character);
+        public getPositionOfLineAndCharacter(line: number, character: number): number {
+            return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
         public getNamedDeclarations() {
