@@ -55,7 +55,7 @@ module ts {
         An_accessor_cannot_be_declared_in_an_ambient_context: { code: 1086, category: DiagnosticCategory.Error, key: "An accessor cannot be declared in an ambient context." },
         _0_modifier_cannot_appear_on_a_constructor_declaration: { code: 1089, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a constructor declaration." },
         _0_modifier_cannot_appear_on_a_parameter: { code: 1090, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a parameter." },
-        Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement: { code: 1091, category: DiagnosticCategory.Error, key: "Only a single variable declaration is allowed in a 'for...in' statement." },
+        Only_a_single_variable_declaration_is_allowed_in_a_for_0_statement: { code: 1091, category: DiagnosticCategory.Error, key: "Only a single variable declaration is allowed in a 'for...{0}' statement." },
         Type_parameters_cannot_appear_on_a_constructor_declaration: { code: 1092, category: DiagnosticCategory.Error, key: "Type parameters cannot appear on a constructor declaration." },
         Type_annotation_cannot_appear_on_a_constructor_declaration: { code: 1093, category: DiagnosticCategory.Error, key: "Type annotation cannot appear on a constructor declaration." },
         An_accessor_cannot_have_type_parameters: { code: 1094, category: DiagnosticCategory.Error, key: "An accessor cannot have type parameters." },

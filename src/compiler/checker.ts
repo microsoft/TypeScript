@@ -4612,6 +4612,7 @@ module ts {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ReturnStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.SwitchStatement:
@@ -8449,23 +8450,12 @@ module ts {
 
         function checkForOfStatement(node: ForOfStatement) {
             // TODO: not yet implemented
-            if (!checkGrammarForStatementInAmbientContext(node)) {
-                checkGrammarForOfStatement(node);
-            }
+            checkGrammarForOfStatement(node);
         }
 
         function checkForInStatement(node: ForInStatement) {
             // Grammar checking 
-            if (!checkGrammarForStatementInAmbientContext(node)) {
-                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    var variableList = <VariableDeclarationList>node.initializer;
-                    if (!checkGrammarVariableDeclarationList(variableList)) {
-                        if (variableList.declarations.length > 1) {
-                            grammarErrorOnFirstToken(variableList.declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
-                        }
-                    }
-                }
-            }
+            checkGrammarForInOrForOfStatement(node);
 
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
@@ -9568,6 +9558,7 @@ module ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ReturnStatement:
@@ -10764,10 +10755,33 @@ module ts {
             }
         }
 
+        function checkGrammarForInOrForOfStatement(forInOrOfStatement: ForInStatement | ForOfStatement): boolean {
+            if (checkGrammarForStatementInAmbientContext(forInOrOfStatement)) {
+                return true;
+            }
+
+            if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                var variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
+                if (!checkGrammarVariableDeclarationList(variableList)) {
+                    if (variableList.declarations.length > 1) {
+                        var keywordText = forInOrOfStatement.kind === SyntaxKind.ForInStatement ? "in" : "of";
+                        return grammarErrorOnFirstToken(variableList.declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_0_statement, keywordText);
+                    }
+                }
+            }
+
+            return false;
+        }
+
         function checkGrammarForOfStatement(forOfStatement: ForOfStatement): boolean {
+            if (checkGrammarForInOrForOfStatement(forOfStatement)) {
+                return true;
+            }
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnFirstToken(forOfStatement, Diagnostics.For_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
             }
+
+            return false;
         }
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
@@ -10862,6 +10876,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                     return true;
@@ -11018,6 +11033,7 @@ module ts {
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                     return false;
                 case SyntaxKind.LabeledStatement:
                     return allowLetAndConstDeclarations(parent.parent);

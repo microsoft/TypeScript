@@ -495,6 +495,7 @@ module ts {
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.SwitchStatement:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;

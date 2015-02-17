@@ -151,8 +151,9 @@ module ts.BreakpointResolver {
                         return spanInForStatement(<ForStatement>node);
 
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                         // span on for (a in ...)
-                        return textSpan(node, findNextToken((<ForInStatement>node).expression, node));
+                        return textSpan(node, findNextToken((<ForInStatement | ForOfStatement>node).expression, node));
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)
@@ -261,7 +262,8 @@ module ts.BreakpointResolver {
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
                 // If declaration of for in statement, just set the span in parent
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement ||
+                    variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
 
@@ -362,6 +364,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
 
                     // Set span on previous token if it starts on same line otherwise on the first statement of the block

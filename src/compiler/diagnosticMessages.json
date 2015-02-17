@@ -211,7 +211,7 @@
         "category": "Error",
         "code": 1090
     },
-    "Only a single variable declaration is allowed in a 'for...in' statement.": {
+    "Only a single variable declaration is allowed in a 'for...{0}' statement.": {
         "category": "Error",
         "code": 1091
     },

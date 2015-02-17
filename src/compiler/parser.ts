@@ -1602,7 +1602,7 @@ module ts {
             }
 
             // in the case where we're parsing the variable declarator of a 'for-in' statement, we 
-            // are done if we see an 'in' keyword in front of us.
+            // are done if we see an 'in' keyword in front of us. Same with for-of
             if (isInOrOfKeyword(token)) {
                 return true;
             }
@@ -1881,6 +1881,7 @@ module ts {
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.WithStatement:
