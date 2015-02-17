@@ -5522,7 +5522,7 @@ module ts {
                         if (defaultLibFileName) {
                             for (var i = 0; i < declarations.length; i++) {
                                 var sourceFile = declarations[i].getSourceFile();
-                                if (sourceFile && ts.normalizePath(sourceFile.fileName) === ts.normalizePath(defaultLibFileName)) {
+                                if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
                                 }
                             }
