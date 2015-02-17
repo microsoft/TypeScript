@@ -133,14 +133,14 @@ module ts {
         };
     }
 
-    function getOneBasedLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getOneBasedLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    function getZeroBasedLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
+        return getZeroBasedLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
     function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
         // If the leading comments start on different line than the start of node, write new line
         if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getOneBasedLineOfLocalPosition(currentSourceFile, node.pos) !== getOneBasedLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+            getZeroBasedLineOfLocalPosition(currentSourceFile, node.pos) !== getZeroBasedLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
             writer.writeLine();
         }
     }
@@ -2973,13 +2973,13 @@ module ts {
             }
 
             function isOnSameLine(node1: Node, node2: Node) {
-                return getOneBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-                getOneBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getZeroBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
+                    getZeroBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
-                return getOneBasedLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getOneBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getZeroBasedLineOfLocalPosition(currentSourceFile, node1.end) ===
+                    getZeroBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -4470,8 +4470,8 @@ module ts {
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            var lastCommentLine = getOneBasedLineOfLocalPosition(currentSourceFile, lastComment.end);
-                            var commentLine = getOneBasedLineOfLocalPosition(currentSourceFile, comment.pos);
+                            var lastCommentLine = getZeroBasedLineOfLocalPosition(currentSourceFile, lastComment.end);
+                            var commentLine = getZeroBasedLineOfLocalPosition(currentSourceFile, comment.pos);
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
@@ -4489,9 +4489,9 @@ module ts {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = getOneBasedLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
-                        var astLine = getOneBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        if (astLine >= lastCommentLine + 2) {
+                        var lastCommentLine = getZeroBasedLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var nodeLine = getZeroBasedLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
