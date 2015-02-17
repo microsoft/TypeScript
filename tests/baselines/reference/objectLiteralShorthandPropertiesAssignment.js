@@ -18,8 +18,7 @@ var person3: { name: string; id:number } = bar("Hello", 5);
 var id = 10000;
 var name = "my name";
 var person = { name: name, id: id };
-function foo(obj) {
-}
+function foo(obj) { }
 ;
 function bar(name, id) {
     return { name: name, id: id };

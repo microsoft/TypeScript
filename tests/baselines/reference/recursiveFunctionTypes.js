@@ -52,12 +52,9 @@ var x = fn; // error
 var y = fn; // ok
 var f;
 var g;
-function f1(d) {
-}
-function f2() {
-}
-function g2() {
-}
+function f1(d) { }
+function f2() { }
+function g2() { }
 function f3() {
     return f3;
 }
@@ -65,8 +62,7 @@ var a = f3; // error
 var C = (function () {
     function C() {
     }
-    C.g = function (t) {
-    };
+    C.g = function (t) { };
     return C;
 })();
 C.g(3); // error

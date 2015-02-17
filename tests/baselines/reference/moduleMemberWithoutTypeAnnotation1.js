@@ -102,8 +102,7 @@ var TypeScript;
 (function (TypeScript) {
     var Syntax;
     (function (Syntax) {
-        function childIndex() {
-        }
+        function childIndex() { }
         Syntax.childIndex = childIndex;
         var VariableWidthTokenWithTrailingTrivia = (function () {
             function VariableWidthTokenWithTrailingTrivia() {

@@ -1,4 +1,4 @@
-EmitOutputStatus : JSGeneratedWithSemanticErrors
+EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile.js
 var x = "hello world";
 

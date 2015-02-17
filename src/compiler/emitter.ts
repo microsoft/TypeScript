@@ -828,7 +828,7 @@ module ts {
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
             writeTextOfNode(currentSourceFile, node.name);
-            var enumMemberValue = resolver.getEnumMemberValue(node);
+            var enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
                 write(enumMemberValue.toString());
@@ -1119,7 +1119,7 @@ module ts {
             if (hasDynamicName(node)) {
                 return;
             }
-
+            
             var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
@@ -1147,7 +1147,9 @@ module ts {
                 if (accessor) {
                     return accessor.kind === SyntaxKind.GetAccessor
                         ? accessor.type // Getter - return type
-                        : accessor.parameters[0].type; // Setter parameter type
+                        : accessor.parameters.length > 0
+                            ? accessor.parameters[0].type // Setter parameter type
+                            : undefined;
                 }
             }
 
@@ -1499,7 +1501,7 @@ module ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-
+    
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         var diagnostics: Diagnostic[] = [];
         var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
@@ -1507,13 +1509,46 @@ module ts {
         return diagnostics;
     }
 
-    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
+    // @internal
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
+
+        if (targetSourceFile === undefined) {
+            forEach(host.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
+                    emitFile(jsFilePath, sourceFile);
+                }
+            });
+
+            if (compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+        else {
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+                emitFile(jsFilePath, targetSourceFile);
+            }
+            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
+                emitFile(compilerOptions.out);
+            }
+        }
+
+        // Sort and make the unique list of diagnostics
+        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
+
+        return {
+            emitSkipped: false,
+            diagnostics,
+            sourceMaps: sourceMapDataList
+        };
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             var writer = createTextWriter(newLine);
@@ -1578,6 +1613,25 @@ module ts {
 
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
+
+            if (compilerOptions.sourceMap) {
+                initializeEmitterWithSourceMaps();
+            }
+
+            if (root) {
+                emit(root);
+            }
+            else {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        emit(sourceFile);
+                    }
+                });
+            }
+
+            writeLine();
+            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
+            return;
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -2384,22 +2438,10 @@ module ts {
                 return true;
             }
 
-            function emitArrayLiteral(node: ArrayLiteralExpression) {
-                var elements = node.elements;
-                var length = elements.length;
-                if (length === 0) {
-                    write("[]");
-                    return;
-                }
-                if (languageVersion >= ScriptTarget.ES6) {
-                    write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
-                    write("]");
-                    return;
-                }
+            function emitListWithSpread(elements: Expression[], multiLine: boolean, trailingComma: boolean) {
                 var pos = 0;
                 var group = 0;
+                var length = elements.length;
                 while (pos < length) {
                     // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
                     if (group === 1) {
@@ -2420,8 +2462,7 @@ module ts {
                             i++;
                         }
                         write("[");
-                        emitList(elements, pos, i - pos, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                            /*trailingComma*/ elements.hasTrailingComma);
+                        emitList(elements, pos, i - pos, multiLine, trailingComma && i === length);
                         write("]");
                         pos = i;
                     }
@@ -2429,6 +2470,23 @@ module ts {
                 }
                 if (group > 1) {
                     write(")");
+                }
+            }
+
+            function emitArrayLiteral(node: ArrayLiteralExpression) {
+                var elements = node.elements;
+                if (elements.length === 0) {
+                    write("[]");
+                }
+                else if (languageVersion >= ScriptTarget.ES6) {
+                    write("[");
+                    emitList(elements, 0, elements.length, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma);
+                    write("]");
+                }
+                else {
+                    emitListWithSpread(elements, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma);
                 }
             }
 
@@ -2460,7 +2518,7 @@ module ts {
                         tempNames[node.id] = tempName;
                         write(tempName.text);
                         write(" = ");
-                        emit(node.expression);
+                emit(node.expression);
                     }
                 }
                 else {
@@ -2540,7 +2598,80 @@ module ts {
                 write("]");
             }
 
+            function hasSpreadElement(elements: Expression[]) {
+                return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
+            }
+
+            function skipParentheses(node: Expression): Expression {
+                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression) {
+                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
+                }
+                return node;
+            }
+
+            function emitCallTarget(node: Expression): Expression {
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
+                    emit(node);
+                    return node;
+                }
+                var temp = createTempVariable(node);
+                recordTempDeclaration(temp);
+                write("(");
+                emit(temp);
+                write(" = ");
+                emit(node);
+                write(")");
+                return temp;
+            }
+
+            function emitCallWithSpread(node: CallExpression) {
+                var target: Expression;
+                var expr = skipParentheses(node.expression);
+                if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
+                    write(".");
+                    emit((<PropertyAccessExpression>expr).name);
+                }
+                else if (expr.kind === SyntaxKind.ElementAccessExpression) {
+                    // Target will be emitted as "this" argument
+                    target = emitCallTarget((<PropertyAccessExpression>expr).expression);
+                    write("[");
+                    emit((<ElementAccessExpression>expr).argumentExpression);
+                    write("]");
+                }
+                else if (expr.kind === SyntaxKind.SuperKeyword) {
+                    target = expr;
+                    write("_super");
+                }
+                else {
+                    emit(node.expression);
+                }
+                write(".apply(");
+                if (target) {
+                    if (target.kind === SyntaxKind.SuperKeyword) {
+                        // Calls of form super(...) and super.foo(...)
+                        emitThis(target);
+                    }
+                    else {
+                        // Calls of form obj.foo(...)
+                        emit(target);
+                    }
+                }
+                else {
+                    // Calls of form foo(...)
+                    write("void 0");
+                }
+                write(", ");
+                emitListWithSpread(node.arguments, /*multiLine*/ false, /*trailingComma*/ false);
+                write(")");
+            }
+
             function emitCallExpression(node: CallExpression, emitArguments: (args: Expression[], node: CallExpression) => void = emitCommaList) {                
+                if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
+                    emitCallWithSpread(node);
+                    return;
+                }
                 var superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
                     write("_super");
@@ -2666,7 +2797,6 @@ module ts {
                 write(tokenToString(node.operator));
             }
 
-
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2689,7 +2819,21 @@ module ts {
                 emit(node.whenFalse);
             }
 
+            function isSingleLineBlock(node: Node) {
+                if (node && node.kind === SyntaxKind.Block) {
+                    var block = <Block>node;
+                    return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
+                }
+            }
+
             function emitBlock(node: Block) {
+                if (isSingleLineBlock(node)) {
+                emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    return;
+                }
+
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
                 scopeEmitStart(node.parent);
@@ -2859,6 +3003,11 @@ module ts {
 
             function isOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
+                getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
                     getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
@@ -3361,6 +3510,10 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
+                if (isSingleLineBlock(node.body)) {
+                    write(" { }");
+                }
+                else {
                 write(" {");
                 scopeEmitStart(node);
 
@@ -3428,6 +3581,8 @@ module ts {
                 }
 
                 scopeEmitEnd();
+                }
+
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
@@ -3828,7 +3983,7 @@ module ts {
                 var decorator = <Decorator>node.parent;
                 if (!isDeclaration(decorator.parent)) {
                     return;
-                }
+            }
 
                 var decorated = <Declaration>decorator.parent;
                 var signature = resolver.getResolvedSignature(node);
@@ -4118,7 +4273,7 @@ module ts {
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {
                 if (!member.initializer || isConst(member.parent)) {
-                    var value = resolver.getEnumMemberValue(member);
+                    var value = resolver.getConstantValue(member);
                     if (value !== undefined) {
                         write(value.toString());
                         return;
@@ -4265,10 +4420,24 @@ module ts {
                 });
             }
 
+            function sortAMDModules(amdModules: {name: string; path: string}[]) {
+                // AMD modules with declared variable names go first
+                return amdModules.sort((moduleA, moduleB) => {
+                    if (moduleA.name === moduleB.name) {
+                        return 0;
+                    } else if (!moduleA.name) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+            }
+
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
                 write("define(");
+                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
@@ -4278,7 +4447,7 @@ module ts {
                     emitLiteral(<LiteralExpression>getExternalModuleImportDeclarationExpression(imp));
                 });
                 forEach(node.amdDependencies, amdDependency => {
-                    var text = "\"" + amdDependency + "\"";
+                    var text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
                 });
@@ -4286,6 +4455,12 @@ module ts {
                 forEach(imports, imp => {
                     write(", ");
                     emit(imp.name);
+                });
+                forEach(node.amdDependencies, amdDependency => {
+                    if (amdDependency.name) {
+                        write(", ");
+                        write(amdDependency.name);
+                    }
                 });
                 write(") {");
                 increaseIndent();
@@ -4613,7 +4788,6 @@ module ts {
                 return leadingComments;
             }
 
-
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
@@ -4662,7 +4836,7 @@ module ts {
                 }
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);                
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
@@ -4731,24 +4905,6 @@ module ts {
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
-
-            if (compilerOptions.sourceMap) {
-                initializeEmitterWithSourceMaps();
-            }
-
-            if (root) {
-                emit(root);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
-                    }
-                });
-            }
-
-            writeLine();
-            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
         }
 
         function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile) {
@@ -4771,83 +4927,12 @@ module ts {
             }
         }
 
-        var hasSemanticDiagnostics = false;
-        var isEmitBlocked = false;
-
-        if (targetSourceFile === undefined) {
-            // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
-            hasSemanticDiagnostics = resolver.hasSemanticDiagnostics();
-            isEmitBlocked = host.isEmitBlocked();
-
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
-
-            if (compilerOptions.out) {
-                emitFile(compilerOptions.out);
-            }
-        }
-        else {
-            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
-                hasSemanticDiagnostics = resolver.hasSemanticDiagnostics(targetSourceFile);
-                isEmitBlocked = host.isEmitBlocked(targetSourceFile);
-
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-                emitFile(jsFilePath, targetSourceFile);
-            }
-            else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
-                // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
-                // Emit all, non-external-module file, into one single output file
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        hasSemanticDiagnostics = hasSemanticDiagnostics || resolver.hasSemanticDiagnostics(sourceFile);
-                        isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
-                    }
-                });
-
-                emitFile(compilerOptions.out);
-            }
-        }
-
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
-                if (!hasSemanticDiagnostics && compilerOptions.declaration) {
+
+            if (compilerOptions.declaration) {
                     writeDeclarationFile(jsFilePath, sourceFile);
                 }
             }
-        }
-
-        // Sort and make the unique list of diagnostics
-        diagnostics.sort(compareDiagnostics);
-        diagnostics = deduplicateSortedDiagnostics(diagnostics);
-
-        // Update returnCode if there is any EmitterError
-        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
-
-        // Check and update returnCode for syntactic and semantic
-        var emitResultStatus: EmitReturnStatus;
-        if (isEmitBlocked) {
-            emitResultStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        } else if (hasEmitterError) {
-            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
-        } else if (hasSemanticDiagnostics && compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.DeclarationGenerationSkipped;
-        } else if (hasSemanticDiagnostics && !compilerOptions.declaration) {
-            emitResultStatus = EmitReturnStatus.JSGeneratedWithSemanticErrors;
-        } else {
-            emitResultStatus = EmitReturnStatus.Succeeded;
-        }
-
-        return {
-            emitResultStatus,
-            diagnostics,
-            sourceMaps: sourceMapDataList
-        };
     }
 }

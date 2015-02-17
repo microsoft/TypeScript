@@ -352,8 +352,7 @@ objc8.t14 = ({
     a: []
 });
 // CONTEXT: Function call
-function c9t5(f) {
-}
+function c9t5(f) { }
 ;
 c9t5(function (n) {
     return ({});

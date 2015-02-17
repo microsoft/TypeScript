@@ -2,6 +2,8 @@
 /// <reference path="emitter.ts" />
 
 module ts {
+    /* @internal */ export var emitTime = 0;
+
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
         var existingDirectories: Map<boolean> = {};
@@ -21,9 +23,9 @@ module ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode ?
-                        createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText :
-                        e.message);
+                    onError(e.number === unsupportedFileEncodingErrorCode
+                        ? createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText
+                        : e.message);
                 }
                 text = "";
             }
@@ -73,90 +75,168 @@ module ts {
         };
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
+    export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
+        var diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+        return sortAndDeduplicateDiagnostics(diagnostics);
+    }
+
+    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
+        if (typeof messageText === "string") {
+            return messageText;
+        }
+        else {
+            var diagnosticChain = messageText;
+            var result = "";
+
+            var indent = 0;
+            while (diagnosticChain) {
+                if (indent) {
+                    result += newLine;
+
+                    for (var i = 0; i < indent; i++) {
+                        result += "  ";
+                    }
+                }
+                result += diagnosticChain.messageText;
+                indent++;
+                diagnosticChain = diagnosticChain.next;
+            }
+
+            return result;
+        }
+    }
+
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program {
         var program: Program;
         var files: SourceFile[] = [];
         var filesByName: Map<SourceFile> = {};
-        var errors: Diagnostic[] = [];
+        var diagnostics = createDiagnosticCollection();
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory: string;
+        host = host || createCompilerHost(options);
 
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
-        errors.sort(compareDiagnostics);
-
 
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
-        var emitHost: EmitHost;
 
         program = {
             getSourceFile: getSourceFile,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
-            getCompilerHost: () => host,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getDeclarationDiagnostics: getDeclarationDiagnostics,
+            getSyntacticDiagnostics,
+            getGlobalDiagnostics,
+            getSemanticDiagnostics,
+            getDeclarationDiagnostics,
             getTypeChecker,
+            getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
-            emitFiles: invokeEmitter,
-            isEmitBlocked,
+            emit,
             getCurrentDirectory: host.getCurrentDirectory,
+            getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
+            getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
+            getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
+            getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
 
-        function getEmitHost() {
-            return emitHost || (emitHost = createEmitHostFromProgram(program));
-        }
-
-        function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            if (options.noEmitOnError) {
-                return getDiagnostics(sourceFile).length !== 0 || getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0;
-            }
-
-            return false;
+        function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
+            return {
+                getCanonicalFileName: host.getCanonicalFileName,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
+                getCompilerOptions: program.getCompilerOptions,
+                getCurrentDirectory: host.getCurrentDirectory,
+                getNewLine: host.getNewLine,
+                getSourceFile: program.getSourceFile,
+                getSourceFiles: program.getSourceFiles,
+                writeFile: writeFileCallback || host.writeFile,
+            };
         }
 
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
 
-        function getTypeChecker(produceDiagnostics: boolean) {
-            if (produceDiagnostics) {
-                return getDiagnosticsProducingTypeChecker();
-            }
-            else {
-                return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, produceDiagnostics));
-            }
+        function getTypeChecker() {
+            return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{
-            var typeChecker = getDiagnosticsProducingTypeChecker();
-            typeChecker.getDiagnostics(targetSourceFile);
-            var resolver = typeChecker.getEmitResolver();
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
+            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
             return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
-            return emitFiles(resolver, getEmitHost(), targetSourceFile);
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
+            // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+            // immediately bail out.
+            if (options.noEmitOnError && getPreEmitDiagnostics(this).length > 0) {
+                return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
+            }
+
+            var start = new Date().getTime();
+
+            var emitResult = emitFiles(
+                getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile),
+                getEmitHost(writeFileCallback),
+                sourceFile);
+
+            emitTime += new Date().getTime() - start;
+            return emitResult;
         }
-        
+
         function getSourceFile(fileName: string) {
             fileName = host.getCanonicalFileName(fileName);
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
-            return sourceFile ? filter(errors, e => e.file === sourceFile) : errors;
+        function getDiagnosticsHelper(sourceFile: SourceFile, getDiagnostics: (sourceFile: SourceFile) => Diagnostic[]): Diagnostic[] {
+            if (sourceFile) {
+                return getDiagnostics(sourceFile);
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            forEach(program.getSourceFiles(), sourceFile => {
+                addRange(allDiagnostics, getDiagnostics(sourceFile));
+            });
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
+        function getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile);
+        }
+
+        function getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
+        }
+
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            return sourceFile.parseDiagnostics;
+        }
+
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+
+            Debug.assert(!!sourceFile.bindDiagnostics);
+            var bindDiagnostics = sourceFile.bindDiagnostics;
+            var checkDiagnostics = typeChecker.getDiagnostics(sourceFile);
+            var programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+
+            return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            return filter(errors, e => !e.file);
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+
+            var allDiagnostics: Diagnostic[] = [];
+            addRange(allDiagnostics, typeChecker.getGlobalDiagnostics());
+            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function hasExtension(fileName: string): boolean {
@@ -196,10 +276,10 @@ module ts {
 
             if (diagnostic) {
                 if (refFile) {
-                    errors.push(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
+                    diagnostics.add(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(diagnostic, fileName));
+                    diagnostics.add(createCompilerDiagnostic(diagnostic, fileName));
                 }
             }
         }
@@ -221,11 +301,11 @@ module ts {
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                     if (refFile) {
-                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
+                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                     }
                 });
                 if (file) {
@@ -245,9 +325,6 @@ module ts {
                     else {
                         files.push(file);
                     }
-                    forEach(getSyntacticDiagnostics(file), e => {
-                        errors.push(e);
-                    });
                 }
             }
             return file;
@@ -257,7 +334,7 @@ module ts {
                 if (file && host.useCaseSensitiveFileNames()) {
                     var sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
                     if (canonicalName !== sourceFileName) {
-                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                        diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
                     }
                 }
@@ -331,10 +408,10 @@ module ts {
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 if (options.sourceRoot) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 return;
             }
@@ -345,7 +422,7 @@ module ts {
                 var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
                 var errorLength = externalModuleErrorSpan.end - errorStart;
-                errors.push(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot
@@ -366,7 +443,7 @@ module ts {
                             for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
                                 if (commonPathComponents[i] !== sourcePathComponents[i]) {
                                     if (i === 0) {
-                                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                                         return;
                                     }
 
@@ -399,11 +476,11 @@ module ts {
 
             if (options.noEmit) {
                 if (options.out || options.outDir) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
                 }
 
                 if (options.declaration) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
         }

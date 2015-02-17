@@ -13,6 +13,5 @@ var Foo = (function () {
     return Foo;
 })();
 ;
-function bar(x) {
-}
+function bar(x) { }
 bar(Foo); // Error, but should be allowed

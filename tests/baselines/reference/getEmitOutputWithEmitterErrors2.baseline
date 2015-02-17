@@ -1,4 +1,4 @@
-EmitOutputStatus : EmitErrorsEncountered
+EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile.js
 define(["require", "exports"], function (require, exports) {
     var C = (function () {

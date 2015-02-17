@@ -19,6 +19,5 @@ var person1 = name, id;
 function foo(name, id) {
     return { name: name, id: id };
 } // error
-function bar(obj) {
-}
+function bar(obj) { }
 bar({ name: name, id: id }); // error

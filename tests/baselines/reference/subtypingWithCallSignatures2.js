@@ -217,8 +217,7 @@ var r2 = foo2(r2arg1);
 var r2a = [r2arg1, r2arg2];
 var r2b = [r2arg2, r2arg1];
 var r3arg1 = function (x) { return x; };
-var r3arg2 = function (x) {
-};
+var r3arg2 = function (x) { };
 var r3 = foo3(r3arg1);
 var r3a = [r3arg1, r3arg2];
 var r3b = [r3arg2, r3arg1];

@@ -3,6 +3,7 @@
 
 module ts {
     var nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+    /* @internal */ export var parseTime = 0;
 
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
@@ -357,11 +358,16 @@ module ts {
     }
 
     function fixupParentReferences(sourceFile: SourceFile) {
-        // normally parent references are set during binding.
-        // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
-        // walk over the nodes and set parent references
+        // normally parent references are set during binding. However, for clients that only need
+        // a syntax tree, and no semantic features, then the binding process is an unnecessary 
+        // overhead.  This functions allows us to set all the parents, without all the expense of
+        // binding.
+
         var parent: Node = sourceFile;
-        function walk(n: Node): void {
+        forEachChild(sourceFile, visitNode);
+        return;
+
+        function visitNode(n: Node): void {
             // walk down setting parents that differ from the parent we think it should be.  This
             // allows us to quickly bail out of setting parents for subtrees during incremental 
             // parsing
@@ -370,42 +376,53 @@ module ts {
 
                 var saveParent = parent;
                 parent = n;
-                forEachChild(n, walk);
+                forEachChild(n, visitNode);
                 parent = saveParent;
             }
         }
-
-        forEachChild(sourceFile, walk);
     }
 
-    export function getSyntacticDiagnostics(sourceFile: SourceFile) {
-        if (!sourceFile.syntacticDiagnostics) {
-            // Don't bother doing any grammar checks if there are already parser errors.  
-            // Otherwise we may end up with too many cascading errors.
-            sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
+    function shouldCheckNode(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.Identifier:
+                return true;
         }
-        return sourceFile.syntacticDiagnostics;
+
+        return false;
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
-        if (element.length) {
+    function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+        if (isArray) {
             visitArray(<IncrementalNodeArray>element);
         }
         else {
             visitNode(<IncrementalNode>element);
         }
+        return;
 
         function visitNode(node: IncrementalNode) {
+            if (aggressiveChecks && shouldCheckNode(node)) {
+                var text = oldText.substring(node.pos, node.end);
+            }
+
             // Ditch any existing LS children we may have created.  This way we can avoid 
             // moving them forward.
             node._children = undefined;
             node.pos += delta;
             node.end += delta;
 
+            if (aggressiveChecks && shouldCheckNode(node)) {
+                Debug.assert(text === newText.substring(node.pos, node.end));
+            }
+
             forEachChild(node, visitNode, visitArray);
+            checkNodePositions(node, aggressiveChecks);
         }
 
         function visitArray(array: IncrementalNodeArray) {
+            array._children = undefined;
             array.pos += delta;
             array.end += delta;
 
@@ -418,6 +435,7 @@ module ts {
     function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
         Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
         Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+        Debug.assert(element.pos <= element.end);
 
         // We have an element that intersects the change range in some way.  It may have its
         // start, or its end (or both) in the changed range.  We want to adjust any part
@@ -489,14 +507,36 @@ module ts {
         }
     }
 
-    function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
-        visitNode(node);
+    function checkNodePositions(node: Node, aggressiveChecks: boolean) {
+        if (aggressiveChecks) {
+            var pos = node.pos;
+            forEachChild(node, child => {
+                Debug.assert(child.pos >= pos);
+                pos = child.end;
+            });
+            Debug.assert(pos <= node.end);
+        }
+    }
+
+    function updateTokenPositionsAndMarkElements(
+        sourceFile: IncrementalNode,
+        changeStart: number,
+        changeRangeOldEnd: number,
+        changeRangeNewEnd: number,
+        delta: number,
+        oldText: string,
+        newText: string,
+        aggressiveChecks: boolean): void {
+
+        visitNode(sourceFile);
+        return;
 
         function visitNode(child: IncrementalNode) {
+            Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and 
                 // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, delta);
+                moveElementEntirelyPastChangeRange(child, /*isArray:*/ false, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
@@ -506,43 +546,49 @@ module ts {
             var fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 child.intersectsChange = true;
+                child._children = undefined;
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                 forEachChild(child, visitNode, visitArray);
+
+                checkNodePositions(child, aggressiveChecks);
                 return;
             }
 
             // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+            Debug.assert(fullEnd < changeStart);
         }
 
         function visitArray(array: IncrementalNodeArray) {
+            Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
-                moveElementEntirelyPastChangeRange(array, delta);
+                moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
+                return;
             }
-            else {
-                // Check if the element intersects the change range.  If it does, then it is not
-                // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                // be able to use.
-                var fullEnd = array.end;
-                if (fullEnd >= changeStart) {
-                    array.intersectsChange = true;
 
-                    // Adjust the pos or end (or both) of the intersecting array accordingly.
-                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                    for (var i = 0, n = array.length; i < n; i++) {
-                        visitNode(array[i]);
-                    }
+            // Check if the element intersects the change range.  If it does, then it is not
+            // reusable.  Also, we'll need to recurse to see what constituent portions we may
+            // be able to use.
+            var fullEnd = array.end;
+            if (fullEnd >= changeStart) {
+                array.intersectsChange = true;
+                array._children = undefined;
+
+                // Adjust the pos or end (or both) of the intersecting array accordingly.
+                adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                for (var i = 0, n = array.length; i < n; i++) {
+                    visitNode(array[i]);
                 }
-                // else {
-                // Otherwise, the array is entirely before the change range.  No need to do anything with it.
-                // }
+                return;
             }
+
+            // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+            Debug.assert(fullEnd < changeStart);
         }
     }
-
 
     function extendToAffectedRange(sourceFile: SourceFile, changeRange: TextChangeRange): TextChangeRange {
         // Consider the following code:
@@ -564,6 +610,7 @@ module ts {
         // start of the tree.
         for (var i = 0; start > 0 && i <= maxLookahead; i++) {
             var nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+            Debug.assert(nearestNode.pos <= start);
             var position = nearestNode.pos;
 
             start = Math.max(0, position - 1);
@@ -670,6 +717,22 @@ module ts {
         }
     }
 
+    function checkChangeRange(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean) {
+        var oldText = sourceFile.text;
+        if (textChangeRange) {
+            Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+
+            if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                var oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
+                var newTextPrefix = newText.substr(0, textChangeRange.span.start);
+                Debug.assert(oldTextPrefix === newTextPrefix);
+
+                var oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
+                var newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
+                Debug.assert(oldTextSuffix === newTextSuffix);
+            }
+        }
+    }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
@@ -680,7 +743,10 @@ module ts {
     // from this SourceFile that are being held onto may change as a result (including 
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
-    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile {
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
+        aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
+
+        checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
         if (textChangeRangeIsUnchanged(textChangeRange)) {
             // if the text didn't change, then we can just return our current source file as-is.
             return sourceFile;
@@ -689,14 +755,32 @@ module ts {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion,/*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
+        // Make sure we're not trying to incrementally update a source file more than once.  Once
+        // we do an update the original source file is considered unusbale from that point onwards. 
+        //
+        // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
+        // tree and give them new positions and parents.  From that point on, trusting the old
+        // tree at all is not possible as far too much of it may violate invariants.
+        var incrementalSourceFile = <IncrementalNode><Node>sourceFile;
+        Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
+        incrementalSourceFile.hasBeenIncrementallyParsed = true;
+
+        var oldText = sourceFile.text;
         var syntaxCursor = createSyntaxCursor(sourceFile);
 
         // Make the actual change larger so that we know to reparse anything whose lookahead 
         // might have intersected the change.
         var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+        checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
+
+        // Ensure that extending the affected range only moved the start of the change range 
+        // earlier in the file.
+        Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+        Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
+        Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
 
         // The is the amount the nodes after the edit range need to be adjusted.  It can be 
         // positive (if the edit added characters), negative (if the edit deleted characters)
@@ -704,8 +788,8 @@ module ts {
         var delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
 
         // If we added or removed characters during the edit, then we need to go and adjust all
-        // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
-        // or they may move backward (if we deleted chars).
+        // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they 
+        // may move backward (if we deleted chars).
         //
         // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
         // to reuse are already at the appropriate position in the new text.  That way when we
@@ -722,8 +806,8 @@ module ts {
         //
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
-        updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-            changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta);
+        updateTokenPositionsAndMarkElements(incrementalSourceFile,
+            changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
 
         // Now that we've set up our internal incremental state just proceed and parse the
         // source file in the normal fashion.  When possible the parser will retrieve and
@@ -763,6 +847,7 @@ module ts {
     }
 
     interface IncrementalNode extends Node, IncrementalElement {
+        hasBeenIncrementallyParsed: boolean
     }
 
     interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
@@ -798,7 +883,7 @@ module ts {
                     // Much of the time the parser will need the very next node in the array that 
                     // we just returned a node from.So just simply check for that case and move 
                     // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
+                    if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
                         currentArrayIndex++;
                         current = currentArray[currentArrayIndex];
                     }
@@ -834,6 +919,7 @@ module ts {
 
             // Recurse into the source file to find the highest node at this position.
             forEachChild(sourceFile, visitNode, visitArray);
+            return;
 
             function visitNode(node: Node) {
                 if (position >= node.pos && position < node.end) {
@@ -879,8 +965,13 @@ module ts {
             }
         }
     }
+
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
-        return parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+        var start = new Date().getTime();
+        var result = parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+
+        parseTime += new Date().getTime() - start;
+        return result;
     }
 
     function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
@@ -888,15 +979,16 @@ module ts {
         var identifiers: Map<string> = {};
         var identifierCount = 0;
         var nodeCount = 0;
-        var scanner: Scanner;
         var token: SyntaxKind;
         
         var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-        sourceFile.pos = sourceFile.end = 0;
-        sourceFile.referenceDiagnostics = [];
+        sourceFile.pos = 0;
+        sourceFile.end = sourceText.length;
+        sourceFile.text = sourceText;
+
         sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
+        sourceFile.bindDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
         sourceFile.fileName = normalizePath(fileName);
         sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
@@ -978,15 +1070,8 @@ module ts {
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode: boolean = false;
 
-        sourceFile.syntacticDiagnostics = undefined;
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
-        sourceFile.end = sourceText.length;
-        sourceFile.text = sourceText;
-
         // Create and prime the scanner before parsing the source elements.
-        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
         token = nextToken();
 
         processReferenceComments(sourceFile);
@@ -1005,6 +1090,7 @@ module ts {
             fixupParentReferences(sourceFile);
         }
 
+        syntaxCursor = undefined;
         return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -1493,7 +1579,6 @@ module ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
-                    return token === SyntaxKind.CommaToken || isStartOfExpression();
                 case ParsingContext.ArrayLiteralMembers:
                     return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isStartOfExpression();
                 case ParsingContext.Parameters:
@@ -1646,8 +1731,8 @@ module ts {
             return result;
         }
 
-        function parseListElement<T extends Node>(kind: ParsingContext, parseElement: () => T): T {
-            var node = currentNode(kind);
+        function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
+            var node = currentNode(parsingContext);
             if (node) {
                 return <T>consumeNode(node);
             }
@@ -1804,29 +1889,10 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
-
-                    // Keep in sync with isStatement:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.Block:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.EmptyStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.DebuggerStatement:
                         return true;
                 }
+
+                return isReusableStatement(node);
             }
 
             return false;
@@ -1932,9 +1998,13 @@ module ts {
         }
 
         function isReusableParameter(node: Node) {
-            // TODO: this most likely needs the same initializer check that 
-            // isReusableVariableDeclaration has.
-            return node.kind === SyntaxKind.Parameter;
+            if (node.kind !== SyntaxKind.Parameter) {
+                return false;
+            }
+
+            // See the comment in isReusableVariableDeclaration for why we do this.
+            var parameter = <ParameterDeclaration>node;
+            return parameter.initializer === undefined;
         }
 
         // Returns true if we should abort parsing.
@@ -1949,7 +2019,7 @@ module ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -1963,11 +2033,24 @@ module ts {
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
                     }
+
                     commaStart = -1; // Back to the state where the last token was not a comma
                     if (isListTerminator(kind)) {
                         break;
                     }
+
+                    // We didn't get a comma, and the list wasn't terminated, explicitly parse
+                    // out a comma so we give a good error message.
                     parseExpected(SyntaxKind.CommaToken);
+                    
+                    // If the token was a semicolon, and the caller allows that, then skip it and
+                    // continue.  This ensures we get back on track and don't result in tons of
+                    // parse errors.  For example, this can happen when people do things like use 
+                    // a semicolon to delimit object literal members.   Note: we'll have already
+                    // reported an error when we called parseExpected above.
+                    if (considerSemicolonAsDelimeter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                        nextToken();
+                    }
                     continue;
                 }
 
@@ -3624,12 +3707,6 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAssignmentExpressionOrOmittedExpression(): Expression {
-            return token === SyntaxKind.CommaToken
-                ? <Expression>createNode(SyntaxKind.OmittedExpression)
-                : parseAssignmentExpressionOrHigher();
-        }
-
         function parseSpreadElement(): Expression {
             var node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
             parseExpected(SyntaxKind.DotDotDotToken);
@@ -3637,19 +3714,21 @@ module ts {
             return finishNode(node);
         }
 
-        function parseArrayLiteralElement(): Expression {
-            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrOmittedExpression();
+        function parseArgumentOrArrayLiteralElement(): Expression {
+            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
+                token === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
+                parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
-            return allowInAnd(parseAssignmentExpressionOrOmittedExpression);
+            return allowInAnd(parseArgumentOrArrayLiteralElement);
         }
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             var node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
+            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -3710,7 +3789,7 @@ module ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter:*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -5047,7 +5126,7 @@ module ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             var triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
-            var amdDependencies: string[] = [];
+            var amdDependencies: {path: string; name: string}[] = [];
             var amdModuleName: string;
 
             // Keep scanning all the leading trivia in the file until we get to something that 
@@ -5074,7 +5153,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -5082,15 +5161,22 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
 
-                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
+                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s/gim;
+                    var pathRegex = /\spath\s*=\s*('|")(.+?)\1/gim;
+                    var nameRegex = /\sname\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
-                        amdDependencies.push(amdDependencyMatchResult[2]);
+                        var pathMatchResult = pathRegex.exec(comment);
+                        var nameMatchResult = nameRegex.exec(comment);
+                        if (pathMatchResult) {
+                            var amdDependency = {path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            amdDependencies.push(amdDependency);
+                        }
                     }
                 }
             }

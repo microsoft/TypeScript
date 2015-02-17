@@ -33,8 +33,7 @@ b.foo();
 //// [autolift3.js]
 var B = (function () {
     function B() {
-        function foo() {
-        }
+        function foo() { }
         foo();
         var a = 0;
         var inner = (function () {

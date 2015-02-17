@@ -13,8 +13,7 @@ var Foo = (function () {
         get: function () {
             return 0;
         },
-        set: function (n) {
-        },
+        set: function (n) { },
         enumerable: true,
         configurable: true
     });

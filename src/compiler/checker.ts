@@ -5,6 +5,8 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    /* @internal */ export var checkTime = 0;
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
@@ -48,12 +50,12 @@ module ts {
             getContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
-            getEnumMemberValue,
+            getConstantValue,
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            getEmitResolver: () => emitResolver,
+            getEmitResolver,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -113,8 +115,7 @@ module ts {
         var nodeLinks: NodeLinks[] = [];
         var potentialThisCollisions: Node[] = [];
 
-        var diagnostics: Diagnostic[] = [];
-        var diagnosticsModified: boolean = false;
+        var diagnostics = createDiagnosticCollection();
 
         var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
             "string": {
@@ -131,16 +132,18 @@ module ts {
             }
         };
 
-        function addDiagnostic(diagnostic: Diagnostic) {
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+        function getEmitResolver(sourceFile?: SourceFile) {
+            // Ensure we have all the type information in place for this file so that all the
+            // emitter questions of this resolver will return the right information.
+            getDiagnostics(sourceFile);
+            return emitResolver;
         }
 
         function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
-            addDiagnostic(diagnostic);
+            diagnostics.add(diagnostic);
         }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
@@ -3517,7 +3520,8 @@ module ts {
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
-                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
+
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
             }
             return result !== Ternary.False;
 
@@ -5743,9 +5747,9 @@ module ts {
                         return false;
                     }
                     else {
-                        var diagnosticsCount = diagnostics.length;
+                        var modificationCount = diagnostics.getModificationCount();
                         checkClassPropertyAccess(node, left, type, prop);
-                        return diagnostics.length === diagnosticsCount
+                        return diagnostics.getModificationCount() === modificationCount;
                     }
                 }
             }
@@ -5856,10 +5860,74 @@ module ts {
             return unknownSignature;
         }
 
+        // Re-order candidate signatures into the result array. Assumes the result array to be empty.
+        // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+        // A nit here is that we reorder only signatures that belong to the same symbol,
+        // so order how inherited signatures are processed is still preserved.
+        // interface A { (x: string): void }
+        // interface B extends A { (x: 'foo'): string }
+        // var b: B;
+        // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
+        function reorderCandidates(signatures: Signature[], result: Signature[]): void {
+            var lastParent: Node;
+            var lastSymbol: Symbol;
+            var cutoffIndex: number = 0;
+            var index: number;
+            var specializedIndex: number = -1;
+            var spliceIndex: number;
+            Debug.assert(!result.length);
+            for (var i = 0; i < signatures.length; i++) {
+                var signature = signatures[i];
+                var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                var parent = signature.declaration && signature.declaration.parent;
+                if (!lastSymbol || symbol === lastSymbol) {
+                    if (lastParent && parent === lastParent) {
+                        index++;
+                    }
+                    else {
+                        lastParent = parent;
+                        index = cutoffIndex;
+                    }
+                }
+                else {
+                    // current declaration belongs to a different symbol
+                    // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
+                    index = cutoffIndex = result.length;
+                    lastParent = parent;
+                }
+                lastSymbol = symbol;
+
+                // specialized signatures always need to be placed before non-specialized signatures regardless
+                // of the cutoff position; see GH#1133
+                if (signature.hasStringLiterals) {
+                    specializedIndex++;
+                    spliceIndex = specializedIndex;
+                    // The cutoff index always needs to be greater than or equal to the specialized signature index
+                    // in order to prevent non-specialized signatures from being added before a specialized
+                    // signature.
+                    cutoffIndex++;
+                }
+                else {
+                    spliceIndex = index;
+                }
+
+                result.splice(spliceIndex, 0, signature);
+            }
+        }
+
+        function getSpreadArgumentIndex(args: Expression[]): number {
+            for (var i = 0; i < args.length; i++) {
+                if (args[i].kind === SyntaxKind.SpreadElementExpression) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
-            var adjustedArgCount: number;
-            var typeArguments: NodeArray<TypeNode>;
-            var callIsIncomplete: boolean;
+            var adjustedArgCount: number;            // Apparent number of arguments we will have in this call
+            var typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
+            var callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 var tagExpression = <TaggedTemplateExpression>node;
@@ -5904,35 +5972,29 @@ module ts {
                 typeArguments = callExpression.typeArguments;
             }
 
-            Debug.assert(adjustedArgCount !== undefined, "'adjustedArgCount' undefined");
-            Debug.assert(callIsIncomplete !== undefined, "'callIsIncomplete' undefined");
-
-            return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
-
-            /**
-             * @param adjustedArgCount The "apparent" number of arguments that we will have in this call.
-             * @param typeArguments    Type arguments node of the call if it exists; undefined otherwise.
-             * @param callIsIncomplete Whether or not a call is unfinished, and we should be "lenient" when we have too few arguments.
-             * @param signature        The signature whose arity we are comparing.
-             */
-            function checkArity(adjustedArgCount: number, typeArguments: NodeArray<TypeNode>, callIsIncomplete: boolean, signature: Signature): boolean {
-                // Too many arguments implies incorrect arity.
-                if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
-                    return false;
-                }
-
-                // If the user supplied type arguments, but the number of type arguments does not match
-                // the declared number of type parameters, the call has an incorrect arity.
-                var hasRightNumberOfTypeArgs = !typeArguments ||
-                    (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
-                if (!hasRightNumberOfTypeArgs) {
-                    return false;
-                }
-
-                // If the call is incomplete, we should skip the lower bound check.
-                var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
-                return callIsIncomplete || hasEnoughArguments;
+            // If the user supplied type arguments, but the number of type arguments does not match
+            // the declared number of type parameters, the call has an incorrect arity.
+            var hasRightNumberOfTypeArgs = !typeArguments ||
+                (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
+            if (!hasRightNumberOfTypeArgs) {
+                return false;
             }
+
+            // If spread arguments are present, check that they correspond to a rest parameter. If so, no
+            // further checking is necessary.
+            var spreadArgIndex = getSpreadArgumentIndex(args);
+            if (spreadArgIndex >= 0) {
+                return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
+            }
+
+            // Too many arguments implies incorrect arity.
+            if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
+                return false;
+            }
+
+            // If the call is incomplete, we should skip the lower bound check.
+            var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
+            return callIsIncomplete || hasEnoughArguments;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -5965,18 +6027,20 @@ module ts {
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
             for (var i = 0; i < args.length; i++) {
-                if (args[i].kind === SyntaxKind.OmittedExpression) {
-                    continue;
+                var arg = args[i];
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
+                    var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                        var argType = globalTemplateStringsArrayType;
+                    }
+                    else {
+                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                        // context sensitive function expressions as wildcards
+                        var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                        var argType = checkExpressionWithContextualType(arg, paramType, mapper);
+                    }
+                    inferTypes(context, argType, paramType);
                 }
-                var parameterType = getTypeAtPosition(signature, i);
-                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                    continue;
-                }
-                // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                // context sensitive function expressions as wildcards
-                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
-                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
@@ -5984,13 +6048,11 @@ module ts {
             // as we construct types for contextually typed parameters)
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
-                    if (args[i].kind === SyntaxKind.OmittedExpression) {
-                        continue;
-                    }
-                    // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
+                    // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
-                        var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
+                        var arg = args[i];
+                        var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
             }
@@ -6028,37 +6090,24 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
-                var argType: Type;
-
-                if (arg.kind === SyntaxKind.OmittedExpression) {
-                    continue;
-                }
-
-                var paramType = getTypeAtPosition(signature, i);
-
-                if (i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
-                    // A tagged template expression has something of a
-                    // "virtual" parameter with the "cooked" strings array type.
-                    argType = globalTemplateStringsArrayType;
-                }
-                else {
-                    // String literals get string literal types unless we're reporting errors
-                    argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                        ? getStringLiteralType(<LiteralExpression>arg)
-                        : checkExpressionWithContextualType(<LiteralExpression>arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                }
-
-                // Use argument expression as error location when reporting errors
-                var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
-                if (!isValidArgument) {
-                    return false;
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
+                    // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
+                    var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    // A tagged template expression provides a special first argument, and string literals get string literal types
+                    // unless we're reporting errors
+                    var argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression ? globalTemplateStringsArrayType :
+                        arg.kind === SyntaxKind.StringLiteral && !reportErrors ? getStringLiteralType(<LiteralExpression>arg) :
+                        checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    // Use argument expression as error location when reporting errors
+                    if (!checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1)) {
+                        return false;
+                    }
                 }
             }
-
             return true;
         }
 
@@ -6125,8 +6174,8 @@ module ts {
             }
 
             var candidates = candidatesOutArray || [];
-            // collectCandidates fills up the candidates array directly
-            collectCandidates();
+            // reorderCandidates fills up the candidates array directly
+            reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
@@ -6316,60 +6365,6 @@ module ts {
                 return undefined;
             }
 
-            // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
-            // A nit here is that we reorder only signatures that belong to the same symbol,
-            // so order how inherited signatures are processed is still preserved.
-            // interface A { (x: string): void }
-            // interface B extends A { (x: 'foo'): string }
-            // var b: B;
-            // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-            function collectCandidates(): void {
-                var result = candidates;
-                var lastParent: Node;
-                var lastSymbol: Symbol;
-                var cutoffIndex: number = 0;
-                var index: number;
-                var specializedIndex: number = -1;
-                var spliceIndex: number;
-                Debug.assert(!result.length);
-                for (var i = 0; i < signatures.length; i++) {
-                    var signature = signatures[i];
-                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                    var parent = signature.declaration && signature.declaration.parent;
-                    if (!lastSymbol || symbol === lastSymbol) {
-                        if (lastParent && parent === lastParent) {
-                            index++;
-                        }
-                        else {
-                            lastParent = parent;
-                            index = cutoffIndex;
-                        }
-                    }
-                    else {
-                        // current declaration belongs to a different symbol
-                        // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
-                        index = cutoffIndex = result.length;
-                        lastParent = parent;
-                    }
-                    lastSymbol = symbol;
-
-                    // specialized signatures always need to be placed before non-specialized signatures regardless
-                    // of the cutoff position; see GH#1133
-                    if (signature.hasStringLiterals) {
-                        specializedIndex++;
-                        spliceIndex = specializedIndex;
-                        // The cutoff index always needs to be greater than or equal to the specialized signature index
-                        // in order to prevent non-specialized signatures from being added before a specialized
-                        // signature.
-                        cutoffIndex++;
-                    }
-                    else {
-                        spliceIndex = index;
-                    }
-
-                    result.splice(spliceIndex, 0, signature);
-                }
-            }
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
@@ -6425,6 +6420,13 @@ module ts {
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
+            if (node.arguments && languageVersion < ScriptTarget.ES6) {
+                var spreadIndex = getSpreadArgumentIndex(node.arguments);
+                if (spreadIndex >= 0) {
+                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+            }
+
             var expressionType = checkExpression(node.expression);
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
@@ -6570,9 +6572,14 @@ module ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
+            if (pos >= 0) {
+                return signature.hasRestParameter ?
+                    pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                    pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+            }
             return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+                getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) :
+                anyArrayType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -8299,32 +8306,61 @@ module ts {
             }
         }
 
-        function checkCollisionWithConstDeclarations(node: VariableLikeDeclaration) {
+        function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
+            // - ScriptBody : StatementList
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
+            // - Block : { StatementList }
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
             // Variable declarations are hoisted to the top of their function scope. They can shadow
             // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
             // by the binder as the declaration scope is different.
             // A non-initialized declaration is a no-op as the block declaration will resolve before the var
             // declaration. the problem is if the declaration has an initializer. this will act as a write to the
             // block declared value. this is fine for let, but not const.
-            //
             // Only consider declarations with initializers, uninitialized var declarations will not 
-            // step on a const variable.
+            // step on a let/const variable.
             // Do not consider let and const declarations, as duplicate block-scoped declarations 
             // are handled by the binder.
-            // We are only looking for var declarations that step on const declarations from a 
+            // We are only looking for var declarations that step on let\const declarations from a 
             // different scope. e.g.:
-            //      var x = 0;
             //      {
-            //          const x = 0;
-            //          var x = 0;
+            //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
+            //          var x = 0; // symbol for this declaration will be 'symbol'
             //      }
             if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                     var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                    if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
-                            error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
+                    if (localDeclarationSymbol &&
+                        localDeclarationSymbol !== symbol &&
+                        localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
+
+                            var varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                            var container =
+                                varDeclList.parent.kind === SyntaxKind.VariableStatement &&
+                                varDeclList.parent.parent;
+                            
+                            // names of block-scoped and function scoped variables can collide only 
+                            // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                            var namesShareScope =
+                                container &&
+                                (container.kind === SyntaxKind.Block && isAnyFunction(container.parent) ||
+                                (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
+                                 container.kind === SyntaxKind.SourceFile);
+
+                            // here we know that function scoped variable is shadowed by block scoped one
+                            // if they are defined in the same scope - binder has already reported redeclaration error
+                            // otherwise if variable has an initializer - show error that initialization will fail 
+                            // since LHS will be block scoped name instead of function scoped
+                            if (!namesShareScope) {
+                                var name = symbolToString(localDeclarationSymbol);
+                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
+                            }
                         }
                     }
                 }
@@ -8422,7 +8458,9 @@ module ts {
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
-                checkCollisionWithConstDeclarations(node);
+                if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                    checkVarDeclaredNamesNotShadowed(<VariableDeclaration | BindingElement>node);
+                }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
@@ -9036,7 +9074,7 @@ module ts {
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
                     }
                 }
@@ -9651,8 +9689,14 @@ module ts {
             }
         }
 
-        // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
+            var start = new Date().getTime();
+            checkSourceFileWorker(node);
+            checkTime += new Date().getTime() - start;
+        }
+
+        // Fully type check a source file and collect the relevant diagnostics.
+        function checkSourceFileWorker(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 // Grammar checking
@@ -9691,30 +9735,19 @@ module ts {
             }
         }
 
-        function getSortedDiagnostics(): Diagnostic[]{
-            Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
-
-            if (diagnosticsModified) {
-                diagnostics.sort(compareDiagnostics);
-                diagnostics = deduplicateSortedDiagnostics(diagnostics);
-                diagnosticsModified = false;
-            }
-            return diagnostics;
-        }
-
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
-                return filter(getSortedDiagnostics(), d => d.file === sourceFile);
+                return diagnostics.getDiagnostics(sourceFile.fileName);
             }
             forEach(host.getSourceFiles(), checkSourceFile);
-            return getSortedDiagnostics();
+            return diagnostics.getDiagnostics();
         }
 
-        function getGlobalDiagnostics(): Diagnostic[]{
+        function getGlobalDiagnostics(): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
-            return filter(getSortedDiagnostics(), d => !d.file);
+            return diagnostics.getGlobalDiagnostics();
         }
 
         function throwIfNonDiagnosticsProducing() {
@@ -9738,7 +9771,7 @@ module ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
             var symbols: SymbolTable = {};
             var memberFlags: NodeFlags = 0;
             function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
@@ -10124,7 +10157,7 @@ module ts {
             return getNamedMembers(propsByName);
         }
 
-        function getRootSymbols(symbol: Symbol): Symbol[]{
+        function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
@@ -10232,11 +10265,6 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticDiagnostics(sourceFile?: SourceFile) {
-            // Return true if there is any semantic error in a file or globally
-            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
-        }
-
         function isImportResolvedToValue(symbol: Symbol): boolean {
             var target = resolveImport(symbol);
             // const enums and modules that contain only const enums are not considered values from the emit perespective
@@ -10290,7 +10318,11 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number {
+        function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number {
+            if (node.kind === SyntaxKind.EnumMember) {
+                return getEnumMemberValue(<EnumMember>node);
+            }
+
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
@@ -10413,9 +10445,7 @@ module ts {
                 getExportAssignmentName,
                 isReferencedImportDeclaration,
                 getNodeCheckFlags,
-                getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
-                hasSemanticDiagnostics,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
@@ -10435,14 +10465,15 @@ module ts {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticDiagnostics, addDiagnostic);
             });
+
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
                     extendSymbolTable(globals, file.locals);
                 }
             });
+
             // Initialize special symbols
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
@@ -11173,9 +11204,32 @@ module ts {
                     }
                 }
             }
+
+            var checkLetConstNames =  languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
+
+            // 1. LexicalDeclaration : LetOrConst BindingList ;
+            // It is a Syntax Error if the BoundNames of BindingList contains "let".
+            // 2. ForDeclaration: ForDeclaration : LetOrConst ForBinding
+            // It is a Syntax Error if the BoundNames of ForDeclaration contains "let".
+
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
             // and its Identifier is eval or arguments 
-            return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            return (checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name)) ||
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+        }
+
+        function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
+            if (name.kind === SyntaxKind.Identifier) {
+                if ((<Identifier>name).text === "let") {
+                    return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
+                }
+            }
+            else {
+                var elements = (<BindingPattern>name).elements;
+                for (var i = 0; i < elements.length; ++i) {
+                    checkGrammarNameInLetOrConstDeclarations(elements[i].name);
+                }
+            }
         }
 
         function checkGrammarVariableDeclarationList(declarationList: VariableDeclarationList): boolean {
@@ -11292,14 +11346,14 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
 
         function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             if (!hasParseDiagnostics(sourceFile)) {
-                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11309,7 +11363,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = getErrorSpanForNode(node);
                 var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11443,7 +11497,7 @@ module ts {
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                diagnostics.add(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;
             }
         }

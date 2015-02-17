@@ -1,4 +1,4 @@
-EmitOutputStatus : Succeeded
+EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile1.js
 // File to emit, does not contain semantic errors
 // expected to be emitted correctelly regardless of the semantic errors in the other file

@@ -17,8 +17,7 @@ function f() {
     }
     x.forEach(function (n, i) { return void ('item ' + i + ' = ' + n); });
 }
-function g(x, y) {
-}
+function g(x, y) { }
 var n = g;
 n = f;
 n([4], 'foo');

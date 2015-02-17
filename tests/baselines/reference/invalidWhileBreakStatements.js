@@ -59,8 +59,7 @@ THREE: while (true) {
 // break forward
 while (true) {
     break FIVE;
-    FIVE: while (true) {
-    }
+    FIVE: while (true) { }
 }
 // label on non-loop statement
 NINE: var y = 12;

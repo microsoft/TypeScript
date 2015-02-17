@@ -18,8 +18,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-function doThing(x) {
-}
+function doThing(x) { }
 var A = (function () {
     function A() {
         this.p = doThing(A); // OK

@@ -78,8 +78,8 @@ module ts {
     }
 
     function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
-        var diagnostic: Diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return diagnostic.messageText;
+        var diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return <string>diagnostic.messageText;
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
@@ -92,7 +92,7 @@ module ts {
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        output += category + " TS" + diagnostic.code + ": " + flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) + sys.newLine;
 
         sys.write(output);
     }
@@ -165,7 +165,7 @@ module ts {
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
@@ -174,29 +174,29 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.help) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
@@ -206,13 +206,13 @@ module ts {
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
                 configFileWatcher = sys.watchFile(configFileName, configFileChanged);
@@ -229,12 +229,12 @@ module ts {
                     var configObject = readConfigFile(configFileName);
                     if (!configObject) {
                         reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
-                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
@@ -322,40 +322,17 @@ module ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        var parseStart = new Date().getTime();
+        ts.parseTime = 0;
+        ts.bindTime = 0;
+        ts.checkTime = 0;
+        ts.emitTime = 0;
+
+        var start = new Date().getTime();
+
         var program = createProgram(fileNames, compilerOptions, compilerHost);
+        var exitStatus = compileProgram();
 
-        var bindStart = new Date().getTime();
-        var errors: Diagnostic[] = program.getDiagnostics();
-        var exitStatus: EmitReturnStatus;
-
-        if (errors.length) {
-            var checkStart = bindStart;
-            var emitStart = bindStart;
-            var reportStart = bindStart;
-            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        }
-        else {
-            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
-            var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
-            if (program.isEmitBlocked()) {
-                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-            }
-            else if (compilerOptions.noEmit) {
-                exitStatus = EmitReturnStatus.Succeeded;
-            }
-            else {
-                var emitStart = new Date().getTime();
-                var emitOutput = program.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
-                var reportStart = new Date().getTime();
-                errors = concatenate(errors, emitErrors);
-            }
-        }
-
-        reportDiagnostics(errors);
+        var end = new Date().getTime() - start;
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -367,21 +344,65 @@ module ts {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
-            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportCountStatistic("Nodes", program.getNodeCount());
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
+
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
-            reportTimeStatistic("Parse time", bindStart - parseStart);
-            reportTimeStatistic("Bind time", checkStart - bindStart);
-            reportTimeStatistic("Check time", emitStart - checkStart);
-            reportTimeStatistic("Emit time", reportStart - emitStart);
-            reportTimeStatistic("Total time", reportStart - parseStart);
+
+            reportTimeStatistic("Parse time", ts.parseTime);
+            reportTimeStatistic("Bind time", ts.bindTime);
+            reportTimeStatistic("Check time", ts.checkTime);
+            reportTimeStatistic("Emit time", ts.emitTime);
+            reportTimeStatistic("Total time", end);
         }
 
         return { program, exitStatus };
+
+        function compileProgram(): ExitStatus {
+            // First get any syntactic errors. 
+            var diagnostics = program.getSyntacticDiagnostics();
+            reportDiagnostics(diagnostics);
+
+            // If we didn't have any syntactic errors, then also try getting the global and 
+            // semantic errors.
+            if (diagnostics.length === 0) {
+                var diagnostics = program.getGlobalDiagnostics();
+                reportDiagnostics(diagnostics);
+
+                if (diagnostics.length === 0) {
+                    var diagnostics = program.getSemanticDiagnostics();
+                    reportDiagnostics(diagnostics);
+                }
+            }
+
+            // If the user doesn't want us to emit, then we're done at this point.
+            if (compilerOptions.noEmit) {
+                return diagnostics.length
+                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
+                    : ExitStatus.Success;
+            }
+
+            // Otherwise, emit and report any errors we ran into.
+            var emitOutput = program.emit();
+            reportDiagnostics(emitOutput.diagnostics);
+
+            // If the emitter didn't emit anything, then pass that value along.
+            if (emitOutput.emitSkipped) {
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            }
+
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+                ExitStatus.DiagnosticsPresent_OutputsGenerated;
+            }
+
+            return ExitStatus.Success;
+        }
     }
 
     function printVersion() {

@@ -19,6 +19,7 @@
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
+/// <reference path='runnerbase.ts'/>
 
 declare var require: any;
 declare var process: any;
@@ -183,7 +184,7 @@ module Utils {
         return {
             start: diagnostic.start,
             length: diagnostic.length,
-            messageText: diagnostic.messageText,
+            messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine),
             category: (<any>ts).DiagnosticCategory[diagnostic.category],
             code: diagnostic.code
         };
@@ -305,7 +306,9 @@ module Utils {
 
             assert.equal(d1.start, d2.start, "d1.start !== d2.start");
             assert.equal(d1.length, d2.length, "d1.length !== d2.length");
-            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(
+                ts.flattenDiagnosticMessageText(d1.messageText, ts.sys.newLine),
+                ts.flattenDiagnosticMessageText(d2.messageText, ts.sys.newLine), "d1.messageText !== d2.messageText");
             assert.equal(d1.category, d2.category, "d1.category !== d2.category");
             assert.equal(d1.code, d2.code, "d1.code !== d2.code");
         }
@@ -689,8 +692,6 @@ module Harness {
     }
 }
 
-
-
 module Harness {
     var tcServicesFileName = "typescriptServices.js";
 
@@ -794,10 +795,18 @@ module Harness {
             }
         }
 
-        export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants = true) {
+            // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
+            var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+            if (assertInvariants) {
+                Utils.assertInvariants(result, /*parent:*/ undefined);
+            }
+            return result;
+        }
 
+        export var defaultLibFileName = 'lib.d.ts';
+        export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFileName = 'fourslash.ts';
@@ -826,7 +835,7 @@ module Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     var fileName = ts.normalizeSlashes(file.unitName);
-                    filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, scriptTarget);
+                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                 }
             };
             inputFiles.forEach(register);
@@ -843,7 +852,7 @@ module Harness {
                     }
                     else if (fn === fourslashFileName) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
-                        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
+                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                         return fourslashSourceFile;
                     }
                     else {
@@ -919,7 +928,8 @@ module Harness {
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-                currentDirectory?: string) {
+                currentDirectory?: string,
+                assertInvariants = true) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
@@ -1067,37 +1077,29 @@ module Harness {
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
                         var fileName = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, file.content, options.target);
+                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target, assertInvariants);
                     }
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
 
                 var fileOutputs: GeneratedFile[] = [];
-
+                
                 var programFiles = inputFiles.map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
-                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
-
-                var isEmitBlocked = program.isEmitBlocked();
-
-                // only emit if there weren't parse errors
-                var emitResult: ts.EmitResult;
-                if (!isEmitBlocked) {
-                    emitResult = program.emitFiles();
-                }
+                var emitResult = program.emit();
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
+                ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });
                 this.lastErrors = errors;
 
-                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
+                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
                 onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
@@ -1189,7 +1191,7 @@ module Harness {
                 end: err.start + err.length,
                 line: errorLineInfo.line,
                 character: errorLineInfo.character,
-                message: err.messageText,
+                message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
                 category: ts.DiagnosticCategory[err.category].toLowerCase(),
                 code: err.code
             };

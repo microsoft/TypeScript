@@ -1,5 +1,6 @@
 ﻿/// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='harness.ts' />
 
 module Harness.LanguageService {
     export class ScriptInfo {
@@ -54,12 +55,11 @@ module Harness.LanguageService {
         }
     }
 
-    class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
-        private lineMap: number[] = null;
-        private textSnapshot: string;
-        private version: number;
+    class ScriptSnapshot implements ts.IScriptSnapshot {
+        public textSnapshot: string;
+        public version: number;
 
-        constructor(private scriptInfo: ScriptInfo) {
+        constructor(public scriptInfo: ScriptInfo) {
             this.textSnapshot = scriptInfo.content;
             this.version = scriptInfo.version;
         }
@@ -72,9 +72,28 @@ module Harness.LanguageService {
             return this.textSnapshot.length;
         }
 
+        public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
+            var oldShim = <ScriptSnapshot>oldScript;
+            return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+        }
+    }
+
+    class ScriptSnapshotProxy implements ts.ScriptSnapshotShim {
+        constructor(public scriptSnapshot: ts.IScriptSnapshot) {
+        }
+
+        public getText(start: number, end: number): string {
+            return this.scriptSnapshot.getText(start, end);
+        }
+
+        public getLength(): number {
+            return this.scriptSnapshot.getLength();
+        }
+
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
-            var oldShim = <ScriptSnapshotShim>oldScript;
-            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+            var oldShim = <ScriptSnapshotProxy>oldScript;
+
+            var range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
             if (range === null) {
                 return null;
             }
@@ -94,69 +113,36 @@ module Harness.LanguageService {
         }
     }
 
-    export class NonCachingDocumentRegistry implements ts.DocumentRegistry {
-        public static Instance: ts.DocumentRegistry = new NonCachingDocumentRegistry();
-
-        public acquireDocument(
-            fileName: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: ts.IScriptSnapshot,
-            version: string): ts.SourceFile {
-            var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
-            sourceFile.version = version;
-            return sourceFile;
-        }
-
-        public updateDocument(
-            document: ts.SourceFile,
-            fileName: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: ts.IScriptSnapshot,
-            version: string,
-            textChangeRange: ts.TextChangeRange
-            ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
-        }
-
-        public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
-            // no op since this class doesn't cache anything
-        }
+    export interface LanguageServiceAdapter {
+        getHost(): LanguageServiceAdapterHost;
+        getLanguageService(): ts.LanguageService;
+        getClassifier(): ts.Classifier;
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
     }
-    export class TypeScriptLS implements ts.LanguageServiceShimHost {
-        private ls: ts.LanguageServiceShim = null;
 
-        private fileNameToScript: ts.Map<ScriptInfo> = {};
-        private settings: ts.CompilerOptions = {};
-
-        constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
+    export class LanguageServiceAdapterHost  {
+        protected fileNameToScript: ts.Map<ScriptInfo> = {};
+        
+        constructor(protected cancellationToken: ts.CancellationToken = CancellationToken.None,
+            protected settings = ts.getDefaultCompilerOptions()) { 
         }
 
-        public trace(s: string) {
+        public getNewLine(): string {
+            return "\r\n";
         }
 
-        public addDefaultLibrary() {
-            this.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+        public getFilenames(): string[] {
+            var fileNames: string[] = [];
+            ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });
+            return fileNames;
         }
 
-        public getHostIdentifier(): string {
-            return "TypeScriptLS";
-        }
-
-        public addFile(fileName: string) {
-            var code = Harness.IO.readFile(fileName);
-            this.addScript(fileName, code);
-        }
-
-        private getScriptInfo(fileName: string): ScriptInfo {
+        public getScriptInfo(fileName: string): ScriptInfo {
             return ts.lookUp(this.fileNameToScript, fileName);
         }
 
-        public addScript(fileName: string, content: string) {
+        public addScript(fileName: string, content: string): void {
             this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
-        }
-
-        private contains(fileName: string): boolean {
-            return ts.hasProperty(this.fileNameToScript, fileName);
         }
 
         public updateScript(fileName: string, content: string) {
@@ -179,107 +165,10 @@ module Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        //////////////////////////////////////////////////////////////////////
-        // ILogger implementation
-        //
-        public information(): boolean { return false; }
-        public debug(): boolean { return true; }
-        public warning(): boolean { return true; }
-        public error(): boolean { return true; }
-        public fatal(): boolean { return true; }
-
-        public log(s: string): void {
-            // For debugging...
-            //TypeScript.Environment.standardOut.WriteLine("TypeScriptLS:" + s);
-        }
-
-        //////////////////////////////////////////////////////////////////////
-        // LanguageServiceShimHost implementation
-        //
-
-        /// Returns json for Tools.CompilationSettings
-        public getCompilationSettings(): string {
-            return JSON.stringify(this.settings);
-        }
-
-        public getCancellationToken(): ts.CancellationToken {
-            return this.cancellationToken;
-        }
-
-        public getCurrentDirectory(): string {
-            return "";
-        }
-
-        public getDefaultLibFileName(): string {
-            return "";
-        }
-
-        public getScriptFileNames(): string {
-            var fileNames: string[] = [];
-            ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });
-            return JSON.stringify(fileNames);
-        }
-
-        public getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
-            if (this.contains(fileName)) {
-                return new ScriptSnapshotShim(this.getScriptInfo(fileName));
-            }
-            return undefined;
-        }
-
-        public getScriptVersion(fileName: string): string {
-            if (this.contains(fileName)) {
-                return this.getScriptInfo(fileName).version.toString();
-            }
-            return undefined;
-        }
-
-        public getLocalizedDiagnosticMessages(): string {
-            return JSON.stringify({});
-        }
-
-        /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
-         *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
-         */
-        public getLanguageService(): ts.LanguageServiceShim {
-            this.ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
-            return this.ls;
-        }
-
-        public setCompilationSettings(settings: ts.CompilerOptions) {
-            for (var key in settings) {
-                if (settings.hasOwnProperty(key)) {
-                    this.settings[key] = settings[key];
-                }
-            }
-        }
-
-        /** Return a new instance of the classifier service shim */
-        public getClassifier(): ts.ClassifierShim {
-            return new TypeScript.Services.TypeScriptServicesFactory().createClassifierShim(this);
-        }
-
-        public getCoreService(): ts.CoreServicesShim {
-            return new TypeScript.Services.TypeScriptServicesFactory().createCoreServicesShim(this);
-        }
-
-        /** Parse file given its source text */
-        public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
-            var result = ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
-            result.version = "1";
-            return result;
-        }
-
-        /** Parse a file on disk given its fileName */
-        public parseFile(fileName: string) {
-            var sourceText = ts.ScriptSnapshot.fromString(Harness.IO.readFile(fileName));
-            return this.parseSourceText(fileName, sourceText);
-        }
-
         /**
-         * @param line 1 based index
-         * @param col 1 based index
-        */
+          * @param line 1 based index
+          * @param col 1 based index
+          */
         public lineColToPosition(fileName: string, line: number, col: number): number {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
@@ -290,9 +179,9 @@ module Harness.LanguageService {
         }
 
         /**
-         * @param line 0 based index
-         * @param col 0 based index
-        */
+          * @param line 0 based index
+          * @param col 0 based index
+          */
         public positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
@@ -303,105 +192,254 @@ module Harness.LanguageService {
             assert.isTrue(result.character >= 1);
             return { line: result.line - 1, character: result.character - 1 };
         }
+    }
 
-        /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextChange[]) {
-            var script = Harness.IO.readFile(sourceFileName);
-            var formattedScript = this.applyEdits(script, edits);
-            var baseline = Harness.IO.readFile(baselineFileName);
+    /// Native adapter
+    class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost { 
+        getCompilationSettings(): ts.CompilerOptions { return this.settings; }
+        getCancellationToken(): ts.CancellationToken { return this.cancellationToken; }
+        getCurrentDirectory(): string { return ""; }
+        getDefaultLibFileName(): string { return ""; }
+        getScriptFileNames(): string[] { return this.getFilenames(); }
+        getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
+            var script = this.getScriptInfo(fileName);
+            return script ? new ScriptSnapshot(script) : undefined;
+        }
+        getScriptVersion(fileName: string): string {
+            var script = this.getScriptInfo(fileName);
+            return script ? script.version.toString() : undefined;
+        }
+        log(s: string): void { }
+        trace(s: string): void { }
+        error(s: string): void { }
+    }
 
-            function noDiff(text1: string, text2: string) {
-                text1 = text1.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
-                text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
+    export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
+        private host: NativeLanguageServiceHost;
+        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) { 
+            this.host = new NativeLanguageServiceHost(cancellationToken, options);
+        }
+        getHost() { return this.host; }
+        getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
+        getClassifier(): ts.Classifier { return ts.createClassifier(); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
+    }
 
-                if (text1 !== text2) {
-                    var errorString = "";
-                    var text1Lines = text1.split(/\n/);
-                    var text2Lines = text2.split(/\n/);
-                    for (var i = 0; i < text1Lines.length; i++) {
-                        if (text1Lines[i] !== text2Lines[i]) {
-                            errorString += "Difference at line " + (i + 1) + ":\n";
-                            errorString += "                  Left File: " + text1Lines[i] + "\n";
-                            errorString += "                 Right File: " + text2Lines[i] + "\n\n";
-                        }
-                    }
-                    throw (new Error(errorString));
-                }
-            }
-            assert.isTrue(noDiff(formattedScript, baseline));
-            assert.equal(formattedScript, baseline);
+    /// Shim adapter
+    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost {
+        private nativeHost: NativeLanguageServiceHost;
+        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+            super(cancellationToken, options);
+            this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
         }
 
+        getFilenames(): string[] { return this.nativeHost.getFilenames(); }
+        getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
+        addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
+        updateScript(fileName: string, content: string): void { return this.nativeHost.updateScript(fileName, content); }
+        editScript(fileName: string, minChar: number, limChar: number, newText: string): void { this.nativeHost.editScript(fileName, minChar, limChar, newText); }
+        lineColToPosition(fileName: string, line: number, col: number): number { return this.nativeHost.lineColToPosition(fileName, line, col); }
+        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToZeroBasedLineCol(fileName, position); }
 
-        /** Apply an array of text edits to a string, and return the resulting string. */
-        public applyEdits(content: string, edits: ts.TextChange[]): string {
-            var result = content;
-            edits = this.normalizeEdits(edits);
-
-            for (var i = edits.length - 1; i >= 0; i--) {
-                var edit = edits[i];
-                var prefix = result.substring(0, edit.span.start);
-                var middle = edit.newText;
-                var suffix = result.substring(ts.textSpanEnd(edit.span));
-                result = prefix + middle + suffix;
-            }
-            return result;
+        getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
+        getCancellationToken(): ts.CancellationToken { return this.nativeHost.getCancellationToken(); }
+        getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
+        getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
+        getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
+        getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
+            var nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
+            return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot); 
         }
+        getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
+        getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
+        log(s: string): void { this.nativeHost.log(s); }
+        trace(s: string): void { this.nativeHost.trace(s); }
+        error(s: string): void { this.nativeHost.error(s); }
+    }
 
-        /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        private normalizeEdits(edits: ts.TextChange[]): ts.TextChange[] {
-            var result: ts.TextChange[] = [];
+    class ClassifierShimProxy implements ts.Classifier { 
+        constructor(private shim: ts.ClassifierShim) {
+        }
+        getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
+            var result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split('\n');
+            var entries: ts.ClassificationInfo[] = [];
+            var i = 0;
+            var position = 0;
 
-            function mapEdits(edits: ts.TextChange[]): { edit: ts.TextChange; index: number; }[] {
-                var result: { edit: ts.TextChange; index: number; }[] = [];
-                for (var i = 0; i < edits.length; i++) {
-                    result.push({ edit: edits[i], index: i });
-                }
-                return result;
+            for (; i < result.length - 1; i += 2) {
+                var t = entries[i / 2] = {
+                    length: parseInt(result[i]),
+                    classification: parseInt(result[i + 1])
+                };
+
+                assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
+                position += t.length;
             }
+            var finalLexState = parseInt(result[result.length - 1]);
 
-            var temp = mapEdits(edits).sort(function (a, b) {
-                var result = a.edit.span.start - b.edit.span.start;
-                if (result === 0)
-                    result = a.index - b.index;
-                return result;
+            assert.equal(position, text.length, "Expected cumulative length of all entries to match the length of the source. expected: " + text.length + ", but got: " + position);
+
+            return {
+                finalLexState,
+                entries
+            };
+        }
+    }
+
+    function unwrapJSONCallResult(result: string): any {
+        var parsedResult = JSON.parse(result);
+        if (parsedResult.error) {
+            throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
+        }
+        else if (parsedResult.canceled) { 
+            throw new ts.OperationCanceledException();
+        }
+        return parsedResult.result;
+    }
+
+    class LanguageServiceShimProxy implements ts.LanguageService {
+        constructor(private shim: ts.LanguageServiceShim) {
+        }
+        private unwrappJSONCallResult(result: string): any {
+            var parsedResult = JSON.parse(result);
+            if (parsedResult.error) {
+                throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
+            }
+            return parsedResult.result;
+        }
+        cleanupSemanticCache(): void {
+            this.shim.cleanupSemanticCache();
+        }
+        getSyntacticDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
+        }
+        getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
+        }
+        getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
+        }
+        getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
+            return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
+        }
+        getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
+            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
+        }
+        getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
+        }
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
+            return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
+        }
+        getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
+            return unwrapJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
+        }
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): ts.TextSpan {
+            return unwrapJSONCallResult(this.shim.getNameOrDottedNameSpan(fileName, startPos, endPos));
+        }
+        getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
+            return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
+        }
+        getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
+            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
+        }
+        getRenameInfo(fileName: string, position: number): ts.RenameInfo {
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
+        }
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
+            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+        }
+        getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
+            return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
+        }
+        getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
+            return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
+        }
+        getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
+            return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
+        }
+        getNavigateToItems(searchValue: string): ts.NavigateToItem[] {
+            return unwrapJSONCallResult(this.shim.getNavigateToItems(searchValue));
+        }
+        getNavigationBarItems(fileName: string): ts.NavigationBarItem[] {
+            return unwrapJSONCallResult(this.shim.getNavigationBarItems(fileName));
+        }
+        getOutliningSpans(fileName: string): ts.OutliningSpan[] {
+            return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
+        }
+        getTodoComments(fileName: string, descriptors: ts.TodoCommentDescriptor[]): ts.TodoComment[] {
+            return unwrapJSONCallResult(this.shim.getTodoComments(fileName, JSON.stringify(descriptors)));
+        }
+        getBraceMatchingAtPosition(fileName: string, position: number): ts.TextSpan[] {
+            return unwrapJSONCallResult(this.shim.getBraceMatchingAtPosition(fileName, position));
+        }
+        getIndentationAtPosition(fileName: string, position: number, options: ts.EditorOptions): number {
+            return unwrapJSONCallResult(this.shim.getIndentationAtPosition(fileName, position, JSON.stringify(options)));
+        }
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.getFormattingEditsForRange(fileName, start, end, JSON.stringify(options)));
+        }
+        getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.getFormattingEditsForDocument(fileName, JSON.stringify(options)));
+        }
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
+        }
+        getEmitOutput(fileName: string): ts.EmitOutput {
+            return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
+        }
+        getProgram(): ts.Program {
+            throw new Error("Program can not be marshaled across the shim layer.");
+        }
+        getSourceFile(fileName: string): ts.SourceFile {
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
+        }
+        dispose(): void { this.shim.dispose({}); }
+    }
+
+    export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
+        private host: ShimLanguageServiceHost;
+        private factory: ts.TypeScriptServicesFactory;
+        constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
+            this.host = new ShimLanguageServiceHost(cancellationToken, options);
+            this.factory = new TypeScript.Services.TypeScriptServicesFactory();
+        }
+        getHost() { return this.host; }
+        getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
+        getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
+            var shimResult: {
+                referencedFiles: ts.IFileReference[];
+                importedFiles: ts.IFileReference[];
+                isLibFile: boolean;
+            };
+
+            var coreServicesShim = this.factory.createCoreServicesShim(this.host);
+            shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
+
+            var convertResult: ts.PreProcessedFileInfo = {
+                referencedFiles: [],
+                importedFiles: [],
+                isLibFile: shimResult.isLibFile
+            };
+
+            ts.forEach(shimResult.referencedFiles, refFile => {
+                convertResult.referencedFiles.push({
+                    fileName: refFile.path,
+                    pos: refFile.position,
+                    end: refFile.position + refFile.length
+                });
             });
 
-            var current = 0;
-            var next = 1;
-            while (current < temp.length) {
-                var currentEdit = temp[current].edit;
+            ts.forEach(shimResult.importedFiles, importedFile => {
+                convertResult.importedFiles.push({
+                    fileName: importedFile.path,
+                    pos: importedFile.position,
+                    end: importedFile.position + importedFile.length
+                });
+            });
 
-                // Last edit
-                if (next >= temp.length) {
-                    result.push(currentEdit);
-                    current++;
-                    continue;
-                }
-                var nextEdit = temp[next].edit;
-
-                var gap = nextEdit.span.start - ts.textSpanEnd(currentEdit.span);
-
-                // non-overlapping edits
-                if (gap >= 0) {
-                    result.push(currentEdit);
-                    current = next;
-                    next++;
-                    continue;
-                }
- 
-                // overlapping edits: for now, we only support ignoring an next edit 
-                // entirely contained in the current edit.
-                if (ts.textSpanEnd(currentEdit.span) >= ts.textSpanEnd(nextEdit.span)) {
-                    next++;
-                    continue;
-                }
-                else {
-                    throw new Error("Trying to apply overlapping edits");
-                }
-            }
-
-            return result;
+            return convertResult;
         }
     }
 }
