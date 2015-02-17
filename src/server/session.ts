@@ -18,7 +18,7 @@ module ts.server {
                 strBuilder += " ";
             }
             spaceCache[n] = strBuilder;
-        }
+        }  
         return spaceCache[n];
     }
 
@@ -54,6 +54,7 @@ module ts.server {
     }
 
     function sortNavItems(items: ts.NavigateToItem[]) {
+        
         return items.sort((a, b) => {
             if (a.matchKind < b.matchKind) {
                 return -1;
@@ -77,17 +78,6 @@ module ts.server {
         })
     }
        
-    interface FileRange {
-        file?: string;
-        start: ILineInfo;
-        end: ILineInfo;
-    }
-
-    interface FileRanges {
-        file: string;
-        locs: FileRange[];
-    }
-
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
             start: project.compilerService.host.positionToLineCol(fileName, diag.start),
@@ -283,7 +273,7 @@ module ts.server {
             }));
         }
 
-        getRenameLocations(line: number, col: number, fileName: string, findInComments: boolean, findInStrings: boolean): { info: RenameInfo; locs: ts.server.protocol.CodeSpan[] } {
+        getRenameLocations(line: number, col: number, fileName: string,findInComments: boolean, findInStrings: boolean): ts.server.protocol.RenameResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -313,7 +303,40 @@ module ts.server {
                 file: location.fileName,
                 start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
                 end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan)),
-            }));
+            })).sort((a, b) => {
+                if (a.file < b.file) {
+                    return -1;
+                }
+                else if (a.file > b.file) {
+                    return 1;
+                }
+                else {
+                    // reverse sort assuming no overlap
+                    if (a.start.line < b.start.line) {
+                        return 1;
+                    }
+                    else if (a.start.line > b.start.line) {
+                        return -1;
+                    }
+                    else {
+                        return b.start.col - a.start.col;
+                    }
+                }
+            }).reduce<ts.server.protocol.SpanGroup[]>((accum: ts.server.protocol.SpanGroup[], cur: ts.server.protocol.CodeSpan) => {
+                var curFileAccum: ts.server.protocol.SpanGroup;
+                if (accum.length > 0) {
+                    curFileAccum = accum[accum.length - 1];
+                    if (curFileAccum.file != cur.file) {
+                        curFileAccum = undefined;
+                    }
+                }
+                if (!curFileAccum) {
+                    curFileAccum = { file: cur.file, locs: [] };
+                    accum.push(curFileAccum);
+                }
+                curFileAccum.locs.push({ start: cur.start, end: cur.end });
+                return accum;
+            }, []);
 
             return { info: renameInfo, locs: bakedRenameLocs };
         }

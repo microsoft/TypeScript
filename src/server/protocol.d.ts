@@ -247,7 +247,7 @@ declare module ts.server.protocol {
         /**
           * Error message if item can not be renamed.
           */
-        localizedErrorMessage: string;
+        localizedErrorMessage?: string;
 
         /**
           * Display name of the item to be renamed.
@@ -271,20 +271,32 @@ declare module ts.server.protocol {
     }
 
     /**
+     *  A group of text spans, all in 'file'.
+     */
+    export interface SpanGroup {
+        /** The file to which the spans apply */
+        file: string;
+        /** The text spans in this group */
+        locs: TextSpan[];
+    }
+
+    export interface RenameResponseBody {
+        /**
+         * Information about the item to be renamed.
+         */
+        info: RenameInfo;
+
+        /**
+         * An array of span groups (one per file) that refer to the item to be renamed.
+         */
+        locs: SpanGroup[];
+    }
+
+    /**
       * Rename response message.
       */
     export interface RenameResponse extends Response {
-        body?: {
-            /**
-              * Information about the item to be renamed.
-              */
-            info: RenameInfo;
-
-            /**
-              * An array of code locations that refer to the item to be renamed.
-              */
-            locs: CodeSpan[];
-        }
+        body?: RenameResponseBody;
     }
 
     /**

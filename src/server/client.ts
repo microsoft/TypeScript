@@ -348,7 +348,18 @@ module ts.server {
 
             var request = this.processRequest<ts.server.protocol.RenameRequest>(CommandNames.Rename, args);
             var response = this.processResponse<ts.server.protocol.RenameResponse>(request);
-
+            var locations: RenameLocation[] = [];
+            response.body.locs.map((entry: ts.server.protocol.SpanGroup) => {
+                var fileName = entry.file;
+                entry.locs.map((loc: ts.server.protocol.TextSpan) => {
+                    var start = this.lineColToPosition(fileName, loc.start);
+                    var end = this.lineColToPosition(fileName, loc.end);
+                    locations.push({
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        fileName: fileName
+                    });
+                });
+            });
             return this.lastRenameEntry = {
                 canRename: response.body.info.canRename,
                 displayName: response.body.info.displayName,
@@ -361,15 +372,7 @@ module ts.server {
                 position: position,
                 findInStrings: findInStrings,
                 findInComments: findInComments,
-                locations: response.body.locs.map((entry) => {
-                    var fileName = entry.file;
-                    var start = this.lineColToPosition(fileName, entry.start);
-                    var end = this.lineColToPosition(fileName, entry.end);
-                    return {
-                        textSpan: ts.createTextSpanFromBounds(start, end),
-                        fileName: fileName
-                    };
-                })
+                locations: locations
             };
         }
 
