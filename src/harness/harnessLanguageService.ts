@@ -166,19 +166,6 @@ module Harness.LanguageService {
         }
 
         /**
-          * @param line 1 based index
-          * @param col 1 based index
-          */
-        public lineColToPosition(fileName: string, line: number, col: number): number {
-            var script: ScriptInfo = this.fileNameToScript[fileName];
-            assert.isNotNull(script);
-            assert.isTrue(line >= 1);
-            assert.isTrue(col >= 1);
-
-            return ts.computePositionOfOneBasedLineAndCharacter(script.lineMap, line, col);
-        }
-
-        /**
           * @param line 0 based index
           * @param col 0 based index
           */
@@ -234,7 +221,6 @@ module Harness.LanguageService {
         addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
         updateScript(fileName: string, content: string): void { return this.nativeHost.updateScript(fileName, content); }
         editScript(fileName: string, minChar: number, limChar: number, newText: string): void { this.nativeHost.editScript(fileName, minChar, limChar, newText); }
-        lineColToPosition(fileName: string, line: number, col: number): number { return this.nativeHost.lineColToPosition(fileName, line, col); }
         positionToZeroBasedLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToZeroBasedLineAndCharacter(fileName, position); }
 
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
