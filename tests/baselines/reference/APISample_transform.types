@@ -177,7 +177,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 >diagnostics : ts.Diagnostic[]
 
     return {
->{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
+>{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
 
         outputs: outputs,
 >outputs : any[]
@@ -185,30 +185,32 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 
         errors: errors.map(function (e) {
 >errors : string[]
->errors.map(function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
+>errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
 >errors.map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
 >errors : ts.Diagnostic[]
 >map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
+>function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
 >e : ts.Diagnostic
 
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " : string
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line : string
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " : string
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) : string
 >e.file.fileName + "(" : string
 >e.file.fileName : string
 >e.file : ts.SourceFile
 >e : ts.Diagnostic
 >file : ts.SourceFile
 >fileName : string
->e.file.getLineAndCharacterFromPosition(e.start).line : number
->e.file.getLineAndCharacterFromPosition(e.start) : ts.LineAndCharacter
->e.file.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>(e.file.getLineAndCharacterOfPosition(e.start).line + 1) : number
+>e.file.getLineAndCharacterOfPosition(e.start).line + 1 : number
+>e.file.getLineAndCharacterOfPosition(e.start).line : number
+>e.file.getLineAndCharacterOfPosition(e.start) : ts.LineAndCharacter
+>e.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >e.file : ts.SourceFile
 >e : ts.Diagnostic
 >file : ts.SourceFile
->getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >e.start : number
 >e : ts.Diagnostic
 >start : number
@@ -4464,15 +4466,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromOneBasedLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionOfLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromOneBasedLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionOfLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -4482,8 +4484,8 @@ declare module "typescript" {
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 
-    function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number): {
->computeOneBasedLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+>computeLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
 >lineStarts : number[]
 >position : number
 
@@ -4494,8 +4496,8 @@ declare module "typescript" {
 >character : number
 
     };
-    function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
->getOneBasedLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (sourceFile: SourceFile, position: number) => LineAndCharacter
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >position : number
@@ -4831,16 +4833,16 @@ declare module "typescript" {
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
 
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number
 >LineAndCharacter : LineAndCharacter
 
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
->getPositionFromOneBasedLineAndCharacter : (line: number, character: number) => number
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+>getPositionOfLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 

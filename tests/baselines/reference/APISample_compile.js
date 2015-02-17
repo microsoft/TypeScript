@@ -21,8 +21,8 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
 
     allDiagnostics.forEach(diagnostic => {
-        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
+        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
     });
 
     var exitCode = emitResult.emitSkipped ? 1 : 0;
@@ -1384,14 +1384,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
-    function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1469,9 +1469,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -1946,8 +1946,8 @@ function compile(fileNames, options) {
     var emitResult = program.emit();
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
     allDiagnostics.forEach(function (diagnostic) {
-        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL));
+        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        console.log(diagnostic.file.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL));
     });
     var exitCode = emitResult.emitSkipped ? 1 : 0;
     console.log("Process exiting with code '" + exitCode + "'.");

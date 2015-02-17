@@ -54,7 +54,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
                                    + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
@@ -1416,14 +1416,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
-    function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1501,9 +1501,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -2005,7 +2005,7 @@ function transform(contents, compilerOptions) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
 }

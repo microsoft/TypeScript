@@ -51,8 +51,8 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 
     function report(node: ts.Node, message: string) {
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
     }
 }
 
@@ -1415,14 +1415,14 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
-    function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
         character: number;
     };
-    function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
@@ -1500,9 +1500,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -2003,8 +2003,8 @@ function delint(sourceFile) {
         ts.forEachChild(node, delintNode);
     }
     function report(node, message) {
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(sourceFile.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + message);
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(sourceFile.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + message);
     }
 }
 exports.delint = delint;
