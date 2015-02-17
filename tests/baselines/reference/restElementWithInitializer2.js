@@ -7,4 +7,4 @@ var x: number[];
 //// [restElementWithInitializer2.js]
 var a;
 var x;
-x = a = a.slice(0); // Error, rest element cannot have initializer
+; // Error, rest element cannot have initializer

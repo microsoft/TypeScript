@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/variableDeclarations/VariableDeclaration7_es6.ts(1,1): error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
-
-
-==== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration7_es6.ts (1 errors) ====
-    let a
-    ~~~
-!!! error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
