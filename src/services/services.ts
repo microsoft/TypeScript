@@ -5540,11 +5540,13 @@ module ts {
                     var declarations = symbol.getDeclarations();
                     if (declarations && declarations.length > 0) {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
-                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
-                        for (var i = 0; i < declarations.length; i++) {
-                            var sourceFile = declarations[i].getSourceFile();
-                            if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
-                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                        var defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+                        if (defaultLibFileName) {
+                            for (var i = 0; i < declarations.length; i++) {
+                                var sourceFile = declarations[i].getSourceFile();
+                                if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                }
                             }
                         }
 
@@ -5565,10 +5567,6 @@ module ts {
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
-
-            function endsWith(string: string, value: string): boolean {
-                return string.lastIndexOf(value) + value.length === string.length;
-            }
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
