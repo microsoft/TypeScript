@@ -34,8 +34,8 @@ module ts {
 
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getOneBasedLineAndCharacterOfPosition(position).line;
-        return lineStarts[line - 1];
+        var line = sourceFile.getZeroBasedLineAndCharacterOfPosition(position).line;
+        return lineStarts[line];
     }
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
