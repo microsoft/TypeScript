@@ -152,7 +152,10 @@ module ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        var commandLine = parseCommandLine(args);
+        return executeCommand(parseCommandLine(args));
+    }
+
+    export function executeCommand(commandLine: ParsedCommandLine): void {
         var configFileName: string;                 // Configuration file name (if any)
         var configFileWatcher: FileWatcher;         // Configuration file watcher
         var cachedProgram: Program;                 // Program cached from last compilation
