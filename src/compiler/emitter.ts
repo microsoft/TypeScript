@@ -1733,15 +1733,13 @@ module ts {
                     }
                 }
 
-                function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, pos: number) {
-                    var result = getZeroBasedLineAndCharacterOfPosition(sourceFile, pos);
-                    result.line++;
-                    result.character++;
-                    return result;
-                }
-
                 function recordSourceMapSpan(pos: number) {
-                    var sourceLinePos = getOneBasedLineAndCharacterOfPosition(currentSourceFile, pos);
+                    var sourceLinePos = getZeroBasedLineAndCharacterOfPosition(currentSourceFile, pos);
+
+                    // Convert the location to be one-based.
+                    sourceLinePos.line++;
+                    sourceLinePos.character++;
+
                     var emittedLine = writer.getLine();
                     var emittedColumn = writer.getColumn();
 

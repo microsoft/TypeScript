@@ -43,7 +43,7 @@ module ts.formatting {
 
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
-                    currentStart = getStartLineAndCharacterForNode(current, sourceFile);
+                    currentStart = getOneBasedStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
                         indentationDelta = 0;
@@ -196,14 +196,14 @@ module ts.formatting {
                 // class A {
                 // $}
 
-                var nextTokenStartLine = getStartLineAndCharacterForNode(nextToken, sourceFile).line;
+                var nextTokenStartLine = getOneBasedStartLineAndCharacterForNode(nextToken, sourceFile).line;
                 return lineAtPosition === nextTokenStartLine;
             }
 
             return false;
         }
 
-        function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
+        function getOneBasedStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
             return sourceFile.getOneBasedLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
 
@@ -216,7 +216,7 @@ module ts.formatting {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);
 
-                var elseKeywordStartLine = getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
+                var elseKeywordStartLine = getOneBasedStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
             }
 
@@ -286,7 +286,7 @@ module ts.formatting {
 
             // walk toward the start of the list starting from current node and check if the line is the same for all items.
             // if end line for item [i - 1] differs from the start line for item [i] - find column of the first non-whitespace character on the line of item [i]
-            var lineAndCharacter = getStartLineAndCharacterForNode(node, sourceFile);
+            var lineAndCharacter = getOneBasedStartLineAndCharacterForNode(node, sourceFile);
             for (var i = index - 1; i >= 0; --i) {
                 if (list[i].kind === SyntaxKind.CommaToken) {
                     continue;
@@ -297,7 +297,7 @@ module ts.formatting {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
 
-                lineAndCharacter = getStartLineAndCharacterForNode(list[i], sourceFile);
+                lineAndCharacter = getOneBasedStartLineAndCharacterForNode(list[i], sourceFile);
             }
             return -1;
         }
