@@ -69,22 +69,6 @@ module ts.server {
             };
         }
 
-        private decodeEncodedFileId(fileId: ts.server.protocol.EncodedFile): string {
-            var fileName: string;
-            if (typeof fileId === "object") {
-                fileName = (<ts.server.protocol.IdFile>fileId).file;
-                this.fileMapping[(<ts.server.protocol.IdFile>fileId).id] = fileName;
-            }
-            else if (typeof fileId === "number") {
-                fileName = ts.lookUp(this.fileMapping, fileId.toString());
-                Debug.assert(!!fileName, "Did not find filename in previous fileID mappings.");
-            }
-            else {
-                Debug.fail("Got unexpedted fileId type.");
-            }
-            return fileName;
-        }
-
         private processRequest<T extends ts.server.protocol.Request>(command: string, arguments?: any): T {
             var request: ts.server.protocol.Request = {
                 seq: this.sequence++,
@@ -232,7 +216,7 @@ module ts.server {
             var response = this.processResponse<ts.server.protocol.NavtoResponse>(request);
 
             return response.body.map(entry => {
-                var fileName = this.decodeEncodedFileId(entry.file);
+                var fileName = entry.file;
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 
@@ -299,7 +283,7 @@ module ts.server {
             var response = this.processResponse<ts.server.protocol.DefinitionResponse>(request);
 
             return response.body.map(entry => {
-                var fileName = this.decodeEncodedFileId(entry.file);
+                var fileName = entry.file;
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 return {
@@ -325,7 +309,7 @@ module ts.server {
             var response = this.processResponse<ts.server.protocol.ReferencesResponse>(request);
 
             return response.body.refs.map(entry => {
-                var fileName = this.decodeEncodedFileId(entry.file);
+                var fileName = entry.file;
                 var start = this.lineColToPosition(fileName, entry.start);
                 var end = this.lineColToPosition(fileName, entry.end);
                 return {
@@ -378,7 +362,7 @@ module ts.server {
                 findInStrings: findInStrings,
                 findInComments: findInComments,
                 locations: response.body.locs.map((entry) => {
-                    var fileName = this.decodeEncodedFileId(entry.file);
+                    var fileName = entry.file;
                     var start = this.lineColToPosition(fileName, entry.start);
                     var end = this.lineColToPosition(fileName, entry.end);
                     return {

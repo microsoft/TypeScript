@@ -153,11 +153,9 @@ declare module ts.server.protocol {
       */
     export interface CodeSpan extends TextSpan {
         /** 
-          * File containing the definition; the value of this
-          * field will always be a string, number of a mapping between
-          * a string and a number.
+          * File containing text span.
           */
-        file: EncodedFile;
+        file: string;
     }
 
     /**
@@ -675,11 +673,9 @@ declare module ts.server.protocol {
         kindModifiers?: string;
         
         /** 
-          * The file in which the symbol is found; the value of this
-          * field will always be a string, number of a mapping between
-          * a string and a number.
+          * The file in which the symbol is found.
           */
-        file: EncodedFile;
+        file: string;
         
         /**
           * The location within file at which the symbol is found.
@@ -735,34 +731,6 @@ declare module ts.server.protocol {
     export interface ChangeRequest extends CodeLocationRequest {
         arguments: ChangeRequestArgs;
     }
-
-    /**
-      * If an object of this type is returned in place of a string as
-      * the value of a file field in a response message, add the
-      * mapping id => file to the client's cache of file id mappings,
-      * and interpret the value as if it was the string in the 'file'
-      * field.
-      */
-    export interface IdFile {
-        /**
-          * Id to assign to file.
-          */
-        id: number;
-        
-        /** 
-          * File name that will correspond to id.
-          */
-        file: string;
-    }
-
-    /**
-      * The type of an encoded file name.  If of type number, the value
-      * is a file id.  If of type IdFile, the value is interpreted as
-      * 'file' and in addition the mapping 'id' to 'file' is
-      * established.  If of type string, the value is simply the file
-      * name.
-      */
-    export type EncodedFile = number | IdFile | string;
 
     /**
       * Response to "brace" request.

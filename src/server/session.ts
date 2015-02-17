@@ -5,10 +5,6 @@
 /// <reference path="editorServices.ts" />
 
 module ts.server {
-    var paddedLength = 8;
-
-    var typeNames = ["interface", "class", "enum", "module", "alias", "type"];
-
     var spaceCache = [" ", "  ", "   ", "    "];
 
     interface StackTraceError extends Error {
@@ -27,7 +23,7 @@ module ts.server {
     }
 
     interface FileStart {
-        file: ts.server.protocol.EncodedFile;
+        file: string;
         start: ILineInfo;
     }
 
@@ -204,18 +200,6 @@ module ts.server {
             this.send(res);
         }
 
-        encodeFileName(fileName: string): ts.server.protocol.EncodedFile {
-            var id = ts.lookUp(this.fileHash, fileName);
-            if (!id) {
-                id = this.nextFileId++;
-                this.fileHash[fileName] = id;
-                return { id: id, file: fileName };
-            }
-            else {
-                return id;
-            }
-        }
-
         output(body: any, commandName: string, requestSequence = 0, errorMessage?: string) {
             this.response(body, commandName, requestSequence, errorMessage);
         }
@@ -224,7 +208,7 @@ module ts.server {
             var diags = project.compilerService.languageService.getSemanticDiagnostics(file);
             if (diags) {
                 var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: this.encodeFileName(file), diagnostics: bakedDiags }, "semanticDiag");
+                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
             }
         }
 
@@ -232,7 +216,7 @@ module ts.server {
             var diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
             if (diags) {
                 var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: this.encodeFileName(file), diagnostics: bakedDiags }, "syntaxDiag");
+                this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
             }
         }
 
@@ -293,7 +277,7 @@ module ts.server {
             }
 
             return definitions.map(def => ({
-                file: this.encodeFileName(def.fileName),
+                file: def.fileName,
                 start: compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
                 end: compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
             }));
@@ -326,7 +310,7 @@ module ts.server {
             }
 
             var bakedRenameLocs = renameLocations.map(location => (<ts.server.protocol.CodeSpan>{
-                file: this.encodeFileName(location.fileName),
+                file: location.fileName,
                 start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
                 end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan)),
             }));
@@ -366,7 +350,7 @@ module ts.server {
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
                 var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                 return {
-                    file: this.encodeFileName(ref.fileName),
+                    file: ref.fileName,
                     start: start,
                     lineText: lineText,
                     end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
@@ -633,7 +617,7 @@ module ts.server {
                 var bakedItem: ts.server.protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
-                    file: this.encodeFileName(navItem.fileName),
+                    file: navItem.fileName,
                     start: start,
                     end: end,
                 };
