@@ -175,7 +175,7 @@ module Harness.LanguageService {
             assert.isTrue(line >= 1);
             assert.isTrue(col >= 1);
 
-            return ts.computePositionFromOneBasedLineAndCharacter(script.lineMap, line, col);
+            return ts.computePositionOfOneBasedLineAndCharacter(script.lineMap, line, col);
         }
 
         /**

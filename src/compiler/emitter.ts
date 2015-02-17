@@ -173,12 +173,12 @@ module ts {
             var lastLine = getLineStarts(currentSourceFile).length;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : getPositionFromOneBasedLineAndCharacter(currentSourceFile, currentLine + 1, /*character*/1);
+                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : getPositionOfOneBasedLineAndCharacter(currentSourceFile, currentLine + 1, /*character*/1);
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getPositionFromOneBasedLineAndCharacter(currentSourceFile, firstCommentLineAndCharacter.line, /*character*/1),
+                        firstCommentLineIndent = calculateIndent(getPositionOfOneBasedLineAndCharacter(currentSourceFile, firstCommentLineAndCharacter.line, /*character*/1),
                             comment.pos);
                     }
 

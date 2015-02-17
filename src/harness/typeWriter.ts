@@ -85,7 +85,7 @@ class TypeWriterWalker {
 
     private log(node: ts.Node, type: ts.Type): void {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
-        var lineAndCharacter = this.currentSourceFile.getOneBasedLineAndCharacterFromPosition(actualPos);
+        var lineAndCharacter = this.currentSourceFile.getOneBasedLineAndCharacterOfPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
         
         // If we got an unknown type, we temporarily want to fall back to just pretending the name

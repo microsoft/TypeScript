@@ -61,9 +61,10 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getOneBasedLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getZeroBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getOneBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromOneBasedLineAndCharacter(line: number, character: number): number;
+        getPositionOfOneBasedLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -612,7 +613,7 @@ module ts {
                     }
 
                     if (paramHelpStringMargin === undefined) {
-                        paramHelpStringMargin = sourceFile.getOneBasedLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
+                        paramHelpStringMargin = sourceFile.getOneBasedLineAndCharacterOfPosition(firstLineParamHelpStringPos).character - 1;
                     }
 
                     // Now consume white spaces max 
@@ -750,16 +751,20 @@ module ts {
             return updateSourceFile(this, newText, textChangeRange);
         }
 
-        public getOneBasedLineAndCharacterFromPosition(position: number): LineAndCharacter {
-            return getOneBasedLineAndCharacterOfPosition(this, position);
+        public getZeroBasedLineAndCharacterOfPosition(position: number): LineAndCharacter {
+            return ts.getZeroBasedLineAndCharacterOfPosition(this, position);
+        }
+
+        public getOneBasedLineAndCharacterOfPosition(position: number): LineAndCharacter {
+            return ts.getOneBasedLineAndCharacterOfPosition(this, position);
         }
 
         public getLineStarts(): number[] {
             return getLineStarts(this);
         }
 
-        public getPositionFromOneBasedLineAndCharacter(line: number, character: number): number {
-            return getPositionFromOneBasedLineAndCharacter(this, line, character);
+        public getPositionOfOneBasedLineAndCharacter(line: number, character: number): number {
+            return ts.getPositionOfOneBasedLineAndCharacter(this, line, character);
         }
 
         public getNamedDeclarations() {

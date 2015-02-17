@@ -278,15 +278,15 @@ module ts {
         return result;
     }
 
-    export function getPositionFromZeroBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionFromOneBasedLineAndCharacter(getLineStarts(sourceFile), line + 1, character + 1);
+    export function getPositionOfZeroBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+        return computePositionOfOneBasedLineAndCharacter(getLineStarts(sourceFile), line + 1, character + 1);
     }
 
-    export function getPositionFromOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionFromOneBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
+    export function getPositionOfOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+        return computePositionOfOneBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    export function computePositionFromOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+    export function computePositionOfOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number {
         Debug.assert(line > 0 && line <= lineStarts.length);
         return lineStarts[line - 1] + character - 1;
     }

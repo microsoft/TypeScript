@@ -39,7 +39,7 @@ module ts {
 
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getOneBasedLineAndCharacterFromPosition(position).line;
+        var line = sourceFile.getOneBasedLineAndCharacterOfPosition(position).line;
         return lineStarts[line - 1];
     }
 
