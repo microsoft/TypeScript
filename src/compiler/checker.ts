@@ -10355,7 +10355,13 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                return "exports." + unescapeIdentifier(symbol.name);
+                var symbolName = unescapeIdentifier(symbol.name);
+                if (isAMDOrCommonjsGen(compilerOptions, languageVersion)) {
+                    return "exports." + symbolName;
+                }
+                else {
+                    return symbolName;
+                }
             }
             var node = location;
             var containerSymbol = getParentOfSymbol(symbol);

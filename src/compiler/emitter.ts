@@ -3254,8 +3254,14 @@ module ts {
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
-                    emitContainingModuleName(node);
-                    write(".");
+                    var container = getContainingModule(node);
+                    if (container) {
+                        write(resolver.getGeneratedNameForNode(container));
+                        write(".");
+                    }
+                    else if (isAMDOrCommonjsGen(compilerOptions, languageVersion)) {
+                        write("exports.");
+                    }
                 }
                 emitNode(node.name);
                 emitEnd(node.name);

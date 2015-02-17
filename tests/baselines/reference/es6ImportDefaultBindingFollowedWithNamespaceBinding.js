@@ -10,7 +10,7 @@ var x: number = nameSpaceBinding.a;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.js]
-exports.a = 10;
+a = 10;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.js]
 import * as nameSpaceBinding from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
 var x = nameSpaceBinding.a;

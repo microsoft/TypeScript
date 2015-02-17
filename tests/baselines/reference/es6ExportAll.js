@@ -22,12 +22,12 @@ var c = (function () {
     }
     return c;
 })();
-exports.c = c;
+c = c;
 var m;
 (function (m) {
     m.x = 10;
-})(m = exports.m || (exports.m = {}));
-exports.x = 10;
+})(m = m || (m = {}));
+x = 10;
 //// [client.js]
 var _server = require("server");
 for (var _a in _server) if (!exports.hasOwnProperty(_a)) exports[_a] = _server[_a];
