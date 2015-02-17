@@ -279,16 +279,12 @@ module ts {
     }
 
     export function getPositionOfZeroBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionOfOneBasedLineAndCharacter(getLineStarts(sourceFile), line + 1, character + 1);
+        return computePositionOfZeroBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    export function getPositionOfOneBasedLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionOfOneBasedLineAndCharacter(getLineStarts(sourceFile), line, character);
-    }
-
-    export function computePositionOfOneBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number {
-        Debug.assert(line > 0 && line <= lineStarts.length);
-        return lineStarts[line - 1] + character - 1;
+    export function computePositionOfZeroBasedLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+        Debug.assert(line >= 0 && line < lineStarts.length);
+        return lineStarts[line] + character;
     }
 
     export function getLineStarts(sourceFile: SourceFile): number[] {

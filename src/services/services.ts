@@ -62,10 +62,8 @@ module ts {
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
         getZeroBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        getOneBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number;
-        getPositionOfOneBasedLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
@@ -756,19 +754,8 @@ module ts {
             return ts.getZeroBasedLineAndCharacterOfPosition(this, position);
         }
 
-        public getOneBasedLineAndCharacterOfPosition(position: number): LineAndCharacter {
-            var result = ts.getZeroBasedLineAndCharacterOfPosition(this, position);
-            result.line++;
-            result.character++;
-            return result;
-        }
-
         public getLineStarts(): number[] {
             return getLineStarts(this);
-        }
-
-        public getPositionOfOneBasedLineAndCharacter(line: number, character: number): number {
-            return ts.getPositionOfOneBasedLineAndCharacter(this, line, character);
         }
 
         public getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number {

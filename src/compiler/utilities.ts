@@ -110,11 +110,6 @@ module ts {
         return getLineStarts(sourceFile)[line];
     }
 
-    export function getStartPositionOfOneBasedLine(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
-        return getLineStarts(sourceFile)[line - 1];
-    }
-
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
