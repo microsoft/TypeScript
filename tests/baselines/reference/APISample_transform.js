@@ -291,23 +291,26 @@ declare module "typescript" {
         ModuleDeclaration = 197,
         ModuleBlock = 198,
         ImportEqualsDeclaration = 199,
-        ExportAssignment = 200,
-        ImportDeclaration = 201,
-        ImportClause = 202,
-        NamespaceImport = 203,
-        NamedImports = 204,
-        ImportSpecifier = 205,
-        ExternalModuleReference = 206,
-        CaseClause = 207,
-        DefaultClause = 208,
-        HeritageClause = 209,
-        CatchClause = 210,
-        PropertyAssignment = 211,
-        ShorthandPropertyAssignment = 212,
-        EnumMember = 213,
-        SourceFile = 214,
-        SyntaxList = 215,
-        Count = 216,
+        ImportDeclaration = 200,
+        ImportClause = 201,
+        NamespaceImport = 202,
+        NamedImports = 203,
+        ImportSpecifier = 204,
+        ExportAssignment = 205,
+        ExportDeclaration = 206,
+        NamedExports = 207,
+        ExportSpecifier = 208,
+        ExternalModuleReference = 209,
+        CaseClause = 210,
+        DefaultClause = 211,
+        HeritageClause = 212,
+        CatchClause = 213,
+        PropertyAssignment = 214,
+        ShorthandPropertyAssignment = 215,
+        EnumMember = 216,
+        SourceFile = 217,
+        SyntaxList = 218,
+        Count = 219,
         FirstAssignment = 52,
         LastAssignment = 63,
         FirstReservedWord = 65,
@@ -368,13 +371,13 @@ declare module "typescript" {
         kind: SyntaxKind;
         flags: NodeFlags;
         parserContextFlags?: ParserContextFlags;
+        modifiers?: ModifiersArray;
         id?: number;
         parent?: Node;
         symbol?: Symbol;
         locals?: SymbolTable;
         nextContainer?: Node;
         localSymbol?: Symbol;
-        modifiers?: ModifiersArray;
     }
     interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
@@ -734,7 +737,10 @@ declare module "typescript" {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    interface ModuleDeclaration extends Declaration, ModuleElement {
+    interface ExportContainer {
+        exportStars?: ExportDeclaration[];
+    }
+    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -759,13 +765,21 @@ declare module "typescript" {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface NamedImports extends Node {
-        elements: NodeArray<ImportSpecifier>;
+    interface ExportDeclaration extends Statement, ModuleElement {
+        exportClause?: NamedExports;
+        moduleSpecifier?: Expression;
     }
-    interface ImportSpecifier extends Declaration {
+    interface NamedImportsOrExports extends Node {
+        elements: NodeArray<ImportOrExportSpecifier>;
+    }
+    type NamedImports = NamedImportsOrExports;
+    type NamedExports = NamedImportsOrExports;
+    interface ImportOrExportSpecifier extends Declaration {
         propertyName?: Identifier;
         name: Identifier;
     }
+    type ImportSpecifier = ImportOrExportSpecifier;
+    type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
     }
@@ -775,7 +789,7 @@ declare module "typescript" {
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
-    interface SourceFile extends Declaration {
+    interface SourceFile extends Declaration, ExportContainer {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
         fileName: string;
@@ -935,7 +949,7 @@ declare module "typescript" {
         errorModuleName?: string;
     }
     interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
         getExpressionNameSubstitution(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: Node): boolean;
@@ -1038,6 +1052,7 @@ declare module "typescript" {
         exportAssignmentChecked?: boolean;
         exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
+        resolvedExports?: SymbolTable;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }

@@ -231,12 +231,15 @@ module ts {
         ModuleDeclaration,
         ModuleBlock,
         ImportEqualsDeclaration,
-        ExportAssignment,
         ImportDeclaration,
         ImportClause,
         NamespaceImport,
         NamedImports,
         ImportSpecifier,
+        ExportAssignment,
+        ExportDeclaration,
+        NamedExports,
+        ExportSpecifier,
 
         // Module references
         ExternalModuleReference,
@@ -349,13 +352,13 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined. 
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
+        modifiers?: ModifiersArray;   // Array of modifiers
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
         nextContainer?: Node;         // Next container in declaration order (initialized by binding)
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
-        modifiers?: ModifiersArray;           // Array of modifiers
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -853,7 +856,11 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ModuleDeclaration extends Declaration, ModuleElement {
+    export interface ExportContainer {
+        exportStars?: ExportDeclaration[];  // List of 'export *' statements (initialized by binding)
+    }
+
+    export interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -898,14 +905,25 @@ module ts {
         name: Identifier;
     }
 
-    export interface NamedImports extends Node {
-        elements: NodeArray<ImportSpecifier>;
+    export interface ExportDeclaration extends Statement, ModuleElement {
+        exportClause?: NamedExports;
+        moduleSpecifier?: Expression;
     }
 
-    export interface ImportSpecifier extends Declaration {
-        propertyName?: Identifier; // Property name to be imported from module
-        name: Identifier; // element name to be imported in the scope
+    export interface NamedImportsOrExports extends Node {
+        elements: NodeArray<ImportOrExportSpecifier>;
     }
+
+    export type NamedImports = NamedImportsOrExports;
+    export type NamedExports = NamedImportsOrExports;
+
+    export interface ImportOrExportSpecifier extends Declaration {
+        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        name: Identifier;           // Declared name
+    }
+
+    export type ImportSpecifier = ImportOrExportSpecifier;
+    export type ExportSpecifier = ImportOrExportSpecifier;
 
     export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
@@ -920,7 +938,7 @@ module ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration {
+    export interface SourceFile extends Declaration, ExportContainer {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
@@ -1165,7 +1183,7 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration): string;
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
         getExpressionNameSubstitution(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
         isReferencedImportDeclaration(node: Node): boolean;
@@ -1286,6 +1304,7 @@ module ts {
         exportAssignmentChecked?: boolean;  // True if export assignment was checked
         exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
         unionType?: UnionType;              // Containing union type for union property
+        resolvedExports?: SymbolTable;      // Resolved exports of module
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }

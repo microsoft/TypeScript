@@ -603,7 +603,7 @@ module ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
-    export function getImportedModuleName(node: Node): Expression {
+    export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
         }
@@ -612,6 +612,9 @@ module ts {
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
                 return (<ExternalModuleReference>reference).expression;
             }
+        }
+        if (node.kind === SyntaxKind.ExportDeclaration) {
+            return (<ExportDeclaration>node).moduleSpecifier;
         }
     }
 
@@ -695,6 +698,7 @@ module ts {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.ExportSpecifier:
                 return true;
         }
         return false;
