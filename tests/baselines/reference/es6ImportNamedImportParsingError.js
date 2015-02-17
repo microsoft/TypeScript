@@ -13,9 +13,9 @@ import , { a } from "es6ImportNamedImportParsingError_0";
 import { a }, from "es6ImportNamedImportParsingError_0";
 
 //// [es6ImportNamedImportParsingError_0.js]
-a = 10;
-x = a;
-m = a;
+export var a = 10;
+export var x = a;
+export var m = a;
 //// [es6ImportNamedImportParsingError_1.js]
 from;
 "es6ImportNamedImportParsingError_0";

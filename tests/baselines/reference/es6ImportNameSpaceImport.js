@@ -9,7 +9,7 @@ import * as nameSpaceBinding from "es6ImportNameSpaceImport_0";
 
 
 //// [es6ImportNameSpaceImport_0.js]
-a = 10;
+export var a = 10;
 //// [es6ImportNameSpaceImport_1.js]
 
 

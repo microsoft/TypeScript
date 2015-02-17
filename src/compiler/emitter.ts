@@ -4202,6 +4202,11 @@ module ts {
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStartOfVariableDeclarationList(node.declarationList);
                 }
+                else if (languageVersion >= ScriptTarget.ES6 && node.parent.kind === SyntaxKind.SourceFile) {
+                    // Exported ES6 module member
+                    write("export ");
+                    emitStartOfVariableDeclarationList(node.declarationList);
+                }
                 emitCommaList(node.declarationList.declarations);
                 write(";");
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {

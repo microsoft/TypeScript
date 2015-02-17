@@ -16,9 +16,9 @@ import defaultBinding, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImp
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport_0.js]
-a = 10;
-x = a;
-m = a;
+export var a = 10;
+export var x = a;
+export var m = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
 
 

@@ -9,7 +9,7 @@ import defaultBinding from "es6ImportDefaultBinding_0";
 
 
 //// [es6ImportDefaultBinding_0.js]
-a = 10;
+export var a = 10;
 //// [es6ImportDefaultBinding_1.js]
 
 
