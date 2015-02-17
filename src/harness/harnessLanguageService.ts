@@ -186,11 +186,7 @@ module Harness.LanguageService {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            var result = ts.computeOneBasedLineAndCharacterOfPosition(script.lineMap, position);
-
-            assert.isTrue(result.line >= 1);
-            assert.isTrue(result.character >= 1);
-            return { line: result.line - 1, character: result.character - 1 };
+            return ts.computeZeroBasedLineAndCharacterOfPosition(script.lineMap, position);
         }
     }
 

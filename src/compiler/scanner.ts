@@ -296,22 +296,17 @@ module ts {
     }
 
     export function computeZeroBasedLineAndCharacterOfPosition(lineStarts: number[], position: number) {
-        var oneBased = computeOneBasedLineAndCharacterOfPosition(lineStarts, position);
-        return { line: oneBased.line - 1, character: oneBased.character -1 };
-    }
-
-    export function computeOneBasedLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         var lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found, 
             // the binary search returns the negative value of the next line start
             // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
             // then the search will return -2
-            lineNumber = (~lineNumber) - 1;
+            lineNumber = ~lineNumber - 1;
         }
         return {
-            line: lineNumber + 1,
-            character: position - lineStarts[lineNumber] + 1
+            line: lineNumber,
+            character: position - lineStarts[lineNumber]
         };
     }
 
