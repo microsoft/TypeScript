@@ -595,6 +595,10 @@
         "category": "Error",
         "code": 1191
     },
+    "Deprecated syntax": {
+        "category": "Error",
+        "code": 1192
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
