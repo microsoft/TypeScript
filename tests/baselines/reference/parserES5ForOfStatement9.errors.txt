@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement9.ts(1,1): error TS2482: For-of statements are only available when targeting ECMAScript 6 or higher
+tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement9.ts(1,6): error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement9.ts (2 errors) ====
+    for (let v of X) {
+    ~~~
+!!! error TS2482: For-of statements are only available when targeting ECMAScript 6 or higher
+         ~~~
+!!! error TS1153: 'let' declarations are only available when targeting ECMAScript 6 and higher.
+    }
