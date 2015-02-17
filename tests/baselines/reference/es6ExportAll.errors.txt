@@ -1,0 +1,20 @@
+tests/cases/compiler/server.ts(2,14): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
+==== tests/cases/compiler/server.ts (1 errors) ====
+    
+    export class c {
+                 ~
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+    }
+    export interface i {
+    }
+    export module m {
+        export var x = 10;
+    }
+    export var x = 10;
+    export module uninstantiated {
+    }
+    
+==== tests/cases/compiler/client.ts (0 errors) ====
+    export * from "server";

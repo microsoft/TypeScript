@@ -905,7 +905,7 @@ module ts {
                     }
                     else {
                         write("{ ");
-                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportSpecifier, resolver.isDeclarationVisible);
+                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportOrExportSpecifier, resolver.isDeclarationVisible);
                         write(" }");
                     }
                 }
@@ -916,12 +916,41 @@ module ts {
             writer.writeLine();
         }
 
-        function emitImportSpecifier(node: ImportSpecifier) {
+        function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
                 writeTextOfNode(currentSourceFile, node.propertyName);
                 write(" as ");
             }
             writeTextOfNode(currentSourceFile, node.name);
+        }
+
+        function emitExportSpecifier(node: ExportSpecifier) {
+            emitImportOrExportSpecifier(node);
+
+            // Make all the declarations visible for the export name
+            var nodes = resolver.setDeclarationsOfIdentifierAsVisible(node.propertyName || node.name);
+
+            // write each of these declarations asynchronously
+            writeAsynchronousModuleElements(nodes);
+        }
+        
+        function emitExportDeclaration(node: ExportDeclaration) {
+            emitJsDocComments(node);
+            write("export ");
+            if (node.exportClause) {
+                write("{ ");
+                emitCommaList(node.exportClause.elements, emitExportSpecifier);
+                write(" }");
+            }
+            else {
+                write("*");
+            }
+            if (node.moduleSpecifier) {
+                write(" from ");
+                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            }
+            write(";");
+            writer.writeLine();
         }
 
         function writeModuleDeclaration(node: ModuleDeclaration) {
@@ -1608,6 +1637,8 @@ module ts {
                 case SyntaxKind.ImportDeclaration:
                     // Import declaration without import clause is visible, otherwise it is not visible
                     return emitModuleElement(node, /*isModuleElementVisible*/!(<ImportDeclaration>node).importClause);
+                case SyntaxKind.ExportDeclaration:
+                    return emitExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:

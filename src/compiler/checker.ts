@@ -1723,12 +1723,18 @@ module ts {
         }
 
         function setDeclarationsOfIdentifierAsVisible(node: Identifier): Node[]{
+            var exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                var exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
-                var result: Node[] = [];
-                buildVisibleNodeList(exportSymbol.declarations);
-                return result;
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
             }
+            else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
+                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+            }
+            var result: Node[] = [];
+            if (exportSymbol) {
+                buildVisibleNodeList(exportSymbol.declarations);
+            }
+            return result;
 
             function buildVisibleNodeList(declarations: Declaration[]) {
                 forEach(declarations, declaration => {
