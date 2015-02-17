@@ -4408,7 +4408,12 @@ module ts {
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (!(node.flags & NodeFlags.Export)) write("var ");
+                    if (!(node.flags & NodeFlags.Export) || isEsModuleMemberDeclaration(node)) {
+                        if (node.flags & NodeFlags.Export) {
+                            write("export ");
+                        }
+                        write("var ");
+                    }
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
