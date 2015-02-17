@@ -31,7 +31,7 @@ var m;
 (function (m) {
     m.x = 10;
 })(m = m || (m = {}));
-x = 10;
+export var x = 10;
 //// [client.js]
 var _server = require("server");
 exports.c = _server.c;

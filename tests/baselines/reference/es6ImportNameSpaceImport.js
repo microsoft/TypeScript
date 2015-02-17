@@ -11,7 +11,7 @@ import * as nameSpaceBinding2 from "es6ImportNameSpaceImport_0"; // elide this
 
 
 //// [es6ImportNameSpaceImport_0.js]
-a = 10;
+export var a = 10;
 //// [es6ImportNameSpaceImport_1.js]
 import * as nameSpaceBinding from "es6ImportNameSpaceImport_0";
 var x = nameSpaceBinding.a;

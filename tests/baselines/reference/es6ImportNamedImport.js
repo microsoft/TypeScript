@@ -42,14 +42,14 @@ import { aaaa as bbbb } from "es6ImportNamedImport_0";
 
 
 //// [es6ImportNamedImport_0.js]
-a = 10;
-x = a;
-m = a;
-a1 = 10;
-x1 = 10;
-z1 = 10;
-z2 = 10;
-aaaa = 10;
+export var a = 10;
+export var x = a;
+export var m = a;
+export var a1 = 10;
+export var x1 = 10;
+export var z1 = 10;
+export var z2 = 10;
+export var aaaa = 10;
 //// [es6ImportNamedImport_1.js]
 import { a } from "es6ImportNamedImport_0";
 var xxxx = a;
