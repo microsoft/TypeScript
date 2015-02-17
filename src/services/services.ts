@@ -756,7 +756,10 @@ module ts {
         }
 
         public getOneBasedLineAndCharacterOfPosition(position: number): LineAndCharacter {
-            return ts.getOneBasedLineAndCharacterOfPosition(this, position);
+            var result = ts.getZeroBasedLineAndCharacterOfPosition(this, position);
+            result.line++;
+            result.character++;
+            return result;
         }
 
         public getLineStarts(): number[] {

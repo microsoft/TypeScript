@@ -319,10 +319,6 @@ module ts {
         return computeZeroBasedLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
-    export function getOneBasedLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
-        return computeOneBasedLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
-    }
-
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {

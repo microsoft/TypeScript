@@ -72,7 +72,7 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += getOneBasedLineAndCharacterOfPosition(file, file.end).line;
+            count += getLineStarts(file).length;
         });
         return count;
     }
@@ -86,9 +86,9 @@ module ts {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = getOneBasedLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            var loc = getZeroBasedLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += diagnostic.file.fileName + "(" + loc.line + "," + loc.character + "): ";
+            output += diagnostic.file.fileName + "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
