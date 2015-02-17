@@ -64,6 +64,7 @@ module ts {
         getZeroBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getOneBasedLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
+        getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number;
         getPositionOfOneBasedLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
@@ -768,6 +769,10 @@ module ts {
 
         public getPositionOfOneBasedLineAndCharacter(line: number, character: number): number {
             return ts.getPositionOfOneBasedLineAndCharacter(this, line, character);
+        }
+
+        public getPositionOfZeroBasedLineAndCharacter(line: number, character: number): number {
+            return ts.getPositionOfZeroBasedLineAndCharacter(this, line, character);
         }
 
         public getNamedDeclarations() {

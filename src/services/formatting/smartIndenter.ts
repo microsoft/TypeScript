@@ -24,7 +24,7 @@ module ts.formatting {
                 return 0;
             }
 
-            var lineAtPosition = sourceFile.getOneBasedLineAndCharacterOfPosition(position).line;
+            var lineAtPosition = sourceFile.getZeroBasedLineAndCharacterOfPosition(position).line;
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
@@ -43,7 +43,7 @@ module ts.formatting {
 
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
-                    currentStart = getOneBasedStartLineAndCharacterForNode(current, sourceFile);
+                    currentStart = getZeroBasedStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
                         indentationDelta = 0;
@@ -74,7 +74,7 @@ module ts.formatting {
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
-            var start = sourceFile.getOneBasedLineAndCharacterOfPosition(n.getStart(sourceFile));
+            var start = sourceFile.getZeroBasedLineAndCharacterOfPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
@@ -135,10 +135,10 @@ module ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             var containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getOneBasedLineAndCharacterOfPosition(containingList.pos);
+                return sourceFile.getZeroBasedLineAndCharacterOfPosition(containingList.pos);
             }
 
-            return sourceFile.getOneBasedLineAndCharacterOfPosition(parent.getStart(sourceFile));
+            return sourceFile.getZeroBasedLineAndCharacterOfPosition(parent.getStart(sourceFile));
         }
 
         /*
@@ -196,15 +196,15 @@ module ts.formatting {
                 // class A {
                 // $}
 
-                var nextTokenStartLine = getOneBasedStartLineAndCharacterForNode(nextToken, sourceFile).line;
+                var nextTokenStartLine = getZeroBasedStartLineAndCharacterForNode(nextToken, sourceFile).line;
                 return lineAtPosition === nextTokenStartLine;
             }
 
             return false;
         }
 
-        function getOneBasedStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
-            return sourceFile.getOneBasedLineAndCharacterOfPosition(n.getStart(sourceFile));
+        function getZeroBasedStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
+            return sourceFile.getZeroBasedLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
@@ -216,7 +216,7 @@ module ts.formatting {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);
 
-                var elseKeywordStartLine = getOneBasedStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
+                var elseKeywordStartLine = getZeroBasedStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
             }
 
@@ -279,31 +279,30 @@ module ts.formatting {
             }
         }
 
-
         function deriveActualIndentationFromList(list: Node[], index: number, sourceFile: SourceFile, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < list.length);
             var node = list[index];
 
             // walk toward the start of the list starting from current node and check if the line is the same for all items.
             // if end line for item [i - 1] differs from the start line for item [i] - find column of the first non-whitespace character on the line of item [i]
-            var lineAndCharacter = getOneBasedStartLineAndCharacterForNode(node, sourceFile);
+            var lineAndCharacter = getZeroBasedStartLineAndCharacterForNode(node, sourceFile);
             for (var i = index - 1; i >= 0; --i) {
                 if (list[i].kind === SyntaxKind.CommaToken) {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getOneBasedLineAndCharacterOfPosition(list[i].end).line;
+                var prevEndLine = sourceFile.getZeroBasedLineAndCharacterOfPosition(list[i].end).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
 
-                lineAndCharacter = getOneBasedStartLineAndCharacterForNode(list[i], sourceFile);
+                lineAndCharacter = getZeroBasedStartLineAndCharacterForNode(list[i], sourceFile);
             }
             return -1;
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
-            var lineStart = sourceFile.getPositionOfOneBasedLineAndCharacter(lineAndCharacter.line, 1);
+            var lineStart = sourceFile.getPositionOfZeroBasedLineAndCharacter(lineAndCharacter.line, 0);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
