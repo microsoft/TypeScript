@@ -49,7 +49,7 @@ m.x.toString();
 
 
 //// [constDeclarations_access_1.js]
-exports.x = 0;
+x = 0;
 //// [constDeclarations_access_2.js]
 // Errors
 m.x = 1;

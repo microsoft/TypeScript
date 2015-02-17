@@ -20,4 +20,4 @@ var A = (function () {
     };
     return A;
 })();
-exports.A = A;
+A = A;
