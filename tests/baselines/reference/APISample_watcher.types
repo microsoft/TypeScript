@@ -3487,8 +3487,8 @@ declare module "typescript" {
         EnumValuesComputed = 128,
 >EnumValuesComputed : NodeCheckFlags
 
-        BlockScopedBindingCapturedInLoop = 256,
->BlockScopedBindingCapturedInLoop : NodeCheckFlags
+        BlockScopedBindingInLoop = 256,
+>BlockScopedBindingInLoop : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks

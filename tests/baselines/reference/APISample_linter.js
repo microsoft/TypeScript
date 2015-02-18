@@ -1028,7 +1028,7 @@ declare module "typescript" {
         SuperStatic = 32,
         ContextChecked = 64,
         EnumValuesComputed = 128,
-        BlockScopedBindingCapturedInLoop = 256,
+        BlockScopedBindingInLoop = 256,
     }
     interface NodeLinks {
         resolvedType?: Type;
