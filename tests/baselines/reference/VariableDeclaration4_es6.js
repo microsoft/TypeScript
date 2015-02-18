@@ -2,4 +2,4 @@
 const a: number
 
 //// [VariableDeclaration4_es6.js]
-var a;
+const a;

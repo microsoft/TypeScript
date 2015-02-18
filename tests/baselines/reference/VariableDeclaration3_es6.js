@@ -2,4 +2,4 @@
 const a = 1
 
 //// [VariableDeclaration3_es6.js]
-var a = 1;
+const a = 1;

@@ -1639,7 +1639,7 @@ module ts {
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
             return;
 
-            function enterScope(): boolean {
+            function enterNameScope(): boolean {
                 var names = currentScopeNames;
                 currentScopeNames = undefined;
                 if (names) {
@@ -1649,7 +1649,7 @@ module ts {
                 return false;
             }
 
-            function exitScope(popFrame: boolean): void {
+            function exitNameScope(popFrame: boolean): void {
                 if (popFrame) {
                     currentScopeNames = lastFrame.names;
                     lastFrame = lastFrame.previous;
@@ -3649,7 +3649,7 @@ module ts {
                 tempVariables = undefined;
                 tempParameters = undefined;
 
-                var popFrame = enterScope()
+                var popFrame = enterNameScope()
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (shouldEmitAsArrowFunction(node)) {
@@ -3743,7 +3743,7 @@ module ts {
                     write(";");
                 }
 
-                exitScope(popFrame);
+                exitNameScope(popFrame);
 
                 tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
@@ -3956,7 +3956,7 @@ module ts {
                     tempVariables = undefined;
                     tempParameters = undefined;
 
-                    var popFrame = enterScope();
+                    var popFrame = enterNameScope();
 
                     // Emit the constructor overload pinned comments
                     forEach(node.members, member => {
@@ -4019,7 +4019,7 @@ module ts {
                         emitTrailingComments(ctor);
                     }
 
-                    exitScope(popFrame);
+                    exitNameScope(popFrame);
 
                     tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
@@ -4150,11 +4150,11 @@ module ts {
                     var saveTempVariables = tempVariables;
                     tempCount = 0;
                     tempVariables = undefined;
-                    var popFrame = enterScope();
+                    var popFrame = enterNameScope();
 
                     emit(node.body);
 
-                    exitScope(popFrame);
+                    exitNameScope(popFrame);
                     tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                 }

@@ -2,4 +2,4 @@
 let a: number = 1
 
 //// [VariableDeclaration10_es6.js]
-var a = 1;
+let a = 1;

@@ -2,4 +2,4 @@
 let a
 
 //// [VariableDeclaration7_es6.js]
-var a;
+let a;
