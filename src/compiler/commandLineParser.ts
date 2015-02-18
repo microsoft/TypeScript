@@ -159,6 +159,14 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
+        },
+        {
+            name: "define",
+            shortName: "d",
+            type: "string",
+            paramType: "SYMBOL",
+            multiple: true,
+            experimental: true
         }
     ];
     
@@ -205,15 +213,16 @@ module ts {
                             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
                         }
 
+                        var value: number | string | boolean = undefined;
                         switch (opt.type) {
                             case "number":
-                                options[opt.name] = parseInt(args[i++]);
+                                value = parseInt(args[i++]);
                                 break;
                             case "boolean":
-                                options[opt.name] = true;
+                                value = true;
                                 break;
                             case "string":
-                                options[opt.name] = args[i++] || "";
+                                value = args[i++] || "";
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
@@ -224,7 +233,22 @@ module ts {
                                 }
                                 else {
                                     errors.push(createCompilerDiagnostic(opt.error));
+                                    continue;
                                 }
+                        }
+
+                        if (value !== undefined) {
+                            if (opt.multiple) {
+                                var list = <any[]>options[opt.name];
+                                if (!list) {
+                                    list = [];
+                                    options[opt.name] = list;
+                                }
+                                list.push(value);
+                            }
+                            else {
+                                options[opt.name] = value;
+                            }
                         }
                     }
                     else {
@@ -302,6 +326,7 @@ module ts {
                         var opt = optionNameMap[id];
                         var optType = opt.type;
                         var value = jsonOptions[id];
+                        var expectedType: string;
                         var expectedType = typeof optType === "string" ? optType : "string";
                         if (typeof value === expectedType) {
                             if (typeof optType !== "string") {
@@ -317,7 +342,18 @@ module ts {
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
                             }
-                            options[opt.name] = value;
+
+                            if (opt.multiple) {
+                                var list = <any[]>options[opt.name];
+                                if (!list) {
+                                    list = [];
+                                    options[opt.name] = list;
+                                }
+                                list.push(value);
+                            }
+                            else {
+                                options[opt.name] = value;
+                            }
                         }
                         else {
                             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));

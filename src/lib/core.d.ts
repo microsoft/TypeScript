@@ -1159,6 +1159,20 @@ interface TypedPropertyDescriptor<T> {
     set?: (value: T) => void;
 }
 
+declare const enum DecoratorTargets {
+    module      = 0x00000001,
+    class       = 0x00000002,
+    interface   = 0x00000004,
+    function    = 0x00000008,
+    enum        = 0x00000010,
+    enumMember  = 0x00000020,
+    property    = 0x00000040,
+    method      = 0x00000080,
+    accessor    = 0x00000100,
+    parameter   = 0x00000200,
+    variable    = 0x00000400,
+}
+
 interface DecoratorFunction { <TFunction extends Function>(target: TFunction): TFunction | void; }
 interface ParameterDecoratorFunction { (target: Function, parameterIndex: number): void; }
 interface MemberDecoratorFunction { <T>(target: Function | Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }
@@ -1172,6 +1186,12 @@ declare function decorator(options?: {
       * A value indicating whether the decorator is ambient (true) and should not be emitted to output.
       */
     ambient?: boolean;
+
+    /**
+      * The elements on which a decorator can be applied.
+      * @remarks Non-ambient decorators are only valid on `class`, `property`, `method`, `accessor`, and `parameter` targets.
+      */
+    targets?: DecoratorTargets;
 }): void;
 
 /**
@@ -1191,3 +1211,15 @@ declare function paramtypes(): void;
   */
 @decorator({ ambient: true })
 declare function returntype(): void;
+
+/**
+  * Built-in decorator. Reports an error on any usage of the symbol.
+  */
+@decorator({ ambient: true })
+declare function obsolete(message?: string): void;
+
+/**
+  * Built-in decorator. Indicates to the compiler that the call expression should be ignored unless a specified conditional compilation symbol is defined.
+  */
+@decorator({ ambient: true })
+declare function conditional(condition: string): void;

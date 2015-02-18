@@ -1153,6 +1153,7 @@ module ts {
         serializeTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration | PropertyDeclaration | ParameterDeclaration): string;
         serializeParameterTypesOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string[];
         serializeReturnTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string;
+        getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[];        
     }
 
     export const enum SymbolFlags {
@@ -1282,6 +1283,7 @@ module ts {
         EmitDecoratedParamTypes = 0x00000400,  // Emit the parameter types of the decorator target as an argument in this parameter position
         EmitDecoratedReturnType = 0x00000800,  // Emit the return type of the decorator target as an argument in this parameter position
         AmbientDecorator        = 0x00001000,  // Decorator was marked ambient, do not emit to output
+        ConditionallyRemoved    = 0x00002000,  // Call should be ignored due to @conditional
     }
 
     export interface NodeLinks {
@@ -1540,7 +1542,8 @@ module ts {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
-        [option: string]: string | number | boolean;
+        defines?: string[];
+        [option: string]: string | number | boolean | string[];
     }
 
     export const enum ModuleKind {
@@ -1579,6 +1582,7 @@ module ts {
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
+        multiple?: boolean;
     }
 
     export const enum CharacterCodes {

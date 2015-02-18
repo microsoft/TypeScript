@@ -2667,7 +2667,22 @@ module ts {
                 write(")");
             }
 
+            function emitVoidExpressionForConditionalRemoval(node: Expression): void {
+                if (node.parent.kind !== SyntaxKind.ExpressionStatement) {
+                    if (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                        write("void 0");
+                    }
+                    else {
+                        write("(void 0)");
+                    }
+                }
+            }
+
             function emitCallExpression(node: CallExpression) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                    emitVoidExpressionForConditionalRemoval(node);
+                    return;
+                }
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
@@ -2698,6 +2713,10 @@ module ts {
             }
 
             function emitNewExpression(node: NewExpression) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                    emitVoidExpressionForConditionalRemoval(node);
+                    return;
+                }
                 write("new ");
                 emit(node.expression);
                 if (node.arguments) {
@@ -2708,6 +2727,10 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                    emitVoidExpressionForConditionalRemoval(node);
+                    return;
+                }
                 emit(node.tag);
                 write(" ");
                 emit(node.template);

@@ -87,6 +87,7 @@ module ts {
         var anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         var unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
 
+        var conditionalSymbols: Map<boolean>;
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
@@ -94,6 +95,8 @@ module ts {
         var globalTypeDecoratorSymbol: Symbol;
         var globalParamTypesDecoratorSymbol: Symbol;
         var globalReturnTypeDecoratorSymbol: Symbol;
+        var globalObsoleteDecoratorSymbol: Symbol;
+        var globalConditionalDecoratorSymbol: Symbol;
 
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
@@ -6533,6 +6536,34 @@ module ts {
             return links.resolvedSignature;
         }
 
+        function isConditionalSymbolDefined(condition: string) {
+            if (!conditionalSymbols) {
+                conditionalSymbols = {};
+                if (compilerOptions.defines) {
+                    for (var i = 0; i < compilerOptions.defines.length; i++) {
+                        conditionalSymbols[compilerOptions.defines[i].toUpperCase()] = true;
+                    }
+                }
+            }
+
+            return hasProperty(conditionalSymbols, condition.toUpperCase());
+        }
+
+        function isConditionallyRemoved(signature: Signature) {
+            if (signature.declaration) {
+                var symbol = signature.declaration.symbol;
+                var metadataArray = getMetadataForSymbol(symbol);
+                var metadata = findMetadata(metadataArray, globalConditionalDecoratorSymbol);
+                if (metadata && metadata.arguments.length > 0) {
+                    var conditionSymbol = <string>metadata.arguments[0];
+                    if (conditionSymbol && !isConditionalSymbolDefined(conditionSymbol)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function checkCallExpression(node: CallExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
@@ -6555,6 +6586,9 @@ module ts {
                     return anyType;
                 }
             }
+            if (isConditionallyRemoved(signature)) {
+                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            }
             return getReturnTypeOfSignature(signature);
         }
 
@@ -6564,7 +6598,12 @@ module ts {
                 grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
 
-            return getReturnTypeOfSignature(getResolvedSignature(node));
+            var signature = getResolvedSignature(node);
+            if (isConditionallyRemoved(signature)) {
+                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            }
+
+            return getReturnTypeOfSignature(signature);
         }
 
         function checkTypeAssertion(node: TypeAssertion): Type {
@@ -8195,7 +8234,7 @@ module ts {
             if (metadataArray) {
                 for (var i = 0; i < metadataArray.length; i++) {
                     var metadata = metadataArray[i];
-                    if (metadata.symbol === globalDecoratorSymbol) {
+                    if (metadata.symbol === decoratorSymbol) {
                         return metadata;
                     }
                 }
@@ -10822,7 +10861,8 @@ module ts {
                 getResolvedSignature,
                 serializeTypeOfDeclaration,
                 serializeParameterTypesOfDeclaration,
-                serializeReturnTypeOfDeclaration
+                serializeReturnTypeOfDeclaration,
+                getMetadataForSymbol
             };
         }
 
@@ -10861,6 +10901,8 @@ module ts {
             globalTypeDecoratorSymbol = getGlobalDecoratorSymbol("type");
             globalParamTypesDecoratorSymbol = getGlobalDecoratorSymbol("paramtypes");
             globalReturnTypeDecoratorSymbol = getGlobalDecoratorSymbol("returntype");
+            globalObsoleteDecoratorSymbol = getGlobalDecoratorSymbol("obsolete");
+            globalConditionalDecoratorSymbol = getGlobalDecoratorSymbol("conditional");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
