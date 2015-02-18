@@ -235,14 +235,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         cmd = cmd + sources.join(" ");
         console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd]);
-        // Add listeners for output and error
-        ex.addListener("stdout", function(output) {
-            process.stdout.write(output);
-        });
-        ex.addListener("stderr", function(error) {
-            process.stderr.write(error);
-        });
+        var ex = jake.createExec([cmd], {interactive: true});
         ex.addListener("cmdEnd", function() {
             if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
                 for (var i in prefixes) {
@@ -303,19 +296,10 @@ compileFile(processDiagnosticMessagesJs,
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
-    console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
-    ex.addListener("cmdEnd", function() {
+
+    exec(cmd, function() {
         complete();
     });
-    ex.run();
 }, {async: true})
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -421,8 +405,8 @@ compileFile(word2mdJs,
 file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
     var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
-    console.log(cmd);
-    child_process.exec(cmd, function () {
+
+    exec(cmd, function () {
         complete();
     });
 }, {async: true})
@@ -476,19 +460,12 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler) {
-    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
+    console.log(cmd);
+    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true, interactive: true});
     ex.addListener("cmdEnd", function() {
         if (completeHandler) {
             completeHandler();
         }
-        complete();
     });
     ex.addListener("error", function(e, status) {
         fail("Process exited with code " + status);
@@ -509,7 +486,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
@@ -552,15 +529,17 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
+
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
-    exec(cmd);
+
+    exec(cmd, function(){
+		complete();
+	});
 }, { async: true });
 
 // Browser tests
@@ -571,7 +550,9 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
-    exec(cmd);
+    exec(cmd, function(){
+		complete();
+	});
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
@@ -591,8 +572,9 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
 
     tests = tests ? tests : '';
     var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
-    console.log(cmd);
-    exec(cmd);
+    exec(cmd, function(){
+		complete();
+	});
 }, {async: true});
 
 function getDiffTool() {
@@ -607,15 +589,17 @@ function getDiffTool() {
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
-    console.log(cmd)
-    exec(cmd);
+    exec(cmd, function(){
+		complete();
+	});
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
-    console.log(cmd)
-    exec(cmd);
+    exec(cmd, function(){
+		complete();
+	});
 }, {async: true});
 
 desc("Builds the test sources and automation in debug mode");
@@ -676,14 +660,12 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
     jake.mkdirP(temp);
     var options = "--outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
-    console.log(cmd + "\n");
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+
+    exec(cmd, function() {
         fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
         jake.rmRf(temp);
         complete();
     });
-    ex.run();
 }, {async: true});
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
@@ -693,10 +675,8 @@ compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath],
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
-    console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+
+    exec(cmd, function() {
         complete();
     });
-    ex.run();
 }, { async: true });

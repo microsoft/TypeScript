@@ -41,6 +41,6 @@
         "codeclimate-test-reporter": "latest"
     },
     "scripts": {
-        "test": "jake generate-code-coverage"
+        "test": "jake --trace generate-code-coverage"
     }
 }

@@ -20,29 +20,9 @@ module perftest {
     export var getCurrentDirectory = ts.sys.getCurrentDirectory;
     var exit = ts.sys.exit;
 
-    var args = ts.sys.args;
-
     // augment sys so first ts.executeCommandLine call will be finish silently
     ts.sys.write = (s: string) => { };
     ts.sys.exit = (code: number) => { };
-    ts.sys.args = []
-
-    export function restoreSys() {
-        ts.sys.args = args;
-        ts.sys.write = write;
-    }
-
-    export function hasLogIOFlag() {
-        return args.length > 2 && args[0] === "--logio";
-    }
-
-    export function getArgsWithoutLogIOFlag() {
-        return args.slice(2);
-    }
-
-    export function getArgsWithoutIOLogFile() {
-        return args.slice(1);
-    }
 
     var resolvePathLog: ts.Map<string> = {};
     
@@ -54,22 +34,34 @@ module perftest {
         };
     }
 
-    export function writeIOLog(fileNames: string[]) {
-        var path = args[1];
+    export function writeIOLog(fileNames: string[], dstPath: string) {
         var log: IOLog = {
             fileNames: fileNames,
             resolvePath: resolvePathLog
         };
 
-        writeFile(path, JSON.stringify(log));
+        writeFile(dstPath, JSON.stringify(log));
     }
 
-    export function prepare(): IO {
-        var log = <IOLog>JSON.parse(readFile(args[0]));
+    export function prepare(cmd: ts.ParsedCommandLine): IO {
+        var content = readFile(cmd.fileNames[0]);
+        if (content === undefined) {
+            throw new Error('Invalid file: ' + cmd.fileNames[0])
+        }
+        try {
+            var log = <IOLog>JSON.parse(content);
+        }
+        catch (err) {
+            write("Invalid IO log file, expecting JSON")
+        }
 
+        cmd.fileNames = []
         var files: ts.Map<string> = {};
-        log.fileNames.forEach(f => { files[f] = readFile(f); })
-        
+        log.fileNames.forEach(f => {
+            files[f] = readFile(f);
+            cmd.fileNames.push(f)
+        })
+
         ts.sys.createDirectory = (s: string) => { };
         ts.sys.directoryExists = (s: string) => true;
         ts.sys.fileExists = (s: string) => true;
@@ -96,7 +88,9 @@ module perftest {
 
         var out: string = "";
 
-        ts.sys.write = (s: string) => { out += s; };
+        ts.sys.write = (s: string) => {
+            out += s;
+        };
 
         return {
             getOut: () => out,

@@ -5,7 +5,8 @@ node_js:
 
 sudo: false
 
-before_script: npm install -g codeclimate-test-reporter
+before_script: 
+  - npm install -g codeclimate-test-reporter
 
 after_script:
   - cat coverage/lcov.info | codeclimate
