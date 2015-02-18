@@ -3805,7 +3805,7 @@ module ts {
             var initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
                 if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
-                    initializer = parseVariableDeclarationList(/*disallowIn:*/ true);
+                    initializer = parseVariableDeclarationList(/*inForStatementInitializer:*/ true);
                 }
                 else {
                     initializer = disallowInAnd(parseExpression);
@@ -4236,7 +4236,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseVariableDeclarationList(disallowIn: boolean): VariableDeclarationList {
+        function parseVariableDeclarationList(inForStatementInitializer: boolean): VariableDeclarationList {
             var node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
             switch (token) {
@@ -4253,20 +4253,39 @@ module ts {
             }
 
             nextToken();
-            var savedDisallowIn = inDisallowInContext();
-            setDisallowInContext(disallowIn);
 
-            node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+            // The user may have written the following:
+            //
+            //    for (var of X) { }
+            //
+            // In this case, we want to parse an empty declaration list, and then parse 'of'
+            // as a keyword. The reason this is not automatic is that 'of' is a valid identifier.
+            // So we need to look ahead to determine if 'of' should be treated as a keyword in
+            // this context.
+            // The checker will then give an error that there is an empty declaration list.
+            if (token === SyntaxKind.OfKeyword && lookAhead(canFollowContextualOfKeyword)) {
+                node.declarations = createMissingList<VariableDeclaration>();
+            }
+            else {
+                var savedDisallowIn = inDisallowInContext();
+                setDisallowInContext(inForStatementInitializer);
 
-            setDisallowInContext(savedDisallowIn);
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+
+                setDisallowInContext(savedDisallowIn);
+            }
 
             return finishNode(node);
+        }
+        
+        function canFollowContextualOfKeyword(): boolean {
+            return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
             setModifiers(node, modifiers);
-            node.declarationList = parseVariableDeclarationList(/*disallowIn:*/ false);
+            node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer:*/ false);
             parseSemicolon();
             return finishNode(node);
         }
