@@ -4347,7 +4347,7 @@ module ts {
                 }
             }
 
-            function emitImportSpecifier(node: ImportSpecifier) {
+            function emitImportOrExportSpecifier(node: ImportSpecifier) {
                 Debug.assert(!generateAmdOrCommonjsModule);
                 if (node.propertyName) {
                     emit(node.propertyName);
@@ -4424,42 +4424,60 @@ module ts {
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier) {
-                    emitStart(node);
-                    var generatedName = resolver.getGeneratedNameForNode(node);
-                    if (compilerOptions.module !== ModuleKind.AMD) {
-                        write("var ");
-                        write(generatedName);
-                        write(" = ");
-                        emitRequire(getExternalModuleName(node));
-                    }
-                    if (node.exportClause) {
-                        // export { x, y, ... }
-                        forEach(node.exportClause.elements, specifier => {
-                            writeLine();
-                            emitStart(specifier);
-                            emitContainingModuleName(specifier);
-                            write(".");
-                            emitNode(specifier.name);
-                            write(" = ");
+                if (generateAmdOrCommonjsModule) {
+                    if (node.moduleSpecifier) {
+                        emitStart(node);
+                        var generatedName = resolver.getGeneratedNameForNode(node);
+                        if (compilerOptions.module !== ModuleKind.AMD) {
+                            write("var ");
                             write(generatedName);
-                            write(".");
-                            emitNode(specifier.propertyName || specifier.name);
-                            write(";");
-                            emitEnd(specifier);
-                        });
+                            write(" = ");
+                            emitRequire(getExternalModuleName(node));
+                        }
+                        if (node.exportClause) {
+                            // export { x, y, ... }
+                            forEach(node.exportClause.elements, specifier => {
+                                writeLine();
+                                emitStart(specifier);
+                                emitContainingModuleName(specifier);
+                                write(".");
+                                emitNode(specifier.name);
+                                write(" = ");
+                                write(generatedName);
+                                write(".");
+                                emitNode(specifier.propertyName || specifier.name);
+                                write(";");
+                                emitEnd(specifier);
+                            });
+                        }
+                        else {
+                            // export *
+                            var tempName = createTempVariable(node).text;
+                            writeLine();
+                            write("for (var " + tempName + " in " + generatedName + ") if (!");
+                            emitContainingModuleName(node);
+                            write(".hasOwnProperty(" + tempName + ")) ");
+                            emitContainingModuleName(node);
+                            write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                        }
+                        emitEnd(node);
+                    }
+                }
+                else {
+                    write("export ");
+                    if (node.exportClause) {
+                        write("{ ");
+                        emitCommaList(node.exportClause.elements);
+                        write(" }");
                     }
                     else {
-                        // export *
-                        var tempName = createTempVariable(node).text;
-                        writeLine();
-                        write("for (var " + tempName + " in " + generatedName + ") if (!");
-                        emitContainingModuleName(node);
-                        write(".hasOwnProperty(" + tempName + ")) ");
-                        emitContainingModuleName(node);
-                        write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                        write("*");
                     }
-                    emitEnd(node);
+                    if (node.moduleSpecifier) {
+                        write(" from ");
+                        emit(node.moduleSpecifier);
+                    }
+                    write(";");
                 }
             }
 
@@ -4888,7 +4906,8 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         return emitImportDeclaration(<ImportDeclaration>node);
                     case SyntaxKind.ImportSpecifier:
-                        return emitImportSpecifier(<ImportSpecifier>node);
+                    case SyntaxKind.ExportSpecifier:
+                        return emitImportOrExportSpecifier(<ImportOrExportSpecifier>node);
                     case SyntaxKind.ImportEqualsDeclaration:
                         return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                     case SyntaxKind.ExportDeclaration:
