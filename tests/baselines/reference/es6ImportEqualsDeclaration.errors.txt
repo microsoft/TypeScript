@@ -1,0 +1,15 @@
+tests/cases/compiler/client.ts(1,1): error TS1192: Deprecated syntax
+tests/cases/compiler/server.ts(3,1): error TS1192: Deprecated syntax
+
+
+==== tests/cases/compiler/client.ts (1 errors) ====
+    import a = require("server");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1192: Deprecated syntax
+==== tests/cases/compiler/server.ts (1 errors) ====
+    
+    var a = 10;
+    export = a;
+    ~~~~~~~~~~~
+!!! error TS1192: Deprecated syntax
+    

@@ -9,9 +9,9 @@ import "es6ImportWithoutFromClause_0";
 
 
 //// [es6ImportWithoutFromClause_0.js]
-exports.a = 10;
+export var a = 10;
 //// [es6ImportWithoutFromClause_1.js]
-require("es6ImportWithoutFromClause_0");
+import "es6ImportWithoutFromClause_0";
 
 
 //// [es6ImportWithoutFromClause_0.d.ts]

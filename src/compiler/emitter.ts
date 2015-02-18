@@ -1793,6 +1793,8 @@ module ts {
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
 
+            var generateAmdOrCommonjsModule = isAMDOrCommonjsGen(compilerOptions, languageVersion);
+
             if (compilerOptions.sourceMap) {
                 initializeEmitterWithSourceMaps();
             }
@@ -2270,6 +2272,20 @@ module ts {
             function emitCommaList(nodes: Node[]) {
                 if (nodes) {
                     emitList(nodes, 0, nodes.length, /*multiline*/ false, /*trailingComma*/ false);
+                }
+            }
+
+            function emitCommaListWithCheck(nodes: Node[], shouldEmit: (node: Node) => boolean) {
+                var currentTextPos = writer.getTextPos();
+                var needsComma = false;
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    if (shouldEmit(nodes[i])) {
+                        if (needsComma) {
+                            write(", ");
+                        }
+                        needsComma = true;
+                        emit(nodes[i]);
+                    }
                 }
             }
 
@@ -3240,8 +3256,14 @@ module ts {
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
-                    emitContainingModuleName(node);
-                    write(".");
+                    var container = getContainingModule(node);
+                    if (container) {
+                        write(resolver.getGeneratedNameForNode(container));
+                        write(".");
+                    }
+                    else if (generateAmdOrCommonjsModule) {
+                        write("exports.");
+                    }
                 }
                 emitNode(node.name);
                 emitEnd(node.name);
@@ -3505,8 +3527,18 @@ module ts {
                 }
             }
 
+            function isEsModuleMemberDeclaration(node: Node) {
+                return !!(node.flags & NodeFlags.Export) &&
+                    !generateAmdOrCommonjsModule &&
+                    node.parent.kind === SyntaxKind.SourceFile;
+            }
+
             function emitVariableStatement(node: VariableStatement) {
-                if (!(node.flags & NodeFlags.Export)) {
+                if (!(node.flags & NodeFlags.Export) || // Not exported
+                    isEsModuleMemberDeclaration(node)) { // ES6 module member
+                    if (node.flags & NodeFlags.Export) {
+                        write("export ");
+                    }
                     if (isLet(node.declarationList)) {
                         write("let ");
                     }
@@ -3639,6 +3671,9 @@ module ts {
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
+                    if (isEsModuleMemberDeclaration(node)) {
+                        write("export ");
+                    }
                     write("function ");
                 }
 
@@ -3774,7 +3809,7 @@ module ts {
                     scopeEmitEnd();
                 }
 
-                if (node.flags & NodeFlags.Export) {
+                if (node.flags & NodeFlags.Export && !isEsModuleMemberDeclaration(node)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -3976,7 +4011,10 @@ module ts {
                 }
                 write(");");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    emitEsNamedExportForDeclaration(node);
+                }
+                else if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -4077,7 +4115,7 @@ module ts {
                     return;
                 }
 
-                if (!(node.flags & NodeFlags.Export)) {
+                if (!(node.flags & NodeFlags.Export) || isEsModuleMemberDeclaration(node)) {
                     emitStart(node);
                     write("var ");
                     emit(node.name);
@@ -4104,7 +4142,10 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    emitEsNamedExportForDeclaration(node);
+                }
+                else if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
                     write("var ");
@@ -4206,7 +4247,8 @@ module ts {
                     scopeEmitEnd();
                 }
                 write(")(");
-                if (node.flags & NodeFlags.Export) {
+                // write moduleDecl = containingModule.m only if it is not exported es6 module member
+                if ((node.flags & NodeFlags.Export) && !isEsModuleMemberDeclaration(node)) {
                     emit(node.name);
                     write(" = ");
                 }
@@ -4215,9 +4257,21 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    emitEsNamedExportForDeclaration(node);
+                }
+                else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
+            }
+
+            function emitEsNamedExportForDeclaration(node: Declaration) {
+                writeLine();
+                emitStart(node);
+                write("export { ");
+                emit(node.name);
+                write(" };");
+                emitEnd(node);
             }
 
             function emitRequire(moduleName: Expression) {
@@ -4234,7 +4288,75 @@ module ts {
                 }
             }
 
-            function emitImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
+            function emitImportDeclaration(node: ImportDeclaration) {
+                if (generateAmdOrCommonjsModule) {
+                    return emitExternalImportDeclaration(node);
+                }
+
+                // ES6 import
+                if (node.importClause) {
+                    var shouldEmitDefaultBindings = node.importClause.name && resolver.isReferencedImportDeclaration(node.importClause);
+                    var shouldEmitNamedBindings = hasReferencedNamedBindings(node.importClause);
+                    if (shouldEmitDefaultBindings || shouldEmitNamedBindings) {
+                        write("import ");
+                        emitStart(node.importClause);
+                        if (shouldEmitDefaultBindings) {
+                            emit(node.importClause.name);
+                            if (shouldEmitNamedBindings) {
+                                write(", ");
+                            }
+                        }
+                        if (shouldEmitNamedBindings) {
+                            emitLeadingComments(node.importClause.namedBindings);
+                            emitStart(node.importClause.namedBindings);
+                            if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                write("* as ");
+                                emit((<NamespaceImport>node.importClause.namedBindings).name);
+                            }
+                            else {
+                                write("{ ");
+                                emitCommaListWithCheck((<NamedImports>node.importClause.namedBindings).elements, resolver.isReferencedImportDeclaration);
+                                write(" }");
+                            }
+                            emitEnd(node.importClause.namedBindings);
+                            emitTrailingComments(node.importClause.namedBindings);
+                        }
+
+                        emitEnd(node.importClause);
+                        write(" from ");
+                        emit(node.moduleSpecifier);
+                        write(";");
+                    }
+                }
+                else {
+                    write("import ");
+                    emit(node.moduleSpecifier);
+                    write(";");
+                }
+            }
+
+            function hasReferencedNamedBindings(importClause: ImportClause) {
+                if (importClause && importClause.namedBindings) {
+                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        return resolver.isReferencedImportDeclaration(importClause.namedBindings);
+                    }
+                    else {
+                        return forEach((<NamedImports>importClause.namedBindings).elements,
+                            namedImport => resolver.isReferencedImportDeclaration(namedImport));
+                    }
+                }
+            }
+
+            function emitImportOrExportSpecifier(node: ImportSpecifier) {
+                Debug.assert(!generateAmdOrCommonjsModule);
+                if (node.propertyName) {
+                    emit(node.propertyName);
+                    write(" as ");
+                }
+                emit(node.name);
+            }
+
+            function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 var info = getExternalImportInfo(node);
                 if (info) {
                     var declarationNode = info.declarationNode;
@@ -4276,7 +4398,7 @@ module ts {
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
                 if (isExternalModuleImportEqualsDeclaration(node)) {
-                    emitImportDeclaration(node);
+                    emitExternalImportDeclaration(node);
                     return;
                 }
                 // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
@@ -4286,7 +4408,12 @@ module ts {
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (!(node.flags & NodeFlags.Export)) write("var ");
+                    if (!(node.flags & NodeFlags.Export) || isEsModuleMemberDeclaration(node)) {
+                        if (node.flags & NodeFlags.Export) {
+                            write("export ");
+                        }
+                        write("var ");
+                    }
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
@@ -4297,77 +4424,103 @@ module ts {
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier) {
-                    emitStart(node);
-                    var generatedName = resolver.getGeneratedNameForNode(node);
-                    if (compilerOptions.module !== ModuleKind.AMD) {
-                        write("var ");
-                        write(generatedName);
-                        write(" = ");
-                        emitRequire(getExternalModuleName(node));
-                    }
-                    if (node.exportClause) {
-                        // export { x, y, ... }
-                        forEach(node.exportClause.elements, specifier => {
-                            writeLine();
-                            emitStart(specifier);
-                            emitContainingModuleName(specifier);
-                            write(".");
-                            emitNode(specifier.name);
-                            write(" = ");
+                if (generateAmdOrCommonjsModule) {
+                    if (node.moduleSpecifier) {
+                        emitStart(node);
+                        var generatedName = resolver.getGeneratedNameForNode(node);
+                        if (compilerOptions.module !== ModuleKind.AMD) {
+                            write("var ");
                             write(generatedName);
-                            write(".");
-                            emitNode(specifier.propertyName || specifier.name);
-                            write(";");
-                            emitEnd(specifier);
-                        });
+                            write(" = ");
+                            emitRequire(getExternalModuleName(node));
+                        }
+                        if (node.exportClause) {
+                            // export { x, y, ... }
+                            forEach(node.exportClause.elements, specifier => {
+                                writeLine();
+                                emitStart(specifier);
+                                emitContainingModuleName(specifier);
+                                write(".");
+                                emitNode(specifier.name);
+                                write(" = ");
+                                write(generatedName);
+                                write(".");
+                                emitNode(specifier.propertyName || specifier.name);
+                                write(";");
+                                emitEnd(specifier);
+                            });
+                        }
+                        else {
+                            // export *
+                            var tempName = createTempVariable(node).text;
+                            writeLine();
+                            write("for (var " + tempName + " in " + generatedName + ") if (!");
+                            emitContainingModuleName(node);
+                            write(".hasOwnProperty(" + tempName + ")) ");
+                            emitContainingModuleName(node);
+                            write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                        }
+                        emitEnd(node);
+                    }
+                }
+                else {
+                    write("export ");
+                    if (node.exportClause) {
+                        write("{ ");
+                        emitCommaList(node.exportClause.elements);
+                        write(" }");
                     }
                     else {
-                        // export *
-                        var tempName = createTempVariable(node).text;
-                        writeLine();
-                        write("for (var " + tempName + " in " + generatedName + ") if (!");
-                        emitContainingModuleName(node);
-                        write(".hasOwnProperty(" + tempName + ")) ");
-                        emitContainingModuleName(node);
-                        write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                        write("*");
                     }
-                    emitEnd(node);
+                    if (node.moduleSpecifier) {
+                        write(" from ");
+                        emit(node.moduleSpecifier);
+                    }
+                    write(";");
                 }
             }
 
             function createExternalImportInfo(node: Node): ExternalImportInfo {
                 if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        return {
-                            rootNode: <ImportEqualsDeclaration>node,
-                            declarationNode: <ImportEqualsDeclaration>node
-                        };
+                        if (resolver.isReferencedImportDeclaration(node)) {
+                            return {
+                                rootNode: <ImportEqualsDeclaration>node,
+                                declarationNode: <ImportEqualsDeclaration>node
+                            };
+                        }
                     }
                 }
                 else if (node.kind === SyntaxKind.ImportDeclaration) {
                     var importClause = (<ImportDeclaration>node).importClause;
                     if (importClause) {
-                        if (importClause.name) {
+                        if (importClause.name && resolver.isReferencedImportDeclaration(importClause)) {
                             return {
                                 rootNode: <ImportDeclaration>node,
                                 declarationNode: importClause
                             };
                         }
-                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            return {
-                                rootNode: <ImportDeclaration>node,
-                                declarationNode: <NamespaceImport>importClause.namedBindings
-                            };
+                        if (hasReferencedNamedBindings(importClause)) {
+                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                return {
+                                    rootNode: <ImportDeclaration>node,
+                                    declarationNode: <NamespaceImport>importClause.namedBindings
+                                };
+                            }
+                            else {
+                                return {
+                                    rootNode: <ImportDeclaration>node,
+                                    namedImports: <NamedImports>importClause.namedBindings,
+                                    localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
+                                };
+                            }
                         }
-                        return {
-                            rootNode: <ImportDeclaration>node,
-                            namedImports: <NamedImports>importClause.namedBindings,
-                            localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
-                        };
                     }
-                    return {
-                        rootNode: <ImportDeclaration>node
+                    else {
+                        return {
+                            rootNode: <ImportDeclaration>node
+                        };
                     }
                 }
                 else if (node.kind === SyntaxKind.ExportDeclaration) {
@@ -4392,9 +4545,7 @@ module ts {
                     else {
                         var info = createExternalImportInfo(node);
                         if (info) {
-                            if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedImportDeclaration(node)) {
-                                externalImports.push(info);
-                            }
+                            externalImports.push(info);
                         }
                     }
                 });
@@ -4420,6 +4571,7 @@ module ts {
             }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
+                createExternalModuleInfo(node);
                 writeLine();
                 write("define(");
                 if (node.amdModuleName) {
@@ -4453,9 +4605,7 @@ module ts {
                 });
                 write(") {");
                 increaseIndent();
-                emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
+                emitSourceFileStatements(node, startIndex);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
@@ -4474,9 +4624,8 @@ module ts {
             }
 
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
-                emitCaptureThisForNodeIfNecessary(node);
-                emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
+                createExternalModuleInfo(node);
+                emitSourceFileStatements(node, startIndex);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
@@ -4489,6 +4638,18 @@ module ts {
                     write(";");
                     emitEnd(exportAssignment);
                 }
+            }
+
+            function emitEsModule(node: SourceFile, startIndex: number) {
+                externalImports = undefined;
+                exportSpecifiers = undefined;
+                emitSourceFileStatements(node, startIndex);
+            }
+
+            function emitSourceFileStatements(node: SourceFile, startIndex: number) {
+                emitCaptureThisForNodeIfNecessary(node);
+                emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
@@ -4533,20 +4694,20 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (isExternalModule(node)) {
-                    createExternalModuleInfo(node);
                     if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
-                    else {
+                    else if (compilerOptions.module === ModuleKind.CommonJS || languageVersion < ScriptTarget.ES6) {
                         emitCommonJSModule(node, startIndex);
+                    }
+                    else {
+                        emitEsModule(node, startIndex);
                     }
                 }
                 else {
                     externalImports = undefined;
                     exportSpecifiers = undefined;
-                    emitCaptureThisForNodeIfNecessary(node);
-                    emitLinesStartingAt(node.statements, startIndex);
-                    emitTempDeclarations(/*newLine*/ true);
+                    emitSourceFileStatements(node, startIndex);
                 }
 
                 emitLeadingComments(node.endOfFileToken);
@@ -4744,6 +4905,9 @@ module ts {
                         return emitModuleDeclaration(<ModuleDeclaration>node);
                     case SyntaxKind.ImportDeclaration:
                         return emitImportDeclaration(<ImportDeclaration>node);
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ExportSpecifier:
+                        return emitImportOrExportSpecifier(<ImportOrExportSpecifier>node);
                     case SyntaxKind.ImportEqualsDeclaration:
                         return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                     case SyntaxKind.ExportDeclaration:

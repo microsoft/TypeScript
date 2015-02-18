@@ -1,0 +1,40 @@
+=== tests/cases/compiler/server.ts ===
+
+export class c {
+>c : c
+}
+export interface i {
+>i : i
+}
+export module m {
+>m : typeof m
+
+    export var x = 10;
+>x : number
+}
+export var x = 10;
+>x : number
+
+export module uninstantiated {
+>uninstantiated : unknown
+}
+
+=== tests/cases/compiler/client.ts ===
+export { c } from "server";
+>c : typeof c
+
+export { c as c2 } from "server";
+>c : unknown
+>c2 : typeof c
+
+export { i, m as instantiatedModule } from "server";
+>i : unknown
+>m : unknown
+>instantiatedModule : typeof instantiatedModule
+
+export { uninstantiated } from "server";
+>uninstantiated : unknown
+
+export { x } from "server";
+>x : number
+

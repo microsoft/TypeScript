@@ -595,6 +595,14 @@
         "category": "Error",
         "code": 1191
     },
+    "Deprecated syntax": {
+        "category": "Error",
+        "code": 1192
+    },
+    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+        "category": "Error",
+        "code": 1193
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

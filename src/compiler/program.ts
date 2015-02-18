@@ -416,12 +416,23 @@ module ts {
             }
 
             var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModule && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
-                var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
-                var errorLength = externalModuleErrorSpan.end - errorStart;
-                diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+            if (firstExternalModule) {
+                var languageVersion = options.target || ScriptTarget.ES3;
+                if (options.module) {
+                    if (languageVersion >= ScriptTarget.ES6) {
+                        // Cannot specify module gen target when in es6 or above
+                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
+                    }
+                }
+                else {
+                    if (languageVersion < ScriptTarget.ES6) {
+                        // We cannot use createDiagnosticFromNode because nodes do not have parents yet
+                        var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
+                        var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
+                        var errorLength = externalModuleErrorSpan.end - errorStart;
+                        diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                    }
+                }
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot

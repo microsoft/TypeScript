@@ -9500,6 +9500,10 @@ module ts {
                 }
             }
             else {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    // Import equals declaration is deprecated in es6 or above
+                    grammarErrorOnNode(node, Diagnostics.Deprecated_syntax);
+                }
                 if (checkExternalImportOrExportDeclaration(node)) {
                     checkImportBinding(node);
                 }
@@ -9521,6 +9525,10 @@ module ts {
             // Grammar checking
             if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
+            }
+            if (languageVersion >= ScriptTarget.ES6) {
+                // export assignment is deprecated in es6 or above
+                grammarErrorOnNode(node, Diagnostics.Deprecated_syntax);
             }
 
             var container = node.parent;
@@ -10347,7 +10355,13 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                return "exports." + unescapeIdentifier(symbol.name);
+                var symbolName = unescapeIdentifier(symbol.name);
+                if (isAMDOrCommonjsGen(compilerOptions, languageVersion)) {
+                    return "exports." + symbolName;
+                }
+                else {
+                    return symbolName;
+                }
             }
             var node = location;
             var containerSymbol = getParentOfSymbol(symbol);
@@ -10375,7 +10389,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Import) {
+                if ((symbol.flags & SymbolFlags.Import) && isAMDOrCommonjsGen(compilerOptions, languageVersion)) {
                     return getImportNameSubstitution(symbol);
                 }
             }
@@ -10416,7 +10430,6 @@ module ts {
                     return true;
                 }
             }
-            return forEachChild(node, isReferencedImportDeclaration);
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
