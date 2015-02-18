@@ -22,7 +22,7 @@ var c = (function () {
     }
     return c;
 })();
-c = c;
+export { c };
 var m;
 (function (m) {
     m.x = 10;

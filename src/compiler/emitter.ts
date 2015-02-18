@@ -4011,7 +4011,10 @@ module ts {
                 }
                 write(");");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (isEsModuleMemberDeclaration(node)) {
+                    emitEsNamedExportForDeclaration(node);
+                }
+                else if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
