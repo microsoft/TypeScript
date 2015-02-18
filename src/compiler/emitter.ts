@@ -2002,11 +2002,18 @@ module ts {
                 return result;
             }
 
-            function recordTempDeclaration(name: Identifier) {
+            function recordTempDeclaration(name: Identifier): void {
                 if (!tempVariables) {
                     tempVariables = [];
                 }
                 tempVariables.push(name);
+            }
+
+            function createAndRecordTempVariable(location: Node): Identifier {
+                var temp = createTempVariable(location, /*forLoopVariable*/ false);
+                recordTempDeclaration(temp);
+
+                return temp;
             }
 
             function emitTempDeclarations(newLine: boolean) {
@@ -2505,8 +2512,7 @@ module ts {
 
                 // For computed properties, we need to create a unique handle to the object
                 // literal so we can modify it without risking internal assignments tainting the object.
-                var tempVar = createTempVariable(node);
-                recordTempDeclaration(tempVar);
+                var tempVar = createAndRecordTempVariable(node);
 
                 // Write out the first non-computed properties
                 // (or all properties if none of them are computed),
@@ -2735,8 +2741,8 @@ module ts {
                     emit(node);
                     return node;
                 }
-                var temp = createTempVariable(node);
-                recordTempDeclaration(temp);
+                var temp = createAndRecordTempVariable(node);
+
                 write("(");
                 emit(temp);
                 write(" = ");
