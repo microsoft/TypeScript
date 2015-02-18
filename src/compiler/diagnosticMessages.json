@@ -1260,6 +1260,10 @@
         "category": "Error",
         "code": 2482
     },
+    "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2483
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement5.ts(1,1): error TS2482: For-of statements are only available when targeting ECMAScript 6 or higher
+tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement5.ts(1,10): error TS2483: The left-hand side of a 'for...of' statement cannot use a type annotation.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement5.ts (1 errors) ====
     for (var a: number of X) {
-    ~~~
-!!! error TS2482: For-of statements are only available when targeting ECMAScript 6 or higher
+             ~
+!!! error TS2483: The left-hand side of a 'for...of' statement cannot use a type annotation.
     }

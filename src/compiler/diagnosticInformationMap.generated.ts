@@ -317,6 +317,7 @@ module ts {
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 2476, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
         Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 2477, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
         For_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 2482, category: DiagnosticCategory.Error, key: "For-of statements are only available when targeting ECMAScript 6 or higher" },
+        The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation: { code: 2483, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...of' statement cannot use a type annotation." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },

@@ -8467,9 +8467,6 @@ module ts {
                 if (variableDeclarationList.declarations.length >= 1) {
                     var decl = variableDeclarationList.declarations[0];
                     checkVariableDeclaration(decl);
-                    if (decl.type) {
-                        error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
-                    }
                 }
             }
             else {
@@ -10769,11 +10766,18 @@ module ts {
                             Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
                         return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
-                    if (variableList.declarations[0].initializer) {
+                    var firstDeclaration = variableList.declarations[0];
+                    if (firstDeclaration.initializer) {
                         var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement ?
                             Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer :
                             Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
-                        return grammarErrorOnNode(variableList.declarations[0].name, diagnostic);
+                        return grammarErrorOnNode(firstDeclaration.name, diagnostic);
+                    }
+                    if (firstDeclaration.type) {
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement ?
+                            Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation :
+                            Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
+                        return grammarErrorOnNode(firstDeclaration, diagnostic);
                     }
                 }
             }
