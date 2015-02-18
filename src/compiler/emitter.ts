@@ -2520,7 +2520,7 @@ module ts {
                 }
 
                 for (var i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
-                    writeSeparator();
+                    writeComma();
 
                     var property = properties[i];
 
@@ -2593,7 +2593,7 @@ module ts {
                     emitEnd(property);
                 }
 
-                writeSeparator();
+                writeComma();
                 emit(tempVar);
 
                 if (multiLine) {
@@ -2603,7 +2603,7 @@ module ts {
 
                 write(")");
 
-                function writeSeparator() {
+                function writeComma() {
                     if (multiLine) {
                         write(",");
                         writeLine();
@@ -2614,31 +2614,32 @@ module ts {
                 }
             }
 
-            function emitObjectLiteral(node: ObjectLiteralExpression) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    emitObjectLiteralBody(node, node.properties.length);
-                    return;
-                }
-
+            function emitObjectLiteral(node: ObjectLiteralExpression): void {
                 var properties = node.properties;
 
-                // Find the first computed property.
-                // Everything until that point can be emitted as part of the initial object literal.
-                var numInitialNonComputedProperties = properties.length;
-                forEach(properties, (property, i) => {
-                    if (hasDynamicName(properties[i])) {
-                        numInitialNonComputedProperties = i;
-                        return true;
-                    }
-                });
+                if (languageVersion < ScriptTarget.ES6) {
 
-                var hasComputedProperty = numInitialNonComputedProperties !== properties.length;
-                if (hasComputedProperty) {
-                    emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
+                    // Find the first computed property.
+                    // Everything until that point can be emitted as part of the initial object literal.
+                    var numProperties = properties.length;
+                    var numInitialNonComputedProperties = numProperties;
+                    for (var i = 0, n = properties.length; i < n; i++) {
+                        if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
+                            numInitialNonComputedProperties = i;
+                            break;
+                        }
+                    }
+                    
+                    var hasComputedProperty = numInitialNonComputedProperties !== properties.length;
+                    if (hasComputedProperty) {
+                        emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
+                        return;
+                    }
                 }
-                else {
-                    emitObjectLiteralBody(node, properties.length);
-                }
+
+                // Ordinary case: either the object has no computed properties
+                // or we're compiling with an ES6+ target.
+                emitObjectLiteralBody(node, properties.length);
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
