@@ -28,53 +28,18 @@ var b = {
 
 //// [restParameterWithoutAnnotationIsAnyArray.js]
 // Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
-function foo() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
-    }
-}
-var f = function foo() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
-    }
-};
-var f2 = function (x) {
-    var y = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        y[_i - 1] = arguments[_i];
-    }
-};
+function foo() { }
+var f = function foo() { };
+var f2 = function (x) { };
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
-        }
-    };
+    C.prototype.foo = function () { };
     return C;
 })();
 var a;
 var b = {
-    foo: function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
-        }
-    },
-    a: function foo(x) {
-        var y = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            y[_i - 1] = arguments[_i];
-        }
-    },
-    b: function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
-        }
-    }
+    foo: function () { },
+    a: function foo(x) { },
+    b: function () { }
 };

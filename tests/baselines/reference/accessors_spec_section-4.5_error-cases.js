@@ -21,8 +21,7 @@ var LanguageSpec_section_4_5_error_cases = (function () {
         get: function () {
             return "";
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });
@@ -30,8 +29,7 @@ var LanguageSpec_section_4_5_error_cases = (function () {
         get: function () {
             return "";
         },
-        set: function (a) {
-        },
+        set: function (a) { },
         enumerable: true,
         configurable: true
     });

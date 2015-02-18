@@ -14,8 +14,7 @@ var C = (function () {
     }
     C.prototype.bar = function () {
         var obj = {
-            [this.bar()]() {
-            }
+            [this.bar()]() { }
         };
         return 0;
     };

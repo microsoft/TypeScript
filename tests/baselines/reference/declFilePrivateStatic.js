@@ -18,10 +18,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.a = function () {
-    };
-    C.b = function () {
-    };
+    C.a = function () { };
+    C.b = function () { };
     Object.defineProperty(C, "c", {
         get: function () {
             return 1;
@@ -37,14 +35,12 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C, "e", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "f", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -52,3 +48,16 @@ var C = (function () {
     C.y = 1;
     return C;
 })();
+
+
+//// [declFilePrivateStatic.d.ts]
+declare class C {
+    private static x;
+    static y: number;
+    private static a();
+    static b(): void;
+    private static c;
+    static d: number;
+    private static e;
+    static f: any;
+}

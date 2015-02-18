@@ -14,8 +14,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, 0 + 1, {
-        set: function (v) {
-        } //No error
+        set: function (v) { } //No error
         ,
         enumerable: true,
         configurable: true

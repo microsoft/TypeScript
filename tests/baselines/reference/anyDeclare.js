@@ -10,6 +10,5 @@ module myMod {
 var myMod;
 (function (myMod) {
     var myFn;
-    function myFn() {
-    }
+    function myFn() { }
 })(myMod || (myMod = {}));

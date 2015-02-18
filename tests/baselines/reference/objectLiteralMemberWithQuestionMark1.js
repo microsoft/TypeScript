@@ -2,5 +2,4 @@
 var v = { foo?() { } }
 
 //// [objectLiteralMemberWithQuestionMark1.js]
-var v = { foo: function () {
-} };
+var v = { foo: function () { } };

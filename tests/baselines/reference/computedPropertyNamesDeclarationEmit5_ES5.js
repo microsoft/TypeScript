@@ -9,8 +9,7 @@ var v = {
 //// [computedPropertyNamesDeclarationEmit5_ES5.js]
 var v = (_a = {},
     _a["" + ""] = 0,
-    _a["" + ""] = function () {
-    },
+    _a["" + ""] = function () { },
     Object.defineProperty(_a, "" + "", {
         get: function () {
             return 0;
@@ -19,8 +18,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, "" + "", {
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     }),

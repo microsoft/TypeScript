@@ -82,7 +82,7 @@ declare module Intl {
         second?: string;
         timeZoneName?: string;
         formatMatcher?: string;
-        hour12: boolean;
+        hour12?: boolean;
     }
 
     interface ResolvedDateTimeFormatOptions {

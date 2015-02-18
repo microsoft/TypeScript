@@ -33,8 +33,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C.prototype, 1 << 6, {
-        set: function (p) {
-        },
+        set: function (p) { },
         enumerable: true,
         configurable: true
     });

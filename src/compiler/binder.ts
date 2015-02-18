@@ -1,6 +1,8 @@
 /// <reference path="parser.ts"/>
 
 module ts {
+    /* @internal */ export var bindTime = 0;
+
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated    = 1,
@@ -60,8 +62,13 @@ module ts {
         return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
-    export function bindSourceFile(file: SourceFile) {
+    export function bindSourceFile(file: SourceFile): void {
+        var start = new Date().getTime();
+        bindSourceFileWorker(file);
+        bindTime += new Date().getTime() - start;
+    }
 
+    function bindSourceFileWorker(file: SourceFile): void {
         var parent: Node;
         var container: Node;
         var blockScopeContainer: Node;
@@ -136,9 +143,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.semanticDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -159,7 +166,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                    file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
                         Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
                 }
                 symbol.exports[prototypeSymbol.name] = prototypeSymbol;
@@ -471,10 +478,20 @@ module ts {
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
+                        bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).fileName) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
                 case SyntaxKind.Block:
+                    // do not treat function block a block-scope container
+                    // all block-scope locals that reside in this block should go to the function locals.
+                    // Otherwise this won't be considered as redeclaration of a block scoped local:
+                    // function foo() {
+                    //  let x;
+                    //  var x;
+                    // }
+                    // 'var x' will be placed into the function locals and 'let x' - into the locals of the block
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isAnyFunction(node.parent));
+                    break;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:

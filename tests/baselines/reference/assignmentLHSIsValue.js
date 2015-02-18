@@ -138,11 +138,9 @@ var Derived = (function (_super) {
     return Derived;
 })(C);
 // function expression
-function bar() {
-}
+function bar() { }
 value;
-(function () {
-});
+(function () { });
 value;
 // function calls
 foo() = value;
@@ -159,6 +157,5 @@ foo() = value;
 (/d+/) = value;
 ({}) = value;
 ([]) = value;
-(function baz() {
-}) = value;
+(function baz() { }) = value;
 (foo()) = value;

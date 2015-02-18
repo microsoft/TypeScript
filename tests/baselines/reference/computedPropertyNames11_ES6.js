@@ -24,28 +24,23 @@ var v = {
     get [s]() {
         return 0;
     },
-    set [n](v) {
-    },
+    set [n](v) { },
     get [s + s]() {
         return 0;
     },
-    set [s + n](v) {
-    },
+    set [s + n](v) { },
     get [+s]() {
         return 0;
     },
-    set [""](v) {
-    },
+    set [""](v) { },
     get [0]() {
         return 0;
     },
-    set [a](v) {
-    },
+    set [a](v) { },
     get [true]() {
         return 0;
     },
-    set [`hello bye`](v) {
-    },
+    set [`hello bye`](v) { },
     get [`hello ${a} bye`]() {
         return 0;
     }

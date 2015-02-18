@@ -22,8 +22,7 @@ var f1 = function () {
 var f2 = function (x) {
     _this.name = x;
 };
-function foo(func) {
-}
+function foo(func) { }
 foo(function () {
     _this.age = 100;
     return true;

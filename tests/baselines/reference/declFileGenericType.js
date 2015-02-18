@@ -98,8 +98,7 @@ exports.c = C.F2;
 exports.d = C.F3;
 exports.e = C.F4;
 exports.x = (new C.D(new C.A())).val;
-function f() {
-}
+function f() { }
 exports.f = f;
 exports.g = C.F5();
 var h = (function (_super) {

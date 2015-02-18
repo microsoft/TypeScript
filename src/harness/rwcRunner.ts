@@ -26,7 +26,10 @@ module RWC {
             var otherFiles: { unitName: string; content: string; }[] = [];
             var compilerResult: Harness.Compiler.CompilerResult;
             var compilerOptions: ts.CompilerOptions;
-            var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
+            var baselineOpts: Harness.Baseline.BaselineOptions = {
+                Subfolder: 'rwc',
+                Baselinefolder: 'internal/baselines'
+            };
             var baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             var currentDirectory: string;
 
@@ -56,7 +59,7 @@ module RWC {
                 runWithIOLog(ioLog, () => {
                     harnessCompiler.reset();
                     // Load the files
-                    ts.forEach(opts.filenames, fileName => {
+                    ts.forEach(opts.fileNames, fileName => {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
                     });
 
@@ -87,7 +90,8 @@ module RWC {
                         /*settingsCallback*/ undefined, opts.options,
                         // Since all Rwc json file specified current directory in its json file, we need to pass this information to compilerHost
                         // so that when the host is asked for current directory, it should give the value from json rather than from process
-                        currentDirectory);
+                        currentDirectory,
+                        /*assertInvariants:*/ false);
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
@@ -170,7 +174,7 @@ module RWC {
 }
 
 class RWCRunner extends RunnerBase {
-    private static sourcePath = "tests/cases/rwc/";
+    private static sourcePath = "internal/cases/rwc/";
 
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
@@ -183,7 +187,7 @@ class RWCRunner extends RunnerBase {
         }
     }
 
-    private runTest(jsonFilename: string) {
-        RWC.runRWCTest(jsonFilename);
+    private runTest(jsonFileName: string) {
+        RWC.runRWCTest(jsonFileName);
     }
 }

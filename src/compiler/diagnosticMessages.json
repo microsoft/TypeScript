@@ -427,7 +427,7 @@
         "category": "Error",
         "code": 1148
     },
-    "Filename '{0}' differs from already included filename '{1}' only in casing": {
+    "File name '{0}' differs from already included file name '{1}' only in casing": {
         "category": "Error",
         "code": 1149
     },
@@ -1204,6 +1204,46 @@
         "category": "Error",
         "code": 2466
     },
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 2468
+    },
+    "Enum declarations must all be const or non-const.": {
+        "category": "Error",
+        "code": 2469
+    },
+    "In 'const' enum declarations member initializer must be constant expression.": {
+        "category": "Error",
+        "code": 2470
+    },
+    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
+        "category": "Error",
+        "code": 2471
+    },
+    "A const enum member can only be accessed using a string literal.": {
+        "category": "Error",
+        "code": 2472
+    },
+    "'const' enum member initializer was evaluated to a non-finite value.": {
+        "category": "Error",
+        "code": 2473
+    },
+    "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
+        "category": "Error",
+        "code": 2474
+    },
+    "Property '{0}' does not exist on 'const' enum '{1}'.": {
+        "category": "Error",
+        "code": 2475
+    },
+    "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
+        "category": "Error",
+        "code": 2476
+    },
+    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+        "category": "Error",
+        "code": 2477
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1480,34 +1520,6 @@
     "Exported type alias '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4081
-    },
-    "Enum declarations must all be const or non-const.": {
-        "category": "Error",
-        "code": 4082
-    },
-    "In 'const' enum declarations member initializer must be constant expression.": {
-        "category": "Error",
-        "code": 4083
-    },
-    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
-        "category": "Error",
-        "code": 4084
-    },
-    "A const enum member can only be accessed using a string literal.": {
-        "category": "Error",
-        "code": 4085
-    },
-    "'const' enum member initializer was evaluated to a non-finite value.": {
-        "category": "Error",
-        "code": 4086
-    },
-    "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
-        "category": "Error",
-        "code": 4087
-    },
-    "Property '{0}' does not exist on 'const' enum '{1}'.": {
-        "category": "Error",
-        "code": 4088
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -1797,6 +1809,10 @@
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
+    },
+    "You cannot rename elements that are defined in the standard TypeScript library.": {
+        "category": "Error",
+        "code": 8001
     },
     "'yield' expressions are not currently supported.": {
         "category": "Error",

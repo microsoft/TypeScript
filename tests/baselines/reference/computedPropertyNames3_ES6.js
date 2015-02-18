@@ -14,32 +14,25 @@ var id;
 var C = (function () {
     function C() {
     }
-    C.prototype[0 + 1] = function () {
-    };
-    C[() => {
-    }] = function () {
-    };
+    C.prototype[0 + 1] = function () { };
+    C[() => { }] = function () { };
     Object.defineProperty(C.prototype, delete id, {
-        get: function () {
-        },
+        get: function () { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C.prototype, [0, 1], {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "", {
-        get: function () {
-        },
+        get: function () { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, id.toString(), {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

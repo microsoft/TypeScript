@@ -9,8 +9,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C["" + ""] = function () {
-    };
+    C["" + ""] = function () { };
     Object.defineProperty(C, "" + "", {
         get: function () {
             return 0;
@@ -19,8 +18,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C, "" + "", {
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });

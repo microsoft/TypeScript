@@ -16,8 +16,7 @@ var __extends = this.__extends || function (d, b) {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.func = function (param) {
-    };
+    C1.prototype.func = function (param) { };
     return C1;
 })();
 var C2 = (function (_super) {

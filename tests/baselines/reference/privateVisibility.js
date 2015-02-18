@@ -35,8 +35,7 @@ var Foo = (function () {
     Foo.prototype.pubMeth = function () {
         this.privMeth();
     };
-    Foo.prototype.privMeth = function () {
-    };
+    Foo.prototype.privMeth = function () { };
     return Foo;
 })();
 var f = new Foo();

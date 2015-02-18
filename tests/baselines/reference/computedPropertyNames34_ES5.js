@@ -18,8 +18,7 @@ var C = (function () {
     }
     C.bar = function () {
         var obj = (_a = {},
-            _a[foo()] = function () {
-            },
+            _a[foo()] = function () { },
             _a
         );
         return 0;

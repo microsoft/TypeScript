@@ -103,8 +103,7 @@ var __extends = this.__extends || function (d, b) {
 var a = (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () {
-    };
+    a.prototype.pgF = function () { };
     Object.defineProperty(a.prototype, "d", {
         get: function () {
             return 30;
@@ -204,3 +203,65 @@ var e = (function () {
     };
     return e;
 })();
+
+
+//// [classdecl.d.ts]
+declare class a {
+    constructor(n: number);
+    constructor(s: string);
+    pgF(): void;
+    pv: any;
+    d: number;
+    static p2: {
+        x: number;
+        y: number;
+    };
+    private static d2();
+    private static p3;
+    private pv3;
+    private foo(n);
+    private foo(s);
+}
+declare class b extends a {
+}
+declare module m1 {
+    class b {
+    }
+    interface ib {
+    }
+}
+declare module m2 {
+    module m3 {
+        class c extends b {
+        }
+        class ib2 implements m1.ib {
+        }
+    }
+}
+declare class c extends m1.b {
+}
+declare class ib2 implements m1.ib {
+}
+declare class aAmbient {
+    constructor(n: number);
+    constructor(s: string);
+    pgF(): void;
+    pv: any;
+    d: number;
+    static p2: {
+        x: number;
+        y: number;
+    };
+    static d2(): any;
+    static p3: any;
+    private pv3;
+    private foo(s);
+}
+declare class d {
+    private foo(n);
+    private foo(s);
+}
+declare class e {
+    private foo(s);
+    private foo(n);
+}

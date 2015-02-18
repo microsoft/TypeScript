@@ -34,7 +34,6 @@ var C = (function (_super) {
     }
     // Gets emitted as super, not _super, which is consistent with
     // use of super in static properties initializers.
-    C.prototype[{ [super.bar.call(this)]: 1 }[0]] = function () {
-    };
+    C.prototype[{ [super.bar.call(this)]: 1 }[0]] = function () { };
     return C;
 })(Base);

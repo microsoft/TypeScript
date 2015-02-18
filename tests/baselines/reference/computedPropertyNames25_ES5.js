@@ -35,8 +35,7 @@ var C = (function (_super) {
     }
     C.prototype.foo = function () {
         var obj = (_a = {},
-            _a[_super.prototype.bar.call(this)] = function () {
-            },
+            _a[_super.prototype.bar.call(this)] = function () { },
             _a
         );
         return 0;

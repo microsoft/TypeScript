@@ -31,24 +31,20 @@ var C = (function () {
         get: function () {
             return null;
         },
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () {
-    };
+    C.prototype.foo = function () { };
     Object.defineProperty(C, "b", {
         get: function () {
             return null;
         },
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });
-    C.foo = function () {
-    };
+    C.foo = function () { };
     return C;
 })();
 var c;

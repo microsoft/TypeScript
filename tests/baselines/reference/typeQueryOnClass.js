@@ -64,10 +64,8 @@ var C = (function () {
         this.ia = 1;
         this.ib = function () { return _this.ia; };
     }
-    C.foo = function (x) {
-    };
-    C.bar = function (x) {
-    };
+    C.foo = function (x) { };
+    C.bar = function (x) { };
     Object.defineProperty(C, "sc", {
         get: function () {
             return 1;
@@ -115,8 +113,7 @@ var D = (function () {
     function D(y) {
         this.y = y;
     }
-    D.prototype.foo = function () {
-    };
+    D.prototype.foo = function () { };
     return D;
 })();
 var d;

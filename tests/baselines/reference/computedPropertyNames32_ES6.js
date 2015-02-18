@@ -17,7 +17,6 @@ var C = (function () {
     C.prototype.bar = function () {
         return 0;
     };
-    C.prototype[foo()] = function () {
-    };
+    C.prototype[foo()] = function () { };
     return C;
 })();

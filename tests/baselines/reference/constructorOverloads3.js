@@ -33,8 +33,7 @@ var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
     }
-    Foo.prototype.bar1 = function () {
-    };
+    Foo.prototype.bar1 = function () { };
     return Foo;
 })(FooBase);
 var f1 = new Foo("hey");

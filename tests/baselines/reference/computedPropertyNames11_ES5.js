@@ -29,8 +29,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, n, {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     }),
@@ -42,8 +41,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, s + n, {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     }),
@@ -55,8 +53,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, "", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     }),
@@ -68,8 +65,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, a, {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     }),
@@ -81,8 +77,7 @@ var v = (_a = {},
         configurable: true
     }),
     Object.defineProperty(_a, "hello bye", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     }),

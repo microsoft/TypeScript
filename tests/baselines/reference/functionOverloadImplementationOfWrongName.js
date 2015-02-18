@@ -4,5 +4,4 @@ function foo(x, y);
 function bar() { }
 
 //// [functionOverloadImplementationOfWrongName.js]
-function bar() {
-}
+function bar() { }
