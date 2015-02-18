@@ -148,6 +148,8 @@ module ts {
         A_rest_element_cannot_have_an_initializer: { code: 1186, category: DiagnosticCategory.Error, key: "A rest element cannot have an initializer." },
         A_parameter_property_may_not_be_a_binding_pattern: { code: 1187, category: DiagnosticCategory.Error, key: "A parameter property may not be a binding pattern." },
         Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement: { code: 1188, category: DiagnosticCategory.Error, key: "Only a single variable declaration is allowed in a 'for...of' statement." },
+        The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer: { code: 1189, category: DiagnosticCategory.Error, key: "The variable declaration of a 'for...in' statement cannot have an initializer." },
+        The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer: { code: 1190, category: DiagnosticCategory.Error, key: "The variable declaration of a 'for...of' statement cannot have an initializer." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

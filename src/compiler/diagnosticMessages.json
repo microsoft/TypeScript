@@ -583,6 +583,14 @@
         "category": "Error",
         "code": 1188
     },
+    "The variable declaration of a 'for...in' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1189
+    },
+    "The variable declaration of a 'for...of' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1190
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

@@ -10769,6 +10769,12 @@ module ts {
                             Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
                         return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
+                    if (variableList.declarations[0].initializer) {
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement ?
+                            Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer :
+                            Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
+                        return grammarErrorOnNode(variableList.declarations[0].name, diagnostic);
+                    }
                 }
             }
 
