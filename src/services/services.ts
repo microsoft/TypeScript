@@ -5540,11 +5540,13 @@ module ts {
                     var declarations = symbol.getDeclarations();
                     if (declarations && declarations.length > 0) {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
-                        var defaultLibFile = getDefaultLibFileName(host.getCompilationSettings());
-                        for (var i = 0; i < declarations.length; i++) {
-                            var sourceFile = declarations[i].getSourceFile();
-                            if (sourceFile && endsWith(sourceFile.fileName, defaultLibFile)) {
-                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                        var defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+                        if (defaultLibFileName) {
+                            for (var i = 0; i < declarations.length; i++) {
+                                var sourceFile = declarations[i].getSourceFile();
+                                if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                }
                             }
                         }
 
@@ -5565,10 +5567,6 @@ module ts {
             }
 
             return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
-
-            function endsWith(string: string, value: string): boolean {
-                return string.lastIndexOf(value) + value.length === string.length;
-            }
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
@@ -5680,7 +5678,7 @@ module ts {
                     keyword2 === SyntaxKind.ConstructorKeyword ||
                     keyword2 === SyntaxKind.StaticKeyword) {
 
-                    // Allow things like  "public get", "public constructor" and "public static".  
+                    // Allow things like "public get", "public constructor" and "public static".  
                     // These are all legal.
                     return true;
                 }
@@ -5697,7 +5695,7 @@ module ts {
         
         // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
         // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult {
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;

@@ -274,10 +274,7 @@ module ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            // Shim the API changes for 1.5 release. This should be removed once
-            // TypeScript 1.5 has shipped.
-            return "";
-            //return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
