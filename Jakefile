@@ -235,14 +235,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         cmd = cmd + sources.join(" ");
         console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd]);
-        // Add listeners for output and error
-        ex.addListener("stdout", function(output) {
-            process.stdout.write(output);
-        });
-        ex.addListener("stderr", function(error) {
-            process.stderr.write(error);
-        });
+        var ex = jake.createExec([cmd], {interactive: true});
         ex.addListener("cmdEnd", function() {
             if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
                 for (var i in prefixes) {
@@ -304,18 +297,9 @@ compileFile(processDiagnosticMessagesJs,
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
-    ex.addListener("cmdEnd", function() {
+    exec(cmd, function() {
         complete();
     });
-    ex.run();
 }, {async: true})
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -476,14 +460,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler) {
-    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
+    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true, interactive: true});
     ex.addListener("cmdEnd", function() {
         if (completeHandler) {
             completeHandler();
@@ -677,13 +654,12 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
     var options = "--outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
     console.log(cmd + "\n");
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+
+    exec(cmd, function() {
         fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
         jake.rmRf(temp);
         complete();
     });
-    ex.run();
 }, {async: true});
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
@@ -694,9 +670,7 @@ desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+    exec(cmd, function() {
         complete();
     });
-    ex.run();
 }, { async: true });
