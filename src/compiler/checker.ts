@@ -10786,6 +10786,8 @@ module ts {
         }
 
         function checkGrammarForOfStatement(forOfStatement: ForOfStatement): boolean {
+            // Temporarily disallow for-of statements until type check work is complete.
+            return grammarErrorOnFirstToken(forOfStatement, Diagnostics.For_of_statements_are_not_currently_supported);
             if (checkGrammarForInOrForOfStatement(forOfStatement)) {
                 return true;
             }

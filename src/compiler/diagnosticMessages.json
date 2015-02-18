@@ -1256,7 +1256,7 @@
         "category": "Error",
         "code": 2477
     },
-    "For-of statements are only available when targeting ECMAScript 6 or higher": {
+    "For...of statements are only available when targeting ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 2482
     },
@@ -1845,5 +1845,9 @@
     "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
         "category": "Error",
         "code": 9002
+    },
+    "For...of statements are not currently supported.": {
+        "category": "Error",
+        "code": 9003
     }
 }

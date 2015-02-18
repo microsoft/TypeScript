@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement4.ts(1,10): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
+tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement4.ts(1,1): error TS9003: For...of statements are not currently supported.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement4.ts (1 errors) ====
     for (var a = 1 of X) {
-             ~
-!!! error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
+    ~~~
+!!! error TS9003: For...of statements are not currently supported.
     }

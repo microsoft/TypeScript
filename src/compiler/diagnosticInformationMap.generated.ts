@@ -316,7 +316,7 @@ module ts {
         Property_0_does_not_exist_on_const_enum_1: { code: 2475, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 2476, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
         Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 2477, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
-        For_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 2482, category: DiagnosticCategory.Error, key: "For-of statements are only available when targeting ECMAScript 6 or higher" },
+        For_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 2482, category: DiagnosticCategory.Error, key: "For...of statements are only available when targeting ECMAScript 6 or higher." },
         The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation: { code: 2483, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...of' statement cannot use a type annotation." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
@@ -463,5 +463,6 @@ module ts {
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
         The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 9002, category: DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." },
+        For_of_statements_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "For...of statements are not currently supported." },
     };
 }
