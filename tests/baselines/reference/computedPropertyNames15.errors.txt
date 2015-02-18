@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(6,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(6,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts (2 errors) ====
@@ -10,8 +10,8 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(7,5): 
         [p1]() { }
         [p2]() { }
         ~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         [p3]() { }
         ~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     }

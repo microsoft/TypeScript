@@ -97,8 +97,7 @@ module ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    // TODO(jfreeman): How do we sort declarations with computed names?
-                    return (<Identifier>n1.name).text.localeCompare((<Identifier>n2.name).text);
+                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -426,7 +425,7 @@ module ts.NavigationBar {
                     // Add the constructor parameters in as children of the class (for property parameters).
                     // Note that *all* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
-                    var nodes: Node[] = removeComputedProperties(node);
+                    var nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
                         nodes.push.apply(nodes, constructor.parameters);
                     }
@@ -455,7 +454,7 @@ module ts.NavigationBar {
             }
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
+                var childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
@@ -466,8 +465,15 @@ module ts.NavigationBar {
             }
         }
 
-        function removeComputedProperties(node: ClassDeclaration | InterfaceDeclaration | EnumDeclaration): Declaration[] {
+        function removeComputedProperties(node: EnumDeclaration): Declaration[] {
             return filter<Declaration>(node.members, member => member.name === undefined || member.name.kind !== SyntaxKind.ComputedPropertyName);
+        }
+
+        /**
+         * Like removeComputedProperties, but retains the properties with well known symbol names
+         */
+        function removeDynamicallyNamedProperties(node: ClassDeclaration | InterfaceDeclaration): Declaration[]{
+            return filter<Declaration>(node.members, member => !hasDynamicName(member));
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {
