@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames42.ts(8,5): error TS1166: Computed property names are not allowed in class property declarations.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames42.ts(8,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames42.ts(8,5): error TS2411: Property '[""]' of type 'Foo' is not assignable to string index type 'Foo2'.
 
 
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames42.ts(8,5): 
         // Computed properties
         [""]: Foo;
         ~~~~
-!!! error TS1166: Computed property names are not allowed in class property declarations.
+!!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
         ~~~~~~~~~~
 !!! error TS2411: Property '[""]' of type 'Foo' is not assignable to string index type 'Foo2'.
     }

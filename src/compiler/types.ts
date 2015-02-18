@@ -140,6 +140,7 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        SymbolKeyword,
         TypeKeyword,
         OfKeyword,
         // Parse tree nodes
@@ -1304,9 +1305,10 @@ module ts {
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
+        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
-        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
