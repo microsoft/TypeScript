@@ -81,7 +81,7 @@ module ts.server {
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
             start: project.compilerService.host.positionToLineCol(fileName, diag.start),
-            end: project.compilerService.host.positionToLineCol(fileName, diag.start+diag.length),
+            end: project.compilerService.host.positionToLineCol(fileName, diag.start + diag.length),
             text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
         };
     }
@@ -104,6 +104,7 @@ module ts.server {
         export var Change = "change";
         export var Close = "close";
         export var Completions = "completions";
+        export var CompletionDetails = "completionEntryDetails";
         export var Definition = "definition";
         export var Format = "format";
         export var Formatonkey = "formatonkey";
@@ -486,8 +487,8 @@ module ts.server {
                 };
             });
         }
-
-        getCompletions(line: number, col: number, prefix: string, fileName: string): protocol.CompletionItem[] {
+ 
+        getCompletions(line: number, col: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
             if (!prefix) {
                 prefix = "";
             }
@@ -505,24 +506,31 @@ module ts.server {
                 throw Errors.NoContent;
             }
 
-            return completions.entries.reduce((result: ts.CompletionEntryDetails[], entry: ts.CompletionEntry) => {
+            return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                 if (completions.isMemberCompletion || entry.name.indexOf(prefix) == 0) {
-                    var protoEntry = <ts.CompletionEntryDetails>{};
-                    protoEntry.name = entry.name;
-                    protoEntry.kind = entry.kind;
-                    if (entry.kindModifiers && (entry.kindModifiers.length > 0)) {
-                        protoEntry.kindModifiers = entry.kindModifiers;
-                    }
-                    var details = compilerService.languageService.getCompletionEntryDetails(file, position, entry.name);
-                    if (details && (details.documentation) && (details.documentation.length > 0)) {
-                        protoEntry.documentation = details.documentation;
-                    }
-                    if (details && (details.displayParts) && (details.displayParts.length > 0)) {
-                        protoEntry.displayParts = details.displayParts;
-                    }
-                    result.push(protoEntry);
+                    result.push(entry);
                 }
                 return result;
+            }, []);
+        }
+
+        getCompletionEntryDetails(line: number, col: number,
+            entryNames: string[], fileName: string): protocol.CompletionEntryDetails[] {
+            var file = ts.normalizePath(fileName);
+            var project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineColToPosition(file, line, col);
+
+            return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
+                var details = compilerService.languageService.getCompletionEntryDetails(file, position, entryName);
+                if (details) {
+                    accum.push(details);
+                }
+                return accum;
             }, []);
         }
 
@@ -722,6 +730,12 @@ module ts.server {
                     case CommandNames.Completions: {
                         var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
                         response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
+                        break;
+                    }
+                    case CommandNames.CompletionDetails: {
+                        var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
+                        response = this.getCompletionEntryDetails(request.arguments.line, request.arguments.col, completionDetailsArgs.entryNames,
+                                                                  request.arguments.file);
                         break;
                     }
                     case CommandNames.Geterr: {

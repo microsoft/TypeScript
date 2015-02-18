@@ -472,6 +472,26 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Arguments for completion details request.
+      */
+    export interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
+        /**
+          * Names of one or more entries for which to obtain details.
+          */
+        entryNames: string[];
+    }
+
+    /**
+      * Completion entry details request; value of command field is
+      * "completionEntryDetails".  Given a file location (file, line,
+      * col) and an array of completion entry names return more
+      * detailed information for each completion entry.
+      */
+    export interface CompletionDetailsRequest extends FileLocationRequest {
+        arguments: CompletionDetailsRequestArgs;
+    }
+
+    /**
       * Part of a symbol description.
       */
     export interface SymbolDisplayPart {
@@ -489,35 +509,42 @@ declare module ts.server.protocol {
     /**
       * An item found in a completion response.
       */
-    export interface CompletionItem {
+    export interface CompletionEntry {
         /**
           * The symbol's name.
           */
         name: string;
-        
         /**
           * The symbol's kind (such as 'className' or 'parameterName').
           */
         kind: string;
-        
         /**
           * Optional modifiers for the kind (such as 'public').
           */
-        kindModifiers?: string;
-        
+        kindModifiers: string;
+    }
+
+    /**
+      * Additional completion entry details, available on demand
+      */
+    export interface CompletionEntryDetails extends CompletionEntry {
         /**
           * Display parts of the symbol (similar to quick info).
           */
-        displayParts?: SymbolDisplayPart[];
+        displayParts: SymbolDisplayPart[];
         
         /**
           * Documentation strings for the symbol.
           */
-        documentation?: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[];
     }
 
     export interface CompletionsResponse extends Response {
-        body?: CompletionItem[];
+        body?: CompletionEntry[];
+    }
+
+    export interface CompletionDetailsResponse extends Response {
+        body?: CompletionEntryDetails[];
     }
 
     /**

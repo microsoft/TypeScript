@@ -1,5 +1,5 @@
 /// <reference path="session.ts" />
-
+ 
 module ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
@@ -172,7 +172,7 @@ module ts.server {
                 documentation: [{ kind: "text", text: response.body.documentation }]
             };
         }
-
+        
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineCol = this.positionToOneBasedLineCol(fileName, position);
             var args: protocol.CompletionsRequestArgs = {
@@ -185,27 +185,28 @@ module ts.server {
             var request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             var response = this.processResponse<protocol.CompletionsResponse>(request);
 
-            return this.lastCompletionEntry = {
+            return  {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(entry => ({
-                    kind: entry.kind,
-                    kindModifiers: entry.kindModifiers,
-                    name: entry.name,
-                    displayParts: entry.displayParts,
-                    documentation: entry.documentation
-                })),
+                entries: response.body,
                 fileName: fileName,
                 position: position
             };
         }
-
+     
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-             if (!this.lastCompletionEntry || this.lastCompletionEntry.fileName !== fileName || this.lastCompletionEntry.position !== position) { 
-                this.getCompletionsAtPosition(fileName, position);
-            }
+            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var args: protocol.CompletionDetailsRequestArgs = {
+                file: fileName,
+                line: lineCol.line,
+                col: lineCol.col,
+                entryNames: [entryName]
+            };
 
-            return <CompletionEntryDetails>this.lastCompletionEntry.entries.filter(entry => entry.name === entryName)[0];
+            var request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
+            var response = this.processResponse<protocol.CompletionDetailsResponse>(request);
+            Debug.assert(response.body.length == 1, "Unexpected length of completion details response body.");
+            return response.body[0];
         }
 
         getNavigateToItems(searchTerm: string): NavigateToItem[] {
