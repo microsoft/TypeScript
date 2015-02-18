@@ -2667,7 +2667,7 @@ module ts {
                 write(")");
             }
 
-            function emitCallExpression(node: CallExpression, emitArguments: (args: Expression[], node: CallExpression) => void = emitCommaList) {                
+            function emitCallExpression(node: CallExpression) {
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
@@ -2686,13 +2686,13 @@ module ts {
                     emitThis(node.expression);
                     if (node.arguments.length) {
                         write(", ");
-                        emitArguments(node.arguments, node);
+                        emitCommaList(node.arguments);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitArguments(node.arguments, node);
+                    emitCommaList(node.arguments);
                     write(")");
                 }
             }
@@ -3955,43 +3955,38 @@ module ts {
                 return false;
             }
 
-            function emitSerializedType(node: ClassDeclaration | PropertyDeclaration | FunctionLikeDeclaration | ParameterDeclaration) {
-                var serializedType = resolver.serializeTypeOfDeclaration(node); 
-                write(serializedType);
-            }
-
-            function emitSerializedParameterTypes(node: ClassDeclaration | FunctionLikeDeclaration) {
-                var serializedTypes = resolver.serializeParameterTypesOfDeclaration(node);
-                write("[");
-                for (var i = 0; i < serializedTypes.length; i++) {
-                    if (i > 0) {
-                        write(", ");
-                    }
-                    write(serializedTypes[i]);
+            function createSerializedTypeExpression(type: string): Expression {
+                if (!type || type === "void 0") {
+                    return createVoidZero();
                 }
-                write("]");
+                var serializedType = <Identifier>createNode(SyntaxKind.Identifier);
+                serializedType.text = type;
+                return serializedType;
             }
 
-            function emitSerializedReturnType(node: ClassDeclaration | FunctionLikeDeclaration) {
-                var serializedType = resolver.serializeReturnTypeOfDeclaration(node);                
-                write(serializedType);
-            }            
+            function createSerializedTypeArrayExpression(types: string[]): ArrayLiteralExpression {
+                var array = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
+                var elements = <NodeArray<Expression>>[];
+                for (var i = 0; i < types.length; i++) {
+                    elements[i] = createSerializedTypeExpression(types[i]);
+                }
+                array.elements = elements;
+                return array;
+            }
 
-            function emitArgumentsOfDecoratorFactory(args: Expression[], node: CallExpression) {
-                emitCommaList(args);
-
+            function rewriteDecoratorFactory(node: CallExpression): CallExpression {
                 var decorator = <Decorator>node.parent;
                 if (!isDeclaration(decorator.parent)) {
-                    return;
-            }
-
+                    return node;
+                }
                 var decorated = <Declaration>decorator.parent;
                 var signature = resolver.getResolvedSignature(node);
                 var declaration = signature.declaration;
                 if (!declaration) {
-                    return;
+                    return node;
                 }
-
+                var newArgumentList: Expression[];
+                var args = node.arguments;
                 var argCount = args ? args.length : 0;
                 var parameters = declaration.parameters;
                 var parameterCount = signature.hasRestParameter ? parameters.length - 1 : parameters.length;
@@ -4004,45 +3999,56 @@ module ts {
                             ? shouldEmitSerializedTypeForNode
                             : shouldEmitSerializedParameterTypesOrReturnTypeForNode;
                         if (shouldEmitCompilerGeneratedArgument(decorated)) {
+                            if (!newArgumentList) {
+                                newArgumentList = args.slice(0);
+                            }
                             while (lastArg < i) {
-                                if (i > 0) {
-                                    write(", ");
-                                }
-                                write("void 0");
+                                newArgumentList.push(createVoidZero());
                                 lastArg++;
                             }
-                            if (i > 0) {
-                                write(", ");
-                            }
-                            if (flags & NodeCheckFlags.EmitDecoratedType) {
-                                emitSerializedType(<ClassDeclaration | PropertyDeclaration | FunctionLikeDeclaration | ParameterDeclaration>decorated);
+                            if (flags & NodeCheckFlags.EmitDecoratedType) {                                
+                                var serializedType = resolver.serializeTypeOfDeclaration(<ClassDeclaration | PropertyDeclaration | FunctionLikeDeclaration | ParameterDeclaration>decorated);
+                                newArgumentList.push(createSerializedTypeExpression(serializedType));
                             }
                             else if (flags & NodeCheckFlags.EmitDecoratedParamTypes) {
-                                emitSerializedParameterTypes(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                                var serializedTypes = resolver.serializeParameterTypesOfDeclaration(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                                newArgumentList.push(createSerializedTypeArrayExpression(serializedTypes));
                             }
                             else if (flags & NodeCheckFlags.EmitDecoratedReturnType) {
-                                emitSerializedReturnType(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                                var serializedType = resolver.serializeReturnTypeOfDeclaration(<ClassDeclaration | FunctionLikeDeclaration>decorated);
+                                newArgumentList.push(createSerializedTypeExpression(serializedType));
                             }
                             lastArg++;
                         }
                     }
                 }
+                if (newArgumentList) {
+                    var updated = <CallExpression>createNode(SyntaxKind.CallExpression);
+                    updated.expression = node.expression;
+                    updated.arguments = <NodeArray<Expression>>newArgumentList;
+                    updated.pos = node.pos;
+                    updated.end = node.end;
+                    updated.flags = node.flags;
+                    return updated;
+                }
+                return node;
             }
 
             function emitExpressionOfDecorator(node: Decorator) {
                 var expression = node.expression;
                 if (expression.kind === SyntaxKind.CallExpression) {
-                    var callExpr = <CallExpression>expression;
-                    emitCallExpression(callExpr, emitArgumentsOfDecoratorFactory);
+                    expression = rewriteDecoratorFactory(<CallExpression>expression);
                 }
-                else {
-                    emit(expression);
-                }
+                emit(expression);
+            }
+
+            function isNonAmbientDecorator(node: Decorator): boolean {
+                return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AmbientDecorator) === 0;
             }
 
             function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number, info: DecoratorEmitInfo) {
-                var decorators = parameter.decorators;
-                if (!decorators) {
+                var decorators = filter(parameter.decorators, isNonAmbientDecorator);
+                if (!decorators || decorators.length === 0) {
                     return;
                 }
 
@@ -4119,7 +4125,8 @@ module ts {
 
                 var name = member.name;
                 var decorators = getDecoratorsOfMember(node, member);
-                if (!decorators) {
+                decorators = filter(decorators, isNonAmbientDecorator);
+                if (!decorators || decorators.length === 0) {
                     return;
                 }
 
@@ -4161,8 +4168,8 @@ module ts {
                     emitDecoratorsOfParameters(constructor, info);
                 }
 
-                var decorators = node.decorators;
-                if (!node.decorators) {
+                var decorators = filter(node.decorators, isNonAmbientDecorator);
+                if (!decorators || decorators.length === 0) {
                     return;
                 }
                 
@@ -4928,11 +4935,11 @@ module ts {
         }
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-                emitJavaScript(jsFilePath, sourceFile);
+            emitJavaScript(jsFilePath, sourceFile);
 
             if (compilerOptions.declaration) {
-                    writeDeclarationFile(jsFilePath, sourceFile);
-                }
+                writeDeclarationFile(jsFilePath, sourceFile);
             }
+        }
     }
 }

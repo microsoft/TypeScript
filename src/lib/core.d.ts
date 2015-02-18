@@ -1159,32 +1159,35 @@ interface TypedPropertyDescriptor<T> {
     set?: (value: T) => void;
 }
 
-declare const enum DecoratorTargets {
-    class = 0x1,
-    interface = 0x2,
-    function = 0x3,
-    method = 0x4,
-    accessor = 0x5,
-    property = 0x6,
-    parameter = 0x7,
-    all = DecoratorTargets.class | DecoratorTargets.interface | DecoratorTargets.function | DecoratorTargets.method | DecoratorTargets.accessor | DecoratorTargets.property | DecoratorTargets.parameter
-}
-
 interface DecoratorFunction { <TFunction extends Function>(target: TFunction): TFunction | void; }
 interface ParameterDecoratorFunction { (target: Function, parameterIndex: number): void; }
 interface MemberDecoratorFunction { <T>(target: Function | Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }
 
 /**
+  * Built-in decorator. Sets options for a function used as a decorator
+  */
+@decorator({ ambient: true })
+declare function decorator(options?: {
+    /**
+      * A value indicating whether the decorator is ambient (true) and should not be emitted to output.
+      */
+    ambient?: boolean;
+}): void;
+
+/**
   * Built-in decorator. Emits the serialized type of the target in the argument position of the decorated parameter.
   */
+@decorator({ ambient: true })
 declare function type(): void;
 
 /**
   * Built-in decorator. Emits the serialized types of the parameters of the target in the argument position of the decorated parameter.
   */
+@decorator({ ambient: true })
 declare function paramtypes(): void;
 
 /**
   * Built-in decorator. Emits the serialized return type of the target in the argument position of the decorated parameter.
   */
+@decorator({ ambient: true })
 declare function returntype(): void;

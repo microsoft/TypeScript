@@ -583,13 +583,25 @@
         "category": "Error",
         "code": 1188
     },
-    "Decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
+    "Non-ambient decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
         "category": "Error",
         "code": 1189
     },
     "Decorator '{0}' is not valid on this declaration type. It is only valid on '{1}' declarations.": {
         "category": "Error",
         "code": 1190
+    },
+    "Decorator '{0}' is not valid on this declaration type.": {
+        "category": "Error",
+        "code": 1191
+    },
+    "Decorator is not valid on this declaration type.": {
+        "category": "Error",
+        "code": 1192
+    },
+    "Argument to ambient decorator must be constant expression.": {
+        "category": "Error",
+        "code": 1193
     },
 
     "Duplicate identifier '{0}'.": {

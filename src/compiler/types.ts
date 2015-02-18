@@ -1250,13 +1250,14 @@ module ts {
     }
 
     export interface SymbolLinks {
-        target?: Symbol;               // Resolved (non-alias) target of an alias
-        type?: Type;                   // Type of value symbol
-        declaredType?: Type;           // Type of class, interface, enum, or type parameter
-        mapper?: TypeMapper;           // Type mapper for instantiation alias
-        referenced?: boolean;          // True if alias symbol has been referenced as a value
-        exportAssignSymbol?: Symbol;   // Symbol exported from external module
-        unionType?: UnionType;         // Containing union type for union property
+        target?: Symbol;                            // Resolved (non-alias) target of an alias
+        type?: Type;                                // Type of value symbol
+        declaredType?: Type;                        // Type of class, interface, enum, or type parameter
+        mapper?: TypeMapper;                        // Type mapper for instantiation alias
+        referenced?: boolean;                       // True if alias symbol has been referenced as a value
+        exportAssignSymbol?: Symbol;                // Symbol exported from external module
+        unionType?: UnionType;                      // Containing union type for union property
+        decoratorMetadata?: DecoratorMetadata[];    // Resolved ambient decorator metadata        
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1280,12 +1281,14 @@ module ts {
         EmitDecoratedType       = 0x00000200,  // Emit the type of the decorator target as an argument in this parameter position
         EmitDecoratedParamTypes = 0x00000400,  // Emit the parameter types of the decorator target as an argument in this parameter position
         EmitDecoratedReturnType = 0x00000800,  // Emit the return type of the decorator target as an argument in this parameter position
+        AmbientDecorator        = 0x00001000,  // Decorator was marked ambient, do not emit to output
     }
 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
+        resolvedDecoratorMetadata?: DecoratorMetadata; // Resolved metadata for a decorator
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
@@ -1437,6 +1440,41 @@ module ts {
         inferredTypes: Type[];              // Inferred type for each type parameter
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
+    }
+
+    export interface DecoratorUsage {
+        ambient: boolean;
+    }
+
+    // DecoratorMetadata consists of the state information about an ambient decorator
+    export interface DecoratorMetadata {
+        symbol: Symbol;     // The symbol of the ambient decorator
+        arguments: any[];   // The arguments to the ambient decorator
+    }
+
+    export const enum DecoratorFlags {
+        BuiltIn                 = 0x00000001, // built-in ambient decorator
+        UserDefinedAmbient      = 0x00000002, // user-provided ambient decorator
+        ClassDeclaration        = 0x00000004, // decorator can target a class declaration
+        InterfaceDeclaration    = 0x00000008, // decorator can target an interface declaration
+        TypeAliasDeclaration    = 0x00000010, // decorator can target a type alias
+        EnumDeclaration         = 0x00000020, // decorator can target an enum declaration
+        EnumMember              = 0x00000040, // decorator can target an enum member
+        ModuleDeclaration       = 0x00000080, // decorator can target a lexical module declaration
+        ImportDeclaration       = 0x00000100, // decorator can target an import declaration
+        VariableDeclaration     = 0x00000200, // decorator can target a variable declaration (var, let, or const)
+        FunctionDeclaration     = 0x00000400, // decorator can target a function declaration
+        PropertyDeclaration     = 0x00000800, // decorator can target a property declaration
+        MethodDeclaration       = 0x00001000, // decorator can target a method declaration
+        AccessorDeclaration     = 0x00002000, // decorator can target an accessor declaration
+        ParameterDeclaration    = 0x00004000, // decorator can target a parameter declaration
+
+        Ambient = BuiltIn | UserDefinedAmbient,
+        AllTargets = ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration
+            | EnumDeclaration | EnumMember | ModuleDeclaration | ImportDeclaration 
+            | VariableDeclaration | FunctionDeclaration | PropertyDeclaration
+            | MethodDeclaration | AccessorDeclaration | ParameterDeclaration,
+        ES3TargetsExclude = PropertyDeclaration | MethodDeclaration | AccessorDeclaration
     }
 
     export interface DiagnosticMessage {
