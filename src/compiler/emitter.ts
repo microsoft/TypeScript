@@ -3282,7 +3282,7 @@ module ts {
                                 emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
                             }
                             else {
-                                if (i === elements.length - 1 && (<SpreadElementExpression>e).expression.kind === SyntaxKind.Identifier) {
+                                if (i === elements.length - 1) {
                                     value = ensureIdentifier(value);
                                     emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
                                     write(".slice(" + i + ")");
@@ -3384,12 +3384,23 @@ module ts {
                     }
                 }
                 else {
-                    var initializeToDefault = renameNonTopLevelLetAndConst(<Identifier>node.name);
+                    var isLet = renameNonTopLevelLetAndConst(<Identifier>node.name);
                     emitModuleMemberName(node);
 
-                    var initializer =
-                        node.initializer ||
-                        (initializeToDefault && createVoidZero());
+                    var initializer = node.initializer;
+                    if (!initializer) {
+                        // downlevel emit for non-initialized let bindings defined in loops
+                        // for (...) {  let x; }
+                        // should be
+                        // for (...) { var <some-uniqie-name> = void 0; }
+                        // this is necessary to preserve ES6 semantic in scenarios like
+                        // for (...) { let x; console.log(x); x = 1 } // assignment on one iteration should not affect other iterations
+                        var initializer =
+                            languageVersion < ScriptTarget.ES6 &&
+                            (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) &&
+                            (getCombinedFlagsForIdentifier(<Identifier>node.name) & NodeFlags.Let) &&
+                            createVoidZero();
+                    }
 
                     emitOptional(" = ", initializer);
                 }
@@ -3422,29 +3433,39 @@ module ts {
                 }
             }
 
-            function renameNonTopLevelLetAndConst(node: Node): boolean {
+            function getCombinedFlagsForIdentifier(node: Identifier): NodeFlags {
+                if (!node.parent || (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
+                    return 0;
+                }
+
+                return getCombinedNodeFlags(node.parent);
+            }
+
+            function renameNonTopLevelLetAndConst(node: Node): void {
                 // do not rename if
                 // - language version is ES6+
                 // - node is synthesized (does not have a parent)
+                // - node is not identifier (can happen when tree is malformed)
                 // - node is definitely not name of variable declaration. 
                 // it still can be part of parameter declaration, this check will be done next
                 if (languageVersion >= ScriptTarget.ES6 ||
                     !node.parent ||
+                    node.kind !== SyntaxKind.Identifier ||
                     (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
-                    return false;
+                    return;
                 }
 
-                var combinedFlags = getCombinedNodeFlags(node.parent);
+                var combinedFlags = getCombinedFlagsForIdentifier(<Identifier>node);
                 if (((combinedFlags & NodeFlags.BlockScoped) === 0) || combinedFlags & NodeFlags.Export) {
                     // do not rename exported or non-block scoped variables
-                    return false;
+                    return;
                 }
 
                 // here it is known that node is a block scoped variable
                 var list = getAncestor(node, SyntaxKind.VariableDeclarationList);
                 if (list.parent.kind === SyntaxKind.VariableStatement && list.parent.parent.kind === SyntaxKind.SourceFile) {
                     // do not rename variables that are defined on source file level
-                    return false;
+                    return;
                 }
 
                 var generatedName = makeUniqueName(getEnclosingBlockScopeContainer(node), (<Identifier>node).text);
@@ -3453,8 +3474,6 @@ module ts {
                     generatedBlockScopeNames = [];
                 }
                 generatedBlockScopeNames[symbolId] = generatedName;
-
-                return (combinedFlags & NodeFlags.Let) !== 0;
             }
 
             function emitVariableStatement(node: VariableStatement) {

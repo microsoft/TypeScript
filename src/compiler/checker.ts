@@ -4939,15 +4939,14 @@ module ts {
                 current = current.parent;
             }
 
-            if (!inFunction) {
-                return;
-            }
-
             var current: Node = container;
             while (current && !isNameScopeBoundary(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
-                    getNodeLinks(current).flags |= NodeCheckFlags.BlockScopedBindingCapturedInLoop;
-                    grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                    if (inFunction) {
+                        getNodeLinks(current).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                    }
+                    getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
                     break;
                 }
                 current = current.parent;

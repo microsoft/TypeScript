@@ -1262,7 +1262,7 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed  = 0x00000080,
-        BlockScopedBindingCapturedInLoop = 0x00000100,
+        BlockScopedBindingInLoop = 0x00000100,
     }
 
     export interface NodeLinks {
