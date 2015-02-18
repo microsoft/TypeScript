@@ -1542,7 +1542,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
-        defines?: string[];
+        define?: string[];
         [option: string]: string | number | boolean | string[];
     }
 

@@ -6539,9 +6539,9 @@ module ts {
         function isConditionalSymbolDefined(condition: string) {
             if (!conditionalSymbols) {
                 conditionalSymbols = {};
-                if (compilerOptions.defines) {
-                    for (var i = 0; i < compilerOptions.defines.length; i++) {
-                        conditionalSymbols[compilerOptions.defines[i].toUpperCase()] = true;
+                if (compilerOptions.define) {
+                    for (var i = 0; i < compilerOptions.define.length; i++) {
+                        conditionalSymbols[compilerOptions.define[i].toUpperCase()] = true;
                     }
                 }
             }
