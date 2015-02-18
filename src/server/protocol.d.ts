@@ -95,10 +95,10 @@ declare module ts.server.protocol {
     }
 
     /**
-      * Instances of this interface specify a code location:
+      * Instances of this interface specify a location in a source file:
       * (file, line, col), where line and column are 1-based.
       */
-    export interface CodeLocationRequestArgs extends FileRequestArgs {
+    export interface FileLocationRequestArgs extends FileRequestArgs {
         /** 
           * The line number for the request (1-based).
           */
@@ -111,24 +111,24 @@ declare module ts.server.protocol {
     }
 
     /**
-      * A request whose arguments specify a code location (file, line, col).
+      * A request whose arguments specify a file location (file, line, col).
       */
-    export interface CodeLocationRequest extends FileRequest {
-        arguments: CodeLocationRequestArgs;
+    export interface FileLocationRequest extends FileRequest {
+        arguments: FileLocationRequestArgs;
     }
 
     /**
       * Go to definition request; value of command field is
-      * "definition". Return response giving the code locations that
+      * "definition". Return response giving the file locations that
       * define the symbol found in file at location line, col.
       */
-    export interface DefinitionRequest extends CodeLocationRequest {
+    export interface DefinitionRequest extends FileLocationRequest {
     }
 
     /**
-      * Object containing line and column (one-based) of code location.
+      * Location in source code expressed as (one-based) line and column.
       */
-    export interface LineCol {
+    export interface Location {
         line: number;
         col: number;
     }
@@ -140,18 +140,18 @@ declare module ts.server.protocol {
         /**
           * First character of the definition.
           */
-        start: LineCol;
+        start: Location;
 
         /**
           * One character past last character of the definition.
           */
-        end: LineCol;
+        end: Location;
     }
 
     /**
       * Object found in response messages defining a span of text in a specific source file.
       */
-    export interface CodeSpan extends TextSpan {
+    export interface FileSpan extends TextSpan {
         /** 
           * File containing text span.
           */
@@ -162,18 +162,18 @@ declare module ts.server.protocol {
       * Definition response message.  Gives text range for definition.
       */
     export interface DefinitionResponse extends Response {
-        body?: CodeSpan[];
+        body?: FileSpan[];
     }
 
     /**
       * Find references request; value of command field is
-      * "references". Return response giving the code locations that
+      * "references". Return response giving the file locations that
       * reference the symbol found in file at location line, col.
       */
-    export interface ReferencesRequest extends CodeLocationRequest {
+    export interface ReferencesRequest extends FileLocationRequest {
     }
 
-    export interface ReferencesResponseItem extends CodeSpan {
+    export interface ReferencesResponseItem extends FileSpan {
         /** Text of line containing the reference.  Including this
           *  with the response avoids latency of editor loading files
           * to show text of reference line (the server already has
@@ -192,7 +192,7 @@ declare module ts.server.protocol {
       */
     export interface ReferencesResponseBody {
         /**
-          * The code locations referencing the symbol.
+          * The file locations referencing the symbol.
           */
         refs: ReferencesResponseItem[];
 
@@ -219,7 +219,7 @@ declare module ts.server.protocol {
         body?: ReferencesResponseBody;
     }
 
-    export interface RenameRequestArgs extends CodeLocationRequestArgs {
+    export interface RenameRequestArgs extends FileLocationRequestArgs {
         findInComments?: boolean;
         findInStrings?: boolean;
     }
@@ -227,11 +227,11 @@ declare module ts.server.protocol {
 
     /**
       * Rename request; value of command field is "rename". Return
-      * response giving the code locations that reference the symbol
+      * response giving the file locations that reference the symbol
       * found in file at location line, col. Also return full display
       * name of the symbol so that client can print it unambiguously.
       */
-    export interface RenameRequest extends CodeLocationRequest {
+    export interface RenameRequest extends FileLocationRequest {
         arguments: RenameRequestArgs;
     }
 
@@ -326,7 +326,7 @@ declare module ts.server.protocol {
       * documentation string for the symbol found in file at location
       * line, col.
       */
-    export interface QuickInfoRequest extends CodeLocationRequest {
+    export interface QuickInfoRequest extends FileLocationRequest {
     }
 
     /**
@@ -344,14 +344,14 @@ declare module ts.server.protocol {
         kindModifiers: string;
         
         /**
-          * Starting code location of symbol.
+          * Starting file location of symbol.
           */
-        start: LineCol;
+        start: Location;
         
         /**
           * One past last character of symbol.
           */
-        end: LineCol;
+        end: Location;
         
         /**
           * Type and kind of symbol.
@@ -374,7 +374,7 @@ declare module ts.server.protocol {
     /**
       * Arguments for format messages.
       */
-    export interface FormatRequestArgs extends CodeLocationRequestArgs {
+    export interface FormatRequestArgs extends FileLocationRequestArgs {
         /**
           * Last line of range for which to format text in file.
           */
@@ -393,7 +393,7 @@ declare module ts.server.protocol {
       * instructions in reverse to file will result in correctly
       * reformatted text.
       */
-    export interface FormatRequest extends CodeLocationRequest {
+    export interface FormatRequest extends FileLocationRequest {
         arguments: FormatRequestArgs;
     } 
 
@@ -408,12 +408,12 @@ declare module ts.server.protocol {
         /**
           * First character of the text span to edit.
           */
-        start: LineCol;
+        start: Location;
 
         /**
           * One character past last character of the text span to edit.
           */
-        end: LineCol;
+        end: Location;
         
         /**
           * Replace the span defined above with this string (may be
@@ -432,7 +432,7 @@ declare module ts.server.protocol {
     /**
       * Arguments for format on key messages.
       */
-    export interface FormatOnKeyRequestArgs extends CodeLocationRequestArgs {
+    export interface FormatOnKeyRequestArgs extends FileLocationRequestArgs {
         /**
           * Key pressed (';', '\n', or '}').
           */
@@ -447,14 +447,14 @@ declare module ts.server.protocol {
       * edit instructions in reverse to file will result in correctly
       * reformatted text.
       */
-    export interface FormatOnKeyRequest extends CodeLocationRequest {
+    export interface FormatOnKeyRequest extends FileLocationRequest {
         arguments: FormatOnKeyRequestArgs;
     }
 
     /**
       * Arguments for completions messages.
       */
-    export interface CompletionsRequestArgs extends CodeLocationRequestArgs {
+    export interface CompletionsRequestArgs extends FileLocationRequestArgs {
         /**
           * Optional prefix to apply to possible completions.
           */
@@ -467,7 +467,7 @@ declare module ts.server.protocol {
       * be the empty string), return the possible completions that
       * begin with prefix.
       */
-    export interface CompletionsRequest extends CodeLocationRequest {
+    export interface CompletionsRequest extends FileLocationRequest {
         arguments: CompletionsRequestArgs;
     }
 
@@ -552,18 +552,18 @@ declare module ts.server.protocol {
     }
 
     /**
-      * Item of diagnostic information found in a DiagEvent message.
+      * Item of diagnostic information found in a DiagnosticEvent message.
       */
     export interface Diagnostic {
         /**
-          * Starting code location at which text appies.
+          * Starting file location at which text appies.
           */
-        start: LineCol;
+        start: Location;
         
         /**
-          * Length of code location at which text applies.
+          * The last file location at which the text applies.
           */
-        len: number;
+        end: Location;
         
         /**
           * Text of diagnostic message.
@@ -571,24 +571,26 @@ declare module ts.server.protocol {
         text: string;
     }
 
+    export interface DiagnosticEventBody {
+        /**
+          * The file for which diagnostic information is reported.
+          */
+        file: string;
+      
+        /**
+          * An array of diagnostic information items.
+          */
+        diagnostics: Diagnostic[];
+    }
+
     /** 
       * Event message for "syntaxDiag" and "semanticDiag" event types.
       * These events provide syntactic and semantic errors for a file.
       */
-    export interface DiagEvent extends Event {
-        body?: {
-            /**
-              * The file for which diagnostic information is reported.
-              */
-            file: string;
-      
-            /**
-              * An array of diagnostic information items.
-              */
-            diagnostics: Diagnostic[];
-        };
+    export interface DiagnosticEvent extends Event {
+        body?: DiagnosticEventBody;
     }
-
+ 
     /**
       * Arguments for reload request.
       */
@@ -652,7 +654,7 @@ declare module ts.server.protocol {
 
     /**
       * Navto request message; value of command field is "navto".
-      * Return list of objects giving code locations and symbols that
+      * Return list of objects giving file locations and symbols that
       * match the search term given in argument 'searchTerm'.  The
       * context for the search is given by the named file.
       */
@@ -692,12 +694,12 @@ declare module ts.server.protocol {
         /**
           * The location within file at which the symbol is found.
           */
-        start: LineCol;
+        start: Location;
         
         /**
           * One past the last character of the symbol.
           */
-        end: LineCol;
+        end: Location;
         
         /**
           * Name of symbol's container symbol (if any); for example,
@@ -722,15 +724,9 @@ declare module ts.server.protocol {
     /**
       * Arguments for change request message.
       */
-    export interface ChangeRequestArgs extends CodeLocationRequestArgs {
+    export interface ChangeRequestArgs extends FormatRequestArgs {
         /**
-          * Length of span deleted at location (file, line, col); nothing deleted
-          * if this field is zero or undefined.
-          */
-        deleteLen?: number;
-        
-        /**
-          * Optional string to insert at location (file, line col).
+          * Optional string to insert at location (file, line, col).
           */
         insertString?: string;
     }
@@ -740,7 +736,7 @@ declare module ts.server.protocol {
       * Update the server's view of the file named by argument 'file'.  
       * Server does not currently send a response to a change request.
       */
-    export interface ChangeRequest extends CodeLocationRequest {
+    export interface ChangeRequest extends FileLocationRequest {
         arguments: ChangeRequestArgs;
     }
 
@@ -753,10 +749,10 @@ declare module ts.server.protocol {
 
     /**
       * Brace matching request; value of command field is "brace".
-      * Return response giving the code locations of matching braces
+      * Return response giving the file locations of matching braces
       * found in file at location line, col.
       */
-    export interface BraceRequest extends CodeLocationRequest {
+    export interface BraceRequest extends FileLocationRequest {
     }
 
     /**
