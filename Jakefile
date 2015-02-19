@@ -3,7 +3,6 @@
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
-var child_process = require("child_process");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -644,13 +643,6 @@ desc("Builds the tsc web host");
 task("webhost", [webhostJsPath], function() {
     jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), "tests/webhost/", {silent: true});
 });
-
-// Perf compiler
-var perftscPath = "tests/perftsc.ts";
-var perftscJsPath = "built/local/perftsc.js";
-compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
-desc("Builds augmented version of the compiler for perf tests");
-task("perftsc", [perftscJsPath]);
 
 // Instrumented compiler
 var loggedIOpath = harnessDirectory + 'loggedIO.ts';
