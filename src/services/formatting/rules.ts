@@ -592,6 +592,7 @@ module ts.formatting {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.DoStatement:
