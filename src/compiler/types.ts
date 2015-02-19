@@ -1478,8 +1478,6 @@ module ts {
 
         Ambient = BuiltIn | UserDefinedAmbient,
 
-        ES3TargetsExclude = PropertyDeclaration | MethodDeclaration | AccessorDeclaration,
-
         // Valid decorator targets (from DecoratorTargets enum)
         DecoratorTargetsMask = AllTargets,
 

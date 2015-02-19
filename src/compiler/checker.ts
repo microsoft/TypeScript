@@ -8433,17 +8433,26 @@ module ts {
 
             var metadata: DecoratorMetadata;
             if (flags & DecoratorFlags.Ambient) {
+                // read and check arguments for decorator
                 getNodeLinks(node).flags |= NodeCheckFlags.AmbientDecorator;
                 metadata = getMetadataForDecorator(node);
                 if (!metadata) {
+                    // if we received 'undefined' here, that means there was an error evaluating the metadata.
                     return;
                 }                
             }
             else {
                 // report error for non-ambient decorator on member in ES3
-                if (languageVersion < ScriptTarget.ES5 && (validFlags & DecoratorFlags.ES3TargetsExclude)) {
+                if (languageVersion < ScriptTarget.ES5 && (validFlags & DecoratorFlags.ES3ValidTargetMask) === 0) {
                     error(node, Diagnostics.Non_ambient_decorators_are_only_supported_on_class_members_when_targeting_ECMAScript_5_or_higher);
                     return;
+                }
+
+                // If we are decorating a class member, we need to check the type is compatible
+                if (validFlags & DecoratorFlags.MemberDecoratorFunctionValidTargetsMask) {
+                    var memberSymbol = getSymbolOfNode(node.parent);
+                    var memberType = getTypeOfSymbol(memberSymbol);
+                    // TODO(rbuckton): Check compatibility for TypedPropertyDescriptor<T> and MemberDecoratorFunction
                 }
             }
 

@@ -1222,7 +1222,7 @@ declare function returntype(): void;
 declare function obsolete(message?: string): void;
 
 /**
-  * Built-in decorator. Indicates to the compiler that the call expression should be ignored unless a specified conditional compilation symbol is defined.
+  * Built-in decorator. Indicates to the compiler that the call expression should be ignored (and replaced with `void 0` if applicable) unless a specified conditional compilation symbol is defined.
   */
 @decorator({ ambient: true, targets: DecoratorTargets.class | DecoratorTargets.function | DecoratorTargets.method })
 declare function conditional(condition: string): void;
