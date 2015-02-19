@@ -244,9 +244,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
             if (callback) {
                 callback();
+            } else {
+                complete();
             }
-
-            complete();
         });
         ex.addListener("error", function() {
             fs.unlinkSync(outFile);
@@ -359,6 +359,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
+                complete();
            });
 
 // Local target to build the compiler and services
@@ -405,9 +406,7 @@ file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
     var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
 
-    exec(cmd, function () {
-        complete();
-    });
+    exec(cmd);
 }, {async: true})
 
 
@@ -464,6 +463,8 @@ function exec(cmd, completeHandler) {
     ex.addListener("cmdEnd", function() {
         if (completeHandler) {
             completeHandler();
+        } else {
+            complete();
         }
     });
     ex.addListener("error", function(e, status) {
@@ -500,6 +501,7 @@ function deleteTemporaryProjectOutput() {
     if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
         jake.rmRf(path.join(localBaseline, "projectOutput/"));
     }
+    complete();
 }
 
 var testTimeout = 20000;
@@ -536,9 +538,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
 
-    exec(cmd, function(){
-        complete();
-    });
+    exec(cmd);
 }, { async: true });
 
 // Browser tests
@@ -549,9 +549,7 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
-    exec(cmd, function(){
-        complete();
-    });
+    exec(cmd);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
@@ -571,9 +569,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
 
     tests = tests ? tests : '';
     var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
-    exec(cmd, function(){
-        complete();
-    });
+    exec(cmd);
 }, {async: true});
 
 function getDiffTool() {
@@ -588,17 +584,13 @@ function getDiffTool() {
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
-    exec(cmd, function(){
-        complete();
-    });
+    exec(cmd);
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
-    exec(cmd, function(){
-        complete();
-    });
+    exec(cmd);
 }, {async: true});
 
 desc("Builds the test sources and automation in debug mode");
@@ -668,7 +660,5 @@ desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
 
-    exec(cmd, function() {
-        complete();
-    });
+    exec(cmd);
 }, { async: true });
