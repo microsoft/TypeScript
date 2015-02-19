@@ -579,6 +579,18 @@
         "category": "Error",
         "code": 1187
     },
+    "Only a single variable declaration is allowed in a 'for...of' statement.": {
+        "category": "Error",
+        "code": 1188
+    },
+    "The variable declaration of a 'for...in' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1189
+    },
+    "The variable declaration of a 'for...of' statement cannot have an initializer.": {
+        "category": "Error",
+        "code": 1190
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1260,6 +1272,14 @@
         "category": "Error",
         "code": 2481
     },
+    "'for...of' statements are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 2482
+    },
+    "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2483
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1841,5 +1861,9 @@
     "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
         "category": "Error",
         "code": 9002
+    },
+    "'for...of' statements are not currently supported.": {
+        "category": "Error",
+        "code": 9003
     }
 }

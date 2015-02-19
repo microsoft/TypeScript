@@ -147,6 +147,9 @@ module ts {
         Merge_conflict_marker_encountered: { code: 1185, category: DiagnosticCategory.Error, key: "Merge conflict marker encountered." },
         A_rest_element_cannot_have_an_initializer: { code: 1186, category: DiagnosticCategory.Error, key: "A rest element cannot have an initializer." },
         A_parameter_property_may_not_be_a_binding_pattern: { code: 1187, category: DiagnosticCategory.Error, key: "A parameter property may not be a binding pattern." },
+        Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement: { code: 1188, category: DiagnosticCategory.Error, key: "Only a single variable declaration is allowed in a 'for...of' statement." },
+        The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer: { code: 1189, category: DiagnosticCategory.Error, key: "The variable declaration of a 'for...in' statement cannot have an initializer." },
+        The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer: { code: 1190, category: DiagnosticCategory.Error, key: "The variable declaration of a 'for...of' statement cannot have an initializer." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -317,6 +320,8 @@ module ts {
         Property_0_does_not_exist_on_const_enum_1: { code: 2479, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 2480, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
         Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 2481, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
+        for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 2482, category: DiagnosticCategory.Error, key: "'for...of' statements are only available when targeting ECMAScript 6 or higher." },
+        The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation: { code: 2483, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...of' statement cannot use a type annotation." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -462,5 +467,6 @@ module ts {
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
         The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 9002, category: DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." },
+        for_of_statements_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'for...of' statements are not currently supported." },
     };
 }

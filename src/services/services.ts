@@ -3441,7 +3441,9 @@ module ts {
                     }
                     break;
                 case SyntaxKind.ForKeyword:
-                    if (hasKind(node.parent, SyntaxKind.ForStatement) || hasKind(node.parent, SyntaxKind.ForInStatement)) {
+                    if (hasKind(node.parent, SyntaxKind.ForStatement) ||
+                        hasKind(node.parent, SyntaxKind.ForInStatement) ||
+                        hasKind(node.parent, SyntaxKind.ForOfStatement)) {
                         return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
                     }
                     break;
@@ -3718,6 +3720,7 @@ module ts {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
                         case SyntaxKind.DoStatement:
                         case SyntaxKind.WhileStatement:
                             return getLoopBreakContinueOccurrences(<IterationStatement>owner)
@@ -3762,6 +3765,7 @@ module ts {
                         // Fall through.
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
                         case SyntaxKind.WhileStatement:
                         case SyntaxKind.DoStatement:
                             if (!statement.label || isLabeledBy(node, statement.label.text)) {
