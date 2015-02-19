@@ -24,7 +24,8 @@ var thirdParty = "ThirdPartyNoticeText.txt";
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
    process.env.path = nodeModulesPathPrefix + process.env.path;
-} else if (process.env.PATH !== undefined) {
+} 
+else if (process.env.PATH !== undefined) {
    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
@@ -181,7 +182,8 @@ function concatenateFiles(destinationFile, sourceFiles) {
 var useDebugMode = true;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
-/* Compiles a file from a list of sources
+
+   /* Compiles a file from a list of sources
     * @param outFile: the target file name
     * @param sources: an array of the names of the source files
     * @param prereqs: prerequisite tasks to compiling the file
@@ -192,8 +194,9 @@ var compilerFilename = "tsc.js";
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
+    * @async
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+    function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -243,7 +246,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
             if (callback) {
                 callback();
-            } else {
+            }
+            else {
                 complete();
             }
         }, /* errorHandler */ function() {
@@ -294,9 +298,7 @@ compileFile(processDiagnosticMessagesJs,
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
 
-    exec(cmd, function() {
-        complete();
-    });
+    exec(cmd);
 }, {async: true})
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -455,17 +457,24 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
+/* Executes a command
+ * @param cmd: command to execute
+ * @param completeHandler?: a function to execute after the command ends
+ * @param errorHandler?: a function to execute if an error occurs
+ * @async
+ */
 function exec(cmd, completeHandler, errorHandler) {
     console.log(cmd);
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true, interactive: true});
     ex.addListener("cmdEnd", function() {
         if (completeHandler) {
             completeHandler();
-        } else {
+        }
+        else {
             complete();
         }
     });
-    ex.addListener("error", errorHandler ? errorHandler : function(e, status) {
+    ex.addListener("error", errorHandler || function(e, status) {
         fail("Process exited with code " + status);
     })
 
@@ -495,6 +504,9 @@ function writeTestConfigFile(tests, testConfigFile) {
     fs.writeFileSync('test.config', testConfigContents);
 }
 
+/* Removes project output
+ * @async
+ */
 function deleteTemporaryProjectOutput() {
     if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
         jake.rmRf(path.join(localBaseline, "projectOutput/"));
