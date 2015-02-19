@@ -232,10 +232,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");
-        console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd], {interactive: true});
-        ex.addListener("cmdEnd", function() {
+        exec(cmd, function() {
+            console.log("")
             if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
                 for (var i in prefixes) {
                     prependFile(prefixes[i], outFile);
@@ -247,12 +246,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             } else {
                 complete();
             }
-        });
-        ex.addListener("error", function() {
+        }, /* errorHandler */ function() {
             fs.unlinkSync(outFile);
             fail("Compilation of " + outFile + " unsuccessful");
         });
-        ex.run();
+
     }, {async: true});
 }
 
@@ -457,7 +455,7 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler) {
+function exec(cmd, completeHandler, errorHandler) {
     console.log(cmd);
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true, interactive: true});
     ex.addListener("cmdEnd", function() {
@@ -467,7 +465,7 @@ function exec(cmd, completeHandler) {
             complete();
         }
     });
-    ex.addListener("error", function(e, status) {
+    ex.addListener("error", errorHandler ? errorHandler : function(e, status) {
         fail("Process exited with code " + status);
     })
 
