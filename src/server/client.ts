@@ -24,7 +24,6 @@ module ts.server {
         private fileMapping: ts.Map<string> = {};
         private lineMaps: ts.Map<number[]> = {};
         private messages: string[] = [];
-        private lastCompletionEntry: CompletionEntry;
         private lastRenameEntry: RenameEntry;
         
         constructor(private host: SessionClientHost) {

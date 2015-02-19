@@ -54,7 +54,6 @@ module ts.server {
     }
 
     function sortNavItems(items: ts.NavigateToItem[]) {
-        
         return items.sort((a, b) => {
             if (a.matchKind < b.matchKind) {
                 return -1;
