@@ -5323,6 +5323,9 @@ declare module "typescript" {
 
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
 >PlaceOpenBraceOnNewLineForControlBlocks : boolean
+
+        [s: string]: boolean | number | string;
+>s : string
     }
     interface DefinitionInfo {
 >DefinitionInfo : DefinitionInfo
