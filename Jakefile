@@ -538,8 +538,8 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
 
     exec(cmd, function(){
-		complete();
-	});
+        complete();
+    });
 }, { async: true });
 
 // Browser tests
@@ -551,8 +551,8 @@ desc("Runs browserify on run.js to produce a file suitable for running tests in 
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
     exec(cmd, function(){
-		complete();
-	});
+        complete();
+    });
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
@@ -573,8 +573,8 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
     tests = tests ? tests : '';
     var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
     exec(cmd, function(){
-		complete();
-	});
+        complete();
+    });
 }, {async: true});
 
 function getDiffTool() {
@@ -590,16 +590,16 @@ desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' e
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
     exec(cmd, function(){
-		complete();
-	});
+        complete();
+    });
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
     exec(cmd, function(){
-		complete();
-	});
+        complete();
+    });
 }, {async: true});
 
 desc("Builds the test sources and automation in debug mode");
