@@ -542,7 +542,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 50000;
+        testTimeout = 100000;
     }
 
     colors = process.env.colors || process.env.color
