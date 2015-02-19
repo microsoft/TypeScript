@@ -114,7 +114,7 @@ module ts {
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
         var loc = getLineAndCharacterOfPosition(file, node.pos);
-        return file.fileName + "(" + (loc.line + 1) + "," + (loc.character + 1) + ")";
+        return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
     export function getStartPosOfNode(node: Node): number {
