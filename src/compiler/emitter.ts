@@ -2065,9 +2065,6 @@ module ts {
             }
 
             function emitList(nodes: Node[], start: number, count: number, multiLine: boolean, trailingComma: boolean) {
-                if (multiLine) {
-                    increaseIndent();
-                }
                 for (var i = 0; i < count; i++) {
                     if (multiLine) {
                         if (i) {
@@ -2086,7 +2083,6 @@ module ts {
                     write(",");
                 }
                 if (multiLine) {
-                    decreaseIndent();
                     writeLine();
                 }
             }
@@ -2094,12 +2090,6 @@ module ts {
             function emitCommaList(nodes: Node[]) {
                 if (nodes) {
                     emitList(nodes, 0, nodes.length, /*multiline*/ false, /*trailingComma*/ false);
-                }
-            }
-
-            function emitMultiLineList(nodes: Node[]) {
-                if (nodes) {
-                    emitList(nodes, 0, nodes.length, /*multiline*/ true, /*trailingComma*/ false);
                 }
             }
 
@@ -2457,7 +2447,13 @@ module ts {
                             i++;
                         }
                         write("[");
+                        if (multiLine) {
+                            increaseIndent();
+                        }
                         emitList(elements, pos, i - pos, multiLine, trailingComma && i === length);
+                        if (multiLine) {
+                            decreaseIndent();
+                        }
                         write("]");
                         pos = i;
                     }
@@ -2475,8 +2471,15 @@ module ts {
                 }
                 else if (languageVersion >= ScriptTarget.ES6) {
                     write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
+                    var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                    if (multiLine) {
+                        increaseIndent();
+                    }
+                    emitList(elements, 0, elements.length, /*multiLine*/ multiLine,
                         /*trailingComma*/ elements.hasTrailingComma);
+                    if (multiLine) {
+                        decreaseIndent();
+                    }
                     write("]");
                 }
                 else {
@@ -2488,16 +2491,23 @@ module ts {
             function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number) {
                 write("{");
 
+                var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+
                 if (numElements > 0) {
                     var properties = node.properties;
-                    var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
                     if (!multiLine) {
                         write(" ");
+                    }
+                    else {
+                        increaseIndent();
                     }
                     emitList(properties, 0, numElements, /*multiLine*/ multiLine,
                         /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
                     if (!multiLine) {
                         write(" ");
+                    }
+                    else {
+                        decreaseIndent();
                     }
                 }
 
@@ -2510,6 +2520,10 @@ module ts {
 
                 write("(");
 
+                if (multiLine) {
+                    increaseIndent();
+                }
+
                 // For computed properties, we need to create a unique handle to the object
                 // literal so we can modify it without risking internal assignments tainting the object.
                 var tempVar = createAndRecordTempVariable(node);
@@ -2521,9 +2535,6 @@ module ts {
                 write(" = ");
                 emitObjectLiteralBody(node, firstComputedPropertyIndex);
 
-                if (multiLine) {
-                    increaseIndent();
-                }
 
                 for (var i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
                     writeComma();
@@ -2624,10 +2635,10 @@ module ts {
                 var properties = node.properties;
 
                 if (languageVersion < ScriptTarget.ES6) {
+                    var numProperties = properties.length;
 
                     // Find the first computed property.
                     // Everything until that point can be emitted as part of the initial object literal.
-                    var numProperties = properties.length;
                     var numInitialNonComputedProperties = numProperties;
                     for (var i = 0, n = properties.length; i < n; i++) {
                         if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {

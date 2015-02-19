@@ -15,9 +15,9 @@ foo({
 
 //// [computedPropertyNamesContextualType7_ES5.js]
 foo((_a = {
-    p: "",
-    0: function () { }
-},
+        p: "",
+        0: function () { }
+    },
     _a["hi" + "bye"] = true,
     _a[0 + 1] = 0,
     _a[+"hi"] = [0],
