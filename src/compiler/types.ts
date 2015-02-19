@@ -1445,7 +1445,8 @@ module ts {
     }
 
     export interface DecoratorUsage {
-        ambient: boolean;
+        ambient?: boolean;
+        targets?: number;
     }
 
     // DecoratorMetadata consists of the state information about an ambient decorator
@@ -1455,28 +1456,47 @@ module ts {
     }
 
     export const enum DecoratorFlags {
-        BuiltIn                 = 0x00000001, // built-in ambient decorator
-        UserDefinedAmbient      = 0x00000002, // user-provided ambient decorator
-        ClassDeclaration        = 0x00000004, // decorator can target a class declaration
-        InterfaceDeclaration    = 0x00000008, // decorator can target an interface declaration
-        TypeAliasDeclaration    = 0x00000010, // decorator can target a type alias
-        EnumDeclaration         = 0x00000020, // decorator can target an enum declaration
-        EnumMember              = 0x00000040, // decorator can target an enum member
-        ModuleDeclaration       = 0x00000080, // decorator can target a lexical module declaration
-        ImportDeclaration       = 0x00000100, // decorator can target an import declaration
-        VariableDeclaration     = 0x00000200, // decorator can target a variable declaration (var, let, or const)
-        FunctionDeclaration     = 0x00000400, // decorator can target a function declaration
-        PropertyDeclaration     = 0x00000800, // decorator can target a property declaration
-        MethodDeclaration       = 0x00001000, // decorator can target a method declaration
-        AccessorDeclaration     = 0x00002000, // decorator can target an accessor declaration
-        ParameterDeclaration    = 0x00004000, // decorator can target a parameter declaration
+        // Flags from DecoratorTargets enum
+        ModuleDeclaration       = 0x00000001, // decorator can target a lexical module declaration (from DecoratorTargets enum)
+        ImportDeclaration       = 0x00000002, // decorator can target an import declaration (from DecoratorTargets enum)
+        ClassDeclaration        = 0x00000004, // decorator can target a class declaration (from DecoratorTargets enum)
+        InterfaceDeclaration    = 0x00000008, // decorator can target an interface declaration (from DecoratorTargets enum)
+        FunctionDeclaration     = 0x00000010, // decorator can target a function declaration (from DecoratorTargets enum)
+        EnumDeclaration         = 0x00000020, // decorator can target an enum declaration (from DecoratorTargets enum)
+        EnumMember              = 0x00000040, // decorator can target an enum member (from DecoratorTargets enum)
+        Constructor             = 0x00000080, // decorator can target a constructor (from DecoratorTargets enum)
+        PropertyDeclaration     = 0x00000100, // decorator can target a property declaration (from DecoratorTargets enum)
+        MethodDeclaration       = 0x00000200, // decorator can target a method declaration (from DecoratorTargets enum)
+        AccessorDeclaration     = 0x00000400, // decorator can target an accessor declaration (from DecoratorTargets enum)
+        ParameterDeclaration    = 0x00000800, // decorator can target a parameter declaration (from DecoratorTargets enum)
+        VariableDeclaration     = 0x00001000, // decorator can target a variable declaration (var, let, or const) (from DecoratorTargets enum)
+        AllTargets              = 0x00001fff, // decorator can target all targets (from DecoratorTargets enum)
+
+        // Additional flags
+        BuiltIn                 = 0x00010000, // built-in ambient decorator
+        UserDefinedAmbient      = 0x00020000, // user-provided ambient decorator
 
         Ambient = BuiltIn | UserDefinedAmbient,
-        AllTargets = ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration
-            | EnumDeclaration | EnumMember | ModuleDeclaration | ImportDeclaration 
-            | VariableDeclaration | FunctionDeclaration | PropertyDeclaration
-            | MethodDeclaration | AccessorDeclaration | ParameterDeclaration,
-        ES3TargetsExclude = PropertyDeclaration | MethodDeclaration | AccessorDeclaration
+
+        ES3TargetsExclude = PropertyDeclaration | MethodDeclaration | AccessorDeclaration,
+
+        // Valid decorator targets (from DecoratorTargets enum)
+        DecoratorTargetsMask = AllTargets,
+
+        // Valid targets for an ES3 non-ambient decorator
+        ES3ValidTargetMask = ClassDeclaration | ParameterDeclaration,
+
+        // Valid targets for a non-ambient decorator
+        NonAmbientValidTargetMask = ClassDeclaration | PropertyDeclaration | MethodDeclaration | AccessorDeclaration | ParameterDeclaration,
+
+        // Valid targets for a non-ambient decorator that resolves to a type compatible with DecoratorFunction
+        DecoratorFunctionValidTargetMask = ClassDeclaration,
+
+        // Valid targets for a non-amient decorator that resolves to a type compatible with MemberDecoratorFunction
+        MemberDecoratorFunctionValidTargetsMask = PropertyDeclaration | MethodDeclaration | AccessorDeclaration,
+
+        // Valid targets for a non-ambient decorator that resolves to a type compatible with ParameterDecoratorFunction
+        ParameterDecoratorFunctionValidTargetsMask = ParameterDeclaration,
     }
 
     export interface DiagnosticMessage {

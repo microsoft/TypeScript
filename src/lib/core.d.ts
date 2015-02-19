@@ -1161,16 +1161,19 @@ interface TypedPropertyDescriptor<T> {
 
 declare const enum DecoratorTargets {
     module      = 0x00000001,
-    class       = 0x00000002,
-    interface   = 0x00000004,
-    function    = 0x00000008,
-    enum        = 0x00000010,
-    enumMember  = 0x00000020,
-    property    = 0x00000040,
-    method      = 0x00000080,
-    accessor    = 0x00000100,
-    parameter   = 0x00000200,
-    variable    = 0x00000400,
+    import      = 0x00000002,
+    class       = 0x00000004,
+    interface   = 0x00000008,
+    function    = 0x00000010,
+    enum        = 0x00000020,
+    enumMember  = 0x00000040,
+    constructor = 0x00000080,
+    property    = 0x00000100,
+    method      = 0x00000200,
+    accessor    = 0x00000400,
+    parameter   = 0x00000800,
+    variable    = 0x00001000,
+    all         = 0x00001fff,
 }
 
 interface DecoratorFunction { <TFunction extends Function>(target: TFunction): TFunction | void; }
@@ -1180,7 +1183,7 @@ interface MemberDecoratorFunction { <T>(target: Function | Object, propertyKey: 
 /**
   * Built-in decorator. Sets options for a function used as a decorator
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.function })
 declare function decorator(options?: {
     /**
       * A value indicating whether the decorator is ambient (true) and should not be emitted to output.
@@ -1197,29 +1200,29 @@ declare function decorator(options?: {
 /**
   * Built-in decorator. Emits the serialized type of the target in the argument position of the decorated parameter.
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.parameter })
 declare function type(): void;
 
 /**
   * Built-in decorator. Emits the serialized types of the parameters of the target in the argument position of the decorated parameter.
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.parameter })
 declare function paramtypes(): void;
 
 /**
   * Built-in decorator. Emits the serialized return type of the target in the argument position of the decorated parameter.
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.parameter })
 declare function returntype(): void;
 
 /**
   * Built-in decorator. Reports an error on any usage of the symbol.
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.function | DecoratorTargets.class | DecoratorTargets.interface | DecoratorTargets.constructor | DecoratorTargets.property | DecoratorTargets.accessor | DecoratorTargets.method | DecoratorTargets.enum | DecoratorTargets.enumMember })
 declare function obsolete(message?: string): void;
 
 /**
   * Built-in decorator. Indicates to the compiler that the call expression should be ignored unless a specified conditional compilation symbol is defined.
   */
-@decorator({ ambient: true })
+@decorator({ ambient: true, targets: DecoratorTargets.class | DecoratorTargets.function | DecoratorTargets.method })
 declare function conditional(condition: string): void;

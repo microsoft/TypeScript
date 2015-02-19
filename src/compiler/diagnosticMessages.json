@@ -603,6 +603,14 @@
         "category": "Error",
         "code": 1193
     },
+    "'{0}' is obsolete.":  {
+        "category": "Error",
+        "code": 1194
+    },
+    "'{0}' is obsolete: '{1}'": {
+        "category": "Error",
+        "code": 1195
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1768,6 +1776,10 @@
     "Do not emit declarations for code that has an '@internal' annotation.": {
         "category": "Message",
         "code": 6056
+    },
+    "SYMBOL": {
+        "category": "Message",
+        "code": 6057
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

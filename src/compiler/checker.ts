@@ -5701,7 +5701,11 @@ module ts {
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
+            var type = checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
+            if (!isCallLikeExpression(node.parent)) {
+                checkUsageOfObsoleteSymbol(node, getNodeLinks(node).resolvedSymbol);
+            }
+            return type;
         }
 
         function checkQualifiedName(node: QualifiedName) {
@@ -6545,23 +6549,38 @@ module ts {
                     }
                 }
             }
-
             return hasProperty(conditionalSymbols, condition.toUpperCase());
         }
 
-        function isConditionallyRemoved(signature: Signature) {
-            if (signature.declaration) {
-                var symbol = signature.declaration.symbol;
+        function checkConditionallyRemovedExpression(node: Expression, symbol: Symbol) {
+            if (symbol) {
                 var metadataArray = getMetadataForSymbol(symbol);
                 var metadata = findMetadata(metadataArray, globalConditionalDecoratorSymbol);
                 if (metadata && metadata.arguments.length > 0) {
                     var conditionSymbol = <string>metadata.arguments[0];
                     if (conditionSymbol && !isConditionalSymbolDefined(conditionSymbol)) {
-                        return true;
+                        getNodeLinks(node).flags = NodeCheckFlags.ConditionallyRemoved;
                     }
                 }
             }
-            return false;
+        }
+
+        function checkUsageOfObsoleteSymbol(node: Expression, symbol: Symbol) {
+            if (symbol) {
+                var metadataArray = getMetadataForSymbol(symbol);
+                var metadata = findMetadata(metadataArray, globalObsoleteDecoratorSymbol);
+                if (metadata) {
+                    if (metadata.arguments.length > 0) {
+                        error(node, Diagnostics._0_is_obsolete_Colon_1, symbolToString(symbol), metadata.arguments[0]);
+                    }
+                    else {
+                        error(node, Diagnostics._0_is_obsolete, symbolToString(symbol));
+                    }
+                }
+                else if (symbol.parent) {
+                    checkUsageOfObsoleteSymbol(node, symbol.parent);
+                }
+            }
         }
 
         function checkCallExpression(node: CallExpression): Type {
@@ -6572,9 +6591,9 @@ module ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
             }
-            if (node.kind === SyntaxKind.NewExpression) {
-                var declaration = signature.declaration;
-                if (declaration &&
+            var declaration = signature.declaration;
+            if (declaration) {
+                if (node.kind === SyntaxKind.NewExpression &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
                     declaration.kind !== SyntaxKind.ConstructorType) {
@@ -6585,10 +6604,11 @@ module ts {
                     }
                     return anyType;
                 }
+
+                checkConditionallyRemovedExpression(node, declaration.symbol);
+                checkUsageOfObsoleteSymbol(node, declaration.symbol);
             }
-            if (isConditionallyRemoved(signature)) {
-                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
-            }
+
             return getReturnTypeOfSignature(signature);
         }
 
@@ -6599,8 +6619,10 @@ module ts {
             }
 
             var signature = getResolvedSignature(node);
-            if (isConditionallyRemoved(signature)) {
-                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            var declaration = signature.declaration;
+            if (declaration) {
+                checkConditionallyRemovedExpression(node, declaration.symbol);
+                checkUsageOfObsoleteSymbol(node, declaration.symbol);
             }
 
             return getReturnTypeOfSignature(signature);
@@ -8193,7 +8215,7 @@ module ts {
         }
 
         function reportInvalidDecoratorExpression(node: Decorator, exprType: Type): void {
-            switch (node.kind) {
+            switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                     checkTypeAssignableTo(exprType, globalDecoratorFunctionType, node);
                     return;
@@ -8211,24 +8233,34 @@ module ts {
             }
         }
 
-        function decoratorIsAmbient(symbol: Symbol) {
-            if (!symbol) {
+        function decoratorIsAmbient(decoratorSymbol: Symbol) {
+            if (!decoratorSymbol) {
                 return false;
             }
-            if (symbol === globalDecoratorSymbol
-                || symbol === globalTypeDecoratorSymbol
-                || symbol === globalParamTypesDecoratorSymbol
-                || symbol === globalReturnTypeDecoratorSymbol) {
+            if (decoratorIsBuiltIn(decoratorSymbol)) {
                 return true;
             }
-            var metadataArray = getMetadataForSymbol(symbol);
+            var metadataArray = getMetadataForSymbol(decoratorSymbol);
             var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
             if (metadata && metadata.arguments.length > 0) {
                 var usage = <DecoratorUsage>metadata.arguments[0];
-                return usage.ambient;
+                return usage && usage.ambient;
             }
             return false;
         }
+
+        function decoratorIsBuiltIn(decoratorSymbol: Symbol) {
+            switch (decoratorSymbol) {
+                case globalDecoratorSymbol:
+                case globalTypeDecoratorSymbol:
+                case globalParamTypesDecoratorSymbol:
+                case globalReturnTypeDecoratorSymbol:
+                case globalConditionalDecoratorSymbol:
+                case globalObsoleteDecoratorSymbol:
+                    return true;
+            }
+            return false;
+        }        
 
         function findMetadata(metadataArray: DecoratorMetadata[], decoratorSymbol: Symbol): DecoratorMetadata {
             if (metadataArray) {
@@ -8261,23 +8293,7 @@ module ts {
             return emptyMetadata;
         }
 
-        function getMetadataForDecorator(node: Decorator): DecoratorMetadata {
-            var links = getNodeLinks(node);
-            if (!links.resolvedDecoratorMetadata) {
-                links.resolvedDecoratorMetadata = resolvingMetadata;
-                var metadata = resolveMetadataForDecorator(node);
-                if (links.resolvedDecoratorMetadata === resolvingMetadata) {
-                    links.resolvedDecoratorMetadata = metadata;
-                }
-            }
-            else if (links.resolvedDecoratorMetadata === resolvingMetadata) {
-                // TODO: report an error?
-                links.resolvedDecoratorMetadata = emptyMetadata;
-            }
-            return links.resolvedDecoratorMetadata;
-        }
-
-        function resolveMetadataForSymbol(symbol: Symbol): DecoratorMetadata[]{
+        function resolveMetadataForSymbol(symbol: Symbol): DecoratorMetadata[] {
             if (symbol.valueDeclaration) {
                 var decorators = symbol.valueDeclaration.decorators;
                 if (decorators) {
@@ -8299,6 +8315,22 @@ module ts {
             return emptyArray;
         }
 
+        function getMetadataForDecorator(node: Decorator): DecoratorMetadata {
+            var links = getNodeLinks(node);
+            if (!links.resolvedDecoratorMetadata) {
+                links.resolvedDecoratorMetadata = resolvingMetadata;
+                var metadata = resolveMetadataForDecorator(node);
+                if (links.resolvedDecoratorMetadata === resolvingMetadata) {
+                    links.resolvedDecoratorMetadata = metadata;
+                }
+            }
+            else if (links.resolvedDecoratorMetadata === resolvingMetadata) {
+                // TODO: report an error?
+                links.resolvedDecoratorMetadata = emptyMetadata;
+            }
+            return links.resolvedDecoratorMetadata;
+        }
+
         function getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[] {
             var links = getSymbolLinks(symbol);
             if (!links.decoratorMetadata) {
@@ -8310,50 +8342,64 @@ module ts {
         function getValidDecoratorTarget(node: Node): DecoratorFlags {
             if (node) {
                 switch (node.kind) {
-                    case SyntaxKind.ClassDeclaration: return DecoratorFlags.ClassDeclaration;
-                    case SyntaxKind.InterfaceDeclaration: return DecoratorFlags.InterfaceDeclaration;
-                    case SyntaxKind.TypeAliasDeclaration: return DecoratorFlags.TypeAliasDeclaration;
-                    case SyntaxKind.EnumDeclaration: return DecoratorFlags.EnumDeclaration;
-                    case SyntaxKind.EnumMember: return DecoratorFlags.EnumMember;
                     case SyntaxKind.ModuleDeclaration: return DecoratorFlags.ModuleDeclaration;
                     case SyntaxKind.ImportDeclaration: return DecoratorFlags.ImportDeclaration;
-                    case SyntaxKind.VariableDeclaration: return DecoratorFlags.VariableDeclaration;
+                    case SyntaxKind.ClassDeclaration: return DecoratorFlags.ClassDeclaration;
+                    case SyntaxKind.InterfaceDeclaration: return DecoratorFlags.InterfaceDeclaration;
                     case SyntaxKind.FunctionDeclaration: return DecoratorFlags.FunctionDeclaration;
+                    case SyntaxKind.EnumDeclaration: return DecoratorFlags.EnumDeclaration;
+                    case SyntaxKind.EnumMember: return DecoratorFlags.EnumMember;
+                    case SyntaxKind.Constructor: return DecoratorFlags.Constructor;                        
                     case SyntaxKind.PropertyDeclaration: return DecoratorFlags.PropertyDeclaration;
                     case SyntaxKind.MethodDeclaration: return DecoratorFlags.MethodDeclaration;
                     case SyntaxKind.GetAccessor: return DecoratorFlags.AccessorDeclaration;
                     case SyntaxKind.SetAccessor: return DecoratorFlags.AccessorDeclaration;
                     case SyntaxKind.Parameter: return DecoratorFlags.ParameterDeclaration;
+                    case SyntaxKind.VariableDeclaration: return DecoratorFlags.VariableDeclaration;
                 }
             }
             return undefined;
         }
 
-        function getDecoratorFlagsForDecorator(node: Decorator, symbol: Symbol, exprType: Type) {
+        function getDecoratorFlagsForDecorator(node: Decorator, decoratorSymbol: Symbol, exprType: Type) {            
             var flags: DecoratorFlags;
-            if (symbol === globalDecoratorSymbol) {
-                flags |= DecoratorFlags.BuiltIn | DecoratorFlags.FunctionDeclaration;
-            }
-            else if (symbol === globalTypeDecoratorSymbol
-                || symbol === globalParamTypesDecoratorSymbol
-                || symbol === globalReturnTypeDecoratorSymbol) {
-                flags |= DecoratorFlags.BuiltIn | DecoratorFlags.ParameterDeclaration;
-            }
-            else {
-                if (symbol && decoratorIsAmbient(symbol)) {
-                    flags |= DecoratorFlags.UserDefinedAmbient | DecoratorFlags.AllTargets;
+            if (decoratorSymbol) {
+                // get the valid targets from this decorator's @decorator
+                var metadataArray = getMetadataForSymbol(decoratorSymbol);
+                var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
+                if (metadata && metadata.arguments.length > 0) {
+                    var usage = <DecoratorUsage>metadata.arguments[0];
+                    if (usage) {
+                        flags |= usage.targets & DecoratorFlags.DecoratorTargetsMask;
+                    }
+                }
+                if (!flags) {
+                    flags = DecoratorFlags.AllTargets;
+                }
+                if (decoratorIsBuiltIn(decoratorSymbol)) {
+                    flags |= DecoratorFlags.BuiltIn;
+                }
+                else if (decoratorIsAmbient(decoratorSymbol)) {
+                    flags |= DecoratorFlags.UserDefinedAmbient;
                 }
                 else {
-                    var widenedType = getWidenedType(exprType);
-                    if (isTypeAssignableTo(globalDecoratorFunctionType, widenedType) || isTypeAssignableTo(exprType, globalDecoratorFunctionType)) {
-                        flags |= DecoratorFlags.ClassDeclaration;
-                    }
-                    if (isTypeAssignableTo(globalMemberDecoratorFunctionType, widenedType) || isTypeAssignableTo(exprType, globalMemberDecoratorFunctionType)) {
-                        flags |= DecoratorFlags.MethodDeclaration | DecoratorFlags.PropertyDeclaration | DecoratorFlags.AccessorDeclaration;
-                    }
-                    if (isTypeAssignableTo(globalParameterDecoratorFunctionType, widenedType) || isTypeAssignableTo(exprType, globalParameterDecoratorFunctionType)) {
-                        flags |= DecoratorFlags.ParameterDeclaration;
-                    }
+                    flags &= DecoratorFlags.NonAmbientValidTargetMask;
+                }
+            }
+            else {
+                flags = DecoratorFlags.NonAmbientValidTargetMask;
+            }
+            if ((flags & DecoratorFlags.Ambient) === 0) {
+                // infer the valid targets from the type of the decorator's expression
+                var widenedType = getWidenedType(exprType);
+                if (!isTypeAssignableTo(globalDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalDecoratorFunctionType)) {
+                    flags &= ~DecoratorFlags.DecoratorFunctionValidTargetMask;
+                }
+                if (!isTypeAssignableTo(globalMemberDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalMemberDecoratorFunctionType)) {
+                    flags &= ~DecoratorFlags.MemberDecoratorFunctionValidTargetsMask;
+                }
+                if (isTypeAssignableTo(globalParameterDecoratorFunctionType, widenedType) || isTypeAssignableTo(exprType, globalParameterDecoratorFunctionType)) {
+                    flags &= ~DecoratorFlags.ParameterDecoratorFunctionValidTargetsMask;
                 }
             }
             return flags;
@@ -8402,24 +8448,26 @@ module ts {
             }
 
             // handle built-in decorators
-            switch (symbol) {
-                case globalDecoratorSymbol:
-                    if (metadata && metadata.arguments.length > 0) {
-                        var usage = <DecoratorUsage>metadata.arguments[0];
-                        if (usage.ambient) {
-                            getNodeLinks(node.parent).flags |= NodeCheckFlags.AmbientDecorator;
+            if (flags & DecoratorFlags.BuiltIn) {
+                switch (symbol) {
+                    case globalDecoratorSymbol:
+                        if (metadata && metadata.arguments.length > 0) {
+                            var usage = <DecoratorUsage>metadata.arguments[0];
+                            if (usage.ambient) {
+                                getNodeLinks(node.parent).flags |= NodeCheckFlags.AmbientDecorator;
+                            }
                         }
-                    }
-                    break;
-                case globalTypeDecoratorSymbol:
-                    getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedType;
-                    break;
-                case globalParamTypesDecoratorSymbol:
-                    getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedParamTypes;
-                    break;
-                case globalReturnTypeDecoratorSymbol:
-                    getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedReturnType;
-                    break;
+                        break;
+                    case globalTypeDecoratorSymbol:
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedType;
+                        break;
+                    case globalParamTypesDecoratorSymbol:
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedParamTypes;
+                        break;
+                    case globalReturnTypeDecoratorSymbol:
+                        getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedReturnType;
+                        break;
+                }
             }
         }
 
@@ -9608,8 +9656,6 @@ module ts {
                         case SyntaxKind.ObjectLiteralExpression:
                             return evalObjectLiteralConstant(<ObjectLiteralExpression>e);
                         case SyntaxKind.PropertyAccessExpression:
-                            var member = expression.parent;
-                            var currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             var enumType = getTypeOfNode((<PropertyAccessExpression>e).expression);
                             var propertyName = (<PropertyAccessExpression>e).name.text;
                             if (!isConstEnumObjectType(enumType)) {

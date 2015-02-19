@@ -589,6 +589,16 @@ module ts {
         return false;
     }
 
+    export function isCallLikeExpression(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+                return true;
+        }
+        return false;
+    }
+
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         var moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||

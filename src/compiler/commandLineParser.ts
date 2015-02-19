@@ -164,7 +164,7 @@ module ts {
             name: "define",
             shortName: "d",
             type: "string",
-            paramType: "SYMBOL",
+            paramType: Diagnostics.SYMBOL,
             multiple: true,
             experimental: true
         }
