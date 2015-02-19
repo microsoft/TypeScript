@@ -900,7 +900,7 @@ module ts {
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
-        getNavigateToItems(searchValue: string): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
@@ -1380,8 +1380,8 @@ module ts {
     enum MatchKind {
         none = 0,
         exact = 1,
-        substring = 2,
-        prefix = 3
+        prefix = 2,
+        substring = 3,
     }
 
     /// Language Service
@@ -4662,7 +4662,7 @@ module ts {
         }
 
         /// NavigateTo
-        function getNavigateToItems(searchValue: string): NavigateToItem[] {
+        function getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[] {
             synchronizeHostData();
 
             // Split search value in terms array
@@ -4671,7 +4671,7 @@ module ts {
             // default NavigateTo approach: if search term contains only lower-case chars - use case-insensitive search, otherwise switch to case-sensitive version
             var searchTerms = map(terms, t => ({ caseSensitive: hasAnyUpperCaseCharacter(t), term: t }));
 
-            var items: NavigateToItem[] = [];
+            var rawItems: { name: string; fileName: string; matchKind: MatchKind; declaration: Declaration }[] = [];
 
             // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[] 
             forEach(program.getSourceFiles(), sourceFile => {
@@ -4685,20 +4685,30 @@ module ts {
                     var name = (<Identifier>declaration.name).text;
                     var matchKind = getMatchKind(searchTerms, name);
                     if (matchKind !== MatchKind.none) {
-                        var container = <Declaration>getContainerNode(declaration);
-                        items.push({
-                            name: name,
-                            kind: getNodeKind(declaration),
-                            kindModifiers: getNodeModifiers(declaration),
-                            matchKind: MatchKind[matchKind],
-                            fileName: fileName,
-                            textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
-                            // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                            containerName: container && container.name ? (<Identifier>container.name).text : "",
-                            containerKind: container && container.name ? getNodeKind(container) : ""
-                        });
+                        rawItems.push({ name, fileName, matchKind, declaration });
                     }
                 }
+            });
+
+            rawItems.sort((i1, i2) => i1.matchKind - i2.matchKind);
+            if (maxResultCount !== undefined) {
+                rawItems = rawItems.slice(0, maxResultCount);
+            }
+
+            var items = map(rawItems, i => {
+                var declaration = i.declaration;
+                var container = <Declaration>getContainerNode(declaration);
+                return <NavigateToItem>{
+                    name: i.name,
+                    kind: getNodeKind(declaration),
+                    kindModifiers: getNodeModifiers(declaration),
+                    matchKind: MatchKind[i.matchKind],
+                    fileName: i.fileName,
+                    textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
+                    // TODO(jfreeman): What should be the containerName when the container has a computed name?
+                    containerName: container && container.name ? (<Identifier>container.name).text : "",
+                    containerKind: container && container.name ? getNodeKind(container) : ""
+                };
             });
 
             return items;
