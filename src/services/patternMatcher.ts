@@ -16,14 +16,14 @@ module ts {
 
         // If this was a camel case match, how strong the match is.  Higher number means
         // it was a better match.
-        camelCaseWeight: number;
+        camelCaseWeight?: number;
 
-        // If this was a match where all consituent parts of the candidate and search pattern 
+        // If this was a match where all constituent parts of the candidate and search pattern 
         // matched case sensitively or case insensitively.  Case sensitive matches of the kind
         // are better matches than insensitive matches.
         isCaseSensitive: boolean;
 
-        // Whether or not this match occured with the punctuation from the search pattern stripped
+        // Whether or not this match occurred with the punctuation from the search pattern stripped
         // out or not.  Matches without the punctuation stripped are better than ones with punctuation
         // stripped.
         punctuationStripped: boolean;
@@ -43,11 +43,14 @@ module ts {
         // work to create 'ts.compiler' only being done once the first match succeeded.
         getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[];
 
-        // Fully checks a candidate, with an optional dotted container against the search pattern.
+        // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
         getMatches(candidate: string, dottedContainer: string): PatternMatch[];
-        isDottedPattern: boolean;
+
+        // Whether or not the pattern contained dots or not.  Clients can use this to determine
+        // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
+        patternContainsDots: boolean;
     }
 
     // First we break up the pattern given by dots.  Each portion of the pattern between the
@@ -120,7 +123,7 @@ module ts {
         return {
             getMatches,
             getMatchesForLastSegmentOfPattern, 
-            isDottedPattern: dotSeparatedSegments.length > 1
+            patternContainsDots: dotSeparatedSegments.length > 1
         };
 
         // Quick checks so we can bail out when asked to match a candidate.
