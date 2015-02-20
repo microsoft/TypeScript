@@ -1877,9 +1877,5 @@
     "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
         "category": "Error",
         "code": 9002
-    },
-    "'for...of' statements are not currently supported.": {
-        "category": "Error",
-        "code": 9003
     }
 }

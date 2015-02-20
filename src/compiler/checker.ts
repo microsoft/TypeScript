@@ -11246,8 +11246,6 @@ module ts {
         }
 
         function checkGrammarForOfStatement(forOfStatement: ForOfStatement): boolean {
-            // Temporarily disallow for-of statements until type check work is complete.
-            return grammarErrorOnFirstToken(forOfStatement, Diagnostics.for_of_statements_are_not_currently_supported);
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnFirstToken(forOfStatement, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
             }
