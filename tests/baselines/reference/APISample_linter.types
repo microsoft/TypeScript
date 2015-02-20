@@ -1015,7 +1015,7 @@ declare module "typescript" {
         FirstToken = 0,
 >FirstToken : SyntaxKind
 
-        LastToken = 121,
+        LastToken = 122,
 >LastToken : SyntaxKind
 
         FirstTriviaToken = 2,
