@@ -17,10 +17,7 @@ var C = (function () {
     function C() {
     }
     C.bar = function () {
-        var obj = (_a = {},
-            _a[foo()] = function () { },
-            _a
-        );
+        var obj = function () { }(_a = {}, _a[foo()] = , _a);
         return 0;
         var _a;
     };

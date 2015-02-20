@@ -21,6 +21,12 @@ module ts {
         diagnosticMessage: DiagnosticMessage;
         typeName?: DeclarationName;
     }
+
+    interface SynthesizedNode extends Node {
+        leadingCommentRanges?: CommentRange[];
+        trailingCommentRanges?: CommentRange[];
+    }
+
     type GetSymbolAccessibilityDiagnostic = (symbolAccesibilityResult: SymbolAccessiblityResult) => SymbolAccessibilityDiagnostic;
 
     interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
@@ -2514,7 +2520,198 @@ module ts {
                 write("}");
             }
 
-            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
+            function createSynthesizedNode(kind: SyntaxKind): Node {
+                var node = createNode(kind);
+                node.pos = -1;
+                node.end = -1;
+                return node;
+            }
+
+            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
+                var parenthesizedObjectLiteral = createDownlevelObjectLiteralWithComputedProperties(node, firstComputedPropertyIndex);
+                return emit(parenthesizedObjectLiteral);
+            }
+
+            function createDownlevelObjectLiteralWithComputedProperties(originalObjectLiteral: ObjectLiteralExpression, firstComputedPropertyIndex: number): ParenthesizedExpression {
+                // For computed properties, we need to create a unique handle to the object
+                // literal so we can modify it without risking internal assignments tainting the object.
+                var tempVar = createAndRecordTempVariable(originalObjectLiteral);
+
+                // Hold onto the initial non-computed properties in a new object literal,
+                // then create the rest through property accesses on the temp variable.
+                var initialObjectLiteral = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
+                initialObjectLiteral.properties = <NodeArray<ObjectLiteralElement>>originalObjectLiteral.properties.slice(0, firstComputedPropertyIndex);
+                initialObjectLiteral.flags |= NodeFlags.MultiLine;
+
+                // The comma expressions that will patch the object literal.
+                var propertyPatches = createBinaryExpression(SyntaxKind.EqualsToken, tempVar, initialObjectLiteral);
+
+                ts.forEach(originalObjectLiteral.properties, property => {
+                    var patchedProperty = tryCreatePatchingPropertyAssignment(originalObjectLiteral, tempVar, property);
+                    if (patchedProperty) {
+                        // TODO(drosen): Preserve comments
+                        //var leadingComments = getLeadingCommentRanges(currentSourceFile.text, property.pos);
+                        //var trailingComments = getTrailingCommentRanges(currentSourceFile.text, property.end);
+                        //addCommentsToSynthesizedNode(patchedProperty, leadingComments, trailingComments);
+
+                        propertyPatches = createBinaryExpression(SyntaxKind.CommaToken, propertyPatches, patchedProperty);
+                    }
+                });
+
+                propertyPatches = createBinaryExpression(SyntaxKind.CommaToken, propertyPatches, tempVar);
+
+                var result = createParenthesizedExpression(propertyPatches);
+                
+                // TODO(drosen): Preserve comments
+                // var leadingComments = getLeadingCommentRanges(currentSourceFile.text, originalObjectLiteral.pos);
+                // var trailingComments = getTrailingCommentRanges(currentSourceFile.text, originalObjectLiteral.end);
+                //addCommentsToSynthesizedNode(result, leadingComments, trailingComments);
+
+                return result;
+            }
+
+            function addCommentsToSynthesizedNode(node: SynthesizedNode, leadingCommentRanges: CommentRange[], trailingCommentRanges: CommentRange[]): void {
+                node.leadingCommentRanges = leadingCommentRanges;
+                node.trailingCommentRanges = trailingCommentRanges;
+            }
+
+            // Returns 'undefined' if a property has already been accounted for.
+            function tryCreatePatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, tempVar: Identifier, property: ObjectLiteralElement): Expression {
+                var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
+                var rightHandSide: Expression;
+
+                if (property.kind === SyntaxKind.PropertyAssignment) {
+                    rightHandSide = (<PropertyAssignment>property).initializer;
+                }
+                else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    var prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
+                    rightHandSide = createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
+                }
+                else if (property.kind === SyntaxKind.MethodDeclaration) {
+                    emitFunctionDeclaration(<MethodDeclaration>property);
+                }
+                else if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
+                    var accessors = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+
+                    // Only emit the first accessor.
+                    if (accessors.firstAccessor !== property) {
+                        return undefined;
+                    }
+
+                    var propertyDescriptor = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
+
+                    var descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
+                    if (accessors.getAccessor) {
+                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForAccessor(accessors.getAccessor));
+                        descriptorProperties.push(getProperty);
+                    }
+                    if (accessors.setAccessor) {
+                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForAccessor(accessors.setAccessor));
+                        descriptorProperties.push(setProperty);
+                    }
+
+                    var trueExpr = <PrimaryExpression>createSynthesizedNode(SyntaxKind.TrueKeyword);
+
+                    var enumerableTrue = createPropertyAssignment(createIdentifier("enumerable"), trueExpr);
+                    descriptorProperties.push(enumerableTrue);
+
+                    var configurableTrue = createPropertyAssignment(createIdentifier("configurable"), trueExpr);
+                    descriptorProperties.push(configurableTrue);
+
+                    propertyDescriptor.properties = descriptorProperties;
+
+                    var objectDotDefineProperty = createPropertyAccessExpression(createIdentifier("Object"), createIdentifier("defineProperty"));
+                    rightHandSide = createCallExpression(objectDotDefineProperty, createNodeArray(propertyDescriptor));
+                }
+                else {
+                    Debug.fail(`ObjectLiteralElement kind ${property.kind} not accounted for.`);
+                }
+
+                return createBinaryExpression(SyntaxKind.EqualsToken, leftHandSide, rightHandSide);
+            }
+
+            function createParenthesizedExpression(expression: Expression) {
+                var result = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
+                result.expression = expression;
+                return result;
+            }
+
+            function createNodeArray<T extends Node>(...elements: T[]): NodeArray<T> {
+                return <NodeArray<T>>elements;
+            }
+
+            function createBinaryExpression(operator: SyntaxKind, left: Expression, right: Expression): BinaryExpression {
+                var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
+                result.operator = operator;
+                result.left = left;
+                result.right = right;
+
+                return result;
+            }
+
+            function createMemberAccessForPropertyName(expression: LeftHandSideExpression, memberName: DeclarationName): PropertyAccessExpression | ElementAccessExpression {
+                if (memberName.kind === SyntaxKind.Identifier) {
+                    return createPropertyAccessExpression(expression, <Identifier>memberName);
+                }
+                else if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
+                    return createElementAccessExpression(expression, <LiteralExpression>memberName);
+                }
+                else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
+                    return createElementAccessExpression(expression, (<ComputedPropertyName>memberName).expression);
+                }
+                else {
+                    Debug.fail(`Kind '${memberName.kind}' not accounted for.`);
+                }
+            }
+
+            function createPropertyAssignment(name: LiteralExpression | Identifier, initializer: Expression) {
+                var result = <PropertyAssignment>createSynthesizedNode(SyntaxKind.PropertyAssignment);
+
+                result.name = name;
+                result.initializer = initializer;
+
+                return result;
+            }
+
+            function createFunctionExpressionForAccessor(accessor: AccessorDeclaration): FunctionExpression {
+                var result = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
+                result.parameters = accessor.parameters;
+                result.body = accessor.body;
+
+                return result;
+            }
+
+            function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
+                var result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+                result.expression = expression;
+                result.name = name;
+
+                return result;
+            }
+
+            function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
+                var result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+                result.expression = expression;
+                result.argumentExpression = argumentExpression;
+
+                return result;
+            }
+            
+            function createIdentifier(name: string) {
+                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                result.text = name;
+                return result;
+            }
+
+            function createCallExpression(invokedExpression: MemberExpression, arguments: NodeArray<Expression>) {
+                var result = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+                result.expression = invokedExpression;
+                result.arguments = arguments;
+
+                return result;
+            }
+
+            function emitDownlevelObjectLiteralWithComputedProperties2(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
                 var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
                 var properties = node.properties;
 
@@ -2587,7 +2784,7 @@ module ts {
                         write("})");
                         emitEnd(property);
                     }
-                    else  {
+                    else {
                         emitLeadingComments(property);
                         emitStart(property.name);
                         emit(tempVar);

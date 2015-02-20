@@ -8,9 +8,6 @@ module M {
 //// [computedPropertyNames19_ES5.js]
 var M;
 (function (M) {
-    var obj = (_a = {},
-        _a[this.bar] = 0,
-        _a
-    );
+    var obj = (_a = {}, _a[this.bar] = 0, _a);
     var _a;
 })(M || (M = {}));

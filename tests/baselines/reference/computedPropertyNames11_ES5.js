@@ -20,74 +20,17 @@ var v = {
 var s;
 var n;
 var a;
-var v = (_a = {},
-    Object.defineProperty(_a, s, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, n, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, s + s, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, s + n, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, +s, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, "", {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, 0, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, a, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, true, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, "hello bye", {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, "hello " + a + " bye", {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    _a
-);
+var v = (_a = {}, _a[s] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a[n] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a[s + s] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a[s + n] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a[+s] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a[""] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a[0] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a[a] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a[true] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a["hello bye"] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a["hello " + a + " bye"] = Object.defineProperty({ get: function () {
+    return 0;
+}, enumerable: true, configurable: true }), _a);
 var _a;
