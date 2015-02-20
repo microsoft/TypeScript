@@ -8210,6 +8210,9 @@ module ts {
                     }
                     result[i] = value;
                 }
+                if (!result) {
+                    return emptyArray;
+                }
             }
             return result;
         }
