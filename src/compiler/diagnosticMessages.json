@@ -1296,6 +1296,18 @@
         "category": "Error",
         "code": 2484
     },
+    "The left-hand side of a 'for...of' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2485
+    },
+    "The left-hand side of a 'for...in' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2486
+    },
+    "Invalid left-hand side in 'for...of' statement.": {
+        "category": "Error",
+        "code": 2487
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
