@@ -2888,6 +2888,10 @@ module ts {
             }
 
             function emitExpressionStatement(node: ExpressionStatement) {
+                if (resolver.getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
+                    return;
+                }
+
                 emitParenthesized(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
                 write(";");
             }
