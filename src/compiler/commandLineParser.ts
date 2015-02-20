@@ -159,7 +159,15 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
-        }
+        },
+        {
+            name: "projectRoot",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_the_directory_where_the_project_root_is_Paths_to_source_map_sources_will_appear_relative_to_this_directory,
+            paramType: Diagnostics.DIRECTORY,
+        },
+
     ];
     
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
