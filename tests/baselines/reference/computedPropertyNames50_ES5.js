@@ -56,15 +56,7 @@ var x = (_a = {
         enumerable: true,
         configurable: true
     }),
-    Object.defineProperty(_a, "foo", {
-        get: function () {
-            if (1 == 1) {
-                return 10;
-            }
-        },
-        enumerable: true,
-        configurable: true
-    }),
+    ,
     _a.p2 = 20,
     _a
 );

@@ -2545,6 +2545,9 @@ module ts {
                     if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
                         // TODO (drosen): Reconcile with 'emitMemberFunctions'.
                         var accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
+                        if (property !== accessors.firstAccessor) {
+                            continue;
+                        }
                         write("Object.defineProperty(");
                         emit(tempVar);
                         write(", ");
