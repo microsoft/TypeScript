@@ -225,7 +225,7 @@ module ts {
         return false;
     }
 
-    function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
+    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
         return languageVersion >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierStart);

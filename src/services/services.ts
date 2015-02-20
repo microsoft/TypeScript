@@ -3,6 +3,7 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
+/// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -4665,6 +4666,8 @@ module ts {
         /// NavigateTo
         function getNavigateToItems(searchValue: string): NavigateToItem[] {
             synchronizeHostData();
+
+
 
             // Split search value in terms array
             var terms = searchValue.split(" ");
