@@ -8747,8 +8747,13 @@ module ts {
         }
 
         function checkForOfStatement(node: ForOfStatement) {
-            // TODO: not yet implemented
-            checkGrammarForOfStatement(node);
+            if (languageVersion < ScriptTarget.ES6) {
+                return grammarErrorOnFirstToken(node, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
+            }
+            
+            checkGrammarForInOrForOfStatement(node);
+
+            // Check the expr
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -8773,8 +8778,8 @@ module ts {
                 //   Var must be an expression classified as a reference of type Any or the String primitive type,
                 //   and Expr must be an expression of type Any, an object type, or a type parameter type.
                 var varExpr = <Expression>node.initializer;
-                var exprType = checkExpression(varExpr);
-                if (!allConstituentTypesHaveKind(exprType, TypeFlags.Any | TypeFlags.StringLike)) {
+                var leftType = checkExpression(varExpr);
+                if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -8783,10 +8788,10 @@ module ts {
                 }
             }
 
-            var exprType = checkExpression(node.expression);
+            var rightType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!allConstituentTypesHaveKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!allConstituentTypesHaveKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -11243,14 +11248,6 @@ module ts {
             }
 
             return false;
-        }
-
-        function checkGrammarForOfStatement(forOfStatement: ForOfStatement): boolean {
-            if (languageVersion < ScriptTarget.ES6) {
-                return grammarErrorOnFirstToken(forOfStatement, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
-            }
-
-            return checkGrammarForInOrForOfStatement(forOfStatement);
         }
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
