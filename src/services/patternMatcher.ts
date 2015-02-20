@@ -19,12 +19,12 @@ module ts {
         camelCaseWeight: number;
 
         // If this was a match where all consituent parts of the candidate and search pattern 
-        // matched cast sensitively or case insensitively.  Case sensitive matches of the kind
+        // matched case sensitively or case insensitively.  Case sensitive matches of the kind
         // are better matches than insensitive matches.
         isCaseSensitive: boolean;
 
         // Whether or not this match occured with the punctuation from the search pattern stripped
-        // out or not.  Matched without the punctuation stripped are better than ones with punctuation
+        // out or not.  Matches without the punctuation stripped are better than ones with punctuation
         // stripped.
         punctuationStripped: boolean;
     }
@@ -34,7 +34,7 @@ module ts {
     // once you no longer need it.
     export interface PatternMatcher {
         // Used to match a candidate against the last segment of a possibly dotted pattern.  This
-        // is useful as a quick check to preven having to compute a container before calling 
+        // is useful as a quick check to prevent having to compute a container before calling 
         // "getMatches".
         //
         // For example, if the search pattern is "ts.c.SK" and the candidate is "SyntaxKind", then
