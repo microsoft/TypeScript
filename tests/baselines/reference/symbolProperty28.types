@@ -1,0 +1,34 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty28.ts ===
+class C1 {
+>C1 : C1
+
+    [Symbol.toStringTag]() {
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+
+        return { x: "" };
+>{ x: "" } : { x: string; }
+>x : string
+    }
+}
+
+class C2 extends C1 { }
+>C2 : C2
+>C1 : C1
+
+var c: C2;
+>c : C2
+>C2 : C2
+
+var obj = c[Symbol.toStringTag]().x;
+>obj : string
+>c[Symbol.toStringTag]().x : string
+>c[Symbol.toStringTag]() : { x: string; }
+>c[Symbol.toStringTag] : () => { x: string; }
+>c : C2
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+>x : string
+

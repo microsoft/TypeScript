@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts ===
+var obj = {
+>obj : { [Symbol.isConcatSpreadable](): void; }
+>{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable](): void; }
+
+    [Symbol.isConcatSpreadable]() { }
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+}

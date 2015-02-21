@@ -61,6 +61,7 @@ module ts {
                             // to be the entire span of the parent.
                             if (parent.kind === SyntaxKind.DoStatement ||
                                 parent.kind === SyntaxKind.ForInStatement ||
+                                parent.kind === SyntaxKind.ForOfStatement ||
                                 parent.kind === SyntaxKind.ForStatement ||
                                 parent.kind === SyntaxKind.IfStatement ||
                                 parent.kind === SyntaxKind.WhileStatement ||

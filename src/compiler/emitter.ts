@@ -281,7 +281,7 @@ module ts {
         var firstAccessor: AccessorDeclaration;
         var getAccessor: AccessorDeclaration;
         var setAccessor: AccessorDeclaration;
-        if (accessor.name.kind === SyntaxKind.ComputedPropertyName) {
+        if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
                 getAccessor = accessor;
@@ -295,19 +295,22 @@ module ts {
         }
         else {
             forEach(declarations, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                    (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
-                    (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    if (!firstAccessor) {
-                        firstAccessor = <AccessorDeclaration>member;
-                    }
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    var memberName = getPropertyNameForPropertyNameNode(member.name);
+                    var accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    if (memberName === accessorName) {
+                        if (!firstAccessor) {
+                            firstAccessor = <AccessorDeclaration>member;
+                        }
 
-                    if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                        getAccessor = <AccessorDeclaration>member;
-                    }
+                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            getAccessor = <AccessorDeclaration>member;
+                        }
 
-                    if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                        setAccessor = <AccessorDeclaration>member;
+                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            setAccessor = <AccessorDeclaration>member;
+                        }
                     }
                 }
             });
@@ -585,6 +588,7 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
@@ -3158,7 +3162,7 @@ module ts {
                 emitEmbeddedStatement(node.statement);
             }
 
-            function emitForInStatement(node: ForInStatement) {
+            function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -3179,7 +3183,13 @@ module ts {
                 else {
                     emit(node.initializer);
                 }
-                write(" in ");
+
+                if (node.kind === SyntaxKind.ForInStatement) {
+                    write(" in ");
+                }
+                else {
+                    write(" of ");
+                }
                 emit(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
@@ -4601,8 +4611,9 @@ module ts {
                         return emitWhileStatement(<WhileStatement>node);
                     case SyntaxKind.ForStatement:
                         return emitForStatement(<ForStatement>node);
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ForInStatement:
-                        return emitForInStatement(<ForInStatement>node);
+                        return emitForInOrForOfStatement(<ForInStatement>node);
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.BreakStatement:
                         return emitBreakOrContinueStatement(<BreakOrContinueStatement>node);
