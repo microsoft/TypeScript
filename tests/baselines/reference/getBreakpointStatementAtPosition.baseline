@@ -1,0 +1,71 @@
+
+1  >while (true) {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (0 to 14)  SpanInfo: {"start":0,"length":12}
+    >while (true)
+    >:=> (line 1, col 0) to (line 1, col 12)
+--------------------------------
+2  >    break;
+
+    ~~~~~~~~~~~                                   => Pos: (15 to 25)  SpanInfo: {"start":19,"length":5}
+    >break
+    >:=> (line 2, col 4) to (line 2, col 9)
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (26 to 27)  SpanInfo: {"start":19,"length":5}
+    >break
+    >:=> (line 2, col 4) to (line 2, col 9)
+--------------------------------
+4  >y: while (true) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (28 to 45)  SpanInfo: {"start":31,"length":12}
+    >while (true)
+    >:=> (line 4, col 3) to (line 4, col 15)
+--------------------------------
+5  >    break y;
+
+    ~~~~~~~~~~~~~                                 => Pos: (46 to 58)  SpanInfo: {"start":50,"length":7}
+    >break y
+    >:=> (line 5, col 4) to (line 5, col 11)
+--------------------------------
+6  >}
+
+    ~~                                            => Pos: (59 to 60)  SpanInfo: {"start":50,"length":7}
+    >break y
+    >:=> (line 5, col 4) to (line 5, col 11)
+--------------------------------
+7  >while (true) {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (61 to 75)  SpanInfo: {"start":61,"length":12}
+    >while (true)
+    >:=> (line 7, col 0) to (line 7, col 12)
+--------------------------------
+8  >    continue;
+
+    ~~~~~~~~~~~~~~                                => Pos: (76 to 89)  SpanInfo: {"start":80,"length":8}
+    >continue
+    >:=> (line 8, col 4) to (line 8, col 12)
+--------------------------------
+9  >}
+
+    ~~                                            => Pos: (90 to 91)  SpanInfo: {"start":80,"length":8}
+    >continue
+    >:=> (line 8, col 4) to (line 8, col 12)
+--------------------------------
+10 >z: while (true) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (92 to 109)  SpanInfo: {"start":95,"length":12}
+    >while (true)
+    >:=> (line 10, col 3) to (line 10, col 15)
+--------------------------------
+11 >    continue z;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (110 to 125)  SpanInfo: {"start":114,"length":10}
+    >continue z
+    >:=> (line 11, col 4) to (line 11, col 14)
+--------------------------------
+12 >}
+    ~                                             => Pos: (126 to 126)  SpanInfo: {"start":114,"length":10}
+    >continue z
+    >:=> (line 11, col 4) to (line 11, col 14)

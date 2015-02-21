@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty7.ts ===
+class C {
+>C : C
+
+    [Symbol.toStringTag](): void { }
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+}
