@@ -3052,13 +3052,37 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
+                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
+                    //
+                    //      Foo() ||
+                    //          Bar();
+                    //
+                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
+                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
+                    // i.e. if you have:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //          Baz();
+                    //
+                    // Then we don't want to emit it as:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //              Baz();
+                    //
+                    // So we only indent if the right side of the binary expression starts further in on the line 
+                    // versus the left.
                     var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
                     var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
 
-                    var ondifferentLine = operatorEnd.line !== rightStart.line;
-                    if (ondifferentLine) {
+                    // Check if the right expression is on a different line versus the operator itself.  If so,
+                    // we'll emit newline.
+                    var onDifferentLine = operatorEnd.line !== rightStart.line;
+                    if (onDifferentLine) {
+                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
                         var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        var firstCharOfExpr = getFirstNonWhitespaceCharacter(exprStart.line);
+                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
                         var shouldIndent = rightStart.character > firstCharOfExpr;
 
                         if (shouldIndent) {
@@ -3079,7 +3103,7 @@ module ts {
                 }
             }
 
-            function getFirstNonWhitespaceCharacter(line: number): number {
+            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
                 var lineStart = getLineStarts(currentSourceFile)[line];
                 var text = currentSourceFile.text;
 

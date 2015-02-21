@@ -94,9 +94,6 @@ module ts.formatting {
         }
 
         function shouldRescanGreaterThanToken(node: Node): boolean {
-            //if (container.kind !== SyntaxKind.BinaryExpression) {
-            //    return false;
-            //}
             if (node) {
                 switch (node.kind) {
                     case SyntaxKind.GreaterThanEqualsToken:
