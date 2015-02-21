@@ -5130,9 +5130,10 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
-        getNavigateToItems(searchValue: string): NavigateToItem[];
->getNavigateToItems : (searchValue: string) => NavigateToItem[]
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+>getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
+>maxResultCount : number
 >NavigateToItem : NavigateToItem
 
         getNavigationBarItems(fileName: string): NavigationBarItem[];
