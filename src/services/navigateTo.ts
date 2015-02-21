@@ -34,7 +34,7 @@ module ts.NavigateTo {
             }
         });
 
-        rawItems.sort((i1, i2) => i1.matchKind - i2.matchKind);
+        rawItems.sort(compareNavigateToItems);
         if (maxResultCount !== undefined) {
             rawItems = rawItems.slice(0, maxResultCount);
         }
@@ -42,6 +42,18 @@ module ts.NavigateTo {
         var items = map(rawItems, createNavigateToItem);
 
         return items;
+
+        // This means "compare in a case insensitive manner."
+        var baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
+        function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
+            // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
+            // Right now we just sort by kind first, and then by name of the item.
+            // We first sort case insensitively.  So "Aaa" will come before "bar".
+            // Then we sort case sensitively, so "aaa" will come before "Aaa".
+            return i1.matchKind - i2.matchKind ||
+                i1.name.localeCompare(i2.name, undefined, baseSensitivity) || 
+                i1.name.localeCompare(i2.name);
+        }
 
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
             var declaration = rawItem.declaration;
