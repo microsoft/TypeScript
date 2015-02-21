@@ -6,6 +6,5 @@ var x = {
 
 //// [templateStringInObjectLiteralES6.js]
 var x = {
-    a: `abc${123}def`,
-} `b`;
+    a: `abc${123}def`, } `b`;
 321;

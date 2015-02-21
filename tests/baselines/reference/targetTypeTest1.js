@@ -109,6 +109,9 @@ function C(a, b) {
     this.b = b;
 }
 C.prototype =
-    { a: 0, b: 0, C1M1: function (c, d) {
-        return (this.a + c) + (this.b + d);
-    } };
+    { a: 0,
+        b: 0,
+        C1M1: function (c, d) {
+            return (this.a + c) + (this.b + d);
+        }
+    };

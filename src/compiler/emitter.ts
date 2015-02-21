@@ -2546,32 +2546,6 @@ module ts {
                 }
             }
 
-            function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number) {
-                write("{");
-
-                var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
-
-                if (numElements > 0) {
-                    var properties = node.properties;
-                    if (!multiLine) {
-                        write(" ");
-                    }
-                    else {
-                        increaseIndent();
-                    }
-                    emitList(properties, 0, numElements, /*multiLine*/ multiLine,
-                        /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
-                    if (!multiLine) {
-                        write(" ");
-                    }
-                    else {
-                        decreaseIndent();
-                    }
-                }
-
-                write("}");
-            }
-
             function createSynthesizedNode(kind: SyntaxKind): Node {
                 var node = createNode(kind);
                 node.pos = -1;
@@ -2801,7 +2775,14 @@ module ts {
 
                 // Ordinary case: either the object has no computed properties
                 // or we're compiling with an ES6+ target.
-                emitObjectLiteralBody(node, properties.length);
+                write("{");
+
+                var properties = node.properties;
+                if (properties.length) {
+                    emitLinePreservingList(node, properties, /*allowTrailingComma:*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces:*/ true)
+                }
+
+                write("}");
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
