@@ -4,13 +4,13 @@
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigateTo.ts' />
 /// <reference path='navigationBar.ts' />
+/// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
-
     export var servicesVersion = "0.4"
 
     export interface Node {

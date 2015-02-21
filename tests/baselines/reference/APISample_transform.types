@@ -4286,6 +4286,9 @@ declare module "typescript" {
         greaterThan = 62,
 >greaterThan : CharacterCodes
 
+        hash = 35,
+>hash : CharacterCodes
+
         lessThan = 60,
 >lessThan : CharacterCodes
 
