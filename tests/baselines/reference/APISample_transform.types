@@ -1683,9 +1683,9 @@ declare module "typescript" {
 >left : Expression
 >Expression : Expression
 
-        operator: SyntaxKind;
->operator : SyntaxKind
->SyntaxKind : SyntaxKind
+        operatorToken: Node;
+>operatorToken : Node
+>Node : Node
 
         right: Expression;
 >right : Expression

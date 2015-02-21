@@ -3409,7 +3409,7 @@ module ts {
                     return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
                         isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
-                    return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
+                    return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
                     (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
                     return isContextSensitive((<PropertyAssignment>node).initializer);
@@ -4591,7 +4591,7 @@ module ts {
             return links.assignmentChecks[symbol.id] = isAssignedIn(node);
 
             function isAssignedInBinaryExpression(node: BinaryExpression) {
-                if (node.operator >= SyntaxKind.FirstAssignment && node.operator <= SyntaxKind.LastAssignment) {
+                if (node.operatorToken.kind >= SyntaxKind.FirstAssignment && node.operatorToken.kind <= SyntaxKind.LastAssignment) {
                     var n = node.left;
                     while (n.kind === SyntaxKind.ParenthesizedExpression) {
                         n = (<ParenthesizedExpression>n).expression;
@@ -4724,10 +4724,10 @@ module ts {
                         case SyntaxKind.BinaryExpression:
                             // In the right operand of an && or ||, narrow based on left operand
                             if (child === (<BinaryExpression>node).right) {
-                                if ((<BinaryExpression>node).operator === SyntaxKind.AmpersandAmpersandToken) {
+                                if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
                                     narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
                                 }
-                                else if ((<BinaryExpression>node).operator === SyntaxKind.BarBarToken) {
+                                else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
                                     narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
                                 }
                             }
@@ -4765,7 +4765,7 @@ module ts {
                     return type;
                 }
                 var typeInfo = primitiveTypeInfo[right.text];
-                if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
@@ -4855,7 +4855,7 @@ module ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
-                        var operator = (<BinaryExpression>expr).operator;
+                        var operator = (<BinaryExpression>expr).operatorToken.kind;
                         if (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                             return narrowTypeByEquality(type, <BinaryExpression>expr, assumeTrue);
                         }
@@ -5202,7 +5202,7 @@ module ts {
 
         function getContextualTypeForBinaryOperand(node: Expression): Type {
             var binaryExpression = <BinaryExpression>node.parent;
-            var operator = binaryExpression.operator;
+            var operator = binaryExpression.operatorToken.kind;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
@@ -5452,7 +5452,7 @@ module ts {
         // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
         function isAssignmentTarget(node: Node): boolean {
             var parent = node.parent;
-            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operator === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
                 return true;
             }
             if (parent.kind === SyntaxKind.PropertyAssignment) {
@@ -7108,7 +7108,7 @@ module ts {
         }
 
         function checkDestructuringAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+            if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                 checkBinaryExpression(<BinaryExpression>target, contextualMapper);
                 target = (<BinaryExpression>target).left;
             }
@@ -7131,13 +7131,13 @@ module ts {
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             // Grammar checking
-            if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+            if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
                 // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
                 // Assignment operator(11.13) or of a PostfixExpression(11.3)
                 checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.left);
             }
 
-            var operator = node.operator;
+            var operator = node.operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
             }
@@ -7178,8 +7178,8 @@ module ts {
                     // try and return them a helpful suggestion
                     if ((leftType.flags & TypeFlags.Boolean) &&
                         (rightType.flags & TypeFlags.Boolean) &&
-                        (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {
-                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
+                        (suggestedOperator = getSuggestedBooleanOperator(node.operatorToken.kind)) !== undefined) {
+                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operatorToken.kind), tokenToString(suggestedOperator));
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal 
@@ -7312,7 +7312,7 @@ module ts {
             }
 
             function reportOperatorError() {
-                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operator), typeToString(leftType), typeToString(rightType));
+                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operatorToken.kind), typeToString(leftType), typeToString(rightType));
             }
         }
 
@@ -9252,7 +9252,7 @@ module ts {
                             if (right === undefined) {
                                 return undefined;
                             }
-                            switch ((<BinaryExpression>e).operator) {
+                            switch ((<BinaryExpression>e).operatorToken.kind) {
                                 case SyntaxKind.BarToken: return left | right;
                                 case SyntaxKind.AmpersandToken: return left & right;
                                 case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
@@ -10827,7 +10827,7 @@ module ts {
             }
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
+            if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operatorToken.kind === SyntaxKind.CommaToken) {
                 return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }

@@ -152,6 +152,7 @@ module ts {
                 return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
+                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
@@ -1311,6 +1312,12 @@ module ts {
             return undefined;
         }
 
+        function parseTokenNode<T extends Node>(): T {
+            var node = <T>createNode(token);
+            nextToken();
+            return finishNode(node);
+        }
+
         function canParseSemicolon() {
             // If there's a real semicolon, then we can always parse it out.
             if (token === SyntaxKind.SemicolonToken) {
@@ -2084,14 +2091,6 @@ module ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-
-
-        function parseTokenNode<T extends Node>(): T {
-            var node = <T>createNode(token);
-            nextToken();
-            return finishNode(node);
-        }
-
         function parseTemplateExpression(): TemplateExpression {
             var template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
@@ -2801,8 +2800,9 @@ module ts {
             //      Expression[in] , AssignmentExpression[in]
 
             var expr = parseAssignmentExpressionOrHigher();
-            while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
+            var operatorToken: Node;
+            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
             }
             return expr;
         }
@@ -2881,9 +2881,7 @@ module ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                var operator = token;
-                nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3187,9 +3185,7 @@ module ts {
                     break;
                 }
 
-                var operator = token;
-                nextToken();
-                leftOperand = makeBinaryExpression(leftOperand, operator, parseBinaryExpressionOrHigher(newPrecedence));
+                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
             }
 
             return leftOperand;
@@ -3245,10 +3241,10 @@ module ts {
             return -1;
         }
 
-        function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
+        function makeBinaryExpression(left: Expression, operatorToken: Node, right: Expression): BinaryExpression {
             var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
             node.left = left;
-            node.operator = operator;
+            node.operatorToken = operatorToken;
             node.right = right;
             return finishNode(node);
         }
