@@ -69,7 +69,7 @@ module ts.BreakpointResolver {
                         return textSpan(node);
                     }
 
-                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operator === SyntaxKind.CommaToken) {
+                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.CommaToken) {
                         // if this is comma expression, the breakpoint is possible in this expression
                         return textSpan(node);
                     }

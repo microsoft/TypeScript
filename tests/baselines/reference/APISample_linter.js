@@ -39,7 +39,7 @@ export function delint(sourceFile: ts.SourceFile) {
                 break;
 
             case ts.SyntaxKind.BinaryExpression:
-                var op = (<ts.BinaryExpression>node).operator;
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.")
@@ -558,7 +558,7 @@ declare module "typescript" {
     }
     interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
     interface ConditionalExpression extends Expression {
@@ -2003,7 +2003,7 @@ function delint(sourceFile) {
                 }
                 break;
             case 165 /* BinaryExpression */:
-                var op = node.operator;
+                var op = node.operatorToken.kind;
                 if (op === 28 /* EqualsEqualsToken */ || op === 29 /* ExclamationEqualsToken */) {
                     report(node, "Use '===' and '!=='.");
                 }

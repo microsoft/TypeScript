@@ -2252,7 +2252,7 @@ module ts {
                     //                spread ('...') unary operators that are anticipated for ES6.
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
-                            switch ((<BinaryExpression>expression).operator) {
+                            switch ((<BinaryExpression>expression).operatorToken.kind) {
                                 case SyntaxKind.AsteriskToken:
                                 case SyntaxKind.SlashToken:
                                 case SyntaxKind.PercentToken:
@@ -2773,14 +2773,14 @@ module ts {
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
                 else {
                     emit(node.left);
-                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                    write(tokenToString(node.operator));
+                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) write(" ");
+                    write(tokenToString(node.operatorToken.kind));
                     write(" ");
                     emit(node.right);
                 }
@@ -3122,7 +3122,7 @@ module ts {
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
-                    equals.operator = SyntaxKind.EqualsEqualsEqualsToken;
+                    equals.operatorToken = createNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
                     var cond = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
                     cond.condition = equals;
@@ -3205,7 +3205,7 @@ module ts {
                 }
 
                 function emitDestructuringAssignment(target: Expression, value: Expression) {
-                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value,(<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
                     }

@@ -4648,7 +4648,7 @@ module ts {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                    var operator = (<BinaryExpression>parent).operator;
+                    var operator = (<BinaryExpression>parent).operatorToken.kind;
                     return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
                 }
             }

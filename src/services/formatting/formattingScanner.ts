@@ -93,17 +93,19 @@ module ts.formatting {
             savedPos = scanner.getStartPos();
         }
 
-        function shouldRescanGreaterThanToken(container: Node): boolean {
-            if (container.kind !== SyntaxKind.BinaryExpression) {
-                return false;
-            }
-            switch ((<BinaryExpression>container).operator) {
-                case SyntaxKind.GreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                case SyntaxKind.GreaterThanGreaterThanToken:
-                    return true;
+        function shouldRescanGreaterThanToken(node: Node): boolean {
+            //if (container.kind !== SyntaxKind.BinaryExpression) {
+            //    return false;
+            //}
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.GreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanToken:
+                        return true;
+                }
             }
 
             return false;
@@ -164,7 +166,7 @@ module ts.formatting {
 
             if (expectedScanAction === ScanAction.RescanGreaterThanToken && currentToken === SyntaxKind.GreaterThanToken) {
                 currentToken = scanner.reScanGreaterToken();
-                Debug.assert((<BinaryExpression>n).operator === currentToken);
+                Debug.assert(n.kind === currentToken);
                 lastScanAction = ScanAction.RescanGreaterThanToken;
             }
             else if (expectedScanAction === ScanAction.RescanSlashToken && startsWithSlashToken(currentToken)) {
