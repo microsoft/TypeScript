@@ -456,7 +456,9 @@ interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;
 }
 
-interface IterableIterator<T> extends Iterable<T>, Iterator<T> { }
+interface IterableIterator<T> extends Iterator<T> {
+    [Symbol.iterator](): IterableIterator<T>;
+}
 
 interface GeneratorFunction extends Function {
 
