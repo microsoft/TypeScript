@@ -61,22 +61,5 @@ function Foo<
 
 //// [genericsManyTypeParameters.js]
 function Foo(x1, y1, z1, a1, b1, c1, x2, y2, z2, a2, b2, c2, x3, y3, z3, a3, b3, c3, x4, y4, z4, a4, b4, c4, x5, y5, z5, a5, b5, c5, x6, y6, z6, a6, b6, c6, x7, y7, z7, a7, b7, c7, x8, y8, z8, a8, b8, c8, x9, y9, z9, a9, b9, c9, x10, y12, z10, a10, b10, c10, x11, y13, z11, a11, b11, c11, x12, y14, z12, a12, b12, c12, x13, y15, z13, a13, b13, c13, x14, y16, z14, a14, b14, c14, x15, y17, z15, a15, b15, c15, x16, y18, z16, a16, b16, c16, x17, y19, z17, a17, b17, c17, x18, y10, z18, a18, b18, c18) {
-    return [x1, y1, z1, a1, b1, c1,
-        x2, y2, z2, a2, b2, c2,
-        x3, y3, z3, a3, b3, c3,
-        x4, y4, z4, a4, b4, c4,
-        x5, y5, z5, a5, b5, c5,
-        x6, y6, z6, a6, b6, c6,
-        x7, y7, z7, a7, b7, c7,
-        x8, y8, z8, a8, b8, c8,
-        x9, y9, z9, a9, b9, c9,
-        x10, y12, z10, a10, b10, c10,
-        x11, y13, z11, a11, b11, c11,
-        x12, y14, z12, a12, b12, c12,
-        x13, y15, z13, a13, b13, c13,
-        x14, y16, z14, a14, b14, c14,
-        x15, y17, z15, a15, b15, c15,
-        x16, y18, z16, a16, b16, c16,
-        x17, y19, z17, a17, b17, c17,
-        x18, y10, z18, a18, b18, c18];
+    return [x1, y1, z1, a1, b1, c1, x2, y2, z2, a2, b2, c2, x3, y3, z3, a3, b3, c3, x4, y4, z4, a4, b4, c4, x5, y5, z5, a5, b5, c5, x6, y6, z6, a6, b6, c6, x7, y7, z7, a7, b7, c7, x8, y8, z8, a8, b8, c8, x9, y9, z9, a9, b9, c9, x10, y12, z10, a10, b10, c10, x11, y13, z11, a11, b11, c11, x12, y14, z12, a12, b12, c12, x13, y15, z13, a13, b13, c13, x14, y16, z14, a14, b14, c14, x15, y17, z15, a15, b15, c15, x16, y18, z16, a16, b16, c16, x17, y19, z17, a17, b17, c17, x18, y10, z18, a18, b18, c18];
 }

@@ -9,15 +9,8 @@ class C<T> {
     }
 }
 
-<<<<<<< HEAD:tests/baselines/reference/computedPropertyNames34.js
-//// [computedPropertyNames34.js]
-function foo() { return ''; }
-=======
 //// [computedPropertyNames34_ES6.js]
-function foo() {
-    return '';
-}
->>>>>>> master:tests/baselines/reference/computedPropertyNames34_ES6.js
+function foo() { return ''; }
 var C = (function () {
     function C() {
     }

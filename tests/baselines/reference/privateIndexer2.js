@@ -11,12 +11,6 @@ var y: {
 
 //// [privateIndexer2.js]
 // private indexers not allowed
-<<<<<<< HEAD
-var x = {
-    [x]: string, string: 
-};
-=======
 var x = (_a = {}, _a[x] = string, _a.string = , _a);
->>>>>>> master
 var y;
 var _a;

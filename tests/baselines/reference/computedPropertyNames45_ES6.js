@@ -33,9 +33,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "get1", {
-        get: function () {
-            return new Foo;
-        },
+        get: function () { return new Foo; },
         enumerable: true,
         configurable: true
     });

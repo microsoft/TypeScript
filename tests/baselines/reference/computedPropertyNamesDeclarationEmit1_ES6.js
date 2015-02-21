@@ -11,9 +11,7 @@ var C = (function () {
     }
     C.prototype["" + ""] = function () { };
     Object.defineProperty(C.prototype, "" + "", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });

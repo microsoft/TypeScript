@@ -7,15 +7,8 @@ class C<T> {
     [foo<T>()]() { }
 }
 
-<<<<<<< HEAD:tests/baselines/reference/computedPropertyNames32.js
-//// [computedPropertyNames32.js]
-function foo() { return ''; }
-=======
 //// [computedPropertyNames32_ES5.js]
-function foo() {
-    return '';
-}
->>>>>>> master:tests/baselines/reference/computedPropertyNames32_ES5.js
+function foo() { return ''; }
 var C = (function () {
     function C() {
     }

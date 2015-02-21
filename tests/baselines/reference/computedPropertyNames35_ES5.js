@@ -5,12 +5,5 @@ interface I<T> {
     [foo<T>()](): void;
 }
 
-<<<<<<< HEAD:tests/baselines/reference/computedPropertyNames35.js
-//// [computedPropertyNames35.js]
-function foo() { return ''; }
-=======
 //// [computedPropertyNames35_ES5.js]
-function foo() {
-    return '';
-}
->>>>>>> master:tests/baselines/reference/computedPropertyNames35_ES5.js
+function foo() { return ''; }

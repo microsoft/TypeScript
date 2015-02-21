@@ -37,4 +37,5 @@ var C3 = (function () {
     return C3;
 })();
 var x = {
-    class: C4 }, _a = void 0;
+    class: C4
+}, _a = void 0;

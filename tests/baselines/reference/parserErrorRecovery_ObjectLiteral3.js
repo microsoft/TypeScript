@@ -3,5 +3,4 @@ var v = { a:
 return;
 
 //// [parserErrorRecovery_ObjectLiteral3.js]
-var v = { a: ,
-    return:  };
+var v = { a: , return:  };

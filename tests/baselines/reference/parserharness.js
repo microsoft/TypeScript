@@ -2627,7 +2627,9 @@ var Harness;
                     var description = b.description + (prop ? ": " + prop : '');
                     emitLog('testStart', { desc: description });
                     emitLog('pass', {
-                        desc: description, pass: true, perfResults: {
+                        desc: description,
+                        pass: true,
+                        perfResults: {
                             mean: b.results[prop].mean(),
                             min: b.results[prop].min(),
                             max: b.results[prop].max(),
