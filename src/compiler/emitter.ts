@@ -2528,6 +2528,7 @@ module ts {
                 var node = createNode(kind);
                 node.pos = -1;
                 node.end = -1;
+
                 return node;
             }
 
@@ -2548,7 +2549,8 @@ module ts {
                 initialObjectLiteral.flags |= NodeFlags.MultiLine;
 
                 // The comma expressions that will patch the object literal.
-                var propertyPatches = createBinaryExpression(SyntaxKind.EqualsToken, tempVar, initialObjectLiteral);
+                // This will end up being something like '_a = { ... }, _a.x = 10, _a.y = 20, _a'.
+                var propertyPatches = createBinaryExpression(tempVar, SyntaxKind.EqualsToken, initialObjectLiteral);
 
                 ts.forEach(originalObjectLiteral.properties, property => {
                     var patchedProperty = tryCreatePatchingPropertyAssignment(originalObjectLiteral, tempVar, property);
@@ -2558,11 +2560,12 @@ module ts {
                         //var trailingComments = getTrailingCommentRanges(currentSourceFile.text, property.end);
                         //addCommentsToSynthesizedNode(patchedProperty, leadingComments, trailingComments);
 
-                        propertyPatches = createBinaryExpression(SyntaxKind.CommaToken, propertyPatches, patchedProperty);
+                        propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, patchedProperty);
                     }
                 });
 
-                propertyPatches = createBinaryExpression(SyntaxKind.CommaToken, propertyPatches, tempVar);
+                // Finally, return the temp variable.
+                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, tempVar);
 
                 var result = createParenthesizedExpression(propertyPatches);
                 
@@ -2579,7 +2582,8 @@ module ts {
                 node.trailingCommentRanges = trailingCommentRanges;
             }
 
-            // Returns 'undefined' if a property has already been accounted for.
+            // Returns 'undefined' if a property has already been accounted for
+            // (e.g. a 'get' accessor which has already been emitted along with its 'set' accessor).
             function tryCreatePatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, tempVar: Identifier, property: ObjectLiteralElement): Expression {
                 var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
                 var rightHandSide: Expression;
@@ -2592,25 +2596,25 @@ module ts {
                     rightHandSide = createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
                 }
                 else if (property.kind === SyntaxKind.MethodDeclaration) {
-                    rightHandSide = createFunctionExpressionForFunctionLikeDeclaration((<MethodDeclaration>property));
+                    rightHandSide = createFunctionExpressionForFunctionLikeDeclaration((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
                 }
                 else if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
-                    var accessors = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                    var { firstAccessor, setAccessor, getAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                     // Only emit the first accessor.
-                    if (accessors.firstAccessor !== property) {
+                    if (firstAccessor !== property) {
                         return undefined;
                     }
 
                     var propertyDescriptor = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
 
                     var descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
-                    if (accessors.getAccessor) {
-                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForFunctionLikeDeclaration(accessors.getAccessor));
+                    if (getAccessor) {
+                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForFunctionLikeDeclaration(getAccessor.parameters, getAccessor.body));
                         descriptorProperties.push(getProperty);
                     }
-                    if (accessors.setAccessor) {
-                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForFunctionLikeDeclaration(accessors.setAccessor));
+                    if (setAccessor) {
+                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForFunctionLikeDeclaration(setAccessor.parameters, setAccessor.body));
                         descriptorProperties.push(setProperty);
                     }
 
@@ -2631,20 +2635,25 @@ module ts {
                     Debug.fail(`ObjectLiteralElement kind ${property.kind} not accounted for.`);
                 }
 
-                return createBinaryExpression(SyntaxKind.EqualsToken, leftHandSide, rightHandSide);
+                return createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, rightHandSide);
             }
 
             function createParenthesizedExpression(expression: Expression) {
                 var result = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
                 result.expression = expression;
+
                 return result;
             }
 
             function createNodeArray<T extends Node>(...elements: T[]): NodeArray<T> {
-                return <NodeArray<T>>elements;
+                var result = <NodeArray<T>>elements;
+                result.pos = -1;
+                result.end = -1;
+
+                return result;
             }
 
-            function createBinaryExpression(operator: SyntaxKind, left: Expression, right: Expression): BinaryExpression {
+            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
                 var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
                 result.operator = operator;
                 result.left = left;
@@ -2670,17 +2679,16 @@ module ts {
 
             function createPropertyAssignment(name: LiteralExpression | Identifier, initializer: Expression) {
                 var result = <PropertyAssignment>createSynthesizedNode(SyntaxKind.PropertyAssignment);
-
                 result.name = name;
                 result.initializer = initializer;
 
                 return result;
             }
 
-            function createFunctionExpressionForFunctionLikeDeclaration(func: FunctionLikeDeclaration): FunctionExpression {
+            function createFunctionExpressionForFunctionLikeDeclaration(parameters: NodeArray<ParameterDeclaration>, body: Block): FunctionExpression {
                 var result = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
-                result.parameters = func.parameters;
-                result.body = func.body;
+                result.parameters = parameters;
+                result.body = body;
 
                 return result;
             }
@@ -2704,6 +2712,7 @@ module ts {
             function createIdentifier(name: string) {
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
+
                 return result;
             }
 
