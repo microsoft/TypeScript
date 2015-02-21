@@ -2261,7 +2261,7 @@ module ts {
                     //                spread ('...') unary operators that are anticipated for ES6.
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
-                            switch ((<BinaryExpression>expression).operator) {
+                            switch ((<BinaryExpression>expression).operatorToken.kind) {
                                 case SyntaxKind.AsteriskToken:
                                 case SyntaxKind.SlashToken:
                                 case SyntaxKind.PercentToken:
@@ -2665,7 +2665,7 @@ module ts {
 
             function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
                 var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
-                result.operator = operator;
+                result.operatorToken = createSynthesizedNode(operator);
                 result.left = left;
                 result.right = right;
 
@@ -3039,17 +3039,82 @@ module ts {
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
                 else {
                     emit(node.left);
-                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                    write(tokenToString(node.operator));
-                    write(" ");
+
+                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                        write(" ");
+                    }
+
+                    write(tokenToString(node.operatorToken.kind));
+
+                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
+                    //
+                    //      Foo() ||
+                    //          Bar();
+                    //
+                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
+                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
+                    // i.e. if you have:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //          Baz();
+                    //
+                    // Then we don't want to emit it as:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //              Baz();
+                    //
+                    // So we only indent if the right side of the binary expression starts further in on the line 
+                    // versus the left.
+                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
+                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
+
+                    // Check if the right expression is on a different line versus the operator itself.  If so,
+                    // we'll emit newline.
+                    var onDifferentLine = operatorEnd.line !== rightStart.line;
+                    if (onDifferentLine) {
+                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
+                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
+                        var shouldIndent = rightStart.character > firstCharOfExpr;
+
+                        if (shouldIndent) {
+                            increaseIndent();
+                        }
+
+                        writeLine();
+                    }
+                    else {
+                        write(" ");
+                    }
+
                     emit(node.right);
+
+                    if (shouldIndent) {
+                        decreaseIndent();
+                    }
                 }
+            }
+
+            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
+                var lineStart = getLineStarts(currentSourceFile)[line];
+                var text = currentSourceFile.text;
+
+                for (var i = lineStart; i < text.length; i++) {
+                    var ch = text.charCodeAt(i);
+                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
+                        break;
+                    }
+                }
+
+                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3388,7 +3453,7 @@ module ts {
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
-                    equals.operator = SyntaxKind.EqualsEqualsEqualsToken;
+                    equals.operatorToken = createNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
                     var cond = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
                     cond.condition = equals;
@@ -3471,7 +3536,7 @@ module ts {
                 }
 
                 function emitDestructuringAssignment(target: Expression, value: Expression) {
-                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value,(<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
                     }

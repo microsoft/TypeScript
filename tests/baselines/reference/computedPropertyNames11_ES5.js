@@ -32,5 +32,6 @@ var v = (_a = {}, _a[s] = Object.defineProperty({ get: function () {
     return 0;
 }, enumerable: true, configurable: true }), _a["hello bye"] = Object.defineProperty({ set: function (v) { }, enumerable: true, configurable: true }), _a["hello " + a + " bye"] = Object.defineProperty({ get: function () {
     return 0;
-}, enumerable: true, configurable: true }), _a);
+}, enumerable: true, configurable: true }),
+_a);
 var _a;

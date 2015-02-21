@@ -173,15 +173,17 @@ export function delint(sourceFile: ts.SourceFile) {
 >SyntaxKind : typeof ts.SyntaxKind
 >BinaryExpression : ts.SyntaxKind
 
-                var op = (<ts.BinaryExpression>node).operator;
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 >op : ts.SyntaxKind
->(<ts.BinaryExpression>node).operator : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken : ts.Node
 >(<ts.BinaryExpression>node) : ts.BinaryExpression
 ><ts.BinaryExpression>node : ts.BinaryExpression
 >ts : unknown
 >BinaryExpression : ts.BinaryExpression
 >node : ts.Node
->operator : ts.SyntaxKind
+>operatorToken : ts.Node
+>kind : ts.SyntaxKind
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
 >op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken : boolean
@@ -1731,9 +1733,9 @@ declare module "typescript" {
 >left : Expression
 >Expression : Expression
 
-        operator: SyntaxKind;
->operator : SyntaxKind
->SyntaxKind : SyntaxKind
+        operatorToken: Node;
+>operatorToken : Node
+>Node : Node
 
         right: Expression;
 >right : Expression

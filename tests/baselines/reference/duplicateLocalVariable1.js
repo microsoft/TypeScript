@@ -436,22 +436,38 @@ exports.tests = (function () {
     }));
     // File pattern matching tests
     testRunner.addTest(new TestCase("Check text file match", function () {
-        return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") && FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") && FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
+        return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") &&
+            FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") &&
+            FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
     }));
     testRunner.addTest(new TestCase("Check makefile match", function () {
         return FileManager.FileBuffer.isTextFile("C:\\some dir\\makefile");
     }));
     testRunner.addTest(new TestCase("Check binary file doesn't match", function () {
-        return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") && !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
+        return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
+        !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
     }));
     // Command-line parameter tests
     testRunner.addTest(new TestCase("Check App defaults", function () {
         var app = new App.App([]);
-        return (app.fixLines === false && app.recurse === true && app.lineEndings === "CRLF" && app.matchPattern === undefined && app.rootDirectory === ".\\" && app.encodings[0] === "ascii" && app.encodings[1] === "utf8nobom");
+        return (app.fixLines === false &&
+            app.recurse === true &&
+            app.lineEndings === "CRLF" &&
+            app.matchPattern === undefined &&
+            app.rootDirectory === ".\\" &&
+            app.encodings[0] === "ascii" &&
+            app.encodings[1] === "utf8nobom");
     }));
     testRunner.addTest(new TestCase("Check App params", function () {
         var app = new App.App(["-dir=C:\\test dir", "-lineEndings=LF", "-encodings=utf16be,ascii", "-recurse=false", "-fixlines"]);
-        return (app.fixLines === true && app.lineEndings === "LF" && app.recurse === false && app.matchPattern === undefined && app.rootDirectory === "C:\\test dir" && app.encodings[0] === "utf16be" && app.encodings[1] === "ascii" && app.encodings.length === 2);
+        return (app.fixLines === true &&
+            app.lineEndings === "LF" &&
+            app.recurse === false &&
+            app.matchPattern === undefined &&
+            app.rootDirectory === "C:\\test dir" &&
+            app.encodings[0] === "utf16be" &&
+            app.encodings[1] === "ascii" &&
+            app.encodings.length === 2);
     }));
     // File BOM detection tests
     testRunner.addTest(new TestCase("Check encoding detection no BOM", function () {

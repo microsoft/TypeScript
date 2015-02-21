@@ -39,7 +39,7 @@ export function delint(sourceFile: ts.SourceFile) {
                 break;
 
             case ts.SyntaxKind.BinaryExpression:
-                var op = (<ts.BinaryExpression>node).operator;
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.")
