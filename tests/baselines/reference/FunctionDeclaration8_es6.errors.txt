@@ -1,12 +1,9 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts(1,11): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts(1,12): error TS2304: Cannot find name 'yield'.
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts(1,20): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts (3 errors) ====
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts (2 errors) ====
     var v = { [yield]: foo }
-              ~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
                ~~~~~
 !!! error TS2304: Cannot find name 'yield'.
                        ~~~

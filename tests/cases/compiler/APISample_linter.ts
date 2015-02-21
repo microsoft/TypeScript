@@ -51,8 +51,8 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 
     function report(node: ts.Node, message: string) {
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
     }
 }
 

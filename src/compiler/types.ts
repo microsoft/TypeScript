@@ -142,7 +142,7 @@ module ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
-        OfKeyword,
+        OfKeyword, // LastKeyword and LastToken
         // Parse tree nodes
 
         // Names
@@ -269,7 +269,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = OfKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,

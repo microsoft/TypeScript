@@ -54,7 +54,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
                                    + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
@@ -317,7 +317,7 @@ declare module "typescript" {
         FirstPunctuation = 14,
         LastPunctuation = 63,
         FirstToken = 0,
-        LastToken = 121,
+        LastToken = 122,
         FirstTriviaToken = 2,
         LastTriviaToken = 6,
         FirstLiteralToken = 7,
@@ -1425,8 +1425,8 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
     function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
@@ -1510,9 +1510,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -1574,7 +1574,7 @@ declare module "typescript" {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getNavigateToItems(searchValue: string): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -2015,7 +2015,7 @@ function transform(contents, compilerOptions) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
 }

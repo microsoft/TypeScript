@@ -317,11 +317,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fileName : string
 
         allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
+>allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
             if (diagnostic.file) {
@@ -329,20 +329,20 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
 
-                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
 >lineChar : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
+>diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
->getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.start : number
 >diagnostic : ts.Diagnostic
 >start : number
 
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
->console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`) : any
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
+>console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`) : any
 >console.log : any
 >console : any
 >log : any
@@ -351,9 +351,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
 >fileName : string
+>lineChar.line + 1 : number
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
+>lineChar.character + 1 : number
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
@@ -1140,7 +1142,7 @@ declare module "typescript" {
         FirstToken = 0,
 >FirstToken : SyntaxKind
 
-        LastToken = 121,
+        LastToken = 122,
 >LastToken : SyntaxKind
 
         FirstTriviaToken = 2,
@@ -4665,15 +4667,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionOfLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionOfLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -5032,16 +5034,16 @@ declare module "typescript" {
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
 
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number
 >LineAndCharacter : LineAndCharacter
 
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+>getPositionOfLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 
@@ -5258,9 +5260,10 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
-        getNavigateToItems(searchValue: string): NavigateToItem[];
->getNavigateToItems : (searchValue: string) => NavigateToItem[]
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+>getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
+>maxResultCount : number
 >NavigateToItem : NavigateToItem
 
         getNavigationBarItems(fileName: string): NavigationBarItem[];
