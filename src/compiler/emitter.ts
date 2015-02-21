@@ -2586,12 +2586,12 @@ module ts {
             // (e.g. a 'get' accessor which has already been emitted along with its 'set' accessor).
             function tryCreatePatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, tempVar: Identifier, property: ObjectLiteralElement): Expression {
                 var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
-                var rightHandSide = getRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
+                var maybeRightHandSide = tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
 
-                return createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, rightHandSide);
+                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide);
             }
 
-            function getRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
+            function tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
                 switch (property.kind) {
                     case SyntaxKind.PropertyAssignment:
                         return (<PropertyAssignment>property).initializer;
