@@ -8765,6 +8765,8 @@ module ts {
                 var leftType = checkExpression(varExpr);
                 checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_of_statement, Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
                 var rightType = checkExpression(node.expression);
+                var iteratedType = getIteratedType(rightType);
+                checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
             }
 
             checkSourceElement(node.statement);
@@ -8814,6 +8816,45 @@ module ts {
                 var decl = variableDeclarationList.declarations[0];
                 checkVariableDeclaration(decl);
             }
+        }
+
+        function getIteratedType(iterable: Type): Type {
+            Debug.assert(languageVersion >= ScriptTarget.ES6);
+            if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
+                return anyType;
+            }
+
+            // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
+            // must have the following structure (annotated with the names of the variables below):
+            //
+            // { // iterable
+            //     [Symbol.iterator]: { // iteratorFunction
+            //         (): { // iterator
+            //             next: { // iteratorNextFunction
+            //                 (): { // iteratorNextResult
+            //                     value: T // iteratorNextValue
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            // T is the type we are after. At every level that involves analyzing return types
+            // of signatures, we union the return types of all the signatures.
+            var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
+            var iteratorFunctionSignatures = getSignaturesOfType(iteratorFunction, SignatureKind.Call);
+            var iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
+
+            var iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
+            var iteratorNextFunctionSignatures = getSignaturesOfType(iteratorNextFunction, SignatureKind.Call);
+            var iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+
+            var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
+
+            return iteratorNextValue;
+            // TODO
+            // Now even though we have extracted the iteratorNextValue, we will have to validate that the type
+            // passed in is actually an Iterable.
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
