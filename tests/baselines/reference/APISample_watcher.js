@@ -87,8 +87,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
-                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
+                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);
@@ -1461,8 +1461,8 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
     function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
@@ -1546,9 +1546,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -2074,8 +2074,8 @@ function watch(rootFileNames, options) {
         var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(fileName)).concat(services.getSemanticDiagnostics(fileName));
         allDiagnostics.forEach(function (diagnostic) {
             if (diagnostic.file) {
-                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log("  Error " + diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
+                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                console.log("  Error " + diagnostic.file.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
             }
             else {
                 console.log("  Error: " + diagnostic.messageText);

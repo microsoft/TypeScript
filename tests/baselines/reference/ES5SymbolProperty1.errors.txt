@@ -1,8 +1,7 @@
-tests/cases/conformance/Symbols/ES5SymbolProperty1.ts(7,5): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/Symbols/ES5SymbolProperty1.ts(7,6): error TS2471: A computed property name of the form 'Symbol.foo' must be of type 'symbol'.
 
 
-==== tests/cases/conformance/Symbols/ES5SymbolProperty1.ts (2 errors) ====
+==== tests/cases/conformance/Symbols/ES5SymbolProperty1.ts (1 errors) ====
     interface SymbolConstructor {
         foo: string;
     }
@@ -10,8 +9,6 @@ tests/cases/conformance/Symbols/ES5SymbolProperty1.ts(7,6): error TS2471: A comp
     
     var obj = {
         [Symbol.foo]: 0
-        ~~~~~~~~~~~~
-!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
          ~~~~~~~~~~
 !!! error TS2471: A computed property name of the form 'Symbol.foo' must be of type 'symbol'.
     }

@@ -72,7 +72,7 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += getLineAndCharacterOfPosition(file, file.end).line;
+            count += getLineStarts(file).length;
         });
         return count;
     }
@@ -88,11 +88,11 @@ module ts {
         if (diagnostic.file) {
             var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += diagnostic.file.fileName + "(" + loc.line + "," + loc.character + "): ";
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) + sys.newLine;
+        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
 
         sys.write(output);
     }

@@ -226,28 +226,30 @@ export function delint(sourceFile: ts.SourceFile) {
 >Node : ts.Node
 >message : string
 
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
 >lineChar : ts.LineAndCharacter
->sourceFile.getLineAndCharacterFromPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >sourceFile : ts.SourceFile
->getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >node.getStart() : number
 >node.getStart : (sourceFile?: ts.SourceFile) => number
 >node : ts.Node
 >getStart : (sourceFile?: ts.SourceFile) => number
 
-        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
->console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`) : any
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
+>console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
 >sourceFile.fileName : string
 >sourceFile : ts.SourceFile
 >fileName : string
+>lineChar.line + 1 : number
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
+>lineChar.character + 1 : number
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
@@ -4539,15 +4541,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionOfLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionOfLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -4906,16 +4908,16 @@ declare module "typescript" {
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
 
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number
 >LineAndCharacter : LineAndCharacter
 
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+>getPositionOfLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 

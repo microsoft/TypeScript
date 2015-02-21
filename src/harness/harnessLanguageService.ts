@@ -160,31 +160,14 @@ module Harness.LanguageService {
         }
 
         /**
-          * @param line 1 based index
-          * @param col 1 based index
-          */
-        public lineColToPosition(fileName: string, line: number, col: number): number {
-            var script: ScriptInfo = this.fileNameToScript[fileName];
-            assert.isNotNull(script);
-            assert.isTrue(line >= 1);
-            assert.isTrue(col >= 1);
-
-            return ts.computePositionFromLineAndCharacter(script.lineMap, line, col);
-        }
-
-        /**
           * @param line 0 based index
           * @param col 0 based index
           */
-        public positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter {
+        public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            var result = ts.computeLineAndCharacterOfPosition(script.lineMap, position);
-
-            assert.isTrue(result.line >= 1);
-            assert.isTrue(result.character >= 1);
-            return { line: result.line - 1, character: result.character - 1 };
+            return ts.computeLineAndCharacterOfPosition(script.lineMap, position);
         }
     }
 
@@ -231,8 +214,7 @@ module Harness.LanguageService {
         getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
         addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
         editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
-        lineColToPosition(fileName: string, line: number, col: number): number { return this.nativeHost.lineColToPosition(fileName, line, col); }
-        positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToZeroBasedLineCol(fileName, position); }
+        positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.CancellationToken { return this.nativeHost.getCancellationToken(); }

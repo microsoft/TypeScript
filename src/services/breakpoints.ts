@@ -14,17 +14,17 @@ module ts.BreakpointResolver {
         }
 
         var tokenAtLocation = getTokenAtPosition(sourceFile, position);
-        var lineOfPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
-        if (sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
+        var lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+        if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
-            // eg: var x =10; |--- curser is here
+            // eg: var x =10; |--- cursor is here
             //     var y = 10; 
             // token at position will return var keyword on second line as the token but we would like to use 
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
             tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
 
             // Its a blank line
-            if (!tokenAtLocation || sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
+            if (!tokenAtLocation || sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
                 return undefined;
             }
         }
@@ -42,7 +42,7 @@ module ts.BreakpointResolver {
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {
-            if (node && lineOfPosition === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
+            if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart()).line) {
                 return spanInNode(node);
             }
             return spanInNode(otherwiseOnNode);
