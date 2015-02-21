@@ -1722,7 +1722,7 @@ module ts {
             }
             else {
                 // For an array binding element the specified or inferred type of the parent must be assignable to any[]
-                if (!isTypeAssignableTo(parentType, anyArrayType)) {
+                if (!isArrayLikeType(parentType)) {
                     error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                     return unknownType;
                 }
@@ -4190,6 +4190,10 @@ module ts {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
+        function isArrayLikeType(type: Type): boolean {
+            return !(type.flags & (TypeFlags.Undefined | TypeFlags.Null)) && isTypeAssignableTo(type, anyArrayType);
+        }
+
         function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0");
         }
@@ -5466,7 +5470,7 @@ module ts {
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
             var type = checkExpressionCached(node.expression, contextualMapper);
-            if (!isTypeAssignableTo(type, anyArrayType)) {
+            if (!isArrayLikeType(type)) {
                 error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
                 return unknownType;
             }
@@ -7074,7 +7078,7 @@ module ts {
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             // TODOO(andersh): Allow iterable source type in ES6
-            if (!isTypeAssignableTo(sourceType, anyArrayType)) {
+            if (!isArrayLikeType(sourceType)) {
                 error(node, Diagnostics.Type_0_is_not_an_array_type, typeToString(sourceType));
                 return sourceType;
             }
