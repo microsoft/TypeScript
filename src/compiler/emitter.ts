@@ -2586,56 +2586,60 @@ module ts {
             // (e.g. a 'get' accessor which has already been emitted along with its 'set' accessor).
             function tryCreatePatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, tempVar: Identifier, property: ObjectLiteralElement): Expression {
                 var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
-                var rightHandSide: Expression;
-
-                if (property.kind === SyntaxKind.PropertyAssignment) {
-                    rightHandSide = (<PropertyAssignment>property).initializer;
-                }
-                else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    var prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
-                    rightHandSide = createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
-                }
-                else if (property.kind === SyntaxKind.MethodDeclaration) {
-                    rightHandSide = createFunctionExpressionForFunctionLikeDeclaration((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
-                }
-                else if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
-                    var { firstAccessor, setAccessor, getAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
-
-                    // Only emit the first accessor.
-                    if (firstAccessor !== property) {
-                        return undefined;
-                    }
-
-                    var propertyDescriptor = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
-
-                    var descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
-                    if (getAccessor) {
-                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForFunctionLikeDeclaration(getAccessor.parameters, getAccessor.body));
-                        descriptorProperties.push(getProperty);
-                    }
-                    if (setAccessor) {
-                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForFunctionLikeDeclaration(setAccessor.parameters, setAccessor.body));
-                        descriptorProperties.push(setProperty);
-                    }
-
-                    var trueExpr = <PrimaryExpression>createSynthesizedNode(SyntaxKind.TrueKeyword);
-
-                    var enumerableTrue = createPropertyAssignment(createIdentifier("enumerable"), trueExpr);
-                    descriptorProperties.push(enumerableTrue);
-
-                    var configurableTrue = createPropertyAssignment(createIdentifier("configurable"), trueExpr);
-                    descriptorProperties.push(configurableTrue);
-
-                    propertyDescriptor.properties = descriptorProperties;
-
-                    var objectDotDefineProperty = createPropertyAccessExpression(createIdentifier("Object"), createIdentifier("defineProperty"));
-                    rightHandSide = createCallExpression(objectDotDefineProperty, createNodeArray(propertyDescriptor));
-                }
-                else {
-                    Debug.fail(`ObjectLiteralElement kind ${property.kind} not accounted for.`);
-                }
+                var rightHandSide = getRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
 
                 return createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, rightHandSide);
+            }
+
+            function getRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
+                switch (property.kind) {
+                    case SyntaxKind.PropertyAssignment:
+                        return (<PropertyAssignment>property).initializer;
+
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        var prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
+                        return createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
+
+                    case SyntaxKind.MethodDeclaration:
+                        return createFunctionExpression((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
+
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        var { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+
+                        // Only emit the first accessor.
+                        if (firstAccessor !== property) {
+                            return undefined;
+                        }
+
+                        var propertyDescriptor = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
+
+                        var descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
+                        if (getAccessor) {
+                            var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpression(getAccessor.parameters, getAccessor.body));
+                            descriptorProperties.push(getProperty);
+                        }
+                        if (setAccessor) {
+                            var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpression(setAccessor.parameters, setAccessor.body));
+                            descriptorProperties.push(setProperty);
+                        }
+
+                        var trueExpr = <PrimaryExpression>createSynthesizedNode(SyntaxKind.TrueKeyword);
+
+                        var enumerableTrue = createPropertyAssignment(createIdentifier("enumerable"), trueExpr);
+                        descriptorProperties.push(enumerableTrue);
+
+                        var configurableTrue = createPropertyAssignment(createIdentifier("configurable"), trueExpr);
+                        descriptorProperties.push(configurableTrue);
+
+                        propertyDescriptor.properties = descriptorProperties;
+
+                        var objectDotDefineProperty = createPropertyAccessExpression(createIdentifier("Object"), createIdentifier("defineProperty"));
+                        return createCallExpression(objectDotDefineProperty, createNodeArray(propertyDescriptor));
+
+                    default:
+                        Debug.fail(`ObjectLiteralElement kind ${property.kind} not accounted for.`);
+                }
             }
 
             function createParenthesizedExpression(expression: Expression) {
@@ -2685,7 +2689,7 @@ module ts {
                 return result;
             }
 
-            function createFunctionExpressionForFunctionLikeDeclaration(parameters: NodeArray<ParameterDeclaration>, body: Block): FunctionExpression {
+            function createFunctionExpression(parameters: NodeArray<ParameterDeclaration>, body: Block): FunctionExpression {
                 var result = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
                 result.parameters = parameters;
                 result.body = body;
