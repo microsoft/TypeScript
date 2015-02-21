@@ -2496,7 +2496,8 @@ var TypeScript;
             if (context.parser !== null) {
                 context.parser.getSourceLineCol(lineCol, this.minChar);
                 context.parser.getSourceLineCol(limLineCol, this.limChar);
-                context.write("(" + lineCol.line + "," + lineCol.col + ")--" + "(" + limLineCol.line + "," + limLineCol.col + "): ");
+                context.write("(" + lineCol.line + "," + lineCol.col + ")--" +
+                    "(" + limLineCol.line + "," + limLineCol.col + "): ");
             }
             var lab = this.printLabel();
             if (hasFlag(this.flags, ASTFlags.Error)) {
@@ -4093,13 +4094,16 @@ var TypeScript;
                             var target = cond.target;
                             if (target.nodeType == NodeType.Dot) {
                                 var binex = target;
-                                if ((binex.operand1.nodeType == NodeType.Name) && (this.obj.nodeType == NodeType.Name) && (binex.operand1.actualText == this.obj.actualText)) {
+                                if ((binex.operand1.nodeType == NodeType.Name) &&
+                                    (this.obj.nodeType == NodeType.Name) &&
+                                    (binex.operand1.actualText == this.obj.actualText)) {
                                     var prop = binex.operand2;
                                     if (prop.actualText == "hasOwnProperty") {
                                         var args = cond.arguments;
                                         if ((args !== null) && (args.members.length == 1)) {
                                             var arg = args.members[0];
-                                            if ((arg.nodeType == NodeType.Name) && (this.lval.nodeType == NodeType.Name)) {
+                                            if ((arg.nodeType == NodeType.Name) &&
+                                                (this.lval.nodeType == NodeType.Name)) {
                                                 if ((this.lval.actualText) == arg.actualText) {
                                                     return true;
                                                 }

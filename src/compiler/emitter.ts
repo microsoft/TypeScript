@@ -3045,11 +3045,52 @@ module ts {
                 }
                 else {
                     emit(node.left);
-                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) write(" ");
+
+                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                        write(" ");
+                    }
+
                     write(tokenToString(node.operatorToken.kind));
-                    write(" ");
+
+                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
+                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
+
+                    var ondifferentLine = operatorEnd.line !== rightStart.line;
+                    if (ondifferentLine) {
+                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        var firstCharOfExpr = getFirstNonWhitespaceCharacter(exprStart.line);
+                        var shouldIndent = rightStart.character > firstCharOfExpr;
+
+                        if (shouldIndent) {
+                            increaseIndent();
+                        }
+
+                        writeLine();
+                    }
+                    else {
+                        write(" ");
+                    }
+
                     emit(node.right);
+
+                    if (shouldIndent) {
+                        decreaseIndent();
+                    }
                 }
+            }
+
+            function getFirstNonWhitespaceCharacter(line: number): number {
+                var lineStart = getLineStarts(currentSourceFile)[line];
+                var text = currentSourceFile.text;
+
+                for (var i = lineStart; i < text.length; i++) {
+                    var ch = text.charCodeAt(i);
+                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
+                        break;
+                    }
+                }
+
+                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {

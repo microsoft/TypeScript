@@ -1998,7 +1998,8 @@ function delint(sourceFile) {
                 if (ifStatement.thenStatement.kind !== 172 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
-                if (ifStatement.elseStatement && ifStatement.elseStatement.kind !== 172 /* Block */ && ifStatement.elseStatement.kind !== 176 /* IfStatement */) {
+                if (ifStatement.elseStatement &&
+                    ifStatement.elseStatement.kind !== 172 /* Block */ && ifStatement.elseStatement.kind !== 176 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
