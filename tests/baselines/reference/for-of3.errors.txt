@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/for-ofStatements/for-of3.ts(2,6): error TS2486: Invalid left-hand side in 'for...of' statement.
+tests/cases/conformance/es6/for-ofStatements/for-of3.ts(2,6): error TS2487: Invalid left-hand side in 'for...of' statement.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of3.ts (1 errors) ====
     var v;
     for (v++ of []) { }
          ~~~
-!!! error TS2486: Invalid left-hand side in 'for...of' statement.
+!!! error TS2487: Invalid left-hand side in 'for...of' statement.
