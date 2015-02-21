@@ -1,5 +1,5 @@
 tests/cases/compiler/interfaceImplementation7.ts(4,11): error TS2320: Interface 'i3' cannot simultaneously extend types 'i1' and 'i2'.
-  Named properties 'name' of types 'i1' and 'i2' are not identical.
+  Named property 'name' of types 'i1' and 'i2' are not identical.
 tests/cases/compiler/interfaceImplementation7.ts(7,7): error TS2420: Class 'C1' incorrectly implements interface 'i4'.
   Types of property 'name' are incompatible.
     Type '() => string' is not assignable to type '() => { s: string; n: number; }'.
@@ -14,7 +14,7 @@ tests/cases/compiler/interfaceImplementation7.ts(7,7): error TS2420: Class 'C1' 
     interface i3 extends i1, i2 { }
               ~~
 !!! error TS2320: Interface 'i3' cannot simultaneously extend types 'i1' and 'i2'.
-!!! error TS2320:   Named properties 'name' of types 'i1' and 'i2' are not identical.
+!!! error TS2320:   Named property 'name' of types 'i1' and 'i2' are not identical.
     interface i4 extends i1, i2 { name(): { s: string; n: number; }; }
     
     class C1 implements i4 {

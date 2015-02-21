@@ -16,14 +16,15 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\server\session.ts' />
+/// <reference path='..\server\client.ts' />
+/// <reference path='..\server\node.d.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
 /// <reference path='runnerbase.ts'/>
 
-declare var require: any;
-declare var process: any;
-var Buffer = require('buffer').Buffer;
+var Buffer: BufferConstructor = require('buffer').Buffer;
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
