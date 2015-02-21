@@ -170,16 +170,17 @@ module ts {
     function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
-            var lastLine = getLineStarts(currentSourceFile).length;
+            var lineCount = getLineStarts(currentSourceFile).length;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : getPositionFromLineAndCharacter(currentSourceFile, currentLine + 1, /*character*/1);
+                var nextLineStart = (currentLine + 1) === lineCount
+                    ? currentSourceFile.text.length + 1
+                    : getStartPositionOfLine(currentLine + 1, currentSourceFile);
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getPositionFromLineAndCharacter(currentSourceFile, firstCommentLineAndCharacter.line, /*character*/1),
-                            comment.pos);
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
                     }
 
                     // These are number of spaces writer is going to write at current indent
@@ -1738,6 +1739,11 @@ module ts {
 
                 function recordSourceMapSpan(pos: number) {
                     var sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
+
+                    // Convert the location to be one-based.
+                    sourceLinePos.line++;
+                    sourceLinePos.character++;
+
                     var emittedLine = writer.getLine();
                     var emittedColumn = writer.getColumn();
 
@@ -2984,7 +2990,7 @@ module ts {
 
             function isOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-                getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
@@ -4501,8 +4507,8 @@ module ts {
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
                         var lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
-                        var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        if (astLine >= lastCommentLine + 2) {
+                        var nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
