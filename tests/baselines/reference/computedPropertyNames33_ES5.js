@@ -17,7 +17,7 @@ var C = (function () {
     function C() {
     }
     C.prototype.bar = function () {
-        var obj = function () { }(_a = {}, _a[foo()] = , _a);
+        var obj = (_a = {}, _a[foo()] = function () { }, _a);
         return 0;
         var _a;
     };

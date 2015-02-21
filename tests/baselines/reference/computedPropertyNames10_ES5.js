@@ -20,5 +20,5 @@ var v = {
 var s;
 var n;
 var a;
-var v = function () { }function () { }function () { }function () { }function () { }function () { }function () { }function () { }function () { }function () { }function () { }(_a = {}, _a[s] = , _a[n] = , _a[s + s] = , _a[s + n] = , _a[+s] = , _a[""] = , _a[0] = , _a[a] = , _a[true] = , _a["hello bye"] = , _a["hello " + a + " bye"] = , _a);
+var v = (_a = {}, _a[s] = function () { }, _a[n] = function () { }, _a[s + s] = function () { }, _a[s + n] = function () { }, _a[+s] = function () { }, _a[""] = function () { }, _a[0] = function () { }, _a[a] = function () { }, _a[true] = function () { }, _a["hello bye"] = function () { }, _a["hello " + a + " bye"] = function () { }, _a);
 var _a;

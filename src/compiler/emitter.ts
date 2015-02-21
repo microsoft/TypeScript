@@ -2592,7 +2592,7 @@ module ts {
                     rightHandSide = createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
                 }
                 else if (property.kind === SyntaxKind.MethodDeclaration) {
-                    emitFunctionDeclaration(<MethodDeclaration>property);
+                    rightHandSide = createFunctionExpressionForFunctionLikeDeclaration((<MethodDeclaration>property));
                 }
                 else if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
                     var accessors = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
@@ -2606,11 +2606,11 @@ module ts {
 
                     var descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
                     if (accessors.getAccessor) {
-                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForAccessor(accessors.getAccessor));
+                        var getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpressionForFunctionLikeDeclaration(accessors.getAccessor));
                         descriptorProperties.push(getProperty);
                     }
                     if (accessors.setAccessor) {
-                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForAccessor(accessors.setAccessor));
+                        var setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpressionForFunctionLikeDeclaration(accessors.setAccessor));
                         descriptorProperties.push(setProperty);
                     }
 
@@ -2677,10 +2677,10 @@ module ts {
                 return result;
             }
 
-            function createFunctionExpressionForAccessor(accessor: AccessorDeclaration): FunctionExpression {
+            function createFunctionExpressionForFunctionLikeDeclaration(func: FunctionLikeDeclaration): FunctionExpression {
                 var result = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
-                result.parameters = accessor.parameters;
-                result.body = accessor.body;
+                result.parameters = func.parameters;
+                result.body = func.body;
 
                 return result;
             }

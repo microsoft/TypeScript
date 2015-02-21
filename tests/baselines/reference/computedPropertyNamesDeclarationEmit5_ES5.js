@@ -7,7 +7,7 @@ var v = {
 }
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.js]
-var v = function () { }(_a = {}, _a["" + ""] = 0, _a["" + ""] = , _a["" + ""] = Object.defineProperty({ get: function () {
+var v = (_a = {}, _a["" + ""] = 0, _a["" + ""] = function () { }, _a["" + ""] = Object.defineProperty({ get: function () {
     return 0;
 }, enumerable: true, configurable: true }), _a["" + ""] = Object.defineProperty({ set: function (x) { }, enumerable: true, configurable: true }), _a);
 var _a;
