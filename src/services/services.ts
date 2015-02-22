@@ -5694,25 +5694,25 @@ module ts {
                          }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
-                             token = SyntaxKind.Identifier;
+                        token = SyntaxKind.Identifier;
                     }
                     else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
-                             // We have two keywords in a row.  Only treat the second as a keyword if 
-                             // it's a sequence that could legally occur in the language.  Otherwise
-                             // treat it as an identifier.  This way, if someone writes "private var"
-                             // we recognize that 'var' is actually an identifier here.
-                             token = SyntaxKind.Identifier;
+                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // it's a sequence that could legally occur in the language.  Otherwise
+                        // treat it as an identifier.  This way, if someone writes "private var"
+                        // we recognize that 'var' is actually an identifier here.
+                        token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
                              token === SyntaxKind.LessThanToken) {
-                             // Could be the start of something generic.  Keep track of that by bumping 
-                             // up the current count of generic contexts we may be in.
-                             angleBracketStack++;
+                        // Could be the start of something generic.  Keep track of that by bumping 
+                        // up the current count of generic contexts we may be in.
+                        angleBracketStack++;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
-                             // If we think we're currently in something generic, then mark that that
-                             // generic entity is complete.
-                             angleBracketStack--;
+                        // If we think we're currently in something generic, then mark that that
+                        // generic entity is complete.
+                        angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
                              token === SyntaxKind.StringKeyword ||
@@ -5873,7 +5873,8 @@ module ts {
                 case SyntaxKind.EqualsToken:
                 case SyntaxKind.CommaToken:
                     return true;
-                default: return false;
+                default:
+                    return false;
             }
         }
 
@@ -5918,6 +5919,7 @@ module ts {
                 case SyntaxKind.SingleLineCommentTrivia:
                     return TokenClass.Comment;
                 case SyntaxKind.WhitespaceTrivia:
+                case SyntaxKind.NewLineTrivia:
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
