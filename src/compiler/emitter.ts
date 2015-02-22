@@ -2236,8 +2236,7 @@ module ts {
             }
             
             function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
-                var tempVariable = createTempVariable(node);
-                recordTempDeclaration(tempVariable);
+                var tempVariable = createAndRecordTempVariable(node);
                 write("(");
                 emit(tempVariable);
                 write(" = ");
