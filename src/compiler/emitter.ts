@@ -2140,6 +2140,9 @@ module ts {
             }
             
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
+                // Find original source text, since we need to emit the raw strings of the tagged template.
+                // The raw strings contain the (escaped) strings of what the user wrote.
+                // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
                 var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 
                 // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
@@ -2149,11 +2152,28 @@ module ts {
                 var isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
                 text = text.substring(1, text.length - (isLast ? 1 : 2));
                 
-                // Newline normalization
+                // Newline normalization:
+                // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
+                // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
                 text = text.replace(/\r\n?/g, "\n");
                 text = escapeString(text);
                 
                 write('"' + text + '"');
+            }
+            
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, callback: (literal: LiteralExpression) => void) {
+                write("[");
+                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                    callback(<LiteralExpression>node.template);
+                }
+                else {
+                    callback((<TemplateExpression>node.template).head);
+                    forEach((<TemplateExpression>node.template).templateSpans, (child) => {
+                        write(", ");
+                        callback(child.literal);
+                    });
+                }
+                write("]");
             }
             
             function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
@@ -2161,33 +2181,14 @@ module ts {
                 recordTempDeclaration(tempVariable);
                 write("(");
                 emit(tempVariable);
-                write(" = [");
-                
-                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                    emit(node.template);
-                }
-                else {
-                    emit((<TemplateExpression>node.template).head);
-                    forEach((<TemplateExpression>node.template).templateSpans, (child) => {
-                        write(", ");
-                        emit(child.literal);
-                    });
-                }
-                write("], ");
+                write(" = ");
+                emitDownlevelTaggedTemplateArray(node, emit);
+                write(", ");
                 
                 emit(tempVariable);
-                write(".raw = [");
-                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                    emitDownlevelRawTemplateLiteral(<LiteralExpression>node.template);
-                }
-                else {
-                    emitDownlevelRawTemplateLiteral((<TemplateExpression>node.template).head);
-                    forEach((<TemplateExpression>node.template).templateSpans, (child, index) => {
-                        write(", ");
-                        emitDownlevelRawTemplateLiteral(child.literal);
-                    });
-                }
-                write("], ");
+                write(".raw = ");
+                emitDownlevelTaggedTemplateArray(node, emitDownlevelRawTemplateLiteral);
+                write(", ");
                 
                 emitParenthesizedIf(node.tag, needsParenthesisForPropertyAccessOrInvocation(node.tag));
                 write("(");
