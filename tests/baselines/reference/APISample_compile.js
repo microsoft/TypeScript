@@ -527,7 +527,7 @@ declare module "typescript" {
     }
     interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
     interface ConditionalExpression extends Expression {
@@ -1326,6 +1326,7 @@ declare module "typescript" {
         equals = 61,
         exclamation = 33,
         greaterThan = 62,
+        hash = 35,
         lessThan = 60,
         minus = 45,
         openBrace = 123,
@@ -1964,8 +1965,6 @@ function compile(fileNames, options) {
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {
-    noEmitOnError: true,
-    noImplicitAny: true,
-    target: 1 /* ES5 */,
-    module: 1 /* CommonJS */
+    noEmitOnError: true, noImplicitAny: true,
+    target: 1 /* ES5 */, module: 1 /* CommonJS */
 });

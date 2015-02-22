@@ -14,12 +14,8 @@ class bar {
 var bar = (function () {
     function bar() {
     }
-    bar.prototype.f = function () {
-        return '';
-    };
-    bar.prototype.g = function () {
-        return { a: null, b: undefined, c: void 4 };
-    };
+    bar.prototype.f = function () { return ''; };
+    bar.prototype.g = function () { return { a: null, b: undefined, c: void 4 }; };
     bar.prototype.h = function (x, y, z) {
         if (x === void 0) { x = 4; }
         if (y === void 0) { y = null; }

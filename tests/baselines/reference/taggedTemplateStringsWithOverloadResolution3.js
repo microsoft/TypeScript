@@ -74,15 +74,11 @@ fn5 `${ (n) => n.substr(0) }`;
 
 
 //// [taggedTemplateStringsWithOverloadResolution3.js]
-function fn1() {
-    return null;
-}
+function fn1() { return null; }
 var s = fn1 "" + undefined;
 // No candidate overloads found
 fn1 "" + {}; // Error
-function fn2() {
-    return undefined;
-}
+function fn2() { return undefined; }
 var d1 = fn2 "" + 0 + undefined; // contextually typed
 var d2 = fn2 "" + 0 + undefined; // any
 d1.foo(); // error
@@ -91,9 +87,7 @@ d2(); // no error (typed as any)
 fn2 "" + 0 + ''; // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
 fn2 "" + '' + 0; // OK
-function fn3() {
-    return null;
-}
+function fn3() { return null; }
 var s = fn3 "" + 3;
 var s = fn3 "" + '' + 3 + '';
 var n = fn3 "" + 5 + 5 + 5;
@@ -115,8 +109,6 @@ fn4 "" + null + null; // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4 "" + true + null;
 fn4 "" + null + true;
-function fn5() {
-    return undefined;
-}
+function fn5() { return undefined; }
 fn5 "" + function (n) { return n.toFixed(); }; // will error; 'n' should have type 'string'.
 fn5 "" + function (n) { return n.substr(0); };

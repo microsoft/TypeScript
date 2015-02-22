@@ -1758,8 +1758,8 @@ module ts {
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
                         (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
-                        (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
+                            (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
+                                (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
                         // Encode the last recordedSpan before assigning new
                         encodeLastRecordedSourceMapSpan();
 
@@ -2080,6 +2080,52 @@ module ts {
                 }
             }
 
+            function emitLinePreservingList(parent: Node, nodes: NodeArray<Node>, allowTrailingComma: boolean, spacesBetweenBraces: boolean) {
+                Debug.assert(nodes.length > 0);
+
+                increaseIndent();
+
+                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                    if (spacesBetweenBraces) {
+                        write(" ");
+                    }
+                }
+                else {
+                    writeLine();
+                }
+
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    if (i) {
+                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                            write(", ");
+                        }
+                        else {
+                            write(",");
+                            writeLine();
+                        }
+                    }
+
+                    emit(nodes[i]);
+                }
+
+                var closeTokenIsOnSameLineAsLastElement = nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes));
+
+                if (nodes.hasTrailingComma && allowTrailingComma) {
+                    write(",");
+                }
+
+                decreaseIndent();
+
+                if (closeTokenIsOnSameLineAsLastElement) {
+                    if (spacesBetweenBraces) {
+                        write(" ");
+                    }
+                }
+                else {
+                    writeLine();
+                }
+            }
+
             function emitList(nodes: Node[], start: number, count: number, multiLine: boolean, trailingComma: boolean) {
                 for (var i = 0; i < count; i++) {
                     if (multiLine) {
@@ -2135,7 +2181,7 @@ module ts {
             function emitLiteral(node: LiteralExpression) {
                 var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
-                    node.text;
+                        node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
@@ -2261,7 +2307,7 @@ module ts {
                     //                spread ('...') unary operators that are anticipated for ES6.
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
-                            switch ((<BinaryExpression>expression).operator) {
+                            switch ((<BinaryExpression>expression).operatorToken.kind) {
                                 case SyntaxKind.AsteriskToken:
                                 case SyntaxKind.SlashToken:
                                 case SyntaxKind.PercentToken:
@@ -2480,54 +2526,24 @@ module ts {
                 }
             }
 
+            function isSpreadElementExpression(node: Node) {
+                return node.kind === SyntaxKind.SpreadElementExpression;
+            }
+
             function emitArrayLiteral(node: ArrayLiteralExpression) {
                 var elements = node.elements;
                 if (elements.length === 0) {
                     write("[]");
                 }
-                else if (languageVersion >= ScriptTarget.ES6) {
+                else if (languageVersion >= ScriptTarget.ES6 || !forEach(elements, isSpreadElementExpression)) {
                     write("[");
-                    var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
-                    if (multiLine) {
-                        increaseIndent();
-                    }
-                    emitList(elements, 0, elements.length, /*multiLine*/ multiLine,
-                        /*trailingComma*/ elements.hasTrailingComma);
-                    if (multiLine) {
-                        decreaseIndent();
-                    }
+                    emitLinePreservingList(node, node.elements, elements.hasTrailingComma, /*spacesBetweenBraces:*/ false);
                     write("]");
                 }
                 else {
                     emitListWithSpread(elements, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
                 }
-            }
-
-            function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number) {
-                write("{");
-
-                var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
-
-                if (numElements > 0) {
-                    var properties = node.properties;
-                    if (!multiLine) {
-                        write(" ");
-                    }
-                    else {
-                        increaseIndent();
-                    }
-                    emitList(properties, 0, numElements, /*multiLine*/ multiLine,
-                        /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
-                    if (!multiLine) {
-                        write(" ");
-                    }
-                    else {
-                        decreaseIndent();
-                    }
-                }
-
-                write("}");
             }
 
             function createSynthesizedNode(kind: SyntaxKind): Node {
@@ -2665,7 +2681,7 @@ module ts {
 
             function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
                 var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
-                result.operator = operator;
+                result.operatorToken = createSynthesizedNode(operator);
                 result.left = left;
                 result.right = right;
 
@@ -2759,7 +2775,14 @@ module ts {
 
                 // Ordinary case: either the object has no computed properties
                 // or we're compiling with an ES6+ target.
-                emitObjectLiteralBody(node, properties.length);
+                write("{");
+
+                var properties = node.properties;
+                if (properties.length) {
+                    emitLinePreservingList(node, properties, /*allowTrailingComma:*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces:*/ true)
+                }
+
+                write("}");
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
@@ -3039,17 +3062,82 @@ module ts {
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
                 else {
                     emit(node.left);
-                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                    write(tokenToString(node.operator));
-                    write(" ");
+
+                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                        write(" ");
+                    }
+
+                    write(tokenToString(node.operatorToken.kind));
+
+                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
+                    //
+                    //      Foo() ||
+                    //          Bar();
+                    //
+                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
+                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
+                    // i.e. if you have:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //          Baz();
+                    //
+                    // Then we don't want to emit it as:
+                    //
+                    //      Foo() ||
+                    //          Bar() ||
+                    //              Baz();
+                    //
+                    // So we only indent if the right side of the binary expression starts further in on the line 
+                    // versus the left.
+                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
+                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
+
+                    // Check if the right expression is on a different line versus the operator itself.  If so,
+                    // we'll emit newline.
+                    var onDifferentLine = operatorEnd.line !== rightStart.line;
+                    if (onDifferentLine) {
+                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
+                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
+                        var shouldIndent = rightStart.character > firstCharOfExpr;
+
+                        if (shouldIndent) {
+                            increaseIndent();
+                        }
+
+                        writeLine();
+                    }
+                    else {
+                        write(" ");
+                    }
+
                     emit(node.right);
+
+                    if (shouldIndent) {
+                        decreaseIndent();
+                    }
                 }
+            }
+
+            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
+                var lineStart = getLineStarts(currentSourceFile)[line];
+                var text = currentSourceFile.text;
+
+                for (var i = lineStart; i < text.length; i++) {
+                    var ch = text.charCodeAt(i);
+                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
+                        break;
+                    }
+                }
+
+                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3060,7 +3148,7 @@ module ts {
                 emit(node.whenFalse);
             }
 
-            function isSingleLineBlock(node: Node) {
+            function isSingleLineEmptyBlock(node: Node) {
                 if (node && node.kind === SyntaxKind.Block) {
                     var block = <Block>node;
                     return block.statements.length === 0 && nodeEndIsOnSameLineAsNodeStart(block, block);
@@ -3068,7 +3156,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
-                if (isSingleLineBlock(node)) {
+                if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -3248,9 +3336,14 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
-            function isOnSameLine(node1: Node, node2: Node) {
+            function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
                     getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function nodeEndPositionsAreOnSameLine(node1: Node, node2: Node) {
+                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
+                    getLineOfLocalPosition(currentSourceFile, node2.end);
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
@@ -3267,7 +3360,7 @@ module ts {
                 else {
                     write("default:");
                 }
-                if (node.statements.length === 1 && isOnSameLine(node, node.statements[0])) {
+                if (node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
                     write(" ");
                     emit(node.statements[0]);
                 }
@@ -3388,7 +3481,7 @@ module ts {
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
-                    equals.operator = SyntaxKind.EqualsEqualsEqualsToken;
+                    equals.operatorToken = createNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
                     var cond = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
                     cond.condition = equals;
@@ -3471,7 +3564,7 @@ module ts {
                 }
 
                 function emitDestructuringAssignment(target: Expression, value: Expression) {
-                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value,(<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
                     }
@@ -3757,77 +3850,14 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                if (isSingleLineBlock(node.body)) {
+                if (isSingleLineEmptyBlock(node.body) || !node.body) {
                     write(" { }");
                 }
+                else if (node.body.kind === SyntaxKind.Block) {
+                    emitBlockFunctionBody(node, <Block>node.body);
+                }
                 else {
-                    write(" {");
-                    scopeEmitStart(node);
-
-                    if (!node.body) {
-                        writeLine();
-                        write("}");
-                    }
-                    else {
-                        increaseIndent();
-
-                        emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
-
-                        var startIndex = 0;
-                        if (node.body.kind === SyntaxKind.Block) {
-                            startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-                        }
-                        var outPos = writer.getTextPos();
-
-                        emitCaptureThisForNodeIfNecessary(node);
-                        emitDefaultValueAssignments(node);
-                        emitRestParameter(node);
-                        if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-                            decreaseIndent();
-                            write(" ");
-                            emitStart(node.body);
-                            write("return ");
-
-                            // Don't emit comments on this body.  We'll have already taken care of it above 
-                            // when we called emitDetachedComments.
-                            emitNode(node.body, /*disableComments:*/ true);
-                            emitEnd(node.body);
-                            write(";");
-                            emitTempDeclarations(/*newLine*/ false);
-                            write(" ");
-                            emitStart(node.body);
-                            write("}");
-                            emitEnd(node.body);
-                        }
-                        else {
-                            if (node.body.kind === SyntaxKind.Block) {
-                                emitLinesStartingAt((<Block>node.body).statements, startIndex);
-                            }
-                            else {
-                                writeLine();
-                                emitLeadingComments(node.body);
-                                write("return ");
-                                emit(node.body, /*disableComments:*/ true);
-                                write(";");
-                                emitTrailingComments(node.body);
-                            }
-                            emitTempDeclarations(/*newLine*/ true);
-                            writeLine();
-                            if (node.body.kind === SyntaxKind.Block) {
-                                emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-                                decreaseIndent();
-                                emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
-                            }
-                            else {
-                                decreaseIndent();
-                                emitStart(node.body);
-                                write("}");
-                                emitEnd(node.body);
-                            }
-                        }
-                    }
-
-                    scopeEmitEnd();
+                    emitExpressionFunctionBody(node, <Expression>node.body);
                 }
 
                 if (node.flags & NodeFlags.Export) {
@@ -3839,9 +3869,99 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+
                 tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
+            }
+
+            // Returns true if any preamble code was emitted.
+            function emitFunctionBodyPreamble(node: FunctionLikeDeclaration): void {
+                emitCaptureThisForNodeIfNecessary(node);
+                emitDefaultValueAssignments(node);
+                emitRestParameter(node);
+            }
+
+            function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
+                write(" {");
+                scopeEmitStart(node);
+
+                increaseIndent();
+                var outPos = writer.getTextPos();
+                emitDetachedComments(node.body);
+                emitFunctionBodyPreamble(node);
+                var preambleEmitted = writer.getTextPos() !== outPos;
+                decreaseIndent();
+
+                // If we didn't have to emit any preamble code, then attempt to keep the arrow
+                // function on one line.
+                if (!preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
+                    write(" ");
+                    emitStart(body);
+                    write("return ");
+
+                    // Don't emit comments on this body.  We'll have already taken care of it above 
+                    // when we called emitDetachedComments.
+                    emitNode(body, /*disableComments:*/ true);
+                    emitEnd(body);
+                    write(";");
+                    emitTempDeclarations(/*newLine*/ false);
+                    write(" ");
+                }
+                else {
+                    increaseIndent();
+                    writeLine();
+                    emitLeadingComments(node.body);
+                    write("return ");
+                    emit(node.body, /*disableComments:*/ true);
+                    write(";");
+                    emitTrailingComments(node.body);
+
+                    emitTempDeclarations(/*newLine*/ true);
+                    decreaseIndent();
+                    writeLine();
+                }
+
+                emitStart(node.body);
+                write("}");
+                emitEnd(node.body);
+
+                scopeEmitEnd();
+            }
+
+            function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
+                write(" {");
+                scopeEmitStart(node);
+
+                var outPos = writer.getTextPos();
+                increaseIndent();
+                emitDetachedComments(body.statements);
+                var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
+                emitFunctionBodyPreamble(node);
+                decreaseIndent();
+                var preambleEmitted = writer.getTextPos() !== outPos;
+
+                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                    for (var i = 0, n = body.statements.length; i < n; i++) {
+                        write(" ");
+                        emit(body.statements[i]);
+                    }
+                    emitTempDeclarations(/*newLine*/ false);
+                    write(" ");
+                    emitLeadingCommentsOfPosition(body.statements.end);
+                }
+                else {
+                    increaseIndent();
+                    emitLinesStartingAt(body.statements, startIndex);
+                    emitTempDeclarations(/*newLine*/ true);
+
+                    writeLine();
+                    emitLeadingCommentsOfPosition(body.statements.end);
+                    decreaseIndent();
+                }
+
+                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                scopeEmitEnd();
             }
 
             function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {

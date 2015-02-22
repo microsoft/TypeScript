@@ -68,6 +68,7 @@ var servicesSources = [
 	"navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
+    "patternMatcher.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
@@ -139,7 +140,8 @@ var harnessSources = [
     "incrementalParser.ts",
     "services/colorization.ts",
     "services/documentRegistry.ts",
-    "services/preProcessFile.ts"
+    "services/preProcessFile.ts",
+    "services/patternMatcher.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

@@ -21,9 +21,7 @@ export var a = function () {
 //// [aliasUsedAsNameValue_0.js]
 exports.id;
 //// [aliasUsedAsNameValue_1.js]
-function b(a) {
-    return null;
-}
+function b(a) { return null; }
 exports.b = b;
 //// [aliasUsedAsNameValue_2.js]
 ///<reference path='aliasUsedAsNameValue_0.ts' />

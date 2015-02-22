@@ -377,9 +377,7 @@ var TypeScript;
             }
             return false;
         };
-        StringHashTable.prototype.count = function () {
-            return this.itemCount;
-        };
+        StringHashTable.prototype.count = function () { return this.itemCount; };
         StringHashTable.prototype.lookup = function (key) {
             var data = this.table[key];
             if (data != undefined) {
@@ -515,9 +513,7 @@ var TypeScript;
             }
             return result;
         };
-        HashTable.prototype.count = function () {
-            return this.itemCount;
-        };
+        HashTable.prototype.count = function () { return this.itemCount; };
         HashTable.prototype.lookup = function (key) {
             var current;
             var val = this.hashFn(key);

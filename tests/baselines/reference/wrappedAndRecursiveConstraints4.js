@@ -28,5 +28,5 @@ var C = (function () {
 var c = new C({ length: 2 });
 var r = c.foo('');
 var r2 = r({ length: 3, charAt: function (x) {
-    '';
-} }); // error
+        '';
+    } }); // error

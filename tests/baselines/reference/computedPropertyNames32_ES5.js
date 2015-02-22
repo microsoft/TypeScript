@@ -8,9 +8,7 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES5.js]
-function foo() {
-    return '';
-}
+function foo() { return ''; }
 var C = (function () {
     function C() {
     }

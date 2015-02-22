@@ -52,9 +52,7 @@ var ObjectLiteral;
 var F = (function () {
     function F() {
     }
-    F.prototype.test = function () {
-        return "";
-    };
+    F.prototype.test = function () { return ""; };
     return F;
 })();
 var SuperObjectTest = (function (_super) {

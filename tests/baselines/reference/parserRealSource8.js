@@ -632,7 +632,8 @@ var TypeScript;
         // the enclosing scope
         // REVIEW: Some twisted logic here - this needs to be cleaned up once old classes are removed
         //  - if it's a new class, always use the contained scope, since we initialize the constructor scope below
-        if (context.scopeChain.thisType && (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
+        if (context.scopeChain.thisType &&
+            (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
             var instType = context.scopeChain.thisType;
             if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
                 if (!funcDecl.isMethod() || isStatic) {
@@ -644,7 +645,10 @@ var TypeScript;
                 }
             }
             else {
-                if (context.scopeChain.previous.scope.container && context.scopeChain.previous.scope.container.declAST && context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl && context.scopeChain.previous.scope.container.declAST.isConstructor) {
+                if (context.scopeChain.previous.scope.container &&
+                    context.scopeChain.previous.scope.container.declAST &&
+                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&
+                    context.scopeChain.previous.scope.container.declAST.isConstructor) {
                     // if the parent is the class constructor, use the constructor scope
                     parentScope = instType.constructorScope;
                 }
@@ -681,7 +685,12 @@ var TypeScript;
                 outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl;
             }
             else {
-                if (!funcDecl.isConstructor && container && container.declAST && container.declAST.nodeType == NodeType.FuncDecl && container.declAST.isConstructor && !funcDecl.isMethod()) {
+                if (!funcDecl.isConstructor &&
+                    container &&
+                    container.declAST &&
+                    container.declAST.nodeType == NodeType.FuncDecl &&
+                    container.declAST.isConstructor &&
+                    !funcDecl.isMethod()) {
                     funcScope = context.scopeChain.thisType.constructorScope; //locals;
                 }
                 else {
@@ -702,7 +711,11 @@ var TypeScript;
             }
             context.typeFlow.checker.createFunctionSignature(funcDecl, container, funcScope, fgSym, fgSym == null);
             // it's a getter or setter for a class property                     
-            if (!funcDecl.accessorSymbol && (funcDecl.fncFlags & FncFlags.ClassMethod) && container && ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || (fgSym && fgSym.isAccessor())) {
+            if (!funcDecl.accessorSymbol &&
+                (funcDecl.fncFlags & FncFlags.ClassMethod) &&
+                container &&
+                ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||
+                (fgSym && fgSym.isAccessor())) {
                 funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
             }
             funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
