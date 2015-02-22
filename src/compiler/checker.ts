@@ -1721,7 +1721,7 @@ module ts {
                 }
             }
             else {
-                // For an array binding element the specified or inferred type of the parent must be assignable to any[]
+                // For an array binding element the specified or inferred type of the parent must be an array-like type
                 if (!isArrayLikeType(parentType)) {
                     error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                     return unknownType;
@@ -4191,6 +4191,7 @@ module ts {
         }
 
         function isArrayLikeType(type: Type): boolean {
+            // A type is array-like if it is not the undefined or null type and if it is assignable to any[]
             return !(type.flags & (TypeFlags.Undefined | TypeFlags.Null)) && isTypeAssignableTo(type, anyArrayType);
         }
 
