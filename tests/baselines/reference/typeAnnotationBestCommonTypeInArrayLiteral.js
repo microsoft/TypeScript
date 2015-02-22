@@ -29,8 +29,7 @@ var menuData = [
         "type": "image",
         "link": "",
         "icon": "modules/menu/logo.svg"
-    },
-    {
+    }, {
         "id": "productName",
         "type": "default",
         "link": "",

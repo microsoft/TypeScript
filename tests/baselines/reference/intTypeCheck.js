@@ -219,15 +219,9 @@ var anyVar;
 var obj0;
 var obj1 = {
     p: null,
-    p3: function () {
-        return 0;
-    },
-    p6: function (pa1) {
-        return 0;
-    },
-    p7: function (pa1, pa2) {
-        return 0;
-    }
+    p3: function () { return 0; },
+    p6: function (pa1) { return 0; },
+    p7: function (pa1, pa2) { return 0; }
 };
 var obj2 = new Object();
 var obj3 = new obj0;
@@ -247,9 +241,7 @@ var obj13 = new Object();
 var obj14 = new obj11;
 var obj15 = new Base;
 var obj16 = null;
-var obj17 = function () {
-    return 0;
-};
+var obj17 = function () { return 0; };
 //var obj18: i2 = function foo() { };
 var obj19 = anyVar;
 var obj20 = new  < i2 > anyVar;

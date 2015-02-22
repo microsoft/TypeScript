@@ -173,15 +173,17 @@ export function delint(sourceFile: ts.SourceFile) {
 >SyntaxKind : typeof ts.SyntaxKind
 >BinaryExpression : ts.SyntaxKind
 
-                var op = (<ts.BinaryExpression>node).operator;
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 >op : ts.SyntaxKind
->(<ts.BinaryExpression>node).operator : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken : ts.Node
 >(<ts.BinaryExpression>node) : ts.BinaryExpression
 ><ts.BinaryExpression>node : ts.BinaryExpression
 >ts : unknown
 >BinaryExpression : ts.BinaryExpression
 >node : ts.Node
->operator : ts.SyntaxKind
+>operatorToken : ts.Node
+>kind : ts.SyntaxKind
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
 >op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken : boolean
@@ -224,28 +226,30 @@ export function delint(sourceFile: ts.SourceFile) {
 >Node : ts.Node
 >message : string
 
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
 >lineChar : ts.LineAndCharacter
->sourceFile.getLineAndCharacterFromPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >sourceFile : ts.SourceFile
->getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >node.getStart() : number
 >node.getStart : (sourceFile?: ts.SourceFile) => number
 >node : ts.Node
 >getStart : (sourceFile?: ts.SourceFile) => number
 
-        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
->console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`) : any
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
+>console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
 >sourceFile.fileName : string
 >sourceFile : ts.SourceFile
 >fileName : string
+>lineChar.line + 1 : number
 >lineChar.line : number
 >lineChar : ts.LineAndCharacter
 >line : number
+>lineChar.character + 1 : number
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
@@ -697,274 +701,283 @@ declare module "typescript" {
         StringKeyword = 119,
 >StringKeyword : SyntaxKind
 
-        TypeKeyword = 120,
+        SymbolKeyword = 120,
+>SymbolKeyword : SyntaxKind
+
+        TypeKeyword = 121,
 >TypeKeyword : SyntaxKind
 
-        QualifiedName = 121,
+        OfKeyword = 122,
+>OfKeyword : SyntaxKind
+
+        QualifiedName = 123,
 >QualifiedName : SyntaxKind
 
-        ComputedPropertyName = 122,
+        ComputedPropertyName = 124,
 >ComputedPropertyName : SyntaxKind
 
-        TypeParameter = 123,
+        TypeParameter = 125,
 >TypeParameter : SyntaxKind
 
-        Parameter = 124,
+        Parameter = 126,
 >Parameter : SyntaxKind
 
-        PropertySignature = 125,
+        PropertySignature = 127,
 >PropertySignature : SyntaxKind
 
-        PropertyDeclaration = 126,
+        PropertyDeclaration = 128,
 >PropertyDeclaration : SyntaxKind
 
-        MethodSignature = 127,
+        MethodSignature = 129,
 >MethodSignature : SyntaxKind
 
-        MethodDeclaration = 128,
+        MethodDeclaration = 130,
 >MethodDeclaration : SyntaxKind
 
-        Constructor = 129,
+        Constructor = 131,
 >Constructor : SyntaxKind
 
-        GetAccessor = 130,
+        GetAccessor = 132,
 >GetAccessor : SyntaxKind
 
-        SetAccessor = 131,
+        SetAccessor = 133,
 >SetAccessor : SyntaxKind
 
-        CallSignature = 132,
+        CallSignature = 134,
 >CallSignature : SyntaxKind
 
-        ConstructSignature = 133,
+        ConstructSignature = 135,
 >ConstructSignature : SyntaxKind
 
-        IndexSignature = 134,
+        IndexSignature = 136,
 >IndexSignature : SyntaxKind
 
-        TypeReference = 135,
+        TypeReference = 137,
 >TypeReference : SyntaxKind
 
-        FunctionType = 136,
+        FunctionType = 138,
 >FunctionType : SyntaxKind
 
-        ConstructorType = 137,
+        ConstructorType = 139,
 >ConstructorType : SyntaxKind
 
-        TypeQuery = 138,
+        TypeQuery = 140,
 >TypeQuery : SyntaxKind
 
-        TypeLiteral = 139,
+        TypeLiteral = 141,
 >TypeLiteral : SyntaxKind
 
-        ArrayType = 140,
+        ArrayType = 142,
 >ArrayType : SyntaxKind
 
-        TupleType = 141,
+        TupleType = 143,
 >TupleType : SyntaxKind
 
-        UnionType = 142,
+        UnionType = 144,
 >UnionType : SyntaxKind
 
-        ParenthesizedType = 143,
+        ParenthesizedType = 145,
 >ParenthesizedType : SyntaxKind
 
-        ObjectBindingPattern = 144,
+        ObjectBindingPattern = 146,
 >ObjectBindingPattern : SyntaxKind
 
-        ArrayBindingPattern = 145,
+        ArrayBindingPattern = 147,
 >ArrayBindingPattern : SyntaxKind
 
-        BindingElement = 146,
+        BindingElement = 148,
 >BindingElement : SyntaxKind
 
-        ArrayLiteralExpression = 147,
+        ArrayLiteralExpression = 149,
 >ArrayLiteralExpression : SyntaxKind
 
-        ObjectLiteralExpression = 148,
+        ObjectLiteralExpression = 150,
 >ObjectLiteralExpression : SyntaxKind
 
-        PropertyAccessExpression = 149,
+        PropertyAccessExpression = 151,
 >PropertyAccessExpression : SyntaxKind
 
-        ElementAccessExpression = 150,
+        ElementAccessExpression = 152,
 >ElementAccessExpression : SyntaxKind
 
-        CallExpression = 151,
+        CallExpression = 153,
 >CallExpression : SyntaxKind
 
-        NewExpression = 152,
+        NewExpression = 154,
 >NewExpression : SyntaxKind
 
-        TaggedTemplateExpression = 153,
+        TaggedTemplateExpression = 155,
 >TaggedTemplateExpression : SyntaxKind
 
-        TypeAssertionExpression = 154,
+        TypeAssertionExpression = 156,
 >TypeAssertionExpression : SyntaxKind
 
-        ParenthesizedExpression = 155,
+        ParenthesizedExpression = 157,
 >ParenthesizedExpression : SyntaxKind
 
-        FunctionExpression = 156,
+        FunctionExpression = 158,
 >FunctionExpression : SyntaxKind
 
-        ArrowFunction = 157,
+        ArrowFunction = 159,
 >ArrowFunction : SyntaxKind
 
-        DeleteExpression = 158,
+        DeleteExpression = 160,
 >DeleteExpression : SyntaxKind
 
-        TypeOfExpression = 159,
+        TypeOfExpression = 161,
 >TypeOfExpression : SyntaxKind
 
-        VoidExpression = 160,
+        VoidExpression = 162,
 >VoidExpression : SyntaxKind
 
-        PrefixUnaryExpression = 161,
+        PrefixUnaryExpression = 163,
 >PrefixUnaryExpression : SyntaxKind
 
-        PostfixUnaryExpression = 162,
+        PostfixUnaryExpression = 164,
 >PostfixUnaryExpression : SyntaxKind
 
-        BinaryExpression = 163,
+        BinaryExpression = 165,
 >BinaryExpression : SyntaxKind
 
-        ConditionalExpression = 164,
+        ConditionalExpression = 166,
 >ConditionalExpression : SyntaxKind
 
-        TemplateExpression = 165,
+        TemplateExpression = 167,
 >TemplateExpression : SyntaxKind
 
-        YieldExpression = 166,
+        YieldExpression = 168,
 >YieldExpression : SyntaxKind
 
-        SpreadElementExpression = 167,
+        SpreadElementExpression = 169,
 >SpreadElementExpression : SyntaxKind
 
-        OmittedExpression = 168,
+        OmittedExpression = 170,
 >OmittedExpression : SyntaxKind
 
-        TemplateSpan = 169,
+        TemplateSpan = 171,
 >TemplateSpan : SyntaxKind
 
-        Block = 170,
+        Block = 172,
 >Block : SyntaxKind
 
-        VariableStatement = 171,
+        VariableStatement = 173,
 >VariableStatement : SyntaxKind
 
-        EmptyStatement = 172,
+        EmptyStatement = 174,
 >EmptyStatement : SyntaxKind
 
-        ExpressionStatement = 173,
+        ExpressionStatement = 175,
 >ExpressionStatement : SyntaxKind
 
-        IfStatement = 174,
+        IfStatement = 176,
 >IfStatement : SyntaxKind
 
-        DoStatement = 175,
+        DoStatement = 177,
 >DoStatement : SyntaxKind
 
-        WhileStatement = 176,
+        WhileStatement = 178,
 >WhileStatement : SyntaxKind
 
-        ForStatement = 177,
+        ForStatement = 179,
 >ForStatement : SyntaxKind
 
-        ForInStatement = 178,
+        ForInStatement = 180,
 >ForInStatement : SyntaxKind
 
-        ContinueStatement = 179,
+        ForOfStatement = 181,
+>ForOfStatement : SyntaxKind
+
+        ContinueStatement = 182,
 >ContinueStatement : SyntaxKind
 
-        BreakStatement = 180,
+        BreakStatement = 183,
 >BreakStatement : SyntaxKind
 
-        ReturnStatement = 181,
+        ReturnStatement = 184,
 >ReturnStatement : SyntaxKind
 
-        WithStatement = 182,
+        WithStatement = 185,
 >WithStatement : SyntaxKind
 
-        SwitchStatement = 183,
+        SwitchStatement = 186,
 >SwitchStatement : SyntaxKind
 
-        LabeledStatement = 184,
+        LabeledStatement = 187,
 >LabeledStatement : SyntaxKind
 
-        ThrowStatement = 185,
+        ThrowStatement = 188,
 >ThrowStatement : SyntaxKind
 
-        TryStatement = 186,
+        TryStatement = 189,
 >TryStatement : SyntaxKind
 
-        DebuggerStatement = 187,
+        DebuggerStatement = 190,
 >DebuggerStatement : SyntaxKind
 
-        VariableDeclaration = 188,
+        VariableDeclaration = 191,
 >VariableDeclaration : SyntaxKind
 
-        VariableDeclarationList = 189,
+        VariableDeclarationList = 192,
 >VariableDeclarationList : SyntaxKind
 
-        FunctionDeclaration = 190,
+        FunctionDeclaration = 193,
 >FunctionDeclaration : SyntaxKind
 
-        ClassDeclaration = 191,
+        ClassDeclaration = 194,
 >ClassDeclaration : SyntaxKind
 
-        InterfaceDeclaration = 192,
+        InterfaceDeclaration = 195,
 >InterfaceDeclaration : SyntaxKind
 
-        TypeAliasDeclaration = 193,
+        TypeAliasDeclaration = 196,
 >TypeAliasDeclaration : SyntaxKind
 
-        EnumDeclaration = 194,
+        EnumDeclaration = 197,
 >EnumDeclaration : SyntaxKind
 
-        ModuleDeclaration = 195,
+        ModuleDeclaration = 198,
 >ModuleDeclaration : SyntaxKind
 
-        ModuleBlock = 196,
+        ModuleBlock = 199,
 >ModuleBlock : SyntaxKind
 
-        ImportDeclaration = 197,
+        ImportDeclaration = 200,
 >ImportDeclaration : SyntaxKind
 
-        ExportAssignment = 198,
+        ExportAssignment = 201,
 >ExportAssignment : SyntaxKind
 
-        ExternalModuleReference = 199,
+        ExternalModuleReference = 202,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 200,
+        CaseClause = 203,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 201,
+        DefaultClause = 204,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 202,
+        HeritageClause = 205,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 203,
+        CatchClause = 206,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 204,
+        PropertyAssignment = 207,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 205,
+        ShorthandPropertyAssignment = 208,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 206,
+        EnumMember = 209,
 >EnumMember : SyntaxKind
 
-        SourceFile = 207,
+        SourceFile = 210,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 208,
+        SyntaxList = 211,
 >SyntaxList : SyntaxKind
 
-        Count = 209,
+        Count = 212,
 >Count : SyntaxKind
 
         FirstAssignment = 52,
@@ -982,7 +995,7 @@ declare module "typescript" {
         FirstKeyword = 65,
 >FirstKeyword : SyntaxKind
 
-        LastKeyword = 120,
+        LastKeyword = 122,
 >LastKeyword : SyntaxKind
 
         FirstFutureReservedWord = 101,
@@ -991,10 +1004,10 @@ declare module "typescript" {
         LastFutureReservedWord = 109,
 >LastFutureReservedWord : SyntaxKind
 
-        FirstTypeNode = 135,
+        FirstTypeNode = 137,
 >FirstTypeNode : SyntaxKind
 
-        LastTypeNode = 143,
+        LastTypeNode = 145,
 >LastTypeNode : SyntaxKind
 
         FirstPunctuation = 14,
@@ -1006,7 +1019,7 @@ declare module "typescript" {
         FirstToken = 0,
 >FirstToken : SyntaxKind
 
-        LastToken = 120,
+        LastToken = 122,
 >LastToken : SyntaxKind
 
         FirstTriviaToken = 2,
@@ -1033,7 +1046,7 @@ declare module "typescript" {
         LastBinaryOperator = 63,
 >LastBinaryOperator : SyntaxKind
 
-        FirstNode = 121,
+        FirstNode = 123,
 >FirstNode : SyntaxKind
     }
     const enum NodeFlags {
@@ -1720,9 +1733,9 @@ declare module "typescript" {
 >left : Expression
 >Expression : Expression
 
-        operator: SyntaxKind;
->operator : SyntaxKind
->SyntaxKind : SyntaxKind
+        operatorToken: Node;
+>operatorToken : Node
+>Node : Node
 
         right: Expression;
 >right : Expression
@@ -2005,6 +2018,19 @@ declare module "typescript" {
     }
     interface ForInStatement extends IterationStatement {
 >ForInStatement : ForInStatement
+>IterationStatement : IterationStatement
+
+        initializer: VariableDeclarationList | Expression;
+>initializer : Expression | VariableDeclarationList
+>VariableDeclarationList : VariableDeclarationList
+>Expression : Expression
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface ForOfStatement extends IterationStatement {
+>ForOfStatement : ForOfStatement
 >IterationStatement : IterationStatement
 
         initializer: VariableDeclarationList | Expression;
@@ -3462,10 +3488,13 @@ declare module "typescript" {
         ContainsObjectLiteral = 524288,
 >ContainsObjectLiteral : TypeFlags
 
-        Intrinsic = 127,
+        ESSymbol = 1048576,
+>ESSymbol : TypeFlags
+
+        Intrinsic = 1048703,
 >Intrinsic : TypeFlags
 
-        Primitive = 510,
+        Primitive = 1049086,
 >Primitive : TypeFlags
 
         StringLike = 258,
@@ -4307,6 +4336,9 @@ declare module "typescript" {
         greaterThan = 62,
 >greaterThan : CharacterCodes
 
+        hash = 35,
+>hash : CharacterCodes
+
         lessThan = 60,
 >lessThan : CharacterCodes
 
@@ -4512,15 +4544,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionOfLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionOfLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -4879,16 +4911,16 @@ declare module "typescript" {
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
 
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number
 >LineAndCharacter : LineAndCharacter
 
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+>getPositionOfLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 
@@ -5105,9 +5137,10 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
-        getNavigateToItems(searchValue: string): NavigateToItem[];
->getNavigateToItems : (searchValue: string) => NavigateToItem[]
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+>getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
+>maxResultCount : number
 >NavigateToItem : NavigateToItem
 
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -5346,6 +5379,9 @@ declare module "typescript" {
 
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
 >PlaceOpenBraceOnNewLineForControlBlocks : boolean
+
+        [s: string]: boolean | number | string;
+>s : string
     }
     interface DefinitionInfo {
 >DefinitionInfo : DefinitionInfo

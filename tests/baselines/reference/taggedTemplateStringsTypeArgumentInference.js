@@ -136,11 +136,17 @@ function someGenerics7(strs, a, b, c) { }
 (_u = ["", "", "", ""], _u.raw = ["", "", "", ""], someGenerics7(_u, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 (_v = ["", "", "", ""], _v.raw = ["", "", "", ""], someGenerics7(_v, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 // Generic tag with argument of generic function type
+<<<<<<< HEAD
 function someGenerics8(strs, n) {
     return n;
 }
 var x = (_w = ["", ""], _w.raw = ["", ""], someGenerics8(_w, someGenerics7));
 (_x = ["", "", "", ""], _x.raw = ["", "", "", ""], x(_x, null, null, null));
+=======
+function someGenerics8(strs, n) { return n; }
+var x = someGenerics8 "" + someGenerics7;
+x "" + null + null + null;
+>>>>>>> master
 // Generic tag with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9(strs, a, b, c) {
     return null;

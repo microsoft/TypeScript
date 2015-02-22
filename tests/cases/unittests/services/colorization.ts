@@ -43,7 +43,7 @@ describe('Colorization', function () {
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
-        var result = classifier.getClassificationsForLine(text, initialEndOfLineState);
+        var result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
 
         for (var i = 0, n = expectedEntries.length; i < n; i++) {
             var expectedEntry = expectedEntries[i];
@@ -428,6 +428,21 @@ class D { }\r\n\
                 punctuation("}"),
                 comment("=======\r\nclass D { }\r\n"),
                 comment(">>>>>>> Branch - a"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("'of' keyword", function () {
+            testLexicalClassification("for (var of of of) { }",
+                ts.EndOfLineState.Start,
+                keyword("for"),
+                punctuation("("),
+                keyword("var"),
+                keyword("of"),
+                keyword("of"),
+                keyword("of"),
+                punctuation(")"),
+                punctuation("{"),
+                punctuation("}"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });

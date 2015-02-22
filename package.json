@@ -25,9 +25,10 @@
         "url": "https://github.com/Microsoft/TypeScript.git"
     },
     "preferGlobal": true,
-    "main": "./bin/typescriptServices.js",
+    "main": "./bin/typescript.js",
     "bin": {
-        "tsc": "./bin/tsc"
+        "tsc": "./bin/tsc",
+        "tsserver": "./bin/tsserver"
     },
     "engines": {
         "node": ">=0.8.0"

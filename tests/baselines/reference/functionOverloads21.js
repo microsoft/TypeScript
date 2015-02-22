@@ -5,6 +5,4 @@ function foo(bar:{a:any; b?:string;}[]) { return 0 }
 
 
 //// [functionOverloads21.js]
-function foo(bar) {
-    return 0;
-}
+function foo(bar) { return 0; }

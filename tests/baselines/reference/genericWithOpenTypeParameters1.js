@@ -15,22 +15,12 @@ var f4 = (x: B<number>) => { return x.foo(1); } // no error
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function (x) {
-        return null;
-    };
+    B.prototype.foo = function (x) { return null; };
     return B;
 })();
 var x;
 x.foo(1); // no error
-var f = function (x) {
-    return x.foo(1);
-}; // error
-var f2 = function (x) {
-    return x.foo(1);
-}; // error
-var f3 = function (x) {
-    return x.foo(1);
-}; // error
-var f4 = function (x) {
-    return x.foo(1);
-}; // no error
+var f = function (x) { return x.foo(1); }; // error
+var f2 = function (x) { return x.foo(1); }; // error
+var f3 = function (x) { return x.foo(1); }; // error
+var f4 = function (x) { return x.foo(1); }; // no error
