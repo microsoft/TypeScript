@@ -9,5 +9,7 @@
         "lib.d.ts",
         "testGlo.ts"
     ],
-    "emittedFiles": []
+    "emittedFiles": [
+        "testGlo.js"
+    ]
 }

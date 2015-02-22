@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames10_ES5.ts ===
+var s: string;
+>s : string
+
+var n: number;
+>n : number
+
+var a: any;
+>a : any
+
+var v = {
+>v : {}
+>{    [s]() { },    [n]() { },    [s + s]() { },    [s + n]() { },    [+s]() { },    [""]() { },    [0]() { },    [a]() { },    [<any>true]() { },    [`hello bye`]() { },    [`hello ${a} bye`]() { }} : {}
+
+    [s]() { },
+>s : string
+
+    [n]() { },
+>n : number
+
+    [s + s]() { },
+>s + s : string
+>s : string
+>s : string
+
+    [s + n]() { },
+>s + n : string
+>s : string
+>n : number
+
+    [+s]() { },
+>+s : number
+>s : string
+
+    [""]() { },
+    [0]() { },
+    [a]() { },
+>a : any
+
+    [<any>true]() { },
+><any>true : any
+
+    [`hello bye`]() { },
+    [`hello ${a} bye`]() { }
+>a : any
+}

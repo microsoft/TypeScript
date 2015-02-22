@@ -10,11 +10,8 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 
 
 //// [getterSetterNonAccessor.js]
-function getFunc() {
-    return 0;
-}
-function setFunc(v) {
-}
+function getFunc() { return 0; }
+function setFunc(v) { }
 Object.defineProperty({}, "0", ({
     get: getFunc,
     set: setFunc,

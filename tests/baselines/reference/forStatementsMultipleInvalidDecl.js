@@ -77,9 +77,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -88,45 +86,25 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 // all of these are errors
-for (var a;;) {
-}
-for (var a = 1;;) {
-}
-for (var a = 'a string';;) {
-}
-for (var a = new C();;) {
-}
-for (var a = new D();;) {
-}
-for (var a = M;;) {
-}
-for (var b;;) {
-}
-for (var b = new C();;) {
-}
-for (var b = new C2();;) {
-}
-for (var f = F;;) {
-}
-for (var f = function (x) { return ''; };;) {
-}
-for (var arr;;) {
-}
-for (var arr = [1, 2, 3, 4];;) {
-}
-for (var arr = [new C(), new C2(), new D()];;) {
-}
-for (var arr2 = [new D()];;) {
-}
-for (var arr2 = new Array();;) {
-}
-for (var m;;) {
-}
-for (var m = M.A;;) {
-}
+for (var a;;) { }
+for (var a = 1;;) { }
+for (var a = 'a string';;) { }
+for (var a = new C();;) { }
+for (var a = new D();;) { }
+for (var a = M;;) { }
+for (var b;;) { }
+for (var b = new C();;) { }
+for (var b = new C2();;) { }
+for (var f = F;;) { }
+for (var f = function (x) { return ''; };;) { }
+for (var arr;;) { }
+for (var arr = [1, 2, 3, 4];;) { }
+for (var arr = [new C(), new C2(), new D()];;) { }
+for (var arr2 = [new D()];;) { }
+for (var arr2 = new Array();;) { }
+for (var m;;) { }
+for (var m = M.A;;) { }

@@ -14,17 +14,17 @@ module ts.BreakpointResolver {
         }
 
         var tokenAtLocation = getTokenAtPosition(sourceFile, position);
-        var lineOfPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
-        if (sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
+        var lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+        if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
-            // eg: var x =10; |--- curser is here
+            // eg: var x =10; |--- cursor is here
             //     var y = 10; 
             // token at position will return var keyword on second line as the token but we would like to use 
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
             tokenAtLocation = findPrecedingToken(tokenAtLocation.start, sourceFile);
 
             // Its a blank line
-            if (!tokenAtLocation || sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
+            if (!tokenAtLocation || sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
                 return undefined;
             }
         }
@@ -42,7 +42,7 @@ module ts.BreakpointResolver {
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): Span {
-            if (node && lineOfPosition === sourceFile.getLineAndCharacterFromPosition(node.getStart()).line) {
+            if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart()).line) {
                 return spanInNode(node);
             }
             return spanInNode(otherwiseOnNode);
@@ -69,7 +69,7 @@ module ts.BreakpointResolver {
                         return span(node);
                     }
 
-                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operator === SyntaxKind.CommaToken) {
+                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.CommaToken) {
                         // if this is comma expression, the breakpoint is possible in this expression
                         return span(node);
                     }
@@ -151,8 +151,9 @@ module ts.BreakpointResolver {
                         return spanInForStatement(<ForStatement>node);
 
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                         // span on for (a in ...)
-                        return span(node, findNextToken((<ForInStatement>node).expression, node));
+                        return span(node, findNextToken((<ForInStatement | ForOfStatement>node).expression, node));
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)
@@ -261,7 +262,8 @@ module ts.BreakpointResolver {
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): Span {
                 // If declaration of for in statement, just set the span in parent
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement ||
+                    variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
 
@@ -362,6 +364,7 @@ module ts.BreakpointResolver {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
 
                     // Set span on previous token if it starts on same line otherwise on the first statement of the block

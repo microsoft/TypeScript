@@ -25,9 +25,6 @@ module ts {
         /** Gets the length of this script snapshot. */
         getLength(): number;
 
-        /** This call returns the JSON-encoded array of the type: number[] */
-        getLineStartPositions(): string;
-
         /**
          * Returns a JSON-encoded value of the type:
          *   { span: { start: number; length: number }; newLength: number }
@@ -37,6 +34,12 @@ module ts {
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
     }
 
+    export interface Logger {
+        log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
+    }
+
     /** Public interface of the host of a language service shim instance.*/
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
@@ -44,12 +47,12 @@ module ts {
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
         getScriptVersion(fileName: string): string;
-        getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: string): string;
+        getDefaultLibFileName(options: string): string;
+        getNewLine?(): string;
     }
 
     ///
@@ -87,6 +90,7 @@ module ts {
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
+        getSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -134,7 +138,7 @@ module ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -161,7 +165,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
@@ -187,14 +191,6 @@ module ts {
             return this.scriptSnapshotShim.getLength();
         }
 
-        public getLineStartPositions(): number[] {
-            if (this.lineStartPositions == null) {
-                this.lineStartPositions = JSON.parse(this.scriptSnapshotShim.getLineStartPositions());
-            }
-
-            return this.lineStartPositions;
-        }
-
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
@@ -209,6 +205,8 @@ module ts {
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
+        private files: string[];
+        
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -235,19 +233,21 @@ module ts {
 
         public getScriptFileNames(): string[] {
             var encoded = this.shimHost.getScriptFileNames();
-            return JSON.parse(encoded);
+            return this.files = JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
+            // Shim the API changes for 1.5 release. This should be removed once
+            // TypeScript 1.5 has shipped.
+            if (this.files && this.files.indexOf(fileName) < 0) {
+                return undefined;
+            }
+            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
         public getScriptVersion(fileName: string): string {
             return this.shimHost.getScriptVersion(fileName);
-        }
-
-        public getScriptIsOpen(fileName: string): boolean {
-            return this.shimHost.getScriptIsOpen(fileName);
         }
 
         public getLocalizedDiagnosticMessages(): any {
@@ -269,12 +269,12 @@ module ts {
             return this.shimHost.getCancellationToken();
         }
 
-        public getDefaultLibFilename(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
-        }
-
         public getCurrentDirectory(): string {
             return this.shimHost.getCurrentDirectory();
+        }
+
+        public getDefaultLibFileName(options: CompilerOptions): string {
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -376,9 +376,14 @@ module ts {
                 });
         }
 
-        private static realizeDiagnostic(diagnostic: Diagnostic): { message: string; start: number; length: number; category: string; } {
+        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
+            var newLine = this.getNewLine();
+            return diagnostics.map(d => this.realizeDiagnostic(d, newLine));
+        }
+
+        private realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
             return {
-                message: diagnostic.messageText,
+                message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
@@ -405,12 +410,16 @@ module ts {
                 });
         }
 
+        private getNewLine(): string {
+            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
+        }
+
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
                 "getSyntacticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSyntacticDiagnostics(fileName);
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic);
+                    var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -418,8 +427,8 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticDiagnostics('" + fileName + "')",
                 () => {
-                    var errors = this.languageService.getSemanticDiagnostics(fileName);
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic);
+                    var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -427,8 +436,8 @@ module ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(LanguageServiceShimObject.realizeDiagnostic)
+                    var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
                 });
         }
 
@@ -619,11 +628,11 @@ module ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
-                "getNavigateToItems('" + searchValue + "')",
+                "getNavigateToItems('" + searchValue + "', " + maxResultCount+ ")",
                 () => {
-                    var items = this.languageService.getNavigateToItems(searchValue);
+                    var items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
                     return items;
                 });
         }
@@ -661,6 +670,9 @@ module ts {
                 "getEmitOutput('" + fileName + "')",
                 () => {
                     var output = this.languageService.getEmitOutput(fileName);
+                    // Shim the API changes for 1.5 release. This should be removed once
+                    // TypeScript 1.5 has shipped.
+                    (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
                     return output;
                 });
         }
@@ -669,9 +681,9 @@ module ts {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory, public logger: Logger) {
+        constructor(factory: ShimFactory) {
             super(factory);
-            this.classifier = createClassifier(this.logger);
+            this.classifier = createClassifier();
         }
 
         /// COLORIZATION
@@ -710,7 +722,7 @@ module ts {
 
                     forEach(result.referencedFiles, refFile => {
                         convertResult.referencedFiles.push({
-                            path: normalizePath(refFile.filename),
+                            path: normalizePath(refFile.fileName),
                             position: refFile.start,
                             length: refFile.length
                         });
@@ -718,7 +730,7 @@ module ts {
 
                     forEach(result.importedFiles, importedFile => {
                         convertResult.importedFiles.push({
-                            path: normalizeSlashes(importedFile.filename),
+                            path: normalizeSlashes(importedFile.fileName),
                             position: importedFile.start,
                             length: importedFile.length
                         });
@@ -761,7 +773,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this, logger);
+                return new ClassifierShimObject(this);
             }
             catch (err) {
                 logInternalError(logger, err);

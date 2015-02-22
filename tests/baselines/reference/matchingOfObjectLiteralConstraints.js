@@ -5,6 +5,5 @@ foo2({ y: "foo" }, "foo");
 
 
 //// [matchingOfObjectLiteralConstraints.js]
-function foo2(x, z) {
-}
+function foo2(x, z) { }
 foo2({ y: "foo" }, "foo");

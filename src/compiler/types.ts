@@ -140,8 +140,9 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        SymbolKeyword,
         TypeKeyword,
-
+        OfKeyword, // LastKeyword and LastToken
         // Parse tree nodes
 
         // Names
@@ -210,6 +211,7 @@ module ts {
         WhileStatement,
         ForStatement,
         ForInStatement,
+        ForOfStatement,
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
@@ -259,7 +261,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = OfKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -267,7 +269,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = OfKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -330,6 +332,12 @@ module ts {
         HasAggregatedChildData = 1 << 6
     }
 
+    export const enum RelationComparisonResult {
+        Succeeded = 1, // Should be truthy
+        Failed = 2,
+        FailedAndReported = 3
+    }
+
     export interface Node extends Span {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -345,7 +353,7 @@ module ts {
         modifiers?: ModifiersArray;           // Array of modifiers
     }
 
-    export interface NodeArray<T> extends Array<T> /*, TextRange */ {
+    export interface NodeArray<T> extends Array<T> {
         start: number;
         hasTrailingComma?: boolean;
         closeTokenIsMissing?: boolean;
@@ -617,7 +625,7 @@ module ts {
 
     export interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
 
@@ -748,6 +756,11 @@ module ts {
         expression: Expression;
     }
 
+    export interface ForOfStatement extends IterationStatement {
+        initializer: VariableDeclarationList | Expression;
+        expression: Expression;
+    }
+
     export interface BreakOrContinueStatement extends Statement {
         label?: Identifier;
     }
@@ -868,7 +881,7 @@ module ts {
     }
 
     export interface FileReference extends Span {
-        filename: string;
+        fileName: string;
     }
 
     export interface CommentSpan extends Span {
@@ -880,77 +893,79 @@ module ts {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
-        filename: string;
+        fileName: string;
         text: string;
 
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-
-        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
-        // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
-        // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
-        // this file as possible.
-        //
-        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
-        // from this SourceFile that are being held onto may change as a result (including 
-        // becoming detached from any SourceFile).  It is recommended that this SourceFile not
-        // be used once 'update' is called on it.
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
-        amdDependencies: string[];
+        amdDependencies: {path: string; name: string}[];
         amdModuleName: string;
         referencedFiles: FileReference[];
 
-        // Diagnostics reported about the "///<reference" comments in the file.
-        referenceDiagnostics: Diagnostic[];
-
-        // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with).
-        parseDiagnostics: Diagnostic[];
-
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        getSyntacticDiagnostics(): Diagnostic[];
-
-        // File level diagnostics reported by the binder.
-        semanticDiagnostics: Diagnostic[];
-
         hasNoDefaultLib: boolean;
-        externalModuleIndicator: Node; // The first node that causes this file to be an external module
-        nodeCount: number;
-        identifierCount: number;
-        symbolCount: number;
+
+        // The first node that causes this file to be an external module
+        externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
+        
+        /* @internal */ nodeCount: number;
+        /* @internal */ identifierCount: number;
+        /* @internal */ symbolCount: number;
+
+        // File level diagnostics reported by the parser (includes diagnostics about /// references
+        // as well as code diagnostics).
+        /* @internal */ parseDiagnostics: Diagnostic[];
+        
+        // File level diagnostics reported by the binder.
+        /* @internal */ bindDiagnostics: Diagnostic[];
+        
+        // Stores a line map for the file.
+        // This field should never be used directly to obtain line map, use getLineMap function instead.
+        /* @internal */ lineMap: number[];
     }
 
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
+    }
+
+    export interface WriteFileCallback {
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
     export interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        getCompilerHost(): CompilerHost;
 
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /**
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then 
+         * the javascript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * specific file will be generated.  
+         *
+         * If writeFile is not specified then the writeFile callback from the compiler host will be
+         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the javascript and declaration files.
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+
+        getSyntacticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+        getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 
         // Gets a type checker that can be used to semantically analyze source fils in the program.
-        // The 'produceDiagnostics' flag determines if the checker will produce diagnostics while
-        // analyzing the code.  It can be set to 'false' to make many type checking operaitons 
-        // faster.  With this flag set, the checker can avoid codepaths only necessary to produce 
-        // diagnostics, but not necessary to answer semantic questions about the code.
-        //
-        // If 'produceDiagnostics' is false, then any calls to get diagnostics from the TypeChecker
-        // will throw an invalid operation exception.
-        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
+        getTypeChecker(): TypeChecker;
+
         getCommonSourceDirectory(): string;
 
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
+        // For testing purposes only.  Should not be used by any other consumers (including the 
+        // language service).
+        /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+
+        /* @internal */ getNodeCount(): number;
+        /* @internal */ getIdentifierCount(): number;
+        /* @internal */ getSymbolCount(): number;
+        /* @internal */ getTypeCount(): number;
     }
 
     export interface SourceMapSpan {
@@ -975,37 +990,33 @@ module ts {
     }
 
     // Return code used by getEmitOutput function to indicate status of the function
-    export enum EmitReturnStatus {
-        Succeeded = 0,                      // All outputs generated if requested (.js, .map, .d.ts), no errors reported
-        AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, nothing generated
-        JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
-        DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
-        EmitErrorsEncountered = 4,          // Emitter errors occurred during emitting process
-        CompilerOptionsErrors = 5,          // Errors occurred in parsing compiler options, nothing generated
+    export enum ExitStatus {
+        // Compiler ran successfully.  Either this was a simple do-nothing compilation (for example,
+        // when -version or -help was provided, or this was a normal compilation, no diagnostics
+        // were produced, and all outputs were generated successfully.
+        Success = 0,
+        
+        // Diagnostics were produced and because of them no code was generated.
+        DiagnosticsPresent_OutputsSkipped = 1,
+
+        // Diagnostics were produced and outputs were generated in spite of them.
+        DiagnosticsPresent_OutputsGenerated = 2,
     }
 
     export interface EmitResult {
-        emitResultStatus: EmitReturnStatus;
+        emitSkipped: boolean;
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
-        getCompilerHost(): CompilerHost;
 
         getSourceFiles(): SourceFile[];
-        getSourceFile(filename: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
     }
 
     export interface TypeChecker {
-        getEmitResolver(): EmitResolver;
-        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getGlobalDiagnostics(): Diagnostic[];
-        getNodeCount(): number;
-        getIdentifierCount(): number;
-        getSymbolCount(): number;
-        getTypeCount(): number;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1030,10 +1041,19 @@ module ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
 
-        // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
-        getEnumMemberValue(node: EnumMember): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+
+        // Should not be called directly.  Should only be accessed through the Program instance.
+        /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getGlobalDiagnostics(): Diagnostic[];
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile): EmitResolver;
+
+        /* @internal */ getNodeCount(): number;
+        /* @internal */ getIdentifierCount(): number;
+        /* @internal */ getSymbolCount(): number;
+        /* @internal */ getTypeCount(): number;
     }
 
     export interface SymbolDisplayBuilder {
@@ -1076,6 +1096,7 @@ module ts {
         WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
+        UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
     }
 
     export const enum SymbolFormatFlags {
@@ -1117,8 +1138,6 @@ module ts {
         isReferencedImportDeclaration(node: ImportDeclaration): boolean;
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
-        getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1126,7 +1145,7 @@ module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
     }
 
@@ -1288,9 +1307,10 @@ module ts {
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
+        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
-        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
@@ -1413,7 +1433,6 @@ module ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
-        isEarly?: boolean;
     }
 
     // A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1431,13 +1450,9 @@ module ts {
         file: SourceFile;
         start: number;
         length: number;
-        messageText: string;
+        messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
-        /**
-          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
-          */
-        isEarly?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1476,6 +1491,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1502,18 +1518,19 @@ module ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        filenames: string[];
+        fileNames: string[];
         errors: Diagnostic[];
     }
 
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
-        isFilePath?: boolean;               // True if option value is a path or filename
+        isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
+        experimental?: boolean;
     }
 
     export const enum CharacterCodes {
@@ -1631,6 +1648,7 @@ module ts {
         equals = 0x3D,                // =
         exclamation = 0x21,           // !
         greaterThan = 0x3E,           // >
+        hash = 0x23,                  // #
         lessThan = 0x3C,              // <
         minus = 0x2D,                 // -
         openBrace = 0x7B,             // {
@@ -1656,10 +1674,10 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(options: CompilerOptions): string;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
@@ -1669,5 +1687,25 @@ module ts {
     export interface TextChangeRange {
         span: Span;
         newLength: number;
+    }
+
+    // @internal
+    export interface DiagnosticCollection {
+        // Adds a diagnostic to this diagnostic collection.
+        add(diagnostic: Diagnostic): void;
+
+        // Gets all the diagnostics that aren't associated with a file.
+        getGlobalDiagnostics(): Diagnostic[];
+
+        // If fileName is provided, gets all the diagnostics associated with that file name.
+        // Otherwise, returns all the diagnostics (global and file associated) in this colletion.
+        getDiagnostics(fileName?: string): Diagnostic[];
+
+        // Gets a count of how many times this collection has been modified.  This value changes
+        // each time 'add' is called (regardless of whether or not an equivalent diagnostic was
+        // already in the collection).  As such, it can be used as a simple way to tell if any
+        // operation caused diagnostics to be returned by storing and comparing the return value 
+        // of this method before/after the operation is performed.
+        getModificationCount(): number;
     }
 }

@@ -50,36 +50,20 @@ module M {
 var M;
 (function (M) {
     // No implicit-'any' errors.
-    function m_f1() {
-    }
+    function m_f1() { }
     // Implicit-'any' error for x.
-    function m_f2(x) {
-    }
+    function m_f2(x) { }
     // No implicit-'any' errors.
-    function m_f3(x) {
-    }
+    function m_f3(x) { }
     // Implicit-'any' errors for x, y, and z.
-    function m_f4(x, y, z) {
-    }
+    function m_f4(x, y, z) { }
     // Implicit-'any' errors for x and z.
-    function m_f5(x, y, z) {
-    }
+    function m_f5(x, y, z) { }
     // Implicit-'any[]' error for r.
-    function m_f6() {
-        var r = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i - 0] = arguments[_i];
-        }
-    }
+    function m_f6() { }
     // Implicit-'any'/'any[]' errors for x and r.
-    function m_f7(x) {
-        var r = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            r[_i - 1] = arguments[_i];
-        }
-    }
-    function m_f8(x3, y3) {
-    }
+    function m_f7(x) { }
+    function m_f8(x3, y3) { }
     // No implicit-'any' errors.
     var m_f9 = function () { return ""; };
     // Implicit-'any' error for x.

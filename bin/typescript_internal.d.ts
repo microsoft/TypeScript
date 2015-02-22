@@ -35,6 +35,7 @@ declare module "typescript" {
     function concatenate<T>(array1: T[], array2: T[]): T[];
     function deduplicate<T>(array: T[]): T[];
     function sum(array: any[], prop: string): number;
+    function addRange<T>(to: T[], from: T[]): void;
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
@@ -44,6 +45,7 @@ declare module "typescript" {
     function getProperty<T>(map: Map<T>, key: string): T;
     function isEmpty<T>(map: Map<T>): boolean;
     function clone<T>(object: T): T;
+    function extend<T>(first: Map<T>, second: Map<T>): Map<T>;
     function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U;
     function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U;
     function lookUp<T>(map: Map<T>, key: string): T;
@@ -66,9 +68,9 @@ declare module "typescript" {
     function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain;
-    function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic;
     function compareValues<T>(a: T, b: T): Comparison;
-    function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): number;
+    function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison;
+    function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function normalizeSlashes(path: string): string;
     function getRootLength(path: string): number;
@@ -78,10 +80,10 @@ declare module "typescript" {
     function isUrl(path: string): boolean;
     function isRootedDiskPath(path: string): boolean;
     function getNormalizedPathComponents(path: string, currentDirectory: string): string[];
-    function getNormalizedAbsolutePath(filename: string, currentDirectory: string): string;
+    function getNormalizedAbsolutePath(fileName: string, currentDirectory: string): string;
     function getNormalizedPathFromPathComponents(pathComponents: string[]): string;
     function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean): string;
-    function getBaseFilename(path: string): string;
+    function getBaseFileName(path: string): string;
     function combinePaths(path1: string, path2: string): string;
     function fileExtensionIs(path: string, extension: string): boolean;
     function removeFileExtension(path: string): string;
@@ -91,6 +93,7 @@ declare module "typescript" {
      * Note that this doesn't actually wrap the input in double quotes.
      */
     function escapeString(s: string): string;
+    function getDefaultLibFileName(options: CompilerOptions): string;
     interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
@@ -125,6 +128,7 @@ declare module "typescript" {
         createDirectory(directoryName: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        readDirectory(path: string, extension?: string): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -145,11 +149,10 @@ declare module "typescript" {
     }
     interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
     }
     function getSingleLineStringWriter(): StringSymbolWriter;
     function releaseStringWriter(writer: StringSymbolWriter): void;
@@ -168,7 +171,7 @@ declare module "typescript" {
     function unescapeIdentifier(identifier: string): string;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
-    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic;
+    function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
     function getErrorSpanForNode(node: Node): Node;
     function isExternalModule(file: SourceFile): boolean;
     function isDeclarationFile(file: SourceFile): boolean;
@@ -186,7 +189,7 @@ declare module "typescript" {
     function isObjectLiteralMethod(node: Node): boolean;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
-    function getSuperContainer(node: Node): Node;
+    function getSuperContainer(node: Node, includeFunctions: boolean): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
@@ -214,7 +217,6 @@ declare module "typescript" {
     function isKeyword(token: SyntaxKind): boolean;
     function isTrivia(token: SyntaxKind): boolean;
     function isModifier(token: SyntaxKind): boolean;
-    function createEmitHostFromProgram(program: Program): EmitHost;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
@@ -244,6 +246,8 @@ declare module "typescript" {
 declare module "typescript" {
     var optionDeclarations: CommandLineOption[];
     function parseCommandLine(commandLine: string[]): ParsedCommandLine;
+    function readConfigFile(fileName: string): any;
+    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module "typescript" {
     interface ListItemInfo {

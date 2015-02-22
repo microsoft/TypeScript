@@ -82,6 +82,7 @@ module ts {
         "string": SyntaxKind.StringKeyword,
         "super": SyntaxKind.SuperKeyword,
         "switch": SyntaxKind.SwitchKeyword,
+        "symbol": SyntaxKind.SymbolKeyword,
         "this": SyntaxKind.ThisKeyword,
         "throw": SyntaxKind.ThrowKeyword,
         "true": SyntaxKind.TrueKeyword,
@@ -93,6 +94,7 @@ module ts {
         "while": SyntaxKind.WhileKeyword,
         "with": SyntaxKind.WithKeyword,
         "yield": SyntaxKind.YieldKeyword,
+        "of": SyntaxKind.OfKeyword,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
         "(": SyntaxKind.OpenParenToken,
@@ -223,7 +225,7 @@ module ts {
         return false;
     }
 
-    function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
+    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
         return languageVersion >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierStart);
@@ -278,29 +280,36 @@ module ts {
         return result;
     }
 
-    export function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
-        Debug.assert(line > 0 && line <= lineStarts.length );
-        return lineStarts[line - 1] + character - 1;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
-    export function getLineAndCharacterOfPosition(lineStarts: number[], position: number) {
+    export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+        Debug.assert(line >= 0 && line < lineStarts.length);
+        return lineStarts[line] + character;
+    }
+
+    export function getLineStarts(sourceFile: SourceFile): number[] {
+        return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
+    }
+
+    export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         var lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
             // If the actual position was not found, 
             // the binary search returns the negative value of the next line start
             // e.g. if the line starts at [5, 10, 23, 80] and the position requested was 20
             // then the search will return -2
-            lineNumber = (~lineNumber) - 1;
+            lineNumber = ~lineNumber - 1;
         }
         return {
-            line: lineNumber + 1,
-            character: position - lineStarts[lineNumber] + 1
+            line: lineNumber,
+            character: position - lineStarts[lineNumber]
         };
     }
 
-    export function positionToLineAndCharacter(text: string, pos: number) {
-        var lineStarts = computeLineStarts(text);
-        return getLineAndCharacterOfPosition(lineStarts, pos);
+    export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
+        return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;

@@ -11,4 +11,7 @@ Foo(() =>
 //// [commentOnSimpleArrowFunctionBody1.js]
 function Foo(x) {
 }
-Foo(function () { return 127; });
+Foo(function () {
+    // do something
+    return 127;
+});

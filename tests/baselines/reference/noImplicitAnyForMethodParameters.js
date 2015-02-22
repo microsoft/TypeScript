@@ -18,14 +18,12 @@ class D {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (a) {
-    }; // OK - non-ambient class and private method - error
+    C.prototype.foo = function (a) { }; // OK - non-ambient class and private method - error
     return C;
 })();
 var D = (function () {
     function D() {
     }
-    D.prototype.foo = function (a) {
-    }; // OK - non-ambient class and public method - error
+    D.prototype.foo = function (a) { }; // OK - non-ambient class and public method - error
     return D;
 })();

@@ -25,13 +25,12 @@ module ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        writeFile: WriteFileCallback;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -106,11 +105,16 @@ module ts {
         return <SourceFile>node;
     }
 
+    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
+        Debug.assert(line >= 0);
+        return getLineStarts(sourceFile)[line];
+    }
+
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
-        var loc = file.getLineAndCharacterFromPosition(node.start);
-        return file.filename + "(" + loc.line + "," + loc.character + ")";
+        var loc = getLineAndCharacterOfPosition(file, node.start);
+        return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
     export function getStartPosOfNode(node: Node): number {
@@ -199,12 +203,19 @@ module ts {
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.start);
         var length = spanEnd(node) - start;
-        return flattenDiagnosticChain(file, start, length, messageChain, newLine);
+        return {
+            file,
+            start,
+            length,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText
+        };
     }
 
     export function getErrorSpanForNode(node: Node): Node {
@@ -337,6 +348,7 @@ module ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
@@ -554,7 +566,8 @@ module ts {
                             forStatement.condition === node ||
                             forStatement.iterator === node;
                     case SyntaxKind.ForInStatement:
-                        var forInStatement = <ForInStatement>parent;
+                    case SyntaxKind.ForOfStatement:
+                        var forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -682,6 +695,7 @@ module ts {
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
             case SyntaxKind.ForStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.LabeledStatement:
@@ -746,7 +760,7 @@ module ts {
 
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
-            var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
+            var referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
@@ -802,7 +816,7 @@ module ts {
                         fileReference: {
                             start: commentRange.start,
                             length: commentRange.length,
-                            filename: matchResult[3]
+                            fileName: matchResult[3]
                         },
                         isNoDefaultLib: false
                     };
@@ -827,6 +841,54 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    /**
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
+     */
+    export function hasDynamicName(declaration: Declaration): boolean {
+        return declaration.name &&
+            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+    }
+
+    /**
+     * Checks if the expression is of the form:
+     *    Symbol.name
+     * where Symbol is literally the word "Symbol", and name is any identifierName
+     */
+    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
+        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+    }
+
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return (<Identifier | LiteralExpression>name).text;
+        }
+        if (name.kind === SyntaxKind.ComputedPropertyName) {
+            var nameExpression = (<ComputedPropertyName>name).expression;
+            if (isWellKnownSymbolSyntactically(nameExpression)) {
+                var rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+        }
+
+        return undefined;
+    }
+
+    export function getPropertyNameForKnownSymbolName(symbolName: string): string {
+        return "__@" + symbolName;
+    }
+
+    /**
+     * Includes the word "Symbol" with unicode escapes
+     */
+    export function isESSymbolIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
+    }
+
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.PublicKeyword:
@@ -839,21 +901,6 @@ module ts {
                 return true;
         }
         return false;
-    }
-
-    export function createEmitHostFromProgram(program: Program): EmitHost {
-        var compilerHost = program.getCompilerHost();
-        return {
-            getCanonicalFileName: compilerHost.getCanonicalFileName,
-            getCommonSourceDirectory: program.getCommonSourceDirectory,
-            getCompilerOptions: program.getCompilerOptions,
-            getCurrentDirectory: compilerHost.getCurrentDirectory,
-            getNewLine: compilerHost.getNewLine,
-            getSourceFile: program.getSourceFile,
-            getSourceFiles: program.getSourceFiles,
-            isEmitBlocked: program.isEmitBlocked,
-            writeFile: compilerHost.writeFile,
-        };
     }
 
     export function spanEnd(span: Span) {
@@ -1080,5 +1127,85 @@ module ts {
         var kind = scanner.scan();
         Debug.assert(kind === SyntaxKind.CommaToken);
         return scanner.getTextPos();
+    }
+
+    // @internal
+    export function createDiagnosticCollection(): DiagnosticCollection {
+        var nonFileDiagnostics: Diagnostic[] = [];
+        var fileDiagnostics: Map<Diagnostic[]> = {};
+
+        var diagnosticsModified = false;
+        var modificationCount = 0;
+
+        return {
+            add,
+            getGlobalDiagnostics,
+            getDiagnostics,
+            getModificationCount
+        };
+
+        function getModificationCount() {
+            return modificationCount;
+        }
+
+        function add(diagnostic: Diagnostic): void {
+            var diagnostics: Diagnostic[];
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                if (!diagnostics) {
+                    diagnostics = [];
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                }
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+
+            diagnostics.push(diagnostic);
+            diagnosticsModified = true;
+            modificationCount++;
+        }
+
+        function getGlobalDiagnostics(): Diagnostic[] {
+            sortAndDeduplicate();
+            return nonFileDiagnostics;
+        }
+
+        function getDiagnostics(fileName?: string): Diagnostic[] {
+            sortAndDeduplicate();
+            if (fileName) {
+                return fileDiagnostics[fileName] || [];
+            }
+
+            var allDiagnostics: Diagnostic[] = [];
+            function pushDiagnostic(d: Diagnostic) {
+                allDiagnostics.push(d);
+            }
+
+            forEach(nonFileDiagnostics, pushDiagnostic);
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    forEach(fileDiagnostics[key], pushDiagnostic);
+                }
+            }
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
+        function sortAndDeduplicate() {
+            if (!diagnosticsModified) {
+                return;
+            }
+
+            diagnosticsModified = false;
+            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
+
+            for (var key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+                }
+            }
+        }
     }
 }

@@ -50,8 +50,9 @@ module ts.NavigationBar {
                     case SyntaxKind.ArrayBindingPattern:
                         forEach((<BindingPattern>node).elements, visit);
                         break;
+                    case SyntaxKind.BindingElement:
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node)) {
+                        if (isBindingPattern((<VariableDeclaration>node).name)) {
                             visit((<VariableDeclaration>node).name);
                             break;
                         }
@@ -96,8 +97,7 @@ module ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    // TODO(jfreeman): How do we sort declarations with computed names?
-                    return (<Identifier>n1.name).text.localeCompare((<Identifier>n2.name).text);
+                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -262,17 +262,34 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    if (isBindingPattern((<VariableDeclaration>node).name)) {
-                        break;
-                    }
-                    if (isConst(node)) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
-                    }
-                    else if (isLet(node)) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
+                case SyntaxKind.BindingElement:
+                    var variableDeclarationNode: Node;
+                    var name: Node;
+
+                    if (node.kind === SyntaxKind.BindingElement) {
+                        name = (<BindingElement>node).name;
+                        variableDeclarationNode = node;
+                        // binding elements are added only for variable declarations
+                        // bubble up to the containing variable declaration
+                        while (variableDeclarationNode && variableDeclarationNode.kind !== SyntaxKind.VariableDeclaration) {
+                            variableDeclarationNode = variableDeclarationNode.parent;
+                        }
+                        Debug.assert(variableDeclarationNode !== undefined);
                     }
                     else {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
+                        Debug.assert(!isBindingPattern((<VariableDeclaration>node).name));
+                        variableDeclarationNode = node;
+                        name = (<VariableDeclaration>node).name;
+                    }
+
+                    if (isConst(variableDeclarationNode)) {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.constElement);
+                    }
+                    else if (isLet(variableDeclarationNode)) {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.letElement);
+                    }
+                    else {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.variableElement);
                     }
                 
                 case SyntaxKind.Constructor:
@@ -386,9 +403,9 @@ module ts.NavigationBar {
                 }
 
                 hasGlobalNode = true;
-                var rootName = isExternalModule(node) ?
-                    "\"" + escapeString(getBaseFilename(removeFileExtension(normalizePath(node.filename)))) + "\"" :
-                    "<global>"
+                var rootName = isExternalModule(node)
+                    ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
+                    : "<global>"
 
                 return getNavigationBarItem(rootName,
                     ts.ScriptElementKind.moduleElement,
@@ -408,7 +425,7 @@ module ts.NavigationBar {
                     // Add the constructor parameters in as children of the class (for property parameters).
                     // Note that *all* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
-                    var nodes: Node[] = removeComputedProperties(node);
+                    var nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
                         nodes.push.apply(nodes, constructor.parameters);
                     }
@@ -437,7 +454,7 @@ module ts.NavigationBar {
             }
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
+                var childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
@@ -448,8 +465,15 @@ module ts.NavigationBar {
             }
         }
 
-        function removeComputedProperties(node: ClassDeclaration | InterfaceDeclaration | EnumDeclaration): Declaration[] {
+        function removeComputedProperties(node: EnumDeclaration): Declaration[] {
             return filter<Declaration>(node.members, member => member.name === undefined || member.name.kind !== SyntaxKind.ComputedPropertyName);
+        }
+
+        /**
+         * Like removeComputedProperties, but retains the properties with well known symbol names
+         */
+        function removeDynamicallyNamedProperties(node: ClassDeclaration | InterfaceDeclaration): Declaration[]{
+            return filter<Declaration>(node.members, member => !hasDynamicName(member));
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {

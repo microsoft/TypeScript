@@ -13,8 +13,7 @@ var my;
 (function (my) {
     var data;
     (function (data) {
-        function buz() {
-        }
+        function buz() { }
         data.buz = buz;
     })(data = my.data || (my.data = {}));
 })(my || (my = {}));

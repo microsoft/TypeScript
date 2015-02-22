@@ -15,9 +15,7 @@ A.B(1);
 //// [genericFunduleInModule2.js]
 var A;
 (function (A) {
-    function B(x) {
-        return x;
-    }
+    function B(x) { return x; }
     A.B = B;
 })(A || (A = {}));
 var A;

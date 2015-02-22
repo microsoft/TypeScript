@@ -8,5 +8,7 @@
         "lib.d.ts",
         "internal2.ts"
     ],
-    "emittedFiles": []
+    "emittedFiles": [
+        "internal2.js"
+    ]
 }

@@ -66,35 +66,23 @@ var r2 = d.foo(2); // error
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x, y) {
-    };
-    C.prototype.bar = function (x, y) {
-    };
-    C.foo = function (x, y) {
-    };
-    C.prototype.baz = function (x, y) {
-    };
-    C.bar = function (x, y) {
-    };
-    C.baz = function (x, y) {
-    };
+    C.prototype.foo = function (x, y) { };
+    C.prototype.bar = function (x, y) { };
+    C.foo = function (x, y) { };
+    C.prototype.baz = function (x, y) { };
+    C.bar = function (x, y) { };
+    C.baz = function (x, y) { };
     return C;
 })();
 var D = (function () {
     function D() {
     }
-    D.prototype.foo = function (x, y) {
-    };
-    D.prototype.bar = function (x, y) {
-    };
-    D.prototype.baz = function (x, y) {
-    };
-    D.foo = function (x, y) {
-    };
-    D.bar = function (x, y) {
-    };
-    D.baz = function (x, y) {
-    };
+    D.prototype.foo = function (x, y) { };
+    D.prototype.bar = function (x, y) { };
+    D.prototype.baz = function (x, y) { };
+    D.foo = function (x, y) { };
+    D.bar = function (x, y) { };
+    D.baz = function (x, y) { };
     return D;
 })();
 var c;

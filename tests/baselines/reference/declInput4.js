@@ -32,14 +32,9 @@ var M;
     var D = (function () {
         function D() {
         }
-        D.prototype.m232 = function () {
-            return null;
-        };
-        D.prototype.m242 = function () {
-            return null;
-        };
-        D.prototype.m26 = function (i) {
-        };
+        D.prototype.m232 = function () { return null; };
+        D.prototype.m242 = function () { return null; };
+        D.prototype.m26 = function (i) { };
         return D;
     })();
     M.D = D;

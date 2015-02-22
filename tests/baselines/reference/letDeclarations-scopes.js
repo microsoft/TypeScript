@@ -239,7 +239,7 @@ function F() {
     let l = 0;
     n = l;
 }
-var F2 = function () {
+var F2 = () => {
     let l = 0;
     n = l;
 };
@@ -289,7 +289,7 @@ var o = {
         let l = 0;
         n = l;
     },
-    f2: function () {
+    f2: () => {
         let l = 0;
         n = l;
     }

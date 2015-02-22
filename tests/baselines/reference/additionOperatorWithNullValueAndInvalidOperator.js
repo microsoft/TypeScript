@@ -25,9 +25,7 @@ var r11 = null + (() => { });
 
 //// [additionOperatorWithNullValueAndInvalidOperator.js]
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
-function foo() {
-    return undefined;
-}
+function foo() { return undefined; }
 var a;
 var b;
 var c;
@@ -44,5 +42,4 @@ var r7 = null + d;
 var r8 = null + true;
 var r9 = null + { a: '' };
 var r10 = null + foo();
-var r11 = null + (function () {
-});
+var r11 = null + (function () { });

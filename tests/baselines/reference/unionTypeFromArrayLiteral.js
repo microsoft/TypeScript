@@ -43,15 +43,13 @@ var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
-    };
+    C.prototype.foo = function () { };
     return C;
 })();
 var D = (function () {
     function D() {
     }
-    D.prototype.foo2 = function () {
-    };
+    D.prototype.foo2 = function () { };
     return D;
 })();
 var E = (function (_super) {
@@ -59,8 +57,7 @@ var E = (function (_super) {
     function E() {
         _super.apply(this, arguments);
     }
-    E.prototype.foo3 = function () {
-    };
+    E.prototype.foo3 = function () { };
     return E;
 })(C);
 var F = (function (_super) {
@@ -68,8 +65,7 @@ var F = (function (_super) {
     function F() {
         _super.apply(this, arguments);
     }
-    F.prototype.foo4 = function () {
-    };
+    F.prototype.foo4 = function () { };
     return F;
 })(C);
 var c, d, e, f;

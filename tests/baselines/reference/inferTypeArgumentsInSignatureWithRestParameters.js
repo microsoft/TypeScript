@@ -12,26 +12,10 @@ i(a); // OK
 
 
 //// [inferTypeArgumentsInSignatureWithRestParameters.js]
-function f(array) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
-function g(array) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
-function h(nonarray) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
-function i(array, opt) {
-}
+function f(array) { }
+function g(array) { }
+function h(nonarray) { }
+function i(array, opt) { }
 var a = [1, 2, 3, 4, 5];
 f(a); // OK
 g(a); // OK

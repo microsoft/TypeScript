@@ -144,8 +144,7 @@ var E2;
     E2[E2["A"] = 0] = "A";
 })(E2 || (E2 = {}));
 var r4 = foo13(0 /* A */);
-function f() {
-}
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;
