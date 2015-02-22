@@ -423,11 +423,11 @@ module ts.NavigationBar {
                     });
 
                     // Add the constructor parameters in as children of the class (for property parameters).
-                    // Note that *all* parameters will be added to the nodes array, but parameters that
+                    // Note that *all non-binding pattern named* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
                     var nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
-                        nodes.push.apply(nodes, constructor.parameters);
+                        nodes.push.apply(nodes, filter(constructor.parameters, p => !isBindingPattern(p.name)));
                     }
 
                     var childItems = getItemsWorker(sortNodes(nodes), createChildItem);
