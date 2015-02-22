@@ -19,6 +19,4 @@ foo2(["s", "t"]);
 function foo3(x) { }
 ;
 foo3(function (s) { });
-foo3(function (n) {
-    return;
-});
+foo3(function (n) { return; });

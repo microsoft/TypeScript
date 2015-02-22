@@ -80,9 +80,7 @@ function Point(x, y) {
     this.x = x;
     this.y = y;
 }
-function EF1(a, b) {
-    return a + b;
-}
+function EF1(a, b) { return a + b; }
 var x = EF1(1, 2);
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
@@ -111,6 +109,9 @@ function C(a, b) {
     this.b = b;
 }
 C.prototype =
-    { a: 0, b: 0, C1M1: function (c, d) {
-        return (this.a + c) + (this.b + d);
-    } };
+    { a: 0,
+        b: 0,
+        C1M1: function (c, d) {
+            return (this.a + c) + (this.b + d);
+        }
+    };

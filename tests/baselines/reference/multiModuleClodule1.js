@@ -36,9 +36,7 @@ var C;
 (function (C) {
     function foo() { }
     C.foo = foo;
-    function baz() {
-        return '';
-    }
+    function baz() { return ''; }
 })(C || (C = {}));
 var c = new C(C.x);
 c.foo = C.foo;

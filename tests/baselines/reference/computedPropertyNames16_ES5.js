@@ -24,9 +24,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, s, {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -36,9 +34,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C, s + s, {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -48,9 +44,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C.prototype, +s, {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -60,9 +54,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C.prototype, 0, {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -72,9 +64,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C, true, {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -84,9 +74,7 @@ var C = (function () {
         configurable: true
     });
     Object.defineProperty(C.prototype, "hello " + a + " bye", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });

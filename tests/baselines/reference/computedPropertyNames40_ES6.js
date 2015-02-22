@@ -25,11 +25,7 @@ var C = (function () {
     function C() {
     }
     // Computed properties
-    C.prototype[""] = function () {
-        return new Foo;
-    };
-    C.prototype[""] = function () {
-        return new Foo2;
-    };
+    C.prototype[""] = function () { return new Foo; };
+    C.prototype[""] = function () { return new Foo2; };
     return C;
 })();

@@ -202,9 +202,7 @@ function foo12() {
     return i2;
 }
 var r12 = foo12();
-function m1() {
-    return 1;
-}
+function m1() { return 1; }
 var m1;
 (function (m1) {
     m1.y = 2;

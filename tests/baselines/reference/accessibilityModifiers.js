@@ -52,9 +52,7 @@ var C = (function () {
     }
     C.privateMethod = function () { };
     Object.defineProperty(C, "privateGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -65,9 +63,7 @@ var C = (function () {
     });
     C.protectedMethod = function () { };
     Object.defineProperty(C, "protectedGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -78,9 +74,7 @@ var C = (function () {
     });
     C.publicMethod = function () { };
     Object.defineProperty(C, "publicGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -97,9 +91,7 @@ var D = (function () {
     }
     D.privateMethod = function () { };
     Object.defineProperty(D, "privateGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -110,9 +102,7 @@ var D = (function () {
     });
     D.protectedMethod = function () { };
     Object.defineProperty(D, "protectedGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -123,9 +113,7 @@ var D = (function () {
     });
     D.publicMethod = function () { };
     Object.defineProperty(D, "publicGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -142,9 +130,7 @@ var E = (function () {
     }
     E.prototype.method = function () { };
     Object.defineProperty(E.prototype, "getter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });

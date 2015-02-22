@@ -12,9 +12,7 @@ var C = (function () {
     }
     C[Symbol.toPrimitive] = function () { };
     Object.defineProperty(C, Symbol.isRegExp, {
-        get: function () {
-            return "";
-        },
+        get: function () { return ""; },
         set: function (x) { },
         enumerable: true,
         configurable: true

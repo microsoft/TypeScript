@@ -364,9 +364,7 @@ var BasicFeatures = (function () {
         ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) {
-            return x["var"] === 42;
-        }, instanceof: function () { return 'objLit{42}'; } };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = 0 /* Monday */;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
@@ -489,15 +487,10 @@ var BasicFeatures = (function () {
 })();
 var CLASS = (function () {
     function CLASS() {
-        this.d = function () {
-            yield;
-            0;
-        };
+        this.d = function () { yield; 0; };
     }
     Object.defineProperty(CLASS.prototype, "Property", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -505,9 +498,7 @@ var CLASS = (function () {
         return 0;
     };
     CLASS.prototype.Foo = function () {
-        var myEvent = function () {
-            return 1;
-        };
+        var myEvent = function () { return 1; };
         if (myEvent() == 1)
             return true ?  : ;
         else

@@ -19,9 +19,7 @@ module N {
 var G = (function () {
     function G() {
     }
-    G.prototype.bar = function (x) {
-        return x;
-    };
+    G.prototype.bar = function (x) { return x; };
     return G;
 })();
 var M;

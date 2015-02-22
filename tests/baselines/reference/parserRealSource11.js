@@ -2397,18 +2397,10 @@ var TypeScript;
             this.postComments = null;
             this.isParenthesized = false;
         }
-        AST.prototype.isExpression = function () {
-            return false;
-        };
-        AST.prototype.isStatementOrExpression = function () {
-            return false;
-        };
-        AST.prototype.isCompoundStatement = function () {
-            return false;
-        };
-        AST.prototype.isLeaf = function () {
-            return this.isStatementOrExpression() && (!this.isCompoundStatement());
-        };
+        AST.prototype.isExpression = function () { return false; };
+        AST.prototype.isStatementOrExpression = function () { return false; };
+        AST.prototype.isCompoundStatement = function () { return false; };
+        AST.prototype.isLeaf = function () { return this.isStatementOrExpression() && (!this.isCompoundStatement()); };
         AST.prototype.typeCheck = function (typeFlow) {
             switch (this.nodeType) {
                 case NodeType.Error:
@@ -2644,12 +2636,8 @@ var TypeScript;
                 this.text = actualText;
             }
         };
-        Identifier.prototype.isMissing = function () {
-            return false;
-        };
-        Identifier.prototype.isLeaf = function () {
-            return true;
-        };
+        Identifier.prototype.isMissing = function () { return false; };
+        Identifier.prototype.isLeaf = function () { return true; };
         Identifier.prototype.treeViewLabel = function () {
             return "id: " + this.actualText;
         };
@@ -2693,9 +2681,7 @@ var TypeScript;
             _super.call(this, NodeType.Label);
             this.id = id;
         }
-        Label.prototype.printLabel = function () {
-            return this.id.actualText + ":";
-        };
+        Label.prototype.printLabel = function () { return this.id.actualText + ":"; };
         Label.prototype.typeCheck = function (typeFlow) {
             this.type = typeFlow.voidType;
             return this;
@@ -2718,12 +2704,8 @@ var TypeScript;
         function Expression(nodeType) {
             _super.call(this, nodeType);
         }
-        Expression.prototype.isExpression = function () {
-            return true;
-        };
-        Expression.prototype.isStatementOrExpression = function () {
-            return true;
-        };
+        Expression.prototype.isExpression = function () { return true; };
+        Expression.prototype.isStatementOrExpression = function () { return true; };
         return Expression;
     })(AST);
     TypeScript.Expression = Expression;
@@ -3184,9 +3166,7 @@ var TypeScript;
             this.varFlags = VarFlags.None;
             this.isDynamicImport = false;
         }
-        ImportDeclaration.prototype.isStatementOrExpression = function () {
-            return true;
-        };
+        ImportDeclaration.prototype.isStatementOrExpression = function () { return true; };
         ImportDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
             var mod = this.alias.type;
             // REVIEW: Only modules may be aliased for now, though there's no real
@@ -3247,18 +3227,10 @@ var TypeScript;
             this.varFlags = VarFlags.None;
             this.sym = null;
         }
-        BoundDecl.prototype.isStatementOrExpression = function () {
-            return true;
-        };
-        BoundDecl.prototype.isPrivate = function () {
-            return hasFlag(this.varFlags, VarFlags.Private);
-        };
-        BoundDecl.prototype.isPublic = function () {
-            return hasFlag(this.varFlags, VarFlags.Public);
-        };
-        BoundDecl.prototype.isProperty = function () {
-            return hasFlag(this.varFlags, VarFlags.Property);
-        };
+        BoundDecl.prototype.isStatementOrExpression = function () { return true; };
+        BoundDecl.prototype.isPrivate = function () { return hasFlag(this.varFlags, VarFlags.Private); };
+        BoundDecl.prototype.isPublic = function () { return hasFlag(this.varFlags, VarFlags.Public); };
+        BoundDecl.prototype.isProperty = function () { return hasFlag(this.varFlags, VarFlags.Property); };
         BoundDecl.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckBoundDecl(this);
         };
@@ -3273,15 +3245,9 @@ var TypeScript;
         function VarDecl(id, nest) {
             _super.call(this, id, NodeType.VarDecl, nest);
         }
-        VarDecl.prototype.isAmbient = function () {
-            return hasFlag(this.varFlags, VarFlags.Ambient);
-        };
-        VarDecl.prototype.isExported = function () {
-            return hasFlag(this.varFlags, VarFlags.Exported);
-        };
-        VarDecl.prototype.isStatic = function () {
-            return hasFlag(this.varFlags, VarFlags.Static);
-        };
+        VarDecl.prototype.isAmbient = function () { return hasFlag(this.varFlags, VarFlags.Ambient); };
+        VarDecl.prototype.isExported = function () { return hasFlag(this.varFlags, VarFlags.Exported); };
+        VarDecl.prototype.isStatic = function () { return hasFlag(this.varFlags, VarFlags.Static); };
         VarDecl.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitJavascriptVarDecl(this, tokenId);
         };
@@ -3298,9 +3264,7 @@ var TypeScript;
             this.isOptional = false;
             this.parameterPropertySym = null;
         }
-        ArgDecl.prototype.isOptionalArg = function () {
-            return this.isOptional || this.init;
-        };
+        ArgDecl.prototype.isOptionalArg = function () { return this.isOptional || this.init; };
         ArgDecl.prototype.treeViewLabel = function () {
             return "arg: " + this.id.actualText;
         };
@@ -3361,12 +3325,8 @@ var TypeScript;
             }
             return this.internalNameCache;
         };
-        FuncDecl.prototype.hasSelfReference = function () {
-            return hasFlag(this.fncFlags, FncFlags.HasSelfReference);
-        };
-        FuncDecl.prototype.setHasSelfReference = function () {
-            this.fncFlags |= FncFlags.HasSelfReference;
-        };
+        FuncDecl.prototype.hasSelfReference = function () { return hasFlag(this.fncFlags, FncFlags.HasSelfReference); };
+        FuncDecl.prototype.setHasSelfReference = function () { this.fncFlags |= FncFlags.HasSelfReference; };
         FuncDecl.prototype.addCloRef = function (id, sym) {
             if (this.envids == null) {
                 this.envids = new Identifier[];
@@ -3420,45 +3380,19 @@ var TypeScript;
         FuncDecl.prototype.isMethod = function () {
             return (this.fncFlags & FncFlags.Method) != FncFlags.None;
         };
-        FuncDecl.prototype.isCallMember = function () {
-            return hasFlag(this.fncFlags, FncFlags.CallMember);
-        };
-        FuncDecl.prototype.isConstructMember = function () {
-            return hasFlag(this.fncFlags, FncFlags.ConstructMember);
-        };
-        FuncDecl.prototype.isIndexerMember = function () {
-            return hasFlag(this.fncFlags, FncFlags.IndexerMember);
-        };
-        FuncDecl.prototype.isSpecialFn = function () {
-            return this.isCallMember() || this.isIndexerMember() || this.isConstructMember();
-        };
-        FuncDecl.prototype.isAnonymousFn = function () {
-            return this.name === null;
-        };
-        FuncDecl.prototype.isAccessor = function () {
-            return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor);
-        };
-        FuncDecl.prototype.isGetAccessor = function () {
-            return hasFlag(this.fncFlags, FncFlags.GetAccessor);
-        };
-        FuncDecl.prototype.isSetAccessor = function () {
-            return hasFlag(this.fncFlags, FncFlags.SetAccessor);
-        };
-        FuncDecl.prototype.isAmbient = function () {
-            return hasFlag(this.fncFlags, FncFlags.Ambient);
-        };
-        FuncDecl.prototype.isExported = function () {
-            return hasFlag(this.fncFlags, FncFlags.Exported);
-        };
-        FuncDecl.prototype.isPrivate = function () {
-            return hasFlag(this.fncFlags, FncFlags.Private);
-        };
-        FuncDecl.prototype.isPublic = function () {
-            return hasFlag(this.fncFlags, FncFlags.Public);
-        };
-        FuncDecl.prototype.isStatic = function () {
-            return hasFlag(this.fncFlags, FncFlags.Static);
-        };
+        FuncDecl.prototype.isCallMember = function () { return hasFlag(this.fncFlags, FncFlags.CallMember); };
+        FuncDecl.prototype.isConstructMember = function () { return hasFlag(this.fncFlags, FncFlags.ConstructMember); };
+        FuncDecl.prototype.isIndexerMember = function () { return hasFlag(this.fncFlags, FncFlags.IndexerMember); };
+        FuncDecl.prototype.isSpecialFn = function () { return this.isCallMember() || this.isIndexerMember() || this.isConstructMember(); };
+        FuncDecl.prototype.isAnonymousFn = function () { return this.name === null; };
+        FuncDecl.prototype.isAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor); };
+        FuncDecl.prototype.isGetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.GetAccessor); };
+        FuncDecl.prototype.isSetAccessor = function () { return hasFlag(this.fncFlags, FncFlags.SetAccessor); };
+        FuncDecl.prototype.isAmbient = function () { return hasFlag(this.fncFlags, FncFlags.Ambient); };
+        FuncDecl.prototype.isExported = function () { return hasFlag(this.fncFlags, FncFlags.Exported); };
+        FuncDecl.prototype.isPrivate = function () { return hasFlag(this.fncFlags, FncFlags.Private); };
+        FuncDecl.prototype.isPublic = function () { return hasFlag(this.fncFlags, FncFlags.Public); };
+        FuncDecl.prototype.isStatic = function () { return hasFlag(this.fncFlags, FncFlags.Static); };
         FuncDecl.prototype.treeViewLabel = function () {
             if (this.name == null) {
                 return "funcExpr";
@@ -3470,12 +3404,8 @@ var TypeScript;
         FuncDecl.prototype.ClearFlags = function () {
             this.fncFlags = FncFlags.None;
         };
-        FuncDecl.prototype.isSignature = function () {
-            return (this.fncFlags & FncFlags.Signature) != FncFlags.None;
-        };
-        FuncDecl.prototype.hasStaticDeclarations = function () {
-            return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0));
-        };
+        FuncDecl.prototype.isSignature = function () { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; };
+        FuncDecl.prototype.hasStaticDeclarations = function () { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); };
         return FuncDecl;
     })(AST);
     TypeScript.FuncDecl = FuncDecl;
@@ -3584,15 +3514,9 @@ var TypeScript;
             this.scopes = scopes;
             this.prettyName = this.name.actualText;
         }
-        ModuleDeclaration.prototype.isExported = function () {
-            return hasFlag(this.modFlags, ModuleFlags.Exported);
-        };
-        ModuleDeclaration.prototype.isAmbient = function () {
-            return hasFlag(this.modFlags, ModuleFlags.Ambient);
-        };
-        ModuleDeclaration.prototype.isEnum = function () {
-            return hasFlag(this.modFlags, ModuleFlags.IsEnum);
-        };
+        ModuleDeclaration.prototype.isExported = function () { return hasFlag(this.modFlags, ModuleFlags.Exported); };
+        ModuleDeclaration.prototype.isAmbient = function () { return hasFlag(this.modFlags, ModuleFlags.Ambient); };
+        ModuleDeclaration.prototype.isEnum = function () { return hasFlag(this.modFlags, ModuleFlags.IsEnum); };
         ModuleDeclaration.prototype.recordNonInterface = function () {
             this.modFlags &= ~ModuleFlags.ShouldEmitModuleDecl;
         };
@@ -3665,15 +3589,9 @@ var TypeScript;
             _super.call(this, nodeType);
             this.flags |= ASTFlags.IsStatement;
         }
-        Statement.prototype.isLoop = function () {
-            return false;
-        };
-        Statement.prototype.isStatementOrExpression = function () {
-            return true;
-        };
-        Statement.prototype.isCompoundStatement = function () {
-            return this.isLoop();
-        };
+        Statement.prototype.isLoop = function () { return false; };
+        Statement.prototype.isStatementOrExpression = function () { return true; };
+        Statement.prototype.isCompoundStatement = function () { return this.isLoop(); };
         Statement.prototype.typeCheck = function (typeFlow) {
             this.type = typeFlow.voidType;
             return this;
@@ -3777,9 +3695,7 @@ var TypeScript;
             this.target = null;
             this.resolvedTarget = null;
         }
-        Jump.prototype.hasExplicitTarget = function () {
-            return (this.target);
-        };
+        Jump.prototype.hasExplicitTarget = function () { return (this.target); };
         Jump.prototype.setResolvedTarget = function (parser, stmt) {
             if (stmt.isLoop()) {
                 this.resolvedTarget = stmt;
@@ -3830,9 +3746,7 @@ var TypeScript;
             this.cond = cond;
             this.body = null;
         }
-        WhileStatement.prototype.isLoop = function () {
-            return true;
-        };
+        WhileStatement.prototype.isLoop = function () { return true; };
         WhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -3885,9 +3799,7 @@ var TypeScript;
             this.whileAST = null;
             this.cond = null;
         }
-        DoWhileStatement.prototype.isLoop = function () {
-            return true;
-        };
+        DoWhileStatement.prototype.isLoop = function () { return true; };
         DoWhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -3943,9 +3855,7 @@ var TypeScript;
             this.elseBod = null;
             this.statement = new ASTSpan();
         }
-        IfStatement.prototype.isCompoundStatement = function () {
-            return true;
-        };
+        IfStatement.prototype.isCompoundStatement = function () { return true; };
         IfStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -4065,9 +3975,7 @@ var TypeScript;
                 this.lval.varFlags |= VarFlags.AutoInit;
             }
         }
-        ForInStatement.prototype.isLoop = function () {
-            return true;
-        };
+        ForInStatement.prototype.isLoop = function () { return true; };
         ForInStatement.prototype.isFiltered = function () {
             if (this.body) {
                 var singleItem = null;
@@ -4177,9 +4085,7 @@ var TypeScript;
             _super.call(this, NodeType.For);
             this.init = init;
         }
-        ForStatement.prototype.isLoop = function () {
-            return true;
-        };
+        ForStatement.prototype.isLoop = function () { return true; };
         ForStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -4271,9 +4177,7 @@ var TypeScript;
             this.expr = expr;
             this.withSym = null;
         }
-        WithStatement.prototype.isCompoundStatement = function () {
-            return true;
-        };
+        WithStatement.prototype.isCompoundStatement = function () { return true; };
         WithStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -4300,9 +4204,7 @@ var TypeScript;
             this.defaultCase = null;
             this.statement = new ASTSpan();
         }
-        SwitchStatement.prototype.isCompoundStatement = function () {
-            return true;
-        };
+        SwitchStatement.prototype.isCompoundStatement = function () { return true; };
         SwitchStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -4456,9 +4358,7 @@ var TypeScript;
             this.tryNode = tryNode;
             this.finallyNode = finallyNode;
         }
-        TryFinally.prototype.isCompoundStatement = function () {
-            return true;
-        };
+        TryFinally.prototype.isCompoundStatement = function () { return true; };
         TryFinally.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.recordSourceMappingStart(this);
             emitter.emitJavascript(this.tryNode, TokenID.Try, false);
@@ -4503,9 +4403,7 @@ var TypeScript;
             this.tryNode = tryNode;
             this.catchNode = catchNode;
         }
-        TryCatch.prototype.isCompoundStatement = function () {
-            return true;
-        };
+        TryCatch.prototype.isCompoundStatement = function () { return true; };
         TryCatch.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);

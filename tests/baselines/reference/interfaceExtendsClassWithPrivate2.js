@@ -34,9 +34,7 @@ var C = (function () {
     function C() {
         this.x = 1;
     }
-    C.prototype.foo = function (x) {
-        return x;
-    };
+    C.prototype.foo = function (x) { return x; };
     return C;
 })();
 var D = (function (_super) {
@@ -46,12 +44,8 @@ var D = (function (_super) {
         this.x = 2;
         this.y = 3;
     }
-    D.prototype.foo = function (x) {
-        return x;
-    };
-    D.prototype.other = function (x) {
-        return x;
-    };
+    D.prototype.foo = function (x) { return x; };
+    D.prototype.other = function (x) { return x; };
     D.prototype.bar = function () { };
     return D;
 })(C);
@@ -61,12 +55,8 @@ var D2 = (function (_super) {
         _super.apply(this, arguments);
         this.x = "";
     }
-    D2.prototype.foo = function (x) {
-        return x;
-    };
-    D2.prototype.other = function (x) {
-        return x;
-    };
+    D2.prototype.foo = function (x) { return x; };
+    D2.prototype.other = function (x) { return x; };
     D2.prototype.bar = function () { };
     return D2;
 })(C);
