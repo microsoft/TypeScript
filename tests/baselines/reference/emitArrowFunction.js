@@ -14,6 +14,4 @@ var f3 = function (x, y) { };
 var f4 = function (x, y, z) { };
 function foo(func) { }
 foo(function () { return true; });
-foo(function () {
-    return false;
-});
+foo(function () { return false; });

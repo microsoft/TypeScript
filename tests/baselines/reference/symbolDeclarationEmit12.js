@@ -23,9 +23,7 @@ var M;
             return undefined;
         };
         Object.defineProperty(C.prototype, Symbol.isRegExp, {
-            get: function () {
-                return undefined;
-            },
+            get: function () { return undefined; },
             set: function (x) { },
             enumerable: true,
             configurable: true

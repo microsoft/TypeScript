@@ -38,9 +38,7 @@ var C = (function () {
     function C() {
         this.x = 1;
     }
-    C.prototype.foo = function (x) {
-        return x;
-    };
+    C.prototype.foo = function (x) { return x; };
     return C;
 })();
 var D = (function (_super) {
@@ -48,12 +46,8 @@ var D = (function (_super) {
     function D() {
         _super.apply(this, arguments);
     }
-    D.prototype.foo = function (x) {
-        return x;
-    };
-    D.prototype.other = function (x) {
-        return x;
-    };
+    D.prototype.foo = function (x) { return x; };
+    D.prototype.other = function (x) { return x; };
     D.prototype.bar = function () { };
     return D;
 })(C);

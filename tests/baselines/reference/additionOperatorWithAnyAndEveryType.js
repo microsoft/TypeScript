@@ -84,6 +84,4 @@ var r16 = a + M;
 var r17 = a + '';
 var r18 = a + 123;
 var r19 = a + { a: '' };
-var r20 = a + (function (a) {
-    return a;
-});
+var r20 = a + (function (a) { return a; });

@@ -7,9 +7,7 @@ module foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter.js]
-function foo(y, z) {
-    return y;
-}
+function foo(y, z) { return y; }
 var foo;
 (function (foo) {
     foo.x;

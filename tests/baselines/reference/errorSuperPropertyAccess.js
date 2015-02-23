@@ -209,9 +209,7 @@ var SomeDerived1 = (function (_super) {
             super.publicFunc.call(this);
         }
         var x = {
-            test: function () {
-                return super.publicFunc.call(this);
-            }
+            test: function () { return super.publicFunc.call(this); }
         };
     };
     return SomeDerived1;

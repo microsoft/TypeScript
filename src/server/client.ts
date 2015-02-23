@@ -47,14 +47,14 @@ module ts.server {
         }
 
         private lineColToPosition(fileName: string, lineCol: protocol.Location): number {
-            return ts.computePositionFromLineAndCharacter(this.getLineMap(fileName), lineCol.line, lineCol.col);
+            return ts.computePositionOfLineAndCharacter(this.getLineMap(fileName), lineCol.line - 1, lineCol.col - 1);
         }
 
         private positionToOneBasedLineCol(fileName: string, position: number): protocol.Location {
             var lineCol = ts.computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
             return {
-                line: lineCol.line,
-                col: lineCol.character
+                line: lineCol.line + 1,
+                col: lineCol.character + 1
             };
         }
 
@@ -208,9 +208,9 @@ module ts.server {
             return response.body[0];
         }
 
-        getNavigateToItems(searchTerm: string): NavigateToItem[] {
+        getNavigateToItems(searchValue: string): NavigateToItem[] {
             var args: protocol.NavtoRequestArgs = {
-                searchTerm,
+                searchValue,
                 file: this.host.getScriptFileNames()[0]
             };
 

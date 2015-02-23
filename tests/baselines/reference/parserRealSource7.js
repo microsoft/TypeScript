@@ -1053,7 +1053,8 @@ var TypeScript;
         if (isExported) {
             typeSymbol.flags |= SymbolFlags.Exported;
         }
-        if ((context.scopeChain.moduleDecl) || (context.scopeChain.container == context.checker.gloMod)) {
+        if ((context.scopeChain.moduleDecl) ||
+            (context.scopeChain.container == context.checker.gloMod)) {
             typeSymbol.flags |= SymbolFlags.ModuleMember;
         }
         moduleDecl.mod = modType;
@@ -1079,7 +1080,11 @@ var TypeScript;
         // REVIEW-CLASSES
         if (!typeSymbol) {
             var valTypeSymbol = scopeChain.scope.findLocal(className, false, false);
-            if (valTypeSymbol && valTypeSymbol.isType() && valTypeSymbol.declAST && valTypeSymbol.declAST.nodeType == NodeType.FuncDecl && valTypeSymbol.declAST.isSignature()) {
+            if (valTypeSymbol &&
+                valTypeSymbol.isType() &&
+                valTypeSymbol.declAST &&
+                valTypeSymbol.declAST.nodeType == NodeType.FuncDecl &&
+                valTypeSymbol.declAST.isSignature()) {
                 typeSymbol = valTypeSymbol;
                 foundValSymbol = true;
                 if (isExported) {
@@ -1233,7 +1238,10 @@ var TypeScript;
         if (context.scopeChain.moduleDecl) {
             context.scopeChain.moduleDecl.recordNonInterface();
         }
-        if (isProperty || isExported || (context.scopeChain.container == context.checker.gloMod) || context.scopeChain.moduleDecl) {
+        if (isProperty ||
+            isExported ||
+            (context.scopeChain.container == context.checker.gloMod) ||
+            context.scopeChain.moduleDecl) {
             if (isAmbient) {
                 var existingSym = scopeChain.scope.findLocal(varDecl.id.text, false, false);
                 if (existingSym) {
@@ -1254,7 +1262,8 @@ var TypeScript;
             }
             field.symbol = fieldSymbol;
             fieldSymbol.declAST = ast;
-            if ((context.scopeChain.moduleDecl) || (context.scopeChain.container == context.checker.gloMod)) {
+            if ((context.scopeChain.moduleDecl) ||
+                (context.scopeChain.container == context.checker.gloMod)) {
                 fieldSymbol.flags |= SymbolFlags.ModuleMember;
                 fieldSymbol.declModule = context.scopeChain.moduleDecl;
             }
@@ -1305,7 +1314,12 @@ var TypeScript;
         // If the parent is the constructor, and this isn't an instance method, skip it.
         // That way, we'll set the type during scope assignment, and can be sure that the
         // function will be placed in the constructor-local scope
-        if (!funcDecl.isConstructor && containerSym && containerSym.declAST && containerSym.declAST.nodeType == NodeType.FuncDecl && containerSym.declAST.isConstructor && !funcDecl.isMethod()) {
+        if (!funcDecl.isConstructor &&
+            containerSym &&
+            containerSym.declAST &&
+            containerSym.declAST.nodeType == NodeType.FuncDecl &&
+            containerSym.declAST.isConstructor &&
+            !funcDecl.isMethod()) {
             return go;
         }
         // Interfaces and overloads
@@ -1394,7 +1408,14 @@ var TypeScript;
                 }
             }
             // REVIEW: Move this check into the typecheck phase?  It's only being run over properties...
-            if (fgSym && !fgSym.isAccessor() && fgSym.type && fgSym.type.construct && fgSym.type.construct.signatures != [] && (fgSym.type.construct.signatures[0].declAST == null || !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) && !funcDecl.isConstructor) {
+            if (fgSym &&
+                !fgSym.isAccessor() &&
+                fgSym.type &&
+                fgSym.type.construct &&
+                fgSym.type.construct.signatures != [] &&
+                (fgSym.type.construct.signatures[0].declAST == null ||
+                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&
+                !funcDecl.isConstructor) {
                 context.checker.errorReporter.simpleError(funcDecl, "Functions may not have class overloads");
             }
             if (fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() && !funcDecl.isConstructor) {

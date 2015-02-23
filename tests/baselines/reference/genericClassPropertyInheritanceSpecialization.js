@@ -92,9 +92,7 @@ var Portal;
                 function Validator(message) {
                 }
                 Validator.prototype.destroy = function () { };
-                Validator.prototype._validate = function (value) {
-                    return 0;
-                };
+                Validator.prototype._validate = function (value) { return 0; };
                 return Validator;
             })();
             Validators.Validator = Validator;

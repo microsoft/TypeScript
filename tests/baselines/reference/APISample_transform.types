@@ -177,7 +177,7 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 >diagnostics : ts.Diagnostic[]
 
     return {
->{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
+>{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
 
         outputs: outputs,
 >outputs : any[]
@@ -185,30 +185,32 @@ function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
 
         errors: errors.map(function (e) {
 >errors : string[]
->errors.map(function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
+>errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
 >errors.map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
 >errors : ts.Diagnostic[]
 >map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->function (e) {            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
+>function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
 >e : ts.Diagnostic
 
-            return e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line + "): " : string
->e.file.fileName + "(" + e.file.getLineAndCharacterFromPosition(e.start).line : string
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " : string
+>e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) : string
 >e.file.fileName + "(" : string
 >e.file.fileName : string
 >e.file : ts.SourceFile
 >e : ts.Diagnostic
 >file : ts.SourceFile
 >fileName : string
->e.file.getLineAndCharacterFromPosition(e.start).line : number
->e.file.getLineAndCharacterFromPosition(e.start) : ts.LineAndCharacter
->e.file.getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>(e.file.getLineAndCharacterOfPosition(e.start).line + 1) : number
+>e.file.getLineAndCharacterOfPosition(e.start).line + 1 : number
+>e.file.getLineAndCharacterOfPosition(e.start).line : number
+>e.file.getLineAndCharacterOfPosition(e.start) : ts.LineAndCharacter
+>e.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >e.file : ts.SourceFile
 >e : ts.Diagnostic
 >file : ts.SourceFile
->getLineAndCharacterFromPosition : (pos: number) => ts.LineAndCharacter
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >e.start : number
 >e : ts.Diagnostic
 >start : number
@@ -592,340 +594,370 @@ declare module "typescript" {
         WithKeyword = 100,
 >WithKeyword : SyntaxKind
 
-        ImplementsKeyword = 101,
+        AsKeyword = 101,
+>AsKeyword : SyntaxKind
+
+        FromKeyword = 102,
+>FromKeyword : SyntaxKind
+
+        ImplementsKeyword = 103,
 >ImplementsKeyword : SyntaxKind
 
-        InterfaceKeyword = 102,
+        InterfaceKeyword = 104,
 >InterfaceKeyword : SyntaxKind
 
-        LetKeyword = 103,
+        LetKeyword = 105,
 >LetKeyword : SyntaxKind
 
-        PackageKeyword = 104,
+        PackageKeyword = 106,
 >PackageKeyword : SyntaxKind
 
-        PrivateKeyword = 105,
+        PrivateKeyword = 107,
 >PrivateKeyword : SyntaxKind
 
-        ProtectedKeyword = 106,
+        ProtectedKeyword = 108,
 >ProtectedKeyword : SyntaxKind
 
-        PublicKeyword = 107,
+        PublicKeyword = 109,
 >PublicKeyword : SyntaxKind
 
-        StaticKeyword = 108,
+        StaticKeyword = 110,
 >StaticKeyword : SyntaxKind
 
-        YieldKeyword = 109,
+        YieldKeyword = 111,
 >YieldKeyword : SyntaxKind
 
-        AnyKeyword = 110,
+        AnyKeyword = 112,
 >AnyKeyword : SyntaxKind
 
-        BooleanKeyword = 111,
+        BooleanKeyword = 113,
 >BooleanKeyword : SyntaxKind
 
-        ConstructorKeyword = 112,
+        ConstructorKeyword = 114,
 >ConstructorKeyword : SyntaxKind
 
-        DeclareKeyword = 113,
+        DeclareKeyword = 115,
 >DeclareKeyword : SyntaxKind
 
-        GetKeyword = 114,
+        GetKeyword = 116,
 >GetKeyword : SyntaxKind
 
-        ModuleKeyword = 115,
+        ModuleKeyword = 117,
 >ModuleKeyword : SyntaxKind
 
-        RequireKeyword = 116,
+        RequireKeyword = 118,
 >RequireKeyword : SyntaxKind
 
-        NumberKeyword = 117,
+        NumberKeyword = 119,
 >NumberKeyword : SyntaxKind
 
-        SetKeyword = 118,
+        SetKeyword = 120,
 >SetKeyword : SyntaxKind
 
-        StringKeyword = 119,
+        StringKeyword = 121,
 >StringKeyword : SyntaxKind
 
-        SymbolKeyword = 120,
+        SymbolKeyword = 122,
 >SymbolKeyword : SyntaxKind
 
-        TypeKeyword = 121,
+        TypeKeyword = 123,
 >TypeKeyword : SyntaxKind
 
-        OfKeyword = 122,
+        OfKeyword = 124,
 >OfKeyword : SyntaxKind
 
-        QualifiedName = 123,
+        QualifiedName = 125,
 >QualifiedName : SyntaxKind
 
-        ComputedPropertyName = 124,
+        ComputedPropertyName = 126,
 >ComputedPropertyName : SyntaxKind
 
-        TypeParameter = 125,
+        TypeParameter = 127,
 >TypeParameter : SyntaxKind
 
-        Parameter = 126,
+        Parameter = 128,
 >Parameter : SyntaxKind
 
-        PropertySignature = 127,
+        PropertySignature = 129,
 >PropertySignature : SyntaxKind
 
-        PropertyDeclaration = 128,
+        PropertyDeclaration = 130,
 >PropertyDeclaration : SyntaxKind
 
-        MethodSignature = 129,
+        MethodSignature = 131,
 >MethodSignature : SyntaxKind
 
-        MethodDeclaration = 130,
+        MethodDeclaration = 132,
 >MethodDeclaration : SyntaxKind
 
-        Constructor = 131,
+        Constructor = 133,
 >Constructor : SyntaxKind
 
-        GetAccessor = 132,
+        GetAccessor = 134,
 >GetAccessor : SyntaxKind
 
-        SetAccessor = 133,
+        SetAccessor = 135,
 >SetAccessor : SyntaxKind
 
-        CallSignature = 134,
+        CallSignature = 136,
 >CallSignature : SyntaxKind
 
-        ConstructSignature = 135,
+        ConstructSignature = 137,
 >ConstructSignature : SyntaxKind
 
-        IndexSignature = 136,
+        IndexSignature = 138,
 >IndexSignature : SyntaxKind
 
-        TypeReference = 137,
+        TypeReference = 139,
 >TypeReference : SyntaxKind
 
-        FunctionType = 138,
+        FunctionType = 140,
 >FunctionType : SyntaxKind
 
-        ConstructorType = 139,
+        ConstructorType = 141,
 >ConstructorType : SyntaxKind
 
-        TypeQuery = 140,
+        TypeQuery = 142,
 >TypeQuery : SyntaxKind
 
-        TypeLiteral = 141,
+        TypeLiteral = 143,
 >TypeLiteral : SyntaxKind
 
-        ArrayType = 142,
+        ArrayType = 144,
 >ArrayType : SyntaxKind
 
-        TupleType = 143,
+        TupleType = 145,
 >TupleType : SyntaxKind
 
-        UnionType = 144,
+        UnionType = 146,
 >UnionType : SyntaxKind
 
-        ParenthesizedType = 145,
+        ParenthesizedType = 147,
 >ParenthesizedType : SyntaxKind
 
-        ObjectBindingPattern = 146,
+        ObjectBindingPattern = 148,
 >ObjectBindingPattern : SyntaxKind
 
-        ArrayBindingPattern = 147,
+        ArrayBindingPattern = 149,
 >ArrayBindingPattern : SyntaxKind
 
-        BindingElement = 148,
+        BindingElement = 150,
 >BindingElement : SyntaxKind
 
-        ArrayLiteralExpression = 149,
+        ArrayLiteralExpression = 151,
 >ArrayLiteralExpression : SyntaxKind
 
-        ObjectLiteralExpression = 150,
+        ObjectLiteralExpression = 152,
 >ObjectLiteralExpression : SyntaxKind
 
-        PropertyAccessExpression = 151,
+        PropertyAccessExpression = 153,
 >PropertyAccessExpression : SyntaxKind
 
-        ElementAccessExpression = 152,
+        ElementAccessExpression = 154,
 >ElementAccessExpression : SyntaxKind
 
-        CallExpression = 153,
+        CallExpression = 155,
 >CallExpression : SyntaxKind
 
-        NewExpression = 154,
+        NewExpression = 156,
 >NewExpression : SyntaxKind
 
-        TaggedTemplateExpression = 155,
+        TaggedTemplateExpression = 157,
 >TaggedTemplateExpression : SyntaxKind
 
-        TypeAssertionExpression = 156,
+        TypeAssertionExpression = 158,
 >TypeAssertionExpression : SyntaxKind
 
-        ParenthesizedExpression = 157,
+        ParenthesizedExpression = 159,
 >ParenthesizedExpression : SyntaxKind
 
-        FunctionExpression = 158,
+        FunctionExpression = 160,
 >FunctionExpression : SyntaxKind
 
-        ArrowFunction = 159,
+        ArrowFunction = 161,
 >ArrowFunction : SyntaxKind
 
-        DeleteExpression = 160,
+        DeleteExpression = 162,
 >DeleteExpression : SyntaxKind
 
-        TypeOfExpression = 161,
+        TypeOfExpression = 163,
 >TypeOfExpression : SyntaxKind
 
-        VoidExpression = 162,
+        VoidExpression = 164,
 >VoidExpression : SyntaxKind
 
-        PrefixUnaryExpression = 163,
+        PrefixUnaryExpression = 165,
 >PrefixUnaryExpression : SyntaxKind
 
-        PostfixUnaryExpression = 164,
+        PostfixUnaryExpression = 166,
 >PostfixUnaryExpression : SyntaxKind
 
-        BinaryExpression = 165,
+        BinaryExpression = 167,
 >BinaryExpression : SyntaxKind
 
-        ConditionalExpression = 166,
+        ConditionalExpression = 168,
 >ConditionalExpression : SyntaxKind
 
-        TemplateExpression = 167,
+        TemplateExpression = 169,
 >TemplateExpression : SyntaxKind
 
-        YieldExpression = 168,
+        YieldExpression = 170,
 >YieldExpression : SyntaxKind
 
-        SpreadElementExpression = 169,
+        SpreadElementExpression = 171,
 >SpreadElementExpression : SyntaxKind
 
-        OmittedExpression = 170,
+        OmittedExpression = 172,
 >OmittedExpression : SyntaxKind
 
-        TemplateSpan = 171,
+        TemplateSpan = 173,
 >TemplateSpan : SyntaxKind
 
-        Block = 172,
+        Block = 174,
 >Block : SyntaxKind
 
-        VariableStatement = 173,
+        VariableStatement = 175,
 >VariableStatement : SyntaxKind
 
-        EmptyStatement = 174,
+        EmptyStatement = 176,
 >EmptyStatement : SyntaxKind
 
-        ExpressionStatement = 175,
+        ExpressionStatement = 177,
 >ExpressionStatement : SyntaxKind
 
-        IfStatement = 176,
+        IfStatement = 178,
 >IfStatement : SyntaxKind
 
-        DoStatement = 177,
+        DoStatement = 179,
 >DoStatement : SyntaxKind
 
-        WhileStatement = 178,
+        WhileStatement = 180,
 >WhileStatement : SyntaxKind
 
-        ForStatement = 179,
+        ForStatement = 181,
 >ForStatement : SyntaxKind
 
-        ForInStatement = 180,
+        ForInStatement = 182,
 >ForInStatement : SyntaxKind
 
-        ForOfStatement = 181,
+        ForOfStatement = 183,
 >ForOfStatement : SyntaxKind
 
-        ContinueStatement = 182,
+        ContinueStatement = 184,
 >ContinueStatement : SyntaxKind
 
-        BreakStatement = 183,
+        BreakStatement = 185,
 >BreakStatement : SyntaxKind
 
-        ReturnStatement = 184,
+        ReturnStatement = 186,
 >ReturnStatement : SyntaxKind
 
-        WithStatement = 185,
+        WithStatement = 187,
 >WithStatement : SyntaxKind
 
-        SwitchStatement = 186,
+        SwitchStatement = 188,
 >SwitchStatement : SyntaxKind
 
-        LabeledStatement = 187,
+        LabeledStatement = 189,
 >LabeledStatement : SyntaxKind
 
-        ThrowStatement = 188,
+        ThrowStatement = 190,
 >ThrowStatement : SyntaxKind
 
-        TryStatement = 189,
+        TryStatement = 191,
 >TryStatement : SyntaxKind
 
-        DebuggerStatement = 190,
+        DebuggerStatement = 192,
 >DebuggerStatement : SyntaxKind
 
-        VariableDeclaration = 191,
+        VariableDeclaration = 193,
 >VariableDeclaration : SyntaxKind
 
-        VariableDeclarationList = 192,
+        VariableDeclarationList = 194,
 >VariableDeclarationList : SyntaxKind
 
-        FunctionDeclaration = 193,
+        FunctionDeclaration = 195,
 >FunctionDeclaration : SyntaxKind
 
-        ClassDeclaration = 194,
+        ClassDeclaration = 196,
 >ClassDeclaration : SyntaxKind
 
-        InterfaceDeclaration = 195,
+        InterfaceDeclaration = 197,
 >InterfaceDeclaration : SyntaxKind
 
-        TypeAliasDeclaration = 196,
+        TypeAliasDeclaration = 198,
 >TypeAliasDeclaration : SyntaxKind
 
-        EnumDeclaration = 197,
+        EnumDeclaration = 199,
 >EnumDeclaration : SyntaxKind
 
-        ModuleDeclaration = 198,
+        ModuleDeclaration = 200,
 >ModuleDeclaration : SyntaxKind
 
-        ModuleBlock = 199,
+        ModuleBlock = 201,
 >ModuleBlock : SyntaxKind
 
-        ImportDeclaration = 200,
+        ImportEqualsDeclaration = 202,
+>ImportEqualsDeclaration : SyntaxKind
+
+        ImportDeclaration = 203,
 >ImportDeclaration : SyntaxKind
 
-        ExportAssignment = 201,
+        ImportClause = 204,
+>ImportClause : SyntaxKind
+
+        NamespaceImport = 205,
+>NamespaceImport : SyntaxKind
+
+        NamedImports = 206,
+>NamedImports : SyntaxKind
+
+        ImportSpecifier = 207,
+>ImportSpecifier : SyntaxKind
+
+        ExportAssignment = 208,
 >ExportAssignment : SyntaxKind
 
-        ExternalModuleReference = 202,
+        ExportDeclaration = 209,
+>ExportDeclaration : SyntaxKind
+
+        NamedExports = 210,
+>NamedExports : SyntaxKind
+
+        ExportSpecifier = 211,
+>ExportSpecifier : SyntaxKind
+
+        ExternalModuleReference = 212,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 203,
+        CaseClause = 213,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 204,
+        DefaultClause = 214,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 205,
+        HeritageClause = 215,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 206,
+        CatchClause = 216,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 207,
+        PropertyAssignment = 217,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 208,
+        ShorthandPropertyAssignment = 218,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 209,
+        EnumMember = 219,
 >EnumMember : SyntaxKind
 
-        SourceFile = 210,
+        SourceFile = 220,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 211,
+        SyntaxList = 221,
 >SyntaxList : SyntaxKind
 
-        Count = 212,
+        Count = 222,
 >Count : SyntaxKind
 
         FirstAssignment = 52,
@@ -943,19 +975,19 @@ declare module "typescript" {
         FirstKeyword = 65,
 >FirstKeyword : SyntaxKind
 
-        LastKeyword = 122,
+        LastKeyword = 124,
 >LastKeyword : SyntaxKind
 
-        FirstFutureReservedWord = 101,
+        FirstFutureReservedWord = 103,
 >FirstFutureReservedWord : SyntaxKind
 
-        LastFutureReservedWord = 109,
+        LastFutureReservedWord = 111,
 >LastFutureReservedWord : SyntaxKind
 
-        FirstTypeNode = 137,
+        FirstTypeNode = 139,
 >FirstTypeNode : SyntaxKind
 
-        LastTypeNode = 145,
+        LastTypeNode = 147,
 >LastTypeNode : SyntaxKind
 
         FirstPunctuation = 14,
@@ -967,7 +999,7 @@ declare module "typescript" {
         FirstToken = 0,
 >FirstToken : SyntaxKind
 
-        LastToken = 122,
+        LastToken = 124,
 >LastToken : SyntaxKind
 
         FirstTriviaToken = 2,
@@ -994,7 +1026,7 @@ declare module "typescript" {
         LastBinaryOperator = 63,
 >LastBinaryOperator : SyntaxKind
 
-        FirstNode = 123,
+        FirstNode = 125,
 >FirstNode : SyntaxKind
     }
     const enum NodeFlags {
@@ -1100,6 +1132,10 @@ declare module "typescript" {
 >parserContextFlags : ParserContextFlags
 >ParserContextFlags : ParserContextFlags
 
+        modifiers?: ModifiersArray;
+>modifiers : ModifiersArray
+>ModifiersArray : ModifiersArray
+
         id?: number;
 >id : number
 
@@ -1122,10 +1158,6 @@ declare module "typescript" {
         localSymbol?: Symbol;
 >localSymbol : Symbol
 >Symbol : Symbol
-
-        modifiers?: ModifiersArray;
->modifiers : ModifiersArray
->ModifiersArray : ModifiersArray
     }
     interface NodeArray<T> extends Array<T>, TextRange {
 >NodeArray : NodeArray<T>
@@ -1681,9 +1713,9 @@ declare module "typescript" {
 >left : Expression
 >Expression : Expression
 
-        operator: SyntaxKind;
->operator : SyntaxKind
->SyntaxKind : SyntaxKind
+        operatorToken: Node;
+>operatorToken : Node
+>Node : Node
 
         right: Expression;
 >right : Expression
@@ -2224,10 +2256,18 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >EnumMember : EnumMember
     }
-    interface ModuleDeclaration extends Declaration, ModuleElement {
+    interface ExportContainer {
+>ExportContainer : ExportContainer
+
+        exportStars?: ExportDeclaration[];
+>exportStars : ExportDeclaration[]
+>ExportDeclaration : ExportDeclaration
+    }
+    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
 >ModuleDeclaration : ModuleDeclaration
 >Declaration : Declaration
 >ModuleElement : ModuleElement
+>ExportContainer : ExportContainer
 
         name: Identifier | LiteralExpression;
 >name : Identifier | LiteralExpression
@@ -2249,8 +2289,8 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >ModuleElement : ModuleElement
     }
-    interface ImportDeclaration extends Declaration, ModuleElement {
->ImportDeclaration : ImportDeclaration
+    interface ImportEqualsDeclaration extends Declaration, ModuleElement {
+>ImportEqualsDeclaration : ImportEqualsDeclaration
 >Declaration : Declaration
 >ModuleElement : ModuleElement
 
@@ -2271,6 +2311,90 @@ declare module "typescript" {
 >expression : Expression
 >Expression : Expression
     }
+    interface ImportDeclaration extends Statement, ModuleElement {
+>ImportDeclaration : ImportDeclaration
+>Statement : Statement
+>ModuleElement : ModuleElement
+
+        importClause?: ImportClause;
+>importClause : ImportClause
+>ImportClause : ImportClause
+
+        moduleSpecifier: Expression;
+>moduleSpecifier : Expression
+>Expression : Expression
+    }
+    interface ImportClause extends Declaration {
+>ImportClause : ImportClause
+>Declaration : Declaration
+
+        name?: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        namedBindings?: NamespaceImport | NamedImports;
+>namedBindings : NamespaceImport | NamedImportsOrExports
+>NamespaceImport : NamespaceImport
+>NamedImports : NamedImportsOrExports
+    }
+    interface NamespaceImport extends Declaration {
+>NamespaceImport : NamespaceImport
+>Declaration : Declaration
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+    }
+    interface ExportDeclaration extends Statement, ModuleElement {
+>ExportDeclaration : ExportDeclaration
+>Statement : Statement
+>ModuleElement : ModuleElement
+
+        exportClause?: NamedExports;
+>exportClause : NamedImportsOrExports
+>NamedExports : NamedImportsOrExports
+
+        moduleSpecifier?: Expression;
+>moduleSpecifier : Expression
+>Expression : Expression
+    }
+    interface NamedImportsOrExports extends Node {
+>NamedImportsOrExports : NamedImportsOrExports
+>Node : Node
+
+        elements: NodeArray<ImportOrExportSpecifier>;
+>elements : NodeArray<ImportOrExportSpecifier>
+>NodeArray : NodeArray<T>
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+    }
+    type NamedImports = NamedImportsOrExports;
+>NamedImports : NamedImportsOrExports
+>NamedImportsOrExports : NamedImportsOrExports
+
+    type NamedExports = NamedImportsOrExports;
+>NamedExports : NamedImportsOrExports
+>NamedImportsOrExports : NamedImportsOrExports
+
+    interface ImportOrExportSpecifier extends Declaration {
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+>Declaration : Declaration
+
+        propertyName?: Identifier;
+>propertyName : Identifier
+>Identifier : Identifier
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+    }
+    type ImportSpecifier = ImportOrExportSpecifier;
+>ImportSpecifier : ImportOrExportSpecifier
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+
+    type ExportSpecifier = ImportOrExportSpecifier;
+>ExportSpecifier : ImportOrExportSpecifier
+>ImportOrExportSpecifier : ImportOrExportSpecifier
+
     interface ExportAssignment extends Statement, ModuleElement {
 >ExportAssignment : ExportAssignment
 >Statement : Statement
@@ -2294,9 +2418,10 @@ declare module "typescript" {
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
     }
-    interface SourceFile extends Declaration {
+    interface SourceFile extends Declaration, ExportContainer {
 >SourceFile : SourceFile
 >Declaration : Declaration
+>ExportContainer : ExportContainer
 
         statements: NodeArray<ModuleElement>;
 >statements : NodeArray<ModuleElement>
@@ -2910,9 +3035,9 @@ declare module "typescript" {
 >accessibility : SymbolAccessibility
 >SymbolAccessibility : SymbolAccessibility
 
-        aliasesToMakeVisible?: ImportDeclaration[];
->aliasesToMakeVisible : ImportDeclaration[]
->ImportDeclaration : ImportDeclaration
+        aliasesToMakeVisible?: ImportEqualsDeclaration[];
+>aliasesToMakeVisible : ImportEqualsDeclaration[]
+>ImportEqualsDeclaration : ImportEqualsDeclaration
 
         errorSymbolName?: string;
 >errorSymbolName : string
@@ -2931,14 +3056,16 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
->getLocalNameOfContainer : (container: EnumDeclaration | ModuleDeclaration) => string
->container : EnumDeclaration | ModuleDeclaration
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+>getGeneratedNameForNode : (node: EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration) => string
+>node : EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration
 >ModuleDeclaration : ModuleDeclaration
 >EnumDeclaration : EnumDeclaration
+>ImportDeclaration : ImportDeclaration
+>ExportDeclaration : ExportDeclaration
 
-        getExpressionNamePrefix(node: Identifier): string;
->getExpressionNamePrefix : (node: Identifier) => string
+        getExpressionNameSubstitution(node: Identifier): string;
+>getExpressionNameSubstitution : (node: Identifier) => string
 >node : Identifier
 >Identifier : Identifier
 
@@ -2947,15 +3074,15 @@ declare module "typescript" {
 >node : SourceFile
 >SourceFile : SourceFile
 
-        isReferencedImportDeclaration(node: ImportDeclaration): boolean;
->isReferencedImportDeclaration : (node: ImportDeclaration) => boolean
->node : ImportDeclaration
->ImportDeclaration : ImportDeclaration
+        isReferencedImportDeclaration(node: Node): boolean;
+>isReferencedImportDeclaration : (node: Node) => boolean
+>node : Node
+>Node : Node
 
-        isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
->isTopLevelValueImportWithEntityName : (node: ImportDeclaration) => boolean
->node : ImportDeclaration
->ImportDeclaration : ImportDeclaration
+        isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
+>isTopLevelValueImportEqualsWithEntityName : (node: ImportEqualsDeclaration) => boolean
+>node : ImportEqualsDeclaration
+>ImportEqualsDeclaration : ImportEqualsDeclaration
 
         getNodeCheckFlags(node: Node): NodeCheckFlags;
 >getNodeCheckFlags : (node: Node) => NodeCheckFlags
@@ -3284,13 +3411,20 @@ declare module "typescript" {
         referenced?: boolean;
 >referenced : boolean
 
-        exportAssignSymbol?: Symbol;
->exportAssignSymbol : Symbol
+        exportAssignmentChecked?: boolean;
+>exportAssignmentChecked : boolean
+
+        exportAssignmentSymbol?: Symbol;
+>exportAssignmentSymbol : Symbol
 >Symbol : Symbol
 
         unionType?: UnionType;
 >unionType : UnionType
 >UnionType : UnionType
+
+        resolvedExports?: SymbolTable;
+>resolvedExports : SymbolTable
+>SymbolTable : SymbolTable
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol
@@ -3359,8 +3493,12 @@ declare module "typescript" {
         isVisible?: boolean;
 >isVisible : boolean
 
-        localModuleName?: string;
->localModuleName : string
+        generatedName?: string;
+>generatedName : string
+
+        generatedNames?: Map<string>;
+>generatedNames : Map<string>
+>Map : Map<T>
 
         assignmentChecks?: Map<boolean>;
 >assignmentChecks : Map<boolean>
@@ -4284,6 +4422,9 @@ declare module "typescript" {
         greaterThan = 62,
 >greaterThan : CharacterCodes
 
+        hash = 35,
+>hash : CharacterCodes
+
         lessThan = 60,
 >lessThan : CharacterCodes
 
@@ -4489,15 +4630,15 @@ declare module "typescript" {
 >computeLineStarts : (text: string) => number[]
 >text : string
 
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
->getPositionFromLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+>getPositionOfLineAndCharacter : (sourceFile: SourceFile, line: number, character: number) => number
 >sourceFile : SourceFile
 >SourceFile : SourceFile
 >line : number
 >character : number
 
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
->computePositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>computePositionOfLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
 >lineStarts : number[]
 >line : number
 >character : number
@@ -4856,16 +4997,16 @@ declare module "typescript" {
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
 
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
->getLineAndCharacterFromPosition : (pos: number) => LineAndCharacter
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+>getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number
 >LineAndCharacter : LineAndCharacter
 
         getLineStarts(): number[];
 >getLineStarts : () => number[]
 
-        getPositionFromLineAndCharacter(line: number, character: number): number;
->getPositionFromLineAndCharacter : (line: number, character: number) => number
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+>getPositionOfLineAndCharacter : (line: number, character: number) => number
 >line : number
 >character : number
 
@@ -5082,9 +5223,10 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
-        getNavigateToItems(searchValue: string): NavigateToItem[];
->getNavigateToItems : (searchValue: string) => NavigateToItem[]
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+>getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
+>maxResultCount : number
 >NavigateToItem : NavigateToItem
 
         getNavigationBarItems(fileName: string): NavigationBarItem[];

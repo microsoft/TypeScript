@@ -152,6 +152,7 @@ module ts {
                 return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
+                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
@@ -251,10 +252,30 @@ module ts {
                 return visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ModuleDeclaration>node).name) ||
                     visitNode(cbNode, (<ModuleDeclaration>node).body);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
+                    visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
             case SyntaxKind.ImportDeclaration:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).name) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleReference);
+                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportClause:
+                return visitNode(cbNode, (<ImportClause>node).name) ||
+                    visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.NamespaceImport:
+                return visitNode(cbNode, (<NamespaceImport>node).name);
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                return visitNodes(cbNodes, (<NamedImportsOrExports>node).elements);
+            case SyntaxKind.ExportDeclaration:
+                return visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
+                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
+                    visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ExportAssignment>node).exportName);
@@ -272,27 +293,28 @@ module ts {
     }
 
     const enum ParsingContext {
-        SourceElements,          // Elements in source file
-        ModuleElements,          // Elements in module declaration
-        BlockStatements,         // Statements in block
-        SwitchClauses,           // Clauses in switch statement
-        SwitchClauseStatements,  // Statements in switch clause
-        TypeMembers,             // Members in interface or type literal
-        ClassMembers,            // Members in class declaration
-        EnumMembers,             // Members in enum declaration
-        TypeReferences,          // Type references in extends or implements clause
-        VariableDeclarations,    // Variable declarations in variable statement
-        ObjectBindingElements,   // Binding elements in object binding list
-        ArrayBindingElements,    // Binding elements in array binding list
-        ArgumentExpressions,     // Expressions in argument list
-        ObjectLiteralMembers,    // Members in object literal
-        ArrayLiteralMembers,     // Members in array literal
-        Parameters,              // Parameters in parameter list
-        TypeParameters,          // Type parameters in type parameter list
-        TypeArguments,           // Type arguments in type argument list
-        TupleElementTypes,       // Element types in tuple element type list
-        HeritageClauses,         // Heritage clauses for a class or interface declaration.
-        Count                    // Number of parsing contexts
+        SourceElements,            // Elements in source file
+        ModuleElements,            // Elements in module declaration
+        BlockStatements,           // Statements in block
+        SwitchClauses,             // Clauses in switch statement
+        SwitchClauseStatements,    // Statements in switch clause
+        TypeMembers,               // Members in interface or type literal
+        ClassMembers,              // Members in class declaration
+        EnumMembers,               // Members in enum declaration
+        TypeReferences,            // Type references in extends or implements clause
+        VariableDeclarations,      // Variable declarations in variable statement
+        ObjectBindingElements,     // Binding elements in object binding list
+        ArrayBindingElements,      // Binding elements in array binding list
+        ArgumentExpressions,       // Expressions in argument list
+        ObjectLiteralMembers,      // Members in object literal
+        ArrayLiteralMembers,       // Members in array literal
+        Parameters,                // Parameters in parameter list
+        TypeParameters,            // Type parameters in type parameter list
+        TypeArguments,             // Type arguments in type argument list
+        TupleElementTypes,         // Element types in tuple element type list
+        HeritageClauses,           // Heritage clauses for a class or interface declaration.
+        ImportOrExportSpecifiers,  // Named import clause's import specifier list
+        Count                      // Number of parsing contexts
     }
 
     const enum Tristate {
@@ -303,26 +325,27 @@ module ts {
 
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
         switch (context) {
-            case ParsingContext.SourceElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.ModuleElements:         return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.BlockStatements:        return Diagnostics.Statement_expected;
-            case ParsingContext.SwitchClauses:          return Diagnostics.case_or_default_expected;
-            case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
-            case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
-            case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
-            case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
-            case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
-            case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
-            case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
-            case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
-            case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
-            case ParsingContext.Parameters:             return Diagnostics.Parameter_declaration_expected;
-            case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
-            case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
-            case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
-            case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.SourceElements:           return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.ModuleElements:           return Diagnostics.Declaration_or_statement_expected;
+            case ParsingContext.BlockStatements:          return Diagnostics.Statement_expected;
+            case ParsingContext.SwitchClauses:            return Diagnostics.case_or_default_expected;
+            case ParsingContext.SwitchClauseStatements:   return Diagnostics.Statement_expected;
+            case ParsingContext.TypeMembers:              return Diagnostics.Property_or_signature_expected;
+            case ParsingContext.ClassMembers:             return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+            case ParsingContext.EnumMembers:              return Diagnostics.Enum_member_expected;
+            case ParsingContext.TypeReferences:           return Diagnostics.Type_reference_expected;
+            case ParsingContext.VariableDeclarations:     return Diagnostics.Variable_declaration_expected;
+            case ParsingContext.ObjectBindingElements:    return Diagnostics.Property_destructuring_pattern_expected;
+            case ParsingContext.ArrayBindingElements:     return Diagnostics.Array_element_destructuring_pattern_expected;
+            case ParsingContext.ArgumentExpressions:      return Diagnostics.Argument_expression_expected;
+            case ParsingContext.ObjectLiteralMembers:     return Diagnostics.Property_assignment_expected;
+            case ParsingContext.ArrayLiteralMembers:      return Diagnostics.Expression_or_comma_expected;
+            case ParsingContext.Parameters:               return Diagnostics.Parameter_declaration_expected;
+            case ParsingContext.TypeParameters:           return Diagnostics.Type_parameter_declaration_expected;
+            case ParsingContext.TypeArguments:            return Diagnostics.Type_argument_expected;
+            case ParsingContext.TupleElementTypes:        return Diagnostics.Type_expected;
+            case ParsingContext.HeritageClauses:          return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
         }
     };
 
@@ -1311,6 +1334,12 @@ module ts {
             return undefined;
         }
 
+        function parseTokenNode<T extends Node>(): T {
+            var node = <T>createNode(token);
+            nextToken();
+            return finishNode(node);
+        }
+
         function canParseSemicolon() {
             // If there's a real semicolon, then we can always parse it out.
             if (token === SyntaxKind.SemicolonToken) {
@@ -1469,7 +1498,10 @@ module ts {
                 // 'const' is only a modifier if followed by 'enum'.
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
-
+            if (token === SyntaxKind.ExportKeyword) {
+                nextToken();
+                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+            }
             nextToken();
             return canFollowModifier();
         }
@@ -1529,6 +1561,8 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
+                case ParsingContext.ImportOrExportSpecifiers:
+                    return isIdentifierOrKeyword();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1565,6 +1599,7 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
+                case ParsingContext.ImportOrExportSpecifiers:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1590,7 +1625,6 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
-
             }
         }
 
@@ -1825,6 +1859,8 @@ module ts {
             if (node) {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
                     case SyntaxKind.ExportAssignment:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -2082,14 +2118,6 @@ module ts {
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
-        }
-
-
-
-        function parseTokenNode<T extends Node>(): T {
-            var node = <T>createNode(token);
-            nextToken();
-            return finishNode(node);
         }
 
         function parseTemplateExpression(): TemplateExpression {
@@ -2801,8 +2829,9 @@ module ts {
             //      Expression[in] , AssignmentExpression[in]
 
             var expr = parseAssignmentExpressionOrHigher();
-            while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
+            var operatorToken: Node;
+            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
             }
             return expr;
         }
@@ -2881,9 +2910,7 @@ module ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                var operator = token;
-                nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3187,9 +3214,7 @@ module ts {
                     break;
                 }
 
-                var operator = token;
-                nextToken();
-                leftOperand = makeBinaryExpression(leftOperand, operator, parseBinaryExpressionOrHigher(newPrecedence));
+                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
             }
 
             return leftOperand;
@@ -3245,10 +3270,10 @@ module ts {
             return -1;
         }
 
-        function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
+        function makeBinaryExpression(left: Expression, operatorToken: Node, right: Expression): BinaryExpression {
             var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
             node.left = left;
-            node.operator = operator;
+            node.operatorToken = operatorToken;
             node.right = right;
             return finishNode(node);
         }
@@ -4626,15 +4651,75 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
-        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
-            var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
-            setModifiers(node, modifiers);
+        function nextTokenIsCommaOrFromKeyword() {
+            nextToken();
+            return token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.FromKeyword;
+        }
+
+        function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
-            node.name = parseIdentifier();
-            parseExpected(SyntaxKind.EqualsToken);
-            node.moduleReference = parseModuleReference();
+            var afterImportPos = scanner.getStartPos();
+
+            var identifier: Identifier;
+            if (isIdentifier()) {
+                identifier = parseIdentifier();
+                if (token !== SyntaxKind.CommaToken && token !== SyntaxKind.FromKeyword) {
+                    // ImportEquals declaration of type:
+                    // import x = require("mod"); or
+                    // import x = M.x;
+                    var importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
+                    setModifiers(importEqualsDeclaration, modifiers);
+                    importEqualsDeclaration.name = identifier;
+                    parseExpected(SyntaxKind.EqualsToken);
+                    importEqualsDeclaration.moduleReference = parseModuleReference();
+                    parseSemicolon();
+                    return finishNode(importEqualsDeclaration);
+                }
+            }
+
+            // Import statement
+            var importDeclaration = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
+            setModifiers(importDeclaration, modifiers);
+
+            // ImportDeclaration:
+            //  import ImportClause from ModuleSpecifier ;
+            //  import ModuleSpecifier;
+            if (identifier || // import id
+                token === SyntaxKind.AsteriskToken || // import * 
+                token === SyntaxKind.OpenBraceToken) { // import {
+                importDeclaration.importClause = parseImportClause(identifier, afterImportPos);
+                parseExpected(SyntaxKind.FromKeyword);
+            }
+
+            importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(importDeclaration);
+        }
+
+        function parseImportClause(identifier: Identifier, fullStart: number) {
+            //ImportClause:
+            //  ImportedDefaultBinding
+            //  NameSpaceImport
+            //  NamedImports
+            //  ImportedDefaultBinding, NameSpaceImport
+            //  ImportedDefaultBinding, NamedImports
+
+            var importClause = <ImportClause>createNode(SyntaxKind.ImportClause, fullStart);
+            if (identifier) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                importClause.name = identifier;
+            }
+
+            // If there was no default import or if there is comma token after default import 
+            // parse namespace or named imports
+            if (!importClause.name ||
+                parseOptional(SyntaxKind.CommaToken)) {
+                importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+            }
+
+            return finishNode(importClause);
         }
 
         function parseModuleReference() {
@@ -4647,19 +4732,102 @@ module ts {
             var node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
             parseExpected(SyntaxKind.RequireKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
+            node.expression = parseModuleSpecifier();
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
 
+        function parseModuleSpecifier(): Expression {
             // We allow arbitrary expressions here, even though the grammar only allows string 
             // literals.  We check to ensure that it is only a string literal later in the grammar
             // walker.
-            node.expression = parseExpression();
-
+            var result = parseExpression();
             // Ensure the string being required is in our 'identifier' table.  This will ensure 
             // that features like 'find refs' will look inside this file when search for its name.
-            if (node.expression.kind === SyntaxKind.StringLiteral) {
-                internIdentifier((<LiteralExpression>node.expression).text);
+            if (result.kind === SyntaxKind.StringLiteral) {
+                internIdentifier((<LiteralExpression>result).text);
+            }
+            return result;
+        }
+
+        function parseNamespaceImport(): NamespaceImport {
+            // NameSpaceImport:
+            //  * as ImportedBinding
+            var namespaceImport = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
+            parseExpected(SyntaxKind.AsteriskToken);
+            parseExpected(SyntaxKind.AsKeyword);
+            namespaceImport.name = parseIdentifier();
+            return finishNode(namespaceImport);
+        }
+
+        function parseNamedImportsOrExports(kind: SyntaxKind): NamedImportsOrExports {
+            var node = <NamedImports>createNode(kind);
+
+            // NamedImports:
+            //  { }
+            //  { ImportsList }
+            //  { ImportsList, }
+
+            // ImportsList:
+            //  ImportSpecifier
+            //  ImportsList, ImportSpecifier
+            node.elements = parseBracketedList(ParsingContext.ImportOrExportSpecifiers,
+                kind === SyntaxKind.NamedImports ? parseImportSpecifier : parseExportSpecifier,
+                SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseExportSpecifier() {
+            return parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier);
+        }
+
+        function parseImportSpecifier() {
+            return parseImportOrExportSpecifier(SyntaxKind.ImportSpecifier);
+        }
+
+        function parseImportOrExportSpecifier(kind: SyntaxKind): ImportOrExportSpecifier {
+            var node = <ImportSpecifier>createNode(kind);
+            // ImportSpecifier:
+            //  ImportedBinding
+            //  IdentifierName as ImportedBinding
+            var isFirstIdentifierNameNotAnIdentifier = isKeyword(token) && !isIdentifier();
+            var start = scanner.getTokenPos();
+            var identifierName = parseIdentifierName();
+            if (token === SyntaxKind.AsKeyword) {
+                node.propertyName = identifierName;
+                parseExpected(SyntaxKind.AsKeyword);
+                if (isIdentifier()) {
+                    node.name = parseIdentifierName();
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                }
+            }
+            else {
+                node.name = identifierName;
+                if (isFirstIdentifierNameNotAnIdentifier) {
+                    // Report error identifier expected
+                    parseErrorAtPosition(start, identifierName.end - start, Diagnostics.Identifier_expected);
+                }
             }
 
-            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
+
+        function parseExportDeclaration(fullStart: number, modifiers: ModifiersArray): ExportDeclaration {
+            var node = <ExportDeclaration>createNode(SyntaxKind.ExportDeclaration, fullStart);
+            setModifiers(node, modifiers);
+            if (parseOptional(SyntaxKind.AsteriskToken)) {
+                parseExpected(SyntaxKind.FromKeyword);
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
+            else {
+                node.exportClause = parseNamedImportsOrExports(SyntaxKind.NamedExports);
+                if (parseOptional(SyntaxKind.FromKeyword)) {
+                    node.moduleSpecifier = parseModuleSpecifier();
+                }
+            }
+            parseSemicolon();
             return finishNode(node);
         }
 
@@ -4688,16 +4856,18 @@ module ts {
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.EnumKeyword:
-                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.TypeKeyword:
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
+                case SyntaxKind.ImportKeyword:
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk or open brace
+                    return lookAhead(nextTokenCanFollowImportKeyword);
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
+                    return lookAhead(nextTokenCanFollowExportKeyword);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4722,14 +4892,25 @@ module ts {
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
         }
 
-        function nextTokenIsEqualsTokenOrDeclarationStart() {
+        function nextTokenCanFollowImportKeyword() {
             nextToken();
-            return token === SyntaxKind.EqualsToken || isDeclarationStart();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
+        }
+
+        function nextTokenCanFollowExportKeyword() {
+            nextToken();
+            return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
             nextToken();
             return isDeclarationStart();
+        }
+
+        function nextTokenIsAsKeyword() {
+            return nextToken() === SyntaxKind.AsKeyword;
         }
 
         function parseDeclaration(): ModuleElement {
@@ -4739,6 +4920,9 @@ module ts {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     return parseExportAssignmentTail(fullStart, modifiers);
+                }
+                if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
+                    return parseExportDeclaration(fullStart, modifiers);
                 }
             }
 
@@ -4760,7 +4944,7 @@ module ts {
                 case SyntaxKind.ModuleKeyword:
                     return parseModuleDeclaration(fullStart, modifiers);
                 case SyntaxKind.ImportKeyword:
-                    return parseImportDeclaration(fullStart, modifiers);
+                    return parseImportDeclarationOrImportEqualsDeclaration(fullStart, modifiers);
                 default:
                     Debug.fail("Mismatch between isDeclarationStart and parseDeclaration");
             }
@@ -4850,8 +5034,10 @@ module ts {
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAssignment
+                || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined);
         }

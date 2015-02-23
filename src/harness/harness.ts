@@ -1185,13 +1185,13 @@ module Harness {
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
-            var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
+            var errorLineInfo = err.file ? err.file.getLineAndCharacterOfPosition(err.start) : { line: -1, character: -1 };
             return {
                 fileName: err.file && err.file.fileName,
                 start: err.start,
                 end: err.start + err.length,
-                line: errorLineInfo.line,
-                character: errorLineInfo.character,
+                line: errorLineInfo.line + 1,
+                character: errorLineInfo.character + 1,
                 message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
                 category: ts.DiagnosticCategory[err.category].toLowerCase(),
                 code: err.code

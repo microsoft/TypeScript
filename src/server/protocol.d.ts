@@ -676,7 +676,11 @@ declare module ts.server.protocol {
           * Search term to navigate to from current location; term can
           * be '.*' or an identifier prefix.
           */
-        searchTerm: string;
+        searchValue: string;
+        /**
+          *  Optional limit on the number of items to return.
+          */
+        maxResultCount?: number;
     }
 
     /**

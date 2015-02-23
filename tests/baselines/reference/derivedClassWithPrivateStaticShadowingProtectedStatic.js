@@ -35,9 +35,7 @@ var Base = (function () {
         return '';
     };
     Object.defineProperty(Base, "a", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         set: function (v) { },
         enumerable: true,
         configurable: true
@@ -54,9 +52,7 @@ var Derived = (function (_super) {
         return '';
     };
     Object.defineProperty(Derived, "a", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         set: function (v) { },
         enumerable: true,
         configurable: true

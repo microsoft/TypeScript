@@ -962,21 +962,15 @@ _.range(0, 30, 5);
 _.range(0, 30, 5);
 _.range(0);
 ///////////////////////////////////////////////////////////////////////////////////////
-var func = function (greeting) {
-    return greeting + ': ' + this.name;
-};
+var func = function (greeting) { return greeting + ': ' + this.name; };
 // need a second var otherwise typescript thinks func signature is the above func type,
 // instead of the newly returned _bind => func type.
 var func2 = _.bind(func, { name: 'moe' }, 'hi');
 func2();
 var buttonView = {
     label: 'underscore',
-    onClick: function () {
-        alert('clicked: ' + this.label);
-    },
-    onHover: function () {
-        alert('hovering: ' + this.label);
-    }
+    onClick: function () { alert('clicked: ' + this.label); },
+    onHover: function () { alert('hovering: ' + this.label); }
 };
 _.bindAll(buttonView);
 $('#underscore_button').bind('click', buttonView.onClick);
@@ -985,9 +979,7 @@ var fibonacci = _.memoize(function (n) {
 });
 var log = _.bind(function (message) { }, Date);
 _.delay(log, 1000, 'logged later');
-_.defer(function () {
-    alert('deferred');
-});
+_.defer(function () { alert('deferred'); });
 var updatePosition = function () { return alert('updating position...'); };
 var throttled = _.throttle(updatePosition, 100);
 $(null).scroll(throttled);
@@ -1002,19 +994,11 @@ var notes;
 var render = function () { return alert("rendering..."); };
 var renderNotes = _.after(notes.length, render);
 _.each(notes, function (note) { return note.asyncSave({ success: renderNotes }); });
-var hello = function (name) {
-    return "hello: " + name;
-};
-hello = _.wrap(hello, function (func, arg) {
-    return "before, " + func(arg) + ", after";
-});
+var hello = function (name) { return "hello: " + name; };
+hello = _.wrap(hello, function (func, arg) { return "before, " + func(arg) + ", after"; });
 hello("moe");
-var greet = function (name) {
-    return "hi: " + name;
-};
-var exclaim = function (statement) {
-    return statement + "!";
-};
+var greet = function (name) { return "hi: " + name; };
+var exclaim = function (statement) { return statement + "!"; };
 var welcome = _.compose(exclaim, greet);
 welcome('moe');
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1029,11 +1013,7 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 var iceCream = { flavor: "chocolate" };
 _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 _.clone({ name: 'moe' });
-_.chain([1, 2, 3, 200]).filter(function (num) {
-    return num % 2 == 0;
-}).tap(alert).map(function (num) {
-    return num * num;
-}).value();
+_.chain([1, 2, 3, 200]).filter(function (num) { return num % 2 == 0; }).tap(alert).map(function (num) { return num * num; }).value();
 _.has({ a: 1, b: 2, c: 3 }, "b");
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };
@@ -1042,9 +1022,7 @@ _.isEqual(moe, clone);
 _.isEmpty([1, 2, 3]);
 _.isEmpty({});
 _.isElement($('body')[0]);
-(function () {
-    return _.isArray(arguments);
-})();
+(function () { return _.isArray(arguments); })();
 _.isArray([1, 2, 3]);
 _.isObject({});
 _.isObject(1);
@@ -1069,9 +1047,7 @@ var underscore = _.noConflict();
 var moe2 = { name: 'moe' };
 moe2 === _.identity(moe);
 var genie;
-_.times(3, function (n) {
-    genie.grantWishNumber(n);
-});
+_.times(3, function (n) { genie.grantWishNumber(n); });
 _.random(0, 100);
 _.mixin({
     capitalize: function (string) {
@@ -1081,9 +1057,7 @@ _.mixin({
 _("fabio").capitalize();
 _.uniqueId('contact_');
 _.escape('Curly, Larry & Moe');
-var object = { cheese: 'crumpets', stuff: function () {
-    return 'nonsense';
-} };
+var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 _.result(object, 'cheese');
 _.result(object, 'stuff');
 var compiled = _.template("hello: <%= name %>");
