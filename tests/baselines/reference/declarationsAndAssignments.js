@@ -290,6 +290,7 @@ function f16() {
     var _a = f15(), a = _a.a, b = _a.b, c = _a.c;
 }
 function f17(_a) {
+    var _b = _a.a, a = _b === void 0 ? "" : _b, _c = _a.b, b = _c === void 0 ? 0 : _c, _d = _a.c, c = _d === void 0 ? false : _d;
 }
 f17({});
 f17({ a: "hello" });

@@ -2266,15 +2266,18 @@ sourceFile:typeResolution.ts
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                               ^^^
-4 >                                                  ^^^^^^^^^^^^^^^
+4 >                                                  ^^^^^^^^^^^^^^
+5 >                                                                ^
 1->
 2 >                    AisIn1_2_2
 3 >                                               
-4 >                                                  public AisIn1_2_2() { }
+4 >                                                  public AisIn1_2_2() { 
+5 >                                                                }
 1->Emitted(114, 21) Source(79, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 2 >Emitted(114, 48) Source(79, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 3 >Emitted(114, 51) Source(79, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-4 >Emitted(114, 66) Source(79, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+4 >Emitted(114, 65) Source(79, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+5 >Emitted(114, 66) Source(79, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 ---
 >>>                    return ClassA;
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2353,15 +2356,18 @@ sourceFile:typeResolution.ts
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                               ^^^
-4 >                                                  ^^^^^^^^^^^^^^^
+4 >                                                  ^^^^^^^^^^^^^^
+5 >                                                                ^
 1->
 2 >                    BisIn1_2_2
 3 >                                               
-4 >                                                  public BisIn1_2_2() { }
+4 >                                                  public BisIn1_2_2() { 
+5 >                                                                }
 1->Emitted(121, 21) Source(80, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 2 >Emitted(121, 48) Source(80, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 3 >Emitted(121, 51) Source(80, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-4 >Emitted(121, 66) Source(80, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+4 >Emitted(121, 65) Source(80, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+5 >Emitted(121, 66) Source(80, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 ---
 >>>                    return ClassB;
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2440,15 +2446,18 @@ sourceFile:typeResolution.ts
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                               ^^^
-4 >                                                  ^^^^^^^^^^^^^^^
+4 >                                                  ^^^^^^^^^^^^^^
+5 >                                                                ^
 1->
 2 >                    CisIn1_2_2
 3 >                                               
-4 >                                                  public CisIn1_2_2() { }
+4 >                                                  public CisIn1_2_2() { 
+5 >                                                                }
 1->Emitted(128, 21) Source(81, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 2 >Emitted(128, 48) Source(81, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 3 >Emitted(128, 51) Source(81, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-4 >Emitted(128, 66) Source(81, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+4 >Emitted(128, 65) Source(81, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+5 >Emitted(128, 66) Source(81, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 ---
 >>>                    return ClassC;
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2619,15 +2628,18 @@ sourceFile:typeResolution.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^
-4 >                                      ^^^^^^^^^^^^^^^
+4 >                                      ^^^^^^^^^^^^^^
+5 >                                                    ^
 1->
 2 >            AisIn1
 3 >                                   
-4 >                                      public AisIn1() { }
+4 >                                      public AisIn1() { 
+5 >                                                    }
 1->Emitted(137, 13) Source(90, 16) + SourceIndex(0) name (TopLevelModule1.ClassA)
 2 >Emitted(137, 36) Source(90, 22) + SourceIndex(0) name (TopLevelModule1.ClassA)
 3 >Emitted(137, 39) Source(90, 9) + SourceIndex(0) name (TopLevelModule1.ClassA)
-4 >Emitted(137, 54) Source(90, 28) + SourceIndex(0) name (TopLevelModule1.ClassA)
+4 >Emitted(137, 53) Source(90, 27) + SourceIndex(0) name (TopLevelModule1.ClassA)
+5 >Emitted(137, 54) Source(90, 28) + SourceIndex(0) name (TopLevelModule1.ClassA)
 ---
 >>>            return ClassA;
 1 >^^^^^^^^^^^^
@@ -3043,15 +3055,18 @@ sourceFile:typeResolution.ts
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                         ^^^
-4 >                                            ^^^^^^^^^^^^^^^
+4 >                                            ^^^^^^^^^^^^^^
+5 >                                                          ^
 1->
 2 >                AisIn2_3
 3 >                                         
-4 >                                            public AisIn2_3() { }
+4 >                                            public AisIn2_3() { 
+5 >                                                          }
 1->Emitted(157, 17) Source(105, 20) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 2 >Emitted(157, 42) Source(105, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 3 >Emitted(157, 45) Source(105, 13) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-4 >Emitted(157, 60) Source(105, 34) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+4 >Emitted(157, 59) Source(105, 33) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+5 >Emitted(157, 60) Source(105, 34) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 ---
 >>>                return ClassA;
 1 >^^^^^^^^^^^^^^^^

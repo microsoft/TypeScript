@@ -3932,10 +3932,9 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
-                // If the body has no statements, and we know there's no code that would have to 
-                // run that could cause side effects, then just do a simple emit if the empty
-                // block.
-                if (body.statements.length === 0 && !hasPossibleSideEffectingParameterInitializers(node)) {
+                // If the body has no statements, and we know there's no code that would cause any 
+                // prologue to be emitted, then just do a simple emit if the empty block.
+                if (body.statements.length === 0 && !anyParameterHasBindingPatternOrInitializer(node)) {
                     emitFunctionBodyWithNoStatements(node, body);
                 }
                 else {
@@ -3943,102 +3942,33 @@ module ts {
                 }
             }
 
-            function hasPossibleSideEffectingParameterInitializers(func: FunctionLikeDeclaration) {
-                return forEach(func.parameters, hasPossibleSideEffects);
+            function anyParameterHasBindingPatternOrInitializer(func: FunctionLikeDeclaration) {
+                return forEach(func.parameters, hasBindingPatternOrInitializer);
             }
 
-            function hasPossibleSideEffects(node: Node): boolean {
-                if (!node) {
-                    return false;
-                }
-
-                switch (node.kind) {
-                    // TODO(cyrusn): Increase the number of cases we support for determining if 
-                    // something is side effect free.
-                    //
-                    // NOTE(cyrusn): Some expressions may seem to be side effect free, but may 
-                    // actually have side effects.  For example, a binary + expression may cause
-                    // the toString method to be called on value, which may have side effects.
-
-                    // These are the set of syntactic productions which we know could definitely
-                    // have side effects:
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                        return true;
-
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                        // Property/Element access might end up causing an accessor to run.  As
-                        // such, we have to assume there will be side effects.
-                        return true;
-
-                    // These are the set of syntactic productions which we know definitely do not
-                    // have side effects:
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.RegularExpressionLiteral:
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return false;
-
-                    // These constructs may or may not have side effects depending on their 
-                    // constituent children.
-                    case SyntaxKind.ArrayBindingPattern:
-                    case SyntaxKind.ObjectBindingPattern:
-                        return forEach((<BindingPattern>node).elements, hasPossibleSideEffects);
-
-                    case SyntaxKind.BindingElement:
-                        return hasPossibleSideEffects((<BindingElement>node).name) ||
-                            hasPossibleSideEffects((<BindingElement>node).initializer);
-
-                    case SyntaxKind.Parameter:
-                        return hasPossibleSideEffects((<ParameterDeclaration>node).name) ||
-                            hasPossibleSideEffects((<ParameterDeclaration>node).initializer);
-
-                    case SyntaxKind.ArrayLiteralExpression:
-                        return forEach((<ArrayLiteralExpression>node).elements, hasPossibleSideEffects);
-
-                    case SyntaxKind.ParenthesizedExpression:
-                        return hasPossibleSideEffects((<ParenthesizedExpression>node).expression);
-
-                    case SyntaxKind.ObjectLiteralExpression:
-                        return forEach((<ObjectLiteralExpression>node).properties, hasPossibleSideEffects);
-
-                    case SyntaxKind.PropertyAssignment:
-                        return hasPossibleSideEffects((<PropertyAssignment>node).name) ||
-                            hasPossibleSideEffects((<PropertyAssignment>node).initializer);
-
-                    case SyntaxKind.ComputedPropertyName:
-                        return hasPossibleSideEffects((<ComputedPropertyName>node).expression);
-
-                    default:
-                        // We are conservative.  Unless we have proved something is side effect 
-                        // free, we assume it has possible side effects.
-                        return true;
-                }
+            function hasBindingPatternOrInitializer(parameter: ParameterDeclaration) {
+                return parameter.initializer || isBindingPattern(parameter.name);
             }
 
             function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
-                if (isSingleLineEmptyBlock(node.body)) {
-                    write(" { }");
+                var singleLine = isSingleLineEmptyBlock(node.body);
+
+                write(" {");
+                if (singleLine) {
+                    write(" ");
                 }
                 else {
-                    write(" {");
-                    writeLine();
                     increaseIndent();
-                    emitLeadingCommentsOfPosition(body.statements.end);
-                    decreaseIndent();
-                    emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                    writeLine();
                 }
+
+                emitLeadingCommentsOfPosition(body.statements.end);
+
+                if (!singleLine) {
+                    decreaseIndent();
+                }
+
+                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
             }
 
             function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {

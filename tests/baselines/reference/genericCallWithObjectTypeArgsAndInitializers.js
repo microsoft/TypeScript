@@ -19,8 +19,18 @@ function foo2(x) {
     if (x === void 0) { x = undefined; }
     return x;
 } // ok
-function foo3(x) { } // error
-function foo4(x, y) { } // error
-function foo5(x, y) { } // ok
-function foo6(x, y, z) { } // error
-function foo7(x, y) { } // should be ok
+function foo3(x) {
+    if (x === void 0) { x = 1; }
+} // error
+function foo4(x, y) {
+    if (y === void 0) { y = x; }
+} // error
+function foo5(x, y) {
+    if (y === void 0) { y = x; }
+} // ok
+function foo6(x, y, z) {
+    if (z === void 0) { z = y; }
+} // error
+function foo7(x, y) {
+    if (y === void 0) { y = x; }
+} // should be ok
