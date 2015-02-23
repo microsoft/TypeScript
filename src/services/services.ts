@@ -3244,6 +3244,13 @@ module ts {
                 return undefined;
             }
 
+            if (symbol.flags & SymbolFlags.Import) {
+                var declaration = symbol.declarations[0];
+                if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
+                    symbol = typeInfoResolver.getAliasedSymbol(symbol);
+                }
+            }
+
             var result: DefinitionInfo[] = [];
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
@@ -4694,12 +4701,18 @@ module ts {
                     }
 
                 case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
                 // An external module can be a Value
                 case SyntaxKind.SourceFile:
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
+
+            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+
             Debug.fail("Unknown declaration type");
         }
 
