@@ -37,7 +37,11 @@ module ts.formatting {
         public NoSpaceBeforeColon: Rule;
         public NoSpaceBeforeQMark: Rule;
         public SpaceAfterColon: Rule;
-        public SpaceAfterQMark: Rule;
+        // insert space after '?' only when it is used in conditional operator
+        public SpaceAfterQMarkInConditionalOperator: Rule;
+        // in other cases there should be no space between '?' and next token
+        public NoSpaceAfterQMark: Rule;
+
         public SpaceAfterSemicolon: Rule;
 
         // Space/new line after }.
@@ -217,7 +221,8 @@ module ts.formatting {
             this.NoSpaceBeforeColon = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.ColonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
             this.NoSpaceBeforeQMark = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.QuestionToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
             this.SpaceAfterColon = new Rule(RuleDescriptor.create3(SyntaxKind.ColonToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Space));
-            this.SpaceAfterQMark = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Space));
+            this.SpaceAfterQMarkInConditionalOperator = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsConditionalOperatorContext), RuleAction.Space));
+            this.NoSpaceAfterQMark = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.SpaceAfterSemicolon = new Rule(RuleDescriptor.create3(SyntaxKind.SemicolonToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Space after }.
@@ -341,7 +346,8 @@ module ts.formatting {
             this.HighPriorityCommonRules =
             [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
-                this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQMark, this.SpaceAfterQMark,
+                this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQMark, this.SpaceAfterQMarkInConditionalOperator,
+                this.NoSpaceAfterQMark,
                 this.NoSpaceBeforeDot, this.NoSpaceAfterDot,
                 this.NoSpaceAfterUnaryPrefixOperator,
                 this.NoSpaceAfterUnaryPreincrementOperator, this.NoSpaceAfterUnaryPredecrementOperator,
@@ -473,6 +479,10 @@ module ts.formatting {
 
         static IsNotBinaryOpContext(context: FormattingContext): boolean {
             return !Rules.IsBinaryOpContext(context);
+        }
+
+        static IsConditionalOperatorContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.ConditionalExpression;
         }
 
         static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
