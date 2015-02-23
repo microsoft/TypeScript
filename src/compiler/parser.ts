@@ -1858,7 +1858,9 @@ module ts {
         function isReusableModuleElement(node: Node) {
             if (node) {
                 switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
                     case SyntaxKind.ExportAssignment:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
