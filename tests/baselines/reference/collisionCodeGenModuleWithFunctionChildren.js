@@ -26,17 +26,17 @@ var M;
     function fn(M, p) { }
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_1) {
     function fn2() {
         var M;
-        var p = _M.x;
+        var p = _M_1.x;
     }
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_2) {
     function fn3() {
         function M() {
-            var p = _M.x;
+            var p = _M_2.x;
         }
     }
 })(M || (M = {}));

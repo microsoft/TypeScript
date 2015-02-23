@@ -63,14 +63,14 @@ var M;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_1) {
     var d = (function () {
         function d() {
         }
         Object.defineProperty(d.prototype, "Z", {
             set: function (p) {
                 var M = 10;
-                this.y = _M.x;
+                this.y = _M_1.x;
             },
             enumerable: true,
             configurable: true
@@ -94,14 +94,14 @@ var M;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_2) {
     var f = (function () {
         function f() {
         }
         Object.defineProperty(f.prototype, "Z", {
             get: function () {
                 var M = 10;
-                return _M.x;
+                return _M_2.x;
             },
             enumerable: true,
             configurable: true
