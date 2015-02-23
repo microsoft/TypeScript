@@ -2366,17 +2366,14 @@ module ts {
         }
 
         function parseTypeMemberSemicolon() {
-            // Try to parse out an explicit or implicit (ASI) semicolon for a type member.  If we
-            // don't have one, then an appropriate error will be reported.
-            if (parseSemicolon()) {
+            // We allow type members to be separated by commas or (possibly ASI) semicolons. 
+            // First check if it was a comma.  If so, we're done with the member.
+            if (parseOptional(SyntaxKind.CommaToken)) {
                 return;
             }
 
-            // If we don't have a semicolon, then the user may have written a comma instead 
-            // accidently (pretty easy to do since commas are so prevalent as list separators). So
-            // just consume the comma and keep going.  Note: we'll have already reported the error
-            // about the missing semicolon above.
-            parseOptional(SyntaxKind.CommaToken);
+            // Didn't have a comma.  We must have a (possible ASI) semicolon.
+            parseSemicolon();
         }
 
         function parseSignatureMember(kind: SyntaxKind): SignatureDeclaration {
