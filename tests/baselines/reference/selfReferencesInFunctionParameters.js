@@ -15,11 +15,8 @@ class C {
 
 //// [selfReferencesInFunctionParameters.js]
 function foo(x) {
-    if (x === void 0) { x = x; }
 }
 function bar(x0, x) {
-    if (x0 === void 0) { x0 = ""; }
-    if (x === void 0) { x = x; }
 }
 var C = (function () {
     function C(x, y) {

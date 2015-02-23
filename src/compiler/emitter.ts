@@ -3850,7 +3850,9 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                if (isSingleLineEmptyBlock(node.body) || !node.body) {
+                if (!node.body) {
+                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // in that case.
                     write(" { }");
                 }
                 else if (node.body.kind === SyntaxKind.Block) {
@@ -3930,15 +3932,117 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
+                // If the body has no statements, and we know there's no code that would have to 
+                // run that could cause side effects, then just do a simple emit if the empty
+                // block.
+                if (body.statements.length === 0 && !hasPossibleSideEffectingParameterInitializers(node)) {
+                    emitFunctionBodyWithNoStatements(node, body);
+                }
+                else {
+                    emitFunctionBodyWithStatements(node, body);
+                }
+            }
+
+            function hasPossibleSideEffectingParameterInitializers(func: FunctionLikeDeclaration) {
+                return forEach(func.parameters, hasPossibleSideEffects);
+            }
+
+            function hasPossibleSideEffects(node: Node): boolean {
+                if (!node) {
+                    return false;
+                }
+
+                switch (node.kind) {
+                    // TODO(cyrusn): Increase the number of cases we support for determining if 
+                    // something is side effect free.
+                    //
+                    // NOTE(cyrusn): Some expressions may seem to be side effect free, but may 
+                    // actually have side effects.  For example, a binary + expression may cause
+                    // the toString method to be called on value, which may have side effects.
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.RegularExpressionLiteral:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.FalseKeyword:
+                    case SyntaxKind.NullKeyword:
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return false;
+
+                    case SyntaxKind.ArrayBindingPattern:
+                    case SyntaxKind.ObjectBindingPattern:
+                        return forEach((<BindingPattern>node).elements, hasPossibleSideEffects);
+
+                    case SyntaxKind.BindingElement:
+                        return hasPossibleSideEffects((<BindingElement>node).name) ||
+                            hasPossibleSideEffects((<BindingElement>node).initializer);
+
+                    case SyntaxKind.Parameter:
+                        return hasPossibleSideEffects((<ParameterDeclaration>node).name) ||
+                            hasPossibleSideEffects((<ParameterDeclaration>node).initializer);
+
+                    case SyntaxKind.PropertyAccessExpression:
+                        return hasPossibleSideEffects((<PropertyAccessExpression>node).expression);
+
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return forEach((<ArrayLiteralExpression>node).elements, hasPossibleSideEffects);
+
+                    case SyntaxKind.ElementAccessExpression:
+                        return hasPossibleSideEffects((<ElementAccessExpression>node).expression) ||
+                            hasPossibleSideEffects((<ElementAccessExpression>node).argumentExpression);
+
+                    case SyntaxKind.ParenthesizedExpression:
+                        return hasPossibleSideEffects((<ParenthesizedExpression>node).expression);
+
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return forEach((<ObjectLiteralExpression>node).properties, hasPossibleSideEffects);
+
+                    case SyntaxKind.PropertyAssignment:
+                        return hasPossibleSideEffects((<PropertyAssignment>node).name) ||
+                            hasPossibleSideEffects((<PropertyAssignment>node).initializer);
+
+                    case SyntaxKind.ComputedPropertyName:
+                        return hasPossibleSideEffects((<ComputedPropertyName>node).expression);
+
+                    default:
+                        // We are conservative.  Unless we have proved something is side effect 
+                        // free, we assume it has possible side effects.
+                        return true;
+                }
+            }
+
+            function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
+                if (isSingleLineEmptyBlock(node.body)) {
+                    write(" { }");
+                }
+                else {
+                    write(" {");
+                    writeLine();
+                    increaseIndent();
+                    emitLeadingCommentsOfPosition(body.statements.end);
+                    decreaseIndent();
+                    emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                }
+            }
+
+            function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
                 scopeEmitStart(node);
 
                 var outPos = writer.getTextPos();
+
                 increaseIndent();
                 emitDetachedComments(body.statements);
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
+
                 var preambleEmitted = writer.getTextPos() !== outPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
