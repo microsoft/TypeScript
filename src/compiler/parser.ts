@@ -152,6 +152,7 @@ module ts {
                 return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
+                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
@@ -191,6 +192,10 @@ module ts {
                 return visitNode(cbNode, (<ForInStatement>node).initializer) ||
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
+            case SyntaxKind.ForOfStatement:
+                return visitNode(cbNode, (<ForOfStatement>node).initializer) ||
+                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
+                    visitNode(cbNode, (<ForOfStatement>node).statement);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
@@ -1329,6 +1334,12 @@ module ts {
             return undefined;
         }
 
+        function parseTokenNode<T extends Node>(): T {
+            var node = <T>createNode(token);
+            nextToken();
+            return finishNode(node);
+        }
+
         function canParseSemicolon() {
             // If there's a real semicolon, then we can always parse it out.
             if (token === SyntaxKind.SemicolonToken) {
@@ -1625,8 +1636,8 @@ module ts {
             }
 
             // in the case where we're parsing the variable declarator of a 'for-in' statement, we 
-            // are done if we see an 'in' keyword in front of us.
-            if (token === SyntaxKind.InKeyword) {
+            // are done if we see an 'in' keyword in front of us. Same with for-of
+            if (isInOrOfKeyword(token)) {
                 return true;
             }
 
@@ -1904,6 +1915,7 @@ module ts {
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.WithStatement:
@@ -2104,14 +2116,6 @@ module ts {
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
-        }
-
-
-
-        function parseTokenNode<T extends Node>(): T {
-            var node = <T>createNode(token);
-            nextToken();
-            return finishNode(node);
         }
 
         function parseTemplateExpression(): TemplateExpression {
@@ -2620,6 +2624,7 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     var node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
@@ -2644,6 +2649,7 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -2821,8 +2827,9 @@ module ts {
             //      Expression[in] , AssignmentExpression[in]
 
             var expr = parseAssignmentExpressionOrHigher();
-            while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
+            var operatorToken: Node;
+            while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
             }
             return expr;
         }
@@ -2901,9 +2908,7 @@ module ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                var operator = token;
-                nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3186,6 +3191,10 @@ module ts {
             return parseBinaryExpressionRest(precedence, leftOperand);
         }
 
+        function isInOrOfKeyword(t: SyntaxKind) {
+            return t === SyntaxKind.InKeyword || t === SyntaxKind.OfKeyword;
+        }
+
         function parseBinaryExpressionRest(precedence: number, leftOperand: Expression): Expression {
             while (true) {
                 // We either have a binary operator here, or we're finished.  We call 
@@ -3203,9 +3212,7 @@ module ts {
                     break;
                 }
 
-                var operator = token;
-                nextToken();
-                leftOperand = makeBinaryExpression(leftOperand, operator, parseBinaryExpressionOrHigher(newPrecedence));
+                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
             }
 
             return leftOperand;
@@ -3261,10 +3268,10 @@ module ts {
             return -1;
         }
 
-        function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
+        function makeBinaryExpression(left: Expression, operatorToken: Node, right: Expression): BinaryExpression {
             var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
             node.left = left;
-            node.operator = operator;
+            node.operatorToken = operatorToken;
             node.right = right;
             return finishNode(node);
         }
@@ -3815,7 +3822,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseForOrForInStatement(): Statement {
+        function parseForOrForInOrForOfStatement(): Statement {
             var pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
@@ -3823,21 +3830,27 @@ module ts {
             var initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
                 if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
-                    initializer = parseVariableDeclarationList(/*disallowIn:*/ true);
+                    initializer = parseVariableDeclarationList(/*inForStatementInitializer:*/ true);
                 }
                 else {
                     initializer = disallowInAnd(parseExpression);
                 }
             }
-            var forOrForInStatement: IterationStatement;
+            var forOrForInOrForOfStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
                 var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forInStatement;
+                forOrForInOrForOfStatement = forInStatement;
             }
-            else {
+            else if (parseOptional(SyntaxKind.OfKeyword)) {
+                var forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
+                forOfStatement.initializer = initializer;
+                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+                parseExpected(SyntaxKind.CloseParenToken);
+                forOrForInOrForOfStatement = forOfStatement;
+            } else {
                 var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
@@ -3849,12 +3862,12 @@ module ts {
                     forStatement.iterator = allowInAnd(parseExpression);
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forStatement;
+                forOrForInOrForOfStatement = forStatement;
             }
 
-            forOrForInStatement.statement = parseStatement();
+            forOrForInOrForOfStatement.statement = parseStatement();
 
-            return finishNode(forOrForInStatement);
+            return finishNode(forOrForInOrForOfStatement);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
@@ -4100,7 +4113,7 @@ module ts {
                 case SyntaxKind.WhileKeyword:
                     return parseWhileStatement();
                 case SyntaxKind.ForKeyword:
-                    return parseForOrForInStatement();
+                    return parseForOrForInOrForOfStatement();
                 case SyntaxKind.ContinueKeyword:
                     return parseBreakOrContinueStatement(SyntaxKind.ContinueStatement);
                 case SyntaxKind.BreakKeyword:
@@ -4242,11 +4255,13 @@ module ts {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            if (!isInOrOfKeyword(token)) {
+                node.initializer = parseInitializer(/*inParameter*/ false);
+            }
             return finishNode(node);
         }
 
-        function parseVariableDeclarationList(disallowIn: boolean): VariableDeclarationList {
+        function parseVariableDeclarationList(inForStatementInitializer: boolean): VariableDeclarationList {
             var node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
             switch (token) {
@@ -4263,20 +4278,39 @@ module ts {
             }
 
             nextToken();
-            var savedDisallowIn = inDisallowInContext();
-            setDisallowInContext(disallowIn);
 
-            node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+            // The user may have written the following:
+            //
+            //    for (var of X) { }
+            //
+            // In this case, we want to parse an empty declaration list, and then parse 'of'
+            // as a keyword. The reason this is not automatic is that 'of' is a valid identifier.
+            // So we need to look ahead to determine if 'of' should be treated as a keyword in
+            // this context.
+            // The checker will then give an error that there is an empty declaration list.
+            if (token === SyntaxKind.OfKeyword && lookAhead(canFollowContextualOfKeyword)) {
+                node.declarations = createMissingList<VariableDeclaration>();
+            }
+            else {
+                var savedDisallowIn = inDisallowInContext();
+                setDisallowInContext(inForStatementInitializer);
 
-            setDisallowInContext(savedDisallowIn);
+                node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+
+                setDisallowInContext(savedDisallowIn);
+            }
 
             return finishNode(node);
+        }
+        
+        function canFollowContextualOfKeyword(): boolean {
+            return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
             setModifiers(node, modifiers);
-            node.declarationList = parseVariableDeclarationList(/*disallowIn:*/ false);
+            node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer:*/ false);
             parseSemicolon();
             return finishNode(node);
         }
@@ -4935,7 +4969,7 @@ module ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             var triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
-            var amdDependencies: string[] = [];
+            var amdDependencies: {path: string; name: string}[] = [];
             var amdModuleName: string;
 
             // Keep scanning all the leading trivia in the file until we get to something that 
@@ -4975,10 +5009,17 @@ module ts {
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
 
-                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
+                    var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s/gim;
+                    var pathRegex = /\spath\s*=\s*('|")(.+?)\1/gim;
+                    var nameRegex = /\sname\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
-                        amdDependencies.push(amdDependencyMatchResult[2]);
+                        var pathMatchResult = pathRegex.exec(comment);
+                        var nameMatchResult = nameRegex.exec(comment);
+                        if (pathMatchResult) {
+                            var amdDependency = {path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            amdDependencies.push(amdDependency);
+                        }
                     }
                 }
             }

@@ -5,6 +5,4 @@ function foo(bar?:number):any { return "" }
 
 
 //// [functionOverloads13.js]
-function foo(bar) {
-    return "";
-}
+function foo(bar) { return ""; }

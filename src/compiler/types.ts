@@ -142,8 +142,9 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        SymbolKeyword,
         TypeKeyword,
-
+        OfKeyword, // LastKeyword and LastToken
         // Parse tree nodes
 
         // Names
@@ -212,6 +213,7 @@ module ts {
         WhileStatement,
         ForStatement,
         ForInStatement,
+        ForOfStatement,
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
@@ -269,7 +271,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = OfKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -277,7 +279,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = OfKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -631,7 +633,7 @@ module ts {
 
     export interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
 
@@ -758,6 +760,11 @@ module ts {
     }
 
     export interface ForInStatement extends IterationStatement {
+        initializer: VariableDeclarationList | Expression;
+        expression: Expression;
+    }
+
+    export interface ForOfStatement extends IterationStatement {
         initializer: VariableDeclarationList | Expression;
         expression: Expression;
     }
@@ -945,7 +952,7 @@ module ts {
         fileName: string;
         text: string;
 
-        amdDependencies: string[];
+        amdDependencies: {path: string; name: string}[];
         amdModuleName: string;
         referencedFiles: FileReference[];
 
@@ -1359,9 +1366,10 @@ module ts {
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
+        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
-        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
@@ -1699,6 +1707,7 @@ module ts {
         equals = 0x3D,                // =
         exclamation = 0x21,           // !
         greaterThan = 0x3E,           // >
+        hash = 0x23,                  // #
         lessThan = 0x3C,              // <
         minus = 0x2D,                 // -
         openBrace = 0x7B,             // {

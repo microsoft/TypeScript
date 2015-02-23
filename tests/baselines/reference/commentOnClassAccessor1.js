@@ -14,9 +14,7 @@ var C = (function () {
         /**
          * @type {number}
          */
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });

@@ -12,6 +12,4 @@ foo((arg: Foo) => { return arg.x; });
 function foo(a) {
     return null;
 }
-foo(function (arg) {
-    return arg.x;
-});
+foo(function (arg) { return arg.x; });

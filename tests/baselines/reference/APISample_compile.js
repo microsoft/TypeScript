@@ -21,8 +21,8 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
 
     allDiagnostics.forEach(diagnostic => {
-        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(`${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
+        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
     });
 
     var exitCode = emitResult.emitSkipped ? 1 : 0;
@@ -181,118 +181,121 @@ declare module "typescript" {
         NumberKeyword = 119,
         SetKeyword = 120,
         StringKeyword = 121,
-        TypeKeyword = 122,
-        QualifiedName = 123,
-        ComputedPropertyName = 124,
-        TypeParameter = 125,
-        Parameter = 126,
-        PropertySignature = 127,
-        PropertyDeclaration = 128,
-        MethodSignature = 129,
-        MethodDeclaration = 130,
-        Constructor = 131,
-        GetAccessor = 132,
-        SetAccessor = 133,
-        CallSignature = 134,
-        ConstructSignature = 135,
-        IndexSignature = 136,
-        TypeReference = 137,
-        FunctionType = 138,
-        ConstructorType = 139,
-        TypeQuery = 140,
-        TypeLiteral = 141,
-        ArrayType = 142,
-        TupleType = 143,
-        UnionType = 144,
-        ParenthesizedType = 145,
-        ObjectBindingPattern = 146,
-        ArrayBindingPattern = 147,
-        BindingElement = 148,
-        ArrayLiteralExpression = 149,
-        ObjectLiteralExpression = 150,
-        PropertyAccessExpression = 151,
-        ElementAccessExpression = 152,
-        CallExpression = 153,
-        NewExpression = 154,
-        TaggedTemplateExpression = 155,
-        TypeAssertionExpression = 156,
-        ParenthesizedExpression = 157,
-        FunctionExpression = 158,
-        ArrowFunction = 159,
-        DeleteExpression = 160,
-        TypeOfExpression = 161,
-        VoidExpression = 162,
-        PrefixUnaryExpression = 163,
-        PostfixUnaryExpression = 164,
-        BinaryExpression = 165,
-        ConditionalExpression = 166,
-        TemplateExpression = 167,
-        YieldExpression = 168,
-        SpreadElementExpression = 169,
-        OmittedExpression = 170,
-        TemplateSpan = 171,
-        Block = 172,
-        VariableStatement = 173,
-        EmptyStatement = 174,
-        ExpressionStatement = 175,
-        IfStatement = 176,
-        DoStatement = 177,
-        WhileStatement = 178,
-        ForStatement = 179,
-        ForInStatement = 180,
-        ContinueStatement = 181,
-        BreakStatement = 182,
-        ReturnStatement = 183,
-        WithStatement = 184,
-        SwitchStatement = 185,
-        LabeledStatement = 186,
-        ThrowStatement = 187,
-        TryStatement = 188,
-        DebuggerStatement = 189,
-        VariableDeclaration = 190,
-        VariableDeclarationList = 191,
-        FunctionDeclaration = 192,
-        ClassDeclaration = 193,
-        InterfaceDeclaration = 194,
-        TypeAliasDeclaration = 195,
-        EnumDeclaration = 196,
-        ModuleDeclaration = 197,
-        ModuleBlock = 198,
-        ImportEqualsDeclaration = 199,
-        ImportDeclaration = 200,
-        ImportClause = 201,
-        NamespaceImport = 202,
-        NamedImports = 203,
-        ImportSpecifier = 204,
-        ExportAssignment = 205,
-        ExportDeclaration = 206,
-        NamedExports = 207,
-        ExportSpecifier = 208,
-        ExternalModuleReference = 209,
-        CaseClause = 210,
-        DefaultClause = 211,
-        HeritageClause = 212,
-        CatchClause = 213,
-        PropertyAssignment = 214,
-        ShorthandPropertyAssignment = 215,
-        EnumMember = 216,
-        SourceFile = 217,
-        SyntaxList = 218,
-        Count = 219,
+        SymbolKeyword = 122,
+        TypeKeyword = 123,
+        OfKeyword = 124,
+        QualifiedName = 125,
+        ComputedPropertyName = 126,
+        TypeParameter = 127,
+        Parameter = 128,
+        PropertySignature = 129,
+        PropertyDeclaration = 130,
+        MethodSignature = 131,
+        MethodDeclaration = 132,
+        Constructor = 133,
+        GetAccessor = 134,
+        SetAccessor = 135,
+        CallSignature = 136,
+        ConstructSignature = 137,
+        IndexSignature = 138,
+        TypeReference = 139,
+        FunctionType = 140,
+        ConstructorType = 141,
+        TypeQuery = 142,
+        TypeLiteral = 143,
+        ArrayType = 144,
+        TupleType = 145,
+        UnionType = 146,
+        ParenthesizedType = 147,
+        ObjectBindingPattern = 148,
+        ArrayBindingPattern = 149,
+        BindingElement = 150,
+        ArrayLiteralExpression = 151,
+        ObjectLiteralExpression = 152,
+        PropertyAccessExpression = 153,
+        ElementAccessExpression = 154,
+        CallExpression = 155,
+        NewExpression = 156,
+        TaggedTemplateExpression = 157,
+        TypeAssertionExpression = 158,
+        ParenthesizedExpression = 159,
+        FunctionExpression = 160,
+        ArrowFunction = 161,
+        DeleteExpression = 162,
+        TypeOfExpression = 163,
+        VoidExpression = 164,
+        PrefixUnaryExpression = 165,
+        PostfixUnaryExpression = 166,
+        BinaryExpression = 167,
+        ConditionalExpression = 168,
+        TemplateExpression = 169,
+        YieldExpression = 170,
+        SpreadElementExpression = 171,
+        OmittedExpression = 172,
+        TemplateSpan = 173,
+        Block = 174,
+        VariableStatement = 175,
+        EmptyStatement = 176,
+        ExpressionStatement = 177,
+        IfStatement = 178,
+        DoStatement = 179,
+        WhileStatement = 180,
+        ForStatement = 181,
+        ForInStatement = 182,
+        ForOfStatement = 183,
+        ContinueStatement = 184,
+        BreakStatement = 185,
+        ReturnStatement = 186,
+        WithStatement = 187,
+        SwitchStatement = 188,
+        LabeledStatement = 189,
+        ThrowStatement = 190,
+        TryStatement = 191,
+        DebuggerStatement = 192,
+        VariableDeclaration = 193,
+        VariableDeclarationList = 194,
+        FunctionDeclaration = 195,
+        ClassDeclaration = 196,
+        InterfaceDeclaration = 197,
+        TypeAliasDeclaration = 198,
+        EnumDeclaration = 199,
+        ModuleDeclaration = 200,
+        ModuleBlock = 201,
+        ImportEqualsDeclaration = 202,
+        ImportDeclaration = 203,
+        ImportClause = 204,
+        NamespaceImport = 205,
+        NamedImports = 206,
+        ImportSpecifier = 207,
+        ExportAssignment = 208,
+        ExportDeclaration = 209,
+        NamedExports = 210,
+        ExportSpecifier = 211,
+        ExternalModuleReference = 212,
+        CaseClause = 213,
+        DefaultClause = 214,
+        HeritageClause = 215,
+        CatchClause = 216,
+        PropertyAssignment = 217,
+        ShorthandPropertyAssignment = 218,
+        EnumMember = 219,
+        SourceFile = 220,
+        SyntaxList = 221,
+        Count = 222,
         FirstAssignment = 52,
         LastAssignment = 63,
         FirstReservedWord = 65,
         LastReservedWord = 100,
         FirstKeyword = 65,
-        LastKeyword = 122,
+        LastKeyword = 124,
         FirstFutureReservedWord = 103,
         LastFutureReservedWord = 111,
-        FirstTypeNode = 137,
-        LastTypeNode = 145,
+        FirstTypeNode = 139,
+        LastTypeNode = 147,
         FirstPunctuation = 14,
         LastPunctuation = 63,
         FirstToken = 0,
-        LastToken = 122,
+        LastToken = 124,
         FirstTriviaToken = 2,
         LastTriviaToken = 6,
         FirstLiteralToken = 7,
@@ -301,7 +304,7 @@ declare module "typescript" {
         LastTemplateToken = 13,
         FirstBinaryOperator = 24,
         LastBinaryOperator = 63,
-        FirstNode = 123,
+        FirstNode = 125,
     }
     const enum NodeFlags {
         Export = 1,
@@ -534,7 +537,7 @@ declare module "typescript" {
     }
     interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
     interface ConditionalExpression extends Expression {
@@ -629,6 +632,10 @@ declare module "typescript" {
         iterator?: Expression;
     }
     interface ForInStatement extends IterationStatement {
+        initializer: VariableDeclarationList | Expression;
+        expression: Expression;
+    }
+    interface ForOfStatement extends IterationStatement {
         initializer: VariableDeclarationList | Expression;
         expression: Expression;
     }
@@ -762,7 +769,10 @@ declare module "typescript" {
         endOfFileToken: Node;
         fileName: string;
         text: string;
-        amdDependencies: string[];
+        amdDependencies: {
+            path: string;
+            name: string;
+        }[];
         amdModuleName: string;
         referencedFiles: FileReference[];
         hasNoDefaultLib: boolean;
@@ -1070,8 +1080,9 @@ declare module "typescript" {
         ObjectLiteral = 131072,
         ContainsUndefinedOrNull = 262144,
         ContainsObjectLiteral = 524288,
-        Intrinsic = 127,
-        Primitive = 510,
+        ESSymbol = 1048576,
+        Intrinsic = 1048703,
+        Primitive = 1049086,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
@@ -1357,6 +1368,7 @@ declare module "typescript" {
         equals = 61,
         exclamation = 33,
         greaterThan = 62,
+        hash = 35,
         lessThan = 60,
         minus = 45,
         openBrace = 123,
@@ -1423,8 +1435,8 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
     function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
@@ -1508,9 +1520,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -1572,7 +1584,7 @@ declare module "typescript" {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getNavigateToItems(searchValue: string): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -1647,6 +1659,7 @@ declare module "typescript" {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        [s: string]: boolean | number | string;
     }
     interface DefinitionInfo {
         fileName: string;
@@ -1780,6 +1793,9 @@ declare module "typescript" {
         InMultiLineCommentTrivia = 1,
         InSingleQuoteStringLiteral = 2,
         InDoubleQuoteStringLiteral = 3,
+        InTemplateHeadOrNoSubstitutionTemplate = 4,
+        InTemplateMiddleOrTail = 5,
+        InTemplateSubstitutionPosition = 6,
     }
     enum TokenClass {
         Punctuation = 0,
@@ -1801,7 +1817,26 @@ declare module "typescript" {
         classification: TokenClass;
     }
     interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
+        /**
+         * Gives lexical classifications of tokens on a line without any syntactic context.
+         * For instance, a token consisting of the text 'string' can be either an identifier
+         * named 'string' or the keyword 'string', however, because this classifier is not aware,
+         * it relies on certain heuristics to give acceptable results. For classifications where
+         * speed trumps accuracy, this function is preferable; however, for true accuracy, the
+         * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
+         * lexical, syntactic, and semantic classifiers may issue the best user experience.
+         *
+         * @param text                      The text of a line to classify.
+         * @param lexState                  The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
+         *                                  certain heuristics may be used in its place; however, if there is a
+         *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
+         *                                  classifications which may be incorrectly categorized will be given
+         *                                  back as Identifiers in order to allow the syntactic classifier to
+         *                                  subsume the classification.
+         */
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
     }
     /**
       * The document registry represents a store of SourceFile objects that can be shared between
@@ -1963,8 +1998,8 @@ function compile(fileNames, options) {
     var emitResult = program.emit();
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
     allDiagnostics.forEach(function (diagnostic) {
-        var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-        console.log(diagnostic.file.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL));
+        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        console.log(diagnostic.file.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL));
     });
     var exitCode = emitResult.emitSkipped ? 1 : 0;
     console.log("Process exiting with code '" + exitCode + "'.");
@@ -1972,8 +2007,6 @@ function compile(fileNames, options) {
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {
-    noEmitOnError: true,
-    noImplicitAny: true,
-    target: 1 /* ES5 */,
-    module: 1 /* CommonJS */
+    noEmitOnError: true, noImplicitAny: true,
+    target: 1 /* ES5 */, module: 1 /* CommonJS */
 });

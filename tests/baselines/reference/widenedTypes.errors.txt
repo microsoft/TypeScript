@@ -1,5 +1,5 @@
 tests/cases/compiler/widenedTypes.ts(2,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/widenedTypes.ts(5,1): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/compiler/widenedTypes.ts(5,1): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 tests/cases/compiler/widenedTypes.ts(6,7): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
 tests/cases/compiler/widenedTypes.ts(8,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/compiler/widenedTypes.ts(11,1): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -20,7 +20,7 @@ tests/cases/compiler/widenedTypes.ts(24,5): error TS2322: Type '{ [x: string]: n
     
     null in {};
     ~~~~
-!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
     "" in null;
           ~~~~
 !!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter

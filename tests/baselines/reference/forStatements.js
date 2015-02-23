@@ -57,9 +57,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -68,9 +66,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 for (var aNumber = 9.9;;) { }
