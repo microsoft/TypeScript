@@ -489,7 +489,7 @@ module ts.server {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
-                throw Errors.NoProject;
+                return undefined;
             }
 
             var compilerService = project.compilerService;
@@ -732,6 +732,9 @@ module ts.server {
                     case CommandNames.Completions: {
                         var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
                         response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
+                        if (!response) {
+                            errorMessage = "No completions at this location";
+                        }
                         break;
                     }
                     case CommandNames.CompletionDetails: {
