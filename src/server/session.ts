@@ -98,7 +98,6 @@ module ts.server {
 
     module Errors { 
         export var NoProject = new Error("No Project.");
-        export var NoContent = new Error("No Content.");
     }
 
     export interface ServerHost extends ts.System {
@@ -258,7 +257,7 @@ module ts.server {
 
             var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return definitions.map(def => ({
@@ -279,7 +278,7 @@ module ts.server {
             var position = compilerService.host.lineColToPosition(file, line, col);
             var renameInfo = compilerService.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             if (!renameInfo.canRename) {
@@ -291,7 +290,7 @@ module ts.server {
 
             var renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
             if (!renameLocations) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
@@ -350,12 +349,12 @@ module ts.server {
 
             var references = compilerService.languageService.getReferencesAtPosition(file, position);
             if (!references) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var displayString = ts.displayPartsToString(nameInfo.displayParts);
@@ -428,7 +427,7 @@ module ts.server {
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition, compilerService.formatCodeOptions);
             if (!edits) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return edits.map((edit) => {
@@ -468,7 +467,7 @@ module ts.server {
             }
 
             if (!edits) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return edits.map((edit) => {
@@ -489,7 +488,7 @@ module ts.server {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
-                return undefined;
+                throw Errors.NoProject;
             }
 
             var compilerService = project.compilerService;
@@ -497,7 +496,7 @@ module ts.server {
 
             var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
@@ -618,7 +617,7 @@ module ts.server {
             var compilerService = project.compilerService;
             var items = compilerService.languageService.getNavigationBarItems(file);
             if (!items) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return this.decorateNavigationBarItem(project, fileName, items);
@@ -634,7 +633,7 @@ module ts.server {
             var compilerService = project.compilerService;
             var navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
             if (!navItems) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return navItems.map((navItem) => {
@@ -676,7 +675,7 @@ module ts.server {
             
             var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
-                throw Errors.NoContent;
+                return undefined;
             }
             
             return spans.map(span => ({
@@ -690,6 +689,7 @@ module ts.server {
                 var request = <protocol.Request>JSON.parse(message);
                 var response: any;
                 var errorMessage: string;
+                var responseRequired = true;
                 switch (request.command) {
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
@@ -709,14 +709,12 @@ module ts.server {
                     case CommandNames.Open: {
                         var openArgs = <protocol.FileRequestArgs>request.arguments;
                         this.openClientFile(openArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Quickinfo: {
                         var quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
-                        if (!response) {
-                            errorMessage = "No info at this location";
-                        }
                         break;
                     }
                     case CommandNames.Format: {
@@ -732,9 +730,6 @@ module ts.server {
                     case CommandNames.Completions: {
                         var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
                         response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
-                        if (!response) {
-                            errorMessage = "No completions at this location";
-                        }
                         break;
                     }
                     case CommandNames.CompletionDetails: {
@@ -746,12 +741,14 @@ module ts.server {
                     case CommandNames.Geterr: {
                         var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Change: {
                         var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.col, changeArgs.endLine, changeArgs.endCol,
                                     changeArgs.insertString, changeArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Reload: {
@@ -762,11 +759,13 @@ module ts.server {
                     case CommandNames.Saveto: {
                         var savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
                         this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Close: {
                         var closeArgs = <protocol.FileRequestArgs>request.arguments;
                         this.closeClientFile(closeArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Navto: {
@@ -794,8 +793,8 @@ module ts.server {
                 if (response) {
                     this.output(response, request.command, request.seq);
                 }
-                else if (errorMessage) {
-                    this.output(undefined, request.command, request.seq, errorMessage);
+                else if (responseRequired) {
+                    this.output(undefined, request.command, request.seq, "No content available.");
                 }
 
             } catch (err) {
