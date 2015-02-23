@@ -3959,6 +3959,21 @@ module ts {
                     // NOTE(cyrusn): Some expressions may seem to be side effect free, but may 
                     // actually have side effects.  For example, a binary + expression may cause
                     // the toString method to be called on value, which may have side effects.
+
+                    // These are the set of syntactic productions which we know could definitely
+                    // have side effects:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return true;
+
+                    case SyntaxKind.PropertyAccessExpression:
+                    case SyntaxKind.ElementAccessExpression:
+                        // Property/Element access might end up causing an accessor to run.  As
+                        // such, we have to assume there will be side effects.
+                        return true;
+
+                    // These are the set of syntactic productions which we know definitely do not
+                    // have side effects:
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -3975,6 +3990,8 @@ module ts {
                     case SyntaxKind.SetAccessor:
                         return false;
 
+                    // These constructs may or may not have side effects depending on their 
+                    // constituent children.
                     case SyntaxKind.ArrayBindingPattern:
                     case SyntaxKind.ObjectBindingPattern:
                         return forEach((<BindingPattern>node).elements, hasPossibleSideEffects);
@@ -3987,15 +4004,8 @@ module ts {
                         return hasPossibleSideEffects((<ParameterDeclaration>node).name) ||
                             hasPossibleSideEffects((<ParameterDeclaration>node).initializer);
 
-                    case SyntaxKind.PropertyAccessExpression:
-                        return hasPossibleSideEffects((<PropertyAccessExpression>node).expression);
-
                     case SyntaxKind.ArrayLiteralExpression:
                         return forEach((<ArrayLiteralExpression>node).elements, hasPossibleSideEffects);
-
-                    case SyntaxKind.ElementAccessExpression:
-                        return hasPossibleSideEffects((<ElementAccessExpression>node).expression) ||
-                            hasPossibleSideEffects((<ElementAccessExpression>node).argumentExpression);
 
                     case SyntaxKind.ParenthesizedExpression:
                         return hasPossibleSideEffects((<ParenthesizedExpression>node).expression);
