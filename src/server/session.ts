@@ -114,7 +114,18 @@ module ts.server {
         changeSeq = 0;
 
         constructor(private host: ServerHost, private logger: Logger) {
-            this.projectService = new ProjectService(host, logger);
+            this.projectService =
+                new ProjectService(host, logger, (eventName,project,fileName) => {
+                this.handleEvent(eventName, project, fileName);
+            });
+        }
+
+        handleEvent(eventName: string, project: Project, fileName: string) {
+            if (eventName == "context") {
+                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                    (n) => n == this.changeSeq, 100);
+            }
         }
 
         logError(err: Error, cmd: string) {
@@ -191,6 +202,14 @@ module ts.server {
             this.semanticCheck(file, project);
         }
 
+        updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
+            setTimeout(() => {
+                if (matchSeq(seq)) {
+                    this.projectService.updateProjectStructure();
+                }
+            }, ms);
+        }
+
         updateErrorCheck(checkList: PendingErrorCheck[], seq: number,
             matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200) {
             if (followMs > ms) {
@@ -207,7 +226,7 @@ module ts.server {
             var checkOne = () => {
                 if (matchSeq(seq)) {
                     var checkSpec = checkList[index++];
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName)) {
+                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, true)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
@@ -535,6 +554,10 @@ module ts.server {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
                 }
+                // update project structure on idle commented out
+                // until we can have the host return only the root files
+                // from getScriptFileNames()
+                //this.updateProjectStructure(this.changeSeq, (n) => n == this.changeSeq);
             }
         }
 

@@ -65,6 +65,7 @@ module ts.server {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
+        roots: ScriptInfo[] = [];
 
         constructor(public host: ServerHost, public project: Project) {
         }
@@ -144,7 +145,7 @@ module ts.server {
             var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
             if (!scriptInfo) {
                 this.filenameToScript[info.fileName] = info;
-                return info;
+                this.roots.push(info);
             }
         }
 
@@ -286,10 +287,12 @@ module ts.server {
             return this.filenameToSourceFile[info.fileName];
         }
 
-        getSourceFileFromName(filename: string) {
+        getSourceFileFromName(filename: string, requireOpen?: boolean) {
             var info = this.projectService.getScriptInfo(filename);
             if (info) {
-                return this.getSourceFile(info);
+                if ((!requireOpen) || info.isOpen) {
+                    return this.getSourceFile(info);
+                }
             }
         }
 
@@ -324,7 +327,7 @@ module ts.server {
         // add a root file to project
         addRoot(info: ScriptInfo) {
             info.defaultProject = this;
-            return this.compilerService.host.addRoot(info);
+            this.compilerService.host.addRoot(info);
         }
 
         filesToString() {
@@ -360,7 +363,7 @@ module ts.server {
     }
 
     interface ProjectServiceEventHandler {
-        (eventName: string, project: Project): void;
+        (eventName: string, project: Project, fileName: string): void;
     }
 
     export class ProjectService {
@@ -392,7 +395,6 @@ module ts.server {
             }
         }
         
-
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
         }
@@ -423,7 +425,20 @@ module ts.server {
                 for (var i = 0, len = referencingProjects.length; i < len; i++) {
                     referencingProjects[i].removeReferencedFile(info);
                 }
+                for (var j = 0, flen = this.openFileRoots.length; j < flen; j++) {
+                    var openFile = this.openFileRoots[j];
+                    if (this.eventHandler) {
+                        this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                    }
+                }
+                for (var j = 0, flen = this.openFilesReferenced.length; j < flen; j++) {
+                    var openFile = this.openFilesReferenced[j];
+                    if (this.eventHandler) {
+                        this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                    }
+                }
             }
+
             this.printProjects();
         }
 
@@ -503,17 +518,50 @@ module ts.server {
             info.close();
         }
 
-        findReferencingProjects(info: ScriptInfo) {
+        findReferencingProjects(info: ScriptInfo, excludedProject?: Project) {
             var referencingProjects: Project[] = [];
             info.defaultProject = undefined;
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 this.inferredProjects[i].updateGraph();
-                if (this.inferredProjects[i].getSourceFile(info)) {
-                    info.defaultProject = this.inferredProjects[i];
-                    referencingProjects.push(this.inferredProjects[i]);
+                if (this.inferredProjects[i] != excludedProject) {
+                    if (this.inferredProjects[i].getSourceFile(info)) {
+                        info.defaultProject = this.inferredProjects[i];
+                        referencingProjects.push(this.inferredProjects[i]);
+                    }
                 }
             }
             return referencingProjects;
+        }
+
+        updateProjectStructure() {
+            this.log("updating project structure from ...", "Info");
+            this.printProjects();
+            for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                var refdFile = this.openFilesReferenced[i];
+                refdFile.defaultProject.updateGraph();
+                var sourceFile = refdFile.defaultProject.getSourceFile(refdFile);
+                if (!sourceFile) {
+                    this.openFilesReferenced = copyListRemovingItem(refdFile, this.openFilesReferenced);
+                    this.addOpenFile(refdFile);
+                }
+            }
+            var openFileRoots: ScriptInfo[] = [];
+            for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                var rootFile = this.openFileRoots[i];
+                var rootedProject = rootFile.defaultProject;
+                var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
+                if (referencingProjects.length == 0) {
+                    rootFile.defaultProject = rootedProject;
+                    openFileRoots.push(rootFile);
+                }
+                else {
+                    // remove project from inferred projects list
+                    this.inferredProjects = copyListRemovingItem(rootedProject, this.inferredProjects);
+                    this.openFilesReferenced.push(rootFile);
+                }
+            }
+            this.openFileRoots = openFileRoots;
+            this.printProjects();
         }
 
         getScriptInfo(filename: string) {
@@ -621,6 +669,7 @@ module ts.server {
             this.psLogger.startGroup();
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var project = this.inferredProjects[i];
+                project.updateGraph();
                 this.psLogger.info("Project " + i.toString());
                 this.psLogger.info(project.filesToString());
                 this.psLogger.info("-----------------------------------------------");
