@@ -842,9 +842,9 @@ module ts.formatting {
             var startLinePos = getStartPositionOfLine(startLine, sourceFile);
 
             var nonWhitespaceColumnInFirstPart =
-                SmartIndenter.findFirstNonWhitespaceColumn(startLinePos, parts[0].pos, sourceFile, options);
+                SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
 
-            if (indentation === nonWhitespaceColumnInFirstPart) {
+            if (indentation === nonWhitespaceColumnInFirstPart.column) {
                 return;
             }
 
@@ -855,21 +855,21 @@ module ts.formatting {
             }
 
             // shift all parts on the delta size
-            var delta = indentation - nonWhitespaceColumnInFirstPart;
+            var delta = indentation - nonWhitespaceColumnInFirstPart.column;
             for (var i = startIndex, len = parts.length; i < len; ++i, ++startLine) {
                 var startLinePos = getStartPositionOfLine(startLine, sourceFile);
-                var nonWhitespaceColumn =
+                var nonWhitespaceCharacterAndColumn =
                     i === 0
                         ? nonWhitespaceColumnInFirstPart
-                        : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
+                        : SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(parts[i].pos, parts[i].end, sourceFile, options);
 
-                var newIndentation = nonWhitespaceColumn + delta;
+                var newIndentation = nonWhitespaceCharacterAndColumn.column + delta;
                 if (newIndentation > 0) {
                     var indentationString = getIndentationString(newIndentation, options);
-                    recordReplace(startLinePos, nonWhitespaceColumn, indentationString);
+                    recordReplace(startLinePos, nonWhitespaceCharacterAndColumn.character, indentationString);
                 }
                 else {
-                    recordDelete(startLinePos, nonWhitespaceColumn);
+                    recordDelete(startLinePos, nonWhitespaceCharacterAndColumn.character);
                 }
             }
         }

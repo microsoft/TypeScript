@@ -1480,6 +1480,29 @@ module FourSlash {
             return runningOffset;
         }
 
+        public copyFormatOptions(): ts.FormatCodeOptions {
+            return {
+                ConvertTabsToSpaces: this.formatCodeOptions.ConvertTabsToSpaces,
+                IndentSize: this.formatCodeOptions.IndentSize,
+                InsertSpaceAfterCommaDelimiter: this.formatCodeOptions.InsertSpaceAfterCommaDelimiter,
+                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: this.formatCodeOptions.InsertSpaceAfterFunctionKeywordForAnonymousFunctions,
+                InsertSpaceAfterKeywordsInControlFlowStatements: this.formatCodeOptions.InsertSpaceAfterKeywordsInControlFlowStatements,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: this.formatCodeOptions.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis,
+                InsertSpaceAfterSemicolonInForStatements: this.formatCodeOptions.InsertSpaceAfterSemicolonInForStatements,
+                InsertSpaceBeforeAndAfterBinaryOperators: this.formatCodeOptions.InsertSpaceBeforeAndAfterBinaryOperators,
+                NewLineCharacter: this.formatCodeOptions.NewLineCharacter,
+                PlaceOpenBraceOnNewLineForControlBlocks: this.formatCodeOptions.PlaceOpenBraceOnNewLineForControlBlocks,
+                PlaceOpenBraceOnNewLineForFunctions: this.formatCodeOptions.PlaceOpenBraceOnNewLineForFunctions,
+                TabSize: this.formatCodeOptions.TabSize
+            }
+        }
+
+        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
+            var oldFormatCodeOptions = this.formatCodeOptions;
+            this.formatCodeOptions = formatCodeOptions;
+            return oldFormatCodeOptions;
+        }
+
         public formatDocument() {
             this.scenarioActions.push('<FormatDocument />');
 

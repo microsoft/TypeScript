@@ -306,12 +306,13 @@ module ts.formatting {
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+        export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions) {
+            var character = 0;
             var column = 0;
             for (var pos = startPos; pos < endPos; ++pos) {
                 var ch = sourceFile.text.charCodeAt(pos);
                 if (!isWhiteSpace(ch)) {
-                    return column;
+                    break;
                 }
 
                 if (ch === CharacterCodes.tab) {
@@ -320,8 +321,14 @@ module ts.formatting {
                 else {
                     column++;
                 }
+
+                character++;
             }
-            return column;
+            return { column, character };
+        }
+
+        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+            return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
