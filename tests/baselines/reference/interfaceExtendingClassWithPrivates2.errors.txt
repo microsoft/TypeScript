@@ -1,5 +1,5 @@
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(9,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'.
-  Named properties 'x' of types 'Foo' and 'Bar' are not identical.
+  Named property 'x' of types 'Foo' and 'Bar' are not identical.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2430: Interface 'I4' incorrectly extends interface 'Bar'.
   Property 'x' is private in type 'Bar' but not in type 'I4'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts(12,11): error TS2430: Interface 'I4' incorrectly extends interface 'Foo'.
@@ -20,7 +20,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     interface I3 extends Foo, Bar { // error
               ~~
 !!! error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'.
-!!! error TS2320:   Named properties 'x' of types 'Foo' and 'Bar' are not identical.
+!!! error TS2320:   Named property 'x' of types 'Foo' and 'Bar' are not identical.
     }
     
     interface I4 extends Foo, Bar { // error

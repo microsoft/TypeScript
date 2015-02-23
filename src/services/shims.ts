@@ -90,6 +90,7 @@ module ts {
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
+        getSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -137,7 +138,7 @@ module ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -164,7 +165,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
@@ -273,10 +274,7 @@ module ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            // Shim the API changes for 1.5 release. This should be removed once
-            // TypeScript 1.5 has shipped.
-            return "";
-            //return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -630,11 +628,11 @@ module ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
-                "getNavigateToItems('" + searchValue + "')",
+                "getNavigateToItems('" + searchValue + "', " + maxResultCount+ ")",
                 () => {
-                    var items = this.languageService.getNavigateToItems(searchValue);
+                    var items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
                     return items;
                 });
         }

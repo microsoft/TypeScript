@@ -39,7 +39,7 @@ export function delint(sourceFile: ts.SourceFile) {
                 break;
 
             case ts.SyntaxKind.BinaryExpression:
-                var op = (<ts.BinaryExpression>node).operator;
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.")
@@ -51,8 +51,8 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 
     function report(node: ts.Node, message: string) {
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(`${sourceFile.fileName} (${lineChar.line},${lineChar.character}): ${message}`)
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
     }
 }
 
@@ -210,110 +210,113 @@ declare module "typescript" {
         NumberKeyword = 117,
         SetKeyword = 118,
         StringKeyword = 119,
-        TypeKeyword = 120,
-        QualifiedName = 121,
-        ComputedPropertyName = 122,
-        TypeParameter = 123,
-        Parameter = 124,
-        PropertySignature = 125,
-        PropertyDeclaration = 126,
-        MethodSignature = 127,
-        MethodDeclaration = 128,
-        Constructor = 129,
-        GetAccessor = 130,
-        SetAccessor = 131,
-        CallSignature = 132,
-        ConstructSignature = 133,
-        IndexSignature = 134,
-        TypeReference = 135,
-        FunctionType = 136,
-        ConstructorType = 137,
-        TypeQuery = 138,
-        TypeLiteral = 139,
-        ArrayType = 140,
-        TupleType = 141,
-        UnionType = 142,
-        ParenthesizedType = 143,
-        ObjectBindingPattern = 144,
-        ArrayBindingPattern = 145,
-        BindingElement = 146,
-        ArrayLiteralExpression = 147,
-        ObjectLiteralExpression = 148,
-        PropertyAccessExpression = 149,
-        ElementAccessExpression = 150,
-        CallExpression = 151,
-        NewExpression = 152,
-        TaggedTemplateExpression = 153,
-        TypeAssertionExpression = 154,
-        ParenthesizedExpression = 155,
-        FunctionExpression = 156,
-        ArrowFunction = 157,
-        DeleteExpression = 158,
-        TypeOfExpression = 159,
-        VoidExpression = 160,
-        PrefixUnaryExpression = 161,
-        PostfixUnaryExpression = 162,
-        BinaryExpression = 163,
-        ConditionalExpression = 164,
-        TemplateExpression = 165,
-        YieldExpression = 166,
-        SpreadElementExpression = 167,
-        OmittedExpression = 168,
-        TemplateSpan = 169,
-        Block = 170,
-        VariableStatement = 171,
-        EmptyStatement = 172,
-        ExpressionStatement = 173,
-        IfStatement = 174,
-        DoStatement = 175,
-        WhileStatement = 176,
-        ForStatement = 177,
-        ForInStatement = 178,
-        ContinueStatement = 179,
-        BreakStatement = 180,
-        ReturnStatement = 181,
-        WithStatement = 182,
-        SwitchStatement = 183,
-        LabeledStatement = 184,
-        ThrowStatement = 185,
-        TryStatement = 186,
-        DebuggerStatement = 187,
-        VariableDeclaration = 188,
-        VariableDeclarationList = 189,
-        FunctionDeclaration = 190,
-        ClassDeclaration = 191,
-        InterfaceDeclaration = 192,
-        TypeAliasDeclaration = 193,
-        EnumDeclaration = 194,
-        ModuleDeclaration = 195,
-        ModuleBlock = 196,
-        ImportDeclaration = 197,
-        ExportAssignment = 198,
-        ExternalModuleReference = 199,
-        CaseClause = 200,
-        DefaultClause = 201,
-        HeritageClause = 202,
-        CatchClause = 203,
-        PropertyAssignment = 204,
-        ShorthandPropertyAssignment = 205,
-        EnumMember = 206,
-        SourceFile = 207,
-        SyntaxList = 208,
-        Count = 209,
+        SymbolKeyword = 120,
+        TypeKeyword = 121,
+        OfKeyword = 122,
+        QualifiedName = 123,
+        ComputedPropertyName = 124,
+        TypeParameter = 125,
+        Parameter = 126,
+        PropertySignature = 127,
+        PropertyDeclaration = 128,
+        MethodSignature = 129,
+        MethodDeclaration = 130,
+        Constructor = 131,
+        GetAccessor = 132,
+        SetAccessor = 133,
+        CallSignature = 134,
+        ConstructSignature = 135,
+        IndexSignature = 136,
+        TypeReference = 137,
+        FunctionType = 138,
+        ConstructorType = 139,
+        TypeQuery = 140,
+        TypeLiteral = 141,
+        ArrayType = 142,
+        TupleType = 143,
+        UnionType = 144,
+        ParenthesizedType = 145,
+        ObjectBindingPattern = 146,
+        ArrayBindingPattern = 147,
+        BindingElement = 148,
+        ArrayLiteralExpression = 149,
+        ObjectLiteralExpression = 150,
+        PropertyAccessExpression = 151,
+        ElementAccessExpression = 152,
+        CallExpression = 153,
+        NewExpression = 154,
+        TaggedTemplateExpression = 155,
+        TypeAssertionExpression = 156,
+        ParenthesizedExpression = 157,
+        FunctionExpression = 158,
+        ArrowFunction = 159,
+        DeleteExpression = 160,
+        TypeOfExpression = 161,
+        VoidExpression = 162,
+        PrefixUnaryExpression = 163,
+        PostfixUnaryExpression = 164,
+        BinaryExpression = 165,
+        ConditionalExpression = 166,
+        TemplateExpression = 167,
+        YieldExpression = 168,
+        SpreadElementExpression = 169,
+        OmittedExpression = 170,
+        TemplateSpan = 171,
+        Block = 172,
+        VariableStatement = 173,
+        EmptyStatement = 174,
+        ExpressionStatement = 175,
+        IfStatement = 176,
+        DoStatement = 177,
+        WhileStatement = 178,
+        ForStatement = 179,
+        ForInStatement = 180,
+        ForOfStatement = 181,
+        ContinueStatement = 182,
+        BreakStatement = 183,
+        ReturnStatement = 184,
+        WithStatement = 185,
+        SwitchStatement = 186,
+        LabeledStatement = 187,
+        ThrowStatement = 188,
+        TryStatement = 189,
+        DebuggerStatement = 190,
+        VariableDeclaration = 191,
+        VariableDeclarationList = 192,
+        FunctionDeclaration = 193,
+        ClassDeclaration = 194,
+        InterfaceDeclaration = 195,
+        TypeAliasDeclaration = 196,
+        EnumDeclaration = 197,
+        ModuleDeclaration = 198,
+        ModuleBlock = 199,
+        ImportDeclaration = 200,
+        ExportAssignment = 201,
+        ExternalModuleReference = 202,
+        CaseClause = 203,
+        DefaultClause = 204,
+        HeritageClause = 205,
+        CatchClause = 206,
+        PropertyAssignment = 207,
+        ShorthandPropertyAssignment = 208,
+        EnumMember = 209,
+        SourceFile = 210,
+        SyntaxList = 211,
+        Count = 212,
         FirstAssignment = 52,
         LastAssignment = 63,
         FirstReservedWord = 65,
         LastReservedWord = 100,
         FirstKeyword = 65,
-        LastKeyword = 120,
+        LastKeyword = 122,
         FirstFutureReservedWord = 101,
         LastFutureReservedWord = 109,
-        FirstTypeNode = 135,
-        LastTypeNode = 143,
+        FirstTypeNode = 137,
+        LastTypeNode = 145,
         FirstPunctuation = 14,
         LastPunctuation = 63,
         FirstToken = 0,
-        LastToken = 120,
+        LastToken = 122,
         FirstTriviaToken = 2,
         LastTriviaToken = 6,
         FirstLiteralToken = 7,
@@ -322,7 +325,7 @@ declare module "typescript" {
         LastTemplateToken = 13,
         FirstBinaryOperator = 24,
         LastBinaryOperator = 63,
-        FirstNode = 121,
+        FirstNode = 123,
     }
     const enum NodeFlags {
         Export = 1,
@@ -555,7 +558,7 @@ declare module "typescript" {
     }
     interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
     interface ConditionalExpression extends Expression {
@@ -650,6 +653,10 @@ declare module "typescript" {
         iterator?: Expression;
     }
     interface ForInStatement extends IterationStatement {
+        initializer: VariableDeclarationList | Expression;
+        expression: Expression;
+    }
+    interface ForOfStatement extends IterationStatement {
         initializer: VariableDeclarationList | Expression;
         expression: Expression;
     }
@@ -754,7 +761,10 @@ declare module "typescript" {
         endOfFileToken: Node;
         fileName: string;
         text: string;
-        amdDependencies: string[];
+        amdDependencies: {
+            path: string;
+            name: string;
+        }[];
         amdModuleName: string;
         referencedFiles: FileReference[];
         hasNoDefaultLib: boolean;
@@ -1059,8 +1069,9 @@ declare module "typescript" {
         ObjectLiteral = 131072,
         ContainsUndefinedOrNull = 262144,
         ContainsObjectLiteral = 524288,
-        Intrinsic = 127,
-        Primitive = 510,
+        ESSymbol = 1048576,
+        Intrinsic = 1048703,
+        Primitive = 1049086,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
@@ -1346,6 +1357,7 @@ declare module "typescript" {
         equals = 61,
         exclamation = 33,
         greaterThan = 62,
+        hash = 35,
         lessThan = 60,
         minus = 45,
         openBrace = 123,
@@ -1412,8 +1424,8 @@ declare module "typescript" {
     }
     function tokenToString(t: SyntaxKind): string;
     function computeLineStarts(text: string): number[];
-    function getPositionFromLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
     function getLineStarts(sourceFile: SourceFile): number[];
     function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
         line: number;
@@ -1497,9 +1509,9 @@ declare module "typescript" {
         scriptSnapshot: IScriptSnapshot;
         nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
-        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
-        getPositionFromLineAndCharacter(line: number, character: number): number;
+        getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
@@ -1561,7 +1573,7 @@ declare module "typescript" {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getNavigateToItems(searchValue: string): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -1636,6 +1648,7 @@ declare module "typescript" {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        [s: string]: boolean | number | string;
     }
     interface DefinitionInfo {
         fileName: string;
@@ -1769,6 +1782,9 @@ declare module "typescript" {
         InMultiLineCommentTrivia = 1,
         InSingleQuoteStringLiteral = 2,
         InDoubleQuoteStringLiteral = 3,
+        InTemplateHeadOrNoSubstitutionTemplate = 4,
+        InTemplateMiddleOrTail = 5,
+        InTemplateSubstitutionPosition = 6,
     }
     enum TokenClass {
         Punctuation = 0,
@@ -1790,7 +1806,26 @@ declare module "typescript" {
         classification: TokenClass;
     }
     interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
+        /**
+         * Gives lexical classifications of tokens on a line without any syntactic context.
+         * For instance, a token consisting of the text 'string' can be either an identifier
+         * named 'string' or the keyword 'string', however, because this classifier is not aware,
+         * it relies on certain heuristics to give acceptable results. For classifications where
+         * speed trumps accuracy, this function is preferable; however, for true accuracy, the
+         * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
+         * lexical, syntactic, and semantic classifiers may issue the best user experience.
+         *
+         * @param text                      The text of a line to classify.
+         * @param lexState                  The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
+         *                                  certain heuristics may be used in its place; however, if there is a
+         *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
+         *                                  classifications which may be incorrectly categorized will be given
+         *                                  back as Identifiers in order to allow the syntactic classifier to
+         *                                  subsume the classification.
+         */
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
     }
     /**
       * The document registry represents a store of SourceFile objects that can be shared between
@@ -1951,25 +1986,26 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 177 /* ForStatement */:
-            case 178 /* ForInStatement */:
-            case 176 /* WhileStatement */:
-            case 175 /* DoStatement */:
-                if (node.statement.kind !== 170 /* Block */) {
+            case 179 /* ForStatement */:
+            case 180 /* ForInStatement */:
+            case 178 /* WhileStatement */:
+            case 177 /* DoStatement */:
+                if (node.statement.kind !== 172 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 174 /* IfStatement */:
+            case 176 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 170 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 172 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
-                if (ifStatement.elseStatement && ifStatement.elseStatement.kind !== 170 /* Block */ && ifStatement.elseStatement.kind !== 174 /* IfStatement */) {
+                if (ifStatement.elseStatement &&
+                    ifStatement.elseStatement.kind !== 172 /* Block */ && ifStatement.elseStatement.kind !== 176 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 163 /* BinaryExpression */:
-                var op = node.operator;
+            case 165 /* BinaryExpression */:
+                var op = node.operatorToken.kind;
                 if (op === 28 /* EqualsEqualsToken */ || op === 29 /* ExclamationEqualsToken */) {
                     report(node, "Use '===' and '!=='.");
                 }
@@ -1978,8 +2014,8 @@ function delint(sourceFile) {
         ts.forEachChild(node, delintNode);
     }
     function report(node, message) {
-        var lineChar = sourceFile.getLineAndCharacterFromPosition(node.getStart());
-        console.log(sourceFile.fileName + " (" + lineChar.line + "," + lineChar.character + "): " + message);
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(sourceFile.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + message);
     }
 }
 exports.delint = delint;

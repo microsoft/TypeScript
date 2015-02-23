@@ -4,6 +4,4 @@ function foo():string { return "" }
 
 
 //// [functionOverloads11.js]
-function foo() {
-    return "";
-}
+function foo() { return ""; }

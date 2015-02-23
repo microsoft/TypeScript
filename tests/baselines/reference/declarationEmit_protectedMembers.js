@@ -65,9 +65,7 @@ var C1 = (function () {
         return this.x;
     };
     Object.defineProperty(C1.prototype, "accessor", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         set: function (a) { },
         enumerable: true,
         configurable: true
@@ -81,9 +79,7 @@ var C1 = (function () {
         configurable: true
     });
     Object.defineProperty(C1, "staticGetter", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -116,9 +112,7 @@ var C3 = (function (_super) {
         return _super.sf.call(this);
     };
     Object.defineProperty(C3, "staticGetter", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });

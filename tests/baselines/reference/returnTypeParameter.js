@@ -4,6 +4,4 @@ function f2<T>(a: T): T { return T; } // bug was that this satisfied the return 
 
 //// [returnTypeParameter.js]
 function f(a) { } // error, no return statement
-function f2(a) {
-    return T;
-} // bug was that this satisfied the return statement requirement
+function f2(a) { return T; } // bug was that this satisfied the return statement requirement

@@ -5,6 +5,4 @@ function foo(foo?:any){ return '' }
 
 
 //// [functionOverloads8.js]
-function foo(foo) {
-    return '';
-}
+function foo(foo) { return ''; }

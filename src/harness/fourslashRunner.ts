@@ -2,19 +2,40 @@
 ///<reference path='harness.ts'/>
 ///<reference path='runnerbase.ts' />
 
-class FourslashRunner extends RunnerBase {
-    public basePath = 'tests/cases/fourslash';
+const enum FourSlashTestType { 
+    Native,
+    Shims,
+    Server
+}
 
-    constructor() {
+class FourSlashRunner extends RunnerBase {
+    protected basePath: string;
+    protected testSuiteName: string;
+
+    constructor(private testType: FourSlashTestType) {
         super();
+        switch (testType) {
+            case FourSlashTestType.Native:
+                this.basePath = 'tests/cases/fourslash';
+                this.testSuiteName = 'fourslash';
+                break;
+            case FourSlashTestType.Shims:
+                this.basePath = 'tests/cases/fourslash/shims';
+                this.testSuiteName = 'fourslash-shims';
+                break;
+            case FourSlashTestType.Server:
+                this.basePath = 'tests/cases/fourslash/server';
+                this.testSuiteName = 'fourslash-server';
+                break;
+        }
     }
 
     public initializeTests() {
         if (this.tests.length === 0) {
-            this.tests = this.enumerateFiles(this.basePath, /\.ts/i);
+            this.tests = this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
         }
 
-        describe("fourslash tests", () => {
+        describe(this.testSuiteName, () => {
             this.tests.forEach((fn: string) => {
                 fn = ts.normalizeSlashes(fn);
                 var justName = fn.replace(/^.*[\\\/]/, '');
@@ -24,8 +45,8 @@ class FourslashRunner extends RunnerBase {
                 if (testIndex >= 0) fn = fn.substr(testIndex);
 
                 if (justName && !justName.match(/fourslash\.ts$/i) && !justName.match(/\.d\.ts$/i)) {
-                    it('FourSlash test ' + justName + ' runs correctly', function () {
-                        FourSlash.runFourSlashTest(fn);
+                    it(this.testSuiteName + ' test ' + justName + ' runs correctly',() => {
+                        FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
                     });
                 }
             });
@@ -82,9 +103,9 @@ class FourslashRunner extends RunnerBase {
     }
 }
 
-class GeneratedFourslashRunner extends FourslashRunner {
-    constructor() {
-        super();
+class GeneratedFourslashRunner extends FourSlashRunner {
+    constructor(testType: FourSlashTestType) {
+        super(testType);
         this.basePath += '/generated/';
     }
 }

@@ -59,9 +59,7 @@ var p = { x: 1, y: undefined };
 var p = { x: 1, y: 2 };
 var p = { x: 0, y: undefined };
 var p;
-var fn = function (s) {
-    return 42;
-};
+var fn = function (s) { return 42; };
 var fn = function (s) { return 3; };
 var fn;
 var fn;

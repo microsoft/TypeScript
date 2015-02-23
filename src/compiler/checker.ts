@@ -67,6 +67,7 @@ module ts {
         var stringType = createIntrinsicType(TypeFlags.String, "string");
         var numberType = createIntrinsicType(TypeFlags.Number, "number");
         var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
+        var esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
         var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
@@ -84,6 +85,7 @@ module ts {
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
+        var globalESSymbolConstructorSymbol: Symbol;
 
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
@@ -93,6 +95,7 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
+        var globalESSymbolType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -120,6 +123,10 @@ module ts {
             "boolean": {
                 type: booleanType,
                 flags: TypeFlags.Boolean
+            },
+            "symbol": {
+                type: esSymbolType,
+                flags: TypeFlags.ESSymbol
             }
         };
 
@@ -706,9 +713,15 @@ module ts {
             return type;
         }
 
-        // A reserved member name starts with two underscores followed by a non-underscore
+        // A reserved member name starts with two underscores, but the third character cannot be an underscore
+        // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
+        // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
+        // Symbol instance.
         function isReservedMemberName(name: string) {
-            return name.charCodeAt(0) === CharacterCodes._ && name.charCodeAt(1) === CharacterCodes._ && name.charCodeAt(2) !== CharacterCodes._;
+            return name.charCodeAt(0) === CharacterCodes._ &&
+                name.charCodeAt(1) === CharacterCodes._ &&
+                name.charCodeAt(2) !== CharacterCodes._ &&
+                name.charCodeAt(2) !== CharacterCodes.at;
         }
 
         function getNamedMembers(members: SymbolTable): Symbol[] {
@@ -1708,8 +1721,8 @@ module ts {
                 }
             }
             else {
-                // For an array binding element the specified or inferred type of the parent must be assignable to any[]
-                if (!isTypeAssignableTo(parentType, anyArrayType)) {
+                // For an array binding element the specified or inferred type of the parent must be an array-like type
+                if (!isArrayLikeType(parentType)) {
                     error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                     return unknownType;
                 }
@@ -2489,9 +2502,9 @@ module ts {
             return getPropertiesOfObjectType(getApparentType(type));
         }
 
-        // For a type parameter, return the base constraint of the type parameter. For the string, number, and
-        // boolean primitive types, return the corresponding object types.Otherwise return the type itself.
-        // Note that the apparent type of a union type is the union type itself.
+        // For a type parameter, return the base constraint of the type parameter. For the string, number,
+        // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
+        // type itself. Note that the apparent type of a union type is the union type itself.
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
@@ -2509,6 +2522,9 @@ module ts {
             }
             else if (type.flags & TypeFlags.Boolean) {
                 type = globalBooleanType;
+            }
+            else if (type.flags & TypeFlags.ESSymbol) {
+                type = globalESSymbolType;
             }
             return type;
         }
@@ -2999,12 +3015,24 @@ module ts {
             return <ObjectType>type;
         }
 
-        function getGlobalSymbol(name: string): Symbol {
-            return resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
+        function getGlobalValueSymbol(name: string): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Value, Diagnostics.Cannot_find_global_value_0);
+        }
+
+        function getGlobalTypeSymbol(name: string): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+        }
+
+        function getGlobalSymbol(name: string, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
+            return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
         function getGlobalType(name: string): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalSymbol(name), 0);
+            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), 0);
+        }
+
+        function getGlobalESSymbolConstructorSymbol() {
+            return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
         function createArrayType(elementType: Type): Type {
@@ -3174,6 +3202,8 @@ module ts {
                     return numberType;
                 case SyntaxKind.BooleanKeyword:
                     return booleanType;
+                case SyntaxKind.SymbolKeyword:
+                    return esSymbolType;
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.StringLiteral:
@@ -3379,7 +3409,7 @@ module ts {
                     return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
                         isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
-                    return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
+                    return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
                     (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
                     return isContextSensitive((<PropertyAssignment>node).initializer);
@@ -4160,6 +4190,11 @@ module ts {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
+        function isArrayLikeType(type: Type): boolean {
+            // A type is array-like if it is not the undefined or null type and if it is assignable to any[]
+            return !(type.flags & (TypeFlags.Undefined | TypeFlags.Null)) && isTypeAssignableTo(type, anyArrayType);
+        }
+
         function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0");
         }
@@ -4561,7 +4596,7 @@ module ts {
             return links.assignmentChecks[symbol.id] = isAssignedIn(node);
 
             function isAssignedInBinaryExpression(node: BinaryExpression) {
-                if (node.operator >= SyntaxKind.FirstAssignment && node.operator <= SyntaxKind.LastAssignment) {
+                if (node.operatorToken.kind >= SyntaxKind.FirstAssignment && node.operatorToken.kind <= SyntaxKind.LastAssignment) {
                     var n = node.left;
                     while (n.kind === SyntaxKind.ParenthesizedExpression) {
                         n = (<ParenthesizedExpression>n).expression;
@@ -4612,6 +4647,7 @@ module ts {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.ForStatement:
                     case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
                     case SyntaxKind.ReturnStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.SwitchStatement:
@@ -4693,10 +4729,10 @@ module ts {
                         case SyntaxKind.BinaryExpression:
                             // In the right operand of an && or ||, narrow based on left operand
                             if (child === (<BinaryExpression>node).right) {
-                                if ((<BinaryExpression>node).operator === SyntaxKind.AmpersandAmpersandToken) {
+                                if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
                                     narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
                                 }
-                                else if ((<BinaryExpression>node).operator === SyntaxKind.BarBarToken) {
+                                else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
                                     narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
                                 }
                             }
@@ -4734,13 +4770,13 @@ module ts {
                     return type;
                 }
                 var typeInfo = primitiveTypeInfo[right.text];
-                if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
                     // Assumed result is true. If check was not for a primitive type, remove all primitive types
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol, /*isOfTypeKind*/ true);
                     }
                     // Check was for a primitive type, return that primitive type if it is a subtype
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
@@ -4824,7 +4860,7 @@ module ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
-                        var operator = (<BinaryExpression>expr).operator;
+                        var operator = (<BinaryExpression>expr).operatorToken.kind;
                         if (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                             return narrowTypeByEquality(type, <BinaryExpression>expr, assumeTrue);
                         }
@@ -5171,7 +5207,7 @@ module ts {
 
         function getContextualTypeForBinaryOperand(node: Expression): Type {
             var binaryExpression = <BinaryExpression>node.parent;
-            var operator = binaryExpression.operator;
+            var operator = binaryExpression.operatorToken.kind;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
@@ -5421,7 +5457,7 @@ module ts {
         // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
         function isAssignmentTarget(node: Node): boolean {
             var parent = node.parent;
-            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operator === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
                 return true;
             }
             if (parent.kind === SyntaxKind.PropertyAssignment) {
@@ -5435,7 +5471,7 @@ module ts {
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
             var type = checkExpressionCached(node.expression, contextualMapper);
-            if (!isTypeAssignableTo(type, anyArrayType)) {
+            if (!isArrayLikeType(type)) {
                 error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
                 return unknownType;
             }
@@ -5475,7 +5511,7 @@ module ts {
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
-            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
+            return allConstituentTypesHaveKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
         }
 
         function isNumericLiteralName(name: string) {
@@ -5508,10 +5544,13 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
-                // This will allow types number, string, or any. It will also allow enums, the unknown
+                // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
-                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+                if (!allConstituentTypesHaveKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
+                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
+                }
+                else {
+                    checkThatExpressionIsProperSymbolReference(node.expression, links.resolvedType, /*reportError*/ true);
                 }
             }
 
@@ -5760,8 +5799,8 @@ module ts {
 
             // See if we can index as a property.
             if (node.argumentExpression) {
-                if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                    var name = (<LiteralExpression>node.argumentExpression).text;
+                var name = getPropertyNameForIndexedAccess(node.argumentExpression, indexType);
+                if (name !== undefined) {
                     var prop = getPropertyOfType(objectType, name);
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
@@ -5775,10 +5814,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
+            if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -5800,9 +5839,76 @@ module ts {
             }
 
             // REVIEW: Users should know the type that was actually used.
-            error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_or_any);
+            error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_symbol_or_any);
 
             return unknownType;
+        }
+
+        /**
+         * If indexArgumentExpression is a string literal or number literal, returns its text.
+         * If indexArgumentExpression is a well known symbol, returns the property name corresponding
+         *    to this symbol, as long as it is a proper symbol reference.
+         * Otherwise, returns undefined.
+         */
+        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression, indexArgumentType: Type): string {
+            if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
+                return (<LiteralExpression>indexArgumentExpression).text;
+            }
+            if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
+                var rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+
+            return undefined;
+        }
+
+        /**
+         * A proper symbol reference requires the following:
+         *   1. The property access denotes a property that exists
+         *   2. The expression is of the form Symbol.<identifier>
+         *   3. The property access is of the primitive type symbol.
+         *   4. Symbol in this context resolves to the global Symbol object
+         */
+        function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
+            if (expressionType === unknownType) {
+                // There is already an error, so no need to report one.
+                return false;
+            }
+
+            if (!isWellKnownSymbolSyntactically(expression)) {
+                return false;
+            }
+
+            // Make sure the property type is the primitive symbol type
+            if ((expressionType.flags & TypeFlags.ESSymbol) === 0) {
+                if (reportError) {
+                    error(expression, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(expression));
+                }
+                return false;
+            }
+
+            // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
+            // global Symbol object
+            var leftHandSide = <Identifier>(<PropertyAccessExpression>expression).expression;
+            var leftHandSideSymbol = getResolvedSymbol(leftHandSide);
+            if (!leftHandSideSymbol) {
+                return false;
+            }
+            
+            var globalESSymbol = getGlobalESSymbolConstructorSymbol();
+            if (!globalESSymbol) {
+                // Already errored when we tried to look up the symbol
+                return false;
+            }
+
+            if (leftHandSideSymbol !== globalESSymbol) {
+                if (reportError) {
+                    error(leftHandSide, Diagnostics.Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object);
+                }
+                return false;
+            }
+
+            return true;
         }
 
         function resolveUntypedCall(node: CallLikeExpression): Signature {
@@ -5822,10 +5928,74 @@ module ts {
             return unknownSignature;
         }
 
+        // Re-order candidate signatures into the result array. Assumes the result array to be empty.
+        // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+        // A nit here is that we reorder only signatures that belong to the same symbol,
+        // so order how inherited signatures are processed is still preserved.
+        // interface A { (x: string): void }
+        // interface B extends A { (x: 'foo'): string }
+        // var b: B;
+        // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
+        function reorderCandidates(signatures: Signature[], result: Signature[]): void {
+            var lastParent: Node;
+            var lastSymbol: Symbol;
+            var cutoffIndex: number = 0;
+            var index: number;
+            var specializedIndex: number = -1;
+            var spliceIndex: number;
+            Debug.assert(!result.length);
+            for (var i = 0; i < signatures.length; i++) {
+                var signature = signatures[i];
+                var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                var parent = signature.declaration && signature.declaration.parent;
+                if (!lastSymbol || symbol === lastSymbol) {
+                    if (lastParent && parent === lastParent) {
+                        index++;
+                    }
+                    else {
+                        lastParent = parent;
+                        index = cutoffIndex;
+                    }
+                }
+                else {
+                    // current declaration belongs to a different symbol
+                    // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
+                    index = cutoffIndex = result.length;
+                    lastParent = parent;
+                }
+                lastSymbol = symbol;
+
+                // specialized signatures always need to be placed before non-specialized signatures regardless
+                // of the cutoff position; see GH#1133
+                if (signature.hasStringLiterals) {
+                    specializedIndex++;
+                    spliceIndex = specializedIndex;
+                    // The cutoff index always needs to be greater than or equal to the specialized signature index
+                    // in order to prevent non-specialized signatures from being added before a specialized
+                    // signature.
+                    cutoffIndex++;
+                }
+                else {
+                    spliceIndex = index;
+                }
+
+                result.splice(spliceIndex, 0, signature);
+            }
+        }
+
+        function getSpreadArgumentIndex(args: Expression[]): number {
+            for (var i = 0; i < args.length; i++) {
+                if (args[i].kind === SyntaxKind.SpreadElementExpression) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
-            var adjustedArgCount: number;
-            var typeArguments: NodeArray<TypeNode>;
-            var callIsIncomplete: boolean;
+            var adjustedArgCount: number;            // Apparent number of arguments we will have in this call
+            var typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
+            var callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 var tagExpression = <TaggedTemplateExpression>node;
@@ -5870,35 +6040,29 @@ module ts {
                 typeArguments = callExpression.typeArguments;
             }
 
-            Debug.assert(adjustedArgCount !== undefined, "'adjustedArgCount' undefined");
-            Debug.assert(callIsIncomplete !== undefined, "'callIsIncomplete' undefined");
-
-            return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
-
-            /**
-             * @param adjustedArgCount The "apparent" number of arguments that we will have in this call.
-             * @param typeArguments    Type arguments node of the call if it exists; undefined otherwise.
-             * @param callIsIncomplete Whether or not a call is unfinished, and we should be "lenient" when we have too few arguments.
-             * @param signature        The signature whose arity we are comparing.
-             */
-            function checkArity(adjustedArgCount: number, typeArguments: NodeArray<TypeNode>, callIsIncomplete: boolean, signature: Signature): boolean {
-                // Too many arguments implies incorrect arity.
-                if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
-                    return false;
-                }
-
-                // If the user supplied type arguments, but the number of type arguments does not match
-                // the declared number of type parameters, the call has an incorrect arity.
-                var hasRightNumberOfTypeArgs = !typeArguments ||
-                    (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
-                if (!hasRightNumberOfTypeArgs) {
-                    return false;
-                }
-
-                // If the call is incomplete, we should skip the lower bound check.
-                var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
-                return callIsIncomplete || hasEnoughArguments;
+            // If the user supplied type arguments, but the number of type arguments does not match
+            // the declared number of type parameters, the call has an incorrect arity.
+            var hasRightNumberOfTypeArgs = !typeArguments ||
+                (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
+            if (!hasRightNumberOfTypeArgs) {
+                return false;
             }
+
+            // If spread arguments are present, check that they correspond to a rest parameter. If so, no
+            // further checking is necessary.
+            var spreadArgIndex = getSpreadArgumentIndex(args);
+            if (spreadArgIndex >= 0) {
+                return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
+            }
+
+            // Too many arguments implies incorrect arity.
+            if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
+                return false;
+            }
+
+            // If the call is incomplete, we should skip the lower bound check.
+            var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
+            return callIsIncomplete || hasEnoughArguments;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -5931,18 +6095,20 @@ module ts {
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
             for (var i = 0; i < args.length; i++) {
-                if (args[i].kind === SyntaxKind.OmittedExpression) {
-                    continue;
+                var arg = args[i];
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
+                    var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                        var argType = globalTemplateStringsArrayType;
+                    }
+                    else {
+                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                        // context sensitive function expressions as wildcards
+                        var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                        var argType = checkExpressionWithContextualType(arg, paramType, mapper);
+                    }
+                    inferTypes(context, argType, paramType);
                 }
-                var parameterType = getTypeAtPosition(signature, i);
-                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                    continue;
-                }
-                // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                // context sensitive function expressions as wildcards
-                var mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
-                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
@@ -5950,13 +6116,11 @@ module ts {
             // as we construct types for contextually typed parameters)
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
-                    if (args[i].kind === SyntaxKind.OmittedExpression) {
-                        continue;
-                    }
-                    // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
+                    // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
-                        var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
+                        var arg = args[i];
+                        var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                        inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
             }
@@ -5994,37 +6158,24 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
-                var argType: Type;
-
-                if (arg.kind === SyntaxKind.OmittedExpression) {
-                    continue;
-                }
-
-                var paramType = getTypeAtPosition(signature, i);
-
-                if (i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
-                    // A tagged template expression has something of a
-                    // "virtual" parameter with the "cooked" strings array type.
-                    argType = globalTemplateStringsArrayType;
-                }
-                else {
-                    // String literals get string literal types unless we're reporting errors
-                    argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                        ? getStringLiteralType(<LiteralExpression>arg)
-                        : checkExpressionWithContextualType(<LiteralExpression>arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                }
-
-                // Use argument expression as error location when reporting errors
-                var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
-                if (!isValidArgument) {
-                    return false;
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
+                    // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
+                    var paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    // A tagged template expression provides a special first argument, and string literals get string literal types
+                    // unless we're reporting errors
+                    var argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression ? globalTemplateStringsArrayType :
+                        arg.kind === SyntaxKind.StringLiteral && !reportErrors ? getStringLiteralType(<LiteralExpression>arg) :
+                        checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    // Use argument expression as error location when reporting errors
+                    if (!checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1)) {
+                        return false;
+                    }
                 }
             }
-
             return true;
         }
 
@@ -6091,8 +6242,8 @@ module ts {
             }
 
             var candidates = candidatesOutArray || [];
-            // collectCandidates fills up the candidates array directly
-            collectCandidates();
+            // reorderCandidates fills up the candidates array directly
+            reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
@@ -6282,60 +6433,6 @@ module ts {
                 return undefined;
             }
 
-            // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
-            // A nit here is that we reorder only signatures that belong to the same symbol,
-            // so order how inherited signatures are processed is still preserved.
-            // interface A { (x: string): void }
-            // interface B extends A { (x: 'foo'): string }
-            // var b: B;
-            // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-            function collectCandidates(): void {
-                var result = candidates;
-                var lastParent: Node;
-                var lastSymbol: Symbol;
-                var cutoffIndex: number = 0;
-                var index: number;
-                var specializedIndex: number = -1;
-                var spliceIndex: number;
-                Debug.assert(!result.length);
-                for (var i = 0; i < signatures.length; i++) {
-                    var signature = signatures[i];
-                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                    var parent = signature.declaration && signature.declaration.parent;
-                    if (!lastSymbol || symbol === lastSymbol) {
-                        if (lastParent && parent === lastParent) {
-                            index++;
-                        }
-                        else {
-                            lastParent = parent;
-                            index = cutoffIndex;
-                        }
-                    }
-                    else {
-                        // current declaration belongs to a different symbol
-                        // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
-                        index = cutoffIndex = result.length;
-                        lastParent = parent;
-                    }
-                    lastSymbol = symbol;
-
-                    // specialized signatures always need to be placed before non-specialized signatures regardless
-                    // of the cutoff position; see GH#1133
-                    if (signature.hasStringLiterals) {
-                        specializedIndex++;
-                        spliceIndex = specializedIndex;
-                        // The cutoff index always needs to be greater than or equal to the specialized signature index
-                        // in order to prevent non-specialized signatures from being added before a specialized
-                        // signature.
-                        cutoffIndex++;
-                    }
-                    else {
-                        spliceIndex = index;
-                    }
-
-                    result.splice(spliceIndex, 0, signature);
-                }
-            }
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
@@ -6391,6 +6488,13 @@ module ts {
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
+            if (node.arguments && languageVersion < ScriptTarget.ES6) {
+                var spreadIndex = getSpreadArgumentIndex(node.arguments);
+                if (spreadIndex >= 0) {
+                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+            }
+
             var expressionType = checkExpression(node.expression);
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
@@ -6536,9 +6640,14 @@ module ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
+            if (pos >= 0) {
+                return signature.hasRestParameter ?
+                    pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                    pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+            }
             return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+                getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) :
+                anyArrayType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -6716,7 +6825,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
+            if (!allConstituentTypesHaveKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -6832,6 +6941,9 @@ module ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
+                    if (someConstituentTypeHasKind(operandType, TypeFlags.ESSymbol)) {
+                        error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
+                    }
                     return numberType;
                 case SyntaxKind.ExclamationToken:
                     return booleanType;
@@ -6867,8 +6979,26 @@ module ts {
             return numberType;
         }
 
-        // Return true if type has the given flags, or is a union type composed of types that all have those flags
-        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
+        // Just like isTypeOfKind below, except that it returns true if *any* constituent
+        // has this kind.
+        function someConstituentTypeHasKind(type: Type, kind: TypeFlags): boolean {
+            if (type.flags & kind) {
+                return true;
+            }
+            if (type.flags & TypeFlags.Union) {
+                var types = (<UnionType>type).types;
+                for (var i = 0; i < types.length; i++) {
+                    if (types[i].flags & kind) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
+        // Return true if type has the given flags, or is a union type composed of types that all have those flags.
+        function allConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
@@ -6898,7 +7028,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
+            if (allConstituentTypesHaveKind(leftType, TypeFlags.Primitive)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -6913,10 +7043,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
-                error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
+            if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+                error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!allConstituentTypesHaveKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -6949,7 +7079,7 @@ module ts {
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             // TODOO(andersh): Allow iterable source type in ES6
-            if (!isTypeAssignableTo(sourceType, anyArrayType)) {
+            if (!isArrayLikeType(sourceType)) {
                 error(node, Diagnostics.Type_0_is_not_an_array_type, typeToString(sourceType));
                 return sourceType;
             }
@@ -6983,7 +7113,7 @@ module ts {
         }
 
         function checkDestructuringAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+            if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                 checkBinaryExpression(<BinaryExpression>target, contextualMapper);
                 target = (<BinaryExpression>target).left;
             }
@@ -7006,13 +7136,13 @@ module ts {
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             // Grammar checking
-            if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+            if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
                 // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
                 // Assignment operator(11.13) or of a PostfixExpression(11.3)
                 checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.left);
             }
 
-            var operator = node.operator;
+            var operator = node.operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
             }
@@ -7053,8 +7183,8 @@ module ts {
                     // try and return them a helpful suggestion
                     if ((leftType.flags & TypeFlags.Boolean) &&
                         (rightType.flags & TypeFlags.Boolean) &&
-                        (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {
-                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
+                        (suggestedOperator = getSuggestedBooleanOperator(node.operatorToken.kind)) !== undefined) {
+                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operatorToken.kind), tokenToString(suggestedOperator));
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal 
@@ -7077,19 +7207,26 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var resultType: Type;
-                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
+                    if (allConstituentTypesHaveKind(leftType, TypeFlags.NumberLike) && allConstituentTypesHaveKind(rightType, TypeFlags.NumberLike)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
-                        // If one or both operands are of the String primitive type, the result is of the String primitive type.
-                        resultType = stringType;
-                    }
-                    else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
-                        // Otherwise, the result is of type Any.
-                        // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
-                        resultType = anyType;
+                    else {
+                        if (allConstituentTypesHaveKind(leftType, TypeFlags.StringLike) || allConstituentTypesHaveKind(rightType, TypeFlags.StringLike)) {
+                            // If one or both operands are of the String primitive type, the result is of the String primitive type.
+                            resultType = stringType;
+                        }
+                        else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
+                            // Otherwise, the result is of type Any.
+                            // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
+                            resultType = anyType;
+                        }
+
+                        // Symbols are not allowed at all in arithmetic expressions
+                        if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
+                            return resultType;
+                        }
                     }
 
                     if (!resultType) {
@@ -7101,14 +7238,18 @@ module ts {
                         checkAssignmentOperator(resultType);
                     }
                     return resultType;
-                case SyntaxKind.EqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsToken:
-                case SyntaxKind.EqualsEqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsEqualsToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
+                    if (!checkForDisallowedESSymbolOperand(operator)) {
+                        return booleanType;
+                    }
+                    // Fall through
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -7126,6 +7267,20 @@ module ts {
                     return rightType;
                 case SyntaxKind.CommaToken:
                     return rightType;
+            }
+
+            // Return type is true if there was no error, false if there was an error.
+            function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
+                var offendingSymbolOperand =
+                    someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
+                    someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                    undefined;
+                if (offendingSymbolOperand) {
+                    error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
+                    return false;
+                }
+
+                return true;
             }
 
             function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind {
@@ -7162,7 +7317,7 @@ module ts {
             }
 
             function reportOperatorError() {
-                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operator), typeToString(leftType), typeToString(rightType));
+                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operatorToken.kind), typeToString(leftType), typeToString(rightType));
             }
         }
 
@@ -7213,7 +7368,10 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
-            if (hasDynamicName(node)) {
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -7224,7 +7382,10 @@ module ts {
             // Grammar checking
             checkGrammarMethod(node);
 
-            if (hasDynamicName(node)) {
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -7487,7 +7648,7 @@ module ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarProperty(node);
+            checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
         }
@@ -8036,12 +8197,16 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (hasDynamicName(node)) {
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 // This check will account for methods in class/interface declarations,
                 // as well as accessors in classes/object literals
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
-            else {
+
+            if (!hasDynamicName(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -8078,7 +8243,7 @@ module ts {
         function checkBlock(node: Block) {
             // Grammar checking for SyntaxKind.Block
             if (node.kind === SyntaxKind.Block) {
-                checkGrammarForStatementInAmbientContext(node);
+                checkGrammarStatementInAmbientContext(node);
             }
 
             forEach(node.statements, checkSourceElement);
@@ -8195,32 +8360,61 @@ module ts {
             }
         }
 
-        function checkCollisionWithConstDeclarations(node: VariableLikeDeclaration) {
+        function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
+            // - ScriptBody : StatementList
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
+            // - Block : { StatementList }
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // also occurs in the VarDeclaredNames of StatementList.
+
             // Variable declarations are hoisted to the top of their function scope. They can shadow
             // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
             // by the binder as the declaration scope is different.
             // A non-initialized declaration is a no-op as the block declaration will resolve before the var
             // declaration. the problem is if the declaration has an initializer. this will act as a write to the
             // block declared value. this is fine for let, but not const.
-            //
             // Only consider declarations with initializers, uninitialized var declarations will not 
-            // step on a const variable.
+            // step on a let/const variable.
             // Do not consider let and const declarations, as duplicate block-scoped declarations 
             // are handled by the binder.
-            // We are only looking for var declarations that step on const declarations from a 
+            // We are only looking for var declarations that step on let\const declarations from a 
             // different scope. e.g.:
-            //      var x = 0;
             //      {
-            //          const x = 0;
-            //          var x = 0;
+            //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
+            //          var x = 0; // symbol for this declaration will be 'symbol'
             //      }
             if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                     var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                    if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
-                            error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
+                    if (localDeclarationSymbol &&
+                        localDeclarationSymbol !== symbol &&
+                        localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
+
+                            var varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                            var container =
+                                varDeclList.parent.kind === SyntaxKind.VariableStatement &&
+                                varDeclList.parent.parent;
+                            
+                            // names of block-scoped and function scoped variables can collide only 
+                            // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                            var namesShareScope =
+                                container &&
+                                (container.kind === SyntaxKind.Block && isAnyFunction(container.parent) ||
+                                (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
+                                 container.kind === SyntaxKind.SourceFile);
+
+                            // here we know that function scoped variable is shadowed by block scoped one
+                            // if they are defined in the same scope - binder has already reported redeclaration error
+                            // otherwise if variable has an initializer - show error that initialization will fail 
+                            // since LHS will be block scoped name instead of function scoped
+                            if (!namesShareScope) {
+                                var name = symbolToString(localDeclarationSymbol);
+                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
+                            }
                         }
                     }
                 }
@@ -8270,12 +8464,14 @@ module ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
-            if (hasDynamicName(node)) {
+            // Do not use hasDynamicName here, because that returns false for well known symbols.
+            // We want to perform checkComputedPropertyName for all computed properties, including
+            // well known symbols.
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
                 }
-                return;
             }
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
@@ -8317,7 +8513,9 @@ module ts {
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
-                checkCollisionWithConstDeclarations(node);
+                if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                    checkVarDeclaredNamesNotShadowed(<VariableDeclaration | BindingElement>node);
+                }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
@@ -8361,14 +8559,14 @@ module ts {
 
         function checkExpressionStatement(node: ExpressionStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node)
+            checkGrammarStatementInAmbientContext(node)
 
             checkExpression(node.expression);
         }
 
         function checkIfStatement(node: IfStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
+            checkGrammarStatementInAmbientContext(node);
 
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
@@ -8377,7 +8575,7 @@ module ts {
 
         function checkDoStatement(node: DoStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
+            checkGrammarStatementInAmbientContext(node);
 
             checkSourceElement(node.statement);
             checkExpression(node.expression);
@@ -8385,7 +8583,7 @@ module ts {
 
         function checkWhileStatement(node: WhileStatement) {
             // Grammar checking 
-            checkGrammarForStatementInAmbientContext(node);
+            checkGrammarStatementInAmbientContext(node);
 
             checkExpression(node.expression);
             checkSourceElement(node.statement);
@@ -8393,7 +8591,7 @@ module ts {
 
         function checkForStatement(node: ForStatement) {
             // Grammar checking
-            if (!checkGrammarForStatementInAmbientContext(node)) {
+            if (!checkGrammarStatementInAmbientContext(node)) {
                 if (node.initializer && node.initializer.kind == SyntaxKind.VariableDeclarationList) {
                     checkGrammarVariableDeclarationList(<VariableDeclarationList>node.initializer);
                 }
@@ -8413,18 +8611,14 @@ module ts {
             checkSourceElement(node.statement);
         }
 
+        function checkForOfStatement(node: ForOfStatement) {
+            // TODO: not yet implemented
+            checkGrammarForOfStatement(node);
+        }
+
         function checkForInStatement(node: ForInStatement) {
             // Grammar checking 
-            if (!checkGrammarForStatementInAmbientContext(node)) {
-                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    var variableList = <VariableDeclarationList>node.initializer;
-                    if (!checkGrammarVariableDeclarationList(variableList)) {
-                        if (variableList.declarations.length > 1) {
-                            grammarErrorOnFirstToken(variableList.declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
-                        }
-                    }
-                }
-            }
+            checkGrammarForInOrForOfStatement(node);
 
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
@@ -8436,9 +8630,6 @@ module ts {
                 if (variableDeclarationList.declarations.length >= 1) {
                     var decl = variableDeclarationList.declarations[0];
                     checkVariableDeclaration(decl);
-                    if (decl.type) {
-                        error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
-                    }
                 }
             }
             else {
@@ -8448,7 +8639,7 @@ module ts {
                 //   and Expr must be an expression of type Any, an object type, or a type parameter type.
                 var varExpr = <Expression>node.initializer;
                 var exprType = checkExpression(varExpr);
-                if (exprType !== anyType && exprType !== stringType) {
+                if (!allConstituentTypesHaveKind(exprType, TypeFlags.Any | TypeFlags.StringLike)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -8460,7 +8651,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!allConstituentTypesHaveKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -8469,7 +8660,7 @@ module ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node) || checkGrammarBreakOrContinueStatement(node);
+            checkGrammarStatementInAmbientContext(node) || checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
         }
@@ -8480,7 +8671,7 @@ module ts {
 
         function checkReturnStatement(node: ReturnStatement) {
             // Grammar checking
-            if (!checkGrammarForStatementInAmbientContext(node)) {
+            if (!checkGrammarStatementInAmbientContext(node)) {
                 var functionBlock = getContainingFunction(node);
                 if (!functionBlock) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
@@ -8511,7 +8702,7 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
-            if (!checkGrammarForStatementInAmbientContext(node)) {
+            if (!checkGrammarStatementInAmbientContext(node)) {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
                 }
@@ -8523,7 +8714,7 @@ module ts {
 
         function checkSwitchStatement(node: SwitchStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
+            checkGrammarStatementInAmbientContext(node);
 
             var firstDefaultClause: CaseOrDefaultClause;
             var hasDuplicateDefaultClause = false;
@@ -8560,7 +8751,7 @@ module ts {
 
         function checkLabeledStatement(node: LabeledStatement) {
             // Grammar checking
-            if (!checkGrammarForStatementInAmbientContext(node)) {
+            if (!checkGrammarStatementInAmbientContext(node)) {
                 var current = node.parent;
                 while (current) {
                     if (isAnyFunction(current)) {
@@ -8581,7 +8772,7 @@ module ts {
 
         function checkThrowStatement(node: ThrowStatement) {
             // Grammar checking
-            if (!checkGrammarForStatementInAmbientContext(node)) {
+            if (!checkGrammarStatementInAmbientContext(node)) {
                 if (node.expression === undefined) {
                     grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
                 }
@@ -8594,7 +8785,7 @@ module ts {
 
         function checkTryStatement(node: TryStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
+            checkGrammarStatementInAmbientContext(node);
 
             checkBlock(node.tryBlock);
             var catchClause = node.catchClause;
@@ -8711,6 +8902,7 @@ module ts {
                 case "number":
                 case "boolean":
                 case "string":
+                case "symbol":
                 case "void":
                     error(name, message, (<Identifier>name).text);
             }
@@ -8929,7 +9121,7 @@ module ts {
                             var typeName1 = typeToString(existing.containingType);
                             var typeName2 = typeToString(base);
 
-                            var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
+                            var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
@@ -9065,7 +9257,7 @@ module ts {
                             if (right === undefined) {
                                 return undefined;
                             }
-                            switch ((<BinaryExpression>e).operator) {
+                            switch ((<BinaryExpression>e).operatorToken.kind) {
                                 case SyntaxKind.BarToken: return left | right;
                                 case SyntaxKind.AmpersandToken: return left & right;
                                 case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
@@ -9416,6 +9608,8 @@ module ts {
                     return checkForStatement(<ForStatement>node);
                 case SyntaxKind.ForInStatement:
                     return checkForInStatement(<ForInStatement>node);
+                case SyntaxKind.ForOfStatement:
+                    return checkForOfStatement(<ForOfStatement>node);
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
@@ -9450,10 +9644,10 @@ module ts {
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
-                    checkGrammarForStatementInAmbientContext(node);
+                    checkGrammarStatementInAmbientContext(node);
                     return;
                 case SyntaxKind.DebuggerStatement:
-                    checkGrammarForStatementInAmbientContext(node);
+                    checkGrammarStatementInAmbientContext(node);
                     return;
             }
         }
@@ -9525,6 +9719,7 @@ module ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ReturnStatement:
@@ -9721,6 +9916,7 @@ module ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
                     return true;
                 case SyntaxKind.VoidKeyword:
                     return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -10245,7 +10441,7 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
-            globalArraySymbol = getGlobalSymbol("Array");
+            globalArraySymbol = getGlobalTypeSymbol("Array");
             globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
@@ -10253,11 +10449,24 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
-            globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
-                ? getGlobalType("TemplateStringsArray")
-                : unknownType;
+            if (languageVersion >= ScriptTarget.ES6) {
+                globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+                globalESSymbolType = getGlobalType("Symbol");
+                globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
+            }
+            else {
+                globalTemplateStringsArrayType = unknownType;
+
+                // Consider putting Symbol interface in lib.d.ts. On the plus side, putting it in lib.d.ts would make it
+                // extensible for Polyfilling Symbols. But putting it into lib.d.ts could also break users that have
+                // a global Symbol already, particularly if it is a class.
+                globalESSymbolType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+                globalESSymbolConstructorSymbol = undefined;
+            }
+
             anyArrayType = createArrayType(anyType);
         }
 
@@ -10472,25 +10681,25 @@ module ts {
                     return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
                 }
             }
-            else if (parameter.dotDotDotToken) {
+            if (parameter.dotDotDotToken) {
                 return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
             }
-            else if (parameter.flags & NodeFlags.Modifier) {
+            if (parameter.flags & NodeFlags.Modifier) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
             }
-            else if (parameter.questionToken) {
+            if (parameter.questionToken) {
                 return grammarErrorOnNode(parameter.questionToken, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
             }
-            else if (parameter.initializer) {
+            if (parameter.initializer) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
             }
-            else if (!parameter.type) {
+            if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            else if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
+            if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
             }
-            else if (!node.type) {
+            if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
             }
         }
@@ -10623,10 +10832,7 @@ module ts {
             }
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (languageVersion < ScriptTarget.ES6) {
-                return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
-            }
-            else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
+            if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operatorToken.kind === SyntaxKind.CommaToken) {
                 return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
@@ -10721,6 +10927,49 @@ module ts {
             }
         }
 
+        function checkGrammarForInOrForOfStatement(forInOrOfStatement: ForInStatement | ForOfStatement): boolean {
+            if (checkGrammarStatementInAmbientContext(forInOrOfStatement)) {
+                return true;
+            }
+
+            if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                var variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
+                if (!checkGrammarVariableDeclarationList(variableList)) {
+                    if (variableList.declarations.length > 1) {
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement
+                            : Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
+                        return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
+                    }
+                    var firstDeclaration = variableList.declarations[0];
+                    if (firstDeclaration.initializer) {
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
+                            : Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
+                        return grammarErrorOnNode(firstDeclaration.name, diagnostic);
+                    }
+                    if (firstDeclaration.type) {
+                        var diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
+                            : Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
+                        return grammarErrorOnNode(firstDeclaration, diagnostic);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        function checkGrammarForOfStatement(forOfStatement: ForOfStatement): boolean {
+            // Temporarily disallow for-of statements until type check work is complete.
+            return grammarErrorOnFirstToken(forOfStatement, Diagnostics.for_of_statements_are_not_currently_supported);
+            if (languageVersion < ScriptTarget.ES6) {
+                return grammarErrorOnFirstToken(forOfStatement, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
+            }
+
+            return checkGrammarForInOrForOfStatement(forOfStatement);
+        }
+
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
             var kind = accessor.kind;
             if (languageVersion < ScriptTarget.ES5) {
@@ -10763,8 +11012,8 @@ module ts {
             }
         }
 
-        function checkGrammarForDisallowedComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
-            if (node.kind === SyntaxKind.ComputedPropertyName) {
+        function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
+            if (node.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically((<ComputedPropertyName>node).expression)) {
                 return grammarErrorOnNode(node, message);
             }
         }
@@ -10795,17 +11044,17 @@ module ts {
                 // and accessors are not allowed in ambient contexts in general,
                 // so this error only really matters for methods.
                 if (isInAmbientContext(node)) {
-                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
+                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_symbol);
                 }
                 else if (!node.body) {
-                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
+                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_symbol);
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces);
+                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol);
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals);
+                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol);
             }
         }
 
@@ -10813,6 +11062,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                     return true;
@@ -10913,9 +11163,32 @@ module ts {
                     }
                 }
             }
+
+            var checkLetConstNames =  languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
+
+            // 1. LexicalDeclaration : LetOrConst BindingList ;
+            // It is a Syntax Error if the BoundNames of BindingList contains "let".
+            // 2. ForDeclaration: ForDeclaration : LetOrConst ForBinding
+            // It is a Syntax Error if the BoundNames of ForDeclaration contains "let".
+
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
             // and its Identifier is eval or arguments 
-            return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            return (checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name)) ||
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+        }
+
+        function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
+            if (name.kind === SyntaxKind.Identifier) {
+                if ((<Identifier>name).text === "let") {
+                    return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
+                }
+            }
+            else {
+                var elements = (<BindingPattern>name).elements;
+                for (var i = 0; i < elements.length; ++i) {
+                    checkGrammarNameInLetOrConstDeclarations(elements[i].name);
+                }
+            }
         }
 
         function checkGrammarVariableDeclarationList(declarationList: VariableDeclarationList): boolean {
@@ -10946,6 +11219,7 @@ module ts {
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                     return false;
                 case SyntaxKind.LabeledStatement:
                     return allowLetAndConstDeclarations(parent.parent);
@@ -10996,6 +11270,9 @@ module ts {
                 var inAmbientContext = isInAmbientContext(enumDecl);
                 for (var i = 0, n = enumDecl.members.length; i < n; i++) {
                     var node = enumDecl.members[i];
+                    // Do not use hasDynamicName here, because that returns false for well known symbols.
+                    // We want to perform checkComputedPropertyName for all computed properties, including
+                    // well known symbols.
                     if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                         hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
                     }
@@ -11076,17 +11353,17 @@ module ts {
         function checkGrammarProperty(node: PropertyDeclaration) {
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional) ||
-                    checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_class_property_declarations)) {
+                    checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces)) {
+                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals)) {
+                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
             }
@@ -11133,7 +11410,7 @@ module ts {
             return isInAmbientContext(node) && checkGrammarTopLevelElementsForRequiredDeclareModifier(node);
         }
 
-        function checkGrammarForStatementInAmbientContext(node: Node): boolean {
+        function checkGrammarStatementInAmbientContext(node: Node): boolean {
             if (isInAmbientContext(node)) {
                 // An accessors is already reported about the ambient context
                 if (isAccessor(node.parent.kind)) {

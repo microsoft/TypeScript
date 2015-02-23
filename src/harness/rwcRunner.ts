@@ -90,7 +90,8 @@ module RWC {
                         /*settingsCallback*/ undefined, opts.options,
                         // Since all Rwc json file specified current directory in its json file, we need to pass this information to compilerHost
                         // so that when the host is asked for current directory, it should give the value from json rather than from process
-                        currentDirectory);
+                        currentDirectory,
+                        /*assertInvariants:*/ false);
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {

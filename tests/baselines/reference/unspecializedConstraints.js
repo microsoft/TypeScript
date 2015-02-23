@@ -240,7 +240,9 @@ var ts;
             this.flags = flags;
         }
         Property.prototype.equals = function (other) {
-            return this.name === other.name && this.flags === other.flags && this.type.equals(other.type);
+            return this.name === other.name &&
+                this.flags === other.flags &&
+                this.type.equals(other.type);
         };
         return Property;
     })(Symbol);
@@ -258,10 +260,14 @@ var ts;
             this.returnType = returnType;
         }
         Signature.prototype.equalsNoReturn = function (other) {
-            return this.parameters.length === other.parameters.length && this.typeParameters.length === other.typeParameters.length && arrayEquals(this.parameters, other.parameters) && arrayEquals(this.typeParameters, other.typeParameters);
+            return this.parameters.length === other.parameters.length &&
+                this.typeParameters.length === other.typeParameters.length &&
+                arrayEquals(this.parameters, other.parameters) &&
+                arrayEquals(this.typeParameters, other.typeParameters);
         };
         Signature.prototype.equals = function (other) {
-            return this.equalsNoReturn(other) && this.returnType.equals(other.returnType);
+            return this.equalsNoReturn(other) &&
+                this.returnType.equals(other.returnType);
         };
         return Signature;
     })(Symbol);
@@ -274,7 +280,9 @@ var ts;
             this.flags = flags;
         }
         Parameter.prototype.equals = function (other) {
-            return this.name === other.name && this.flags === other.flags && this.type.equals(other.type);
+            return this.name === other.name &&
+                this.flags === other.flags &&
+                this.type.equals(other.type);
         };
         return Parameter;
     })(Symbol);

@@ -53,9 +53,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "X", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });
@@ -98,9 +96,7 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     Object.defineProperty(E.prototype, "X", {
-        get: function () {
-            return '';
-        } // error
+        get: function () { return ''; } // error
         ,
         enumerable: true,
         configurable: true

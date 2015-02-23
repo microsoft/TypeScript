@@ -126,7 +126,7 @@ module ts.formatting {
             static AnyIncludingMultilineComments = TokenRange.FromTokens(TokenRange.Any.GetTokens().concat([SyntaxKind.MultiLineCommentTrivia]));
             static Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
             static BinaryOperators = TokenRange.FromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
-            static BinaryKeywordOperators = TokenRange.FromTokens([SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword]);
+            static BinaryKeywordOperators = TokenRange.FromTokens([SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword]);
             static UnaryPrefixOperators = TokenRange.FromTokens([SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken]);
             static UnaryPrefixExpressions = TokenRange.FromTokens([SyntaxKind.NumericLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
             static UnaryPreincrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
@@ -134,7 +134,7 @@ module ts.formatting {
             static UnaryPredecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
             static UnaryPostdecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
             static Comments = TokenRange.FromTokens([SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia]);
-            static TypeNames = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
+            static TypeNames = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.SymbolKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
         }
     }
 }

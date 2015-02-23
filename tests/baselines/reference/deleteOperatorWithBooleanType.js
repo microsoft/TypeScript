@@ -41,15 +41,11 @@ delete M.n;
 //// [deleteOperatorWithBooleanType.js]
 // delete  operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;

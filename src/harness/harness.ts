@@ -16,13 +16,15 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\server\session.ts' />
+/// <reference path='..\server\client.ts' />
+/// <reference path='..\server\node.d.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
+/// <reference path='runnerbase.ts'/>
 
-declare var require: any;
-declare var process: any;
-var Buffer = require('buffer').Buffer;
+var Buffer: BufferConstructor = require('buffer').Buffer;
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -691,8 +693,6 @@ module Harness {
     }
 }
 
-
-
 module Harness {
     var tcServicesFileName = "typescriptServices.js";
 
@@ -796,16 +796,18 @@ module Harness {
             }
         }
 
-        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget) {
-            var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ true);
-            Utils.assertInvariants(result, /*parent:*/ undefined);
+        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants = true) {
+            // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
+            var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+            if (assertInvariants) {
+                Utils.assertInvariants(result, /*parent:*/ undefined);
+            }
             return result;
         }
 
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
         export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
-
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFileName = 'fourslash.ts';
@@ -927,7 +929,8 @@ module Harness {
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-                currentDirectory?: string) {
+                currentDirectory?: string,
+                assertInvariants = true) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
@@ -1075,7 +1078,7 @@ module Harness {
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
                         var fileName = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target);
+                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target, assertInvariants);
                     }
                 };
                 inputFiles.forEach(register);
@@ -1182,13 +1185,13 @@ module Harness {
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
-            var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
+            var errorLineInfo = err.file ? err.file.getLineAndCharacterOfPosition(err.start) : { line: -1, character: -1 };
             return {
                 fileName: err.file && err.file.fileName,
                 start: err.start,
                 end: err.start + err.length,
-                line: errorLineInfo.line,
-                character: errorLineInfo.character,
+                line: errorLineInfo.line + 1,
+                character: errorLineInfo.character + 1,
                 message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
                 category: ts.DiagnosticCategory[err.category].toLowerCase(),
                 code: err.code
