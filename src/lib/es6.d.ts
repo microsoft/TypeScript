@@ -477,8 +477,9 @@ declare var GeneratorFunction: GeneratorFunctionConstructor;
 
 interface Generator<T> extends IterableIterator<T> {
     next(value?: any): IteratorResult<T>;
-    throw (exception: any): IteratorResult<T>;
-    return (value: T): IteratorResult<T>;
+    throw(exception: any): IteratorResult<T>;
+    return(value: T): IteratorResult<T>;
+    [Symbol.iterator](): Generator<T>;
     [Symbol.toStringTag]: string;
 }
 
