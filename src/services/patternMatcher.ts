@@ -160,7 +160,7 @@ module ts {
             if (dotSeparatedSegments.length - 1 > containerParts.length) {
                 // There weren't enough container parts to match against the pattern parts.
                 // So this definitely doesn't match.
-                return null;
+                return undefined;
             }
 
             // So far so good.  Now break up the container for the candidate and check if all
