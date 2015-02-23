@@ -1164,7 +1164,7 @@ interface ArrayConstructor {
 }
 
 declare var Array: ArrayConstructor;
-declare type PropertyKey = string | number | Symbol;
+declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
     /** Returns a string representation of an object. */
@@ -1173,7 +1173,7 @@ interface Symbol {
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface SymbolConstructor {
@@ -1186,21 +1186,21 @@ interface SymbolConstructor {
       * Returns a new unique Symbol value.
       * @param  description Description of the new Symbol object.
       */
-    (description?: string|number): Symbol;
+    (description?: string|number): symbol;
 
     /**
       * Returns a Symbol object from the global symbol registry matching the given key if found. 
       * Otherwise, returns a new symbol with this key.
       * @param key key to search for.
       */
-    for(key: string): Symbol;
+    for(key: string): symbol;
 
     /**
       * Returns a key from the global symbol registry matching the given Symbol if found. 
       * Otherwise, returns a undefined.
       * @param sym Symbol to find the key for.
       */
-    keyFor(sym: Symbol): string;
+    keyFor(sym: symbol): string;
 
     // Well-known Symbols
 
@@ -1208,42 +1208,42 @@ interface SymbolConstructor {
       * A method that determines if a constructor object recognizes an object as one of the 
       * constructor’s instances. Called by the semantics of the instanceof operator. 
       */
-    hasInstance: Symbol;
+    hasInstance: symbol;
 
     /** 
       * A Boolean value that if true indicates that an object should flatten to its array elements
       * by Array.prototype.concat.
       */
-    isConcatSpreadable: Symbol;
+    isConcatSpreadable: symbol;
 
     /** 
       * A Boolean value that if true indicates that an object may be used as a regular expression. 
       */
-    isRegExp: Symbol;
+    isRegExp: symbol;
 
     /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
       * for-of statement. 
       */
-    iterator: Symbol;
+    iterator: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
       * abstract operation. 
       */
-    toPrimitive: Symbol;
+    toPrimitive: symbol;
 
     /** 
       * A String value that is used in the creation of the default string description of an object. 
       * Called by the built- in method Object.prototype.toString. 
       */
-    toStringTag: Symbol;
+    toStringTag: symbol;
 
     /** 
       * An Object whose own property names are property names that are excluded from the with 
       * environment bindings of the associated objects.
       */
-    unscopables: Symbol;
+    unscopables: symbol;
 }
 declare var Symbol: SymbolConstructor;
 
@@ -1274,7 +1274,7 @@ interface ObjectConstructor {
       * Returns an array of all symbol properties found directly on object o.
       * @param o Object to retrieve the symbols from.
       */
-    getOwnPropertySymbols(o: any): Symbol[];
+    getOwnPropertySymbols(o: any): symbol[];
 
     /**
       *  Returns true if the values are the same value, false otherwise.
@@ -1396,7 +1396,7 @@ interface ArrayLike<T> {
 
 interface Array<T> {
     /** Iterator */
-    // [Symbol.iterator] (): Iterator<T>;
+    [Symbol.iterator] (): Iterator<T>;
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
@@ -1495,7 +1495,7 @@ interface ArrayConstructor {
 
 interface String {
     /** Iterator */
-    // [Symbol.iterator] (): Iterator<string>;
+    [Symbol.iterator] (): Iterator<string>;
 
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
@@ -1613,12 +1613,12 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    //[Symbol.iterator](): Iterator<T>;
+    [Symbol.iterator](): Iterator<T>;
     next(): IteratorResult<T>;
 }
 
 interface Iterable<T> {
-  //[Symbol.iterator](): Iterator<T>;
+    [Symbol.iterator](): Iterator<T>;
 }
 
 interface GeneratorFunction extends Function {
@@ -1640,7 +1640,7 @@ interface Generator<T> extends Iterator<T> {
     next(value?: any): IteratorResult<T>;
     throw (exception: any): IteratorResult<T>;
     return (value: T): IteratorResult<T>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface Math {
@@ -1754,11 +1754,11 @@ interface Math {
       */
     cbrt(x: number): number;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface RegExp {
-    // [Symbol.isRegExp]: boolean;
+    [Symbol.isRegExp]: boolean;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
@@ -1815,8 +1815,8 @@ interface Map<K, V> {
     set(key: K, value?: V): Map<K, V>;
     size: number;
     values(): Iterator<V>;
-    // [Symbol.iterator]():Iterator<[K,V]>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.iterator]():Iterator<[K,V]>;
+    [Symbol.toStringTag]: string;
 }
 
 interface MapConstructor {
@@ -1832,7 +1832,7 @@ interface WeakMap<K, V> {
     get(key: K): V;
     has(key: K): boolean;
     set(key: K, value?: V): WeakMap<K, V>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface WeakMapConstructor {
@@ -1852,8 +1852,8 @@ interface Set<T> {
     keys(): Iterator<T>;
     size: number;
     values(): Iterator<T>;
-    // [Symbol.iterator]():Iterator<T>;
-    // [Symbol.toStringTag]: string;
+    [Symbol.iterator]():Iterator<T>;
+    [Symbol.toStringTag]: string;
 }
 
 interface SetConstructor {
@@ -1868,7 +1868,7 @@ interface WeakSet<T> {
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface WeakSetConstructor {
@@ -1879,7 +1879,7 @@ interface WeakSetConstructor {
 declare var WeakSet: WeakSetConstructor;
 
 interface JSON {
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 /**
@@ -1899,7 +1899,7 @@ interface ArrayBuffer {
       */
     slice(begin: number, end?: number): ArrayBuffer;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface ArrayBufferConstructor {
@@ -2036,7 +2036,7 @@ interface DataView {
       */
     setUint32(byteOffset: number, value: number, littleEndian: boolean): void;
 
-    // [Symbol.toStringTag]: string;
+    [Symbol.toStringTag]: string;
 }
 
 interface DataViewConstructor {
@@ -2303,7 +2303,7 @@ interface Int8Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int8ArrayConstructor {
@@ -2593,7 +2593,7 @@ interface Uint8Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint8ArrayConstructor {
@@ -2883,7 +2883,7 @@ interface Uint8ClampedArray {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -3173,7 +3173,7 @@ interface Int16Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int16ArrayConstructor {
@@ -3463,7 +3463,7 @@ interface Uint16Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint16ArrayConstructor {
@@ -3753,7 +3753,7 @@ interface Int32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Int32ArrayConstructor {
@@ -4043,7 +4043,7 @@ interface Uint32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Uint32ArrayConstructor {
@@ -4333,7 +4333,7 @@ interface Float32Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Float32ArrayConstructor {
@@ -4623,7 +4623,7 @@ interface Float64Array {
     values(): Iterator<number>;
 
     [index: number]: number;
-    // [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator] (): Iterator<number>;
 }
 
 interface Float64ArrayConstructor {
@@ -4687,7 +4687,7 @@ declare var Reflect: {
     getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     getPrototypeOf(target: any): any;
     has(target: any, propertyKey: string): boolean;
-    has(target: any, propertyKey: Symbol): boolean;
+    has(target: any, propertyKey: symbol): boolean;
     isExtensible(target: any): boolean;
     ownKeys(target: any): Array<PropertyKey>;
     preventExtensions(target: any): boolean;
