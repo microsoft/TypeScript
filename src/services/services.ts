@@ -1552,77 +1552,48 @@ module ts {
             var file = this.getEntry(fileName);
             return file && file.scriptSnapshot;
         }
-
-        public getChangeRange(fileName: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
-            var currentVersion = this.getVersion(fileName);
-            if (lastKnownVersion === currentVersion) {
-                return unchangedTextChangeRange; // "No changes"
-            }
-
-            var scriptSnapshot = this.getScriptSnapshot(fileName);
-            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
-        }
     }
 
     class SyntaxTreeCache {
-        private hostCache: HostCache;
-
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentFileName: string = "";
-        private currentFileVersion: string = null;
-        private currentSourceFile: SourceFile = null;
+        private currentFileName: string;
+        private currentFileVersion: string;
+        private currentFileScriptSnapshot: IScriptSnapshot;
+        private currentSourceFile: SourceFile;
 
         constructor(private host: LanguageServiceHost) {
         }
 
-        private log(message: string) {
-            if (this.host.log) {
-                this.host.log(message);
+        public getCurrentSourceFile(fileName: string): SourceFile {
+            var scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            if (!scriptSnapshot) {
+                // The host does not know about this file.
+                throw new Error("Could not find file: '" + fileName + "'.");
             }
-        }
 
-        private initialize(fileName: string) {
-            // ensure that both source file and syntax tree are either initialized or not initialized
-            var start = new Date().getTime();
-            this.hostCache = new HostCache(this.host);
-            this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
-
-            var version = this.hostCache.getVersion(fileName);
+            var version = this.host.getScriptVersion(fileName);
             var sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var start = new Date().getTime();
+                // This is a new file, just parse it
                 sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
-                this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var editRange = this.hostCache.getChangeRange(fileName, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
-
-                var start = new Date().getTime();
+                // This is the same file, just a newer version. Incrementally parse the file.
+                var editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
-                this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFileName = fileName;
+                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentSourceFile = sourceFile;
             }
-        }
 
-        public getCurrentSourceFile(fileName: string): SourceFile {
-            this.initialize(fileName);
             return this.currentSourceFile;
-        }
-
-        public getCurrentScriptSnapshot(fileName: string): IScriptSnapshot {
-            return this.getCurrentSourceFile(fileName).scriptSnapshot;
         }
     }
 
@@ -2069,6 +2040,7 @@ module ts {
         }
 
         function getValidSourceFile(fileName: string): SourceFile {
+            fileName = normalizeSlashes(fileName);
             var sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
@@ -2157,7 +2129,7 @@ module ts {
                         }
 
                         // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostCache.getChangeRange(fileName, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
                         return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
                     }
                 }
@@ -2222,8 +2194,6 @@ module ts {
         function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
-
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
@@ -2234,7 +2204,6 @@ module ts {
         function getSemanticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName)
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
@@ -2310,8 +2279,6 @@ module ts {
 
         function getCompletionsAtPosition(fileName: string, position: number) {
             synchronizeHostData();
-
-            fileName = normalizeSlashes(fileName);
 
             var syntacticStart = new Date().getTime();
             var sourceFile = getValidSourceFile(fileName);
@@ -2731,8 +2698,6 @@ module ts {
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
-            fileName = normalizeSlashes(fileName);
-
             var sourceFile = getValidSourceFile(fileName);
 
             var session = activeCompletionSession;
@@ -3195,7 +3160,6 @@ module ts {
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3241,7 +3205,6 @@ module ts {
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -3377,7 +3340,6 @@ module ts {
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
@@ -3926,7 +3888,6 @@ module ts {
         function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -4670,7 +4631,6 @@ module ts {
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var outputFiles: OutputFile[] = [];
@@ -4814,23 +4774,21 @@ module ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
 
         /// Syntactic features
-        function getCurrentSourceFile(fileName: string): SourceFile {
-            fileName = normalizeSlashes(fileName);
-            var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return currentSourceFile;
+        function getSourceFile(fileName: string): SourceFile {
+            return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
         function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
-            fileName = ts.normalizeSlashes(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
             // Get node at the location
-            var node = getTouchingPropertyName(getCurrentSourceFile(fileName), startPos);
+            var node = getTouchingPropertyName(sourceFile, startPos);
 
             if (!node) {
                 return;
@@ -4884,19 +4842,19 @@ module ts {
 
         function getBreakpointStatementAtPosition(fileName: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            fileName = ts.normalizeSlashes(fileName);
-            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(fileName), position);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
-        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            fileName = normalizeSlashes(fileName);
+        function getNavigationBarItems(fileName: string): NavigationBarItem[]{
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             synchronizeHostData();
-            fileName = normalizeSlashes(fileName);
 
             var sourceFile = getValidSourceFile(fileName);
 
@@ -4970,8 +4928,7 @@ module ts {
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Make a scanner we can get trivia from.
             var triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
@@ -5189,13 +5146,12 @@ module ts {
 
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             var result: TextSpan[] = [];
 
             var token = getTouchingToken(sourceFile, position);
@@ -5248,10 +5204,8 @@ module ts {
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
-            fileName = normalizeSlashes(fileName);
-
             var start = new Date().getTime();
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
@@ -5263,22 +5217,17 @@ module ts {
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
@@ -5301,8 +5250,6 @@ module ts {
             // treating this as a semantic operation, we can access any tree without throwing 
             // anything away.
             synchronizeHostData();
-
-            fileName = normalizeSlashes(fileName);
 
             var sourceFile = getValidSourceFile(fileName);
 
@@ -5446,7 +5393,6 @@ module ts {
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
@@ -5530,7 +5476,7 @@ module ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
-            getSourceFile: getCurrentSourceFile,
+            getSourceFile,
             getProgram
         };
     }
