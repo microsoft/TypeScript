@@ -82,7 +82,6 @@ module ts.server {
         private watchedFiles: WatchedFile[] = [];
         private nextFileToCheck = 0;
         private watchTimer: NodeJS.Timer;
-        private static fileDeleted = 34;
 
         // average async stat takes about 30 microseconds
         // set chunk size to do 30 files in < 1 millisecond
@@ -111,13 +110,7 @@ module ts.server {
 
             fs.stat(watchedFile.fileName,(err, stats) => {
                 if (err) {
-                    var msg = err.message;
-                    if (err.errno) {
-                        msg += " errno: " + err.errno.toString();
-                    }
-                    if (err.errno == WatchedFileSet.fileDeleted) {
-                        watchedFile.callback(watchedFile.fileName);
-                    }
+                    watchedFile.callback(watchedFile.fileName);
                 }
                 else if (watchedFile.mtime.getTime() != stats.mtime.getTime()) {
                     watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
