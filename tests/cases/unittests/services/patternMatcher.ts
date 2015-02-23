@@ -96,7 +96,6 @@ describe('PatternMatcher', function () {
 
     describe("SingleWordPattern", () => {
         it("PreferCaseSensitiveExact", () => {
-            debugger;
             var match = getFirstMatch("Foo", "Foo");
 
             assert.equal(ts.PatternMatchKind.exact, match.kind);
@@ -125,7 +124,6 @@ describe('PatternMatcher', function () {
         });
 
         it("PreferCaseSensitiveCamelCaseMatchSimple", () => {
-            debugger;
             var match = getFirstMatch("FogBar", "FB");
 
             assert.equal(ts.PatternMatchKind.camelCase, match.kind);
@@ -172,7 +170,6 @@ describe('PatternMatcher', function () {
         });
 
         it("PreferCaseSensitiveLowercasePattern", () => {
-            debugger;
             var match = getFirstMatch("FogBar", "b");
 
             assert.equal(ts.PatternMatchKind.substring, match.kind);
@@ -266,7 +263,6 @@ describe('PatternMatcher', function () {
         });
 
         it("AllLowerPattern1", () => {
-            debugger;
             var match = getFirstMatch("FogBarChangedEventArgs", "changedeventargs");
 
             assert.isTrue(undefined !== match);
@@ -473,7 +469,6 @@ describe('PatternMatcher', function () {
         });
 
         it("DottedPattern7", () => {
-            debugger;
             var match = getFirstMatch("UIElement", "UIElement");
             var match = getFirstMatch("GetKeyword", "UIElement");
             assert.isTrue(match === undefined);
@@ -490,7 +485,7 @@ describe('PatternMatcher', function () {
     }
 
     function getFirstMatchForDottedPattern(dottedContainer: string, candidate: string, pattern: string): ts.PatternMatch {
-        var matches = ts.createPatternMatcher(pattern).getMatches(candidate, dottedContainer);
+        var matches = ts.createPatternMatcher(pattern).getMatches(dottedContainer.split("."), candidate);
         return matches ? matches[0] : undefined;
     }
 

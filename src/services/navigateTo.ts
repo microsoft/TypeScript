@@ -26,8 +26,12 @@ module ts.NavigateTo {
                     // It was a match!  If the pattern has dots in it, then also see if hte 
                     // declaration container matches as well.
                     if (patternMatcher.patternContainsDots) {
-                        var containerName = getContainerName(getContainerNode(declaration));
-                        matches = patternMatcher.getMatches(name, containerName);
+                        var containers = getContainers(declaration);
+                        if (!containers) {
+                            return undefined;
+                        }
+
+                        matches = patternMatcher.getMatches(containers, name);
 
                         if (!matches) {
                             continue;
@@ -36,7 +40,7 @@ module ts.NavigateTo {
 
                     var fileName = sourceFile.fileName;
                     var matchKind = bestMatchKind(matches);
-                    rawItems.push({ name, fileName, matchKind, isCaseSensitive: isCaseSensitive(matches), declaration });
+                    rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                 }
             }
         });
@@ -50,7 +54,7 @@ module ts.NavigateTo {
 
         return items;
 
-        function isCaseSensitive(matches: PatternMatch[]): boolean {
+        function allMatchesAreCaseSensitive(matches: PatternMatch[]): boolean {
             Debug.assert(matches.length > 0);
 
             // This is a case sensitive match, only if all the submatches were case sensitive.
@@ -64,26 +68,99 @@ module ts.NavigateTo {
         }
 
         function getDeclarationName(declaration: Declaration): string {
-            if (declaration.name.kind === SyntaxKind.Identifier ||
-                declaration.name.kind === SyntaxKind.StringLiteral ||
-                declaration.name.kind === SyntaxKind.NumericLiteral) {
+            var result = getTextOfIdentifierOrLiteral(declaration.name);
+            if (result !== undefined) {
+                return result;
+            }
 
-                return (<Identifier>declaration.name).text;
+            if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
+                var expr = (<ComputedPropertyName>declaration.name).expression;
+                if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                    return (<PropertyAccessExpression>expr).name.text;
+                }
+
+                return getTextOfIdentifierOrLiteral(expr);
             }
 
             return undefined;
         }
 
-        function getContainerName(declaration: Declaration): string {
-            var name = getDeclarationName(declaration);
-            if (name === undefined) {
-                return undefined;
+        function getTextOfIdentifierOrLiteral(node: Node) {
+            if (node.kind === SyntaxKind.Identifier ||
+                node.kind === SyntaxKind.StringLiteral ||
+                node.kind === SyntaxKind.NumericLiteral) {
+
+                return (<Identifier | LiteralExpression>node).text;
             }
 
-            var container = getContainerNode(declaration);
-            return container && container.name
-                ? getContainerName(container) + "." + name
-                : name;
+            return undefined;
+        }
+
+        function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]) {
+            if (declaration && declaration.name) {
+                var text = getTextOfIdentifierOrLiteral(declaration.name);
+                if (text !== undefined) {
+                    containers.unshift(text);
+                }
+                else if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
+                    return tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion:*/ true);
+                }
+                else {
+                    // Don't know how to add this.
+                    return false
+                }
+            }
+
+            return true;
+        }
+
+        // Only added the names of computed properties if they're simple dotted expressions, like:
+        //
+        //      [X.Y.Z]() { }
+        function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
+            var text = getTextOfIdentifierOrLiteral(expression);
+            if (text !== undefined) {
+                if (includeLastPortion) {
+                    containers.unshift(text);
+                }
+                return true;
+            }
+
+            if (expression.kind === SyntaxKind.PropertyAccessExpression) {
+                var propertyAccess = <PropertyAccessExpression>expression;
+                if (includeLastPortion) {
+                    containers.unshift(propertyAccess.name.text);
+                }
+
+                return tryAddComputedPropertyName(propertyAccess.expression, containers, /*includeLastPortion:*/ true);
+            }
+
+            return false;
+        }
+
+        function getContainers(declaration: Declaration) {
+            var containers: string[] = [];
+
+            // First, if we started with a computed property name, then add all but the last
+            // portion into the container array.
+            if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
+                if (!tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion:*/ false)) {
+                    return undefined;
+                }
+            }
+
+            // Now, walk up our containers, adding all their names to the container array.
+            declaration = getContainerNode(declaration);
+
+            while (declaration) {
+                if (!tryAddSingleDeclarationName(declaration, containers)) {
+                    return undefined;
+                }
+
+                declaration = getContainerNode(declaration);
+            }
+
+            return containers;
         }
 
         function bestMatchKind(matches: PatternMatch[]) {

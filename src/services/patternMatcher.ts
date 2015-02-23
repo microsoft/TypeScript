@@ -46,7 +46,7 @@ module ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidate: string, dottedContainer: string): PatternMatch[];
+        getMatches(candidateContainers: string[], candidate: string): PatternMatch[];
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -139,7 +139,7 @@ module ts {
             return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
         }
 
-        function getMatches(candidate: string, dottedContainer: string): PatternMatch[] {
+        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] {
             if (skipMatch(candidate)) {
                 return undefined;
             }
@@ -152,12 +152,11 @@ module ts {
                 return undefined;
             }
 
-            dottedContainer = dottedContainer || "";
-            var containerParts = dottedContainer.split(".");
+            candidateContainers = candidateContainers || [];
 
             // -1 because the last part was checked against the name, and only the rest
             // of the parts are checked against the container.
-            if (dotSeparatedSegments.length - 1 > containerParts.length) {
+            if (dotSeparatedSegments.length - 1 > candidateContainers.length) {
                 // There weren't enough container parts to match against the pattern parts.
                 // So this definitely doesn't match.
                 return undefined;
@@ -167,12 +166,12 @@ module ts {
             // the dotted parts match up correctly.
             var totalMatch = candidateMatch;
 
-            for (var i = dotSeparatedSegments.length - 2, j = containerParts.length - 1;
+            for (var i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
                  i >= 0;
                  i--, j--) {
 
                 var segment = dotSeparatedSegments[i];
-                var containerName = containerParts[j];
+                var containerName = candidateContainers[j];
 
                 var containerMatch = matchSegment(containerName, segment);
                 if (!containerMatch) {
