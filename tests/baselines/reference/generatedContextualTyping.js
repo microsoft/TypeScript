@@ -1065,18 +1065,42 @@ var x120 = (function () {
     }
     return x120;
 })();
-function x121(parm) { }
-function x122(parm) { }
-function x123(parm) { }
-function x124(parm) { }
-function x125(parm) { }
-function x126(parm) { }
-function x127(parm) { }
-function x128(parm) { }
-function x129(parm) { }
-function x130(parm) { }
-function x131(parm) { }
-function x132(parm) { }
+function x121(parm) {
+    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+}
+function x122(parm) {
+    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+}
+function x123(parm) {
+    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+}
+function x124(parm) {
+    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+}
+function x125(parm) {
+    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+}
+function x126(parm) {
+    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+}
+function x127(parm) {
+    if (parm === void 0) { parm = [d1, d2]; }
+}
+function x128(parm) {
+    if (parm === void 0) { parm = [d1, d2]; }
+}
+function x129(parm) {
+    if (parm === void 0) { parm = [d1, d2]; }
+}
+function x130(parm) {
+    if (parm === void 0) { parm = { n: [d1, d2] }; }
+}
+function x131(parm) {
+    if (parm === void 0) { parm = function (n) { var n; return null; }; }
+}
+function x132(parm) {
+    if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
+}
 function x133() { return function () { return [d1, d2]; }; }
 function x134() { return function () { return [d1, d2]; }; }
 function x135() { return function named() { return [d1, d2]; }; }
