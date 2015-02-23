@@ -1160,4 +1160,21 @@ module ts {
             }
         }
     }
+    
+    /**
+      * Finds the first DecoratorMetadata entry in a DecoratorMetadataArray for the given decorator symbol.
+      * @metadataArray an array of DecoratorMetadata
+      * @decoratorSymbol the symbol to a function declaration representing an ambient decorator.
+      */
+    export function findMetadata(metadataArray: DecoratorMetadata[], decoratorSymbol: Symbol): DecoratorMetadata {
+        if (metadataArray && decoratorSymbol) {
+            for (var i = 0; i < metadataArray.length; i++) {
+                var metadata = metadataArray[i];
+                if (metadata.symbol === decoratorSymbol) {
+                    return metadata;
+                }
+            }
+        }
+        return undefined;
+    }
 }

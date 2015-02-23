@@ -70,9 +70,9 @@ module ts {
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         var anyType = createIntrinsicType(TypeFlags.Any, "any");
-        var stringType = createIntrinsicType(TypeFlags.String, "string", /*boxedType*/ "String");
-        var numberType = createIntrinsicType(TypeFlags.Number, "number", /*boxedType*/ "Number");
-        var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean", /*boxedType*/ "Boolean");
+        var stringType = createIntrinsicType(TypeFlags.String, "string");
+        var numberType = createIntrinsicType(TypeFlags.Number, "number");
+        var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
         var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
@@ -734,10 +734,9 @@ module ts {
             return result;
         }
 
-        function createIntrinsicType(kind: TypeFlags, intrinsicName: string, boxedName?: string): IntrinsicType {
+        function createIntrinsicType(kind: TypeFlags, intrinsicName: string): IntrinsicType {
             var type = <IntrinsicType>createType(kind);
             type.intrinsicName = intrinsicName;
-            type.boxedName = boxedName;
             return type;
         }
 
@@ -8152,6 +8151,10 @@ module ts {
             forEach(node.decorators, checkDecorator);
         }
 
+        /**
+          * Gets the right-most Identifier of the expression of a Decorator. This is used to resolve
+          * the declaration of an ambient decorator.
+          */
         function getIdentifierOfDecoratorExpression(expression: Expression): Identifier {
             // unwrap a parenthesized expression
             while (expression.kind === SyntaxKind.ParenthesizedExpression) {
@@ -8181,6 +8184,9 @@ module ts {
             return undefined;
         }
 
+        /**
+          * Gets the argument list of the expression of a Decorator, if it is a decorator factory.
+          */
         function getArgumentsOfDecoratorExpression(expression: Expression): Expression[] {
             // unwrap a parenthesized expression
             while (expression.kind === SyntaxKind.ParenthesizedExpression) {
@@ -8195,6 +8201,9 @@ module ts {
             return undefined;
         }
 
+        /**
+          * Evaluates and returns the constant values of the arguments to a decorator factory.
+          */
         function evalDecoratorArguments(node: Decorator, argumentList: Expression[]): any[]{
             var result: any[];
             if (argumentList) {
@@ -8210,9 +8219,9 @@ module ts {
                     }
                     result[i] = value;
                 }
-                if (!result) {
-                    return emptyArray;
-                }
+            }
+            if (!result) {
+                return emptyArray;
             }
             return result;
         }
@@ -8263,18 +8272,6 @@ module ts {
                     return true;
             }
             return false;
-        }        
-
-        function findMetadata(metadataArray: DecoratorMetadata[], decoratorSymbol: Symbol): DecoratorMetadata {
-            if (metadataArray) {
-                for (var i = 0; i < metadataArray.length; i++) {
-                    var metadata = metadataArray[i];
-                    if (metadata.symbol === decoratorSymbol) {
-                        return metadata;
-                    }
-                }
-            }
-            return undefined;
         }
 
         function resolveMetadataForDecorator(decorator: Decorator): DecoratorMetadata {
@@ -8342,6 +8339,9 @@ module ts {
             return links.decoratorMetadata;
         }
 
+        /**
+          * For a node, gets a DecoratorFlags value that represents the decorator target for that node.
+          */
         function getValidDecoratorTarget(node: Node): DecoratorFlags {
             if (node) {
                 switch (node.kind) {
@@ -8364,7 +8364,13 @@ module ts {
             return undefined;
         }
 
-        function getDecoratorFlagsForDecorator(node: Decorator, decoratorSymbol: Symbol, exprType: Type) {            
+        /**
+          * Computes the DecoratorFlags for a decorator.
+          * @node The decorator
+          * @decoratorSymbol The symbol for the decorator function or factory
+          * @exprType The type of the decorator expression
+          */
+        function getDecoratorFlagsForDecorator(node: Decorator, decoratorSymbol: Symbol, exprType: Type): DecoratorFlags {            
             var flags: DecoratorFlags;
             if (decoratorSymbol) {
                 // get the valid targets from this decorator's @decorator
@@ -8406,6 +8412,68 @@ module ts {
                 }
             }
             return flags;
+        }
+
+        /**
+          * Checks the type annotation of an accessor declaration or property declaration as 
+          * an expression if it is a type reference to a type with a value declaration.
+          */
+        function checkTypeAnnotationAsExpression(node: AccessorDeclaration | PropertyDeclaration) {
+            var typeNode: TypeNode;
+            if (isAccessor(node.kind)) {
+                typeNode = (<AccessorDeclaration>node).type;
+            }
+            else if (node.kind === SyntaxKind.PropertyDeclaration) {
+                typeNode = (<PropertyDeclaration>node).type;
+            }
+            if (typeNode && typeNode.kind === SyntaxKind.TypeReference) {
+                var type = getTypeOfSymbol(node.symbol);
+                if (type.symbol.valueDeclaration) {
+                    checkExpressionOrQualifiedName((<TypeReferenceNode>typeNode).typeName);
+                }
+            }
+        }
+
+        /**
+          * Checks the type annotation of the parameters of a function-like or the constructor 
+          * of a class as expressions if they are a type reference to a type with a value declaration.
+          */
+        function checkParameterTypeAnnotationsAsExpressions(node: ClassDeclaration | FunctionLikeDeclaration) {
+            // ensure all type annotations with a value declaration are checked as an expression
+            var declaration: FunctionLikeDeclaration;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                declaration = getFirstConstructorWithBody(<ClassDeclaration>node);
+            }
+            else {
+                declaration = <FunctionLikeDeclaration>node;
+            }
+            if (declaration) {
+                var parameters = declaration.parameters;
+                var parameterCount = parameters.length;
+                for (var i = 0; i < parameterCount; i++) {
+                    var parameter = parameters[i];
+                    if (parameter.type && parameter.type.kind === SyntaxKind.TypeReference) {
+                        var parameterType = getTypeOfSymbol(parameter.symbol);
+                        if (parameterType.symbol.valueDeclaration) {
+                            checkExpressionOrQualifiedName((<TypeReferenceNode>parameter.type).typeName);
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+          * Checks the return type annotation as an expression if it is a type reference to a 
+          * type with a value declaration.
+          */
+        function checkReturnTypeAnnotationAsExpression(node: FunctionLikeDeclaration) {
+            var returnTypeNode = node.type;
+            if (returnTypeNode && returnTypeNode.kind === SyntaxKind.TypeReference) {
+                var returnTypeSymbol = getSymbolOfNode(returnTypeNode);
+                if (returnTypeSymbol.valueDeclaration) {
+                    checkExpressionOrQualifiedName((<TypeReferenceNode>returnTypeNode).typeName);
+                }
+            }
         }
 
         function checkDecorator(node: Decorator): void {
@@ -8479,6 +8547,39 @@ module ts {
                     case globalReturnTypeDecoratorSymbol:
                         getNodeLinks(node.parent).flags |= NodeCheckFlags.EmitDecoratedReturnType;
                         break;
+                }
+            }
+            else if (symbol && !(flags & DecoratorFlags.UserDefinedAmbient)) {
+                var valueDeclaration = symbol.valueDeclaration;
+                if (valueDeclaration && isAnyFunction(valueDeclaration)) {
+                    var hasTypeDecorator = false;
+                    var hasParamTypesDecorator = false;
+                    var hasReturnTypeDecorator = false;
+                    var signature = getSignatureFromDeclaration(<SignatureDeclaration>valueDeclaration);
+                    var parameters = signature.parameters;
+                    var parameterCount = parameters.length;
+                    for (var i = 0; i < parameterCount; i++) {
+                        var parameter = parameters[i];
+                        var metadataArray = getMetadataForSymbol(parameter);
+                        if (findMetadata(metadataArray, globalTypeDecoratorSymbol)) {
+                            hasTypeDecorator = true;
+                        }
+                        if (findMetadata(metadataArray, globalParamTypesDecoratorSymbol)) {
+                            hasParamTypesDecorator = true;
+                        }
+                        if (findMetadata(metadataArray, globalReturnTypeDecoratorSymbol)) {
+                            hasReturnTypeDecorator = true;
+                        }
+                    }
+                    if (hasTypeDecorator && (isAccessor(node.parent.kind) || node.kind === SyntaxKind.PropertyDeclaration)) {
+                        checkTypeAnnotationAsExpression(<AccessorDeclaration | PropertyDeclaration>node.parent);
+                    }
+                    if (hasParamTypesDecorator && (node.parent.kind === SyntaxKind.ClassDeclaration || isAnyFunction(node.parent))) {
+                        checkParameterTypeAnnotationsAsExpressions(<ClassDeclaration | FunctionLikeDeclaration>node.parent);
+                    }
+                    if (hasReturnTypeDecorator && isAnyFunction(node.parent)) {
+                        checkReturnTypeAnnotationAsExpression(<FunctionLikeDeclaration>node.parent);
+                    }
                 }
             }
         }
@@ -10797,53 +10898,96 @@ module ts {
             return undefined;
         }
 
-        function serializeType(type: Type): string {
+        function serializeEntityName(node: EntityName): string {
+            if (node.kind === SyntaxKind.Identifier) {
+                var prefix = getExpressionNamePrefix(<Identifier>node);
+                if (prefix) {
+                    return prefix + "." + (<Identifier>node).text;
+                }
+                return (<Identifier>node).text;
+            }
+            else {
+                return serializeEntityName((<QualifiedName>node).left) + "." + serializeEntityName((<QualifiedName>node).right);
+            }
+        }
+
+        function serializeTypeReferenceNode(node: TypeReferenceNode): string {
+            var type = getTypeFromTypeReferenceNode(node);
             var flags = type.flags;
             if (flags & TypeFlags.Void) {
                 return "void 0";
             }
-            else if (flags & TypeFlags.Intrinsic) {
-                var boxedName = (<IntrinsicType>type).boxedName;
-                if (boxedName) {
-                    return boxedName;
-                }
+            else if (type.flags & TypeFlags.Boolean) {
+                return "Boolean";
             }
-            else if (flags & TypeFlags.StringLiteral) {
-                return "String";
-            }
-            else if (flags & TypeFlags.Enum) {
+            else if (flags & TypeFlags.NumberLike) {
                 return "Number";
+            }
+            else if (flags & TypeFlags.StringLike) {
+                return "String";
             }
             else if (flags & TypeFlags.Tuple) {
                 return "Array";
             }
-            else {
-                var symbol = type.symbol;
-                var declaration = symbol.valueDeclaration;
-                if (declaration) {
-                    var name = declaration.name;
-                    if (name && name.kind === SyntaxKind.Identifier) {
-                        var prefix = getExpressionNamePrefix(<Identifier>name);
-                        if (prefix) {
-                            return prefix + "." + (<Identifier>name).text;
-                        }
-                        return (<Identifier>name).text;
-                    }
-                }
+            else if (type.symbol.valueDeclaration) {
+                return serializeEntityName(node.typeName);
             }
 
             var signatures = getSignaturesOfType(type, SignatureKind.Call);
             if (signatures.length) {
                 return "Function";
             }
-                        
+            return "Object";
+        }
+
+        function serializeTypeNode(node: TypeNode | EntityName): string {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.VoidKeyword:
+                        return "void 0";
+                    case SyntaxKind.ParenthesizedType:
+                        return serializeTypeNode((<ParenthesizedTypeNode>node).type);
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.QualifiedName:
+                        return serializeEntityName(<EntityName>node);
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                        return "Function";
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.TupleType:
+                        return "Array";
+                    case SyntaxKind.BooleanKeyword:
+                        return "Boolean";
+                    case SyntaxKind.StringKeyword:
+                    case SyntaxKind.StringLiteral:
+                        return "String";
+                    case SyntaxKind.NumberKeyword:
+                        return "Number";
+                    case SyntaxKind.TypeReference:
+                        return serializeTypeReferenceNode(<TypeReferenceNode>node);
+                    case SyntaxKind.TypeQuery:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.AnyKeyword:
+                    default:
+                        break;
+                }
+            }
             return "Object";
         }
 
         function serializeTypeOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration | PropertyDeclaration | ParameterDeclaration): string {
-            var symbol = getSymbolOfNode(node);
-            var type = symbol ? getTypeOfSymbol(symbol) : unknownType;
-            return serializeType(type);
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    return serializeEntityName((<ClassDeclaration>node).name);
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.Parameter:
+                    return serializeTypeNode((<PropertyDeclaration | ParameterDeclaration>node).type);
+            }
+            if (isAnyFunction(node)) {
+                return "Function";
+            }
+            return "Object";
         }
         
         function serializeParameterTypesOfDeclaration(node: ClassDeclaration | FunctionLikeDeclaration): string[]{
@@ -10874,9 +11018,8 @@ module ts {
             if (node.kind === SyntaxKind.ClassDeclaration) {
                 return serializeTypeOfDeclaration(node);
             }
-            else if (isAnyFunction(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(valueDeclaration));
-                return serializeType(returnType);
+            else if (isAnyFunction(node)) {
+                return serializeTypeNode((<FunctionLikeDeclaration>node).type);
             }
             return "void 0";
         }

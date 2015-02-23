@@ -1341,7 +1341,6 @@ module ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
-        boxedName: string;      // Name of boxed constructor
     }
 
     // String literal types (TypeFlags.StringLiteral)
