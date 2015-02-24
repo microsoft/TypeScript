@@ -11,12 +11,13 @@ var v = {
 
 //// [computedPropertyNames5_ES5.js]
 var b;
-var v = (_a = {}, _a[b] =
-0, _a[true] =
-1, _a[[]] =
-0, _a[{}] =
-0, _a[undefined] =
-undefined, _a[null] =
-null,
-_a);
+var v = (_a = {},
+    _a[b] = 0,
+    _a[true] = 1,
+    _a[[]] = 0,
+    _a[{}] = 0,
+    _a[undefined] = undefined,
+    _a[null] = null,
+    _a
+);
 var _a;

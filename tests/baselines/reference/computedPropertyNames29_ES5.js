@@ -17,8 +17,10 @@ var C = (function () {
     C.prototype.bar = function () {
         var _this = this;
         (function () {
-            var obj = (_a = {}, _a[_this.bar()] = function () { },
-            _a);
+            var obj = (_a = {},
+                _a[_this.bar()] = function () { },
+                _a
+            );
             var _a;
         });
         return 0;

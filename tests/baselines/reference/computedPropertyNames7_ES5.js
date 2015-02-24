@@ -11,7 +11,8 @@ var E;
 (function (E) {
     E[E["member"] = 0] = "member";
 })(E || (E = {}));
-var v = (_a = {}, _a[0 /* member */] =
-0,
-_a);
+var v = (_a = {},
+    _a[0 /* member */] = 0,
+    _a
+);
 var _a;

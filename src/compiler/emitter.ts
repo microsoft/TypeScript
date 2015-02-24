@@ -2555,6 +2555,195 @@ module ts {
                 }
             }
 
+            function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number): void {
+                if (numElements === 0) {
+                    write("{}");
+                    return;
+                }
+
+                write("{");
+
+                if (numElements > 0) {
+                    var properties = node.properties;
+                    
+
+                    // If we are not doing a downlevel transformation for object literals,
+                    // then try to preserve the original shape of the object literal.
+                    // Otherwise just try to preserve the formatting.
+                    if (numElements === properties.length) {
+                        emitLinePreservingList(node, properties, /* allowTrailingComma */ languageVersion >= ScriptTarget.ES5, /* spacesBetweenBraces */ true);
+                    }
+                    else {
+                        var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                        if (!multiLine) {
+                            write(" ");
+                        }
+                        else {
+                            increaseIndent();
+                        }
+
+                        emitList(properties, 0, numElements, /*multiLine*/ multiLine, /*trailingComma*/ false);
+
+                        if (!multiLine) {
+                            write(" ");
+                        }
+                        else {
+                            decreaseIndent();
+                        }
+                    }
+                }
+
+                write("}");
+            }
+
+            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
+                var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                var properties = node.properties;
+
+                write("(");
+
+                if (multiLine) {
+                    increaseIndent();
+                }
+
+                // For computed properties, we need to create a unique handle to the object
+                // literal so we can modify it without risking internal assignments tainting the object.
+                var tempVar = createAndRecordTempVariable(node);
+
+                // Write out the first non-computed properties
+                // (or all properties if none of them are computed),
+                // then emit the rest through indexing on the temp variable.
+                emit(tempVar)
+                write(" = ");
+                emitObjectLiteralBody(node, firstComputedPropertyIndex);
+
+
+                for (var i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
+                    writeComma();
+
+                    var property = properties[i];
+
+                    emitStart(property)
+                    if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
+                        // TODO (drosen): Reconcile with 'emitMemberFunctions'.
+                        var accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
+                        if (property !== accessors.firstAccessor) {
+                            continue;
+                        }
+                        write("Object.defineProperty(");
+                        emit(tempVar);
+                        write(", ");
+                        emitStart(node.name);
+                        emitExpressionForPropertyName(property.name);
+                        emitEnd(property.name);
+                        write(", {");
+                        increaseIndent();
+                        if (accessors.getAccessor) {
+                            writeLine()
+                            emitLeadingComments(accessors.getAccessor);
+                            write("get: ");
+                            emitStart(accessors.getAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.getAccessor);
+                            emitEnd(accessors.getAccessor);
+                            emitTrailingComments(accessors.getAccessor);
+                            write(",");
+                        }
+                        if (accessors.setAccessor) {
+                            writeLine();
+                            emitLeadingComments(accessors.setAccessor);
+                            write("set: ");
+                            emitStart(accessors.setAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.setAccessor);
+                            emitEnd(accessors.setAccessor);
+                            emitTrailingComments(accessors.setAccessor);
+                            write(",");
+                        }
+                        writeLine();
+                        write("enumerable: true,");
+                        writeLine();
+                        write("configurable: true");
+                        decreaseIndent();
+                        writeLine();
+                        write("})");
+                        emitEnd(property);
+                    }
+                    else {
+                        emitLeadingComments(property);
+                        emitStart(property.name);
+                        emit(tempVar);
+                        emitMemberAccessForPropertyName(property.name);
+                        emitEnd(property.name);
+
+                        write(" = ");
+
+                        if (property.kind === SyntaxKind.PropertyAssignment) {
+                            emit((<PropertyAssignment>property).initializer);
+                        }
+                        else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            emitExpressionIdentifier((<ShorthandPropertyAssignment>property).name);
+                        }
+                        else if (property.kind === SyntaxKind.MethodDeclaration) {
+                            emitFunctionDeclaration(<MethodDeclaration>property);
+                        }
+                        else {
+                            Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
+                        }
+                    }
+
+                    emitEnd(property);
+                }
+
+                writeComma();
+                emit(tempVar);
+
+                if (multiLine) {
+                    decreaseIndent();
+                    writeLine();
+                }
+
+                write(")");
+
+                function writeComma() {
+                    if (multiLine) {
+                        write(",");
+                        writeLine();
+                    }
+                    else {
+                        write(", ");
+                    }
+                }
+            }
+
+            function emitObjectLiteral(node: ObjectLiteralExpression): void {
+                var properties = node.properties;
+
+                if (languageVersion < ScriptTarget.ES6) {
+                    var numProperties = properties.length;
+
+                    // Find the first computed property.
+                    // Everything until that point can be emitted as part of the initial object literal.
+                    var numInitialNonComputedProperties = numProperties;
+                    for (var i = 0, n = properties.length; i < n; i++) {
+                        if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
+                            numInitialNonComputedProperties = i;
+                            break;
+                        }
+                    }
+
+                    var hasComputedProperty = numInitialNonComputedProperties !== properties.length;
+                    if (hasComputedProperty) {
+                        emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
+                        return;
+                    }
+                }
+
+                // Ordinary case: either the object has no computed properties
+                // or we're compiling with an ES6+ target.
+                emitObjectLiteralBody(node, properties.length);
+            }
+
             function createSynthesizedNode(kind: SyntaxKind): Node {
                 var node = createNode(kind);
                 node.pos = -1;
@@ -2563,7 +2752,7 @@ module ts {
                 return node;
             }
 
-            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
+            function emitDownlevelObjectLiteralWithComputedPropertiesThroughRewrite(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
                 var parenthesizedObjectLiteral = createDownlevelObjectLiteralWithComputedProperties(node, firstComputedPropertyIndex);
                 return emit(parenthesizedObjectLiteral);
             }
@@ -2763,7 +2952,7 @@ module ts {
                 return result;
             }
 
-            function emitObjectLiteral(node: ObjectLiteralExpression): void {
+            function emitObjectLiteralThroughRewrite(node: ObjectLiteralExpression): void {
                 var properties = node.properties;
 
                 if (languageVersion < ScriptTarget.ES6) {
@@ -2781,7 +2970,7 @@ module ts {
                     
                     var hasComputedProperty = numInitialNonComputedProperties !== properties.length;
                     if (hasComputedProperty) {
-                        emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
+                        emitDownlevelObjectLiteralWithComputedPropertiesThroughRewrite(node, numInitialNonComputedProperties);
                         return;
                     }
                 }

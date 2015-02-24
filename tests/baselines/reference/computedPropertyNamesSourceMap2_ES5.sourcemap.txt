@@ -8,153 +8,100 @@ sources: computedPropertyNamesSourceMap2_ES5.ts
 emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES5.js
 sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 -------------------------------------------------------------------
->>>var v = (_a = {}, _a["hello"] = function () {
+>>>var v = (_a = {},
 1 >
 2 >^^^^
 3 >    ^
 4 >     ^^^
-5 >        
-6 >        ^
-7 >         ^^
-8 >           ^^^
-9 >              ^^
-10>                ^^
-11>                  ^^
-12>                    ^
-13>                     ^^^^^^^
-14>                            ^
-15>                             ^^^
+5 >        ^
+6 >         ^^
+7 >           ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >var 
 3 >    v
 4 >      = 
-5 >        !!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-5 >        !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 9) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 9) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
 5 >        
-6 >        !!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-6 >        !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 9) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 10) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-6 >        
-7 >         !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-7 >         !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 10) Source(1, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 12) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-7 >         
-8 >           !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-8 >           !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 12) Source(1, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 15) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-8 >           
-9 >              !!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-9 >              !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 15) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 17) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-9 >              
-10>                !!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-10>                !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 15) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 19) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-10>                
-11>                  !!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-11>                  !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 17) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 21) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-11>                  
-12>                    !!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-12>                    !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 17) Source(0, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 22) Source(2, 6) + SourceIndex(0) nameIndex (-1)
-12>                    var v = {
-  >                        [
-13>                     !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-13>                     !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 19) Source(1, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 29) Source(2, 13) + SourceIndex(0) nameIndex (-1)
-13>                     "hello"
-14>                            !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-14>                            !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 21) Source(1, 9) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 30) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-14>                            
-15>                             !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-15>                             !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 22) Source(2, 14) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(1, 33) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-15>                             
+6 >         
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
 4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
-5 >Emitted(1, 9) Source(0, NaN) + SourceIndex(0)
-6 >Emitted(1, 10) Source(1, 1) + SourceIndex(0)
-7 >Emitted(1, 12) Source(1, 1) + SourceIndex(0)
-8 >Emitted(1, 15) Source(0, NaN) + SourceIndex(0)
-9 >Emitted(1, 17) Source(0, NaN) + SourceIndex(0)
-10>Emitted(1, 19) Source(1, 1) + SourceIndex(0)
-11>Emitted(1, 21) Source(1, 1) + SourceIndex(0)
-12>Emitted(1, 22) Source(2, 6) + SourceIndex(0)
-13>Emitted(1, 29) Source(2, 13) + SourceIndex(0)
-14>Emitted(1, 30) Source(0, NaN) + SourceIndex(0)
-15>Emitted(1, 33) Source(0, NaN) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 1) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 1) + SourceIndex(0)
 ---
->>>    debugger;
+>>>    _a["hello"] = function () {
+1->^^^^
+2 >    
+3 >    ^^
+4 >      ^
+5 >       ^^^^^^^
+6 >              ^
+7 >               ^^^->
+1->var v = {
+  >    
+2 >    
+3 >    
+4 >      var v = {
+  >          [
+5 >       "hello"
+6 >              ]
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+3 >Emitted(2, 7) Source(1, 1) + SourceIndex(0)
+4 >Emitted(2, 8) Source(2, 6) + SourceIndex(0)
+5 >Emitted(2, 15) Source(2, 13) + SourceIndex(0)
+6 >Emitted(2, 16) Source(2, 14) + SourceIndex(0)
+---
+>>>        debugger;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^
+1->() {
+  >        
+2 >        debugger
+3 >                ;
+1->Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (["hello"])
+2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0) name (["hello"])
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0) name (["hello"])
+---
+>>>    },
 1 >^^^^
-2 >    ^^^^^^^^
-3 >            ^
-1 >!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-1 >!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 29) Source(2, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(2, 5) Source(3, 9) + SourceIndex(0) nameIndex (-1)
-1 >
-2 >    !!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-2 >    !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 30) Source(0, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(2, 13) Source(3, 17) + SourceIndex(0) nameIndex (-1)
-2 >    debugger
-3 >            !!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-3 >            !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 30) Source(0, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(2, 14) Source(3, 18) + SourceIndex(0) nameIndex (-1)
-3 >            ;
-1 >Emitted(2, 5) Source(3, 9) + SourceIndex(0)
-2 >Emitted(2, 13) Source(3, 17) + SourceIndex(0)
-3 >Emitted(2, 14) Source(3, 18) + SourceIndex(0)
----
->>>},
-1 >
-2 >^
-3 > 
-4 > ^^^^->
-1 >!!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-1 >!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 33) Source(0, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(3, 1) Source(4, 5) + SourceIndex(0) nameIndex (-1)
+2 >    ^
+3 >     ^^->
 1 >
   >    
-2 >!!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-2 >!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(1, 33) Source(0, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(3, 2) Source(4, 6) + SourceIndex(0) nameIndex (-1)
-2 >}
-3 > !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-3 > !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(2, 5) Source(3, 21) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(3, 2) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-3 > 
-1 >Emitted(3, 1) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 2) Source(4, 6) + SourceIndex(0)
-3 >Emitted(3, 2) Source(0, NaN) + SourceIndex(0)
+2 >    }
+1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (["hello"])
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0) name (["hello"])
 ---
->>>_a);
+>>>    _a
+1->^^^^
+2 >    ^^
 1->
-2 >^^
-3 >  
-4 >  ^
-5 >   ^
-6 >    ^^^^->
-1->!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-1->!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(2, 13) Source(3, 29) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(4, 1) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-1->
-2 >!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-2 >!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(2, 14) Source(3, 30) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(4, 3) Source(1, 1) + SourceIndex(0) nameIndex (-1)
-2 >
-3 >  !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-3 >  !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(3, 1) Source(4, 17) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(4, 3) Source(0, NaN) + SourceIndex(0) nameIndex (-1)
-3 >  
-4 >  !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-4 >  !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(3, 2) Source(4, 18) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(4, 4) Source(5, 2) + SourceIndex(0) nameIndex (-1)
-4 >  
-5 >   !!^^ !!^^ There was decoding error in the sourcemap at this location: Invalid sourceLine found
-5 >   !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(3, 2) Source(0, 18) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(4, 5) Source(5, 2) + SourceIndex(0) nameIndex (-1)
-5 >   
-1->Emitted(4, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(4, 3) Source(1, 1) + SourceIndex(0)
-3 >Emitted(4, 3) Source(0, NaN) + SourceIndex(0)
-4 >Emitted(4, 4) Source(5, 2) + SourceIndex(0)
-5 >Emitted(4, 5) Source(5, 2) + SourceIndex(0)
+2 >    
+1->Emitted(5, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(5, 7) Source(1, 1) + SourceIndex(0)
+---
+>>>);
+1 >^
+2 > ^
+3 >  ^^^^^^->
+1 >var v = {
+  >    ["hello"]() {
+  >        debugger;
+  >    }
+  >}
+2 > 
+1 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+2 >Emitted(6, 3) Source(5, 2) + SourceIndex(0)
 ---
 >>>var _a;
 1->^^^^
 2 >    ^^
 3 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->!!^^ !!^^ There was decoding error in the sourcemap at this location: Unsupported Error Format: No entries after emitted column
-1->!!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(3, 2) Source(0, 18) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(5, 5) Source(1, 1) + SourceIndex(0) nameIndex (-1)
 1->
-2 >    !!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:
-2 >    !!^^ !!^^ Decoded span from sourcemap's mappings entry: Emitted(4, 1) Source(1, 18) + SourceIndex(0) nameIndex (-1) Span encoded by the emitter:Emitted(5, 7) Source(1, 1) + SourceIndex(0) nameIndex (-1)
 2 >    
-1->Emitted(5, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(5, 7) Source(1, 1) + SourceIndex(0)
+1->Emitted(7, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(7, 7) Source(1, 1) + SourceIndex(0)
 ---
-!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded
-!!!! **** Remaining decoded string: ,EAAA,AADA,CAKA,CAAA;IAJD,EAAA
 >>>//# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map

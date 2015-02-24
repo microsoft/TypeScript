@@ -10,8 +10,9 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType5_ES5.js]
-var o = (_a = {}, _a[+"foo"] =
-"", _a[+"bar"] =
-0,
-_a);
+var o = (_a = {},
+    _a[+"foo"] = "",
+    _a[+"bar"] = 0,
+    _a
+);
 var _a;
