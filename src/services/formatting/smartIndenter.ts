@@ -24,7 +24,7 @@ module ts.formatting {
                 return 0;
             }
 
-            var lineAtPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
+            var lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
@@ -74,7 +74,7 @@ module ts.formatting {
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
-            var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            var start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
@@ -135,10 +135,10 @@ module ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             var containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getLineAndCharacterFromPosition(containingList.pos);
+                return sourceFile.getLineAndCharacterOfPosition(containingList.pos);
             }
 
-            return sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
+            return sourceFile.getLineAndCharacterOfPosition(parent.getStart(sourceFile));
         }
 
         /*
@@ -204,7 +204,7 @@ module ts.formatting {
         }
 
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
-            return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
@@ -279,7 +279,6 @@ module ts.formatting {
             }
         }
 
-
         function deriveActualIndentationFromList(list: Node[], index: number, sourceFile: SourceFile, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < list.length);
             var node = list[index];
@@ -292,7 +291,7 @@ module ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(list[i].end).line;
+                var prevEndLine = sourceFile.getLineAndCharacterOfPosition(list[i].end).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
@@ -303,16 +302,24 @@ module ts.formatting {
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
-            var lineStart = sourceFile.getPositionFromLineAndCharacter(lineAndCharacter.line, 1);
+            var lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+        /*
+            Character is the actual index of the character since the beginning of the line.
+            Column - position of the character after expanding tabs to spaces
+            "0\t2$"
+            value of 'character' for '$' is 3
+            value of 'column' for '$' is 6 (assuming that tab size is 4)
+        */
+        export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions) {
+            var character = 0;
             var column = 0;
             for (var pos = startPos; pos < endPos; ++pos) {
                 var ch = sourceFile.text.charCodeAt(pos);
                 if (!isWhiteSpace(ch)) {
-                    return column;
+                    break;
                 }
 
                 if (ch === CharacterCodes.tab) {
@@ -321,8 +328,14 @@ module ts.formatting {
                 else {
                     column++;
                 }
+
+                character++;
             }
-            return column;
+            return { column, character };
+        }
+
+        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+            return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
@@ -359,6 +372,7 @@ module ts.formatting {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.FunctionDeclaration:

@@ -28,18 +28,14 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "y", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         set: function (x) { },
         enumerable: true,
         configurable: true
     });
     C.prototype.foo = function () { };
     Object.defineProperty(C, "b", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         set: function (x) { },
         enumerable: true,
         configurable: true

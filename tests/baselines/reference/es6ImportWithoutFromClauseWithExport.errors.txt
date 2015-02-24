@@ -1,4 +1,4 @@
-tests/cases/compiler/client.ts(1,1): error TS1188: An import declaration cannot have modifiers.
+tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/client.ts(1,1): error TS1188: An import declaration cannot 
 ==== tests/cases/compiler/client.ts (1 errors) ====
     export import "server";
     ~~~~~~
-!!! error TS1188: An import declaration cannot have modifiers.
+!!! error TS1191: An import declaration cannot have modifiers.

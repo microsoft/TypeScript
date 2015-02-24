@@ -50,9 +50,7 @@ var aa = {
 function fn(x) {
     throw x;
 }
-(function (x) {
-    throw x;
-});
+(function (x) { throw x; });
 var y;
 switch (y) {
     case 'a':

@@ -48,15 +48,11 @@ void objA.a,M.n;
 // void  operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
-function foo() {
-    return "abc";
-}
+function foo() { return "abc"; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return "";
-    };
+    A.foo = function () { return ""; };
     return A;
 })();
 var M;
@@ -70,9 +66,7 @@ var ResultIsAny2 = void STRING1;
 // string type literal
 var ResultIsAny3 = void "";
 var ResultIsAny4 = void { x: "", y: "" };
-var ResultIsAny5 = void { x: "", y: function (s) {
-    return s;
-} };
+var ResultIsAny5 = void { x: "", y: function (s) { return s; } };
 // string type expressions
 var ResultIsAny6 = void objA.a;
 var ResultIsAny7 = void M.n;

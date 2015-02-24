@@ -159,6 +159,7 @@ declare module "typescript" {
     function getFullWidth(node: Node): number;
     function containsParseError(node: Node): boolean;
     function getSourceFileOfNode(node: Node): SourceFile;
+    function getStartPositionOfLine(line: number, sourceFile: SourceFile): number;
     function nodePosToString(node: Node): string;
     function getStartPosOfNode(node: Node): number;
     function nodeIsMissing(node: Node): boolean;
@@ -169,6 +170,7 @@ declare module "typescript" {
     function getTextOfNode(node: Node): string;
     function escapeIdentifier(identifier: string): string;
     function unescapeIdentifier(identifier: string): string;
+    function makeIdentifierFromModuleName(moduleName: string): string;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
     function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
@@ -193,9 +195,10 @@ declare module "typescript" {
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
-    function isExternalModuleImportDeclaration(node: Node): boolean;
-    function getExternalModuleImportDeclarationExpression(node: Node): Expression;
-    function isInternalModuleImportDeclaration(node: Node): boolean;
+    function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleImportEqualsDeclarationExpression(node: Node): Expression;
+    function isInternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleName(node: Node): Expression;
     function hasDotDotDotToken(node: Node): boolean;
     function hasQuestionToken(node: Node): boolean;
     function hasRestParameters(s: SignatureDeclaration): boolean;
@@ -216,6 +219,26 @@ declare module "typescript" {
     function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult;
     function isKeyword(token: SyntaxKind): boolean;
     function isTrivia(token: SyntaxKind): boolean;
+    /**
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
+     */
+    function hasDynamicName(declaration: Declaration): boolean;
+    /**
+     * Checks if the expression is of the form:
+     *    Symbol.name
+     * where Symbol is literally the word "Symbol", and name is any identifierName
+     */
+    function isWellKnownSymbolSyntactically(node: Expression): boolean;
+    function getPropertyNameForPropertyNameNode(name: DeclarationName): string;
+    function getPropertyNameForKnownSymbolName(symbolName: string): string;
+    /**
+     * Includes the word "Symbol" with unicode escapes
+     */
+    function isESSymbolIdentifier(node: Node): boolean;
     function isModifier(token: SyntaxKind): boolean;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
@@ -255,8 +278,7 @@ declare module "typescript" {
         list: Node;
     }
     function getEndLinePosition(line: number, sourceFile: SourceFile): number;
-    function getStartPositionOfLine(line: number, sourceFile: SourceFile): number;
-    function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number;
+    function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number;
     function rangeContainsRange(r1: TextRange, r2: TextRange): boolean;
     function startEndContainsRange(start: number, end: number, range: TextRange): boolean;
     function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean;

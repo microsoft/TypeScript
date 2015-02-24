@@ -51,17 +51,6 @@ module ts {
         }
     }
 
-    /**
-     * A declaration has a dynamic name if both of the following are true:
-     *   1. The declaration has a computed property name
-     *   2. The computed name is *not* expressed as Symbol.<name>, where name
-     *      is a property of the Symbol constructor that denotes a built in
-     *      Symbol.
-     */
-    export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
-    }
-
     export function bindSourceFile(file: SourceFile): void {
         var start = new Date().getTime();
         bindSourceFileWorker(file);
@@ -98,13 +87,18 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
-        // Should not be called on a declaration with a computed property name.
+        // Should not be called on a declaration with a computed property name,
+        // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                Debug.assert(!hasDynamicName(node));
+                if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    var nameExpression = (<ComputedPropertyName>node.name).expression;
+                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
+                    return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
+                }
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
@@ -501,9 +495,20 @@ module ts {
                         break;
                     }
                 case SyntaxKind.Block:
+                    // do not treat function block a block-scope container
+                    // all block-scope locals that reside in this block should go to the function locals.
+                    // Otherwise this won't be considered as redeclaration of a block scoped local:
+                    // function foo() {
+                    //  let x;
+                    //  var x;
+                    // }
+                    // 'var x' will be placed into the function locals and 'let x' - into the locals of the block
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isAnyFunction(node.parent));
+                    break;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.SwitchStatement:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;

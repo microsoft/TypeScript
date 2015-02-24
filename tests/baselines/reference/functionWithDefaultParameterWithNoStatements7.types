@@ -1,0 +1,9 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements7.ts ===
+function foo(a = false) { }
+>foo : (a?: boolean) => void
+>a : boolean
+
+function bar(a = false) {
+>bar : (a?: boolean) => void
+>a : boolean
+}

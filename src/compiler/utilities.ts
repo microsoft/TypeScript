@@ -105,11 +105,16 @@ module ts {
         return <SourceFile>node;
     }
 
+    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
+        Debug.assert(line >= 0);
+        return getLineStarts(sourceFile)[line];
+    }
+
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
         var loc = getLineAndCharacterOfPosition(file, node.pos);
-        return file.fileName + "(" + loc.line + "," + loc.character + ")";
+        return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
     export function getStartPosOfNode(node: Node): number {
@@ -349,6 +354,7 @@ module ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
@@ -566,7 +572,8 @@ module ts {
                             forStatement.condition === node ||
                             forStatement.iterator === node;
                     case SyntaxKind.ForInStatement:
-                        var forInStatement = <ForInStatement>parent;
+                    case SyntaxKind.ForOfStatement:
+                        var forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -713,6 +720,7 @@ module ts {
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
             case SyntaxKind.ForStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.LabeledStatement:
@@ -834,6 +842,54 @@ module ts {
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    /**
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
+     */
+    export function hasDynamicName(declaration: Declaration): boolean {
+        return declaration.name &&
+            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+    }
+
+    /**
+     * Checks if the expression is of the form:
+     *    Symbol.name
+     * where Symbol is literally the word "Symbol", and name is any identifierName
+     */
+    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
+        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+    }
+
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return (<Identifier | LiteralExpression>name).text;
+        }
+        if (name.kind === SyntaxKind.ComputedPropertyName) {
+            var nameExpression = (<ComputedPropertyName>name).expression;
+            if (isWellKnownSymbolSyntactically(nameExpression)) {
+                var rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+        }
+
+        return undefined;
+    }
+
+    export function getPropertyNameForKnownSymbolName(symbolName: string): string {
+        return "__@" + symbolName;
+    }
+
+    /**
+     * Includes the word "Symbol" with unicode escapes
+     */
+    export function isESSymbolIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
     export function isModifier(token: SyntaxKind): boolean {

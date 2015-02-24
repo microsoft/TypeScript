@@ -41,9 +41,7 @@ var foo;
     var C2 = (function () {
         function C2() {
         }
-        C2.prototype.test = function () {
-            return true;
-        };
+        C2.prototype.test = function () { return true; };
         return C2;
     })();
     // None of the types are exported, so per section 10.3, should all be errors

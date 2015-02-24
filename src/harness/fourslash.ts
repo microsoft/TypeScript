@@ -282,6 +282,8 @@ module FourSlash {
                     return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
                     return new Harness.LanguageService.ShimLanugageServiceAdapter(cancellationToken, compilationOptions);
+                case FourSlashTestType.Server:
+                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
@@ -396,7 +398,7 @@ module FourSlash {
 
             var lineStarts = ts.computeLineStarts(this.getFileContent(this.activeFile.fileName));
             var lineCharPos = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
-            this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
+            this.scenarioActions.push(`<MoveCaretToLineAndChar LineNumber=${ lineCharPos.line + 1 } CharNumber=${ lineCharPos.character + 1 } />`);
         }
 
         public moveCaretRight(count = 1) {
@@ -418,6 +420,9 @@ module FourSlash {
             this.activeFile = fileToOpen;
             var fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), '').substr(1);
             this.scenarioActions.push('<OpenFile FileName="" SrcFileId="' + fileName + '" FileId="' + fileName + '" />');
+            
+            // Let the host know that this file is now open
+            this.languageServiceAdapterHost.openFile(fileToOpen.fileName);
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
@@ -1475,6 +1480,16 @@ module FourSlash {
             return runningOffset;
         }
 
+        public copyFormatOptions(): ts.FormatCodeOptions {
+            return ts.clone(this.formatCodeOptions);
+        }
+
+        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
+            var oldFormatCodeOptions = this.formatCodeOptions;
+            this.formatCodeOptions = formatCodeOptions;
+            return oldFormatCodeOptions;
+        }
+
         public formatDocument() {
             this.scenarioActions.push('<FormatDocument />');
 
@@ -1927,7 +1942,7 @@ module FourSlash {
             }
 
             var missingItem = { name: name, kind: kind };
-            this.raiseError('verifyGetScriptLexicalStructureListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items) + ')');
+            this.raiseError('verifyGetScriptLexicalStructureListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(items, null, " ") + ')');
         }
 
         private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string) {
@@ -2010,39 +2025,31 @@ module FourSlash {
 
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
-            // The current caret position (in line/col terms)
-            var line = this.getCurrentCaretFilePosition().line;
-            // The line/col of the start of this line
-            var pos = this.languageServiceAdapterHost.lineColToPosition(this.activeFile.fileName, line, 1);
-            // The index of the current file
+            var text = this.getFileContent(this.activeFile.fileName)
 
-            // The text from the start of the line to the end of the file
-            var text = this.getFileContent(this.activeFile.fileName).substring(pos);
+            var pos = this.currentCaretPosition;
+            var startPos = pos, endPos = pos;
 
-            // Truncate to the first newline
-            var newlinePos = text.indexOf('\n');
-            if (newlinePos === -1) {
-                return text;
-            }
-            else {
-                if (text.charAt(newlinePos - 1) === '\r') {
-                    newlinePos--;
+            while (startPos > 0) {
+                var ch = text.charCodeAt(startPos - 1);
+                if (ch === ts.CharacterCodes.carriageReturn || ch === ts.CharacterCodes.lineFeed) {
+                    break;
                 }
-                return text.substr(0, newlinePos);
-            }
-        }
 
-        private getCurrentCaretFilePosition() {
-            var result = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
-            if (result.line >= 0) {
-                result.line++;
+                startPos--;
             }
 
-            if (result.character >= 0) {
-                result.character++;
+            while (endPos < text.length) {
+                var ch = text.charCodeAt(endPos);
+
+                if (ch === ts.CharacterCodes.carriageReturn || ch === ts.CharacterCodes.lineFeed) {
+                    break;
+                }
+
+                endPos++;
             }
 
-            return result;
+            return text.substring(startPos, endPos);
         }
 
         private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string) {
@@ -2120,7 +2127,7 @@ module FourSlash {
         }
 
         private getLineColStringAtPosition(position: number) {
-            var pos = this.languageServiceAdapterHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
+            var pos = this.languageServiceAdapterHost.positionToLineAndCharacter(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 

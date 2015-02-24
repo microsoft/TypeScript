@@ -65,8 +65,6 @@ var foo = (function (_super) {
     function foo() {
         _super.apply(this, arguments);
     }
-    foo.prototype.bar = function () {
-        return undefined;
-    };
+    foo.prototype.bar = function () { return undefined; };
     return foo;
 })(baz);

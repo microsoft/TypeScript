@@ -150,9 +150,7 @@ someGenerics7(function (n) { return n; }, function (n) { return n; }, function (
 someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 // Generic call with argument of generic function type
-function someGenerics8(n) {
-    return n;
-}
+function someGenerics8(n) { return n; }
 var x = someGenerics8(someGenerics7);
 x(null, null, null);
 // Generic call with multiple parameters of generic type passed arguments with no best common type

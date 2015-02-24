@@ -1,9 +1,9 @@
-tests/cases/compiler/client.ts(1,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
-tests/cases/compiler/client.ts(2,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
-tests/cases/compiler/client.ts(4,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
-tests/cases/compiler/client.ts(6,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
-tests/cases/compiler/client.ts(9,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
-tests/cases/compiler/client.ts(11,8): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(1,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(2,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(4,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(6,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(9,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(11,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
@@ -18,26 +18,26 @@ tests/cases/compiler/client.ts(11,8): error TS1189: External module '"tests/case
 ==== tests/cases/compiler/client.ts (6 errors) ====
     import defaultBinding1, { } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     import defaultBinding2, { a } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x1 = new a();
     import defaultBinding3, { a11 as b } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x2 = new b();
     import defaultBinding4, { x, a12 as y } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x4 = new x();
     export var x5 = new y();
     import defaultBinding5, { x11 as z,  } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x3 = new z();
     import defaultBinding6, { m,  } from "server";
            ~~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x6 = new m();
     

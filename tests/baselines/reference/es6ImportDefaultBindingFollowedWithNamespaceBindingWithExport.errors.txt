@@ -1,5 +1,5 @@
-tests/cases/compiler/client.ts(1,1): error TS1188: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(1,15): error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+tests/cases/compiler/client.ts(1,15): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/client.ts(1,15): error TS1189: External module '"tests/case
 ==== tests/cases/compiler/client.ts (2 errors) ====
     export import defaultBinding, * as nameSpaceBinding  from "server";
     ~~~~~~
-!!! error TS1188: An import declaration cannot have modifiers.
+!!! error TS1191: An import declaration cannot have modifiers.
                   ~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
     export var x: number = nameSpaceBinding.a;

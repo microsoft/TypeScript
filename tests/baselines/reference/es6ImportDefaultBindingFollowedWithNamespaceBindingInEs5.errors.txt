@@ -1,4 +1,4 @@
-tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts(1,8): error TS1189: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export or export assignment.
+tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts(1,8): error TS1192: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export or export assignment.
 
 
 ==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts (0 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.
 ==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts (1 errors) ====
     import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
            ~~~~~~~~~~~~~~
-!!! error TS1189: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export or export assignment.
+!!! error TS1192: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export or export assignment.
     var x: number = nameSpaceBinding.a;

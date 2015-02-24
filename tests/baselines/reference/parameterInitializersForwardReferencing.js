@@ -73,14 +73,23 @@ function outside() {
         var b;
     }
 }
-function defaultArgFunction(a, b) { }
-function defaultArgArrow(a, b) { }
+function defaultArgFunction(a, b) {
+    if (a === void 0) { a = function () { return b; }; }
+    if (b === void 0) { b = 1; }
+}
+function defaultArgArrow(a, b) {
+    if (a === void 0) { a = function () { return function () { return b; }; }; }
+    if (b === void 0) { b = 3; }
+}
 var C = (function () {
     function C(a, b) {
         if (a === void 0) { a = b; }
         if (b === void 0) { b = 1; }
     }
-    C.prototype.method = function (a, b) { };
+    C.prototype.method = function (a, b) {
+        if (a === void 0) { a = b; }
+        if (b === void 0) { b = 1; }
+    };
     return C;
 })();
 // Function expressions
@@ -92,8 +101,6 @@ var x = function (a, b, c) {
 };
 // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
 function f(a, b, c) {
-    if (b === void 0) { b = function () {
-        return c;
-    }; }
+    if (b === void 0) { b = function () { return c; }; }
     if (c === void 0) { c = b(); }
 }
