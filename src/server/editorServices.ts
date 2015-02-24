@@ -530,8 +530,15 @@ module ts.server {
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
+
+            // First loop through all open files that are referenced by projects but are not
+            // project roots.  For each referenced file, see if the default project still
+            // references that file.  If so, then just keep the file in the referenced list.
+            // If not, add the file to an unattached list, to be rechecked later.
+
             var openFilesReferenced: ScriptInfo[] = [];
             var unattachedOpenFiles: ScriptInfo[] = [];
+
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                 var referencedFile = this.openFilesReferenced[i];
                 referencedFile.defaultProject.updateGraph();
@@ -544,6 +551,14 @@ module ts.server {
                 }
             }
             this.openFilesReferenced = openFilesReferenced;
+
+            // Then, loop through all of the open files that are project roots.
+            // For each root file, note the project that it roots.  Then see if 
+            // any other projects newly reference the file.  If zero projects
+            // newly reference the file, keep it as a root.  If one or more
+            // projects newly references the file, remove its project from the
+            // inferred projects list (since it is no longer a root) and add
+            // the file to the open, referenced file list.
             var openFileRoots: ScriptInfo[] = [];
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
                 var rootFile = this.openFileRoots[i];
@@ -560,6 +575,10 @@ module ts.server {
                 }
             }
             this.openFileRoots = openFileRoots;
+
+            // Finally, if we found any open, referenced files that are no longer
+            // referenced by their default project, treat them as newly opened
+            // by the editor. 
             for (var i = 0, len = unattachedOpenFiles.length; i < len; i++) {
                 this.addOpenFile(unattachedOpenFiles[i]);
             }
