@@ -727,24 +727,24 @@ module ts {
             return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports;
         }
 
-        function getExportsOfModule(symbol: Symbol): SymbolTable {
-            var links = getSymbolLinks(symbol);
-            return links.resolvedExports || (links.resolvedExports = getExportsForModule(symbol));
+        function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
+            var links = getSymbolLinks(moduleSymbol);
+            return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        function getExportsForModule(symbol: Symbol): SymbolTable {
+        function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
             var result: SymbolTable;
             var visitedSymbols: Symbol[] = [];
-            visit(symbol);
-            return result;
+            visit(moduleSymbol);
+            return result || moduleSymbol.exports;
 
             function visit(symbol: Symbol) {
                 if (!contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
-                    if (!result) {
-                        result = symbol.exports;
-                    }
-                    else {
+                    if (symbol !== moduleSymbol) {
+                        if (!result) {
+                            result = cloneSymbolTable(moduleSymbol.exports);
+                        }
                         extendSymbolTable(result, symbol.exports);
                     }
                     forEach(symbol.declarations, node => {
