@@ -10,8 +10,6 @@
 ////}
 ////export = Class;
 
-debugger;
-
 goTo.file("b.ts");
 
 goTo.marker('classAliasDefinition');
