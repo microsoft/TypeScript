@@ -5314,6 +5314,9 @@ declare module "typescript" {
         matchKind: string;
 >matchKind : string
 
+        isCaseSensitive: boolean;
+>isCaseSensitive : boolean
+
         fileName: string;
 >fileName : string
 
