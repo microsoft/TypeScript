@@ -14,17 +14,13 @@ module M {
 
 //// [innerFunc.js]
 function salt() {
-    function pepper() {
-        return 5;
-    }
+    function pepper() { return 5; }
     return pepper();
 }
 var M;
 (function (M) {
     function tungsten() {
-        function oxygen() {
-            return 6;
-        }
+        function oxygen() { return 6; }
         ;
         return oxygen();
     }

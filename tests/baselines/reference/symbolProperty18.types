@@ -1,0 +1,47 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty18.ts ===
+var i = {
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+
+    [Symbol.iterator]: 0,
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    [Symbol.toStringTag]() { return "" },
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+
+    set [Symbol.toPrimitive](p: boolean) { }
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>p : boolean
+}
+
+var it = i[Symbol.iterator];
+>it : number
+>i[Symbol.iterator] : number
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+var str = i[Symbol.toStringTag]();
+>str : string
+>i[Symbol.toStringTag]() : string
+>i[Symbol.toStringTag] : () => string
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+
+i[Symbol.toPrimitive] = false;
+>i[Symbol.toPrimitive] = false : boolean
+>i[Symbol.toPrimitive] : boolean
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+

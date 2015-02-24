@@ -33,9 +33,7 @@ var M2;
     M2.compose = compose;
     ;
     function compose2(g, f) {
-        return function (x) {
-            return g(f(x));
-        };
+        return function (x) { return g(f(x)); };
     }
     M2.compose2 = compose2;
     ;

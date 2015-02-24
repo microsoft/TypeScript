@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit11.ts ===
+class C {
+>C : C
+
+    static [Symbol.iterator] = 0;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    static [Symbol.toPrimitive]() { }
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+
+    static get [Symbol.isRegExp]() { return ""; }
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+
+    static set [Symbol.isRegExp](x) { }
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+>x : string
+}

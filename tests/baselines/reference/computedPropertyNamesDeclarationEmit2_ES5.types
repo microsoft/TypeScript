@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts ===
+class C {
+>C : C
+
+    static ["" + ""]() { }
+>"" + "" : string
+
+    static get ["" + ""]() { return 0; }
+>"" + "" : string
+
+    static set ["" + ""](x) { }
+>"" + "" : string
+>x : any
+}

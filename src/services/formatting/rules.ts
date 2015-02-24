@@ -452,7 +452,7 @@ module ts.formatting {
                     return true;
 
                 // equal in import a = module('a');
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
                 // equal in var a = 0;
                 case SyntaxKind.VariableDeclaration:
                 // equal in p = 0;
@@ -464,6 +464,9 @@ module ts.formatting {
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:
                     return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
+                // Technically, "of" is not a binary operator, but format it the same way as "in"
+                case SyntaxKind.ForOfStatement:
+                    return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
             }
             return false;
         }
@@ -592,6 +595,7 @@ module ts.formatting {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.DoStatement:

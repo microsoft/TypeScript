@@ -13,6 +13,4 @@ function foo() {
         rest[_i - 0] = arguments[_i];
     }
 }
-foo "" + function (x) {
-    x = "bad";
-};
+foo "" + function (x) { x = "bad"; };

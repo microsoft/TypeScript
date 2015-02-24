@@ -34,12 +34,8 @@ function foo5(x: number) {
 }
 
 //// [declFileTypeofFunction.js]
-function f() {
-    return undefined;
-}
-function g() {
-    return undefined;
-}
+function f() { return undefined; }
+function g() { return undefined; }
 var b;
 function b1() {
     return b1;
