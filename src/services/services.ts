@@ -802,6 +802,11 @@ module ts {
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ExportSpecifier:
+                        case SyntaxKind.ImportSpecifier:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ImportClause:
+                        case SyntaxKind.NamespaceImport:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -840,6 +845,37 @@ module ts {
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
                             namedDeclarations.push(<Declaration>node);
+                            break;
+                        
+                        case SyntaxKind.ExportDeclaration:
+                            // Handle named exports case e.g.:
+                            //    export {a, b as B} from "mod";
+                            if ((<ExportDeclaration>node).exportClause) {
+                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                            }
+                            break;
+
+                        case SyntaxKind.ImportDeclaration:
+                            var importClause = (<ImportDeclaration>node).importClause;
+                            if (importClause) {
+                                // Handle default import case e.g.:
+                                //    import d from "mod";
+                                if (importClause.name) {
+                                    namedDeclarations.push(importClause);
+                                }
+
+                                // Handle named bindings in imports e.g.:
+                                //    import * as NS from "mod";
+                                //    import {a, b as B} from "mod";
+                                if (importClause.namedBindings) {
+                                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                        namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                    }
+                                    else {
+                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                    }
+                                }
+                            }
                             break;
                     }
                 });
@@ -2010,6 +2046,12 @@ module ts {
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
             case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.NamespaceImport:
+                return ScriptElementKind.alias;
         }
         return ScriptElementKind.unknown;
     }
@@ -3986,7 +4028,7 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var declaredName = getDeclaredName(symbol);
+            var declaredName = getDeclaredName(symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -4003,7 +4045,7 @@ module ts {
                     getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                 }
                 else {
-                    var internedName = getInternedName(symbol, declarations)
+                    var internedName = getInternedName(symbol, node, declarations)
                     forEach(sourceFiles, sourceFile => {
                         cancellationToken.throwIfCancellationRequested();
 
@@ -4023,13 +4065,51 @@ module ts {
 
             return result;
 
-            function getDeclaredName(symbol: Symbol) {
+            function isImportOrExportSpecifierName(location: Node): boolean {
+                return location.parent &&
+                    (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+                    (<ImportOrExportSpecifier>location.parent).propertyName === location;
+            }
+
+            function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
+                return (symbol.flags & SymbolFlags.Import) && forEach(symbol.declarations, declaration => {
+                    return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
+                });
+            }
+
+            function getDeclaredName(symbol: Symbol, location: Node) {
+                // Special case for function expressions, whose names are solely local to their bodies.
+                var functionExpression = forEach(symbol.declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
+
+                // When a name gets interned into a SourceFile's 'identifiers' Map,
+                // its name is escaped and stored in the same way its symbol name/identifier
+                // name should be stored. Function expressions, however, are a special case,
+                // because despite sometimes having a name, the binder unconditionally binds them
+                // to a symbol with the name "__function".
+                if (functionExpression && functionExpression.name) {
+                    var name = functionExpression.name.text;
+                }
+
+                // If this is an export or import specifier it could have been renamed using the as syntax.
+                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
+                // so check for the propertyName.
+                if (isImportOrExportSpecifierName(location)) {
+                    return location.getText();
+                }
+
                 var name = typeInfoResolver.symbolToString(symbol);
 
                 return stripQuotes(name);
             }
 
-            function getInternedName(symbol: Symbol, declarations: Declaration[]): string {
+            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
+                // If this is an export or import specifier it could have been renamed using the as syntax.
+                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
+                // so check for the propertyName.
+                if (isImportOrExportSpecifierName(location)) {
+                    return location.getText();
+                }
+
                 // Special case for function expressions, whose names are solely local to their bodies.
                 var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
@@ -4058,16 +4138,22 @@ module ts {
 
             function getSymbolScope(symbol: Symbol): Node {
                 // If this is private property or method, the scope is the containing class
-                if (symbol.getFlags() && (SymbolFlags.Property | SymbolFlags.Method)) {
+                if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
                     var privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
                     if (privateDeclaration) {
                         return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                     }
                 }
 
+                // If the symbol is an import we would like to find it if we are looking for what it imports.
+                // So consider it visibile outside its declaration scope.
+                if (symbol.flags & SymbolFlags.Import) {
+                    return undefined;
+                }
+
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
                 // if symbol correspond to the union property - bail out
-                if (symbol.parent || (symbol.getFlags() & SymbolFlags.UnionProperty)) {
+                if (symbol.parent || (symbol.flags & SymbolFlags.UnionProperty)) {
                     return undefined;
                 }
 
@@ -4422,6 +4508,11 @@ module ts {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
+                // If the symbol is an alias, add what it alaises to the list
+                if (isImportOrExportSpecifierImportSymbol(symbol)) {
+                    result.push(typeInfoResolver.getAliasedSymbol(symbol));
+                }
+
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
@@ -4495,6 +4586,13 @@ module ts {
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
                 if (searchSymbols.indexOf(referenceSymbol) >= 0) {
+                    return true;
+                }
+
+                // If the reference symbol is an alias, check if what it is aliasing is one of the search
+                // symbols.
+                if (isImportOrExportSpecifierImportSymbol(referenceSymbol) &&
+                    searchSymbols.indexOf(typeInfoResolver.getAliasedSymbol(referenceSymbol)) >= 0) {
                     return true;
                 }
 

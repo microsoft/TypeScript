@@ -1,0 +1,17 @@
+
+1  >export * from "a";
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (0 to 18)  SpanInfo: {"start":0,"length":17}
+    >export * from "a"
+    >:=> (line 1, col 0) to (line 1, col 17)
+--------------------------------
+2  >export {a as A} from "a";
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (19 to 44)  SpanInfo: {"start":19,"length":24}
+    >export {a as A} from "a"
+    >:=> (line 2, col 0) to (line 2, col 24)
+--------------------------------
+3  >export import e = require("a");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (45 to 75)  SpanInfo: {"start":45,"length":30}
+    >export import e = require("a")
+    >:=> (line 3, col 0) to (line 3, col 30)
