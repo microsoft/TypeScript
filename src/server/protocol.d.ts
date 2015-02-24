@@ -711,6 +711,11 @@ declare module ts.server.protocol {
           * exact, substring, or prefix.
           */
         matchKind?: string;
+
+        /**
+          * If this was a case sensitive or insensitive match.
+          */
+        isCaseSensitive?: boolean;
         
         /**
           * Optional modifiers for the kind (such as 'public').

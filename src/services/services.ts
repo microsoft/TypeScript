@@ -970,6 +970,7 @@ module ts {
         kind: string;
         kindModifiers: string;
         matchKind: string;
+        isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
         containerName: string;
@@ -1957,7 +1958,7 @@ module ts {
         });
     }
 
-    /* @internal */ export function getContainerNode(node: Node): Node {
+    /* @internal */ export function getContainerNode(node: Node): Declaration {
         while (true) {
             node = node.parent;
             if (!node) {
@@ -1975,7 +1976,7 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ModuleDeclaration:
-                    return node;
+                    return <Declaration>node;
             }
         }
     }

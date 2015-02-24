@@ -4,4 +4,4 @@
 
 goTo.marker();
 //verify there is no empty navigation item.
-verify.navigationItemsListCount(0, "^$"/*empty string*/)
+verify.navigationItemsListCount(0, "")

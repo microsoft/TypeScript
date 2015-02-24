@@ -3899,7 +3899,9 @@ module ts {
                     emitSignatureParameters(node);
                 }
 
-                if (isSingleLineEmptyBlock(node.body) || !node.body) {
+                if (!node.body) {
+                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // in that case.
                     write(" { }");
                 }
                 else if (node.body.kind === SyntaxKind.Block) {
@@ -3932,6 +3934,17 @@ module ts {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    emitDownLevelExpressionFunctionBody(node, body);
+                    return;
+                }
+
+                // For es6 and higher we can emit the expression as is.
+                write(" ");
+                emit(body);
+            }
+
+            function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
                 write(" {");
                 scopeEmitStart(node);
 
@@ -3979,15 +3992,57 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
+                // If the body has no statements, and we know there's no code that would cause any 
+                // prologue to be emitted, then just do a simple emit if the empty block.
+                if (body.statements.length === 0 && !anyParameterHasBindingPatternOrInitializer(node)) {
+                    emitFunctionBodyWithNoStatements(node, body);
+                }
+                else {
+                    emitFunctionBodyWithStatements(node, body);
+                }
+            }
+
+            function anyParameterHasBindingPatternOrInitializer(func: FunctionLikeDeclaration) {
+                return forEach(func.parameters, hasBindingPatternOrInitializer);
+            }
+
+            function hasBindingPatternOrInitializer(parameter: ParameterDeclaration) {
+                return parameter.initializer || isBindingPattern(parameter.name);
+            }
+
+            function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
+                var singleLine = isSingleLineEmptyBlock(node.body);
+
+                write(" {");
+                if (singleLine) {
+                    write(" ");
+                }
+                else {
+                    increaseIndent();
+                    writeLine();
+                }
+
+                emitLeadingCommentsOfPosition(body.statements.end);
+
+                if (!singleLine) {
+                    decreaseIndent();
+                }
+
+                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
+            }
+
+            function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
                 scopeEmitStart(node);
 
                 var outPos = writer.getTextPos();
+
                 increaseIndent();
                 emitDetachedComments(body.statements);
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
+
                 var preambleEmitted = writer.getTextPos() !== outPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
