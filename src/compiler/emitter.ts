@@ -2220,16 +2220,16 @@ module ts {
                 write('"' + text + '"');
             }
             
-            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, callback: (literal: LiteralExpression) => void) {
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
                 write("[");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                    callback(<LiteralExpression>node.template);
+                    literalEmitter(<LiteralExpression>node.template);
                 }
                 else {
-                    callback((<TemplateExpression>node.template).head);
+                    literalEmitter((<TemplateExpression>node.template).head);
                     forEach((<TemplateExpression>node.template).templateSpans, (child) => {
                         write(", ");
-                        callback(child.literal);
+                        literalEmitter(child.literal);
                     });
                 }
                 write("]");
