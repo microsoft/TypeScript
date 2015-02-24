@@ -1862,6 +1862,9 @@ module ts {
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
             }
+            if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                return getTypeForVariableDeclarationInForOfStatement(<ForOfStatement>declaration.parent.parent);
+            }
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
@@ -8818,6 +8821,28 @@ module ts {
             }
         }
 
+        function getTypeForVariableDeclarationInForOfStatement(forOfStatement: ForOfStatement): Type {
+            // Temporarily return 'any' below ES6
+            if (languageVersion < ScriptTarget.ES6) {
+                return anyType;
+            }
+
+            var variable = forOfStatement.initializer;
+            var links = getNodeLinks(variable);
+            if (!links.resolvedType) {
+                links.resolvedType = resolvingType;
+                var type = getIteratedType(getTypeOfExpression(forOfStatement.expression));
+                if (links.resolvedType === resolvingType) {
+                    links.resolvedType = type;
+                }
+            }
+            else if (links.resolvedType === resolvingType) {
+                links.resolvedType = anyType;
+            }
+
+            return links.resolvedType;
+        }
+
         function getIteratedType(iterable: Type): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
             if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
@@ -11483,22 +11508,24 @@ module ts {
         }
 
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
-            if (isInAmbientContext(node)) {
-                if (isBindingPattern(node.name)) {
-                    return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
-                }
-                if (node.initializer) {
-                    // Error on equals token which immediate precedes the initializer
-                    return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                }
-            }
-            else {
-                if (!node.initializer) {
-                    if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
-                        return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+            if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
+                if (isInAmbientContext(node)) {
+                    if (isBindingPattern(node.name)) {
+                        return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
                     }
-                    if (isConst(node)) {
-                        return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                    if (node.initializer) {
+                        // Error on equals token which immediate precedes the initializer
+                        return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                    }
+                }
+                else {
+                    if (!node.initializer) {
+                        if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
+                            return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+                        }
+                        if (isConst(node)) {
+                            return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                        }
                     }
                 }
             }
