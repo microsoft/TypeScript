@@ -15,598 +15,21 @@ and limitations under the License.
 
 var ts;
 (function (ts) {
-    (function (SyntaxKind) {
-        SyntaxKind[SyntaxKind["Unknown"] = 0] = "Unknown";
-        SyntaxKind[SyntaxKind["EndOfFileToken"] = 1] = "EndOfFileToken";
-        SyntaxKind[SyntaxKind["SingleLineCommentTrivia"] = 2] = "SingleLineCommentTrivia";
-        SyntaxKind[SyntaxKind["MultiLineCommentTrivia"] = 3] = "MultiLineCommentTrivia";
-        SyntaxKind[SyntaxKind["NewLineTrivia"] = 4] = "NewLineTrivia";
-        SyntaxKind[SyntaxKind["WhitespaceTrivia"] = 5] = "WhitespaceTrivia";
-        SyntaxKind[SyntaxKind["ConflictMarkerTrivia"] = 6] = "ConflictMarkerTrivia";
-        SyntaxKind[SyntaxKind["NumericLiteral"] = 7] = "NumericLiteral";
-        SyntaxKind[SyntaxKind["StringLiteral"] = 8] = "StringLiteral";
-        SyntaxKind[SyntaxKind["RegularExpressionLiteral"] = 9] = "RegularExpressionLiteral";
-        SyntaxKind[SyntaxKind["NoSubstitutionTemplateLiteral"] = 10] = "NoSubstitutionTemplateLiteral";
-        SyntaxKind[SyntaxKind["TemplateHead"] = 11] = "TemplateHead";
-        SyntaxKind[SyntaxKind["TemplateMiddle"] = 12] = "TemplateMiddle";
-        SyntaxKind[SyntaxKind["TemplateTail"] = 13] = "TemplateTail";
-        SyntaxKind[SyntaxKind["OpenBraceToken"] = 14] = "OpenBraceToken";
-        SyntaxKind[SyntaxKind["CloseBraceToken"] = 15] = "CloseBraceToken";
-        SyntaxKind[SyntaxKind["OpenParenToken"] = 16] = "OpenParenToken";
-        SyntaxKind[SyntaxKind["CloseParenToken"] = 17] = "CloseParenToken";
-        SyntaxKind[SyntaxKind["OpenBracketToken"] = 18] = "OpenBracketToken";
-        SyntaxKind[SyntaxKind["CloseBracketToken"] = 19] = "CloseBracketToken";
-        SyntaxKind[SyntaxKind["DotToken"] = 20] = "DotToken";
-        SyntaxKind[SyntaxKind["DotDotDotToken"] = 21] = "DotDotDotToken";
-        SyntaxKind[SyntaxKind["SemicolonToken"] = 22] = "SemicolonToken";
-        SyntaxKind[SyntaxKind["CommaToken"] = 23] = "CommaToken";
-        SyntaxKind[SyntaxKind["LessThanToken"] = 24] = "LessThanToken";
-        SyntaxKind[SyntaxKind["GreaterThanToken"] = 25] = "GreaterThanToken";
-        SyntaxKind[SyntaxKind["LessThanEqualsToken"] = 26] = "LessThanEqualsToken";
-        SyntaxKind[SyntaxKind["GreaterThanEqualsToken"] = 27] = "GreaterThanEqualsToken";
-        SyntaxKind[SyntaxKind["EqualsEqualsToken"] = 28] = "EqualsEqualsToken";
-        SyntaxKind[SyntaxKind["ExclamationEqualsToken"] = 29] = "ExclamationEqualsToken";
-        SyntaxKind[SyntaxKind["EqualsEqualsEqualsToken"] = 30] = "EqualsEqualsEqualsToken";
-        SyntaxKind[SyntaxKind["ExclamationEqualsEqualsToken"] = 31] = "ExclamationEqualsEqualsToken";
-        SyntaxKind[SyntaxKind["EqualsGreaterThanToken"] = 32] = "EqualsGreaterThanToken";
-        SyntaxKind[SyntaxKind["PlusToken"] = 33] = "PlusToken";
-        SyntaxKind[SyntaxKind["MinusToken"] = 34] = "MinusToken";
-        SyntaxKind[SyntaxKind["AsteriskToken"] = 35] = "AsteriskToken";
-        SyntaxKind[SyntaxKind["SlashToken"] = 36] = "SlashToken";
-        SyntaxKind[SyntaxKind["PercentToken"] = 37] = "PercentToken";
-        SyntaxKind[SyntaxKind["PlusPlusToken"] = 38] = "PlusPlusToken";
-        SyntaxKind[SyntaxKind["MinusMinusToken"] = 39] = "MinusMinusToken";
-        SyntaxKind[SyntaxKind["LessThanLessThanToken"] = 40] = "LessThanLessThanToken";
-        SyntaxKind[SyntaxKind["GreaterThanGreaterThanToken"] = 41] = "GreaterThanGreaterThanToken";
-        SyntaxKind[SyntaxKind["GreaterThanGreaterThanGreaterThanToken"] = 42] = "GreaterThanGreaterThanGreaterThanToken";
-        SyntaxKind[SyntaxKind["AmpersandToken"] = 43] = "AmpersandToken";
-        SyntaxKind[SyntaxKind["BarToken"] = 44] = "BarToken";
-        SyntaxKind[SyntaxKind["CaretToken"] = 45] = "CaretToken";
-        SyntaxKind[SyntaxKind["ExclamationToken"] = 46] = "ExclamationToken";
-        SyntaxKind[SyntaxKind["TildeToken"] = 47] = "TildeToken";
-        SyntaxKind[SyntaxKind["AmpersandAmpersandToken"] = 48] = "AmpersandAmpersandToken";
-        SyntaxKind[SyntaxKind["BarBarToken"] = 49] = "BarBarToken";
-        SyntaxKind[SyntaxKind["QuestionToken"] = 50] = "QuestionToken";
-        SyntaxKind[SyntaxKind["ColonToken"] = 51] = "ColonToken";
-        SyntaxKind[SyntaxKind["EqualsToken"] = 52] = "EqualsToken";
-        SyntaxKind[SyntaxKind["PlusEqualsToken"] = 53] = "PlusEqualsToken";
-        SyntaxKind[SyntaxKind["MinusEqualsToken"] = 54] = "MinusEqualsToken";
-        SyntaxKind[SyntaxKind["AsteriskEqualsToken"] = 55] = "AsteriskEqualsToken";
-        SyntaxKind[SyntaxKind["SlashEqualsToken"] = 56] = "SlashEqualsToken";
-        SyntaxKind[SyntaxKind["PercentEqualsToken"] = 57] = "PercentEqualsToken";
-        SyntaxKind[SyntaxKind["LessThanLessThanEqualsToken"] = 58] = "LessThanLessThanEqualsToken";
-        SyntaxKind[SyntaxKind["GreaterThanGreaterThanEqualsToken"] = 59] = "GreaterThanGreaterThanEqualsToken";
-        SyntaxKind[SyntaxKind["GreaterThanGreaterThanGreaterThanEqualsToken"] = 60] = "GreaterThanGreaterThanGreaterThanEqualsToken";
-        SyntaxKind[SyntaxKind["AmpersandEqualsToken"] = 61] = "AmpersandEqualsToken";
-        SyntaxKind[SyntaxKind["BarEqualsToken"] = 62] = "BarEqualsToken";
-        SyntaxKind[SyntaxKind["CaretEqualsToken"] = 63] = "CaretEqualsToken";
-        SyntaxKind[SyntaxKind["Identifier"] = 64] = "Identifier";
-        SyntaxKind[SyntaxKind["BreakKeyword"] = 65] = "BreakKeyword";
-        SyntaxKind[SyntaxKind["CaseKeyword"] = 66] = "CaseKeyword";
-        SyntaxKind[SyntaxKind["CatchKeyword"] = 67] = "CatchKeyword";
-        SyntaxKind[SyntaxKind["ClassKeyword"] = 68] = "ClassKeyword";
-        SyntaxKind[SyntaxKind["ConstKeyword"] = 69] = "ConstKeyword";
-        SyntaxKind[SyntaxKind["ContinueKeyword"] = 70] = "ContinueKeyword";
-        SyntaxKind[SyntaxKind["DebuggerKeyword"] = 71] = "DebuggerKeyword";
-        SyntaxKind[SyntaxKind["DefaultKeyword"] = 72] = "DefaultKeyword";
-        SyntaxKind[SyntaxKind["DeleteKeyword"] = 73] = "DeleteKeyword";
-        SyntaxKind[SyntaxKind["DoKeyword"] = 74] = "DoKeyword";
-        SyntaxKind[SyntaxKind["ElseKeyword"] = 75] = "ElseKeyword";
-        SyntaxKind[SyntaxKind["EnumKeyword"] = 76] = "EnumKeyword";
-        SyntaxKind[SyntaxKind["ExportKeyword"] = 77] = "ExportKeyword";
-        SyntaxKind[SyntaxKind["ExtendsKeyword"] = 78] = "ExtendsKeyword";
-        SyntaxKind[SyntaxKind["FalseKeyword"] = 79] = "FalseKeyword";
-        SyntaxKind[SyntaxKind["FinallyKeyword"] = 80] = "FinallyKeyword";
-        SyntaxKind[SyntaxKind["ForKeyword"] = 81] = "ForKeyword";
-        SyntaxKind[SyntaxKind["FunctionKeyword"] = 82] = "FunctionKeyword";
-        SyntaxKind[SyntaxKind["IfKeyword"] = 83] = "IfKeyword";
-        SyntaxKind[SyntaxKind["ImportKeyword"] = 84] = "ImportKeyword";
-        SyntaxKind[SyntaxKind["InKeyword"] = 85] = "InKeyword";
-        SyntaxKind[SyntaxKind["InstanceOfKeyword"] = 86] = "InstanceOfKeyword";
-        SyntaxKind[SyntaxKind["NewKeyword"] = 87] = "NewKeyword";
-        SyntaxKind[SyntaxKind["NullKeyword"] = 88] = "NullKeyword";
-        SyntaxKind[SyntaxKind["ReturnKeyword"] = 89] = "ReturnKeyword";
-        SyntaxKind[SyntaxKind["SuperKeyword"] = 90] = "SuperKeyword";
-        SyntaxKind[SyntaxKind["SwitchKeyword"] = 91] = "SwitchKeyword";
-        SyntaxKind[SyntaxKind["ThisKeyword"] = 92] = "ThisKeyword";
-        SyntaxKind[SyntaxKind["ThrowKeyword"] = 93] = "ThrowKeyword";
-        SyntaxKind[SyntaxKind["TrueKeyword"] = 94] = "TrueKeyword";
-        SyntaxKind[SyntaxKind["TryKeyword"] = 95] = "TryKeyword";
-        SyntaxKind[SyntaxKind["TypeOfKeyword"] = 96] = "TypeOfKeyword";
-        SyntaxKind[SyntaxKind["VarKeyword"] = 97] = "VarKeyword";
-        SyntaxKind[SyntaxKind["VoidKeyword"] = 98] = "VoidKeyword";
-        SyntaxKind[SyntaxKind["WhileKeyword"] = 99] = "WhileKeyword";
-        SyntaxKind[SyntaxKind["WithKeyword"] = 100] = "WithKeyword";
-        SyntaxKind[SyntaxKind["AsKeyword"] = 101] = "AsKeyword";
-        SyntaxKind[SyntaxKind["FromKeyword"] = 102] = "FromKeyword";
-        SyntaxKind[SyntaxKind["ImplementsKeyword"] = 103] = "ImplementsKeyword";
-        SyntaxKind[SyntaxKind["InterfaceKeyword"] = 104] = "InterfaceKeyword";
-        SyntaxKind[SyntaxKind["LetKeyword"] = 105] = "LetKeyword";
-        SyntaxKind[SyntaxKind["PackageKeyword"] = 106] = "PackageKeyword";
-        SyntaxKind[SyntaxKind["PrivateKeyword"] = 107] = "PrivateKeyword";
-        SyntaxKind[SyntaxKind["ProtectedKeyword"] = 108] = "ProtectedKeyword";
-        SyntaxKind[SyntaxKind["PublicKeyword"] = 109] = "PublicKeyword";
-        SyntaxKind[SyntaxKind["StaticKeyword"] = 110] = "StaticKeyword";
-        SyntaxKind[SyntaxKind["YieldKeyword"] = 111] = "YieldKeyword";
-        SyntaxKind[SyntaxKind["AnyKeyword"] = 112] = "AnyKeyword";
-        SyntaxKind[SyntaxKind["BooleanKeyword"] = 113] = "BooleanKeyword";
-        SyntaxKind[SyntaxKind["ConstructorKeyword"] = 114] = "ConstructorKeyword";
-        SyntaxKind[SyntaxKind["DeclareKeyword"] = 115] = "DeclareKeyword";
-        SyntaxKind[SyntaxKind["GetKeyword"] = 116] = "GetKeyword";
-        SyntaxKind[SyntaxKind["ModuleKeyword"] = 117] = "ModuleKeyword";
-        SyntaxKind[SyntaxKind["RequireKeyword"] = 118] = "RequireKeyword";
-        SyntaxKind[SyntaxKind["NumberKeyword"] = 119] = "NumberKeyword";
-        SyntaxKind[SyntaxKind["SetKeyword"] = 120] = "SetKeyword";
-        SyntaxKind[SyntaxKind["StringKeyword"] = 121] = "StringKeyword";
-        SyntaxKind[SyntaxKind["SymbolKeyword"] = 122] = "SymbolKeyword";
-        SyntaxKind[SyntaxKind["TypeKeyword"] = 123] = "TypeKeyword";
-        SyntaxKind[SyntaxKind["OfKeyword"] = 124] = "OfKeyword";
-        SyntaxKind[SyntaxKind["QualifiedName"] = 125] = "QualifiedName";
-        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 126] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["TypeParameter"] = 127] = "TypeParameter";
-        SyntaxKind[SyntaxKind["Parameter"] = 128] = "Parameter";
-        SyntaxKind[SyntaxKind["PropertySignature"] = 129] = "PropertySignature";
-        SyntaxKind[SyntaxKind["PropertyDeclaration"] = 130] = "PropertyDeclaration";
-        SyntaxKind[SyntaxKind["MethodSignature"] = 131] = "MethodSignature";
-        SyntaxKind[SyntaxKind["MethodDeclaration"] = 132] = "MethodDeclaration";
-        SyntaxKind[SyntaxKind["Constructor"] = 133] = "Constructor";
-        SyntaxKind[SyntaxKind["GetAccessor"] = 134] = "GetAccessor";
-        SyntaxKind[SyntaxKind["SetAccessor"] = 135] = "SetAccessor";
-        SyntaxKind[SyntaxKind["CallSignature"] = 136] = "CallSignature";
-        SyntaxKind[SyntaxKind["ConstructSignature"] = 137] = "ConstructSignature";
-        SyntaxKind[SyntaxKind["IndexSignature"] = 138] = "IndexSignature";
-        SyntaxKind[SyntaxKind["TypeReference"] = 139] = "TypeReference";
-        SyntaxKind[SyntaxKind["FunctionType"] = 140] = "FunctionType";
-        SyntaxKind[SyntaxKind["ConstructorType"] = 141] = "ConstructorType";
-        SyntaxKind[SyntaxKind["TypeQuery"] = 142] = "TypeQuery";
-        SyntaxKind[SyntaxKind["TypeLiteral"] = 143] = "TypeLiteral";
-        SyntaxKind[SyntaxKind["ArrayType"] = 144] = "ArrayType";
-        SyntaxKind[SyntaxKind["TupleType"] = 145] = "TupleType";
-        SyntaxKind[SyntaxKind["UnionType"] = 146] = "UnionType";
-        SyntaxKind[SyntaxKind["ParenthesizedType"] = 147] = "ParenthesizedType";
-        SyntaxKind[SyntaxKind["ObjectBindingPattern"] = 148] = "ObjectBindingPattern";
-        SyntaxKind[SyntaxKind["ArrayBindingPattern"] = 149] = "ArrayBindingPattern";
-        SyntaxKind[SyntaxKind["BindingElement"] = 150] = "BindingElement";
-        SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 151] = "ArrayLiteralExpression";
-        SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 152] = "ObjectLiteralExpression";
-        SyntaxKind[SyntaxKind["PropertyAccessExpression"] = 153] = "PropertyAccessExpression";
-        SyntaxKind[SyntaxKind["ElementAccessExpression"] = 154] = "ElementAccessExpression";
-        SyntaxKind[SyntaxKind["CallExpression"] = 155] = "CallExpression";
-        SyntaxKind[SyntaxKind["NewExpression"] = 156] = "NewExpression";
-        SyntaxKind[SyntaxKind["TaggedTemplateExpression"] = 157] = "TaggedTemplateExpression";
-        SyntaxKind[SyntaxKind["TypeAssertionExpression"] = 158] = "TypeAssertionExpression";
-        SyntaxKind[SyntaxKind["ParenthesizedExpression"] = 159] = "ParenthesizedExpression";
-        SyntaxKind[SyntaxKind["FunctionExpression"] = 160] = "FunctionExpression";
-        SyntaxKind[SyntaxKind["ArrowFunction"] = 161] = "ArrowFunction";
-        SyntaxKind[SyntaxKind["DeleteExpression"] = 162] = "DeleteExpression";
-        SyntaxKind[SyntaxKind["TypeOfExpression"] = 163] = "TypeOfExpression";
-        SyntaxKind[SyntaxKind["VoidExpression"] = 164] = "VoidExpression";
-        SyntaxKind[SyntaxKind["PrefixUnaryExpression"] = 165] = "PrefixUnaryExpression";
-        SyntaxKind[SyntaxKind["PostfixUnaryExpression"] = 166] = "PostfixUnaryExpression";
-        SyntaxKind[SyntaxKind["BinaryExpression"] = 167] = "BinaryExpression";
-        SyntaxKind[SyntaxKind["ConditionalExpression"] = 168] = "ConditionalExpression";
-        SyntaxKind[SyntaxKind["TemplateExpression"] = 169] = "TemplateExpression";
-        SyntaxKind[SyntaxKind["YieldExpression"] = 170] = "YieldExpression";
-        SyntaxKind[SyntaxKind["SpreadElementExpression"] = 171] = "SpreadElementExpression";
-        SyntaxKind[SyntaxKind["OmittedExpression"] = 172] = "OmittedExpression";
-        SyntaxKind[SyntaxKind["TemplateSpan"] = 173] = "TemplateSpan";
-        SyntaxKind[SyntaxKind["Block"] = 174] = "Block";
-        SyntaxKind[SyntaxKind["VariableStatement"] = 175] = "VariableStatement";
-        SyntaxKind[SyntaxKind["EmptyStatement"] = 176] = "EmptyStatement";
-        SyntaxKind[SyntaxKind["ExpressionStatement"] = 177] = "ExpressionStatement";
-        SyntaxKind[SyntaxKind["IfStatement"] = 178] = "IfStatement";
-        SyntaxKind[SyntaxKind["DoStatement"] = 179] = "DoStatement";
-        SyntaxKind[SyntaxKind["WhileStatement"] = 180] = "WhileStatement";
-        SyntaxKind[SyntaxKind["ForStatement"] = 181] = "ForStatement";
-        SyntaxKind[SyntaxKind["ForInStatement"] = 182] = "ForInStatement";
-        SyntaxKind[SyntaxKind["ForOfStatement"] = 183] = "ForOfStatement";
-        SyntaxKind[SyntaxKind["ContinueStatement"] = 184] = "ContinueStatement";
-        SyntaxKind[SyntaxKind["BreakStatement"] = 185] = "BreakStatement";
-        SyntaxKind[SyntaxKind["ReturnStatement"] = 186] = "ReturnStatement";
-        SyntaxKind[SyntaxKind["WithStatement"] = 187] = "WithStatement";
-        SyntaxKind[SyntaxKind["SwitchStatement"] = 188] = "SwitchStatement";
-        SyntaxKind[SyntaxKind["LabeledStatement"] = 189] = "LabeledStatement";
-        SyntaxKind[SyntaxKind["ThrowStatement"] = 190] = "ThrowStatement";
-        SyntaxKind[SyntaxKind["TryStatement"] = 191] = "TryStatement";
-        SyntaxKind[SyntaxKind["DebuggerStatement"] = 192] = "DebuggerStatement";
-        SyntaxKind[SyntaxKind["VariableDeclaration"] = 193] = "VariableDeclaration";
-        SyntaxKind[SyntaxKind["VariableDeclarationList"] = 194] = "VariableDeclarationList";
-        SyntaxKind[SyntaxKind["FunctionDeclaration"] = 195] = "FunctionDeclaration";
-        SyntaxKind[SyntaxKind["ClassDeclaration"] = 196] = "ClassDeclaration";
-        SyntaxKind[SyntaxKind["InterfaceDeclaration"] = 197] = "InterfaceDeclaration";
-        SyntaxKind[SyntaxKind["TypeAliasDeclaration"] = 198] = "TypeAliasDeclaration";
-        SyntaxKind[SyntaxKind["EnumDeclaration"] = 199] = "EnumDeclaration";
-        SyntaxKind[SyntaxKind["ModuleDeclaration"] = 200] = "ModuleDeclaration";
-        SyntaxKind[SyntaxKind["ModuleBlock"] = 201] = "ModuleBlock";
-        SyntaxKind[SyntaxKind["ImportEqualsDeclaration"] = 202] = "ImportEqualsDeclaration";
-        SyntaxKind[SyntaxKind["ImportDeclaration"] = 203] = "ImportDeclaration";
-        SyntaxKind[SyntaxKind["ImportClause"] = 204] = "ImportClause";
-        SyntaxKind[SyntaxKind["NamespaceImport"] = 205] = "NamespaceImport";
-        SyntaxKind[SyntaxKind["NamedImports"] = 206] = "NamedImports";
-        SyntaxKind[SyntaxKind["ImportSpecifier"] = 207] = "ImportSpecifier";
-        SyntaxKind[SyntaxKind["ExportAssignment"] = 208] = "ExportAssignment";
-        SyntaxKind[SyntaxKind["ExportDeclaration"] = 209] = "ExportDeclaration";
-        SyntaxKind[SyntaxKind["NamedExports"] = 210] = "NamedExports";
-        SyntaxKind[SyntaxKind["ExportSpecifier"] = 211] = "ExportSpecifier";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 212] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["CaseClause"] = 213] = "CaseClause";
-        SyntaxKind[SyntaxKind["DefaultClause"] = 214] = "DefaultClause";
-        SyntaxKind[SyntaxKind["HeritageClause"] = 215] = "HeritageClause";
-        SyntaxKind[SyntaxKind["CatchClause"] = 216] = "CatchClause";
-        SyntaxKind[SyntaxKind["PropertyAssignment"] = 217] = "PropertyAssignment";
-        SyntaxKind[SyntaxKind["ShorthandPropertyAssignment"] = 218] = "ShorthandPropertyAssignment";
-        SyntaxKind[SyntaxKind["EnumMember"] = 219] = "EnumMember";
-        SyntaxKind[SyntaxKind["SourceFile"] = 220] = "SourceFile";
-        SyntaxKind[SyntaxKind["SyntaxList"] = 221] = "SyntaxList";
-        SyntaxKind[SyntaxKind["Count"] = 222] = "Count";
-        SyntaxKind[SyntaxKind["FirstAssignment"] = 52] = "FirstAssignment";
-        SyntaxKind[SyntaxKind["LastAssignment"] = 63] = "LastAssignment";
-        SyntaxKind[SyntaxKind["FirstReservedWord"] = 65] = "FirstReservedWord";
-        SyntaxKind[SyntaxKind["LastReservedWord"] = 100] = "LastReservedWord";
-        SyntaxKind[SyntaxKind["FirstKeyword"] = 65] = "FirstKeyword";
-        SyntaxKind[SyntaxKind["LastKeyword"] = 124] = "LastKeyword";
-        SyntaxKind[SyntaxKind["FirstFutureReservedWord"] = 103] = "FirstFutureReservedWord";
-        SyntaxKind[SyntaxKind["LastFutureReservedWord"] = 111] = "LastFutureReservedWord";
-        SyntaxKind[SyntaxKind["FirstTypeNode"] = 139] = "FirstTypeNode";
-        SyntaxKind[SyntaxKind["LastTypeNode"] = 147] = "LastTypeNode";
-        SyntaxKind[SyntaxKind["FirstPunctuation"] = 14] = "FirstPunctuation";
-        SyntaxKind[SyntaxKind["LastPunctuation"] = 63] = "LastPunctuation";
-        SyntaxKind[SyntaxKind["FirstToken"] = 0] = "FirstToken";
-        SyntaxKind[SyntaxKind["LastToken"] = 124] = "LastToken";
-        SyntaxKind[SyntaxKind["FirstTriviaToken"] = 2] = "FirstTriviaToken";
-        SyntaxKind[SyntaxKind["LastTriviaToken"] = 6] = "LastTriviaToken";
-        SyntaxKind[SyntaxKind["FirstLiteralToken"] = 7] = "FirstLiteralToken";
-        SyntaxKind[SyntaxKind["LastLiteralToken"] = 10] = "LastLiteralToken";
-        SyntaxKind[SyntaxKind["FirstTemplateToken"] = 10] = "FirstTemplateToken";
-        SyntaxKind[SyntaxKind["LastTemplateToken"] = 13] = "LastTemplateToken";
-        SyntaxKind[SyntaxKind["FirstBinaryOperator"] = 24] = "FirstBinaryOperator";
-        SyntaxKind[SyntaxKind["LastBinaryOperator"] = 63] = "LastBinaryOperator";
-        SyntaxKind[SyntaxKind["FirstNode"] = 125] = "FirstNode";
-    })(ts.SyntaxKind || (ts.SyntaxKind = {}));
-    var SyntaxKind = ts.SyntaxKind;
-    (function (NodeFlags) {
-        NodeFlags[NodeFlags["Export"] = 1] = "Export";
-        NodeFlags[NodeFlags["Ambient"] = 2] = "Ambient";
-        NodeFlags[NodeFlags["Public"] = 16] = "Public";
-        NodeFlags[NodeFlags["Private"] = 32] = "Private";
-        NodeFlags[NodeFlags["Protected"] = 64] = "Protected";
-        NodeFlags[NodeFlags["Static"] = 128] = "Static";
-        NodeFlags[NodeFlags["MultiLine"] = 256] = "MultiLine";
-        NodeFlags[NodeFlags["Synthetic"] = 512] = "Synthetic";
-        NodeFlags[NodeFlags["DeclarationFile"] = 1024] = "DeclarationFile";
-        NodeFlags[NodeFlags["Let"] = 2048] = "Let";
-        NodeFlags[NodeFlags["Const"] = 4096] = "Const";
-        NodeFlags[NodeFlags["OctalLiteral"] = 8192] = "OctalLiteral";
-        NodeFlags[NodeFlags["Modifier"] = 243] = "Modifier";
-        NodeFlags[NodeFlags["AccessibilityModifier"] = 112] = "AccessibilityModifier";
-        NodeFlags[NodeFlags["BlockScoped"] = 6144] = "BlockScoped";
-    })(ts.NodeFlags || (ts.NodeFlags = {}));
-    var NodeFlags = ts.NodeFlags;
-    (function (ParserContextFlags) {
-        ParserContextFlags[ParserContextFlags["StrictMode"] = 1] = "StrictMode";
-        ParserContextFlags[ParserContextFlags["DisallowIn"] = 2] = "DisallowIn";
-        ParserContextFlags[ParserContextFlags["Yield"] = 4] = "Yield";
-        ParserContextFlags[ParserContextFlags["GeneratorParameter"] = 8] = "GeneratorParameter";
-        ParserContextFlags[ParserContextFlags["ThisNodeHasError"] = 16] = "ThisNodeHasError";
-        ParserContextFlags[ParserContextFlags["ParserGeneratedFlags"] = 31] = "ParserGeneratedFlags";
-        ParserContextFlags[ParserContextFlags["ThisNodeOrAnySubNodesHasError"] = 32] = "ThisNodeOrAnySubNodesHasError";
-        ParserContextFlags[ParserContextFlags["HasAggregatedChildData"] = 64] = "HasAggregatedChildData";
-    })(ts.ParserContextFlags || (ts.ParserContextFlags = {}));
-    var ParserContextFlags = ts.ParserContextFlags;
-    (function (RelationComparisonResult) {
-        RelationComparisonResult[RelationComparisonResult["Succeeded"] = 1] = "Succeeded";
-        RelationComparisonResult[RelationComparisonResult["Failed"] = 2] = "Failed";
-        RelationComparisonResult[RelationComparisonResult["FailedAndReported"] = 3] = "FailedAndReported";
-    })(ts.RelationComparisonResult || (ts.RelationComparisonResult = {}));
-    var RelationComparisonResult = ts.RelationComparisonResult;
     (function (ExitStatus) {
         ExitStatus[ExitStatus["Success"] = 0] = "Success";
         ExitStatus[ExitStatus["DiagnosticsPresent_OutputsSkipped"] = 1] = "DiagnosticsPresent_OutputsSkipped";
         ExitStatus[ExitStatus["DiagnosticsPresent_OutputsGenerated"] = 2] = "DiagnosticsPresent_OutputsGenerated";
     })(ts.ExitStatus || (ts.ExitStatus = {}));
     var ExitStatus = ts.ExitStatus;
-    (function (TypeFormatFlags) {
-        TypeFormatFlags[TypeFormatFlags["None"] = 0] = "None";
-        TypeFormatFlags[TypeFormatFlags["WriteArrayAsGenericType"] = 1] = "WriteArrayAsGenericType";
-        TypeFormatFlags[TypeFormatFlags["UseTypeOfFunction"] = 2] = "UseTypeOfFunction";
-        TypeFormatFlags[TypeFormatFlags["NoTruncation"] = 4] = "NoTruncation";
-        TypeFormatFlags[TypeFormatFlags["WriteArrowStyleSignature"] = 8] = "WriteArrowStyleSignature";
-        TypeFormatFlags[TypeFormatFlags["WriteOwnNameForAnyLike"] = 16] = "WriteOwnNameForAnyLike";
-        TypeFormatFlags[TypeFormatFlags["WriteTypeArgumentsOfSignature"] = 32] = "WriteTypeArgumentsOfSignature";
-        TypeFormatFlags[TypeFormatFlags["InElementType"] = 64] = "InElementType";
-        TypeFormatFlags[TypeFormatFlags["UseFullyQualifiedType"] = 128] = "UseFullyQualifiedType";
-    })(ts.TypeFormatFlags || (ts.TypeFormatFlags = {}));
-    var TypeFormatFlags = ts.TypeFormatFlags;
-    (function (SymbolFormatFlags) {
-        SymbolFormatFlags[SymbolFormatFlags["None"] = 0] = "None";
-        SymbolFormatFlags[SymbolFormatFlags["WriteTypeParametersOrArguments"] = 1] = "WriteTypeParametersOrArguments";
-        SymbolFormatFlags[SymbolFormatFlags["UseOnlyExternalAliasing"] = 2] = "UseOnlyExternalAliasing";
-    })(ts.SymbolFormatFlags || (ts.SymbolFormatFlags = {}));
-    var SymbolFormatFlags = ts.SymbolFormatFlags;
-    (function (SymbolAccessibility) {
-        SymbolAccessibility[SymbolAccessibility["Accessible"] = 0] = "Accessible";
-        SymbolAccessibility[SymbolAccessibility["NotAccessible"] = 1] = "NotAccessible";
-        SymbolAccessibility[SymbolAccessibility["CannotBeNamed"] = 2] = "CannotBeNamed";
-    })(ts.SymbolAccessibility || (ts.SymbolAccessibility = {}));
-    var SymbolAccessibility = ts.SymbolAccessibility;
-    (function (SymbolFlags) {
-        SymbolFlags[SymbolFlags["FunctionScopedVariable"] = 1] = "FunctionScopedVariable";
-        SymbolFlags[SymbolFlags["BlockScopedVariable"] = 2] = "BlockScopedVariable";
-        SymbolFlags[SymbolFlags["Property"] = 4] = "Property";
-        SymbolFlags[SymbolFlags["EnumMember"] = 8] = "EnumMember";
-        SymbolFlags[SymbolFlags["Function"] = 16] = "Function";
-        SymbolFlags[SymbolFlags["Class"] = 32] = "Class";
-        SymbolFlags[SymbolFlags["Interface"] = 64] = "Interface";
-        SymbolFlags[SymbolFlags["ConstEnum"] = 128] = "ConstEnum";
-        SymbolFlags[SymbolFlags["RegularEnum"] = 256] = "RegularEnum";
-        SymbolFlags[SymbolFlags["ValueModule"] = 512] = "ValueModule";
-        SymbolFlags[SymbolFlags["NamespaceModule"] = 1024] = "NamespaceModule";
-        SymbolFlags[SymbolFlags["TypeLiteral"] = 2048] = "TypeLiteral";
-        SymbolFlags[SymbolFlags["ObjectLiteral"] = 4096] = "ObjectLiteral";
-        SymbolFlags[SymbolFlags["Method"] = 8192] = "Method";
-        SymbolFlags[SymbolFlags["Constructor"] = 16384] = "Constructor";
-        SymbolFlags[SymbolFlags["GetAccessor"] = 32768] = "GetAccessor";
-        SymbolFlags[SymbolFlags["SetAccessor"] = 65536] = "SetAccessor";
-        SymbolFlags[SymbolFlags["Signature"] = 131072] = "Signature";
-        SymbolFlags[SymbolFlags["TypeParameter"] = 262144] = "TypeParameter";
-        SymbolFlags[SymbolFlags["TypeAlias"] = 524288] = "TypeAlias";
-        SymbolFlags[SymbolFlags["ExportValue"] = 1048576] = "ExportValue";
-        SymbolFlags[SymbolFlags["ExportType"] = 2097152] = "ExportType";
-        SymbolFlags[SymbolFlags["ExportNamespace"] = 4194304] = "ExportNamespace";
-        SymbolFlags[SymbolFlags["Import"] = 8388608] = "Import";
-        SymbolFlags[SymbolFlags["Instantiated"] = 16777216] = "Instantiated";
-        SymbolFlags[SymbolFlags["Merged"] = 33554432] = "Merged";
-        SymbolFlags[SymbolFlags["Transient"] = 67108864] = "Transient";
-        SymbolFlags[SymbolFlags["Prototype"] = 134217728] = "Prototype";
-        SymbolFlags[SymbolFlags["UnionProperty"] = 268435456] = "UnionProperty";
-        SymbolFlags[SymbolFlags["Optional"] = 536870912] = "Optional";
-        SymbolFlags[SymbolFlags["Enum"] = 384] = "Enum";
-        SymbolFlags[SymbolFlags["Variable"] = 3] = "Variable";
-        SymbolFlags[SymbolFlags["Value"] = 107455] = "Value";
-        SymbolFlags[SymbolFlags["Type"] = 793056] = "Type";
-        SymbolFlags[SymbolFlags["Namespace"] = 1536] = "Namespace";
-        SymbolFlags[SymbolFlags["Module"] = 1536] = "Module";
-        SymbolFlags[SymbolFlags["Accessor"] = 98304] = "Accessor";
-        SymbolFlags[SymbolFlags["FunctionScopedVariableExcludes"] = 107454] = "FunctionScopedVariableExcludes";
-        SymbolFlags[SymbolFlags["BlockScopedVariableExcludes"] = 107455] = "BlockScopedVariableExcludes";
-        SymbolFlags[SymbolFlags["ParameterExcludes"] = 107455] = "ParameterExcludes";
-        SymbolFlags[SymbolFlags["PropertyExcludes"] = 107455] = "PropertyExcludes";
-        SymbolFlags[SymbolFlags["EnumMemberExcludes"] = 107455] = "EnumMemberExcludes";
-        SymbolFlags[SymbolFlags["FunctionExcludes"] = 106927] = "FunctionExcludes";
-        SymbolFlags[SymbolFlags["ClassExcludes"] = 899583] = "ClassExcludes";
-        SymbolFlags[SymbolFlags["InterfaceExcludes"] = 792992] = "InterfaceExcludes";
-        SymbolFlags[SymbolFlags["RegularEnumExcludes"] = 899327] = "RegularEnumExcludes";
-        SymbolFlags[SymbolFlags["ConstEnumExcludes"] = 899967] = "ConstEnumExcludes";
-        SymbolFlags[SymbolFlags["ValueModuleExcludes"] = 106639] = "ValueModuleExcludes";
-        SymbolFlags[SymbolFlags["NamespaceModuleExcludes"] = 0] = "NamespaceModuleExcludes";
-        SymbolFlags[SymbolFlags["MethodExcludes"] = 99263] = "MethodExcludes";
-        SymbolFlags[SymbolFlags["GetAccessorExcludes"] = 41919] = "GetAccessorExcludes";
-        SymbolFlags[SymbolFlags["SetAccessorExcludes"] = 74687] = "SetAccessorExcludes";
-        SymbolFlags[SymbolFlags["TypeParameterExcludes"] = 530912] = "TypeParameterExcludes";
-        SymbolFlags[SymbolFlags["TypeAliasExcludes"] = 793056] = "TypeAliasExcludes";
-        SymbolFlags[SymbolFlags["ImportExcludes"] = 8388608] = "ImportExcludes";
-        SymbolFlags[SymbolFlags["ModuleMember"] = 8914931] = "ModuleMember";
-        SymbolFlags[SymbolFlags["ExportHasLocal"] = 944] = "ExportHasLocal";
-        SymbolFlags[SymbolFlags["HasLocals"] = 255504] = "HasLocals";
-        SymbolFlags[SymbolFlags["HasExports"] = 1952] = "HasExports";
-        SymbolFlags[SymbolFlags["HasMembers"] = 6240] = "HasMembers";
-        SymbolFlags[SymbolFlags["IsContainer"] = 262128] = "IsContainer";
-        SymbolFlags[SymbolFlags["PropertyOrAccessor"] = 98308] = "PropertyOrAccessor";
-        SymbolFlags[SymbolFlags["Export"] = 7340032] = "Export";
-    })(ts.SymbolFlags || (ts.SymbolFlags = {}));
-    var SymbolFlags = ts.SymbolFlags;
-    (function (NodeCheckFlags) {
-        NodeCheckFlags[NodeCheckFlags["TypeChecked"] = 1] = "TypeChecked";
-        NodeCheckFlags[NodeCheckFlags["LexicalThis"] = 2] = "LexicalThis";
-        NodeCheckFlags[NodeCheckFlags["CaptureThis"] = 4] = "CaptureThis";
-        NodeCheckFlags[NodeCheckFlags["EmitExtends"] = 8] = "EmitExtends";
-        NodeCheckFlags[NodeCheckFlags["SuperInstance"] = 16] = "SuperInstance";
-        NodeCheckFlags[NodeCheckFlags["SuperStatic"] = 32] = "SuperStatic";
-        NodeCheckFlags[NodeCheckFlags["ContextChecked"] = 64] = "ContextChecked";
-        NodeCheckFlags[NodeCheckFlags["EnumValuesComputed"] = 128] = "EnumValuesComputed";
-    })(ts.NodeCheckFlags || (ts.NodeCheckFlags = {}));
-    var NodeCheckFlags = ts.NodeCheckFlags;
-    (function (TypeFlags) {
-        TypeFlags[TypeFlags["Any"] = 1] = "Any";
-        TypeFlags[TypeFlags["String"] = 2] = "String";
-        TypeFlags[TypeFlags["Number"] = 4] = "Number";
-        TypeFlags[TypeFlags["Boolean"] = 8] = "Boolean";
-        TypeFlags[TypeFlags["Void"] = 16] = "Void";
-        TypeFlags[TypeFlags["Undefined"] = 32] = "Undefined";
-        TypeFlags[TypeFlags["Null"] = 64] = "Null";
-        TypeFlags[TypeFlags["Enum"] = 128] = "Enum";
-        TypeFlags[TypeFlags["StringLiteral"] = 256] = "StringLiteral";
-        TypeFlags[TypeFlags["TypeParameter"] = 512] = "TypeParameter";
-        TypeFlags[TypeFlags["Class"] = 1024] = "Class";
-        TypeFlags[TypeFlags["Interface"] = 2048] = "Interface";
-        TypeFlags[TypeFlags["Reference"] = 4096] = "Reference";
-        TypeFlags[TypeFlags["Tuple"] = 8192] = "Tuple";
-        TypeFlags[TypeFlags["Union"] = 16384] = "Union";
-        TypeFlags[TypeFlags["Anonymous"] = 32768] = "Anonymous";
-        TypeFlags[TypeFlags["FromSignature"] = 65536] = "FromSignature";
-        TypeFlags[TypeFlags["ObjectLiteral"] = 131072] = "ObjectLiteral";
-        TypeFlags[TypeFlags["ContainsUndefinedOrNull"] = 262144] = "ContainsUndefinedOrNull";
-        TypeFlags[TypeFlags["ContainsObjectLiteral"] = 524288] = "ContainsObjectLiteral";
-        TypeFlags[TypeFlags["ESSymbol"] = 1048576] = "ESSymbol";
-        TypeFlags[TypeFlags["Intrinsic"] = 1048703] = "Intrinsic";
-        TypeFlags[TypeFlags["Primitive"] = 1049086] = "Primitive";
-        TypeFlags[TypeFlags["StringLike"] = 258] = "StringLike";
-        TypeFlags[TypeFlags["NumberLike"] = 132] = "NumberLike";
-        TypeFlags[TypeFlags["ObjectType"] = 48128] = "ObjectType";
-        TypeFlags[TypeFlags["RequiresWidening"] = 786432] = "RequiresWidening";
-    })(ts.TypeFlags || (ts.TypeFlags = {}));
-    var TypeFlags = ts.TypeFlags;
-    (function (SignatureKind) {
-        SignatureKind[SignatureKind["Call"] = 0] = "Call";
-        SignatureKind[SignatureKind["Construct"] = 1] = "Construct";
-    })(ts.SignatureKind || (ts.SignatureKind = {}));
-    var SignatureKind = ts.SignatureKind;
-    (function (IndexKind) {
-        IndexKind[IndexKind["String"] = 0] = "String";
-        IndexKind[IndexKind["Number"] = 1] = "Number";
-    })(ts.IndexKind || (ts.IndexKind = {}));
-    var IndexKind = ts.IndexKind;
     (function (DiagnosticCategory) {
         DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";
         DiagnosticCategory[DiagnosticCategory["Error"] = 1] = "Error";
         DiagnosticCategory[DiagnosticCategory["Message"] = 2] = "Message";
     })(ts.DiagnosticCategory || (ts.DiagnosticCategory = {}));
     var DiagnosticCategory = ts.DiagnosticCategory;
-    (function (ModuleKind) {
-        ModuleKind[ModuleKind["None"] = 0] = "None";
-        ModuleKind[ModuleKind["CommonJS"] = 1] = "CommonJS";
-        ModuleKind[ModuleKind["AMD"] = 2] = "AMD";
-    })(ts.ModuleKind || (ts.ModuleKind = {}));
-    var ModuleKind = ts.ModuleKind;
-    (function (ScriptTarget) {
-        ScriptTarget[ScriptTarget["ES3"] = 0] = "ES3";
-        ScriptTarget[ScriptTarget["ES5"] = 1] = "ES5";
-        ScriptTarget[ScriptTarget["ES6"] = 2] = "ES6";
-        ScriptTarget[ScriptTarget["Latest"] = 2] = "Latest";
-    })(ts.ScriptTarget || (ts.ScriptTarget = {}));
-    var ScriptTarget = ts.ScriptTarget;
-    (function (CharacterCodes) {
-        CharacterCodes[CharacterCodes["nullCharacter"] = 0] = "nullCharacter";
-        CharacterCodes[CharacterCodes["maxAsciiCharacter"] = 127] = "maxAsciiCharacter";
-        CharacterCodes[CharacterCodes["lineFeed"] = 10] = "lineFeed";
-        CharacterCodes[CharacterCodes["carriageReturn"] = 13] = "carriageReturn";
-        CharacterCodes[CharacterCodes["lineSeparator"] = 8232] = "lineSeparator";
-        CharacterCodes[CharacterCodes["paragraphSeparator"] = 8233] = "paragraphSeparator";
-        CharacterCodes[CharacterCodes["nextLine"] = 133] = "nextLine";
-        CharacterCodes[CharacterCodes["space"] = 32] = "space";
-        CharacterCodes[CharacterCodes["nonBreakingSpace"] = 160] = "nonBreakingSpace";
-        CharacterCodes[CharacterCodes["enQuad"] = 8192] = "enQuad";
-        CharacterCodes[CharacterCodes["emQuad"] = 8193] = "emQuad";
-        CharacterCodes[CharacterCodes["enSpace"] = 8194] = "enSpace";
-        CharacterCodes[CharacterCodes["emSpace"] = 8195] = "emSpace";
-        CharacterCodes[CharacterCodes["threePerEmSpace"] = 8196] = "threePerEmSpace";
-        CharacterCodes[CharacterCodes["fourPerEmSpace"] = 8197] = "fourPerEmSpace";
-        CharacterCodes[CharacterCodes["sixPerEmSpace"] = 8198] = "sixPerEmSpace";
-        CharacterCodes[CharacterCodes["figureSpace"] = 8199] = "figureSpace";
-        CharacterCodes[CharacterCodes["punctuationSpace"] = 8200] = "punctuationSpace";
-        CharacterCodes[CharacterCodes["thinSpace"] = 8201] = "thinSpace";
-        CharacterCodes[CharacterCodes["hairSpace"] = 8202] = "hairSpace";
-        CharacterCodes[CharacterCodes["zeroWidthSpace"] = 8203] = "zeroWidthSpace";
-        CharacterCodes[CharacterCodes["narrowNoBreakSpace"] = 8239] = "narrowNoBreakSpace";
-        CharacterCodes[CharacterCodes["ideographicSpace"] = 12288] = "ideographicSpace";
-        CharacterCodes[CharacterCodes["mathematicalSpace"] = 8287] = "mathematicalSpace";
-        CharacterCodes[CharacterCodes["ogham"] = 5760] = "ogham";
-        CharacterCodes[CharacterCodes["_"] = 95] = "_";
-        CharacterCodes[CharacterCodes["$"] = 36] = "$";
-        CharacterCodes[CharacterCodes["_0"] = 48] = "_0";
-        CharacterCodes[CharacterCodes["_1"] = 49] = "_1";
-        CharacterCodes[CharacterCodes["_2"] = 50] = "_2";
-        CharacterCodes[CharacterCodes["_3"] = 51] = "_3";
-        CharacterCodes[CharacterCodes["_4"] = 52] = "_4";
-        CharacterCodes[CharacterCodes["_5"] = 53] = "_5";
-        CharacterCodes[CharacterCodes["_6"] = 54] = "_6";
-        CharacterCodes[CharacterCodes["_7"] = 55] = "_7";
-        CharacterCodes[CharacterCodes["_8"] = 56] = "_8";
-        CharacterCodes[CharacterCodes["_9"] = 57] = "_9";
-        CharacterCodes[CharacterCodes["a"] = 97] = "a";
-        CharacterCodes[CharacterCodes["b"] = 98] = "b";
-        CharacterCodes[CharacterCodes["c"] = 99] = "c";
-        CharacterCodes[CharacterCodes["d"] = 100] = "d";
-        CharacterCodes[CharacterCodes["e"] = 101] = "e";
-        CharacterCodes[CharacterCodes["f"] = 102] = "f";
-        CharacterCodes[CharacterCodes["g"] = 103] = "g";
-        CharacterCodes[CharacterCodes["h"] = 104] = "h";
-        CharacterCodes[CharacterCodes["i"] = 105] = "i";
-        CharacterCodes[CharacterCodes["j"] = 106] = "j";
-        CharacterCodes[CharacterCodes["k"] = 107] = "k";
-        CharacterCodes[CharacterCodes["l"] = 108] = "l";
-        CharacterCodes[CharacterCodes["m"] = 109] = "m";
-        CharacterCodes[CharacterCodes["n"] = 110] = "n";
-        CharacterCodes[CharacterCodes["o"] = 111] = "o";
-        CharacterCodes[CharacterCodes["p"] = 112] = "p";
-        CharacterCodes[CharacterCodes["q"] = 113] = "q";
-        CharacterCodes[CharacterCodes["r"] = 114] = "r";
-        CharacterCodes[CharacterCodes["s"] = 115] = "s";
-        CharacterCodes[CharacterCodes["t"] = 116] = "t";
-        CharacterCodes[CharacterCodes["u"] = 117] = "u";
-        CharacterCodes[CharacterCodes["v"] = 118] = "v";
-        CharacterCodes[CharacterCodes["w"] = 119] = "w";
-        CharacterCodes[CharacterCodes["x"] = 120] = "x";
-        CharacterCodes[CharacterCodes["y"] = 121] = "y";
-        CharacterCodes[CharacterCodes["z"] = 122] = "z";
-        CharacterCodes[CharacterCodes["A"] = 65] = "A";
-        CharacterCodes[CharacterCodes["B"] = 66] = "B";
-        CharacterCodes[CharacterCodes["C"] = 67] = "C";
-        CharacterCodes[CharacterCodes["D"] = 68] = "D";
-        CharacterCodes[CharacterCodes["E"] = 69] = "E";
-        CharacterCodes[CharacterCodes["F"] = 70] = "F";
-        CharacterCodes[CharacterCodes["G"] = 71] = "G";
-        CharacterCodes[CharacterCodes["H"] = 72] = "H";
-        CharacterCodes[CharacterCodes["I"] = 73] = "I";
-        CharacterCodes[CharacterCodes["J"] = 74] = "J";
-        CharacterCodes[CharacterCodes["K"] = 75] = "K";
-        CharacterCodes[CharacterCodes["L"] = 76] = "L";
-        CharacterCodes[CharacterCodes["M"] = 77] = "M";
-        CharacterCodes[CharacterCodes["N"] = 78] = "N";
-        CharacterCodes[CharacterCodes["O"] = 79] = "O";
-        CharacterCodes[CharacterCodes["P"] = 80] = "P";
-        CharacterCodes[CharacterCodes["Q"] = 81] = "Q";
-        CharacterCodes[CharacterCodes["R"] = 82] = "R";
-        CharacterCodes[CharacterCodes["S"] = 83] = "S";
-        CharacterCodes[CharacterCodes["T"] = 84] = "T";
-        CharacterCodes[CharacterCodes["U"] = 85] = "U";
-        CharacterCodes[CharacterCodes["V"] = 86] = "V";
-        CharacterCodes[CharacterCodes["W"] = 87] = "W";
-        CharacterCodes[CharacterCodes["X"] = 88] = "X";
-        CharacterCodes[CharacterCodes["Y"] = 89] = "Y";
-        CharacterCodes[CharacterCodes["Z"] = 90] = "Z";
-        CharacterCodes[CharacterCodes["ampersand"] = 38] = "ampersand";
-        CharacterCodes[CharacterCodes["asterisk"] = 42] = "asterisk";
-        CharacterCodes[CharacterCodes["at"] = 64] = "at";
-        CharacterCodes[CharacterCodes["backslash"] = 92] = "backslash";
-        CharacterCodes[CharacterCodes["backtick"] = 96] = "backtick";
-        CharacterCodes[CharacterCodes["bar"] = 124] = "bar";
-        CharacterCodes[CharacterCodes["caret"] = 94] = "caret";
-        CharacterCodes[CharacterCodes["closeBrace"] = 125] = "closeBrace";
-        CharacterCodes[CharacterCodes["closeBracket"] = 93] = "closeBracket";
-        CharacterCodes[CharacterCodes["closeParen"] = 41] = "closeParen";
-        CharacterCodes[CharacterCodes["colon"] = 58] = "colon";
-        CharacterCodes[CharacterCodes["comma"] = 44] = "comma";
-        CharacterCodes[CharacterCodes["dot"] = 46] = "dot";
-        CharacterCodes[CharacterCodes["doubleQuote"] = 34] = "doubleQuote";
-        CharacterCodes[CharacterCodes["equals"] = 61] = "equals";
-        CharacterCodes[CharacterCodes["exclamation"] = 33] = "exclamation";
-        CharacterCodes[CharacterCodes["greaterThan"] = 62] = "greaterThan";
-        CharacterCodes[CharacterCodes["hash"] = 35] = "hash";
-        CharacterCodes[CharacterCodes["lessThan"] = 60] = "lessThan";
-        CharacterCodes[CharacterCodes["minus"] = 45] = "minus";
-        CharacterCodes[CharacterCodes["openBrace"] = 123] = "openBrace";
-        CharacterCodes[CharacterCodes["openBracket"] = 91] = "openBracket";
-        CharacterCodes[CharacterCodes["openParen"] = 40] = "openParen";
-        CharacterCodes[CharacterCodes["percent"] = 37] = "percent";
-        CharacterCodes[CharacterCodes["plus"] = 43] = "plus";
-        CharacterCodes[CharacterCodes["question"] = 63] = "question";
-        CharacterCodes[CharacterCodes["semicolon"] = 59] = "semicolon";
-        CharacterCodes[CharacterCodes["singleQuote"] = 39] = "singleQuote";
-        CharacterCodes[CharacterCodes["slash"] = 47] = "slash";
-        CharacterCodes[CharacterCodes["tilde"] = 126] = "tilde";
-        CharacterCodes[CharacterCodes["backspace"] = 8] = "backspace";
-        CharacterCodes[CharacterCodes["formFeed"] = 12] = "formFeed";
-        CharacterCodes[CharacterCodes["byteOrderMark"] = 65279] = "byteOrderMark";
-        CharacterCodes[CharacterCodes["tab"] = 9] = "tab";
-        CharacterCodes[CharacterCodes["verticalTab"] = 11] = "verticalTab";
-    })(ts.CharacterCodes || (ts.CharacterCodes = {}));
-    var CharacterCodes = ts.CharacterCodes;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    (function (Ternary) {
-        Ternary[Ternary["False"] = 0] = "False";
-        Ternary[Ternary["Maybe"] = 1] = "Maybe";
-        Ternary[Ternary["True"] = -1] = "True";
-    })(ts.Ternary || (ts.Ternary = {}));
-    var Ternary = ts.Ternary;
-    (function (Comparison) {
-        Comparison[Comparison["LessThan"] = -1] = "LessThan";
-        Comparison[Comparison["EqualTo"] = 0] = "EqualTo";
-        Comparison[Comparison["GreaterThan"] = 1] = "GreaterThan";
-    })(ts.Comparison || (ts.Comparison = {}));
-    var Comparison = ts.Comparison;
     function forEach(array, callback) {
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
@@ -1176,13 +599,6 @@ var ts;
         getTypeConstructor: function () { return Type; },
         getSignatureConstructor: function () { return Signature; }
     };
-    (function (AssertionLevel) {
-        AssertionLevel[AssertionLevel["None"] = 0] = "None";
-        AssertionLevel[AssertionLevel["Normal"] = 1] = "Normal";
-        AssertionLevel[AssertionLevel["Aggressive"] = 2] = "Aggressive";
-        AssertionLevel[AssertionLevel["VeryAggressive"] = 3] = "VeryAggressive";
-    })(ts.AssertionLevel || (ts.AssertionLevel = {}));
-    var AssertionLevel = ts.AssertionLevel;
     var Debug;
     (function (Debug) {
         var currentAssertionLevel = 0;
@@ -3073,6 +2489,344 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
+    ts.optionDeclarations = [
+        {
+            name: "charset",
+            type: "string"
+        },
+        {
+            name: "codepage",
+            type: "number"
+        },
+        {
+            name: "declaration",
+            shortName: "d",
+            type: "boolean",
+            description: ts.Diagnostics.Generates_corresponding_d_ts_file
+        },
+        {
+            name: "diagnostics",
+            type: "boolean"
+        },
+        {
+            name: "emitBOM",
+            type: "boolean"
+        },
+        {
+            name: "help",
+            shortName: "h",
+            type: "boolean",
+            description: ts.Diagnostics.Print_this_message
+        },
+        {
+            name: "listFiles",
+            type: "boolean"
+        },
+        {
+            name: "locale",
+            type: "string"
+        },
+        {
+            name: "mapRoot",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
+            paramType: ts.Diagnostics.LOCATION
+        },
+        {
+            name: "module",
+            shortName: "m",
+            type: {
+                "commonjs": 1,
+                "amd": 2
+            },
+            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
+            paramType: ts.Diagnostics.KIND,
+            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+        },
+        {
+            name: "noEmit",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_emit_outputs
+        },
+        {
+            name: "noEmitOnError",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported
+        },
+        {
+            name: "noImplicitAny",
+            type: "boolean",
+            description: ts.Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type
+        },
+        {
+            name: "noLib",
+            type: "boolean"
+        },
+        {
+            name: "noLibCheck",
+            type: "boolean"
+        },
+        {
+            name: "noResolve",
+            type: "boolean"
+        },
+        {
+            name: "out",
+            type: "string",
+            description: ts.Diagnostics.Concatenate_and_emit_output_to_single_file,
+            paramType: ts.Diagnostics.FILE
+        },
+        {
+            name: "outDir",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Redirect_output_structure_to_the_directory,
+            paramType: ts.Diagnostics.DIRECTORY
+        },
+        {
+            name: "preserveConstEnums",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
+            name: "project",
+            shortName: "p",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Compile_the_project_in_the_given_directory,
+            paramType: ts.Diagnostics.DIRECTORY
+        },
+        {
+            name: "removeComments",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_emit_comments_to_output
+        },
+        {
+            name: "sourceMap",
+            type: "boolean",
+            description: ts.Diagnostics.Generates_corresponding_map_file
+        },
+        {
+            name: "sourceRoot",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
+            paramType: ts.Diagnostics.LOCATION
+        },
+        {
+            name: "suppressImplicitAnyIndexErrors",
+            type: "boolean",
+            description: ts.Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures
+        },
+        {
+            name: "stripInternal",
+            type: "boolean",
+            description: ts.Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
+            experimental: true
+        },
+        {
+            name: "target",
+            shortName: "t",
+            type: { "es3": 0, "es5": 1, "es6": 2 },
+            description: ts.Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
+            paramType: ts.Diagnostics.VERSION,
+            error: ts.Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+        },
+        {
+            name: "version",
+            shortName: "v",
+            type: "boolean",
+            description: ts.Diagnostics.Print_the_compiler_s_version
+        },
+        {
+            name: "watch",
+            shortName: "w",
+            type: "boolean",
+            description: ts.Diagnostics.Watch_input_files
+        }
+    ];
+    function parseCommandLine(commandLine) {
+        var options = {};
+        var fileNames = [];
+        var errors = [];
+        var shortOptionNames = {};
+        var optionNameMap = {};
+        ts.forEach(ts.optionDeclarations, function (option) {
+            optionNameMap[option.name.toLowerCase()] = option;
+            if (option.shortName) {
+                shortOptionNames[option.shortName] = option.name;
+            }
+        });
+        parseStrings(commandLine);
+        return {
+            options: options,
+            fileNames: fileNames,
+            errors: errors
+        };
+        function parseStrings(args) {
+            var i = 0;
+            while (i < args.length) {
+                var s = args[i++];
+                if (s.charCodeAt(0) === 64) {
+                    parseResponseFile(s.slice(1));
+                }
+                else if (s.charCodeAt(0) === 45) {
+                    s = s.slice(s.charCodeAt(1) === 45 ? 2 : 1).toLowerCase();
+                    if (ts.hasProperty(shortOptionNames, s)) {
+                        s = shortOptionNames[s];
+                    }
+                    if (ts.hasProperty(optionNameMap, s)) {
+                        var opt = optionNameMap[s];
+                        if (!args[i] && opt.type !== "boolean") {
+                            errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                        }
+                        switch (opt.type) {
+                            case "number":
+                                options[opt.name] = parseInt(args[i++]);
+                                break;
+                            case "boolean":
+                                options[opt.name] = true;
+                                break;
+                            case "string":
+                                options[opt.name] = args[i++] || "";
+                                break;
+                            default:
+                                var map = opt.type;
+                                var key = (args[i++] || "").toLowerCase();
+                                if (ts.hasProperty(map, key)) {
+                                    options[opt.name] = map[key];
+                                }
+                                else {
+                                    errors.push(ts.createCompilerDiagnostic(opt.error));
+                                }
+                        }
+                    }
+                    else {
+                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unknown_compiler_option_0, s));
+                    }
+                }
+                else {
+                    fileNames.push(s);
+                }
+            }
+        }
+        function parseResponseFile(fileName) {
+            var text = ts.sys.readFile(fileName);
+            if (!text) {
+                errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_not_found, fileName));
+                return;
+            }
+            var args = [];
+            var pos = 0;
+            while (true) {
+                while (pos < text.length && text.charCodeAt(pos) <= 32)
+                    pos++;
+                if (pos >= text.length)
+                    break;
+                var start = pos;
+                if (text.charCodeAt(start) === 34) {
+                    pos++;
+                    while (pos < text.length && text.charCodeAt(pos) !== 34)
+                        pos++;
+                    if (pos < text.length) {
+                        args.push(text.substring(start + 1, pos));
+                        pos++;
+                    }
+                    else {
+                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
+                    }
+                }
+                else {
+                    while (text.charCodeAt(pos) > 32)
+                        pos++;
+                    args.push(text.substring(start, pos));
+                }
+            }
+            parseStrings(args);
+        }
+    }
+    ts.parseCommandLine = parseCommandLine;
+    function readConfigFile(fileName) {
+        try {
+            var text = ts.sys.readFile(fileName);
+            return /\S/.test(text) ? JSON.parse(text) : {};
+        }
+        catch (e) {
+        }
+    }
+    ts.readConfigFile = readConfigFile;
+    function parseConfigFile(json, basePath) {
+        var errors = [];
+        return {
+            options: getCompilerOptions(),
+            fileNames: getFiles(),
+            errors: errors
+        };
+        function getCompilerOptions() {
+            var options = {};
+            var optionNameMap = {};
+            ts.forEach(ts.optionDeclarations, function (option) {
+                optionNameMap[option.name] = option;
+            });
+            var jsonOptions = json["compilerOptions"];
+            if (jsonOptions) {
+                for (var id in jsonOptions) {
+                    if (ts.hasProperty(optionNameMap, id)) {
+                        var opt = optionNameMap[id];
+                        var optType = opt.type;
+                        var value = jsonOptions[id];
+                        var expectedType = typeof optType === "string" ? optType : "string";
+                        if (typeof value === expectedType) {
+                            if (typeof optType !== "string") {
+                                var key = value.toLowerCase();
+                                if (ts.hasProperty(optType, key)) {
+                                    value = optType[key];
+                                }
+                                else {
+                                    errors.push(ts.createCompilerDiagnostic(opt.error));
+                                    value = 0;
+                                }
+                            }
+                            if (opt.isFilePath) {
+                                value = ts.normalizePath(ts.combinePaths(basePath, value));
+                            }
+                            options[opt.name] = value;
+                        }
+                        else {
+                            errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                        }
+                    }
+                    else {
+                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unknown_compiler_option_0, id));
+                    }
+                }
+            }
+            return options;
+        }
+        function getFiles() {
+            var files = [];
+            if (ts.hasProperty(json, "files")) {
+                if (json["files"] instanceof Array) {
+                    var files = ts.map(json["files"], function (s) { return ts.combinePaths(basePath, s); });
+                }
+            }
+            else {
+                var sysFiles = ts.sys.readDirectory(basePath, ".ts");
+                for (var i = 0; i < sysFiles.length; i++) {
+                    var name = sysFiles[i];
+                    if (!ts.fileExtensionIs(name, ".d.ts") || !ts.contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                        files.push(name);
+                    }
+                }
+            }
+            return files;
+        }
+    }
+    ts.parseConfigFile = parseConfigFile;
+})(ts || (ts = {}));
+var ts;
+(function (ts) {
     function getDeclarationOfKind(symbol, kind) {
         var declarations = symbol.declarations;
         for (var i = 0; i < declarations.length; i++) {
@@ -4285,37 +4039,6 @@ var ts;
         }
     }
     ts.forEachChild = forEachChild;
-    var ParsingContext;
-    (function (ParsingContext) {
-        ParsingContext[ParsingContext["SourceElements"] = 0] = "SourceElements";
-        ParsingContext[ParsingContext["ModuleElements"] = 1] = "ModuleElements";
-        ParsingContext[ParsingContext["BlockStatements"] = 2] = "BlockStatements";
-        ParsingContext[ParsingContext["SwitchClauses"] = 3] = "SwitchClauses";
-        ParsingContext[ParsingContext["SwitchClauseStatements"] = 4] = "SwitchClauseStatements";
-        ParsingContext[ParsingContext["TypeMembers"] = 5] = "TypeMembers";
-        ParsingContext[ParsingContext["ClassMembers"] = 6] = "ClassMembers";
-        ParsingContext[ParsingContext["EnumMembers"] = 7] = "EnumMembers";
-        ParsingContext[ParsingContext["TypeReferences"] = 8] = "TypeReferences";
-        ParsingContext[ParsingContext["VariableDeclarations"] = 9] = "VariableDeclarations";
-        ParsingContext[ParsingContext["ObjectBindingElements"] = 10] = "ObjectBindingElements";
-        ParsingContext[ParsingContext["ArrayBindingElements"] = 11] = "ArrayBindingElements";
-        ParsingContext[ParsingContext["ArgumentExpressions"] = 12] = "ArgumentExpressions";
-        ParsingContext[ParsingContext["ObjectLiteralMembers"] = 13] = "ObjectLiteralMembers";
-        ParsingContext[ParsingContext["ArrayLiteralMembers"] = 14] = "ArrayLiteralMembers";
-        ParsingContext[ParsingContext["Parameters"] = 15] = "Parameters";
-        ParsingContext[ParsingContext["TypeParameters"] = 16] = "TypeParameters";
-        ParsingContext[ParsingContext["TypeArguments"] = 17] = "TypeArguments";
-        ParsingContext[ParsingContext["TupleElementTypes"] = 18] = "TupleElementTypes";
-        ParsingContext[ParsingContext["HeritageClauses"] = 19] = "HeritageClauses";
-        ParsingContext[ParsingContext["ImportOrExportSpecifiers"] = 20] = "ImportOrExportSpecifiers";
-        ParsingContext[ParsingContext["Count"] = 21] = "Count";
-    })(ParsingContext || (ParsingContext = {}));
-    var Tristate;
-    (function (Tristate) {
-        Tristate[Tristate["False"] = 0] = "False";
-        Tristate[Tristate["True"] = 1] = "True";
-        Tristate[Tristate["Unknown"] = 2] = "Unknown";
-    })(Tristate || (Tristate = {}));
     function parsingContextErrors(context) {
         switch (context) {
             case 0: return ts.Diagnostics.Declaration_or_statement_expected;
@@ -4590,10 +4313,6 @@ var ts;
         var nodeText = ts.getSourceTextOfNodeFromSourceFile(sourceFile, node.expression);
         return nodeText === '"use strict"' || nodeText === "'use strict'";
     }
-    var InvalidPosition;
-    (function (InvalidPosition) {
-        InvalidPosition[InvalidPosition["Value"] = -1] = "Value";
-    })(InvalidPosition || (InvalidPosition = {}));
     function createSyntaxCursor(sourceFile) {
         var currentArray = sourceFile.statements;
         var currentArrayIndex = 0;
@@ -7430,12 +7149,6 @@ var ts;
 var ts;
 (function (ts) {
     ts.bindTime = 0;
-    (function (ModuleInstanceState) {
-        ModuleInstanceState[ModuleInstanceState["NonInstantiated"] = 0] = "NonInstantiated";
-        ModuleInstanceState[ModuleInstanceState["Instantiated"] = 1] = "Instantiated";
-        ModuleInstanceState[ModuleInstanceState["ConstEnumOnly"] = 2] = "ConstEnumOnly";
-    })(ts.ModuleInstanceState || (ts.ModuleInstanceState = {}));
-    var ModuleInstanceState = ts.ModuleInstanceState;
     function getModuleInstanceState(node) {
         if (node.kind === 197 || node.kind === 198) {
             return 0;
@@ -21758,341 +21471,356 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    ts.optionDeclarations = [
-        {
-            name: "charset",
-            type: "string"
-        },
-        {
-            name: "codepage",
-            type: "number"
-        },
-        {
-            name: "declaration",
-            shortName: "d",
-            type: "boolean",
-            description: ts.Diagnostics.Generates_corresponding_d_ts_file
-        },
-        {
-            name: "diagnostics",
-            type: "boolean"
-        },
-        {
-            name: "emitBOM",
-            type: "boolean"
-        },
-        {
-            name: "help",
-            shortName: "h",
-            type: "boolean",
-            description: ts.Diagnostics.Print_this_message
-        },
-        {
-            name: "listFiles",
-            type: "boolean"
-        },
-        {
-            name: "locale",
-            type: "string"
-        },
-        {
-            name: "mapRoot",
-            type: "string",
-            isFilePath: true,
-            description: ts.Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
-            paramType: ts.Diagnostics.LOCATION
-        },
-        {
-            name: "module",
-            shortName: "m",
-            type: {
-                "commonjs": 1,
-                "amd": 2
-            },
-            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
-            paramType: ts.Diagnostics.KIND,
-            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
-        },
-        {
-            name: "noEmit",
-            type: "boolean",
-            description: ts.Diagnostics.Do_not_emit_outputs
-        },
-        {
-            name: "noEmitOnError",
-            type: "boolean",
-            description: ts.Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported
-        },
-        {
-            name: "noImplicitAny",
-            type: "boolean",
-            description: ts.Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type
-        },
-        {
-            name: "noLib",
-            type: "boolean"
-        },
-        {
-            name: "noLibCheck",
-            type: "boolean"
-        },
-        {
-            name: "noResolve",
-            type: "boolean"
-        },
-        {
-            name: "out",
-            type: "string",
-            description: ts.Diagnostics.Concatenate_and_emit_output_to_single_file,
-            paramType: ts.Diagnostics.FILE
-        },
-        {
-            name: "outDir",
-            type: "string",
-            isFilePath: true,
-            description: ts.Diagnostics.Redirect_output_structure_to_the_directory,
-            paramType: ts.Diagnostics.DIRECTORY
-        },
-        {
-            name: "preserveConstEnums",
-            type: "boolean",
-            description: ts.Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
-        },
-        {
-            name: "project",
-            shortName: "p",
-            type: "string",
-            isFilePath: true,
-            description: ts.Diagnostics.Compile_the_project_in_the_given_directory,
-            paramType: ts.Diagnostics.DIRECTORY
-        },
-        {
-            name: "removeComments",
-            type: "boolean",
-            description: ts.Diagnostics.Do_not_emit_comments_to_output
-        },
-        {
-            name: "sourceMap",
-            type: "boolean",
-            description: ts.Diagnostics.Generates_corresponding_map_file
-        },
-        {
-            name: "sourceRoot",
-            type: "string",
-            isFilePath: true,
-            description: ts.Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
-            paramType: ts.Diagnostics.LOCATION
-        },
-        {
-            name: "suppressImplicitAnyIndexErrors",
-            type: "boolean",
-            description: ts.Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures
-        },
-        {
-            name: "stripInternal",
-            type: "boolean",
-            description: ts.Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
-            experimental: true
-        },
-        {
-            name: "target",
-            shortName: "t",
-            type: { "es3": 0, "es5": 1, "es6": 2 },
-            description: ts.Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
-            paramType: ts.Diagnostics.VERSION,
-            error: ts.Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
-        },
-        {
-            name: "version",
-            shortName: "v",
-            type: "boolean",
-            description: ts.Diagnostics.Print_the_compiler_s_version
-        },
-        {
-            name: "watch",
-            shortName: "w",
-            type: "boolean",
-            description: ts.Diagnostics.Watch_input_files
-        }
-    ];
-    function parseCommandLine(commandLine) {
-        var options = {};
-        var fileNames = [];
-        var errors = [];
-        var shortOptionNames = {};
-        var optionNameMap = {};
-        ts.forEach(ts.optionDeclarations, function (option) {
-            optionNameMap[option.name.toLowerCase()] = option;
-            if (option.shortName) {
-                shortOptionNames[option.shortName] = option.name;
+    var BreakpointResolver;
+    (function (BreakpointResolver) {
+        function spanInSourceFileAtLocation(sourceFile, position) {
+            if (sourceFile.flags & 1024) {
+                return undefined;
             }
-        });
-        parseStrings(commandLine);
-        return {
-            options: options,
-            fileNames: fileNames,
-            errors: errors
-        };
-        function parseStrings(args) {
-            var i = 0;
-            while (i < args.length) {
-                var s = args[i++];
-                if (s.charCodeAt(0) === 64) {
-                    parseResponseFile(s.slice(1));
+            var tokenAtLocation = ts.getTokenAtPosition(sourceFile, position);
+            var lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+            if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
+                tokenAtLocation = ts.findPrecedingToken(tokenAtLocation.pos, sourceFile);
+                if (!tokenAtLocation || sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
+                    return undefined;
                 }
-                else if (s.charCodeAt(0) === 45) {
-                    s = s.slice(s.charCodeAt(1) === 45 ? 2 : 1).toLowerCase();
-                    if (ts.hasProperty(shortOptionNames, s)) {
-                        s = shortOptionNames[s];
-                    }
-                    if (ts.hasProperty(optionNameMap, s)) {
-                        var opt = optionNameMap[s];
-                        if (!args[i] && opt.type !== "boolean") {
-                            errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+            }
+            if (ts.isInAmbientContext(tokenAtLocation)) {
+                return undefined;
+            }
+            return spanInNode(tokenAtLocation);
+            function textSpan(startNode, endNode) {
+                return ts.createTextSpanFromBounds(startNode.getStart(), (endNode || startNode).getEnd());
+            }
+            function spanInNodeIfStartsOnSameLine(node, otherwiseOnNode) {
+                if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart()).line) {
+                    return spanInNode(node);
+                }
+                return spanInNode(otherwiseOnNode);
+            }
+            function spanInPreviousNode(node) {
+                return spanInNode(ts.findPrecedingToken(node.pos, sourceFile));
+            }
+            function spanInNextNode(node) {
+                return spanInNode(ts.findNextToken(node, node.parent));
+            }
+            function spanInNode(node) {
+                if (node) {
+                    if (ts.isExpression(node)) {
+                        if (node.parent.kind === 179) {
+                            return spanInPreviousNode(node);
                         }
-                        switch (opt.type) {
-                            case "number":
-                                options[opt.name] = parseInt(args[i++]);
-                                break;
-                            case "boolean":
-                                options[opt.name] = true;
-                                break;
-                            case "string":
-                                options[opt.name] = args[i++] || "";
-                                break;
-                            default:
-                                var map = opt.type;
-                                var key = (args[i++] || "").toLowerCase();
-                                if (ts.hasProperty(map, key)) {
-                                    options[opt.name] = map[key];
-                                }
-                                else {
-                                    errors.push(ts.createCompilerDiagnostic(opt.error));
-                                }
+                        if (node.parent.kind === 181) {
+                            return textSpan(node);
+                        }
+                        if (node.parent.kind === 167 && node.parent.operatorToken.kind === 23) {
+                            return textSpan(node);
+                        }
+                        if (node.parent.kind == 161 && node.parent.body == node) {
+                            return textSpan(node);
                         }
                     }
-                    else {
-                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unknown_compiler_option_0, s));
-                    }
-                }
-                else {
-                    fileNames.push(s);
-                }
-            }
-        }
-        function parseResponseFile(fileName) {
-            var text = ts.sys.readFile(fileName);
-            if (!text) {
-                errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_not_found, fileName));
-                return;
-            }
-            var args = [];
-            var pos = 0;
-            while (true) {
-                while (pos < text.length && text.charCodeAt(pos) <= 32)
-                    pos++;
-                if (pos >= text.length)
-                    break;
-                var start = pos;
-                if (text.charCodeAt(start) === 34) {
-                    pos++;
-                    while (pos < text.length && text.charCodeAt(pos) !== 34)
-                        pos++;
-                    if (pos < text.length) {
-                        args.push(text.substring(start + 1, pos));
-                        pos++;
-                    }
-                    else {
-                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
-                    }
-                }
-                else {
-                    while (text.charCodeAt(pos) > 32)
-                        pos++;
-                    args.push(text.substring(start, pos));
-                }
-            }
-            parseStrings(args);
-        }
-    }
-    ts.parseCommandLine = parseCommandLine;
-    function readConfigFile(fileName) {
-        try {
-            var text = ts.sys.readFile(fileName);
-            return /\S/.test(text) ? JSON.parse(text) : {};
-        }
-        catch (e) {
-        }
-    }
-    ts.readConfigFile = readConfigFile;
-    function parseConfigFile(json, basePath) {
-        var errors = [];
-        return {
-            options: getCompilerOptions(),
-            fileNames: getFiles(),
-            errors: errors
-        };
-        function getCompilerOptions() {
-            var options = {};
-            var optionNameMap = {};
-            ts.forEach(ts.optionDeclarations, function (option) {
-                optionNameMap[option.name] = option;
-            });
-            var jsonOptions = json["compilerOptions"];
-            if (jsonOptions) {
-                for (var id in jsonOptions) {
-                    if (ts.hasProperty(optionNameMap, id)) {
-                        var opt = optionNameMap[id];
-                        var optType = opt.type;
-                        var value = jsonOptions[id];
-                        var expectedType = typeof optType === "string" ? optType : "string";
-                        if (typeof value === expectedType) {
-                            if (typeof optType !== "string") {
-                                var key = value.toLowerCase();
-                                if (ts.hasProperty(optType, key)) {
-                                    value = optType[key];
-                                }
-                                else {
-                                    errors.push(ts.createCompilerDiagnostic(opt.error));
-                                    value = 0;
-                                }
+                    switch (node.kind) {
+                        case 175:
+                            return spanInVariableDeclaration(node.declarationList.declarations[0]);
+                        case 193:
+                        case 130:
+                        case 129:
+                            return spanInVariableDeclaration(node);
+                        case 128:
+                            return spanInParameterDeclaration(node);
+                        case 195:
+                        case 132:
+                        case 131:
+                        case 134:
+                        case 135:
+                        case 133:
+                        case 160:
+                        case 161:
+                            return spanInFunctionDeclaration(node);
+                        case 174:
+                            if (ts.isFunctionBlock(node)) {
+                                return spanInFunctionBlock(node);
                             }
-                            if (opt.isFilePath) {
-                                value = ts.normalizePath(ts.combinePaths(basePath, value));
+                        case 201:
+                            return spanInBlock(node);
+                        case 216:
+                            return spanInBlock(node.block);
+                        case 177:
+                            return textSpan(node.expression);
+                        case 186:
+                            return textSpan(node.getChildAt(0), node.expression);
+                        case 180:
+                            return textSpan(node, ts.findNextToken(node.expression, node));
+                        case 179:
+                            return spanInNode(node.statement);
+                        case 192:
+                            return textSpan(node.getChildAt(0));
+                        case 178:
+                            return textSpan(node, ts.findNextToken(node.expression, node));
+                        case 189:
+                            return spanInNode(node.statement);
+                        case 185:
+                        case 184:
+                            return textSpan(node.getChildAt(0), node.label);
+                        case 181:
+                            return spanInForStatement(node);
+                        case 182:
+                        case 183:
+                            return textSpan(node, ts.findNextToken(node.expression, node));
+                        case 188:
+                            return textSpan(node, ts.findNextToken(node.expression, node));
+                        case 213:
+                        case 214:
+                            return spanInNode(node.statements[0]);
+                        case 191:
+                            return spanInBlock(node.tryBlock);
+                        case 190:
+                            return textSpan(node, node.expression);
+                        case 208:
+                            return textSpan(node, node.exportName);
+                        case 202:
+                            return textSpan(node, node.moduleReference);
+                        case 200:
+                            if (ts.getModuleInstanceState(node) !== 1) {
+                                return undefined;
                             }
-                            options[opt.name] = value;
+                        case 196:
+                        case 199:
+                        case 219:
+                        case 155:
+                        case 156:
+                            return textSpan(node);
+                        case 187:
+                            return spanInNode(node.statement);
+                        case 197:
+                        case 198:
+                            return undefined;
+                        case 22:
+                        case 1:
+                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile));
+                        case 23:
+                            return spanInPreviousNode(node);
+                        case 14:
+                            return spanInOpenBraceToken(node);
+                        case 15:
+                            return spanInCloseBraceToken(node);
+                        case 16:
+                            return spanInOpenParenToken(node);
+                        case 17:
+                            return spanInCloseParenToken(node);
+                        case 51:
+                            return spanInColonToken(node);
+                        case 25:
+                        case 24:
+                            return spanInGreaterThanOrLessThanToken(node);
+                        case 99:
+                            return spanInWhileKeyword(node);
+                        case 75:
+                        case 67:
+                        case 80:
+                            return spanInNextNode(node);
+                        default:
+                            if (node.parent.kind === 217 && node.parent.name === node) {
+                                return spanInNode(node.parent.initializer);
+                            }
+                            if (node.parent.kind === 158 && node.parent.type === node) {
+                                return spanInNode(node.parent.expression);
+                            }
+                            if (ts.isAnyFunction(node.parent) && node.parent.type === node) {
+                                return spanInPreviousNode(node);
+                            }
+                            return spanInNode(node.parent);
+                    }
+                }
+                function spanInVariableDeclaration(variableDeclaration) {
+                    if (variableDeclaration.parent.parent.kind === 182 ||
+                        variableDeclaration.parent.parent.kind === 183) {
+                        return spanInNode(variableDeclaration.parent.parent);
+                    }
+                    var isParentVariableStatement = variableDeclaration.parent.parent.kind === 175;
+                    var isDeclarationOfForStatement = variableDeclaration.parent.parent.kind === 181 && ts.contains(variableDeclaration.parent.parent.initializer.declarations, variableDeclaration);
+                    var declarations = isParentVariableStatement ? variableDeclaration.parent.parent.declarationList.declarations : isDeclarationOfForStatement ? variableDeclaration.parent.parent.initializer.declarations : undefined;
+                    if (variableDeclaration.initializer || (variableDeclaration.flags & 1)) {
+                        if (declarations && declarations[0] === variableDeclaration) {
+                            if (isParentVariableStatement) {
+                                return textSpan(variableDeclaration.parent, variableDeclaration);
+                            }
+                            else {
+                                ts.Debug.assert(isDeclarationOfForStatement);
+                                return textSpan(ts.findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
+                            }
                         }
                         else {
-                            errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                            return textSpan(variableDeclaration);
                         }
                     }
+                    else if (declarations && declarations[0] !== variableDeclaration) {
+                        var indexOfCurrentDeclaration = ts.indexOf(declarations, variableDeclaration);
+                        return spanInVariableDeclaration(declarations[indexOfCurrentDeclaration - 1]);
+                    }
+                }
+                function canHaveSpanInParameterDeclaration(parameter) {
+                    return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
+                        !!(parameter.flags & 16) || !!(parameter.flags & 32);
+                }
+                function spanInParameterDeclaration(parameter) {
+                    if (canHaveSpanInParameterDeclaration(parameter)) {
+                        return textSpan(parameter);
+                    }
                     else {
-                        errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.Unknown_compiler_option_0, id));
+                        var functionDeclaration = parameter.parent;
+                        var indexOfParameter = ts.indexOf(functionDeclaration.parameters, parameter);
+                        if (indexOfParameter) {
+                            return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
+                        }
+                        else {
+                            return spanInNode(functionDeclaration.body);
+                        }
                     }
                 }
-            }
-            return options;
-        }
-        function getFiles() {
-            var files = [];
-            if (ts.hasProperty(json, "files")) {
-                if (json["files"] instanceof Array) {
-                    var files = ts.map(json["files"], function (s) { return ts.combinePaths(basePath, s); });
+                function canFunctionHaveSpanInWholeDeclaration(functionDeclaration) {
+                    return !!(functionDeclaration.flags & 1) ||
+                        (functionDeclaration.parent.kind === 196 && functionDeclaration.kind !== 133);
                 }
-            }
-            else {
-                var sysFiles = ts.sys.readDirectory(basePath, ".ts");
-                for (var i = 0; i < sysFiles.length; i++) {
-                    var name = sysFiles[i];
-                    if (!ts.fileExtensionIs(name, ".d.ts") || !ts.contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                function spanInFunctionDeclaration(functionDeclaration) {
+                    if (!functionDeclaration.body) {
+                        return undefined;
+                    }
+                    if (canFunctionHaveSpanInWholeDeclaration(functionDeclaration)) {
+                        return textSpan(functionDeclaration);
+                    }
+                    return spanInNode(functionDeclaration.body);
+                }
+                function spanInFunctionBlock(block) {
+                    var nodeForSpanInBlock = block.statements.length ? block.statements[0] : block.getLastToken();
+                    if (canFunctionHaveSpanInWholeDeclaration(block.parent)) {
+                        return spanInNodeIfStartsOnSameLine(block.parent, nodeForSpanInBlock);
+                    }
+                    return spanInNode(nodeForSpanInBlock);
+                }
+                function spanInBlock(block) {
+                    switch (block.parent.kind) {
+                        case 200:
+                            if (ts.getModuleInstanceState(block.parent) !== 1) {
+                                return undefined;
+                            }
+                        case 180:
+                        case 178:
+                        case 182:
+                        case 183:
+                            return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
+                        case 181:
+                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
+                    }
+                    return spanInNode(block.statements[0]);
+                }
+                function spanInForStatement(forStatement) {
+                    if (forStatement.initializer) {
+                        if (forStatement.initializer.kind === 194) {
+                            var variableDeclarationList = forStatement.initializer;
+                            if (variableDeclarationList.declarations.length > 0) {
+                                return spanInNode(variableDeclarationList.declarations[0]);
+                            }
+                        }
+                        else {
+                            return spanInNode(forStatement.initializer);
+                        }
+                    }
+                    if (forStatement.condition) {
+                        return textSpan(forStatement.condition);
+                    }
+                    if (forStatement.iterator) {
+                        return textSpan(forStatement.iterator);
                     }
                 }
+                function spanInOpenBraceToken(node) {
+                    switch (node.parent.kind) {
+                        case 199:
+                            var enumDeclaration = node.parent;
+                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+                        case 196:
+                            var classDeclaration = node.parent;
+                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
+                        case 188:
+                            return spanInNodeIfStartsOnSameLine(node.parent, node.parent.clauses[0]);
+                    }
+                    return spanInNode(node.parent);
+                }
+                function spanInCloseBraceToken(node) {
+                    switch (node.parent.kind) {
+                        case 201:
+                            if (ts.getModuleInstanceState(node.parent.parent) !== 1) {
+                                return undefined;
+                            }
+                        case 199:
+                        case 196:
+                            return textSpan(node);
+                        case 174:
+                            if (ts.isFunctionBlock(node.parent)) {
+                                return textSpan(node);
+                            }
+                        case 216:
+                            return spanInNode(node.parent.statements[node.parent.statements.length - 1]);
+                            ;
+                        case 188:
+                            var switchStatement = node.parent;
+                            var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
+                            if (lastClause) {
+                                return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
+                            }
+                            return undefined;
+                        default:
+                            return spanInNode(node.parent);
+                    }
+                }
+                function spanInOpenParenToken(node) {
+                    if (node.parent.kind === 179) {
+                        return spanInPreviousNode(node);
+                    }
+                    return spanInNode(node.parent);
+                }
+                function spanInCloseParenToken(node) {
+                    switch (node.parent.kind) {
+                        case 160:
+                        case 195:
+                        case 161:
+                        case 132:
+                        case 131:
+                        case 134:
+                        case 135:
+                        case 133:
+                        case 180:
+                        case 179:
+                        case 181:
+                            return spanInPreviousNode(node);
+                        default:
+                            return spanInNode(node.parent);
+                    }
+                    return spanInNode(node.parent);
+                }
+                function spanInColonToken(node) {
+                    if (ts.isAnyFunction(node.parent) || node.parent.kind === 217) {
+                        return spanInPreviousNode(node);
+                    }
+                    return spanInNode(node.parent);
+                }
+                function spanInGreaterThanOrLessThanToken(node) {
+                    if (node.parent.kind === 158) {
+                        return spanInNode(node.parent.expression);
+                    }
+                    return spanInNode(node.parent);
+                }
+                function spanInWhileKeyword(node) {
+                    if (node.parent.kind === 179) {
+                        return textSpan(node, ts.findNextToken(node.parent.expression, node.parent));
+                    }
+                    return spanInNode(node.parent);
+                }
             }
-            return files;
         }
-    }
-    ts.parseConfigFile = parseConfigFile;
+        BreakpointResolver.spanInSourceFileAtLocation = spanInSourceFileAtLocation;
+    })(BreakpointResolver = ts.BreakpointResolver || (ts.BreakpointResolver = {}));
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
@@ -23133,12 +22861,6 @@ var ts;
     var SignatureHelp;
     (function (SignatureHelp) {
         var emptyArray = [];
-        var ArgumentListKind;
-        (function (ArgumentListKind) {
-            ArgumentListKind[ArgumentListKind["TypeArguments"] = 0] = "TypeArguments";
-            ArgumentListKind[ArgumentListKind["CallArguments"] = 1] = "CallArguments";
-            ArgumentListKind[ArgumentListKind["TaggedTemplateArguments"] = 2] = "TaggedTemplateArguments";
-        })(ArgumentListKind || (ArgumentListKind = {}));
         function getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken) {
             var startingToken = ts.findTokenOnLeftOfPosition(sourceFile, position);
             if (!startingToken) {
@@ -23800,13 +23522,6 @@ var ts;
     var formatting;
     (function (formatting) {
         var scanner = ts.createScanner(2, false);
-        var ScanAction;
-        (function (ScanAction) {
-            ScanAction[ScanAction["Scan"] = 0] = "Scan";
-            ScanAction[ScanAction["RescanGreaterThanToken"] = 1] = "RescanGreaterThanToken";
-            ScanAction[ScanAction["RescanSlashToken"] = 2] = "RescanSlashToken";
-            ScanAction[ScanAction["RescanTemplateToken"] = 3] = "RescanTemplateToken";
-        })(ScanAction || (ScanAction = {}));
         function getFormattingScanner(sourceFile, startPos, endPos) {
             scanner.setText(sourceFile.text);
             scanner.setTextPos(startPos);
@@ -24053,20 +23768,6 @@ var ts;
 (function (ts) {
     var formatting;
     (function (formatting) {
-        (function (FormattingRequestKind) {
-            FormattingRequestKind[FormattingRequestKind["FormatDocument"] = 0] = "FormatDocument";
-            FormattingRequestKind[FormattingRequestKind["FormatSelection"] = 1] = "FormatSelection";
-            FormattingRequestKind[FormattingRequestKind["FormatOnEnter"] = 2] = "FormatOnEnter";
-            FormattingRequestKind[FormattingRequestKind["FormatOnSemicolon"] = 3] = "FormatOnSemicolon";
-            FormattingRequestKind[FormattingRequestKind["FormatOnClosingCurlyBrace"] = 4] = "FormatOnClosingCurlyBrace";
-        })(formatting.FormattingRequestKind || (formatting.FormattingRequestKind = {}));
-        var FormattingRequestKind = formatting.FormattingRequestKind;
-    })(formatting = ts.formatting || (ts.formatting = {}));
-})(ts || (ts = {}));
-var ts;
-(function (ts) {
-    var formatting;
-    (function (formatting) {
         var Rule = (function () {
             function Rule(Descriptor, Operation, Flag) {
                 if (Flag === void 0) { Flag = 0; }
@@ -24082,19 +23783,6 @@ var ts;
             return Rule;
         })();
         formatting.Rule = Rule;
-    })(formatting = ts.formatting || (ts.formatting = {}));
-})(ts || (ts = {}));
-var ts;
-(function (ts) {
-    var formatting;
-    (function (formatting) {
-        (function (RuleAction) {
-            RuleAction[RuleAction["Ignore"] = 1] = "Ignore";
-            RuleAction[RuleAction["Space"] = 2] = "Space";
-            RuleAction[RuleAction["NewLine"] = 4] = "NewLine";
-            RuleAction[RuleAction["Delete"] = 8] = "Delete";
-        })(formatting.RuleAction || (formatting.RuleAction = {}));
-        var RuleAction = formatting.RuleAction;
     })(formatting = ts.formatting || (ts.formatting = {}));
 })(ts || (ts = {}));
 var ts;
@@ -24125,17 +23813,6 @@ var ts;
             return RuleDescriptor;
         })();
         formatting.RuleDescriptor = RuleDescriptor;
-    })(formatting = ts.formatting || (ts.formatting = {}));
-})(ts || (ts = {}));
-var ts;
-(function (ts) {
-    var formatting;
-    (function (formatting) {
-        (function (RuleFlags) {
-            RuleFlags[RuleFlags["None"] = 0] = "None";
-            RuleFlags[RuleFlags["CanDeleteNewLines"] = 1] = "CanDeleteNewLines";
-        })(formatting.RuleFlags || (formatting.RuleFlags = {}));
-        var RuleFlags = formatting.RuleFlags;
     })(formatting = ts.formatting || (ts.formatting = {}));
 })(ts || (ts = {}));
 var ts;
@@ -24869,10 +24546,6 @@ var ts;
 (function (ts) {
     var formatting;
     (function (formatting) {
-        var Constants;
-        (function (Constants) {
-            Constants[Constants["Unknown"] = -1] = "Unknown";
-        })(Constants || (Constants = {}));
         function formatOnEnter(position, sourceFile, rulesProvider, options) {
             var line = sourceFile.getLineAndCharacterOfPosition(position).line;
             if (line === 0) {
@@ -26517,22 +26190,6 @@ var ts;
         SymbolDisplayPartKind[SymbolDisplayPartKind["regularExpressionLiteral"] = 21] = "regularExpressionLiteral";
     })(ts.SymbolDisplayPartKind || (ts.SymbolDisplayPartKind = {}));
     var SymbolDisplayPartKind = ts.SymbolDisplayPartKind;
-    (function (OutputFileType) {
-        OutputFileType[OutputFileType["JavaScript"] = 0] = "JavaScript";
-        OutputFileType[OutputFileType["SourceMap"] = 1] = "SourceMap";
-        OutputFileType[OutputFileType["Declaration"] = 2] = "Declaration";
-    })(ts.OutputFileType || (ts.OutputFileType = {}));
-    var OutputFileType = ts.OutputFileType;
-    (function (EndOfLineState) {
-        EndOfLineState[EndOfLineState["Start"] = 0] = "Start";
-        EndOfLineState[EndOfLineState["InMultiLineCommentTrivia"] = 1] = "InMultiLineCommentTrivia";
-        EndOfLineState[EndOfLineState["InSingleQuoteStringLiteral"] = 2] = "InSingleQuoteStringLiteral";
-        EndOfLineState[EndOfLineState["InDoubleQuoteStringLiteral"] = 3] = "InDoubleQuoteStringLiteral";
-        EndOfLineState[EndOfLineState["InTemplateHeadOrNoSubstitutionTemplate"] = 4] = "InTemplateHeadOrNoSubstitutionTemplate";
-        EndOfLineState[EndOfLineState["InTemplateMiddleOrTail"] = 5] = "InTemplateMiddleOrTail";
-        EndOfLineState[EndOfLineState["InTemplateSubstitutionPosition"] = 6] = "InTemplateSubstitutionPosition";
-    })(ts.EndOfLineState || (ts.EndOfLineState = {}));
-    var EndOfLineState = ts.EndOfLineState;
     (function (TokenClass) {
         TokenClass[TokenClass["Punctuation"] = 0] = "Punctuation";
         TokenClass[TokenClass["Keyword"] = 1] = "Keyword";
@@ -27017,21 +26674,6 @@ var ts;
             });
         }
     }
-    var SemanticMeaning;
-    (function (SemanticMeaning) {
-        SemanticMeaning[SemanticMeaning["None"] = 0] = "None";
-        SemanticMeaning[SemanticMeaning["Value"] = 1] = "Value";
-        SemanticMeaning[SemanticMeaning["Type"] = 2] = "Type";
-        SemanticMeaning[SemanticMeaning["Namespace"] = 4] = "Namespace";
-        SemanticMeaning[SemanticMeaning["All"] = 7] = "All";
-    })(SemanticMeaning || (SemanticMeaning = {}));
-    var BreakContinueSearchType;
-    (function (BreakContinueSearchType) {
-        BreakContinueSearchType[BreakContinueSearchType["None"] = 0] = "None";
-        BreakContinueSearchType[BreakContinueSearchType["Unlabeled"] = 1] = "Unlabeled";
-        BreakContinueSearchType[BreakContinueSearchType["Labeled"] = 2] = "Labeled";
-        BreakContinueSearchType[BreakContinueSearchType["All"] = 3] = "All";
-    })(BreakContinueSearchType || (BreakContinueSearchType = {}));
     var keywordCompletions = [];
     for (var i = 65; i <= 124; i++) {
         keywordCompletions.push({
@@ -29988,847 +29630,2314 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    var BreakpointResolver;
-    (function (BreakpointResolver) {
-        function spanInSourceFileAtLocation(sourceFile, position) {
-            if (sourceFile.flags & 1024) {
-                return undefined;
+    var server;
+    (function (server) {
+        var lineCollectionCapacity = 4;
+        var ScriptInfo = (function () {
+            function ScriptInfo(host, fileName, content, isOpen) {
+                if (isOpen === void 0) { isOpen = false; }
+                this.host = host;
+                this.fileName = fileName;
+                this.content = content;
+                this.isOpen = isOpen;
+                this.children = [];
+                this.svc = ScriptVersionCache.fromString(content);
             }
-            var tokenAtLocation = ts.getTokenAtPosition(sourceFile, position);
-            var lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
-            if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
-                tokenAtLocation = ts.findPrecedingToken(tokenAtLocation.pos, sourceFile);
-                if (!tokenAtLocation || sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
-                    return undefined;
-                }
-            }
-            if (ts.isInAmbientContext(tokenAtLocation)) {
-                return undefined;
-            }
-            return spanInNode(tokenAtLocation);
-            function textSpan(startNode, endNode) {
-                return ts.createTextSpanFromBounds(startNode.getStart(), (endNode || startNode).getEnd());
-            }
-            function spanInNodeIfStartsOnSameLine(node, otherwiseOnNode) {
-                if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart()).line) {
-                    return spanInNode(node);
-                }
-                return spanInNode(otherwiseOnNode);
-            }
-            function spanInPreviousNode(node) {
-                return spanInNode(ts.findPrecedingToken(node.pos, sourceFile));
-            }
-            function spanInNextNode(node) {
-                return spanInNode(ts.findNextToken(node, node.parent));
-            }
-            function spanInNode(node) {
-                if (node) {
-                    if (ts.isExpression(node)) {
-                        if (node.parent.kind === 179) {
-                            return spanInPreviousNode(node);
-                        }
-                        if (node.parent.kind === 181) {
-                            return textSpan(node);
-                        }
-                        if (node.parent.kind === 167 && node.parent.operatorToken.kind === 23) {
-                            return textSpan(node);
-                        }
-                        if (node.parent.kind == 161 && node.parent.body == node) {
-                            return textSpan(node);
-                        }
-                    }
-                    switch (node.kind) {
-                        case 175:
-                            return spanInVariableDeclaration(node.declarationList.declarations[0]);
-                        case 193:
-                        case 130:
-                        case 129:
-                            return spanInVariableDeclaration(node);
-                        case 128:
-                            return spanInParameterDeclaration(node);
-                        case 195:
-                        case 132:
-                        case 131:
-                        case 134:
-                        case 135:
-                        case 133:
-                        case 160:
-                        case 161:
-                            return spanInFunctionDeclaration(node);
-                        case 174:
-                            if (ts.isFunctionBlock(node)) {
-                                return spanInFunctionBlock(node);
-                            }
-                        case 201:
-                            return spanInBlock(node);
-                        case 216:
-                            return spanInBlock(node.block);
-                        case 177:
-                            return textSpan(node.expression);
-                        case 186:
-                            return textSpan(node.getChildAt(0), node.expression);
-                        case 180:
-                            return textSpan(node, ts.findNextToken(node.expression, node));
-                        case 179:
-                            return spanInNode(node.statement);
-                        case 192:
-                            return textSpan(node.getChildAt(0));
-                        case 178:
-                            return textSpan(node, ts.findNextToken(node.expression, node));
-                        case 189:
-                            return spanInNode(node.statement);
-                        case 185:
-                        case 184:
-                            return textSpan(node.getChildAt(0), node.label);
-                        case 181:
-                            return spanInForStatement(node);
-                        case 182:
-                        case 183:
-                            return textSpan(node, ts.findNextToken(node.expression, node));
-                        case 188:
-                            return textSpan(node, ts.findNextToken(node.expression, node));
-                        case 213:
-                        case 214:
-                            return spanInNode(node.statements[0]);
-                        case 191:
-                            return spanInBlock(node.tryBlock);
-                        case 190:
-                            return textSpan(node, node.expression);
-                        case 208:
-                            return textSpan(node, node.exportName);
-                        case 202:
-                            return textSpan(node, node.moduleReference);
-                        case 200:
-                            if (ts.getModuleInstanceState(node) !== 1) {
-                                return undefined;
-                            }
-                        case 196:
-                        case 199:
-                        case 219:
-                        case 155:
-                        case 156:
-                            return textSpan(node);
-                        case 187:
-                            return spanInNode(node.statement);
-                        case 197:
-                        case 198:
-                            return undefined;
-                        case 22:
-                        case 1:
-                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile));
-                        case 23:
-                            return spanInPreviousNode(node);
-                        case 14:
-                            return spanInOpenBraceToken(node);
-                        case 15:
-                            return spanInCloseBraceToken(node);
-                        case 16:
-                            return spanInOpenParenToken(node);
-                        case 17:
-                            return spanInCloseParenToken(node);
-                        case 51:
-                            return spanInColonToken(node);
-                        case 25:
-                        case 24:
-                            return spanInGreaterThanOrLessThanToken(node);
-                        case 99:
-                            return spanInWhileKeyword(node);
-                        case 75:
-                        case 67:
-                        case 80:
-                            return spanInNextNode(node);
-                        default:
-                            if (node.parent.kind === 217 && node.parent.name === node) {
-                                return spanInNode(node.parent.initializer);
-                            }
-                            if (node.parent.kind === 158 && node.parent.type === node) {
-                                return spanInNode(node.parent.expression);
-                            }
-                            if (ts.isAnyFunction(node.parent) && node.parent.type === node) {
-                                return spanInPreviousNode(node);
-                            }
-                            return spanInNode(node.parent);
-                    }
-                }
-                function spanInVariableDeclaration(variableDeclaration) {
-                    if (variableDeclaration.parent.parent.kind === 182 ||
-                        variableDeclaration.parent.parent.kind === 183) {
-                        return spanInNode(variableDeclaration.parent.parent);
-                    }
-                    var isParentVariableStatement = variableDeclaration.parent.parent.kind === 175;
-                    var isDeclarationOfForStatement = variableDeclaration.parent.parent.kind === 181 && ts.contains(variableDeclaration.parent.parent.initializer.declarations, variableDeclaration);
-                    var declarations = isParentVariableStatement ? variableDeclaration.parent.parent.declarationList.declarations : isDeclarationOfForStatement ? variableDeclaration.parent.parent.initializer.declarations : undefined;
-                    if (variableDeclaration.initializer || (variableDeclaration.flags & 1)) {
-                        if (declarations && declarations[0] === variableDeclaration) {
-                            if (isParentVariableStatement) {
-                                return textSpan(variableDeclaration.parent, variableDeclaration);
-                            }
-                            else {
-                                ts.Debug.assert(isDeclarationOfForStatement);
-                                return textSpan(ts.findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
-                            }
-                        }
-                        else {
-                            return textSpan(variableDeclaration);
-                        }
-                    }
-                    else if (declarations && declarations[0] !== variableDeclaration) {
-                        var indexOfCurrentDeclaration = ts.indexOf(declarations, variableDeclaration);
-                        return spanInVariableDeclaration(declarations[indexOfCurrentDeclaration - 1]);
-                    }
-                }
-                function canHaveSpanInParameterDeclaration(parameter) {
-                    return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
-                        !!(parameter.flags & 16) || !!(parameter.flags & 32);
-                }
-                function spanInParameterDeclaration(parameter) {
-                    if (canHaveSpanInParameterDeclaration(parameter)) {
-                        return textSpan(parameter);
-                    }
-                    else {
-                        var functionDeclaration = parameter.parent;
-                        var indexOfParameter = ts.indexOf(functionDeclaration.parameters, parameter);
-                        if (indexOfParameter) {
-                            return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
-                        }
-                        else {
-                            return spanInNode(functionDeclaration.body);
-                        }
-                    }
-                }
-                function canFunctionHaveSpanInWholeDeclaration(functionDeclaration) {
-                    return !!(functionDeclaration.flags & 1) ||
-                        (functionDeclaration.parent.kind === 196 && functionDeclaration.kind !== 133);
-                }
-                function spanInFunctionDeclaration(functionDeclaration) {
-                    if (!functionDeclaration.body) {
-                        return undefined;
-                    }
-                    if (canFunctionHaveSpanInWholeDeclaration(functionDeclaration)) {
-                        return textSpan(functionDeclaration);
-                    }
-                    return spanInNode(functionDeclaration.body);
-                }
-                function spanInFunctionBlock(block) {
-                    var nodeForSpanInBlock = block.statements.length ? block.statements[0] : block.getLastToken();
-                    if (canFunctionHaveSpanInWholeDeclaration(block.parent)) {
-                        return spanInNodeIfStartsOnSameLine(block.parent, nodeForSpanInBlock);
-                    }
-                    return spanInNode(nodeForSpanInBlock);
-                }
-                function spanInBlock(block) {
-                    switch (block.parent.kind) {
-                        case 200:
-                            if (ts.getModuleInstanceState(block.parent) !== 1) {
-                                return undefined;
-                            }
-                        case 180:
-                        case 178:
-                        case 182:
-                        case 183:
-                            return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
-                        case 181:
-                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
-                    }
-                    return spanInNode(block.statements[0]);
-                }
-                function spanInForStatement(forStatement) {
-                    if (forStatement.initializer) {
-                        if (forStatement.initializer.kind === 194) {
-                            var variableDeclarationList = forStatement.initializer;
-                            if (variableDeclarationList.declarations.length > 0) {
-                                return spanInNode(variableDeclarationList.declarations[0]);
-                            }
-                        }
-                        else {
-                            return spanInNode(forStatement.initializer);
-                        }
-                    }
-                    if (forStatement.condition) {
-                        return textSpan(forStatement.condition);
-                    }
-                    if (forStatement.iterator) {
-                        return textSpan(forStatement.iterator);
-                    }
-                }
-                function spanInOpenBraceToken(node) {
-                    switch (node.parent.kind) {
-                        case 199:
-                            var enumDeclaration = node.parent;
-                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
-                        case 196:
-                            var classDeclaration = node.parent;
-                            return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
-                        case 188:
-                            return spanInNodeIfStartsOnSameLine(node.parent, node.parent.clauses[0]);
-                    }
-                    return spanInNode(node.parent);
-                }
-                function spanInCloseBraceToken(node) {
-                    switch (node.parent.kind) {
-                        case 201:
-                            if (ts.getModuleInstanceState(node.parent.parent) !== 1) {
-                                return undefined;
-                            }
-                        case 199:
-                        case 196:
-                            return textSpan(node);
-                        case 174:
-                            if (ts.isFunctionBlock(node.parent)) {
-                                return textSpan(node);
-                            }
-                        case 216:
-                            return spanInNode(node.parent.statements[node.parent.statements.length - 1]);
-                            ;
-                        case 188:
-                            var switchStatement = node.parent;
-                            var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
-                            if (lastClause) {
-                                return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
-                            }
-                            return undefined;
-                        default:
-                            return spanInNode(node.parent);
-                    }
-                }
-                function spanInOpenParenToken(node) {
-                    if (node.parent.kind === 179) {
-                        return spanInPreviousNode(node);
-                    }
-                    return spanInNode(node.parent);
-                }
-                function spanInCloseParenToken(node) {
-                    switch (node.parent.kind) {
-                        case 160:
-                        case 195:
-                        case 161:
-                        case 132:
-                        case 131:
-                        case 134:
-                        case 135:
-                        case 133:
-                        case 180:
-                        case 179:
-                        case 181:
-                            return spanInPreviousNode(node);
-                        default:
-                            return spanInNode(node.parent);
-                    }
-                    return spanInNode(node.parent);
-                }
-                function spanInColonToken(node) {
-                    if (ts.isAnyFunction(node.parent) || node.parent.kind === 217) {
-                        return spanInPreviousNode(node);
-                    }
-                    return spanInNode(node.parent);
-                }
-                function spanInGreaterThanOrLessThanToken(node) {
-                    if (node.parent.kind === 158) {
-                        return spanInNode(node.parent.expression);
-                    }
-                    return spanInNode(node.parent);
-                }
-                function spanInWhileKeyword(node) {
-                    if (node.parent.kind === 179) {
-                        return textSpan(node, ts.findNextToken(node.parent.expression, node.parent));
-                    }
-                    return spanInNode(node.parent);
-                }
-            }
-        }
-        BreakpointResolver.spanInSourceFileAtLocation = spanInSourceFileAtLocation;
-    })(BreakpointResolver = ts.BreakpointResolver || (ts.BreakpointResolver = {}));
-})(ts || (ts = {}));
-var debugObjectHost = this;
-var ts;
-(function (ts) {
-    function logInternalError(logger, err) {
-        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
-    }
-    var ScriptSnapshotShimAdapter = (function () {
-        function ScriptSnapshotShimAdapter(scriptSnapshotShim) {
-            this.scriptSnapshotShim = scriptSnapshotShim;
-            this.lineStartPositions = null;
-        }
-        ScriptSnapshotShimAdapter.prototype.getText = function (start, end) {
-            return this.scriptSnapshotShim.getText(start, end);
-        };
-        ScriptSnapshotShimAdapter.prototype.getLength = function () {
-            return this.scriptSnapshotShim.getLength();
-        };
-        ScriptSnapshotShimAdapter.prototype.getChangeRange = function (oldSnapshot) {
-            var oldSnapshotShim = oldSnapshot;
-            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
-            if (encoded == null) {
-                return null;
-            }
-            var decoded = JSON.parse(encoded);
-            return ts.createTextChangeRange(ts.createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
-        };
-        return ScriptSnapshotShimAdapter;
-    })();
-    var LanguageServiceShimHostAdapter = (function () {
-        function LanguageServiceShimHostAdapter(shimHost) {
-            this.shimHost = shimHost;
-        }
-        LanguageServiceShimHostAdapter.prototype.log = function (s) {
-            this.shimHost.log(s);
-        };
-        LanguageServiceShimHostAdapter.prototype.trace = function (s) {
-            this.shimHost.trace(s);
-        };
-        LanguageServiceShimHostAdapter.prototype.error = function (s) {
-            this.shimHost.error(s);
-        };
-        LanguageServiceShimHostAdapter.prototype.getCompilationSettings = function () {
-            var settingsJson = this.shimHost.getCompilationSettings();
-            if (settingsJson == null || settingsJson == "") {
-                throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
-                return null;
-            }
-            return JSON.parse(settingsJson);
-        };
-        LanguageServiceShimHostAdapter.prototype.getScriptFileNames = function () {
-            var encoded = this.shimHost.getScriptFileNames();
-            return this.files = JSON.parse(encoded);
-        };
-        LanguageServiceShimHostAdapter.prototype.getScriptSnapshot = function (fileName) {
-            if (this.files && this.files.indexOf(fileName) < 0) {
-                return undefined;
-            }
-            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
-            return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
-        };
-        LanguageServiceShimHostAdapter.prototype.getScriptVersion = function (fileName) {
-            return this.shimHost.getScriptVersion(fileName);
-        };
-        LanguageServiceShimHostAdapter.prototype.getLocalizedDiagnosticMessages = function () {
-            var diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
-            if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
-                return null;
-            }
-            try {
-                return JSON.parse(diagnosticMessagesJson);
-            }
-            catch (e) {
-                this.log(e.description || "diagnosticMessages.generated.json has invalid JSON format");
-                return null;
-            }
-        };
-        LanguageServiceShimHostAdapter.prototype.getCancellationToken = function () {
-            return this.shimHost.getCancellationToken();
-        };
-        LanguageServiceShimHostAdapter.prototype.getCurrentDirectory = function () {
-            return this.shimHost.getCurrentDirectory();
-        };
-        LanguageServiceShimHostAdapter.prototype.getDefaultLibFileName = function (options) {
-            try {
-                return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
-            }
-            catch (e) {
-                return "";
-            }
-        };
-        return LanguageServiceShimHostAdapter;
-    })();
-    ts.LanguageServiceShimHostAdapter = LanguageServiceShimHostAdapter;
-    function simpleForwardCall(logger, actionDescription, action) {
-        logger.log(actionDescription);
-        var start = Date.now();
-        var result = action();
-        var end = Date.now();
-        logger.log(actionDescription + " completed in " + (end - start) + " msec");
-        if (typeof (result) === "string") {
-            var str = result;
-            if (str.length > 128) {
-                str = str.substring(0, 128) + "...";
-            }
-            logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
-        }
-        return result;
-    }
-    function forwardJSONCall(logger, actionDescription, action) {
-        try {
-            var result = simpleForwardCall(logger, actionDescription, action);
-            return JSON.stringify({ result: result });
-        }
-        catch (err) {
-            if (err instanceof ts.OperationCanceledException) {
-                return JSON.stringify({ canceled: true });
-            }
-            logInternalError(logger, err);
-            err.description = actionDescription;
-            return JSON.stringify({ error: err });
-        }
-    }
-    var ShimBase = (function () {
-        function ShimBase(factory) {
-            this.factory = factory;
-            factory.registerShim(this);
-        }
-        ShimBase.prototype.dispose = function (dummy) {
-            this.factory.unregisterShim(this);
-        };
-        return ShimBase;
-    })();
-    var LanguageServiceShimObject = (function (_super) {
-        __extends(LanguageServiceShimObject, _super);
-        function LanguageServiceShimObject(factory, host, languageService) {
-            _super.call(this, factory);
-            this.host = host;
-            this.languageService = languageService;
-            this.logger = this.host;
-        }
-        LanguageServiceShimObject.prototype.forwardJSONCall = function (actionDescription, action) {
-            return forwardJSONCall(this.logger, actionDescription, action);
-        };
-        LanguageServiceShimObject.prototype.dispose = function (dummy) {
-            this.logger.log("dispose()");
-            this.languageService.dispose();
-            this.languageService = null;
-            if (debugObjectHost && debugObjectHost.CollectGarbage) {
-                debugObjectHost.CollectGarbage();
-                this.logger.log("CollectGarbage()");
-            }
-            this.logger = null;
-            _super.prototype.dispose.call(this, dummy);
-        };
-        LanguageServiceShimObject.prototype.refresh = function (throwOnError) {
-            this.forwardJSONCall("refresh(" + throwOnError + ")", function () {
-                return null;
-            });
-        };
-        LanguageServiceShimObject.prototype.cleanupSemanticCache = function () {
-            var _this = this;
-            this.forwardJSONCall("cleanupSemanticCache()", function () {
-                _this.languageService.cleanupSemanticCache();
-                return null;
-            });
-        };
-        LanguageServiceShimObject.prototype.realizeDiagnostics = function (diagnostics) {
-            var _this = this;
-            var newLine = this.getNewLine();
-            return diagnostics.map(function (d) { return _this.realizeDiagnostic(d, newLine); });
-        };
-        LanguageServiceShimObject.prototype.realizeDiagnostic = function (diagnostic, newLine) {
-            return {
-                message: ts.flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-                start: diagnostic.start,
-                length: diagnostic.length,
-                category: ts.DiagnosticCategory[diagnostic.category].toLowerCase(),
-                code: diagnostic.code
+            ScriptInfo.prototype.close = function () {
+                this.isOpen = false;
             };
-        };
-        LanguageServiceShimObject.prototype.getSyntacticClassifications = function (fileName, start, length) {
-            var _this = this;
-            return this.forwardJSONCall("getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")", function () {
-                var classifications = _this.languageService.getSyntacticClassifications(fileName, ts.createTextSpan(start, length));
-                return classifications;
-            });
-        };
-        LanguageServiceShimObject.prototype.getSemanticClassifications = function (fileName, start, length) {
-            var _this = this;
-            return this.forwardJSONCall("getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")", function () {
-                var classifications = _this.languageService.getSemanticClassifications(fileName, ts.createTextSpan(start, length));
-                return classifications;
-            });
-        };
-        LanguageServiceShimObject.prototype.getNewLine = function () {
-            return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
-        };
-        LanguageServiceShimObject.prototype.getSyntacticDiagnostics = function (fileName) {
-            var _this = this;
-            return this.forwardJSONCall("getSyntacticDiagnostics('" + fileName + "')", function () {
-                var diagnostics = _this.languageService.getSyntacticDiagnostics(fileName);
-                return _this.realizeDiagnostics(diagnostics);
-            });
-        };
-        LanguageServiceShimObject.prototype.getSemanticDiagnostics = function (fileName) {
-            var _this = this;
-            return this.forwardJSONCall("getSemanticDiagnostics('" + fileName + "')", function () {
-                var diagnostics = _this.languageService.getSemanticDiagnostics(fileName);
-                return _this.realizeDiagnostics(diagnostics);
-            });
-        };
-        LanguageServiceShimObject.prototype.getCompilerOptionsDiagnostics = function () {
-            var _this = this;
-            return this.forwardJSONCall("getCompilerOptionsDiagnostics()", function () {
-                var diagnostics = _this.languageService.getCompilerOptionsDiagnostics();
-                return _this.realizeDiagnostics(diagnostics);
-            });
-        };
-        LanguageServiceShimObject.prototype.getQuickInfoAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getQuickInfoAtPosition('" + fileName + "', " + position + ")", function () {
-                var quickInfo = _this.languageService.getQuickInfoAtPosition(fileName, position);
-                return quickInfo;
-            });
-        };
-        LanguageServiceShimObject.prototype.getNameOrDottedNameSpan = function (fileName, startPos, endPos) {
-            var _this = this;
-            return this.forwardJSONCall("getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")", function () {
-                var spanInfo = _this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
-                return spanInfo;
-            });
-        };
-        LanguageServiceShimObject.prototype.getBreakpointStatementAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getBreakpointStatementAtPosition('" + fileName + "', " + position + ")", function () {
-                var spanInfo = _this.languageService.getBreakpointStatementAtPosition(fileName, position);
-                return spanInfo;
-            });
-        };
-        LanguageServiceShimObject.prototype.getSignatureHelpItems = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getSignatureHelpItems('" + fileName + "', " + position + ")", function () {
-                var signatureInfo = _this.languageService.getSignatureHelpItems(fileName, position);
-                return signatureInfo;
-            });
-        };
-        LanguageServiceShimObject.prototype.getDefinitionAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getDefinitionAtPosition('" + fileName + "', " + position + ")", function () {
-                return _this.languageService.getDefinitionAtPosition(fileName, position);
-            });
-        };
-        LanguageServiceShimObject.prototype.getRenameInfo = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getRenameInfo('" + fileName + "', " + position + ")", function () {
-                return _this.languageService.getRenameInfo(fileName, position);
-            });
-        };
-        LanguageServiceShimObject.prototype.findRenameLocations = function (fileName, position, findInStrings, findInComments) {
-            var _this = this;
-            return this.forwardJSONCall("findRenameLocations('" + fileName + "', " + position + ", " + findInStrings + ", " + findInComments + ")", function () {
-                return _this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
-            });
-        };
-        LanguageServiceShimObject.prototype.getBraceMatchingAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getBraceMatchingAtPosition('" + fileName + "', " + position + ")", function () {
-                var textRanges = _this.languageService.getBraceMatchingAtPosition(fileName, position);
-                return textRanges;
-            });
-        };
-        LanguageServiceShimObject.prototype.getIndentationAtPosition = function (fileName, position, options) {
-            var _this = this;
-            return this.forwardJSONCall("getIndentationAtPosition('" + fileName + "', " + position + ")", function () {
-                var localOptions = JSON.parse(options);
-                return _this.languageService.getIndentationAtPosition(fileName, position, localOptions);
-            });
-        };
-        LanguageServiceShimObject.prototype.getReferencesAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getReferencesAtPosition('" + fileName + "', " + position + ")", function () {
-                return _this.languageService.getReferencesAtPosition(fileName, position);
-            });
-        };
-        LanguageServiceShimObject.prototype.getOccurrencesAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getOccurrencesAtPosition('" + fileName + "', " + position + ")", function () {
-                return _this.languageService.getOccurrencesAtPosition(fileName, position);
-            });
-        };
-        LanguageServiceShimObject.prototype.getCompletionsAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getCompletionsAtPosition('" + fileName + "', " + position + ")", function () {
-                var completion = _this.languageService.getCompletionsAtPosition(fileName, position);
-                return completion;
-            });
-        };
-        LanguageServiceShimObject.prototype.getCompletionEntryDetails = function (fileName, position, entryName) {
-            var _this = this;
-            return this.forwardJSONCall("getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")", function () {
-                var details = _this.languageService.getCompletionEntryDetails(fileName, position, entryName);
-                return details;
-            });
-        };
-        LanguageServiceShimObject.prototype.getFormattingEditsForRange = function (fileName, start, end, options) {
-            var _this = this;
-            return this.forwardJSONCall("getFormattingEditsForRange('" + fileName + "', " + start + ", " + end + ")", function () {
-                var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
-                return edits;
-            });
-        };
-        LanguageServiceShimObject.prototype.getFormattingEditsForDocument = function (fileName, options) {
-            var _this = this;
-            return this.forwardJSONCall("getFormattingEditsForDocument('" + fileName + "')", function () {
-                var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsForDocument(fileName, localOptions);
-                return edits;
-            });
-        };
-        LanguageServiceShimObject.prototype.getFormattingEditsAfterKeystroke = function (fileName, position, key, options) {
-            var _this = this;
-            return this.forwardJSONCall("getFormattingEditsAfterKeystroke('" + fileName + "', " + position + ", '" + key + "')", function () {
-                var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
-                return edits;
-            });
-        };
-        LanguageServiceShimObject.prototype.getNavigateToItems = function (searchValue, maxResultCount) {
-            var _this = this;
-            return this.forwardJSONCall("getNavigateToItems('" + searchValue + "', " + maxResultCount + ")", function () {
-                var items = _this.languageService.getNavigateToItems(searchValue, maxResultCount);
-                return items;
-            });
-        };
-        LanguageServiceShimObject.prototype.getNavigationBarItems = function (fileName) {
-            var _this = this;
-            return this.forwardJSONCall("getNavigationBarItems('" + fileName + "')", function () {
-                var items = _this.languageService.getNavigationBarItems(fileName);
-                return items;
-            });
-        };
-        LanguageServiceShimObject.prototype.getOutliningSpans = function (fileName) {
-            var _this = this;
-            return this.forwardJSONCall("getOutliningSpans('" + fileName + "')", function () {
-                var items = _this.languageService.getOutliningSpans(fileName);
-                return items;
-            });
-        };
-        LanguageServiceShimObject.prototype.getTodoComments = function (fileName, descriptors) {
-            var _this = this;
-            return this.forwardJSONCall("getTodoComments('" + fileName + "')", function () {
-                var items = _this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
-                return items;
-            });
-        };
-        LanguageServiceShimObject.prototype.getEmitOutput = function (fileName) {
-            var _this = this;
-            return this.forwardJSONCall("getEmitOutput('" + fileName + "')", function () {
-                var output = _this.languageService.getEmitOutput(fileName);
-                output.emitOutputStatus = output.emitSkipped ? 1 : 0;
-                return output;
-            });
-        };
-        return LanguageServiceShimObject;
-    })(ShimBase);
-    var ClassifierShimObject = (function (_super) {
-        __extends(ClassifierShimObject, _super);
-        function ClassifierShimObject(factory) {
-            _super.call(this, factory);
-            this.classifier = ts.createClassifier();
-        }
-        ClassifierShimObject.prototype.getClassificationsForLine = function (text, lexState, classifyKeywordsInGenerics) {
-            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
-            var items = classification.entries;
-            var result = "";
-            for (var i = 0; i < items.length; i++) {
-                result += items[i].length + "\n";
-                result += items[i].classification + "\n";
+            ScriptInfo.prototype.addChild = function (childInfo) {
+                this.children.push(childInfo);
+            };
+            ScriptInfo.prototype.snap = function () {
+                return this.svc.getSnapshot();
+            };
+            ScriptInfo.prototype.getText = function () {
+                var snap = this.snap();
+                return snap.getText(0, snap.getLength());
+            };
+            ScriptInfo.prototype.getLineInfo = function (line) {
+                var snap = this.snap();
+                return snap.index.lineNumberToInfo(line);
+            };
+            ScriptInfo.prototype.editContent = function (start, end, newText) {
+                this.svc.edit(start, end - start, newText);
+            };
+            ScriptInfo.prototype.getTextChangeRangeBetweenVersions = function (startVersion, endVersion) {
+                return this.svc.getTextChangesBetweenVersions(startVersion, endVersion);
+            };
+            ScriptInfo.prototype.getChangeRange = function (oldSnapshot) {
+                return this.snap().getChangeRange(oldSnapshot);
+            };
+            return ScriptInfo;
+        })();
+        var LSHost = (function () {
+            function LSHost(host, project) {
+                this.host = host;
+                this.project = project;
+                this.ls = null;
+                this.filenameToScript = {};
+                this.roots = [];
             }
-            result += classification.finalLexState;
-            return result;
-        };
-        return ClassifierShimObject;
-    })(ShimBase);
-    var CoreServicesShimObject = (function (_super) {
-        __extends(CoreServicesShimObject, _super);
-        function CoreServicesShimObject(factory, logger) {
-            _super.call(this, factory);
-            this.logger = logger;
-        }
-        CoreServicesShimObject.prototype.forwardJSONCall = function (actionDescription, action) {
-            return forwardJSONCall(this.logger, actionDescription, action);
-        };
-        CoreServicesShimObject.prototype.getPreProcessedFileInfo = function (fileName, sourceTextSnapshot) {
-            return this.forwardJSONCall("getPreProcessedFileInfo('" + fileName + "')", function () {
-                var result = ts.preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
-                var convertResult = {
-                    referencedFiles: [],
-                    importedFiles: [],
-                    isLibFile: result.isLibFile
-                };
-                ts.forEach(result.referencedFiles, function (refFile) {
-                    convertResult.referencedFiles.push({
-                        path: ts.normalizePath(refFile.fileName),
-                        position: refFile.pos,
-                        length: refFile.end - refFile.pos
-                    });
-                });
-                ts.forEach(result.importedFiles, function (importedFile) {
-                    convertResult.importedFiles.push({
-                        path: ts.normalizeSlashes(importedFile.fileName),
-                        position: importedFile.pos,
-                        length: importedFile.end - importedFile.pos
-                    });
-                });
-                return convertResult;
-            });
-        };
-        CoreServicesShimObject.prototype.getDefaultCompilationSettings = function () {
-            return this.forwardJSONCall("getDefaultCompilationSettings()", function () {
-                return ts.getDefaultCompilerOptions();
-            });
-        };
-        return CoreServicesShimObject;
-    })(ShimBase);
-    var TypeScriptServicesFactory = (function () {
-        function TypeScriptServicesFactory() {
-            this._shims = [];
-            this.documentRegistry = ts.createDocumentRegistry();
-        }
-        TypeScriptServicesFactory.prototype.getServicesVersion = function () {
-            return ts.servicesVersion;
-        };
-        TypeScriptServicesFactory.prototype.createLanguageServiceShim = function (host) {
-            try {
-                var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var languageService = ts.createLanguageService(hostAdapter, this.documentRegistry);
-                return new LanguageServiceShimObject(this, host, languageService);
-            }
-            catch (err) {
-                logInternalError(host, err);
-                throw err;
-            }
-        };
-        TypeScriptServicesFactory.prototype.createClassifierShim = function (logger) {
-            try {
-                return new ClassifierShimObject(this);
-            }
-            catch (err) {
-                logInternalError(logger, err);
-                throw err;
-            }
-        };
-        TypeScriptServicesFactory.prototype.createCoreServicesShim = function (logger) {
-            try {
-                return new CoreServicesShimObject(this, logger);
-            }
-            catch (err) {
-                logInternalError(logger, err);
-                throw err;
-            }
-        };
-        TypeScriptServicesFactory.prototype.close = function () {
-            this._shims = [];
-            this.documentRegistry = ts.createDocumentRegistry();
-        };
-        TypeScriptServicesFactory.prototype.registerShim = function (shim) {
-            this._shims.push(shim);
-        };
-        TypeScriptServicesFactory.prototype.unregisterShim = function (shim) {
-            for (var i = 0, n = this._shims.length; i < n; i++) {
-                if (this._shims[i] === shim) {
-                    delete this._shims[i];
+            LSHost.prototype.getDefaultLibFileName = function () {
+                var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
+                return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
+            };
+            LSHost.prototype.getScriptSnapshot = function (filename) {
+                var scriptInfo = this.getScriptInfo(filename);
+                if (scriptInfo) {
+                    return scriptInfo.snap();
+                }
+            };
+            LSHost.prototype.setCompilationSettings = function (opt) {
+                this.compilationSettings = opt;
+            };
+            LSHost.prototype.lineAffectsRefs = function (filename, line) {
+                var info = this.getScriptInfo(filename);
+                var lineInfo = info.getLineInfo(line);
+                if (lineInfo && lineInfo.text) {
+                    var regex = /reference|import|\/\*|\*\//;
+                    return regex.test(lineInfo.text);
+                }
+            };
+            LSHost.prototype.getCompilationSettings = function () {
+                return this.compilationSettings;
+            };
+            LSHost.prototype.getScriptFileNames = function () {
+                var filenames = [];
+                for (var filename in this.filenameToScript) {
+                    if (this.filenameToScript[filename] && this.filenameToScript[filename].isOpen) {
+                        filenames.push(filename);
+                    }
+                }
+                return filenames;
+            };
+            LSHost.prototype.getScriptVersion = function (filename) {
+                return this.getScriptInfo(filename).svc.latestVersion().toString();
+            };
+            LSHost.prototype.getCurrentDirectory = function () {
+                return "";
+            };
+            LSHost.prototype.getScriptIsOpen = function (filename) {
+                return this.getScriptInfo(filename).isOpen;
+            };
+            LSHost.prototype.removeReferencedFile = function (info) {
+                if (!info.isOpen) {
+                    this.filenameToScript[info.fileName] = undefined;
+                }
+            };
+            LSHost.prototype.getScriptInfo = function (filename) {
+                var scriptInfo = ts.lookUp(this.filenameToScript, filename);
+                if (!scriptInfo) {
+                    scriptInfo = this.project.openReferencedFile(filename);
+                    if (scriptInfo) {
+                        this.filenameToScript[scriptInfo.fileName] = scriptInfo;
+                    }
+                }
+                else {
+                }
+                return scriptInfo;
+            };
+            LSHost.prototype.addRoot = function (info) {
+                var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
+                if (!scriptInfo) {
+                    this.filenameToScript[info.fileName] = info;
+                    this.roots.push(info);
+                }
+            };
+            LSHost.prototype.saveTo = function (filename, tmpfilename) {
+                var script = this.getScriptInfo(filename);
+                if (script) {
+                    var snap = script.snap();
+                    this.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
+                }
+            };
+            LSHost.prototype.reloadScript = function (filename, tmpfilename, cb) {
+                var script = this.getScriptInfo(filename);
+                if (script) {
+                    script.svc.reloadFromFile(tmpfilename, cb);
+                }
+            };
+            LSHost.prototype.editScript = function (filename, start, end, newText) {
+                var script = this.getScriptInfo(filename);
+                if (script) {
+                    script.editContent(start, end, newText);
                     return;
                 }
+                throw new Error("No script with name '" + filename + "'");
+            };
+            LSHost.prototype.resolvePath = function (path) {
+                var start = new Date().getTime();
+                var result = this.host.resolvePath(path);
+                return result;
+            };
+            LSHost.prototype.fileExists = function (path) {
+                var start = new Date().getTime();
+                var result = this.host.fileExists(path);
+                return result;
+            };
+            LSHost.prototype.directoryExists = function (path) {
+                return this.host.directoryExists(path);
+            };
+            LSHost.prototype.lineToTextSpan = function (filename, line) {
+                var script = this.filenameToScript[filename];
+                var index = script.snap().index;
+                var lineInfo = index.lineNumberToInfo(line + 1);
+                var len;
+                if (lineInfo.leaf) {
+                    len = lineInfo.leaf.text.length;
+                }
+                else {
+                    var nextLineInfo = index.lineNumberToInfo(line + 2);
+                    len = nextLineInfo.col - lineInfo.col;
+                }
+                return ts.createTextSpan(lineInfo.col, len);
+            };
+            LSHost.prototype.lineColToPosition = function (filename, line, col) {
+                var script = this.filenameToScript[filename];
+                var index = script.snap().index;
+                var lineInfo = index.lineNumberToInfo(line);
+                return (lineInfo.col + col - 1);
+            };
+            LSHost.prototype.positionToLineCol = function (filename, position) {
+                var script = this.filenameToScript[filename];
+                var index = script.snap().index;
+                var lineCol = index.charOffsetToLineNumberAndPos(position);
+                return { line: lineCol.line, col: lineCol.col + 1 };
+            };
+            return LSHost;
+        })();
+        function getAbsolutePath(filename, directory) {
+            var rootLength = ts.getRootLength(filename);
+            if (rootLength > 0) {
+                return filename;
             }
-            throw new Error("Invalid operation");
-        };
-        return TypeScriptServicesFactory;
-    })();
-    ts.TypeScriptServicesFactory = TypeScriptServicesFactory;
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = ts;
-    }
+            else {
+                var splitFilename = filename.split('/');
+                var splitDir = directory.split('/');
+                var i = 0;
+                var dirTail = 0;
+                var sflen = splitFilename.length;
+                while ((i < sflen) && (splitFilename[i].charAt(0) == '.')) {
+                    var dots = splitFilename[i];
+                    if (dots == '..') {
+                        dirTail++;
+                    }
+                    else if (dots != '.') {
+                        return undefined;
+                    }
+                    i++;
+                }
+                return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join('/');
+            }
+        }
+        var Project = (function () {
+            function Project(projectService) {
+                this.projectService = projectService;
+                this.filenameToSourceFile = {};
+                this.updateGraphSeq = 0;
+                this.compilerService = new CompilerService(this);
+            }
+            Project.prototype.openReferencedFile = function (filename) {
+                return this.projectService.openFile(filename, false);
+            };
+            Project.prototype.getSourceFile = function (info) {
+                return this.filenameToSourceFile[info.fileName];
+            };
+            Project.prototype.getSourceFileFromName = function (filename, requireOpen) {
+                var info = this.projectService.getScriptInfo(filename);
+                if (info) {
+                    if ((!requireOpen) || info.isOpen) {
+                        return this.getSourceFile(info);
+                    }
+                }
+            };
+            Project.prototype.removeReferencedFile = function (info) {
+                this.compilerService.host.removeReferencedFile(info);
+                this.updateGraph();
+            };
+            Project.prototype.updateFileMap = function () {
+                this.filenameToSourceFile = {};
+                var sourceFiles = this.program.getSourceFiles();
+                for (var i = 0, len = sourceFiles.length; i < len; i++) {
+                    var normFilename = ts.normalizePath(sourceFiles[i].fileName);
+                    this.filenameToSourceFile[normFilename] = sourceFiles[i];
+                }
+            };
+            Project.prototype.finishGraph = function () {
+                this.updateGraph();
+                this.compilerService.languageService.getNavigateToItems(".*");
+            };
+            Project.prototype.updateGraph = function () {
+                this.program = this.compilerService.languageService.getProgram();
+                this.updateFileMap();
+            };
+            Project.prototype.isConfiguredProject = function () {
+                return this.projectFilename;
+            };
+            Project.prototype.addRoot = function (info) {
+                info.defaultProject = this;
+                this.compilerService.host.addRoot(info);
+            };
+            Project.prototype.filesToString = function () {
+                var strBuilder = "";
+                ts.forEachValue(this.filenameToSourceFile, function (sourceFile) { strBuilder += sourceFile.fileName + "\n"; });
+                return strBuilder;
+            };
+            Project.prototype.setProjectOptions = function (projectOptions) {
+                this.projectOptions = projectOptions;
+                if (projectOptions.compilerOptions) {
+                    this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
+                }
+            };
+            return Project;
+        })();
+        server.Project = Project;
+        function copyListRemovingItem(item, list) {
+            var copiedList = [];
+            for (var i = 0, len = list.length; i < len; i++) {
+                if (list[i] != item) {
+                    copiedList.push(list[i]);
+                }
+            }
+            return copiedList;
+        }
+        var ProjectService = (function () {
+            function ProjectService(host, psLogger, eventHandler) {
+                this.host = host;
+                this.psLogger = psLogger;
+                this.eventHandler = eventHandler;
+                this.filenameToScriptInfo = {};
+                this.openFileRoots = [];
+                this.openFilesReferenced = [];
+                this.inferredProjects = [];
+            }
+            ProjectService.prototype.watchedFileChanged = function (fileName) {
+                var info = this.filenameToScriptInfo[fileName];
+                if (!info) {
+                    this.psLogger.info("Error: got watch notification for unknown file: " + fileName);
+                }
+                if (!this.host.fileExists(fileName)) {
+                    this.fileDeletedInFilesystem(info);
+                }
+                else {
+                    if (info && (!info.isOpen)) {
+                        info.svc.reloadFromFile(info.fileName);
+                    }
+                }
+            };
+            ProjectService.prototype.log = function (msg, type) {
+                if (type === void 0) { type = "Err"; }
+                this.psLogger.msg(msg, type);
+            };
+            ProjectService.prototype.closeLog = function () {
+                this.psLogger.close();
+            };
+            ProjectService.prototype.createInferredProject = function (root) {
+                var iproj = new Project(this);
+                iproj.addRoot(root);
+                iproj.finishGraph();
+                this.inferredProjects.push(iproj);
+                return iproj;
+            };
+            ProjectService.prototype.fileDeletedInFilesystem = function (info) {
+                this.psLogger.info(info.fileName + " deleted");
+                if (info.fileWatcher) {
+                    info.fileWatcher.close();
+                    info.fileWatcher = undefined;
+                }
+                if (!info.isOpen) {
+                    this.filenameToScriptInfo[info.fileName] = undefined;
+                    var referencingProjects = this.findReferencingProjects(info);
+                    for (var i = 0, len = referencingProjects.length; i < len; i++) {
+                        referencingProjects[i].removeReferencedFile(info);
+                    }
+                    for (var j = 0, flen = this.openFileRoots.length; j < flen; j++) {
+                        var openFile = this.openFileRoots[j];
+                        if (this.eventHandler) {
+                            this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                        }
+                    }
+                    for (var j = 0, flen = this.openFilesReferenced.length; j < flen; j++) {
+                        var openFile = this.openFilesReferenced[j];
+                        if (this.eventHandler) {
+                            this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                        }
+                    }
+                }
+                this.printProjects();
+            };
+            ProjectService.prototype.addOpenFile = function (info) {
+                this.findReferencingProjects(info);
+                if (info.defaultProject) {
+                    this.openFilesReferenced.push(info);
+                }
+                else {
+                    info.defaultProject = this.createInferredProject(info);
+                    var openFileRoots = [];
+                    for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                        var r = this.openFileRoots[i];
+                        if (info.defaultProject.getSourceFile(r)) {
+                            this.inferredProjects =
+                            copyListRemovingItem(r.defaultProject, this.inferredProjects);
+                            this.openFilesReferenced.push(r);
+                            r.defaultProject = info.defaultProject;
+                        }
+                        else {
+                            openFileRoots.push(r);
+                        }
+                    }
+                    this.openFileRoots = openFileRoots;
+                    this.openFileRoots.push(info);
+                }
+            };
+            ProjectService.prototype.closeOpenFile = function (info) {
+                var openFileRoots = [];
+                var removedProject;
+                for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                    if (info == this.openFileRoots[i]) {
+                        removedProject = info.defaultProject;
+                    }
+                    else {
+                        openFileRoots.push(this.openFileRoots[i]);
+                    }
+                }
+                this.openFileRoots = openFileRoots;
+                if (removedProject) {
+                    this.inferredProjects = copyListRemovingItem(removedProject, this.inferredProjects);
+                    var openFilesReferenced = [];
+                    var orphanFiles = [];
+                    for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                        var f = this.openFilesReferenced[i];
+                        if (f.defaultProject == removedProject) {
+                            f.defaultProject = undefined;
+                            orphanFiles.push(f);
+                        }
+                        else {
+                            openFilesReferenced.push(f);
+                        }
+                    }
+                    this.openFilesReferenced = openFilesReferenced;
+                    for (var i = 0, len = orphanFiles.length; i < len; i++) {
+                        this.addOpenFile(orphanFiles[i]);
+                    }
+                }
+                else {
+                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                }
+                info.close();
+            };
+            ProjectService.prototype.findReferencingProjects = function (info, excludedProject) {
+                var referencingProjects = [];
+                info.defaultProject = undefined;
+                for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
+                    this.inferredProjects[i].updateGraph();
+                    if (this.inferredProjects[i] != excludedProject) {
+                        if (this.inferredProjects[i].getSourceFile(info)) {
+                            info.defaultProject = this.inferredProjects[i];
+                            referencingProjects.push(this.inferredProjects[i]);
+                        }
+                    }
+                }
+                return referencingProjects;
+            };
+            ProjectService.prototype.updateProjectStructure = function () {
+                this.log("updating project structure from ...", "Info");
+                this.printProjects();
+                for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                    var refdFile = this.openFilesReferenced[i];
+                    refdFile.defaultProject.updateGraph();
+                    var sourceFile = refdFile.defaultProject.getSourceFile(refdFile);
+                    if (!sourceFile) {
+                        this.openFilesReferenced = copyListRemovingItem(refdFile, this.openFilesReferenced);
+                        this.addOpenFile(refdFile);
+                    }
+                }
+                var openFileRoots = [];
+                for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                    var rootFile = this.openFileRoots[i];
+                    var rootedProject = rootFile.defaultProject;
+                    var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
+                    if (referencingProjects.length == 0) {
+                        rootFile.defaultProject = rootedProject;
+                        openFileRoots.push(rootFile);
+                    }
+                    else {
+                        this.inferredProjects = copyListRemovingItem(rootedProject, this.inferredProjects);
+                        this.openFilesReferenced.push(rootFile);
+                    }
+                }
+                this.openFileRoots = openFileRoots;
+                this.printProjects();
+            };
+            ProjectService.prototype.getScriptInfo = function (filename) {
+                filename = ts.normalizePath(filename);
+                return ts.lookUp(this.filenameToScriptInfo, filename);
+            };
+            ProjectService.prototype.openFile = function (fileName, openedByClient) {
+                var _this = this;
+                if (openedByClient === void 0) { openedByClient = false; }
+                fileName = ts.normalizePath(fileName);
+                var info = ts.lookUp(this.filenameToScriptInfo, fileName);
+                if (!info) {
+                    var content;
+                    if (this.host.fileExists(fileName)) {
+                        content = this.host.readFile(fileName);
+                    }
+                    if (!content) {
+                        if (openedByClient) {
+                            content = "";
+                        }
+                    }
+                    if (content !== undefined) {
+                        info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                        this.filenameToScriptInfo[fileName] = info;
+                        if (!info.isOpen) {
+                            info.fileWatcher = this.host.watchFile(fileName, function (_) { _this.watchedFileChanged(fileName); });
+                        }
+                    }
+                }
+                if (info) {
+                    if (openedByClient) {
+                        info.isOpen = true;
+                    }
+                }
+                return info;
+            };
+            ProjectService.prototype.openClientFile = function (filename) {
+                var info = this.openFile(filename, true);
+                this.addOpenFile(info);
+                this.printProjects();
+                return info;
+            };
+            ProjectService.prototype.closeClientFile = function (filename) {
+                var info = ts.lookUp(this.filenameToScriptInfo, filename);
+                if (info) {
+                    this.closeOpenFile(info);
+                    info.isOpen = false;
+                }
+                this.printProjects();
+            };
+            ProjectService.prototype.getProjectsReferencingFile = function (filename) {
+                var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+                if (scriptInfo) {
+                    var projects = [];
+                    for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
+                        if (this.inferredProjects[i].getSourceFile(scriptInfo)) {
+                            projects.push(this.inferredProjects[i]);
+                        }
+                    }
+                    return projects;
+                }
+            };
+            ProjectService.prototype.getProjectForFile = function (filename) {
+                var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+                if (scriptInfo) {
+                    return scriptInfo.defaultProject;
+                }
+            };
+            ProjectService.prototype.printProjectsForFile = function (filename) {
+                var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+                if (scriptInfo) {
+                    this.psLogger.startGroup();
+                    this.psLogger.info("Projects for " + filename);
+                    var projects = this.getProjectsReferencingFile(filename);
+                    for (var i = 0, len = projects.length; i < len; i++) {
+                        this.psLogger.info("Inferred Project " + i.toString());
+                    }
+                    this.psLogger.endGroup();
+                }
+                else {
+                    this.psLogger.info(filename + " not in any project");
+                }
+            };
+            ProjectService.prototype.printProjects = function () {
+                this.psLogger.startGroup();
+                for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
+                    var project = this.inferredProjects[i];
+                    project.updateGraph();
+                    this.psLogger.info("Project " + i.toString());
+                    this.psLogger.info(project.filesToString());
+                    this.psLogger.info("-----------------------------------------------");
+                }
+                this.psLogger.info("Open file roots: ");
+                for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                    this.psLogger.info(this.openFileRoots[i].fileName);
+                }
+                this.psLogger.info("Open files referenced: ");
+                for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                    this.psLogger.info(this.openFilesReferenced[i].fileName);
+                }
+                this.psLogger.endGroup();
+            };
+            ProjectService.prototype.openConfigFile = function (configFilename) {
+                configFilename = ts.normalizePath(configFilename);
+                var dirPath = ts.getDirectoryPath(configFilename);
+                var rawConfig = ts.readConfigFile(configFilename);
+                if (!rawConfig) {
+                    return { errorMsg: "tsconfig syntax error" };
+                }
+                else {
+                    var parsedCommandLine = ts.parseConfigFile(rawConfig);
+                    if (parsedCommandLine.errors) {
+                        return { errorMsg: "tsconfig option errors" };
+                    }
+                    else if (parsedCommandLine.fileNames) {
+                        var proj = this.createProject(configFilename);
+                        for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
+                            var rootFilename = parsedCommandLine.fileNames[i];
+                            var normRootFilename = ts.normalizePath(rootFilename);
+                            normRootFilename = getAbsolutePath(normRootFilename, dirPath);
+                            if (this.host.fileExists(normRootFilename)) {
+                                var info = this.openFile(normRootFilename);
+                                proj.addRoot(info);
+                            }
+                            else {
+                                return { errorMsg: "specified file " + rootFilename + " not found" };
+                            }
+                        }
+                        var projectOptions = {
+                            files: parsedCommandLine.fileNames,
+                            compilerOptions: parsedCommandLine.options
+                        };
+                        if (rawConfig.formatCodeOptions) {
+                            projectOptions.formatCodeOptions = rawConfig.formatCodeOptions;
+                        }
+                        proj.setProjectOptions(projectOptions);
+                        return { success: true, project: proj };
+                    }
+                    else {
+                        return { errorMsg: "no files found" };
+                    }
+                }
+            };
+            ProjectService.prototype.createProject = function (projectFilename) {
+                var eproj = new Project(this);
+                eproj.projectFilename = projectFilename;
+                return eproj;
+            };
+            return ProjectService;
+        })();
+        server.ProjectService = ProjectService;
+        var CompilerService = (function () {
+            function CompilerService(project) {
+                this.project = project;
+                this.settings = ts.getDefaultCompilerOptions();
+                this.documentRegistry = ts.createDocumentRegistry();
+                this.formatCodeOptions = CompilerService.defaultFormatCodeOptions;
+                this.host = new LSHost(project.projectService.host, project);
+                this.settings.target = 1;
+                this.host.setCompilationSettings(this.settings);
+                this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
+                this.classifier = ts.createClassifier();
+            }
+            CompilerService.prototype.setCompilerOptions = function (opt) {
+                this.settings = opt;
+                this.host.setCompilationSettings(opt);
+            };
+            CompilerService.prototype.isExternalModule = function (filename) {
+                var sourceFile = this.languageService.getSourceFile(filename);
+                return ts.isExternalModule(sourceFile);
+            };
+            CompilerService.defaultFormatCodeOptions = {
+                IndentSize: 4,
+                TabSize: 4,
+                NewLineCharacter: ts.sys.newLine,
+                ConvertTabsToSpaces: true,
+                InsertSpaceAfterCommaDelimiter: true,
+                InsertSpaceAfterSemicolonInForStatements: true,
+                InsertSpaceBeforeAndAfterBinaryOperators: true,
+                InsertSpaceAfterKeywordsInControlFlowStatements: true,
+                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                PlaceOpenBraceOnNewLineForFunctions: false,
+                PlaceOpenBraceOnNewLineForControlBlocks: false
+            };
+            return CompilerService;
+        })();
+        var CharRangeSection;
+        (function (CharRangeSection) {
+            CharRangeSection[CharRangeSection["PreStart"] = 0] = "PreStart";
+            CharRangeSection[CharRangeSection["Start"] = 1] = "Start";
+            CharRangeSection[CharRangeSection["Entire"] = 2] = "Entire";
+            CharRangeSection[CharRangeSection["Mid"] = 3] = "Mid";
+            CharRangeSection[CharRangeSection["End"] = 4] = "End";
+            CharRangeSection[CharRangeSection["PostEnd"] = 5] = "PostEnd";
+        })(CharRangeSection || (CharRangeSection = {}));
+        var BaseLineIndexWalker = (function () {
+            function BaseLineIndexWalker() {
+                this.goSubtree = true;
+                this.done = false;
+            }
+            BaseLineIndexWalker.prototype.leaf = function (rangeStart, rangeLength, ll) {
+            };
+            return BaseLineIndexWalker;
+        })();
+        var EditWalker = (function (_super) {
+            __extends(EditWalker, _super);
+            function EditWalker() {
+                _super.call(this);
+                this.lineIndex = new LineIndex();
+                this.endBranch = [];
+                this.state = 2;
+                this.initialText = "";
+                this.trailingText = "";
+                this.suppressTrailingText = false;
+                this.lineIndex.root = new LineNode();
+                this.startPath = [this.lineIndex.root];
+                this.stack = [this.lineIndex.root];
+            }
+            EditWalker.prototype.insertLines = function (insertedText) {
+                if (this.suppressTrailingText) {
+                    this.trailingText = "";
+                }
+                if (insertedText) {
+                    insertedText = this.initialText + insertedText + this.trailingText;
+                }
+                else {
+                    insertedText = this.initialText + this.trailingText;
+                }
+                var lm = LineIndex.linesFromText(insertedText);
+                var lines = lm.lines;
+                if (lines.length > 1) {
+                    if (lines[lines.length - 1] == "") {
+                        lines.length--;
+                    }
+                }
+                var branchParent;
+                var lastZeroCount;
+                for (var k = this.endBranch.length - 1; k >= 0; k--) {
+                    this.endBranch[k].updateCounts();
+                    if (this.endBranch[k].charCount() == 0) {
+                        lastZeroCount = this.endBranch[k];
+                        if (k > 0) {
+                            branchParent = this.endBranch[k - 1];
+                        }
+                        else {
+                            branchParent = this.branchNode;
+                        }
+                    }
+                }
+                if (lastZeroCount) {
+                    branchParent.remove(lastZeroCount);
+                }
+                var insertionNode = this.startPath[this.startPath.length - 2];
+                var leafNode = this.startPath[this.startPath.length - 1];
+                var len = lines.length;
+                if (len > 0) {
+                    leafNode.text = lines[0];
+                    if (len > 1) {
+                        var insertedNodes = new Array(len - 1);
+                        var startNode = leafNode;
+                        for (var i = 1, len = lines.length; i < len; i++) {
+                            insertedNodes[i - 1] = new LineLeaf(lines[i]);
+                        }
+                        var pathIndex = this.startPath.length - 2;
+                        while (pathIndex >= 0) {
+                            insertionNode = this.startPath[pathIndex];
+                            insertedNodes = insertionNode.insertAt(startNode, insertedNodes);
+                            pathIndex--;
+                            startNode = insertionNode;
+                        }
+                        var insertedNodesLen = insertedNodes.length;
+                        while (insertedNodesLen > 0) {
+                            var newRoot = new LineNode();
+                            newRoot.add(this.lineIndex.root);
+                            insertedNodes = newRoot.insertAt(this.lineIndex.root, insertedNodes);
+                            insertedNodesLen = insertedNodes.length;
+                            this.lineIndex.root = newRoot;
+                        }
+                        this.lineIndex.root.updateCounts();
+                    }
+                    else {
+                        for (var j = this.startPath.length - 2; j >= 0; j--) {
+                            this.startPath[j].updateCounts();
+                        }
+                    }
+                }
+                else {
+                    insertionNode.remove(leafNode);
+                    for (var j = this.startPath.length - 2; j >= 0; j--) {
+                        this.startPath[j].updateCounts();
+                    }
+                }
+                return this.lineIndex;
+            };
+            EditWalker.prototype.post = function (relativeStart, relativeLength, lineCollection, parent, nodeType) {
+                if (lineCollection == this.lineCollectionAtBranch) {
+                    this.state = 4;
+                }
+                this.stack.length--;
+                return undefined;
+            };
+            EditWalker.prototype.pre = function (relativeStart, relativeLength, lineCollection, parent, nodeType) {
+                var currentNode = this.stack[this.stack.length - 1];
+                if ((this.state == 2) && (nodeType == 1)) {
+                    this.state = 1;
+                    this.branchNode = currentNode;
+                    this.lineCollectionAtBranch = lineCollection;
+                }
+                var child;
+                function fresh(node) {
+                    if (node.isLeaf()) {
+                        return new LineLeaf("");
+                    }
+                    else
+                        return new LineNode();
+                }
+                switch (nodeType) {
+                    case 0:
+                        this.goSubtree = false;
+                        if (this.state != 4) {
+                            currentNode.add(lineCollection);
+                        }
+                        break;
+                    case 1:
+                        if (this.state == 4) {
+                            this.goSubtree = false;
+                        }
+                        else {
+                            child = fresh(lineCollection);
+                            currentNode.add(child);
+                            this.startPath[this.startPath.length] = child;
+                        }
+                        break;
+                    case 2:
+                        if (this.state != 4) {
+                            child = fresh(lineCollection);
+                            currentNode.add(child);
+                            this.startPath[this.startPath.length] = child;
+                        }
+                        else {
+                            if (!lineCollection.isLeaf()) {
+                                child = fresh(lineCollection);
+                                currentNode.add(child);
+                                this.endBranch[this.endBranch.length] = child;
+                            }
+                        }
+                        break;
+                    case 3:
+                        this.goSubtree = false;
+                        break;
+                    case 4:
+                        if (this.state != 4) {
+                            this.goSubtree = false;
+                        }
+                        else {
+                            if (!lineCollection.isLeaf()) {
+                                child = fresh(lineCollection);
+                                currentNode.add(child);
+                                this.endBranch[this.endBranch.length] = child;
+                            }
+                        }
+                        break;
+                    case 5:
+                        this.goSubtree = false;
+                        if (this.state != 1) {
+                            currentNode.add(lineCollection);
+                        }
+                        break;
+                }
+                if (this.goSubtree) {
+                    this.stack[this.stack.length] = child;
+                }
+                return lineCollection;
+            };
+            EditWalker.prototype.leaf = function (relativeStart, relativeLength, ll) {
+                if (this.state == 1) {
+                    this.initialText = ll.text.substring(0, relativeStart);
+                }
+                else if (this.state == 2) {
+                    this.initialText = ll.text.substring(0, relativeStart);
+                    this.trailingText = ll.text.substring(relativeStart + relativeLength);
+                }
+                else {
+                    this.trailingText = ll.text.substring(relativeStart + relativeLength);
+                }
+            };
+            return EditWalker;
+        })(BaseLineIndexWalker);
+        var TextChange = (function () {
+            function TextChange(pos, deleteLen, insertedText) {
+                this.pos = pos;
+                this.deleteLen = deleteLen;
+                this.insertedText = insertedText;
+            }
+            TextChange.prototype.getTextChangeRange = function () {
+                return ts.createTextChangeRange(ts.createTextSpan(this.pos, this.deleteLen), this.insertedText ? this.insertedText.length : 0);
+            };
+            return TextChange;
+        })();
+        var ScriptVersionCache = (function () {
+            function ScriptVersionCache() {
+                this.changes = [];
+                this.versions = [];
+                this.minVersion = 0;
+                this.currentVersion = 0;
+            }
+            ScriptVersionCache.prototype.edit = function (pos, deleteLen, insertedText) {
+                this.changes[this.changes.length] = new TextChange(pos, deleteLen, insertedText);
+                if ((this.changes.length > ScriptVersionCache.changeNumberThreshold) ||
+                    (deleteLen > ScriptVersionCache.changeLengthThreshold) ||
+                    (insertedText && (insertedText.length > ScriptVersionCache.changeLengthThreshold))) {
+                    this.getSnapshot();
+                }
+            };
+            ScriptVersionCache.prototype.latest = function () {
+                return this.versions[this.currentVersion];
+            };
+            ScriptVersionCache.prototype.latestVersion = function () {
+                if (this.changes.length > 0) {
+                    this.getSnapshot();
+                }
+                return this.currentVersion;
+            };
+            ScriptVersionCache.prototype.reloadFromFile = function (filename, cb) {
+                var content = ts.sys.readFile(filename);
+                this.reload(content);
+                if (cb)
+                    cb();
+            };
+            ScriptVersionCache.prototype.reload = function (script) {
+                this.currentVersion++;
+                this.changes = [];
+                var snap = new LineIndexSnapshot(this.currentVersion, this);
+                this.versions[this.currentVersion] = snap;
+                snap.index = new LineIndex();
+                var lm = LineIndex.linesFromText(script);
+                snap.index.load(lm.lines);
+                for (var i = this.minVersion; i < this.currentVersion; i++) {
+                    this.versions[i] = undefined;
+                }
+                this.minVersion = this.currentVersion;
+            };
+            ScriptVersionCache.prototype.getSnapshot = function () {
+                var snap = this.versions[this.currentVersion];
+                if (this.changes.length > 0) {
+                    var snapIndex = this.latest().index;
+                    for (var i = 0, len = this.changes.length; i < len; i++) {
+                        var change = this.changes[i];
+                        snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
+                    }
+                    snap = new LineIndexSnapshot(this.currentVersion + 1, this);
+                    snap.index = snapIndex;
+                    snap.changesSincePreviousVersion = this.changes;
+                    this.currentVersion = snap.version;
+                    this.versions[snap.version] = snap;
+                    this.changes = [];
+                }
+                return snap;
+            };
+            ScriptVersionCache.prototype.getTextChangesBetweenVersions = function (oldVersion, newVersion) {
+                if (oldVersion < newVersion) {
+                    if (oldVersion >= this.minVersion) {
+                        var textChangeRanges = [];
+                        for (var i = oldVersion + 1; i <= newVersion; i++) {
+                            var snap = this.versions[i];
+                            for (var j = 0, len = snap.changesSincePreviousVersion.length; j < len; j++) {
+                                var textChange = snap.changesSincePreviousVersion[j];
+                                textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
+                            }
+                        }
+                        return ts.collapseTextChangeRangesAcrossMultipleVersions(textChangeRanges);
+                    }
+                    else {
+                        return undefined;
+                    }
+                }
+                else {
+                    return ts.unchangedTextChangeRange;
+                }
+            };
+            ScriptVersionCache.fromString = function (script) {
+                var svc = new ScriptVersionCache();
+                var snap = new LineIndexSnapshot(0, svc);
+                svc.versions[svc.currentVersion] = snap;
+                snap.index = new LineIndex();
+                var lm = LineIndex.linesFromText(script);
+                snap.index.load(lm.lines);
+                return svc;
+            };
+            ScriptVersionCache.changeNumberThreshold = 8;
+            ScriptVersionCache.changeLengthThreshold = 256;
+            return ScriptVersionCache;
+        })();
+        var LineIndexSnapshot = (function () {
+            function LineIndexSnapshot(version, cache) {
+                this.version = version;
+                this.cache = cache;
+                this.changesSincePreviousVersion = [];
+            }
+            LineIndexSnapshot.prototype.getText = function (rangeStart, rangeEnd) {
+                return this.index.getText(rangeStart, rangeEnd - rangeStart);
+            };
+            LineIndexSnapshot.prototype.getLength = function () {
+                return this.index.root.charCount();
+            };
+            LineIndexSnapshot.prototype.getLineStartPositions = function () {
+                var starts = [-1];
+                var count = 1;
+                var pos = 0;
+                this.index.every(function (ll, s, len) {
+                    starts[count++] = pos;
+                    pos += ll.text.length;
+                    return true;
+                }, 0);
+                return starts;
+            };
+            LineIndexSnapshot.prototype.getLineMapper = function () {
+                var _this = this;
+                return (function (line) {
+                    return _this.index.lineNumberToInfo(line).col;
+                });
+            };
+            LineIndexSnapshot.prototype.getTextChangeRangeSinceVersion = function (scriptVersion) {
+                if (this.version <= scriptVersion) {
+                    return ts.unchangedTextChangeRange;
+                }
+                else {
+                    return this.cache.getTextChangesBetweenVersions(scriptVersion, this.version);
+                }
+            };
+            LineIndexSnapshot.prototype.getChangeRange = function (oldSnapshot) {
+                var oldSnap = oldSnapshot;
+                return this.getTextChangeRangeSinceVersion(oldSnap.version);
+            };
+            return LineIndexSnapshot;
+        })();
+        var LineIndex = (function () {
+            function LineIndex() {
+                this.checkEdits = false;
+            }
+            LineIndex.prototype.charOffsetToLineNumberAndPos = function (charOffset) {
+                return this.root.charOffsetToLineNumberAndPos(1, charOffset);
+            };
+            LineIndex.prototype.lineNumberToInfo = function (lineNumber) {
+                var lineCount = this.root.lineCount();
+                if (lineNumber <= lineCount) {
+                    var lineInfo = this.root.lineNumberToInfo(lineNumber, 0);
+                    lineInfo.line = lineNumber;
+                    return lineInfo;
+                }
+                else {
+                    return {
+                        line: lineNumber,
+                        col: this.root.charCount()
+                    };
+                }
+            };
+            LineIndex.prototype.load = function (lines) {
+                if (lines.length > 0) {
+                    var leaves = [];
+                    for (var i = 0, len = lines.length; i < len; i++) {
+                        leaves[i] = new LineLeaf(lines[i]);
+                    }
+                    this.root = LineIndex.buildTreeFromBottom(leaves);
+                }
+                else {
+                    this.root = new LineNode();
+                }
+            };
+            LineIndex.prototype.walk = function (rangeStart, rangeLength, walkFns) {
+                this.root.walk(rangeStart, rangeLength, walkFns);
+            };
+            LineIndex.prototype.getText = function (rangeStart, rangeLength) {
+                var accum = "";
+                if (rangeLength > 0) {
+                    this.walk(rangeStart, rangeLength, {
+                        goSubtree: true,
+                        done: false,
+                        leaf: function (relativeStart, relativeLength, ll) {
+                            accum = accum.concat(ll.text.substring(relativeStart, relativeStart + relativeLength));
+                        }
+                    });
+                }
+                return accum;
+            };
+            LineIndex.prototype.every = function (f, rangeStart, rangeEnd) {
+                if (!rangeEnd) {
+                    rangeEnd = this.root.charCount();
+                }
+                var walkFns = {
+                    goSubtree: true,
+                    done: false,
+                    leaf: function (relativeStart, relativeLength, ll) {
+                        if (!f(ll, relativeStart, relativeLength)) {
+                            this.done = true;
+                        }
+                    }
+                };
+                this.walk(rangeStart, rangeEnd - rangeStart, walkFns);
+                return !walkFns.done;
+            };
+            LineIndex.prototype.edit = function (pos, deleteLength, newText) {
+                function editFlat(source, s, dl, nt) {
+                    if (nt === void 0) { nt = ""; }
+                    return source.substring(0, s) + nt + source.substring(s + dl, source.length);
+                }
+                if (this.root.charCount() == 0) {
+                    if (newText) {
+                        this.load(LineIndex.linesFromText(newText).lines);
+                        return this;
+                    }
+                }
+                else {
+                    if (this.checkEdits) {
+                        var checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
+                    }
+                    var walker = new EditWalker();
+                    if (deleteLength > 0) {
+                        var e = pos + deleteLength;
+                        var lineInfo = this.charOffsetToLineNumberAndPos(e);
+                        if ((lineInfo && (lineInfo.col == 0))) {
+                            deleteLength += lineInfo.text.length;
+                            if (newText) {
+                                newText = newText + lineInfo.text;
+                            }
+                            else {
+                                newText = lineInfo.text;
+                            }
+                        }
+                    }
+                    else if (pos >= this.root.charCount()) {
+                        var endString = this.getText(pos - 1, 1);
+                        if (newText) {
+                            newText = endString + newText;
+                        }
+                        else {
+                            newText = endString;
+                        }
+                        pos = pos - 1;
+                        deleteLength = 0;
+                        walker.suppressTrailingText = true;
+                    }
+                    this.root.walk(pos, deleteLength, walker);
+                    walker.insertLines(newText);
+                    if (this.checkEdits) {
+                        var updatedText = this.getText(0, this.root.charCount());
+                        ts.Debug.assert(checkText == updatedText, "buffer edit mismatch");
+                    }
+                    return walker.lineIndex;
+                }
+            };
+            LineIndex.buildTreeFromBottom = function (nodes) {
+                var nodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
+                var interiorNodes = [];
+                var nodeIndex = 0;
+                for (var i = 0; i < nodeCount; i++) {
+                    interiorNodes[i] = new LineNode();
+                    var charCount = 0;
+                    var lineCount = 0;
+                    for (var j = 0; j < lineCollectionCapacity; j++) {
+                        if (nodeIndex < nodes.length) {
+                            interiorNodes[i].add(nodes[nodeIndex]);
+                            charCount += nodes[nodeIndex].charCount();
+                            lineCount += nodes[nodeIndex].lineCount();
+                        }
+                        else {
+                            break;
+                        }
+                        nodeIndex++;
+                    }
+                    interiorNodes[i].totalChars = charCount;
+                    interiorNodes[i].totalLines = lineCount;
+                }
+                if (interiorNodes.length == 1) {
+                    return interiorNodes[0];
+                }
+                else {
+                    return this.buildTreeFromBottom(interiorNodes);
+                }
+            };
+            LineIndex.linesFromText = function (text) {
+                var lineStarts = ts.computeLineStarts(text);
+                if (lineStarts.length == 0) {
+                    return { lines: [], lineMap: lineStarts };
+                }
+                var lines = new Array(lineStarts.length);
+                var lc = lineStarts.length - 1;
+                for (var lmi = 0; lmi < lc; lmi++) {
+                    lines[lmi] = text.substring(lineStarts[lmi], lineStarts[lmi + 1]);
+                }
+                var endText = text.substring(lineStarts[lc]);
+                if (endText.length > 0) {
+                    lines[lc] = endText;
+                }
+                else {
+                    lines.length--;
+                }
+                return { lines: lines, lineMap: lineStarts };
+            };
+            return LineIndex;
+        })();
+        var LineNode = (function () {
+            function LineNode() {
+                this.totalChars = 0;
+                this.totalLines = 0;
+                this.children = [];
+            }
+            LineNode.prototype.isLeaf = function () {
+                return false;
+            };
+            LineNode.prototype.updateCounts = function () {
+                this.totalChars = 0;
+                this.totalLines = 0;
+                for (var i = 0, len = this.children.length; i < len; i++) {
+                    var child = this.children[i];
+                    this.totalChars += child.charCount();
+                    this.totalLines += child.lineCount();
+                }
+            };
+            LineNode.prototype.execWalk = function (rangeStart, rangeLength, walkFns, childIndex, nodeType) {
+                if (walkFns.pre) {
+                    walkFns.pre(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
+                }
+                if (walkFns.goSubtree) {
+                    this.children[childIndex].walk(rangeStart, rangeLength, walkFns);
+                    if (walkFns.post) {
+                        walkFns.post(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
+                    }
+                }
+                else {
+                    walkFns.goSubtree = true;
+                }
+                return walkFns.done;
+            };
+            LineNode.prototype.skipChild = function (relativeStart, relativeLength, childIndex, walkFns, nodeType) {
+                if (walkFns.pre && (!walkFns.done)) {
+                    walkFns.pre(relativeStart, relativeLength, this.children[childIndex], this, nodeType);
+                    walkFns.goSubtree = true;
+                }
+            };
+            LineNode.prototype.walk = function (rangeStart, rangeLength, walkFns) {
+                var childIndex = 0;
+                var child = this.children[0];
+                var childCharCount = child.charCount();
+                var adjustedStart = rangeStart;
+                while (adjustedStart >= childCharCount) {
+                    this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, 0);
+                    adjustedStart -= childCharCount;
+                    child = this.children[++childIndex];
+                    childCharCount = child.charCount();
+                }
+                if ((adjustedStart + rangeLength) <= childCharCount) {
+                    if (this.execWalk(adjustedStart, rangeLength, walkFns, childIndex, 2)) {
+                        return;
+                    }
+                }
+                else {
+                    if (this.execWalk(adjustedStart, childCharCount - adjustedStart, walkFns, childIndex, 1)) {
+                        return;
+                    }
+                    var adjustedLength = rangeLength - (childCharCount - adjustedStart);
+                    child = this.children[++childIndex];
+                    childCharCount = child.charCount();
+                    while (adjustedLength > childCharCount) {
+                        if (this.execWalk(0, childCharCount, walkFns, childIndex, 3)) {
+                            return;
+                        }
+                        adjustedLength -= childCharCount;
+                        child = this.children[++childIndex];
+                        childCharCount = child.charCount();
+                    }
+                    if (adjustedLength > 0) {
+                        if (this.execWalk(0, adjustedLength, walkFns, childIndex, 4)) {
+                            return;
+                        }
+                    }
+                }
+                if (walkFns.pre) {
+                    var clen = this.children.length;
+                    if (childIndex < (clen - 1)) {
+                        for (var ej = childIndex + 1; ej < clen; ej++) {
+                            this.skipChild(0, 0, ej, walkFns, 5);
+                        }
+                    }
+                }
+            };
+            LineNode.prototype.charOffsetToLineNumberAndPos = function (lineNumber, charOffset) {
+                var childInfo = this.childFromCharOffset(lineNumber, charOffset);
+                if (!childInfo.child) {
+                    return {
+                        line: lineNumber,
+                        col: charOffset
+                    };
+                }
+                else if (childInfo.childIndex < this.children.length) {
+                    if (childInfo.child.isLeaf()) {
+                        return {
+                            line: childInfo.lineNumber,
+                            col: childInfo.charOffset,
+                            text: (childInfo.child).text,
+                            leaf: (childInfo.child)
+                        };
+                    }
+                    else {
+                        var lineNode = (childInfo.child);
+                        return lineNode.charOffsetToLineNumberAndPos(childInfo.lineNumber, childInfo.charOffset);
+                    }
+                }
+                else {
+                    var lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
+                    return { line: this.lineCount(), col: lineInfo.leaf.charCount() };
+                }
+            };
+            LineNode.prototype.lineNumberToInfo = function (lineNumber, charOffset) {
+                var childInfo = this.childFromLineNumber(lineNumber, charOffset);
+                if (!childInfo.child) {
+                    return {
+                        line: lineNumber,
+                        col: charOffset
+                    };
+                }
+                else if (childInfo.child.isLeaf()) {
+                    return {
+                        line: lineNumber,
+                        col: childInfo.charOffset,
+                        text: (childInfo.child).text,
+                        leaf: (childInfo.child)
+                    };
+                }
+                else {
+                    var lineNode = (childInfo.child);
+                    return lineNode.lineNumberToInfo(childInfo.relativeLineNumber, childInfo.charOffset);
+                }
+            };
+            LineNode.prototype.childFromLineNumber = function (lineNumber, charOffset) {
+                var child;
+                var relativeLineNumber = lineNumber;
+                for (var i = 0, len = this.children.length; i < len; i++) {
+                    child = this.children[i];
+                    var childLineCount = child.lineCount();
+                    if (childLineCount >= relativeLineNumber) {
+                        break;
+                    }
+                    else {
+                        relativeLineNumber -= childLineCount;
+                        charOffset += child.charCount();
+                    }
+                }
+                return {
+                    child: child,
+                    childIndex: i,
+                    relativeLineNumber: relativeLineNumber,
+                    charOffset: charOffset
+                };
+            };
+            LineNode.prototype.childFromCharOffset = function (lineNumber, charOffset) {
+                var child;
+                for (var i = 0, len = this.children.length; i < len; i++) {
+                    child = this.children[i];
+                    if (child.charCount() > charOffset) {
+                        break;
+                    }
+                    else {
+                        charOffset -= child.charCount();
+                        lineNumber += child.lineCount();
+                    }
+                }
+                return {
+                    child: child,
+                    childIndex: i,
+                    charOffset: charOffset,
+                    lineNumber: lineNumber
+                };
+            };
+            LineNode.prototype.splitAfter = function (childIndex) {
+                var splitNode;
+                var clen = this.children.length;
+                childIndex++;
+                var endLength = childIndex;
+                if (childIndex < clen) {
+                    splitNode = new LineNode();
+                    while (childIndex < clen) {
+                        splitNode.add(this.children[childIndex++]);
+                    }
+                    splitNode.updateCounts();
+                }
+                this.children.length = endLength;
+                return splitNode;
+            };
+            LineNode.prototype.remove = function (child) {
+                var childIndex = this.findChildIndex(child);
+                var clen = this.children.length;
+                if (childIndex < (clen - 1)) {
+                    for (var i = childIndex; i < (clen - 1); i++) {
+                        this.children[i] = this.children[i + 1];
+                    }
+                }
+                this.children.length--;
+            };
+            LineNode.prototype.findChildIndex = function (child) {
+                var childIndex = 0;
+                var clen = this.children.length;
+                while ((this.children[childIndex] != child) && (childIndex < clen))
+                    childIndex++;
+                return childIndex;
+            };
+            LineNode.prototype.insertAt = function (child, nodes) {
+                var childIndex = this.findChildIndex(child);
+                var clen = this.children.length;
+                var nodeCount = nodes.length;
+                if ((clen < lineCollectionCapacity) && (childIndex == (clen - 1)) && (nodeCount == 1)) {
+                    this.add(nodes[0]);
+                    this.updateCounts();
+                    return [];
+                }
+                else {
+                    var shiftNode = this.splitAfter(childIndex);
+                    var nodeIndex = 0;
+                    childIndex++;
+                    while ((childIndex < lineCollectionCapacity) && (nodeIndex < nodeCount)) {
+                        this.children[childIndex++] = nodes[nodeIndex++];
+                    }
+                    var splitNodes = [];
+                    var splitNodeCount = 0;
+                    if (nodeIndex < nodeCount) {
+                        splitNodeCount = Math.ceil((nodeCount - nodeIndex) / lineCollectionCapacity);
+                        splitNodes = new Array(splitNodeCount);
+                        var splitNodeIndex = 0;
+                        for (var i = 0; i < splitNodeCount; i++) {
+                            splitNodes[i] = new LineNode();
+                        }
+                        var splitNode = splitNodes[0];
+                        while (nodeIndex < nodeCount) {
+                            splitNode.add(nodes[nodeIndex++]);
+                            if (splitNode.children.length == lineCollectionCapacity) {
+                                splitNodeIndex++;
+                                splitNode = splitNodes[splitNodeIndex];
+                            }
+                        }
+                        for (i = splitNodes.length - 1; i >= 0; i--) {
+                            if (splitNodes[i].children.length == 0) {
+                                splitNodes.length--;
+                            }
+                        }
+                    }
+                    if (shiftNode) {
+                        splitNodes[splitNodes.length] = shiftNode;
+                    }
+                    this.updateCounts();
+                    for (i = 0; i < splitNodeCount; i++) {
+                        splitNodes[i].updateCounts();
+                    }
+                    return splitNodes;
+                }
+            };
+            LineNode.prototype.add = function (collection) {
+                this.children[this.children.length] = collection;
+                return (this.children.length < lineCollectionCapacity);
+            };
+            LineNode.prototype.charCount = function () {
+                return this.totalChars;
+            };
+            LineNode.prototype.lineCount = function () {
+                return this.totalLines;
+            };
+            return LineNode;
+        })();
+        var LineLeaf = (function () {
+            function LineLeaf(text) {
+                this.text = text;
+            }
+            LineLeaf.prototype.setUdata = function (data) {
+                this.udata = data;
+            };
+            LineLeaf.prototype.getUdata = function () {
+                return this.udata;
+            };
+            LineLeaf.prototype.isLeaf = function () {
+                return true;
+            };
+            LineLeaf.prototype.walk = function (rangeStart, rangeLength, walkFns) {
+                walkFns.leaf(rangeStart, rangeLength, this);
+            };
+            LineLeaf.prototype.charCount = function () {
+                return this.text.length;
+            };
+            LineLeaf.prototype.lineCount = function () {
+                return 1;
+            };
+            return LineLeaf;
+        })();
+    })(server = ts.server || (ts.server = {}));
 })(ts || (ts = {}));
-var TypeScript;
-(function (TypeScript) {
-    var Services;
-    (function (Services) {
-        Services.TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
-    })(Services = TypeScript.Services || (TypeScript.Services = {}));
-})(TypeScript || (TypeScript = {}));
+var ts;
+(function (ts) {
+    var server;
+    (function (server) {
+        var spaceCache = [" ", "  ", "   ", "    "];
+        function generateSpaces(n) {
+            if (!spaceCache[n]) {
+                var strBuilder = "";
+                for (var i = 0; i < n; i++) {
+                    strBuilder += " ";
+                }
+                spaceCache[n] = strBuilder;
+            }
+            return spaceCache[n];
+        }
+        function compareNumber(a, b) {
+            if (a < b) {
+                return -1;
+            }
+            else if (a == b) {
+                return 0;
+            }
+            else
+                return 1;
+        }
+        function compareFileStart(a, b) {
+            if (a.file < b.file) {
+                return -1;
+            }
+            else if (a.file == b.file) {
+                var n = compareNumber(a.start.line, b.start.line);
+                if (n == 0) {
+                    return compareNumber(a.start.col, b.start.col);
+                }
+                else
+                    return n;
+            }
+            else {
+                return 1;
+            }
+        }
+        function formatDiag(fileName, project, diag) {
+            return {
+                start: project.compilerService.host.positionToLineCol(fileName, diag.start),
+                end: project.compilerService.host.positionToLineCol(fileName, diag.start + diag.length),
+                text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            };
+        }
+        function allEditsBeforePos(edits, pos) {
+            for (var i = 0, len = edits.length; i < len; i++) {
+                if (ts.textSpanEnd(edits[i].span) >= pos) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        var CommandNames;
+        (function (CommandNames) {
+            CommandNames.Change = "change";
+            CommandNames.Close = "close";
+            CommandNames.Completions = "completions";
+            CommandNames.CompletionDetails = "completionEntryDetails";
+            CommandNames.Definition = "definition";
+            CommandNames.Format = "format";
+            CommandNames.Formatonkey = "formatonkey";
+            CommandNames.Geterr = "geterr";
+            CommandNames.NavBar = "navbar";
+            CommandNames.Navto = "navto";
+            CommandNames.Open = "open";
+            CommandNames.Quickinfo = "quickinfo";
+            CommandNames.References = "references";
+            CommandNames.Reload = "reload";
+            CommandNames.Rename = "rename";
+            CommandNames.Saveto = "saveto";
+            CommandNames.Brace = "brace";
+            CommandNames.Unknown = "unknown";
+        })(CommandNames = server.CommandNames || (server.CommandNames = {}));
+        var Errors;
+        (function (Errors) {
+            Errors.NoProject = new Error("No Project.");
+        })(Errors || (Errors = {}));
+        var Session = (function () {
+            function Session(host, logger) {
+                var _this = this;
+                this.host = host;
+                this.logger = logger;
+                this.pendingOperation = false;
+                this.fileHash = {};
+                this.nextFileId = 1;
+                this.changeSeq = 0;
+                this.projectService =
+                    new server.ProjectService(host, logger, function (eventName, project, fileName) {
+                        _this.handleEvent(eventName, project, fileName);
+                    });
+            }
+            Session.prototype.handleEvent = function (eventName, project, fileName) {
+                var _this = this;
+                if (eventName == "context") {
+                    this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                    this.updateErrorCheck([{ fileName: fileName, project: project }], this.changeSeq, function (n) { return n == _this.changeSeq; }, 100);
+                }
+            };
+            Session.prototype.logError = function (err, cmd) {
+                var typedErr = err;
+                var msg = "Exception on executing command " + cmd;
+                if (typedErr.message) {
+                    msg += ":\n" + typedErr.message;
+                    if (typedErr.stack) {
+                        msg += "\n" + typedErr.stack;
+                    }
+                }
+                this.projectService.log(msg);
+            };
+            Session.prototype.sendLineToClient = function (line) {
+                this.host.write(line + this.host.newLine);
+            };
+            Session.prototype.send = function (msg) {
+                var json = JSON.stringify(msg);
+                this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
+                    '\r\n\r\n' + json);
+            };
+            Session.prototype.event = function (info, eventName) {
+                var ev = {
+                    seq: 0,
+                    type: "event",
+                    event: eventName,
+                    body: info
+                };
+                this.send(ev);
+            };
+            Session.prototype.response = function (info, cmdName, reqSeq, errorMsg) {
+                if (reqSeq === void 0) { reqSeq = 0; }
+                var res = {
+                    seq: 0,
+                    type: "response",
+                    command: cmdName,
+                    request_seq: reqSeq,
+                    success: !errorMsg
+                };
+                if (!errorMsg) {
+                    res.body = info;
+                }
+                else {
+                    res.message = errorMsg;
+                }
+                this.send(res);
+            };
+            Session.prototype.output = function (body, commandName, requestSequence, errorMessage) {
+                if (requestSequence === void 0) { requestSequence = 0; }
+                this.response(body, commandName, requestSequence, errorMessage);
+            };
+            Session.prototype.semanticCheck = function (file, project) {
+                var diags = project.compilerService.languageService.getSemanticDiagnostics(file);
+                if (diags) {
+                    var bakedDiags = diags.map(function (diag) { return formatDiag(file, project, diag); });
+                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                }
+            };
+            Session.prototype.syntacticCheck = function (file, project) {
+                var diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
+                if (diags) {
+                    var bakedDiags = diags.map(function (diag) { return formatDiag(file, project, diag); });
+                    this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                }
+            };
+            Session.prototype.errorCheck = function (file, project) {
+                this.syntacticCheck(file, project);
+                this.semanticCheck(file, project);
+            };
+            Session.prototype.updateProjectStructure = function (seq, matchSeq, ms) {
+                var _this = this;
+                if (ms === void 0) { ms = 1500; }
+                setTimeout(function () {
+                    if (matchSeq(seq)) {
+                        _this.projectService.updateProjectStructure();
+                    }
+                }, ms);
+            };
+            Session.prototype.updateErrorCheck = function (checkList, seq, matchSeq, ms, followMs) {
+                var _this = this;
+                if (ms === void 0) { ms = 1500; }
+                if (followMs === void 0) { followMs = 200; }
+                if (followMs > ms) {
+                    followMs = ms;
+                }
+                if (this.errorTimer) {
+                    clearTimeout(this.errorTimer);
+                }
+                if (this.immediateId) {
+                    clearImmediate(this.immediateId);
+                    this.immediateId = undefined;
+                }
+                var index = 0;
+                var checkOne = function () {
+                    if (matchSeq(seq)) {
+                        var checkSpec = checkList[index++];
+                        if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, true)) {
+                            _this.syntacticCheck(checkSpec.fileName, checkSpec.project);
+                            _this.immediateId = setImmediate(function () {
+                                _this.semanticCheck(checkSpec.fileName, checkSpec.project);
+                                _this.immediateId = undefined;
+                                if (checkList.length > index) {
+                                    _this.errorTimer = setTimeout(checkOne, followMs);
+                                }
+                                else {
+                                    _this.errorTimer = undefined;
+                                }
+                            });
+                        }
+                    }
+                };
+                if ((checkList.length > index) && (matchSeq(seq))) {
+                    this.errorTimer = setTimeout(checkOne, ms);
+                }
+            };
+            Session.prototype.getDefinition = function (line, col, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
+                if (!definitions) {
+                    return undefined;
+                }
+                return definitions.map(function (def) { return ({
+                    file: def.fileName,
+                    start: compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
+                    end: compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
+                }); });
+            };
+            Session.prototype.getRenameLocations = function (line, col, fileName, findInComments, findInStrings) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var renameInfo = compilerService.languageService.getRenameInfo(file, position);
+                if (!renameInfo) {
+                    return undefined;
+                }
+                if (!renameInfo.canRename) {
+                    return {
+                        info: renameInfo,
+                        locs: []
+                    };
+                }
+                var renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
+                if (!renameLocations) {
+                    return undefined;
+                }
+                var bakedRenameLocs = renameLocations.map(function (location) { return {
+                    file: location.fileName,
+                    start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
+                    end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan))
+                }; }).sort(function (a, b) {
+                    if (a.file < b.file) {
+                        return -1;
+                    }
+                    else if (a.file > b.file) {
+                        return 1;
+                    }
+                    else {
+                        if (a.start.line < b.start.line) {
+                            return 1;
+                        }
+                        else if (a.start.line > b.start.line) {
+                            return -1;
+                        }
+                        else {
+                            return b.start.col - a.start.col;
+                        }
+                    }
+                }).reduce(function (accum, cur) {
+                    var curFileAccum;
+                    if (accum.length > 0) {
+                        curFileAccum = accum[accum.length - 1];
+                        if (curFileAccum.file != cur.file) {
+                            curFileAccum = undefined;
+                        }
+                    }
+                    if (!curFileAccum) {
+                        curFileAccum = { file: cur.file, locs: [] };
+                        accum.push(curFileAccum);
+                    }
+                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
+                    return accum;
+                }, []);
+                return { info: renameInfo, locs: bakedRenameLocs };
+            };
+            Session.prototype.getReferences = function (line, col, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var references = compilerService.languageService.getReferencesAtPosition(file, position);
+                if (!references) {
+                    return undefined;
+                }
+                var nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
+                if (!nameInfo) {
+                    return undefined;
+                }
+                var displayString = ts.displayPartsToString(nameInfo.displayParts);
+                var nameSpan = nameInfo.textSpan;
+                var nameColStart = compilerService.host.positionToLineCol(file, nameSpan.start).col;
+                var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+                var bakedRefs = references.map(function (ref) {
+                    var start = compilerService.host.positionToLineCol(ref.fileName, ref.textSpan.start);
+                    var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
+                    var snap = compilerService.host.getScriptSnapshot(ref.fileName);
+                    var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                    return {
+                        file: ref.fileName,
+                        start: start,
+                        lineText: lineText,
+                        end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                        isWriteAccess: ref.isWriteAccess
+                    };
+                }).sort(compareFileStart);
+                return {
+                    refs: bakedRefs,
+                    symbolName: nameText,
+                    symbolStartCol: nameColStart,
+                    symbolDisplayString: displayString
+                };
+            };
+            Session.prototype.openClientFile = function (fileName) {
+                var file = ts.normalizePath(fileName);
+                this.projectService.openClientFile(file);
+            };
+            Session.prototype.getQuickInfo = function (line, col, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
+                if (!quickInfo) {
+                    return undefined;
+                }
+                var displayString = ts.displayPartsToString(quickInfo.displayParts);
+                var docString = ts.displayPartsToString(quickInfo.documentation);
+                return {
+                    kind: quickInfo.kind,
+                    kindModifiers: quickInfo.kindModifiers,
+                    start: compilerService.host.positionToLineCol(file, quickInfo.textSpan.start),
+                    end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(quickInfo.textSpan)),
+                    displayString: displayString,
+                    documentation: docString
+                };
+            };
+            Session.prototype.getFormattingEditsForRange = function (line, col, endLine, endCol, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var startPosition = compilerService.host.lineColToPosition(file, line, col);
+                var endPosition = compilerService.host.lineColToPosition(file, endLine, endCol);
+                var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition, compilerService.formatCodeOptions);
+                if (!edits) {
+                    return undefined;
+                }
+                return edits.map(function (edit) {
+                    return {
+                        start: compilerService.host.positionToLineCol(file, edit.span.start),
+                        end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(edit.span)),
+                        newText: edit.newText ? edit.newText : ""
+                    };
+                });
+            };
+            Session.prototype.getFormattingEditsAfterKeystroke = function (line, col, key, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key, compilerService.formatCodeOptions);
+                if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
+                    var editorOptions = {
+                        IndentSize: 4,
+                        TabSize: 4,
+                        NewLineCharacter: "\n",
+                        ConvertTabsToSpaces: true
+                    };
+                    var indentPosition = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                    var spaces = generateSpaces(indentPosition);
+                    if (indentPosition > 0) {
+                        edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                    }
+                }
+                if (!edits) {
+                    return undefined;
+                }
+                return edits.map(function (edit) {
+                    return {
+                        start: compilerService.host.positionToLineCol(file, edit.span.start),
+                        end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(edit.span)),
+                        newText: edit.newText ? edit.newText : ""
+                    };
+                });
+            };
+            Session.prototype.getCompletions = function (line, col, prefix, fileName) {
+                if (!prefix) {
+                    prefix = "";
+                }
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
+                if (!completions) {
+                    return undefined;
+                }
+                return completions.entries.reduce(function (result, entry) {
+                    if (completions.isMemberCompletion || entry.name.indexOf(prefix) == 0) {
+                        result.push(entry);
+                    }
+                    return result;
+                }, []);
+            };
+            Session.prototype.getCompletionEntryDetails = function (line, col, entryNames, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                return entryNames.reduce(function (accum, entryName) {
+                    var details = compilerService.languageService.getCompletionEntryDetails(file, position, entryName);
+                    if (details) {
+                        accum.push(details);
+                    }
+                    return accum;
+                }, []);
+            };
+            Session.prototype.getDiagnostics = function (delay, fileNames) {
+                var _this = this;
+                var checkList = fileNames.reduce(function (accum, fileName) {
+                    fileName = ts.normalizePath(fileName);
+                    var project = _this.projectService.getProjectForFile(fileName);
+                    if (project) {
+                        accum.push({ fileName: fileName, project: project });
+                    }
+                    return accum;
+                }, []);
+                if (checkList.length > 0) {
+                    this.updateErrorCheck(checkList, this.changeSeq, function (n) { return n == _this.changeSeq; }, delay);
+                }
+            };
+            Session.prototype.change = function (line, col, endLine, endCol, insertString, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (project) {
+                    var compilerService = project.compilerService;
+                    var start = compilerService.host.lineColToPosition(file, line, col);
+                    var end = compilerService.host.lineColToPosition(file, endLine, endCol);
+                    if (start >= 0) {
+                        compilerService.host.editScript(file, start, end, insertString);
+                        this.changeSeq++;
+                    }
+                }
+            };
+            Session.prototype.reload = function (fileName, tempFileName, reqSeq) {
+                var _this = this;
+                if (reqSeq === void 0) { reqSeq = 0; }
+                var file = ts.normalizePath(fileName);
+                var tmpfile = ts.normalizePath(tempFileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (project) {
+                    this.changeSeq++;
+                    project.compilerService.host.reloadScript(file, tmpfile, function () {
+                        _this.output(undefined, CommandNames.Reload, reqSeq);
+                    });
+                }
+            };
+            Session.prototype.saveToTmp = function (fileName, tempFileName) {
+                var file = ts.normalizePath(fileName);
+                var tmpfile = ts.normalizePath(tempFileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (project) {
+                    project.compilerService.host.saveTo(file, tmpfile);
+                }
+            };
+            Session.prototype.closeClientFile = function (fileName) {
+                var file = ts.normalizePath(fileName);
+                this.projectService.closeClientFile(file);
+            };
+            Session.prototype.decorateNavigationBarItem = function (project, fileName, items) {
+                var _this = this;
+                if (!items) {
+                    return undefined;
+                }
+                var compilerService = project.compilerService;
+                return items.map(function (item) { return ({
+                    text: item.text,
+                    kind: item.kind,
+                    kindModifiers: item.kindModifiers,
+                    spans: item.spans.map(function (span) { return ({
+                        start: compilerService.host.positionToLineCol(fileName, span.start),
+                        end: compilerService.host.positionToLineCol(fileName, ts.textSpanEnd(span))
+                    }); }),
+                    childItems: _this.decorateNavigationBarItem(project, fileName, item.childItems)
+                }); });
+            };
+            Session.prototype.getNavigationBarItems = function (fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var items = compilerService.languageService.getNavigationBarItems(file);
+                if (!items) {
+                    return undefined;
+                }
+                return this.decorateNavigationBarItem(project, fileName, items);
+            };
+            Session.prototype.getNavigateToItems = function (searchValue, fileName, maxResultCount) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
+                if (!navItems) {
+                    return undefined;
+                }
+                return navItems.map(function (navItem) {
+                    var start = compilerService.host.positionToLineCol(navItem.fileName, navItem.textSpan.start);
+                    var end = compilerService.host.positionToLineCol(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                    var bakedItem = {
+                        name: navItem.name,
+                        kind: navItem.kind,
+                        file: navItem.fileName,
+                        start: start,
+                        end: end
+                    };
+                    if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                        bakedItem.kindModifiers = navItem.kindModifiers;
+                    }
+                    if (navItem.matchKind != 'none') {
+                        bakedItem.matchKind = navItem.matchKind;
+                    }
+                    if (navItem.containerName && (navItem.containerName.length > 0)) {
+                        bakedItem.containerName = navItem.containerName;
+                    }
+                    if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                        bakedItem.containerKind = navItem.containerKind;
+                    }
+                    return bakedItem;
+                });
+            };
+            Session.prototype.getBraceMatching = function (line, col, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineColToPosition(file, line, col);
+                var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
+                if (!spans) {
+                    return undefined;
+                }
+                return spans.map(function (span) { return ({
+                    start: compilerService.host.positionToLineCol(file, span.start),
+                    end: compilerService.host.positionToLineCol(file, span.start + span.length)
+                }); });
+            };
+            Session.prototype.onMessage = function (message) {
+                try {
+                    var request = JSON.parse(message);
+                    var response;
+                    var errorMessage;
+                    var responseRequired = true;
+                    switch (request.command) {
+                        case CommandNames.Definition: {
+                            var defArgs = request.arguments;
+                            response = this.getDefinition(defArgs.line, defArgs.col, defArgs.file);
+                            break;
+                        }
+                        case CommandNames.References: {
+                            var refArgs = request.arguments;
+                            response = this.getReferences(refArgs.line, refArgs.col, refArgs.file);
+                            break;
+                        }
+                        case CommandNames.Rename: {
+                            var renameArgs = request.arguments;
+                            response = this.getRenameLocations(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
+                            break;
+                        }
+                        case CommandNames.Open: {
+                            var openArgs = request.arguments;
+                            this.openClientFile(openArgs.file);
+                            responseRequired = false;
+                            break;
+                        }
+                        case CommandNames.Quickinfo: {
+                            var quickinfoArgs = request.arguments;
+                            response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
+                            break;
+                        }
+                        case CommandNames.Format: {
+                            var formatArgs = request.arguments;
+                            response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
+                            break;
+                        }
+                        case CommandNames.Formatonkey: {
+                            var formatOnKeyArgs = request.arguments;
+                            response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
+                            break;
+                        }
+                        case CommandNames.Completions: {
+                            var completionsArgs = request.arguments;
+                            response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
+                            break;
+                        }
+                        case CommandNames.CompletionDetails: {
+                            var completionDetailsArgs = request.arguments;
+                            response = this.getCompletionEntryDetails(request.arguments.line, request.arguments.col, completionDetailsArgs.entryNames, request.arguments.file);
+                            break;
+                        }
+                        case CommandNames.Geterr: {
+                            var geterrArgs = request.arguments;
+                            response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
+                            responseRequired = false;
+                            break;
+                        }
+                        case CommandNames.Change: {
+                            var changeArgs = request.arguments;
+                            this.change(changeArgs.line, changeArgs.col, changeArgs.endLine, changeArgs.endCol, changeArgs.insertString, changeArgs.file);
+                            responseRequired = false;
+                            break;
+                        }
+                        case CommandNames.Reload: {
+                            var reloadArgs = request.arguments;
+                            this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
+                            break;
+                        }
+                        case CommandNames.Saveto: {
+                            var savetoArgs = request.arguments;
+                            this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
+                            responseRequired = false;
+                            break;
+                        }
+                        case CommandNames.Close: {
+                            var closeArgs = request.arguments;
+                            this.closeClientFile(closeArgs.file);
+                            responseRequired = false;
+                            break;
+                        }
+                        case CommandNames.Navto: {
+                            var navtoArgs = request.arguments;
+                            response = this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount);
+                            break;
+                        }
+                        case CommandNames.Brace: {
+                            var braceArguments = request.arguments;
+                            response = this.getBraceMatching(braceArguments.line, braceArguments.col, braceArguments.file);
+                            break;
+                        }
+                        case CommandNames.NavBar: {
+                            var navBarArgs = request.arguments;
+                            response = this.getNavigationBarItems(navBarArgs.file);
+                            break;
+                        }
+                        default: {
+                            this.projectService.log("Unrecognized JSON command: " + message);
+                            this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
+                            break;
+                        }
+                    }
+                    if (response) {
+                        this.output(response, request.command, request.seq);
+                    }
+                    else if (responseRequired) {
+                        this.output(undefined, request.command, request.seq, "No content available.");
+                    }
+                }
+                catch (err) {
+                    if (err instanceof ts.OperationCanceledException) {
+                    }
+                    this.logError(err, message);
+                    this.output(undefined, request ? request.command : CommandNames.Unknown, request ? request.seq : 0, "Error processing request. " + err.message);
+                }
+            };
+            return Session;
+        })();
+        server.Session = Session;
+    })(server = ts.server || (ts.server = {}));
+})(ts || (ts = {}));
+var ts;
+(function (ts) {
+    var server;
+    (function (server) {
+        var nodeproto = require('_debugger');
+        var readline = require('readline');
+        var path = require('path');
+        var fs = require('fs');
+        var rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            terminal: false
+        });
+        var Logger = (function () {
+            function Logger(logFilename) {
+                this.logFilename = logFilename;
+                this.fd = -1;
+                this.seq = 0;
+                this.inGroup = false;
+                this.firstInGroup = true;
+            }
+            Logger.padStringRight = function (str, padding) {
+                return (str + padding).slice(0, padding.length);
+            };
+            Logger.prototype.close = function () {
+                if (this.fd >= 0) {
+                    fs.close(this.fd);
+                }
+            };
+            Logger.prototype.perftrc = function (s) {
+                this.msg(s, "Perf");
+            };
+            Logger.prototype.info = function (s) {
+                this.msg(s, "Info");
+            };
+            Logger.prototype.startGroup = function () {
+                this.inGroup = true;
+                this.firstInGroup = true;
+            };
+            Logger.prototype.endGroup = function () {
+                this.inGroup = false;
+                this.seq++;
+                this.firstInGroup = true;
+            };
+            Logger.prototype.msg = function (s, type) {
+                if (type === void 0) { type = "Err"; }
+                if (this.fd < 0) {
+                    this.fd = fs.openSync(this.logFilename, "w");
+                }
+                if (this.fd >= 0) {
+                    s = s + "\n";
+                    var prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
+                    if (this.firstInGroup) {
+                        s = prefix + s;
+                        this.firstInGroup = false;
+                    }
+                    if (!this.inGroup) {
+                        this.seq++;
+                        this.firstInGroup = true;
+                    }
+                    var buf = new Buffer(s);
+                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                }
+            };
+            return Logger;
+        })();
+        var WatchedFileSet = (function () {
+            function WatchedFileSet(interval, chunkSize) {
+                if (interval === void 0) { interval = 2500; }
+                if (chunkSize === void 0) { chunkSize = 30; }
+                this.interval = interval;
+                this.chunkSize = chunkSize;
+                this.watchedFiles = [];
+                this.nextFileToCheck = 0;
+            }
+            WatchedFileSet.copyListRemovingItem = function (item, list) {
+                var copiedList = [];
+                for (var i = 0, len = list.length; i < len; i++) {
+                    if (list[i] != item) {
+                        copiedList.push(list[i]);
+                    }
+                }
+                return copiedList;
+            };
+            WatchedFileSet.getModifiedTime = function (fileName) {
+                return fs.statSync(fileName).mtime;
+            };
+            WatchedFileSet.prototype.poll = function (checkedIndex) {
+                var watchedFile = this.watchedFiles[checkedIndex];
+                if (!watchedFile) {
+                    return;
+                }
+                fs.stat(watchedFile.fileName, function (err, stats) {
+                    if (err) {
+                        watchedFile.callback(watchedFile.fileName);
+                    }
+                    else if (watchedFile.mtime.getTime() != stats.mtime.getTime()) {
+                        watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
+                        watchedFile.callback(watchedFile.fileName);
+                    }
+                });
+            };
+            WatchedFileSet.prototype.startWatchTimer = function () {
+                var _this = this;
+                this.watchTimer = setInterval(function () {
+                    var count = 0;
+                    var nextToCheck = _this.nextFileToCheck;
+                    var firstCheck = -1;
+                    while ((count < _this.chunkSize) && (nextToCheck != firstCheck)) {
+                        _this.poll(nextToCheck);
+                        if (firstCheck < 0) {
+                            firstCheck = nextToCheck;
+                        }
+                        nextToCheck++;
+                        if (nextToCheck === _this.watchedFiles.length) {
+                            nextToCheck = 0;
+                        }
+                        count++;
+                    }
+                    _this.nextFileToCheck = nextToCheck;
+                }, this.interval);
+            };
+            WatchedFileSet.prototype.addFile = function (fileName, callback) {
+                var file = {
+                    fileName: fileName,
+                    callback: callback,
+                    mtime: WatchedFileSet.getModifiedTime(fileName)
+                };
+                this.watchedFiles.push(file);
+                if (this.watchedFiles.length === 1) {
+                    this.startWatchTimer();
+                }
+                return file;
+            };
+            WatchedFileSet.prototype.removeFile = function (file) {
+                this.watchedFiles = WatchedFileSet.copyListRemovingItem(file, this.watchedFiles);
+            };
+            return WatchedFileSet;
+        })();
+        var IOSession = (function (_super) {
+            __extends(IOSession, _super);
+            function IOSession(host, logger) {
+                _super.call(this, host, logger);
+            }
+            IOSession.prototype.listen = function () {
+                var _this = this;
+                rl.on('line', function (input) {
+                    var message = input.trim();
+                    _this.onMessage(message);
+                });
+                rl.on('close', function () {
+                    _this.projectService.closeLog();
+                    _this.projectService.log("Exiting...");
+                    process.exit(0);
+                });
+            };
+            return IOSession;
+        })(server.Session);
+        var logger = new Logger(__dirname + "/.log" + process.pid.toString());
+        var watchedFileSet = new WatchedFileSet();
+        ts.sys.watchFile = function (fileName, callback) {
+            var watchedFile = watchedFileSet.addFile(fileName, callback);
+            return {
+                close: function () { return watchedFileSet.removeFile(watchedFile); }
+            };
+        };
+        new IOSession(ts.sys, logger).listen();
+    })(server = ts.server || (ts.server = {}));
+})(ts || (ts = {}));
