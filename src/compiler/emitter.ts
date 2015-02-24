@@ -2257,7 +2257,7 @@ module ts {
                     forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
                         write(", ");
                         var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
-                            && (<BinaryExpression>templateSpan.expression).operator === SyntaxKind.CommaToken;
+                            && (<BinaryExpression>templateSpan.expression).operatorToken.kind === SyntaxKind.CommaToken;
                         emitParenthesizedIf(templateSpan.expression, needsParens);
                     });
                 }
