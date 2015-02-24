@@ -53,7 +53,7 @@ var M;
     })(m1 || (m1 = {}));
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_1) {
     var m2;
     (function (m2) {
         var M = (function () {
@@ -61,17 +61,17 @@ var M;
             }
             return M;
         })();
-        var p = _M.x;
+        var p = _M_1.x;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_2) {
     var m3;
     (function (m3) {
         function M() {
         }
-        var p = _M.x;
+        var p = _M_2.x;
         var p2 = M();
     })(m3 || (m3 = {}));
 })(M || (M = {}));
@@ -84,12 +84,12 @@ var M;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_3) {
     var m4;
     (function (m4) {
         var M;
         (function (M) {
-            var p = _M.x;
+            var p = _M_3.x;
         })(M || (M = {}));
     })(m4 || (m4 = {}));
 })(M || (M = {}));

@@ -1,10 +1,10 @@
 module ts {
     // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
     export enum PatternMatchKind {
-        Exact,
-        Prefix,
-        Substring,
-        CamelCase
+        exact,
+        prefix,
+        substring,
+        camelCase
     }
 
     // Information about a match made by the pattern matcher between a candidate and the 
@@ -46,7 +46,7 @@ module ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidate: string, dottedContainer: string): PatternMatch[];
+        getMatches(candidateContainers: string[], candidate: string): PatternMatch[];
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -139,7 +139,7 @@ module ts {
             return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
         }
 
-        function getMatches(candidate: string, dottedContainer: string): PatternMatch[] {
+        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] {
             if (skipMatch(candidate)) {
                 return undefined;
             }
@@ -152,27 +152,26 @@ module ts {
                 return undefined;
             }
 
-            dottedContainer = dottedContainer || "";
-            var containerParts = dottedContainer.split(".");
+            candidateContainers = candidateContainers || [];
 
             // -1 because the last part was checked against the name, and only the rest
             // of the parts are checked against the container.
-            if (dotSeparatedSegments.length - 1 > containerParts.length) {
+            if (dotSeparatedSegments.length - 1 > candidateContainers.length) {
                 // There weren't enough container parts to match against the pattern parts.
                 // So this definitely doesn't match.
-                return null;
+                return undefined;
             }
 
             // So far so good.  Now break up the container for the candidate and check if all
             // the dotted parts match up correctly.
             var totalMatch = candidateMatch;
 
-            for (var i = dotSeparatedSegments.length - 2, j = containerParts.length - 1;
+            for (var i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
                  i >= 0;
                  i--, j--) {
 
                 var segment = dotSeparatedSegments[i];
-                var containerName = containerParts[j];
+                var containerName = candidateContainers[j];
 
                 var containerMatch = matchSegment(containerName, segment);
                 if (!containerMatch) {
@@ -202,12 +201,12 @@ module ts {
                 if (chunk.text.length === candidate.length) {
                     // a) Check if the part matches the candidate entirely, in an case insensitive or
                     //    sensitive manner.  If it does, return that there was an exact match.
-                    return createPatternMatch(PatternMatchKind.Exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
+                    return createPatternMatch(PatternMatchKind.exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
                 }
                 else {
                     // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
                     //    manner.  If it does, return that there was a prefix match.
-                    return createPatternMatch(PatternMatchKind.Prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+                    return createPatternMatch(PatternMatchKind.prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
                 }
             }
 
@@ -225,7 +224,7 @@ module ts {
                     for (var i = 0, n = wordSpans.length; i < n; i++) {
                         var span = wordSpans[i]
                         if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                            return createPatternMatch(PatternMatchKind.Substring, punctuationStripped,
+                            return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
                                 /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
                         }
                     }
@@ -236,7 +235,7 @@ module ts {
                 //    candidate in a case *sensitive* manner. If so, return that there was a substring
                 //    match.
                 if (candidate.indexOf(chunk.text) > 0) {
-                    return createPatternMatch(PatternMatchKind.Substring, punctuationStripped, /*isCaseSensitive:*/ true);
+                    return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ true);
                 }
             }
 
@@ -246,12 +245,12 @@ module ts {
                     var candidateParts = getWordSpans(candidate);
                     var camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
                     if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.CamelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
+                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
                     }
 
                     camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true);
                     if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.CamelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
+                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
                     }
                 }
             }
@@ -266,7 +265,7 @@ module ts {
                 // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
                 if (chunk.text.length < candidate.length) {
                     if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
-                        return createPatternMatch(PatternMatchKind.Substring, punctuationStripped, /*isCaseSensitive:*/ false);
+                        return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ false);
                     }
                 }
             }
@@ -508,7 +507,7 @@ module ts {
     }
 
     function compareCamelCase(result1: PatternMatch, result2: PatternMatch) {
-        if (result1.kind === PatternMatchKind.CamelCase && result2.kind === PatternMatchKind.CamelCase) {
+        if (result1.kind === PatternMatchKind.camelCase && result2.kind === PatternMatchKind.camelCase) {
             // Swap the values here.  If result1 has a higher weight, then we want it to come
             // first.
             return result2.camelCaseWeight - result1.camelCaseWeight;

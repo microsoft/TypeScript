@@ -8,4 +8,4 @@ declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 foo("", { [Symbol.unscopables]: s => s.length });
 
 //// [symbolProperty22.js]
-foo("", { [Symbol.unscopables]: s => { return s.length; } });
+foo("", { [Symbol.unscopables]: s => s.length });

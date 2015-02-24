@@ -450,8 +450,8 @@ sourceFile:sourceMap-FileWithComments.ts
 1 >() {
   >    
 2 >    }
-1 >Emitted(21, 5) Source(26, 5) + SourceIndex(0) name (Shapes.foo)
-2 >Emitted(21, 6) Source(26, 6) + SourceIndex(0) name (Shapes.foo)
+1 >Emitted(21, 5) Source(26, 5) + SourceIndex(0) name (Shapes)
+2 >Emitted(21, 6) Source(26, 6) + SourceIndex(0) name (Shapes)
 ---
 >>>    Shapes.foo = foo;
 1->^^^^

@@ -452,7 +452,7 @@ module ts.formatting {
                     return true;
 
                 // equal in import a = module('a');
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
                 // equal in var a = 0;
                 case SyntaxKind.VariableDeclaration:
                 // equal in p = 0;

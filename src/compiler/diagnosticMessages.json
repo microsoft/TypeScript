@@ -591,6 +591,22 @@
         "category": "Error",
         "code": 1190
     },
+    "An import declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1191
+    },
+    "External module '{0}' has no default export or export assignment.": {
+        "category": "Error",
+        "code": 1192
+    },
+    "An export declaration cannot have modifiers.": {
+        "category": "Error",
+        "code": 1193
+    },
+    "Export declarations are not permitted in an internal module.": {
+        "category": "Error",
+        "code": 1194
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1104,7 +1120,7 @@
         "category": "Error",
         "code": 2438
     },
-    "Import declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+    "Import or export declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
         "category": "Error",
         "code": 2439
     },
@@ -1279,6 +1295,10 @@
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2483
+    },
+    "Export declaration conflicts with exported declaration of '{0}'": {
+        "category": "Error",
+        "code": 2484
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

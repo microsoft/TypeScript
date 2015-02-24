@@ -32,15 +32,7 @@ module ts {
             }
 
             function autoCollapse(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return false;
-                }
-
-                return true;
+                return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
             }
 
             var depth = 0;
