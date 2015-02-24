@@ -1,10 +1,13 @@
 ﻿//@target: ES6
-var v: number;
-for (v of (new NumberIterator)[Symbol.iterator]().next()) { } // Should fail
+var v: string;
+for (v of new NumberIterator) { } // Should succeed
 
 class NumberIterator {
     next() {
-        return 0;
+        return {
+            value: 0,
+            done: false
+        };
     }
     [Symbol.iterator]() {
         return this;

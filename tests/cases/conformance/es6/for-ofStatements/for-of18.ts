@@ -1,6 +1,6 @@
 ﻿//@target: ES6
 var v: string;
-for (v of (new StringIterator)[Symbol.iterator]().next()) { } // Should succeed
+for (v of new StringIterator) { } // Should succeed
 
 class StringIterator {
     next() {

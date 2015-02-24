@@ -1,8 +1,8 @@
 ﻿//@target: ES6
 var v: string;
-for (v of new StringIterator) { } // Should succeed
+for (v of new StringIterator) { } // Should fail
 
-class StringIterator implements Iterator<string> {
+class StringIterator {
     next() {
         return "";
     }
