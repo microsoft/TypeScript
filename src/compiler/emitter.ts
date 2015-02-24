@@ -3934,6 +3934,17 @@ module ts {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    emitDownLevelExpressionFunctionBody(node, body);
+                    return;
+                }
+
+                // For es6 and higher we can emit the expression as is.
+                write(" ");
+                emit(body);
+            }
+
+            function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
                 write(" {");
                 scopeEmitStart(node);
 
