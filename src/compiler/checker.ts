@@ -56,6 +56,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
             getEmitResolver,
+            getExportsOfExternalModule,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -2752,6 +2753,19 @@ module ts {
                 }
             });
             return result;
+        }
+
+        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[]{
+            if (!node.moduleSpecifier) {
+                return emptyArray;
+            }
+
+            var module = resolveExternalModuleName(node, node.moduleSpecifier);
+            if (!module || !module.exports) {
+                return emptyArray;
+            }
+
+            return mapToArray(module.exports)
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {

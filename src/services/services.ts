@@ -2403,6 +2403,19 @@ module ts {
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
                 }
+                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                    // cursor is in import clause
+                    // try to show exported member for imported module
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
+                    if (canShowCompletionInImportsClause(previousToken)) {
+                        var importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                        Debug.assert(importDeclaration !== undefined);
+                        var exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
+                        var filteredExports = filterModuleExports(exports, importDeclaration);
+                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                    }
+                }
                 else {
                     // Get scope members
                     isMemberCompletion = false;
@@ -2451,6 +2464,16 @@ module ts {
                     isRightOfIllegalDot(previousToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function canShowCompletionInImportsClause(node: Node): boolean {
+                // import {| 
+                // import {a,|
+                if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
+                    return node.parent.kind === SyntaxKind.NamedImports;
+                }
+
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -2530,6 +2553,8 @@ module ts {
 
                 return false;
             }
+
+
 
             function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
@@ -2662,6 +2687,34 @@ module ts {
                 }
 
                 return false;
+            }
+
+            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[]{
+                var exisingImports: Map<boolean> = {};
+
+                if (!importDeclaration.importClause) {
+                    return exports;
+                }
+
+                if (importDeclaration.importClause.name) {
+                    exisingImports[importDeclaration.importClause.name.text] = true;
+                }
+
+                if (importDeclaration.importClause.namedBindings &&
+                    importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+
+                    forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        var name = el.propertyName || el.name;
+                        exisingImports[name.text] = true;
+                    });
+                }
+
+                if (isEmpty(exisingImports)) {
+                    return exports;
+                }
+                else {
+                    return filter(exports, e => !lookUp(exisingImports, e.name));
+                }
             }
 
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
