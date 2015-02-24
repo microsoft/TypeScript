@@ -574,7 +574,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     }
 
     colors = process.env.colors || process.env.color
-    colors = colors ? ' --no-colors ' : ''
+    colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
     reporter = process.env.reporter || process.env.r || 'dot';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
