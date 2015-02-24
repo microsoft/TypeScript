@@ -170,6 +170,7 @@ declare module "typescript" {
     function getTextOfNode(node: Node): string;
     function escapeIdentifier(identifier: string): string;
     function unescapeIdentifier(identifier: string): string;
+    function makeIdentifierFromModuleName(moduleName: string): string;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
     function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
@@ -194,9 +195,10 @@ declare module "typescript" {
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
-    function isExternalModuleImportDeclaration(node: Node): boolean;
-    function getExternalModuleImportDeclarationExpression(node: Node): Expression;
-    function isInternalModuleImportDeclaration(node: Node): boolean;
+    function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleImportEqualsDeclarationExpression(node: Node): Expression;
+    function isInternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleName(node: Node): Expression;
     function hasDotDotDotToken(node: Node): boolean;
     function hasQuestionToken(node: Node): boolean;
     function hasRestParameters(s: SignatureDeclaration): boolean;

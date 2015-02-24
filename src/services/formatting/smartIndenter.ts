@@ -306,12 +306,20 @@ module ts.formatting {
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+        /*
+            Character is the actual index of the character since the beginning of the line.
+            Column - position of the character after expanding tabs to spaces
+            "0\t2$"
+            value of 'character' for '$' is 3
+            value of 'column' for '$' is 6 (assuming that tab size is 4)
+        */
+        export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions) {
+            var character = 0;
             var column = 0;
             for (var pos = startPos; pos < endPos; ++pos) {
                 var ch = sourceFile.text.charCodeAt(pos);
                 if (!isWhiteSpace(ch)) {
-                    return column;
+                    break;
                 }
 
                 if (ch === CharacterCodes.tab) {
@@ -320,8 +328,14 @@ module ts.formatting {
                 else {
                     column++;
                 }
+
+                character++;
             }
-            return column;
+            return { column, character };
+        }
+
+        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+            return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {

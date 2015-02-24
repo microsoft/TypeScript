@@ -52,30 +52,6 @@ module ts.server {
             return 1;
         }
     }
-
-    function sortNavItems(items: ts.NavigateToItem[]) {
-        return items.sort((a, b) => {
-            if (a.matchKind < b.matchKind) {
-                return -1;
-            }
-            else if (a.matchKind == b.matchKind) {
-                var lowa = a.name.toLowerCase();
-                var lowb = b.name.toLowerCase();
-                if (lowa < lowb) {
-                    return -1;
-                }
-                else if (lowa == lowb) {
-                    return 0;
-                }
-                else {
-                    return 1;
-                }
-            }
-            else {
-                return 1;
-            }
-        })
-    }
        
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
@@ -122,7 +98,6 @@ module ts.server {
 
     module Errors { 
         export var NoProject = new Error("No Project.");
-        export var NoContent = new Error("No Content.");
     }
 
     export interface ServerHost extends ts.System {
@@ -138,7 +113,18 @@ module ts.server {
         changeSeq = 0;
 
         constructor(private host: ServerHost, private logger: Logger) {
-            this.projectService = new ProjectService(host, logger);
+            this.projectService =
+                new ProjectService(host, logger, (eventName,project,fileName) => {
+                this.handleEvent(eventName, project, fileName);
+            });
+        }
+
+        handleEvent(eventName: string, project: Project, fileName: string) {
+            if (eventName == "context") {
+                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                    (n) => n == this.changeSeq, 100);
+            }
         }
 
         logError(err: Error, cmd: string) {
@@ -215,6 +201,14 @@ module ts.server {
             this.semanticCheck(file, project);
         }
 
+        updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
+            setTimeout(() => {
+                if (matchSeq(seq)) {
+                    this.projectService.updateProjectStructure();
+                }
+            }, ms);
+        }
+
         updateErrorCheck(checkList: PendingErrorCheck[], seq: number,
             matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200) {
             if (followMs > ms) {
@@ -231,7 +225,7 @@ module ts.server {
             var checkOne = () => {
                 if (matchSeq(seq)) {
                     var checkSpec = checkList[index++];
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName)) {
+                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, true)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
@@ -263,7 +257,7 @@ module ts.server {
 
             var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return definitions.map(def => ({
@@ -284,7 +278,7 @@ module ts.server {
             var position = compilerService.host.lineColToPosition(file, line, col);
             var renameInfo = compilerService.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             if (!renameInfo.canRename) {
@@ -296,7 +290,7 @@ module ts.server {
 
             var renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
             if (!renameLocations) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
@@ -355,12 +349,12 @@ module ts.server {
 
             var references = compilerService.languageService.getReferencesAtPosition(file, position);
             if (!references) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var displayString = ts.displayPartsToString(nameInfo.displayParts);
@@ -404,7 +398,7 @@ module ts.server {
             var position = compilerService.host.lineColToPosition(file, line, col);
             var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!quickInfo) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             var displayString = ts.displayPartsToString(quickInfo.displayParts);
@@ -433,7 +427,7 @@ module ts.server {
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition, compilerService.formatCodeOptions);
             if (!edits) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return edits.map((edit) => {
@@ -473,7 +467,7 @@ module ts.server {
             }
 
             if (!edits) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return edits.map((edit) => {
@@ -502,7 +496,7 @@ module ts.server {
 
             var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
@@ -559,6 +553,10 @@ module ts.server {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
                 }
+                // update project structure on idle commented out
+                // until we can have the host return only the root files
+                // from getScriptFileNames()
+                //this.updateProjectStructure(this.changeSeq, (n) => n == this.changeSeq);
             }
         }
 
@@ -619,13 +617,13 @@ module ts.server {
             var compilerService = project.compilerService;
             var items = compilerService.languageService.getNavigationBarItems(file);
             if (!items) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return this.decorateNavigationBarItem(project, fileName, items);
         }
 
-        getNavigateToItems(searchTerm: string, fileName: string): protocol.NavtoItem[] {
+        getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -633,9 +631,9 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var navItems = sortNavItems(compilerService.languageService.getNavigateToItems(searchTerm));
+            var navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
             if (!navItems) {
-                throw Errors.NoContent;
+                return undefined;
             }
 
             return navItems.map((navItem) => {
@@ -677,7 +675,7 @@ module ts.server {
             
             var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
-                throw Errors.NoContent;
+                return undefined;
             }
             
             return spans.map(span => ({
@@ -690,6 +688,8 @@ module ts.server {
             try {
                 var request = <protocol.Request>JSON.parse(message);
                 var response: any;
+                var errorMessage: string;
+                var responseRequired = true;
                 switch (request.command) {
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
@@ -709,6 +709,7 @@ module ts.server {
                     case CommandNames.Open: {
                         var openArgs = <protocol.FileRequestArgs>request.arguments;
                         this.openClientFile(openArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Quickinfo: {
@@ -740,12 +741,14 @@ module ts.server {
                     case CommandNames.Geterr: {
                         var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Change: {
                         var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.col, changeArgs.endLine, changeArgs.endCol,
                                     changeArgs.insertString, changeArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Reload: {
@@ -756,16 +759,18 @@ module ts.server {
                     case CommandNames.Saveto: {
                         var savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
                         this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Close: {
                         var closeArgs = <protocol.FileRequestArgs>request.arguments;
                         this.closeClientFile(closeArgs.file);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Navto: {
                         var navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                        response = this.getNavigateToItems(navtoArgs.searchTerm, navtoArgs.file);
+                        response = this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount);
                         break;
                     }
                     case CommandNames.Brace: {
@@ -787,6 +792,9 @@ module ts.server {
 
                 if (response) {
                     this.output(response, request.command, request.seq);
+                }
+                else if (responseRequired) {
+                    this.output(undefined, request.command, request.seq, "No content available.");
                 }
 
             } catch (err) {

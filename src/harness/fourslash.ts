@@ -1480,6 +1480,16 @@ module FourSlash {
             return runningOffset;
         }
 
+        public copyFormatOptions(): ts.FormatCodeOptions {
+            return ts.clone(this.formatCodeOptions);
+        }
+
+        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
+            var oldFormatCodeOptions = this.formatCodeOptions;
+            this.formatCodeOptions = formatCodeOptions;
+            return oldFormatCodeOptions;
+        }
+
         public formatDocument() {
             this.scenarioActions.push('<FormatDocument />');
 

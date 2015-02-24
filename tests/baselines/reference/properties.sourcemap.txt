@@ -118,8 +118,8 @@ sourceFile:properties.ts
   >    {
   >        
 2 >            //
-1 >Emitted(9, 13) Source(11, 9) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(9, 15) Source(11, 11) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(9, 13) Source(11, 9) + SourceIndex(0) name (MyClass)
+2 >Emitted(9, 15) Source(11, 11) + SourceIndex(0) name (MyClass)
 ---
 >>>        },
 1 >^^^^^^^^
@@ -128,8 +128,8 @@ sourceFile:properties.ts
 1 >
   >    
 2 >        }
-1 >Emitted(10, 9) Source(12, 5) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(10, 10) Source(12, 6) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(10, 9) Source(12, 5) + SourceIndex(0) name (MyClass)
+2 >Emitted(10, 10) Source(12, 6) + SourceIndex(0) name (MyClass)
 ---
 >>>        enumerable: true,
 >>>        configurable: true

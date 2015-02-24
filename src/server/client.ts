@@ -208,9 +208,9 @@ module ts.server {
             return response.body[0];
         }
 
-        getNavigateToItems(searchTerm: string): NavigateToItem[] {
+        getNavigateToItems(searchValue: string): NavigateToItem[] {
             var args: protocol.NavtoRequestArgs = {
-                searchTerm,
+                searchValue,
                 file: this.host.getScriptFileNames()[0]
             };
 
@@ -229,6 +229,7 @@ module ts.server {
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
+                    isCaseSensitive: entry.isCaseSensitive,
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end)
                 };

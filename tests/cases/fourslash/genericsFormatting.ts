@@ -30,4 +30,4 @@ goTo.marker("inNewSignature");
 verify.currentLineContentIs("    new <T>(a: T);");
 
 goTo.marker("inOptionalMethodSignature");
-verify.currentLineContentIs("    op? <T, M>(a: T, b: M);");
+verify.currentLineContentIs("    op?<T, M>(a: T, b: M);");

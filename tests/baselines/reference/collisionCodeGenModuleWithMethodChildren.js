@@ -39,7 +39,9 @@ var M;
     var c = (function () {
         function c() {
         }
-        c.prototype.fn = function (M, p) { };
+        c.prototype.fn = function (M, p) {
+            if (p === void 0) { p = _M.x; }
+        };
         return c;
     })();
 })(M || (M = {}));

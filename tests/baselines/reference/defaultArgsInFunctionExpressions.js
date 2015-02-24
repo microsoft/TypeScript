@@ -49,16 +49,24 @@ s = f2('');
 s = f2();
 n = f2();
 // Contextually type the default arg with the type annotation
-var f3 = function (a) { };
+var f3 = function (a) {
+    if (a === void 0) { a = function (s) { return s; }; }
+};
 // Type check using the function's contextual type
-var f4 = function (a) { };
+var f4 = function (a) {
+    if (a === void 0) { a = ""; }
+};
 // Contextually type the default arg using the function's contextual type
-var f5 = function (a) { };
+var f5 = function (a) {
+    if (a === void 0) { a = function (s) { return s; }; }
+};
 var U;
 (function (U) {
     U.x;
 })(U || (U = {}));
-var f6 = function (t) { };
+var f6 = function (t) {
+    if (t === void 0) { t = T; }
+};
 var f7 = function (t) {
     if (t === void 0) { t = U; }
     return t;
