@@ -8846,7 +8846,7 @@ module ts {
         function getIteratedType(iterable: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
             if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
-                return anyType;
+                return iterable; // any or unknown
             }
 
             // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
@@ -8867,6 +8867,10 @@ module ts {
             // T is the type we are after. At every level that involves analyzing return types
             // of signatures, we union the return types of all the signatures.
             var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
+            if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
+                return iteratorFunction; // any or unknown
+            }
+            
             var iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
             if (iteratorFunctionSignatures.length === 0) {
                 error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
@@ -8874,8 +8878,15 @@ module ts {
             }
 
             var iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
+            if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
+                return iterator; // any or unknown
+            }
 
             var iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
+            if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
+                return iteratorNextFunction; // any or unknown
+            }
+            
             var iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
             if (iteratorNextFunctionSignatures.length === 0) {
                 error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
@@ -8883,6 +8894,9 @@ module ts {
             }
 
             var iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+            if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
+                return iteratorNextResult; // any or unknown
+            }
 
             var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
             if (!iteratorNextValue) {
