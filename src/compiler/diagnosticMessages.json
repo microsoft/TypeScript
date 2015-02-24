@@ -1308,6 +1308,18 @@
         "category": "Error",
         "code": 2487
     },
+    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2488
+    },
+    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2489
+    },
+    "The object returned by the next method of the iterator must have a 'value' property.": {
+        "category": "Error",
+        "code": 2490
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
