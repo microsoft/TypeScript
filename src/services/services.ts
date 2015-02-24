@@ -3244,6 +3244,10 @@ module ts {
                 return undefined;
             }
 
+            // If this is an alias, and the request came at the declaration location
+            // get the aliased symbol instead. This allows for goto def on an import e.g.
+            //   import {A, B} from "mod";
+            // to jump to the implementation directelly.
             if (symbol.flags & SymbolFlags.Import) {
                 var declaration = symbol.declarations[0];
                 if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
