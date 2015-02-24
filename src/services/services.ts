@@ -802,6 +802,11 @@ module ts {
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ExportSpecifier:
+                        case SyntaxKind.ImportSpecifier:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ImportClause:
+                        case SyntaxKind.NamespaceImport:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -840,6 +845,37 @@ module ts {
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
                             namedDeclarations.push(<Declaration>node);
+                            break;
+                        
+                        case SyntaxKind.ExportDeclaration:
+                            // Handle named exports case e.g.:
+                            //    export {a, b as B} from "mod";
+                            if ((<ExportDeclaration>node).exportClause) {
+                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                            }
+                            break;
+
+                        case SyntaxKind.ImportDeclaration:
+                            var importClause = (<ImportDeclaration>node).importClause;
+                            if (importClause) {
+                                // Handle default import case e.g.:
+                                //    import d from "mod";
+                                if (importClause.name) {
+                                    namedDeclarations.push(importClause);
+                                }
+
+                                // Handle named bindings in imports e.g.:
+                                //    import * as NS from "mod";
+                                //    import {a, b as B} from "mod";
+                                if (importClause.namedBindings) {
+                                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                        namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                    }
+                                    else {
+                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                    }
+                                }
+                            }
                             break;
                     }
                 });
@@ -2010,6 +2046,12 @@ module ts {
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
             case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.NamespaceImport:
+                return ScriptElementKind.alias;
         }
         return ScriptElementKind.unknown;
     }
