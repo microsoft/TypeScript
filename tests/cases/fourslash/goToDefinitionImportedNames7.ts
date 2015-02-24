@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import /*classAliasDefinition*/defaultExport from "myLib";
+////import /*classAliasDefinition*/defaultExport from "a";
 
 
 // @Filename: a.ts
-////module Module {
-////}
 /////*classDefinition*/class Class {
 ////    private f;
 ////}
 ////export = Class;
+
+debugger;
 
 goTo.file("b.ts");
 
