@@ -101,13 +101,7 @@ module ts.server {
         }
 
         getScriptFileNames() {
-            var filenames: string[] = [];
-            for (var filename in this.filenameToScript) {
-                if (this.filenameToScript[filename] && this.filenameToScript[filename].isOpen) {
-                    filenames.push(filename);
-                }
-            }
-            return filenames;
+            return this.roots.map(root => root.fileName);
         }
 
         getScriptVersion(filename: string) {
@@ -536,15 +530,20 @@ module ts.server {
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
+            var openFilesReferenced: ScriptInfo[] = [];
+            var unattachedOpenFiles: ScriptInfo[] = [];
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                var refdFile = this.openFilesReferenced[i];
-                refdFile.defaultProject.updateGraph();
-                var sourceFile = refdFile.defaultProject.getSourceFile(refdFile);
-                if (!sourceFile) {
-                    this.openFilesReferenced = copyListRemovingItem(refdFile, this.openFilesReferenced);
-                    this.addOpenFile(refdFile);
+                var referencedFile = this.openFilesReferenced[i];
+                referencedFile.defaultProject.updateGraph();
+                var sourceFile = referencedFile.defaultProject.getSourceFile(referencedFile);
+                if (sourceFile) {
+                    openFilesReferenced.push(referencedFile);
+                }
+                else {
+                    unattachedOpenFiles.push(referencedFile);
                 }
             }
+            this.openFilesReferenced = openFilesReferenced;
             var openFileRoots: ScriptInfo[] = [];
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
                 var rootFile = this.openFileRoots[i];
@@ -555,12 +554,15 @@ module ts.server {
                     openFileRoots.push(rootFile);
                 }
                 else {
-                    // remove project from inferred projects list
+                    // remove project from inferred projects list because root captured
                     this.inferredProjects = copyListRemovingItem(rootedProject, this.inferredProjects);
                     this.openFilesReferenced.push(rootFile);
                 }
             }
             this.openFileRoots = openFileRoots;
+            for (var i = 0, len = unattachedOpenFiles.length; i < len; i++) {
+                this.addOpenFile(unattachedOpenFiles[i]);
+            }
             this.printProjects();
         }
 
