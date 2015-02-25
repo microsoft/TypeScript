@@ -977,7 +977,12 @@ $('#underscore_button').bind('click', buttonView.onClick);
 var fibonacci = _.memoize(function (n) {
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
 });
-var log = _.bind(function (message) { }, Date);
+var log = _.bind(function (message) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}, Date);
 _.delay(log, 1000, 'logged later');
 _.defer(function () { alert('deferred'); });
 var updatePosition = function () { return alert('updating position...'); };

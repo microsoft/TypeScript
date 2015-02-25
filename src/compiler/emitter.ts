@@ -3088,6 +3088,8 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
+                    // Check if the right expression is on a different line versus the operator itself.  If so,
+                    // we'll emit newline.
                     if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
                         increaseIndent();
                         writeLine();
@@ -3940,58 +3942,21 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
-                // If the body has no statements, and we know there's no code that would cause any 
-                // prologue to be emitted, then just do a simple emit if the empty block.
-                if (body.statements.length === 0 && !anyParameterHasBindingPatternOrInitializer(node)) {
-                    emitFunctionBodyWithNoStatements(node, body);
-                }
-                else {
-                    emitFunctionBodyWithStatements(node, body);
-                }
-            }
-
-            function anyParameterHasBindingPatternOrInitializer(func: FunctionLikeDeclaration) {
-                return forEach(func.parameters, hasBindingPatternOrInitializer);
-            }
-
-            function hasBindingPatternOrInitializer(parameter: ParameterDeclaration) {
-                return parameter.initializer || isBindingPattern(parameter.name);
-            }
-
-            function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
-                var singleLine = isSingleLineEmptyBlock(node.body);
-
-                write(" {");
-                if (singleLine) {
-                    write(" ");
-                }
-                else {
-                    increaseIndent();
-                    writeLine();
-                }
-
-                emitLeadingCommentsOfPosition(body.statements.end);
-
-                if (!singleLine) {
-                    decreaseIndent();
-                }
-
-                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
-            }
-
-            function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
                 scopeEmitStart(node);
 
-                var outPos = writer.getTextPos();
+                var initialTextPos = writer.getTextPos();
 
                 increaseIndent();
                 emitDetachedComments(body.statements);
+
+                // Emit all the directive prologues (like "use strict").  These have to come before
+                // any other preamble code we write (like parameter initializers).
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
 
-                var preambleEmitted = writer.getTextPos() !== outPos;
+                var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (var i = 0, n = body.statements.length; i < n; i++) {
