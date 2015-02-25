@@ -4747,6 +4747,8 @@ module ts {
                         return SemanticMeaning.Namespace;
                     }
 
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ImportEqualsDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
