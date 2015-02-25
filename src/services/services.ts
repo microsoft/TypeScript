@@ -1752,32 +1752,141 @@ module ts {
             });
         }
 
+
+
+        function recordModuleName() {
+            var importPath = scanner.getTokenValue();
+            var pos = scanner.getTokenPos();
+            importedFiles.push({
+                fileName: importPath,
+                pos: pos,
+                end: pos + importPath.length
+            });
+        }
+
         function processImport(): void {
             scanner.setText(sourceText);
             var token = scanner.scan();
             // Look for:
-            // import foo = module("foo");
+            //    import "mod";
+            //    import d from "mod"
+            //    import {a as A } from "mod";
+            //    import * as NS  from "mod"
+            //    import d, {a, b as B} from "mod"
+            //    import i = require("mod");
+            //
+            //    export * from "mod"
+            //    export {a as b} from "mod"
+
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.ImportKeyword) {
                     token = scanner.scan();
-                    if (token === SyntaxKind.Identifier) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.EqualsToken) {
+                    if (token === SyntaxKind.StringLiteral) {
+                        // import "mod";
+                        recordModuleName();
+                        continue;
+                    }
+                    else {
+                        if (token === SyntaxKind.Identifier) {
                             token = scanner.scan();
-                            if (token === SyntaxKind.RequireKeyword) {
+                            if (token === SyntaxKind.FromKeyword) {
                                 token = scanner.scan();
-                                if (token === SyntaxKind.OpenParenToken) {
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // import d from "mod";
+                                    recordModuleName();
+                                    continue
+                                }
+                            }
+                            else if (token === SyntaxKind.EqualsToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.RequireKeyword) {
                                     token = scanner.scan();
-                                    if (token === SyntaxKind.StringLiteral) {
-                                        var importPath = scanner.getTokenValue();
-                                        var pos = scanner.getTokenPos();
-                                        importedFiles.push({
-                                            fileName: importPath,
-                                            pos: pos,
-                                            end: pos + importPath.length
-                                        });
+                                    if (token === SyntaxKind.OpenParenToken) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            //  import i = require("mod");
+                                            recordModuleName();
+                                            continue;
+                                        }
                                     }
                                 }
+                            }
+                            else if (token === SyntaxKind.CommaToken) {
+                                // consume comma and keep going
+                                token = scanner.scan();
+                            }
+                            else {
+                                // unknown syntax
+                                continue;
+                            }
+                        }
+
+                        if (token === SyntaxKind.OpenBraceToken) {
+                            token = scanner.scan();
+                            // consume "{ a as B, c, d as D}" clauses
+                            while (token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.CloseBraceToken) {
+                                token = scanner.scan();
+                            }
+
+                            if (token === SyntaxKind.CloseBraceToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.FromKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.StringLiteral) {
+                                        // import {a as A} from "mod";
+                                        // import d, {a, b as B} from "mod"
+                                        recordModuleName();
+                                    }
+                                }
+                            }
+                        }
+                        else if (token === SyntaxKind.AsteriskToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.AsKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.Identifier) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.FromKeyword) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            // import * as NS from "mod"
+                                            // import d, * as NS from "mod"
+                                            recordModuleName();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.ExportKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        token = scanner.scan();
+                        // consume "{ a as B, c, d as D}" clauses
+                        while (token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                        }
+
+                        if (token === SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.FromKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // export {a as A} from "mod";
+                                    // export {a, b as B} from "mod"
+                                    recordModuleName();
+                                }
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.AsteriskToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // export * from "mod"
+                                recordModuleName();
                             }
                         }
                     }
