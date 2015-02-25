@@ -3088,68 +3088,19 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
-                    //
-                    //      Foo() ||
-                    //          Bar();
-                    //
-                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
-                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
-                    // i.e. if you have:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //          Baz();
-                    //
-                    // Then we don't want to emit it as:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //              Baz();
-                    //
-                    // So we only indent if the right side of the binary expression starts further in on the line 
-                    // versus the left.
-
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
                     if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
-                        var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
-
-                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
-                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
-                        var shouldIndent = rightStart.character > firstCharOfExpr;
-
-                        if (shouldIndent) {
-                            increaseIndent();
-                        }
-
+                        increaseIndent();
                         writeLine();
+                        emit(node.right);
+                        decreaseIndent();
                     }
                     else {
                         write(" ");
-                    }
-
-                    emit(node.right);
-
-                    if (shouldIndent) {
-                        decreaseIndent();
+                        emit(node.right);
                     }
                 }
-            }
-
-            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
-                var lineStart = getLineStarts(currentSourceFile)[line];
-                var text = currentSourceFile.text;
-
-                for (var i = lineStart; i < text.length; i++) {
-                    var ch = text.charCodeAt(i);
-                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
-                        break;
-                    }
-                }
-
-                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
