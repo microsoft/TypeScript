@@ -8832,6 +8832,7 @@ module ts {
         }
 
         function getIteratedType(iterable: Type, expressionForError: Expression): Type {
+            Debug.assert(languageVersion >= ScriptTarget.ES6);
             var iteratedType = getIteratedTypeSubroutine(iterable, expressionForError);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
@@ -8843,7 +8844,6 @@ module ts {
             return iteratedType;
             
             function getIteratedTypeSubroutine(iterable: Type, expressionForError: Expression) {
-                Debug.assert(languageVersion >= ScriptTarget.ES6);
                 if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
                     return iterable; // any or unknown
                 }
