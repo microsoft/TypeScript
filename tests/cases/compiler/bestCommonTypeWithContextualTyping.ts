@@ -16,5 +16,5 @@ var e: Ellement;
 var arr: Contextual[] = [e]; // Ellement[]
 var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: Ellement }
 
-var conditional: Contextual = null ? e : e; // Ellement
+var condition: Contextual = null ? e : e; // Ellement
 var contextualOr: Contextual = e || e; // Ellement

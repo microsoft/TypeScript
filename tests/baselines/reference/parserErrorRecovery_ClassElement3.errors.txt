@@ -11,7 +11,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErr
 !!! error TS1127: Invalid character.
        class C {
        }
-       @
+       #
        
 !!! error TS1127: Invalid character.
        enum E {

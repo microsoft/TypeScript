@@ -351,559 +351,568 @@ declare module "typescript" {
         ColonToken = 51,
 >ColonToken : SyntaxKind
 
-        EqualsToken = 52,
+        AtToken = 52,
+>AtToken : SyntaxKind
+
+        EqualsToken = 53,
 >EqualsToken : SyntaxKind
 
-        PlusEqualsToken = 53,
+        PlusEqualsToken = 54,
 >PlusEqualsToken : SyntaxKind
 
-        MinusEqualsToken = 54,
+        MinusEqualsToken = 55,
 >MinusEqualsToken : SyntaxKind
 
-        AsteriskEqualsToken = 55,
+        AsteriskEqualsToken = 56,
 >AsteriskEqualsToken : SyntaxKind
 
-        SlashEqualsToken = 56,
+        SlashEqualsToken = 57,
 >SlashEqualsToken : SyntaxKind
 
-        PercentEqualsToken = 57,
+        PercentEqualsToken = 58,
 >PercentEqualsToken : SyntaxKind
 
-        LessThanLessThanEqualsToken = 58,
+        LessThanLessThanEqualsToken = 59,
 >LessThanLessThanEqualsToken : SyntaxKind
 
-        GreaterThanGreaterThanEqualsToken = 59,
+        GreaterThanGreaterThanEqualsToken = 60,
 >GreaterThanGreaterThanEqualsToken : SyntaxKind
 
-        GreaterThanGreaterThanGreaterThanEqualsToken = 60,
+        GreaterThanGreaterThanGreaterThanEqualsToken = 61,
 >GreaterThanGreaterThanGreaterThanEqualsToken : SyntaxKind
 
-        AmpersandEqualsToken = 61,
+        AmpersandEqualsToken = 62,
 >AmpersandEqualsToken : SyntaxKind
 
-        BarEqualsToken = 62,
+        BarEqualsToken = 63,
 >BarEqualsToken : SyntaxKind
 
-        CaretEqualsToken = 63,
+        CaretEqualsToken = 64,
 >CaretEqualsToken : SyntaxKind
 
-        Identifier = 64,
+        Identifier = 65,
 >Identifier : SyntaxKind
 
-        BreakKeyword = 65,
+        BreakKeyword = 66,
 >BreakKeyword : SyntaxKind
 
-        CaseKeyword = 66,
+        CaseKeyword = 67,
 >CaseKeyword : SyntaxKind
 
-        CatchKeyword = 67,
+        CatchKeyword = 68,
 >CatchKeyword : SyntaxKind
 
-        ClassKeyword = 68,
+        ClassKeyword = 69,
 >ClassKeyword : SyntaxKind
 
-        ConstKeyword = 69,
+        ConstKeyword = 70,
 >ConstKeyword : SyntaxKind
 
-        ContinueKeyword = 70,
+        ContinueKeyword = 71,
 >ContinueKeyword : SyntaxKind
 
-        DebuggerKeyword = 71,
+        DebuggerKeyword = 72,
 >DebuggerKeyword : SyntaxKind
 
-        DefaultKeyword = 72,
+        DefaultKeyword = 73,
 >DefaultKeyword : SyntaxKind
 
-        DeleteKeyword = 73,
+        DeleteKeyword = 74,
 >DeleteKeyword : SyntaxKind
 
-        DoKeyword = 74,
+        DoKeyword = 75,
 >DoKeyword : SyntaxKind
 
-        ElseKeyword = 75,
+        ElseKeyword = 76,
 >ElseKeyword : SyntaxKind
 
-        EnumKeyword = 76,
+        EnumKeyword = 77,
 >EnumKeyword : SyntaxKind
 
-        ExportKeyword = 77,
+        ExportKeyword = 78,
 >ExportKeyword : SyntaxKind
 
-        ExtendsKeyword = 78,
+        ExtendsKeyword = 79,
 >ExtendsKeyword : SyntaxKind
 
-        FalseKeyword = 79,
+        FalseKeyword = 80,
 >FalseKeyword : SyntaxKind
 
-        FinallyKeyword = 80,
+        FinallyKeyword = 81,
 >FinallyKeyword : SyntaxKind
 
-        ForKeyword = 81,
+        ForKeyword = 82,
 >ForKeyword : SyntaxKind
 
-        FunctionKeyword = 82,
+        FunctionKeyword = 83,
 >FunctionKeyword : SyntaxKind
 
-        IfKeyword = 83,
+        IfKeyword = 84,
 >IfKeyword : SyntaxKind
 
-        ImportKeyword = 84,
+        ImportKeyword = 85,
 >ImportKeyword : SyntaxKind
 
-        InKeyword = 85,
+        InKeyword = 86,
 >InKeyword : SyntaxKind
 
-        InstanceOfKeyword = 86,
+        InstanceOfKeyword = 87,
 >InstanceOfKeyword : SyntaxKind
 
-        NewKeyword = 87,
+        NewKeyword = 88,
 >NewKeyword : SyntaxKind
 
-        NullKeyword = 88,
+        NullKeyword = 89,
 >NullKeyword : SyntaxKind
 
-        ReturnKeyword = 89,
+        ReturnKeyword = 90,
 >ReturnKeyword : SyntaxKind
 
-        SuperKeyword = 90,
+        SuperKeyword = 91,
 >SuperKeyword : SyntaxKind
 
-        SwitchKeyword = 91,
+        SwitchKeyword = 92,
 >SwitchKeyword : SyntaxKind
 
-        ThisKeyword = 92,
+        ThisKeyword = 93,
 >ThisKeyword : SyntaxKind
 
-        ThrowKeyword = 93,
+        ThrowKeyword = 94,
 >ThrowKeyword : SyntaxKind
 
-        TrueKeyword = 94,
+        TrueKeyword = 95,
 >TrueKeyword : SyntaxKind
 
-        TryKeyword = 95,
+        TryKeyword = 96,
 >TryKeyword : SyntaxKind
 
-        TypeOfKeyword = 96,
+        TypeOfKeyword = 97,
 >TypeOfKeyword : SyntaxKind
 
-        VarKeyword = 97,
+        VarKeyword = 98,
 >VarKeyword : SyntaxKind
 
-        VoidKeyword = 98,
+        VoidKeyword = 99,
 >VoidKeyword : SyntaxKind
 
-        WhileKeyword = 99,
+        WhileKeyword = 100,
 >WhileKeyword : SyntaxKind
 
-        WithKeyword = 100,
+        WithKeyword = 101,
 >WithKeyword : SyntaxKind
 
-        AsKeyword = 101,
+        AsKeyword = 102,
 >AsKeyword : SyntaxKind
 
-        FromKeyword = 102,
+        FromKeyword = 103,
 >FromKeyword : SyntaxKind
 
-        ImplementsKeyword = 103,
+        ImplementsKeyword = 104,
 >ImplementsKeyword : SyntaxKind
 
-        InterfaceKeyword = 104,
+        InterfaceKeyword = 105,
 >InterfaceKeyword : SyntaxKind
 
-        LetKeyword = 105,
+        LetKeyword = 106,
 >LetKeyword : SyntaxKind
 
-        PackageKeyword = 106,
+        PackageKeyword = 107,
 >PackageKeyword : SyntaxKind
 
-        PrivateKeyword = 107,
+        PrivateKeyword = 108,
 >PrivateKeyword : SyntaxKind
 
-        ProtectedKeyword = 108,
+        ProtectedKeyword = 109,
 >ProtectedKeyword : SyntaxKind
 
-        PublicKeyword = 109,
+        PublicKeyword = 110,
 >PublicKeyword : SyntaxKind
 
-        StaticKeyword = 110,
+        StaticKeyword = 111,
 >StaticKeyword : SyntaxKind
 
-        YieldKeyword = 111,
+        YieldKeyword = 112,
 >YieldKeyword : SyntaxKind
 
-        AnyKeyword = 112,
+        AnyKeyword = 113,
 >AnyKeyword : SyntaxKind
 
-        BooleanKeyword = 113,
+        BooleanKeyword = 114,
 >BooleanKeyword : SyntaxKind
 
-        ConstructorKeyword = 114,
+        ConstructorKeyword = 115,
 >ConstructorKeyword : SyntaxKind
 
-        DeclareKeyword = 115,
+        DeclareKeyword = 116,
 >DeclareKeyword : SyntaxKind
 
-        GetKeyword = 116,
+        GetKeyword = 117,
 >GetKeyword : SyntaxKind
 
-        ModuleKeyword = 117,
+        ModuleKeyword = 118,
 >ModuleKeyword : SyntaxKind
 
-        RequireKeyword = 118,
+        RequireKeyword = 119,
 >RequireKeyword : SyntaxKind
 
-        NumberKeyword = 119,
+        NumberKeyword = 120,
 >NumberKeyword : SyntaxKind
 
-        SetKeyword = 120,
+        SetKeyword = 121,
 >SetKeyword : SyntaxKind
 
-        StringKeyword = 121,
+        StringKeyword = 122,
 >StringKeyword : SyntaxKind
 
-        SymbolKeyword = 122,
+        SymbolKeyword = 123,
 >SymbolKeyword : SyntaxKind
 
-        TypeKeyword = 123,
+        TypeKeyword = 124,
 >TypeKeyword : SyntaxKind
 
-        OfKeyword = 124,
+        OfKeyword = 125,
 >OfKeyword : SyntaxKind
 
-        QualifiedName = 125,
+        QualifiedName = 126,
 >QualifiedName : SyntaxKind
 
-        ComputedPropertyName = 126,
+        ComputedPropertyName = 127,
 >ComputedPropertyName : SyntaxKind
 
-        TypeParameter = 127,
+        TypeParameter = 128,
 >TypeParameter : SyntaxKind
 
-        Parameter = 128,
+        Parameter = 129,
 >Parameter : SyntaxKind
 
-        PropertySignature = 129,
+        Decorator = 130,
+>Decorator : SyntaxKind
+
+        PropertySignature = 131,
 >PropertySignature : SyntaxKind
 
-        PropertyDeclaration = 130,
+        PropertyDeclaration = 132,
 >PropertyDeclaration : SyntaxKind
 
-        MethodSignature = 131,
+        MethodSignature = 133,
 >MethodSignature : SyntaxKind
 
-        MethodDeclaration = 132,
+        MethodDeclaration = 134,
 >MethodDeclaration : SyntaxKind
 
-        Constructor = 133,
+        Constructor = 135,
 >Constructor : SyntaxKind
 
-        GetAccessor = 134,
+        GetAccessor = 136,
 >GetAccessor : SyntaxKind
 
-        SetAccessor = 135,
+        SetAccessor = 137,
 >SetAccessor : SyntaxKind
 
-        CallSignature = 136,
+        CallSignature = 138,
 >CallSignature : SyntaxKind
 
-        ConstructSignature = 137,
+        ConstructSignature = 139,
 >ConstructSignature : SyntaxKind
 
-        IndexSignature = 138,
+        IndexSignature = 140,
 >IndexSignature : SyntaxKind
 
-        TypeReference = 139,
+        TypeReference = 141,
 >TypeReference : SyntaxKind
 
-        FunctionType = 140,
+        FunctionType = 142,
 >FunctionType : SyntaxKind
 
-        ConstructorType = 141,
+        ConstructorType = 143,
 >ConstructorType : SyntaxKind
 
-        TypeQuery = 142,
+        TypeQuery = 144,
 >TypeQuery : SyntaxKind
 
-        TypeLiteral = 143,
+        TypeLiteral = 145,
 >TypeLiteral : SyntaxKind
 
-        ArrayType = 144,
+        ArrayType = 146,
 >ArrayType : SyntaxKind
 
-        TupleType = 145,
+        TupleType = 147,
 >TupleType : SyntaxKind
 
-        UnionType = 146,
+        UnionType = 148,
 >UnionType : SyntaxKind
 
-        ParenthesizedType = 147,
+        ParenthesizedType = 149,
 >ParenthesizedType : SyntaxKind
 
-        ObjectBindingPattern = 148,
+        ObjectBindingPattern = 150,
 >ObjectBindingPattern : SyntaxKind
 
-        ArrayBindingPattern = 149,
+        ArrayBindingPattern = 151,
 >ArrayBindingPattern : SyntaxKind
 
-        BindingElement = 150,
+        BindingElement = 152,
 >BindingElement : SyntaxKind
 
-        ArrayLiteralExpression = 151,
+        ArrayLiteralExpression = 153,
 >ArrayLiteralExpression : SyntaxKind
 
-        ObjectLiteralExpression = 152,
+        ObjectLiteralExpression = 154,
 >ObjectLiteralExpression : SyntaxKind
 
-        PropertyAccessExpression = 153,
+        PropertyAccessExpression = 155,
 >PropertyAccessExpression : SyntaxKind
 
-        ElementAccessExpression = 154,
+        ElementAccessExpression = 156,
 >ElementAccessExpression : SyntaxKind
 
-        CallExpression = 155,
+        CallExpression = 157,
 >CallExpression : SyntaxKind
 
-        NewExpression = 156,
+        NewExpression = 158,
 >NewExpression : SyntaxKind
 
-        TaggedTemplateExpression = 157,
+        TaggedTemplateExpression = 159,
 >TaggedTemplateExpression : SyntaxKind
 
-        TypeAssertionExpression = 158,
+        TypeAssertionExpression = 160,
 >TypeAssertionExpression : SyntaxKind
 
-        ParenthesizedExpression = 159,
+        ParenthesizedExpression = 161,
 >ParenthesizedExpression : SyntaxKind
 
-        FunctionExpression = 160,
+        FunctionExpression = 162,
 >FunctionExpression : SyntaxKind
 
-        ArrowFunction = 161,
+        ArrowFunction = 163,
 >ArrowFunction : SyntaxKind
 
-        DeleteExpression = 162,
+        DeleteExpression = 164,
 >DeleteExpression : SyntaxKind
 
-        TypeOfExpression = 163,
+        TypeOfExpression = 165,
 >TypeOfExpression : SyntaxKind
 
-        VoidExpression = 164,
+        VoidExpression = 166,
 >VoidExpression : SyntaxKind
 
-        PrefixUnaryExpression = 165,
+        PrefixUnaryExpression = 167,
 >PrefixUnaryExpression : SyntaxKind
 
-        PostfixUnaryExpression = 166,
+        PostfixUnaryExpression = 168,
 >PostfixUnaryExpression : SyntaxKind
 
-        BinaryExpression = 167,
+        BinaryExpression = 169,
 >BinaryExpression : SyntaxKind
 
-        ConditionalExpression = 168,
+        ConditionalExpression = 170,
 >ConditionalExpression : SyntaxKind
 
-        TemplateExpression = 169,
+        TemplateExpression = 171,
 >TemplateExpression : SyntaxKind
 
-        YieldExpression = 170,
+        YieldExpression = 172,
 >YieldExpression : SyntaxKind
 
-        SpreadElementExpression = 171,
+        SpreadElementExpression = 173,
 >SpreadElementExpression : SyntaxKind
 
-        OmittedExpression = 172,
+        OmittedExpression = 174,
 >OmittedExpression : SyntaxKind
 
-        TemplateSpan = 173,
+        TemplateSpan = 175,
 >TemplateSpan : SyntaxKind
 
-        Block = 174,
+        Block = 176,
 >Block : SyntaxKind
 
-        VariableStatement = 175,
+        VariableStatement = 177,
 >VariableStatement : SyntaxKind
 
-        EmptyStatement = 176,
+        EmptyStatement = 178,
 >EmptyStatement : SyntaxKind
 
-        ExpressionStatement = 177,
+        ExpressionStatement = 179,
 >ExpressionStatement : SyntaxKind
 
-        IfStatement = 178,
+        IfStatement = 180,
 >IfStatement : SyntaxKind
 
-        DoStatement = 179,
+        DoStatement = 181,
 >DoStatement : SyntaxKind
 
-        WhileStatement = 180,
+        WhileStatement = 182,
 >WhileStatement : SyntaxKind
 
-        ForStatement = 181,
+        ForStatement = 183,
 >ForStatement : SyntaxKind
 
-        ForInStatement = 182,
+        ForInStatement = 184,
 >ForInStatement : SyntaxKind
 
-        ForOfStatement = 183,
+        ForOfStatement = 185,
 >ForOfStatement : SyntaxKind
 
-        ContinueStatement = 184,
+        ContinueStatement = 186,
 >ContinueStatement : SyntaxKind
 
-        BreakStatement = 185,
+        BreakStatement = 187,
 >BreakStatement : SyntaxKind
 
-        ReturnStatement = 186,
+        ReturnStatement = 188,
 >ReturnStatement : SyntaxKind
 
-        WithStatement = 187,
+        WithStatement = 189,
 >WithStatement : SyntaxKind
 
-        SwitchStatement = 188,
+        SwitchStatement = 190,
 >SwitchStatement : SyntaxKind
 
-        LabeledStatement = 189,
+        LabeledStatement = 191,
 >LabeledStatement : SyntaxKind
 
-        ThrowStatement = 190,
+        ThrowStatement = 192,
 >ThrowStatement : SyntaxKind
 
-        TryStatement = 191,
+        TryStatement = 193,
 >TryStatement : SyntaxKind
 
-        DebuggerStatement = 192,
+        DebuggerStatement = 194,
 >DebuggerStatement : SyntaxKind
 
-        VariableDeclaration = 193,
+        VariableDeclaration = 195,
 >VariableDeclaration : SyntaxKind
 
-        VariableDeclarationList = 194,
+        VariableDeclarationList = 196,
 >VariableDeclarationList : SyntaxKind
 
-        FunctionDeclaration = 195,
+        FunctionDeclaration = 197,
 >FunctionDeclaration : SyntaxKind
 
-        ClassDeclaration = 196,
+        ClassDeclaration = 198,
 >ClassDeclaration : SyntaxKind
 
-        InterfaceDeclaration = 197,
+        InterfaceDeclaration = 199,
 >InterfaceDeclaration : SyntaxKind
 
-        TypeAliasDeclaration = 198,
+        TypeAliasDeclaration = 200,
 >TypeAliasDeclaration : SyntaxKind
 
-        EnumDeclaration = 199,
+        EnumDeclaration = 201,
 >EnumDeclaration : SyntaxKind
 
-        ModuleDeclaration = 200,
+        ModuleDeclaration = 202,
 >ModuleDeclaration : SyntaxKind
 
-        ModuleBlock = 201,
+        ModuleBlock = 203,
 >ModuleBlock : SyntaxKind
 
-        ImportEqualsDeclaration = 202,
+        ImportEqualsDeclaration = 204,
 >ImportEqualsDeclaration : SyntaxKind
 
-        ImportDeclaration = 203,
+        ImportDeclaration = 205,
 >ImportDeclaration : SyntaxKind
 
-        ImportClause = 204,
+        ImportClause = 206,
 >ImportClause : SyntaxKind
 
-        NamespaceImport = 205,
+        NamespaceImport = 207,
 >NamespaceImport : SyntaxKind
 
-        NamedImports = 206,
+        NamedImports = 208,
 >NamedImports : SyntaxKind
 
-        ImportSpecifier = 207,
+        ImportSpecifier = 209,
 >ImportSpecifier : SyntaxKind
 
-        ExportAssignment = 208,
+        ExportAssignment = 210,
 >ExportAssignment : SyntaxKind
 
-        ExportDeclaration = 209,
+        ExportDeclaration = 211,
 >ExportDeclaration : SyntaxKind
 
-        NamedExports = 210,
+        NamedExports = 212,
 >NamedExports : SyntaxKind
 
-        ExportSpecifier = 211,
+        ExportSpecifier = 213,
 >ExportSpecifier : SyntaxKind
 
-        ExternalModuleReference = 212,
+        IncompleteDeclaration = 214,
+>IncompleteDeclaration : SyntaxKind
+
+        ExternalModuleReference = 215,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 213,
+        CaseClause = 216,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 214,
+        DefaultClause = 217,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 215,
+        HeritageClause = 218,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 216,
+        CatchClause = 219,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 217,
+        PropertyAssignment = 220,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 218,
+        ShorthandPropertyAssignment = 221,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 219,
+        EnumMember = 222,
 >EnumMember : SyntaxKind
 
-        SourceFile = 220,
+        SourceFile = 223,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 221,
+        SyntaxList = 224,
 >SyntaxList : SyntaxKind
 
-        Count = 222,
+        Count = 225,
 >Count : SyntaxKind
 
-        FirstAssignment = 52,
+        FirstAssignment = 53,
 >FirstAssignment : SyntaxKind
 
-        LastAssignment = 63,
+        LastAssignment = 64,
 >LastAssignment : SyntaxKind
 
-        FirstReservedWord = 65,
+        FirstReservedWord = 66,
 >FirstReservedWord : SyntaxKind
 
-        LastReservedWord = 100,
+        LastReservedWord = 101,
 >LastReservedWord : SyntaxKind
 
-        FirstKeyword = 65,
+        FirstKeyword = 66,
 >FirstKeyword : SyntaxKind
 
-        LastKeyword = 124,
+        LastKeyword = 125,
 >LastKeyword : SyntaxKind
 
-        FirstFutureReservedWord = 103,
+        FirstFutureReservedWord = 104,
 >FirstFutureReservedWord : SyntaxKind
 
-        LastFutureReservedWord = 111,
+        LastFutureReservedWord = 112,
 >LastFutureReservedWord : SyntaxKind
 
-        FirstTypeNode = 139,
+        FirstTypeNode = 141,
 >FirstTypeNode : SyntaxKind
 
-        LastTypeNode = 147,
+        LastTypeNode = 149,
 >LastTypeNode : SyntaxKind
 
         FirstPunctuation = 14,
 >FirstPunctuation : SyntaxKind
 
-        LastPunctuation = 63,
+        LastPunctuation = 64,
 >LastPunctuation : SyntaxKind
 
         FirstToken = 0,
 >FirstToken : SyntaxKind
 
-        LastToken = 124,
+        LastToken = 125,
 >LastToken : SyntaxKind
 
         FirstTriviaToken = 2,
@@ -927,10 +936,10 @@ declare module "typescript" {
         FirstBinaryOperator = 24,
 >FirstBinaryOperator : SyntaxKind
 
-        LastBinaryOperator = 63,
+        LastBinaryOperator = 64,
 >LastBinaryOperator : SyntaxKind
 
-        FirstNode = 125,
+        FirstNode = 126,
 >FirstNode : SyntaxKind
     }
     const enum NodeFlags {
@@ -996,16 +1005,19 @@ declare module "typescript" {
         GeneratorParameter = 8,
 >GeneratorParameter : ParserContextFlags
 
-        ThisNodeHasError = 16,
+        Decorator = 16,
+>Decorator : ParserContextFlags
+
+        ThisNodeHasError = 32,
 >ThisNodeHasError : ParserContextFlags
 
-        ParserGeneratedFlags = 31,
+        ParserGeneratedFlags = 63,
 >ParserGeneratedFlags : ParserContextFlags
 
-        ThisNodeOrAnySubNodesHasError = 32,
+        ThisNodeOrAnySubNodesHasError = 64,
 >ThisNodeOrAnySubNodesHasError : ParserContextFlags
 
-        HasAggregatedChildData = 64,
+        HasAggregatedChildData = 128,
 >HasAggregatedChildData : ParserContextFlags
     }
     const enum RelationComparisonResult {
@@ -1035,6 +1047,11 @@ declare module "typescript" {
         parserContextFlags?: ParserContextFlags;
 >parserContextFlags : ParserContextFlags
 >ParserContextFlags : ParserContextFlags
+
+        decorators?: NodeArray<Decorator>;
+>decorators : NodeArray<Decorator>
+>NodeArray : NodeArray<T>
+>Decorator : Decorator
 
         modifiers?: ModifiersArray;
 >modifiers : ModifiersArray
@@ -1130,6 +1147,14 @@ declare module "typescript" {
         expression: Expression;
 >expression : Expression
 >Expression : Expression
+    }
+    interface Decorator extends Node {
+>Decorator : Decorator
+>Node : Node
+
+        expression: LeftHandSideExpression;
+>expression : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
     }
     interface TypeParameterDeclaration extends Declaration {
 >TypeParameterDeclaration : TypeParameterDeclaration
@@ -3057,6 +3082,33 @@ declare module "typescript" {
 >location : Node
 >Node : Node
 >name : string
+
+        getResolvedSignature(node: CallLikeExpression): Signature;
+>getResolvedSignature : (node: CallExpression | NewExpression | TaggedTemplateExpression) => Signature
+>node : CallExpression | NewExpression | TaggedTemplateExpression
+>CallLikeExpression : CallExpression | NewExpression | TaggedTemplateExpression
+>Signature : Signature
+
+        serializeTypeOfNode(node: Node): string;
+>serializeTypeOfNode : (node: Node) => string
+>node : Node
+>Node : Node
+
+        serializeParameterTypesOfNode(node: Node): string[];
+>serializeParameterTypesOfNode : (node: Node) => string[]
+>node : Node
+>Node : Node
+
+        serializeReturnTypeOfNode(node: Node): string;
+>serializeReturnTypeOfNode : (node: Node) => string
+>node : Node
+>Node : Node
+
+        getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[];
+>getMetadataForSymbol : (symbol: Symbol) => DecoratorMetadata[]
+>symbol : Symbol
+>Symbol : Symbol
+>DecoratorMetadata : DecoratorMetadata
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
@@ -3329,6 +3381,10 @@ declare module "typescript" {
         resolvedExports?: SymbolTable;
 >resolvedExports : SymbolTable
 >SymbolTable : SymbolTable
+
+        decoratorMetadata?: DecoratorMetadata[];
+>decoratorMetadata : DecoratorMetadata[]
+>DecoratorMetadata : DecoratorMetadata
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol
@@ -3368,6 +3424,24 @@ declare module "typescript" {
 
         EnumValuesComputed = 128,
 >EnumValuesComputed : NodeCheckFlags
+
+        EmitDecorate = 256,
+>EmitDecorate : NodeCheckFlags
+
+        EmitDecoratedType = 512,
+>EmitDecoratedType : NodeCheckFlags
+
+        EmitDecoratedParamTypes = 1024,
+>EmitDecoratedParamTypes : NodeCheckFlags
+
+        EmitDecoratedReturnType = 2048,
+>EmitDecoratedReturnType : NodeCheckFlags
+
+        AmbientDecorator = 4096,
+>AmbientDecorator : NodeCheckFlags
+
+        ConditionallyRemoved = 8192,
+>ConditionallyRemoved : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks
@@ -3383,6 +3457,10 @@ declare module "typescript" {
         resolvedSymbol?: Symbol;
 >resolvedSymbol : Symbol
 >Symbol : Symbol
+
+        resolvedDecoratorMetadata?: DecoratorMetadata;
+>resolvedDecoratorMetadata : DecoratorMetadata
+>DecoratorMetadata : DecoratorMetadata
 
         flags?: NodeCheckFlags;
 >flags : NodeCheckFlags
@@ -3760,6 +3838,97 @@ declare module "typescript" {
         failedTypeParameterIndex?: number;
 >failedTypeParameterIndex : number
     }
+    interface DecoratorUsage {
+>DecoratorUsage : DecoratorUsage
+
+        ambient?: boolean;
+>ambient : boolean
+
+        targets?: number;
+>targets : number
+    }
+    interface DecoratorMetadata {
+>DecoratorMetadata : DecoratorMetadata
+
+        symbol: Symbol;
+>symbol : Symbol
+>Symbol : Symbol
+
+        arguments: any[];
+>arguments : any[]
+    }
+    const enum DecoratorFlags {
+>DecoratorFlags : DecoratorFlags
+
+        ModuleDeclaration = 1,
+>ModuleDeclaration : DecoratorFlags
+
+        ImportDeclaration = 2,
+>ImportDeclaration : DecoratorFlags
+
+        ClassDeclaration = 4,
+>ClassDeclaration : DecoratorFlags
+
+        InterfaceDeclaration = 8,
+>InterfaceDeclaration : DecoratorFlags
+
+        FunctionDeclaration = 16,
+>FunctionDeclaration : DecoratorFlags
+
+        EnumDeclaration = 32,
+>EnumDeclaration : DecoratorFlags
+
+        EnumMember = 64,
+>EnumMember : DecoratorFlags
+
+        Constructor = 128,
+>Constructor : DecoratorFlags
+
+        PropertyDeclaration = 256,
+>PropertyDeclaration : DecoratorFlags
+
+        MethodDeclaration = 512,
+>MethodDeclaration : DecoratorFlags
+
+        AccessorDeclaration = 1024,
+>AccessorDeclaration : DecoratorFlags
+
+        ParameterDeclaration = 2048,
+>ParameterDeclaration : DecoratorFlags
+
+        VariableDeclaration = 4096,
+>VariableDeclaration : DecoratorFlags
+
+        AllTargets = 8191,
+>AllTargets : DecoratorFlags
+
+        BuiltIn = 65536,
+>BuiltIn : DecoratorFlags
+
+        UserDefinedAmbient = 131072,
+>UserDefinedAmbient : DecoratorFlags
+
+        Ambient = 196608,
+>Ambient : DecoratorFlags
+
+        DecoratorTargetsMask = 8191,
+>DecoratorTargetsMask : DecoratorFlags
+
+        ES3ValidTargetMask = 2052,
+>ES3ValidTargetMask : DecoratorFlags
+
+        NonAmbientValidTargetMask = 3844,
+>NonAmbientValidTargetMask : DecoratorFlags
+
+        DecoratorFunctionValidTargetMask = 4,
+>DecoratorFunctionValidTargetMask : DecoratorFlags
+
+        MemberDecoratorFunctionValidTargetsMask = 1792,
+>MemberDecoratorFunctionValidTargetsMask : DecoratorFlags
+
+        ParameterDecoratorFunctionValidTargetsMask = 2048,
+>ParameterDecoratorFunctionValidTargetsMask : DecoratorFlags
+    }
     interface DiagnosticMessage {
 >DiagnosticMessage : DiagnosticMessage
 
@@ -3921,7 +4090,10 @@ declare module "typescript" {
         stripInternal?: boolean;
 >stripInternal : boolean
 
-        [option: string]: string | number | boolean;
+        define?: string[];
+>define : string[]
+
+        [option: string]: string | number | boolean | string[];
 >option : string
     }
     const enum ModuleKind {
@@ -4004,6 +4176,9 @@ declare module "typescript" {
 
         experimental?: boolean;
 >experimental : boolean
+
+        multiple?: boolean;
+>multiple : boolean
     }
     const enum CharacterCodes {
 >CharacterCodes : CharacterCodes

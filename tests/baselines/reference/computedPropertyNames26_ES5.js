@@ -37,6 +37,6 @@ var C = (function (_super) {
     C.prototype[(_a = {}, _a[super.bar.call(this)] =
     1,
     _a)[0]] = function () { };
+    var _a;
     return C;
 })(Base);
-var _a;

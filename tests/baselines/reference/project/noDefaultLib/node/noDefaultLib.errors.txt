@@ -1,22 +1,42 @@
-error TS2318: Cannot find global type 'String'.
 error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'Object'.
-error TS2318: Cannot find global type 'Number'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'Boolean'.
 error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'String'.
+error TS2318: Cannot find global type 'DecoratorFunction'.
+error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2468: Cannot find global value 'conditional'.
+error TS2318: Cannot find global type 'Number'.
+error TS2468: Cannot find global value 'decorator'.
+error TS2318: Cannot find global type 'ParameterDecoratorFunction'.
+error TS2468: Cannot find global value 'type'.
+error TS2468: Cannot find global value 'returntype'.
+error TS2468: Cannot find global value 'paramtypes'.
+error TS2468: Cannot find global value 'obsolete'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'MemberDecoratorFunction'.
+error TS2318: Cannot find global type 'Function'.
 test.ts(3,8): error TS2304: Cannot find name 'Array'.
 
 
-!!! error TS2318: Cannot find global type 'String'.
 !!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'Object'.
-!!! error TS2318: Cannot find global type 'Number'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'Boolean'.
 !!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'DecoratorFunction'.
+!!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2468: Cannot find global value 'conditional'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2468: Cannot find global value 'decorator'.
+!!! error TS2318: Cannot find global type 'ParameterDecoratorFunction'.
+!!! error TS2468: Cannot find global value 'type'.
+!!! error TS2468: Cannot find global value 'returntype'.
+!!! error TS2468: Cannot find global value 'paramtypes'.
+!!! error TS2468: Cannot find global value 'obsolete'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'MemberDecoratorFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
 ==== test.ts (1 errors) ====
     /// <reference no-default-lib="true"/>
     
