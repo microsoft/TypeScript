@@ -2070,7 +2070,7 @@ module ts {
             }
 
             function emitOptional(prefix: string, node: Node) {
-                if (node) {
+                if (node && !(resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved)) {
                     write(prefix);
                     emit(node);
                 }
@@ -2986,7 +2986,7 @@ module ts {
             }
 
             function emitCallExpression(node: CallExpression) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                if (resolver.getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
                     emitVoidExpressionForConditionalRemoval(node);
                     return;
                 }
@@ -3020,7 +3020,7 @@ module ts {
             }
 
             function emitNewExpression(node: NewExpression) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                if (resolver.getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
                     emitVoidExpressionForConditionalRemoval(node);
                     return;
                 }
@@ -3034,7 +3034,7 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConditionallyRemoved) {
+                if (resolver.getNodeCheckFlags(node.tag) & NodeCheckFlags.ConditionallyRemoved) {
                     emitVoidExpressionForConditionalRemoval(node);
                     return;
                 }

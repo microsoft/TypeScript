@@ -1326,6 +1326,10 @@ module ts {
         unionType?: UnionType;                      // Containing union type for union property
         resolvedExports?: SymbolTable;              // Resolved exports of module
         decoratorMetadata?: DecoratorMetadata[];    // Resolved ambient decorator metadata        
+        decoratorUsage?: DecoratorUsageMetadata;
+        obsolete?: ObsoleteMetadata;
+        conditionalSymbols?: string[];
+        conditionallyRemoved?: boolean;
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1512,9 +1516,14 @@ module ts {
         // It is optional because in contextual signature instantiation, nothing fails
     }
 
-    export interface DecoratorUsage {
+    export interface DecoratorUsageMetadata {
         ambient?: boolean;
         targets?: number;
+    }
+
+    export interface ObsoleteMetadata {
+        obsolete?: boolean;
+        message?: string;
     }
 
     // DecoratorMetadata consists of the state information about an ambient decorator

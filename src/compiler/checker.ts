@@ -24,6 +24,9 @@ module ts {
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
         var emptyMetadata = <DecoratorMetadata>{};
+        var emptyDecoratorUsageMetadata = <DecoratorUsageMetadata>{};
+        var emptyObsoleteMetadata = <ObsoleteMetadata>{};
+        var sharedObsoleteMetadata = <ObsoleteMetadata>{ obsolete: true };
 
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -5154,6 +5157,8 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
+            checkUsageOfObsoleteSymbol(node, symbol);
+            checkConditionallyRemovedExpression(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
@@ -5905,9 +5910,6 @@ module ts {
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
             var type = checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
-            if (!isCallLikeExpression(node.parent)) {
-                checkUsageOfObsoleteSymbol(node, getNodeLinks(node).resolvedSymbol);
-            }
             return type;
         }
 
@@ -5946,6 +5948,10 @@ module ts {
                     else {
                         checkClassPropertyAccess(node, left, type, prop);
                     }
+                }
+                if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                    checkUsageOfObsoleteSymbol(<PropertyAccessExpression>node, prop);
+                    checkConditionallyRemovedExpression(<PropertyAccessExpression>node, prop);
                 }
                 return getTypeOfSymbol(prop);
             }
@@ -6823,32 +6829,25 @@ module ts {
         }
 
         function checkConditionallyRemovedExpression(node: Expression, symbol: Symbol) {
-            if (symbol) {
-                var metadataArray = getMetadataForSymbol(symbol);
-                var metadata = findMetadata(metadataArray, globalConditionalDecoratorSymbol);
-                if (metadata && metadata.arguments.length > 0) {
-                    var conditionSymbol = <string>metadata.arguments[0];
-                    if (conditionSymbol && !isConditionalSymbolDefined(conditionSymbol)) {
-                        getNodeLinks(node).flags = NodeCheckFlags.ConditionallyRemoved;
-                    }
-                }
+            var links = getNodeLinks(node);
+            if (links.flags & NodeCheckFlags.ConditionallyRemoved) {
+                return;
+            }
+            if (symbol && symbolIsConditionallyRemoved(symbol)) {
+                links.flags |= NodeCheckFlags.ConditionallyRemoved;                
             }
         }
 
         function checkUsageOfObsoleteSymbol(node: Expression, symbol: Symbol) {
             if (symbol) {
-                var metadataArray = getMetadataForSymbol(symbol);
-                var metadata = findMetadata(metadataArray, globalObsoleteDecoratorSymbol);
-                if (metadata) {
-                    if (metadata.arguments.length > 0) {
-                        error(node, Diagnostics._0_is_obsolete_Colon_1, symbolToString(symbol), metadata.arguments[0]);
+                var metadata = getObsoleteMetadataForSymbol(symbol);
+                if (metadata.obsolete) {
+                    if (metadata.message) {
+                        error(node, Diagnostics._0_is_obsolete_Colon_1, symbolToString(symbol), metadata.message);
                     }
                     else {
                         error(node, Diagnostics._0_is_obsolete, symbolToString(symbol));
                     }
-                }
-                else if (symbol.parent) {
-                    checkUsageOfObsoleteSymbol(node, symbol.parent);
                 }
             }
         }
@@ -6856,7 +6855,7 @@ module ts {
         function checkCallExpression(node: CallExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
-
+            
             var signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
@@ -6874,11 +6873,9 @@ module ts {
                     }
                     return anyType;
                 }
-
-                checkConditionallyRemovedExpression(node, declaration.symbol);
-                checkUsageOfObsoleteSymbol(node, declaration.symbol);
             }
 
+            getNodeLinks(node).flags |= getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved;
             return getReturnTypeOfSignature(signature);
         }
 
@@ -6889,12 +6886,7 @@ module ts {
             }
 
             var signature = getResolvedSignature(node);
-            var declaration = signature.declaration;
-            if (declaration) {
-                checkConditionallyRemovedExpression(node, declaration.symbol);
-                checkUsageOfObsoleteSymbol(node, declaration.symbol);
-            }
-
+            getNodeLinks(node).flags |= getNodeCheckFlags(node.tag) & NodeCheckFlags.ConditionallyRemoved;
             return getReturnTypeOfSignature(signature);
         }
 
@@ -8556,11 +8548,9 @@ module ts {
             if (decoratorIsBuiltIn(decoratorSymbol)) {
                 return true;
             }
-            var metadataArray = getMetadataForSymbol(decoratorSymbol);
-            var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
-            if (metadata && metadata.arguments.length > 0) {
-                var usage = <DecoratorUsage>metadata.arguments[0];
-                return usage && usage.ambient;
+            var usage = getDecoratorUsageForSymbol(decoratorSymbol);
+            if (usage) {
+                return usage.ambient;
             }
             return false;
         }
@@ -8619,6 +8609,25 @@ module ts {
             return emptyArray;
         }
 
+        function filterMetadata(metadataArray: DecoratorMetadata[], decoratorSymbol: Symbol): DecoratorMetadata[] {
+            if (metadataArray && decoratorSymbol) {
+                var results: DecoratorMetadata[];
+                for (var i = 0; i < metadataArray.length; i++) {
+                    var metadata = metadataArray[i];
+                    if (metadata.symbol === decoratorSymbol) {
+                        if (!results) {
+                            results = [];
+                        }
+                        results.push(metadata);
+                    }
+                }
+            }
+            if (results) {
+                return results;
+            }
+            return emptyArray;
+        }
+
         /** Gets the decorator metadata for a Decorator node */
         function getMetadataForDecorator(node: Decorator): DecoratorMetadata {
             var links = getNodeLinks(node);
@@ -8637,7 +8646,7 @@ module ts {
         }
 
         /** Gets the decorator metadata for a symbol */
-        function getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[]{
+        function getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[] {
             if (!symbol.valueDeclaration) {
                 return emptyArray;
             }
@@ -8646,6 +8655,80 @@ module ts {
                 links.decoratorMetadata = resolveMetadataForSymbol(symbol);
             }
             return links.decoratorMetadata;
+        }
+
+        function getDecoratorUsageForSymbol(symbol: Symbol): DecoratorUsageMetadata {
+            var links = getSymbolLinks(symbol);
+            if (!links.decoratorUsage) {
+                links.decoratorUsage = emptyDecoratorUsageMetadata;
+                var metadataArray = getMetadataForSymbol(symbol);
+                var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
+                if (metadata && metadata.arguments.length > 0) {
+                    links.decoratorUsage = <DecoratorUsageMetadata>metadata.arguments[0];
+                }
+            }
+            return links.decoratorUsage;
+        }
+
+        function getObsoleteMetadataForSymbol(symbol: Symbol): ObsoleteMetadata {
+            var links = getSymbolLinks(symbol);
+            if (!links.obsolete) {
+                links.obsolete = emptyObsoleteMetadata;
+                var metadataArray = getMetadataForSymbol(symbol);
+                var metadata = findMetadata(metadataArray, globalObsoleteDecoratorSymbol);
+                if (metadata) {
+                    if (metadata.arguments.length > 0) {
+                        links.obsolete = { obsolete: true, message: metadata.arguments[0] };
+                    }
+                    else {
+                        links.obsolete = sharedObsoleteMetadata;
+                    }
+                }
+            }
+            return links.obsolete;
+        }
+
+        function getConditionalMetadataForSymbol(symbol: Symbol): string[] {
+            var links = getSymbolLinks(symbol);
+            if (!links.conditionalSymbols) {
+                links.conditionalSymbols = emptyArray;
+                var metadataArray = getMetadataForSymbol(symbol);
+                var filteredMetadataArray = filterMetadata(metadataArray, globalConditionalDecoratorSymbol);
+                var metadataCount = filteredMetadataArray.length;
+                var conditions: string[];
+                for (var i = 0; i < metadataCount; i++) {
+                    var metadata = filteredMetadataArray[i];
+                    if (metadata.arguments.length > 0) {
+                        if (!conditions) {
+                            conditions = [];
+                        }
+                        conditions.push(metadata.arguments[0]);
+                    }
+                }
+                links.conditionalSymbols = conditions || emptyArray;
+            }
+            return links.conditionalSymbols;
+        }
+
+        function symbolIsConditionallyRemoved(symbol: Symbol): boolean {
+            var links = getSymbolLinks(symbol);
+            if (links.conditionallyRemoved === undefined) {
+                links.conditionallyRemoved = false;
+                var conditionalSymbols = getConditionalMetadataForSymbol(symbol);
+                if (conditionalSymbols !== emptyArray) {
+                    var symbolCount = conditionalSymbols.length;
+                    for (var i = 0; i < symbolCount; i++) {
+                        if (!isConditionalSymbolDefined(conditionalSymbols[i])) {
+                            links.conditionallyRemoved = true;
+                            break;
+                        }
+                    }
+                }
+                if (!links.conditionallyRemoved && symbol.parent) {
+                    links.conditionallyRemoved = symbolIsConditionallyRemoved(symbol.parent);
+                }
+            }
+            return links.conditionallyRemoved;
         }
 
         /**
@@ -8683,13 +8766,9 @@ module ts {
             var flags: DecoratorFlags;
             if (decoratorSymbol) {
                 // get the valid targets from this decorator's @decorator
-                var metadataArray = getMetadataForSymbol(decoratorSymbol);
-                var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
-                if (metadata && metadata.arguments.length > 0) {
-                    var usage = <DecoratorUsage>metadata.arguments[0];
-                    if (usage) {
-                        flags |= usage.targets & DecoratorFlags.DecoratorTargetsMask;
-                    }
+                var usage = getDecoratorUsageForSymbol(decoratorSymbol);
+                if (usage) {
+                    flags |= usage.targets & DecoratorFlags.DecoratorTargetsMask;
                 }
                 if (!flags) {
                     flags = DecoratorFlags.AllTargets;
@@ -8782,7 +8861,7 @@ module ts {
             switch (symbol) {
                 case globalDecoratorSymbol:
                     if (metadata && metadata.arguments.length > 0) {
-                        var usage = <DecoratorUsage>metadata.arguments[0];
+                        var usage = <DecoratorUsageMetadata>metadata.arguments[0];
                         if (usage.ambient) {
                             getNodeLinks(node.parent).flags |= NodeCheckFlags.AmbientDecorator;
                         }
@@ -9312,6 +9391,7 @@ module ts {
             checkGrammarStatementInAmbientContext(node)
 
             checkExpression(node.expression);
+            getNodeLinks(node).flags |= getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved;
         }
 
         function checkIfStatement(node: IfStatement) {
