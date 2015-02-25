@@ -2719,6 +2719,12 @@ declare module "typescript" {
 >symbol : Symbol
 >Symbol : Symbol
 >Symbol : Symbol
+
+        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
+>getExportsOfExternalModule : (node: ImportDeclaration) => Symbol[]
+>node : ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+>Symbol : Symbol
     }
     interface SymbolDisplayBuilder {
 >SymbolDisplayBuilder : SymbolDisplayBuilder
