@@ -1217,25 +1217,33 @@ module ts {
         }
 
         function emitVariableDeclaration(node: VariableDeclaration) {
-            // If this node is a computed name, it can only be a symbol, because we've already skipped
-            // it if it's not a well known symbol. In that case, the text of the name will be exactly
-            // what we want, namely the name expression enclosed in brackets.
-            writeTextOfNode(currentSourceFile, node.name);
-            // If optional property emit ?
-            if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
-                write("?");
-            }
-            if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
-                emitTypeOfVariableDeclarationFromTypeLiteral(node);
-            }
-            else if (!(node.flags & NodeFlags.Private)) {
-                writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
+            // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
+            // so there is no check needed to see if declaration is visible
+            if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+                if (isBindingPattern(node.name)) {
+                    emitBindingPattern(<BindingPattern>node.name);
+                }
+                else {
+                    // If this node is a computed name, it can only be a symbol, because we've already skipped
+                    // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                    // what we want, namely the name expression enclosed in brackets.
+                    writeTextOfNode(currentSourceFile, node.name);
+                    // If optional property emit ?
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
+                        write("?");
+                    }
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
+                        emitTypeOfVariableDeclarationFromTypeLiteral(node);
+                    }
+                    else if (!(node.flags & NodeFlags.Private)) {
+                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
+                    }
+                }
             }
 
-            function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                var diagnosticMessage: DiagnosticMessage;
+            function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult: SymbolAccessiblityResult) {
                 if (node.kind === SyntaxKind.VariableDeclaration) {
-                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                    return symbolAccesibilityResult.errorModuleName ?
                         symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                             Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
@@ -1245,14 +1253,14 @@ module ts {
                 else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (node.flags & NodeFlags.Static) {
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
                     else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                 Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
@@ -1260,17 +1268,45 @@ module ts {
                     }
                     else {
                         // Interfaces cannot have types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
                     }
                 }
+            }
 
+            function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
+                var diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
                 return diagnosticMessage !== undefined ? {
                     diagnosticMessage,
                     errorNode: node,
                     typeName: node.name
                 } : undefined;
+            }
+
+            function emitBindingPattern(bindingPattern: BindingPattern) {
+                emitCommaList(bindingPattern.elements, emitBindingElement);
+            }
+
+            function emitBindingElement(bindingElement: BindingElement) {
+                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
+                    var diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                    return diagnosticMessage !== undefined ? {
+                        diagnosticMessage,
+                        errorNode: bindingElement,
+                        typeName: bindingElement.name
+                    } : undefined;
+                }
+
+                if (bindingElement.name) {
+                    if (isBindingPattern(bindingElement.name)) {
+                        emitBindingPattern(<BindingPattern>bindingElement.name);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, bindingElement.name);
+                        writeTypeOfDeclaration(bindingElement, /*type*/ undefined, getBindingElementTypeVisibilityError);
+                    }
+                }
             }
         }
 
@@ -3869,6 +3905,10 @@ module ts {
             }
 
             function emitExportVariableAssignments(node: VariableDeclaration | BindingElement) {
+                if (node.kind === SyntaxKind.OmittedExpression) {
+                    return;
+                }
+
                 var name = (<VariableLikeDeclaration>node).name;
                 if (name.kind === SyntaxKind.Identifier) {
                     emitExportMemberAssignments(<Identifier>name);
