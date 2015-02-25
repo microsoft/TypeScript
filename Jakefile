@@ -8,6 +8,7 @@ var child_process = require("child_process");
 // Variables
 var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
+var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -64,8 +65,10 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
+	"navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
+    "patternMatcher.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
@@ -89,6 +92,16 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
+
+var serverSources = [
+    "node.d.ts",
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts",
+    "server.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+});
 
 var definitionsRoots = [
     "compiler/types.d.ts",
@@ -127,9 +140,17 @@ var harnessSources = [
     "incrementalParser.ts",
     "services/colorization.ts",
     "services/documentRegistry.ts",
-    "services/preProcessFile.ts"
+    "services/preProcessFile.ts",
+    "services/patternMatcher.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
+})).concat([
+    "protocol.d.ts",
+    "session.ts",
+    "client.ts",
+    "editorServices.ts",
+].map(function (f) {
+    return path.join(serverDirectory, f);
 }));
 
 var librarySourceMap = [
@@ -327,6 +348,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
@@ -336,7 +358,10 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*preserveConstEnums*/ true,
             /*keepComments*/ false,
             /*noResolve*/ false,
-            /*stripInternal*/ false);
+            /*stripInternal*/ false,
+            /*callback*/ function () { 
+                jake.cpR(servicesFile, nodePackageFile, {silent: true});
+            });
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -378,9 +403,12 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
                 jake.rmRf(tempDirPath, {silent: true});
            });
 
+var serverFile = path.join(builtLocalDirectory, "tsserver.js");
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -435,7 +463,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -542,11 +570,11 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 50000;
+        testTimeout = 100000;
     }
 
     colors = process.env.colors || process.env.color
-    colors = colors ? ' --no-colors ' : ''
+    colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
     reporter = process.env.reporter || process.env.r || 'dot';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally

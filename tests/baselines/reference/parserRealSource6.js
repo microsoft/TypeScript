@@ -329,7 +329,8 @@ var TypeScript;
         // is has not been fully re-parsed yet.
         if (ast.nodeType == NodeType.Script && context.pos > limChar)
             limChar = context.pos;
-        if ((minChar <= context.pos) && (limChar >= context.pos)) {
+        if ((minChar <= context.pos) &&
+            (limChar >= context.pos)) {
             switch (ast.nodeType) {
                 case NodeType.Script:
                     var script = ast;

@@ -813,7 +813,8 @@ var TypeScript;
             else {
                 var tokenInfo = lookupToken(this.tokenId);
                 if (tokenInfo != undefined) {
-                    if ((tokenInfo.unopNodeType != NodeType.None) || (tokenInfo.binopNodeType != NodeType.None)) {
+                    if ((tokenInfo.unopNodeType != NodeType.None) ||
+                        (tokenInfo.binopNodeType != NodeType.None)) {
                         return 2 /* Operator */;
                     }
                 }

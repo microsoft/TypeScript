@@ -12,6 +12,5 @@ export module myModule {
 //// [importInsideModule_file2.js]
 var myModule;
 (function (myModule) {
-    var foo = require("importInsideModule_file1");
     var a = foo.x;
 })(myModule = exports.myModule || (exports.myModule = {}));

@@ -23,12 +23,8 @@ var B = (function () {
     B.prototype.bar = function () { };
     return B;
 })();
-function f(x) {
-    return x;
-}
-function g(x) {
-    return f(x);
-}
+function f(x) { return x; }
+function g(x) { return f(x); }
 g(7);
 f(g(7));
 f(g < A, B > 7);

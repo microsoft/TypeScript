@@ -2,6 +2,11 @@
 
 module ts.formatting {
     export module SmartIndenter {
+
+        const enum Value {
+            Unknown = -1
+        }
+
         export function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number {
             if (position > sourceFile.text.length) {
                 return 0; // past EOF
@@ -24,12 +29,12 @@ module ts.formatting {
                 return 0;
             }
 
-            var lineAtPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
+            var lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
                 var actualIndentation = getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options);
-                if (actualIndentation !== -1) {
+                if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
             }
@@ -57,7 +62,7 @@ module ts.formatting {
 
                 // check if current node is a list item - if yes, take indentation from it
                 var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                if (actualIndentation !== -1) {
+                if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
 
@@ -74,7 +79,7 @@ module ts.formatting {
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
-            var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            var start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
         }
 
@@ -101,7 +106,7 @@ module ts.formatting {
                 if (useActualIndentation) {
                     // check if current node is a list item - if yes, take indentation from it
                     var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                    if (actualIndentation !== -1) {
+                    if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
                 }
@@ -113,7 +118,7 @@ module ts.formatting {
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
                     var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
-                    if (actualIndentation !== -1) {
+                    if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
                 }
@@ -135,25 +140,29 @@ module ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             var containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getLineAndCharacterFromPosition(containingList.pos);
+                return sourceFile.getLineAndCharacterOfPosition(containingList.pos);
             }
 
-            return sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));
+            return sourceFile.getLineAndCharacterOfPosition(parent.getStart(sourceFile));
         }
 
         /*
-         * Function returns -1 if indentation cannot be determined
+         * Function returns Value.Unknown if indentation cannot be determined
          */
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: EditorOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             var commaItemInfo = findListItemInfo(commaToken);
-            Debug.assert(commaItemInfo && commaItemInfo.listItemIndex > 0);
-            // The item we're interested in is right before the comma
-            return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
+            if (commaItemInfo && commaItemInfo.listItemIndex > 0) {
+                return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
+            }
+            else {
+                // handle broken code gracefully
+                return Value.Unknown;
+            }
         }
 
         /*
-         * Function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
+         * Function returns Value.Unknown if actual indentation for node should not be used (i.e because node is nested expression)
          */
         function getActualIndentationForNode(current: Node,
             parent: Node,
@@ -170,7 +179,7 @@ module ts.formatting {
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
             if (!useActualIndentation) {
-                return -1;
+                return Value.Unknown;
             }
 
             return findColumnForFirstNonWhitespaceCharacterInLine(currentLineAndChar, sourceFile, options);
@@ -204,7 +213,7 @@ module ts.formatting {
         }
 
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
-            return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
+            return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
@@ -271,14 +280,13 @@ module ts.formatting {
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
             var containingList = getContainingList(node, sourceFile);
-            return containingList ? getActualIndentationFromList(containingList) : -1;
+            return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
 
             function getActualIndentationFromList(list: Node[]): number {
                 var index = indexOf(list, node);
-                return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : -1;
+                return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
             }
         }
-
 
         function deriveActualIndentationFromList(list: Node[], index: number, sourceFile: SourceFile, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < list.length);
@@ -292,27 +300,35 @@ module ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(list[i].end).line;
+                var prevEndLine = sourceFile.getLineAndCharacterOfPosition(list[i].end).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
 
                 lineAndCharacter = getStartLineAndCharacterForNode(list[i], sourceFile);
             }
-            return -1;
+            return Value.Unknown;
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
-            var lineStart = sourceFile.getPositionFromLineAndCharacter(lineAndCharacter.line, 1);
+            var lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+        /*
+            Character is the actual index of the character since the beginning of the line.
+            Column - position of the character after expanding tabs to spaces
+            "0\t2$"
+            value of 'character' for '$' is 3
+            value of 'column' for '$' is 6 (assuming that tab size is 4)
+        */
+        export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions) {
+            var character = 0;
             var column = 0;
             for (var pos = startPos; pos < endPos; ++pos) {
                 var ch = sourceFile.text.charCodeAt(pos);
                 if (!isWhiteSpace(ch)) {
-                    return column;
+                    break;
                 }
 
                 if (ch === CharacterCodes.tab) {
@@ -321,8 +337,14 @@ module ts.formatting {
                 else {
                     column++;
                 }
+
+                character++;
             }
-            return column;
+            return { column, character };
+        }
+
+        export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
+            return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
@@ -359,6 +381,7 @@ module ts.formatting {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.FunctionDeclaration:

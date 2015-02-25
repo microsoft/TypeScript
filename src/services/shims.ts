@@ -138,7 +138,7 @@ module ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -274,7 +274,14 @@ module ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            // Wrap the API changes for 1.5 release. This try/catch
+            // should be removed once TypeScript 1.5 has shipped.
+            try {
+                return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            }
+            catch (e) {
+                return "";
+            }
         }
     }
 
@@ -628,11 +635,11 @@ module ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
-                "getNavigateToItems('" + searchValue + "')",
+                "getNavigateToItems('" + searchValue + "', " + maxResultCount+ ")",
                 () => {
-                    var items = this.languageService.getNavigateToItems(searchValue);
+                    var items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
                     return items;
                 });
         }

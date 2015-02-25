@@ -7,9 +7,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS1147: Import
 tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find external module 'm1_M4_private'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(80,35): error TS4000: Import declaration 'm1_im2_public' is using private name 'm1_M2_private'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(81,43): error TS1147: Import declarations in an internal module cannot reference an external module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(81,43): error TS2307: Cannot find external module 'm1_M3_public'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(82,43): error TS1147: Import declarations in an internal module cannot reference an external module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(82,43): error TS2307: Cannot find external module 'm1_M4_private'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(125,45): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -20,7 +18,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Impor
 tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in an internal module cannot reference an external module.
 
 
-==== tests/cases/compiler/privacyGloImportParseErrors.ts (20 errors) ====
+==== tests/cases/compiler/privacyGloImportParseErrors.ts (18 errors) ====
     module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -120,13 +118,9 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
         export import m1_im3_public = require("m1_M3_public");
                                               ~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
-                                              ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find external module 'm1_M3_public'.
         export import m1_im4_public = require("m1_M4_private");
                                               ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
-                                              ~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find external module 'm1_M4_private'.
     }
     
     module glo_M1_public {

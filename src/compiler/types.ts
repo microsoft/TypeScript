@@ -120,6 +120,8 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
+        AsKeyword,
+        FromKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -140,8 +142,9 @@ module ts {
         NumberKeyword,
         SetKeyword,
         StringKeyword,
+        SymbolKeyword,
         TypeKeyword,
-
+        OfKeyword, // LastKeyword and LastToken
         // Parse tree nodes
 
         // Names
@@ -210,6 +213,7 @@ module ts {
         WhileStatement,
         ForStatement,
         ForInStatement,
+        ForOfStatement,
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
@@ -228,8 +232,16 @@ module ts {
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
+        ImportEqualsDeclaration,
         ImportDeclaration,
+        ImportClause,
+        NamespaceImport,
+        NamedImports,
+        ImportSpecifier,
         ExportAssignment,
+        ExportDeclaration,
+        NamedExports,
+        ExportSpecifier,
 
         // Module references
         ExternalModuleReference,
@@ -259,7 +271,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = OfKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -267,7 +279,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = OfKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -342,13 +354,13 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined. 
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
+        modifiers?: ModifiersArray;   // Array of modifiers
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
         nextContainer?: Node;         // Next container in declaration order (initialized by binding)
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
-        modifiers?: ModifiersArray;           // Array of modifiers
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -621,7 +633,7 @@ module ts {
 
     export interface BinaryExpression extends Expression {
         left: Expression;
-        operator: SyntaxKind;
+        operatorToken: Node;
         right: Expression;
     }
 
@@ -752,6 +764,11 @@ module ts {
         expression: Expression;
     }
 
+    export interface ForOfStatement extends IterationStatement {
+        initializer: VariableDeclarationList | Expression;
+        expression: Expression;
+    }
+
     export interface BreakOrContinueStatement extends Statement {
         label?: Identifier;
     }
@@ -846,7 +863,11 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ModuleDeclaration extends Declaration, ModuleElement {
+    export interface ExportContainer {
+        exportStars?: ExportDeclaration[];  // List of 'export *' statements (initialized by binding)
+    }
+
+    export interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -855,7 +876,7 @@ module ts {
         statements: NodeArray<ModuleElement>
     }
 
-    export interface ImportDeclaration extends Declaration, ModuleElement {
+    export interface ImportEqualsDeclaration extends Declaration, ModuleElement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -866,6 +887,50 @@ module ts {
     export interface ExternalModuleReference extends Node {
         expression?: Expression;
     }
+
+    // In case of:
+    // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
+    // In rest of the cases, module specifier is string literal corresponding to module
+    // ImportClause information is shown at its declaration below.
+    export interface ImportDeclaration extends Statement, ModuleElement {
+        importClause?: ImportClause;
+        moduleSpecifier: Expression;
+    }
+
+    // In case of: 
+    // import d from "mod" => name = d, namedBinding = undefined
+    // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
+    // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
+    // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    export interface ImportClause extends Declaration {
+        name?: Identifier; // Default binding
+        namedBindings?: NamespaceImport | NamedImports;
+    }
+
+    export interface NamespaceImport extends Declaration {
+        name: Identifier;
+    }
+
+    export interface ExportDeclaration extends Statement, ModuleElement {
+        exportClause?: NamedExports;
+        moduleSpecifier?: Expression;
+    }
+
+    export interface NamedImportsOrExports extends Node {
+        elements: NodeArray<ImportOrExportSpecifier>;
+    }
+
+    export type NamedImports = NamedImportsOrExports;
+    export type NamedExports = NamedImportsOrExports;
+
+    export interface ImportOrExportSpecifier extends Declaration {
+        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        name: Identifier;           // Declared name
+    }
+
+    export type ImportSpecifier = ImportOrExportSpecifier;
+    export type ExportSpecifier = ImportOrExportSpecifier;
 
     export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
@@ -880,7 +945,7 @@ module ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration {
+    export interface SourceFile extends Declaration, ExportContainer {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
@@ -1035,6 +1100,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1113,7 +1179,7 @@ module ts {
 
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: ImportEqualsDeclaration[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -1123,11 +1189,11 @@ module ts {
     }
 
     export interface EmitResolver {
-        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
-        getExpressionNamePrefix(node: Identifier): string;
+        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+        getExpressionNameSubstitution(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: ImportDeclaration): boolean;
-        isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
+        isReferencedImportDeclaration(node: Node): boolean;
+        isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
@@ -1231,18 +1297,20 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol,
-        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
+        valueDeclaration?: Declaration // First value declaration of the symbol
+        constEnumOnlyModule?: boolean  // True if module contains only const enums or other modules with only const enums
     }
 
     export interface SymbolLinks {
-        target?: Symbol;               // Resolved (non-alias) target of an alias
-        type?: Type;                   // Type of value symbol
-        declaredType?: Type;           // Type of class, interface, enum, or type parameter
-        mapper?: TypeMapper;           // Type mapper for instantiation alias
-        referenced?: boolean;          // True if alias symbol has been referenced as a value
-        exportAssignSymbol?: Symbol;   // Symbol exported from external module
-        unionType?: UnionType;         // Containing union type for union property
+        target?: Symbol;                    // Resolved (non-alias) target of an alias
+        type?: Type;                        // Type of value symbol
+        declaredType?: Type;                // Type of class, interface, enum, or type parameter
+        mapper?: TypeMapper;                // Type mapper for instantiation alias
+        referenced?: boolean;               // True if alias symbol has been referenced as a value
+        exportAssignmentChecked?: boolean;  // True if export assignment was checked
+        exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
+        unionType?: UnionType;              // Containing union type for union property
+        resolvedExports?: SymbolTable;      // Resolved exports of module
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1273,7 +1341,8 @@ module ts {
         enumMemberValue?: number;         // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
         isVisible?: boolean;              // Is this node visible
-        localModuleName?: string;         // Local name for module instance
+        generatedName?: string;           // Generated name for module, enum, or import declaration
+        generatedNames?: Map<string>;     // Generated names table for source file
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
@@ -1300,9 +1369,10 @@ module ts {
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
+        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
-        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
-        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
@@ -1640,6 +1710,7 @@ module ts {
         equals = 0x3D,                // =
         exclamation = 0x21,           // !
         greaterThan = 0x3E,           // >
+        hash = 0x23,                  // #
         lessThan = 0x3C,              // <
         minus = 0x2D,                 // -
         openBrace = 0x7B,             // {

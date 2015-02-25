@@ -1,5 +1,5 @@
-tests/cases/compiler/shadowingViaLocalValue.ts(4,13): error TS2477: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
-tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS2477: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
+tests/cases/compiler/shadowingViaLocalValue.ts(4,13): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS2481: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
 
 
 ==== tests/cases/compiler/shadowingViaLocalValue.ts (2 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS2477: Cannot init
         {
             var x = 1;
                 ~
-!!! error TS2477: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+!!! error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
         }
     }
     
@@ -17,7 +17,7 @@ tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS2477: Cannot init
         {
             for (var x1 = 0; ;);
                      ~~
-!!! error TS2477: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
+!!! error TS2481: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
         }
     }
     

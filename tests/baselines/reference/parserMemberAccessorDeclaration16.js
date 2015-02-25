@@ -8,7 +8,9 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {
-        set: function (a) { },
+        set: function (a) {
+            if (a === void 0) { a = 1; }
+        },
         enumerable: true,
         configurable: true
     });

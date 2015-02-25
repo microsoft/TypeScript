@@ -47,49 +47,37 @@ var LanguageSpec_section_4_5_inference = (function () {
     function LanguageSpec_section_4_5_inference() {
     }
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredGetterFromSetterAnnotation", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredGetterFromSetterAnnotation_GetterFirst", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredFromGetter", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredFromGetter_SetterFirst", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredSetterFromGetterAnnotation", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredSetterFromGetterAnnotation_GetterFirst", {
-        get: function () {
-            return new B();
-        },
+        get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true

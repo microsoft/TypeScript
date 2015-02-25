@@ -31,18 +31,10 @@ var d: new(x: number) => void;
 d = C; // Error
 
 //// [assignmentCompatWithOverloads.js]
-function f1(x) {
-    return null;
-}
-function f2(x) {
-    return null;
-}
-function f3(x) {
-    return null;
-}
-function f4(x) {
-    return undefined;
-}
+function f1(x) { return null; }
+function f2(x) { return null; }
+function f3(x) { return null; }
+function f4(x) { return undefined; }
 var g;
 g = f1; // OK 
 g = f2; // Error

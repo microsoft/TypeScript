@@ -1,0 +1,48 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty40.ts ===
+class C {
+>C : C
+
+    [Symbol.iterator](x: string): string;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : string
+
+    [Symbol.iterator](x: number): number;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : number
+
+    [Symbol.iterator](x: any) {
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : any
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+var c = new C;
+>c : C
+>new C : C
+>C : typeof C
+
+c[Symbol.iterator]("");
+>c[Symbol.iterator]("") : string
+>c[Symbol.iterator] : { (x: string): string; (x: number): number; }
+>c : C
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+c[Symbol.iterator](0);
+>c[Symbol.iterator](0) : number
+>c[Symbol.iterator] : { (x: string): string; (x: number): number; }
+>c : C
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+

@@ -314,10 +314,12 @@ var TypeScriptAllInOne;
         Program.prototype.if = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
-             ^ retValue;
+             ^
+            retValue;
             bfs.TYPES();
             if (retValue != 0) {
-                return 1 && ;
+                return 1 &&
+                ;
             }
             retValue = bfs.OPERATOR;
             ' );;
@@ -348,7 +350,8 @@ var BasicFeatures = (function () {
     BasicFeatures.prototype.VARIABLES = function () {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
-        var inf = Number.NEGATIVE_INFINITY - ;
+        var inf = Number.NEGATIVE_INFINITY -
+        ;
         var nan = Number.NaN;
         var undef = undefined;
         var _\uD4A5\u7204\uC316, uE59F = local;
@@ -357,16 +360,16 @@ var BasicFeatures = (function () {
         var local6 = local5 instanceof fs.File;
         var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
         var float = 6.02e23, float2 = 6.02E-23;
-        var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != ;
+        var char = 'c', \u0066 = '\u0066', hexchar = '\x42' !=
+        ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) {
-            return x["var"] === 42;
-        }, instanceof: function () { return 'objLit{42}'; } };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = 0 /* Monday */;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
-        var any = 0 ^= ;
+        var any = 0 ^=
+        ;
         var bool = 0;
         var declare = 0;
         var constructor = 0;
@@ -382,7 +385,8 @@ var BasicFeatures = (function () {
         var public = 0;
         var set = 0;
         var static = 0;
-        var string = 0 /  > ;
+        var string = 0 /  >
+        ;
         var yield = 0;
         var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
         return 0;
@@ -483,15 +487,10 @@ var BasicFeatures = (function () {
 })();
 var CLASS = (function () {
     function CLASS() {
-        this.d = function () {
-            yield;
-            0;
-        };
+        this.d = function () { yield; 0; };
     }
     Object.defineProperty(CLASS.prototype, "Property", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -499,9 +498,7 @@ var CLASS = (function () {
         return 0;
     };
     CLASS.prototype.Foo = function () {
-        var myEvent = function () {
-            return 1;
-        };
+        var myEvent = function () { return 1; };
         if (myEvent() == 1)
             return true ?  : ;
         else
@@ -545,7 +542,8 @@ while ()
     : string, ;
 rest: string[];
 {
-     & public;
+     &
+    public;
     DefaultValue(value ?  : string = "Hello");
     { }
 }

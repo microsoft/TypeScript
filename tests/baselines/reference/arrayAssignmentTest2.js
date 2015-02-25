@@ -69,12 +69,8 @@ var __extends = this.__extends || function (d, b) {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.IM1 = function () {
-        return null;
-    };
-    C1.prototype.C1M1 = function () {
-        return null;
-    };
+    C1.prototype.IM1 = function () { return null; };
+    C1.prototype.C1M1 = function () { return null; };
     return C1;
 })();
 var C2 = (function (_super) {
@@ -82,17 +78,13 @@ var C2 = (function (_super) {
     function C2() {
         _super.apply(this, arguments);
     }
-    C2.prototype.C2M1 = function () {
-        return null;
-    };
+    C2.prototype.C2M1 = function () { return null; };
     return C2;
 })(C1);
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.CM3M1 = function () {
-        return 3;
-    };
+    C3.prototype.CM3M1 = function () { return 3; };
     return C3;
 })();
 /*
@@ -112,9 +104,7 @@ var i1 = c1;
 var c2 = new C2();
 var c3 = new C3();
 var o1 = { one: 1 };
-var f1 = function () {
-    return new C1();
-};
+var f1 = function () { return new C1(); };
 var arr_any = [];
 var arr_i1 = [];
 var arr_c1 = [];
@@ -128,9 +118,7 @@ arr_c3 = arr_c2_2; // should be an error - is
 arr_c3 = arr_c1_2; // should be an error - is
 arr_c3 = arr_i1_2; // should be an error - is
 arr_any = f1; // should be an error - is
-arr_any = function () {
-    return null;
-}; // should be an error - is
+arr_any = function () { return null; }; // should be an error - is
 arr_any = o1; // should be an error - is
 arr_any = a1; // should be ok - is
 arr_any = c1; // should be an error - is
