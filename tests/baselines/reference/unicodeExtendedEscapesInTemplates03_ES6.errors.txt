@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates03_ES6.ts(2,12): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates03_ES6.ts (1 errors) ====
+    
+    var x = `\u{0000}`;
+               
+!!! error TS1125: Hexadecimal digit expected.
+    

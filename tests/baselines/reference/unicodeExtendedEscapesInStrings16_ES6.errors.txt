@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings16_ES6.ts(2,12): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings16_ES6.ts(2,20): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings16_ES6.ts(2,28): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings16_ES6.ts(2,36): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings16_ES6.ts (4 errors) ====
+    
+    var x = "\u{ABCD}\u{EF12}\u{3456}\u{7890}";
+               
+!!! error TS1125: Hexadecimal digit expected.
+                       
+!!! error TS1125: Hexadecimal digit expected.
+                               
+!!! error TS1125: Hexadecimal digit expected.
+                                       
+!!! error TS1125: Hexadecimal digit expected.
+    
