@@ -112,12 +112,8 @@ var r6 = true ? { foo: 1 } : null;
 var r6 = true ? null : { foo: 1 };
 var r7 = true ? function () { } : null;
 var r7 = true ? null : function () { };
-var r8 = true ? function (x) {
-    return x;
-} : null;
-var r8b = true ? null : function (x) {
-    return x;
-}; // type parameters not identical across declarations
+var r8 = true ? function (x) { return x; } : null;
+var r8b = true ? null : function (x) { return x; }; // type parameters not identical across declarations
 var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;

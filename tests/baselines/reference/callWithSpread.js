@@ -61,10 +61,6 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 function foo(x, y) {
-    var z = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        z[_i - 2] = arguments[_i];
-    }
 }
 var a;
 var z;
@@ -93,10 +89,6 @@ var C = (function () {
         this.foo.apply(this, [x, y].concat(z));
     }
     C.prototype.foo = function (x, y) {
-        var z = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            z[_i - 2] = arguments[_i];
-        }
     };
     return C;
 })();

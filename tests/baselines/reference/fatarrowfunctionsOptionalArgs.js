@@ -208,9 +208,7 @@ foo(
     return 28;
 });
 // in multiple paren
-((((function (arg) {
-    return 32;
-}))));
+((((function (arg) { return 32; }))));
 // in ternary exression
 false ? function () { return 41; } : null;
 false ? function (arg) { return 42; } : null;
@@ -275,17 +273,9 @@ false ? null : function () {
     return 68;
 };
 // nested ternary expressions
-(function (a) {
-    return a;
-}) ? function (b) {
-    return b;
-} : function (c) {
-    return c;
-};
+(function (a) { return a; }) ? function (b) { return b; } : function (c) { return c; };
 //multiple levels
-(function (a) {
-    return a;
-});
+(function (a) { return a; });
 (function (b) { return function (c) { return 81; }; });
 (function (c) { return function (d) { return 82; }; });
 // In Expressions

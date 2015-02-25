@@ -46,13 +46,9 @@ var r8 = a2<number>();
 //// [callNonGenericFunctionWithTypeArguments.js]
 // it is always illegal to provide type arguments to a non-generic function
 // all invocations here are illegal
-function f(x) {
-    return null;
-}
+function f(x) { return null; }
 var r = f(1);
-var f2 = function (x) {
-    return null;
-};
+var f2 = function (x) { return null; };
 var r2 = f2(1);
 var f3;
 var r3 = f3(1);

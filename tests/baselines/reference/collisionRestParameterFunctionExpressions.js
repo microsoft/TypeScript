@@ -47,10 +47,6 @@ function foo() {
         var _i = 10; // no error
     }
     function f4(_i) {
-        var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
-        }
     }
     function f4NoError(_i) {
     }

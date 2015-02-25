@@ -20,9 +20,7 @@ function f1() {
     var n = f0();
 }
 function f2() { }
-function f3() {
-    return;
-}
+function f3() { return; }
 function f4() {
     return '';
     return;

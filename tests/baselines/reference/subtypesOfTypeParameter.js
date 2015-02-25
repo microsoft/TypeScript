@@ -178,12 +178,8 @@ function f2(x, y) {
     var r6 = true ? x : { foo: 1 };
     var r7 = true ? function () { } : x;
     var r7 = true ? x : function () { };
-    var r8 = true ? function (x) {
-        return x;
-    } : x;
-    var r8b = true ? x : function (x) {
-        return x;
-    }; // type parameters not identical across declarations
+    var r8 = true ? function (x) { return x; } : x;
+    var r8b = true ? x : function (x) { return x; }; // type parameters not identical across declarations
     var i1;
     var r9 = true ? i1 : x;
     var r9 = true ? x : i1;

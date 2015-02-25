@@ -3,6 +3,4 @@
 `${function (x: number) { x = "bad"; } }`;
 
 //// [templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.js]
-`${function (x) {
-    x = "bad";
-}}`;
+`${function (x) { x = "bad"; }}`;

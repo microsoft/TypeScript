@@ -33,7 +33,9 @@ var CharacterInfo = (function () {
         return c >= CharacterCodes._0 && c <= CharacterCodes._9;
     };
     CharacterInfo.isHexDigit = function (c) {
-        return isDecimalDigit(c) || (c >= CharacterCodes.A && c <= CharacterCodes.F) || (c >= CharacterCodes.a && c <= CharacterCodes.f);
+        return isDecimalDigit(c) ||
+            (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
+            (c >= CharacterCodes.a && c <= CharacterCodes.f);
     };
     CharacterInfo.hexValue = function (c) {
         Debug.assert(isHexDigit(c));
