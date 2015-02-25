@@ -635,13 +635,21 @@
         "category": "Error",
         "code": 1202
     },
-    "'{0}' is obsolete.":  {
+    "Decorators may not change the type of a member.": {
         "category": "Error",
         "code": 1203
     },
-    "'{0}' is obsolete: '{1}'": {
+    "Decorators may not change the type of a class.": {
         "category": "Error",
         "code": 1204
+    },
+    "'{0}' is obsolete.":  {
+        "category": "Error",
+        "code": 1205
+    },
+    "'{0}' is obsolete: '{1}'": {
+        "category": "Error",
+        "code": 1206
     },
 
     "Duplicate identifier '{0}'.": {

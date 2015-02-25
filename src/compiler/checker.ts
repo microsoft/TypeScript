@@ -8816,8 +8816,17 @@ module ts {
             }
         }
 
+        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message: DiagnosticMessage) {
+            var parentSymbol = getSymbolOfNode(node.parent);
+            var parentType = getTypeOfSymbol(parentSymbol);
+            var signature = getSingleCallSignature(expectedDecoratorType);
+            var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
+            var signatureType = getOrCreateTypeFromSignature(instantiatedSignature);
+            checkTypeAssignableTo(exprType, signatureType, node, message);
+        }
+
         /** Check the usage of a non-ambient decorator. */
-        function checkNonAmbientDecorator(node: Decorator, symbol: Symbol, flags: DecoratorFlags) {
+        function checkNonAmbientDecorator(node: Decorator, symbol: Symbol, exprType: Type, flags: DecoratorFlags) {
             // report error for invalid target for decorator
             var validFlags = getValidDecoratorTarget(node.parent);
             if ((flags & validFlags) === 0) {
@@ -8833,9 +8842,10 @@ module ts {
 
             // If we are decorating a class member, we need to check the type is compatible
             if (validFlags & DecoratorFlags.MemberDecoratorFunctionValidTargetsMask) {
-                var memberSymbol = getSymbolOfNode(node.parent);
-                var memberType = getTypeOfSymbol(memberSymbol);
-                // TODO(rbuckton): Check compatibility for TypedPropertyDescriptor<T> and MemberDecoratorFunction
+                checkDecoratorSignature(node, exprType, globalMemberDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
+            }
+            else if (validFlags & DecoratorFlags.DecoratorFunctionValidTargetMask) {
+                checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
             }
 
             if (symbol) {
@@ -8894,7 +8904,7 @@ module ts {
                 checkAmbientDecorator(node, symbol, flags);
             }
             else {
-                checkNonAmbientDecorator(node, symbol, flags);
+                checkNonAmbientDecorator(node, symbol, exprType, flags);
             }
         }
 
