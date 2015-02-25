@@ -8902,6 +8902,11 @@ module ts {
             var parentSymbol = getSymbolOfNode(node.parent);
             var parentType = getTypeOfSymbol(parentSymbol);
             var signature = getSingleCallSignature(expectedDecoratorType);
+            if (!signature) {
+                // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
+                // and we have already reported an error in initializeTypeChecker.
+                return;
+            }
             var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
             var signatureType = getOrCreateTypeFromSignature(instantiatedSignature);
             checkTypeAssignableTo(exprType, signatureType, node, message);
