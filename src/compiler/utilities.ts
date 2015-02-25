@@ -745,6 +745,12 @@ module ts {
         }
 
         var parent = name.parent;
+        if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
+            if ((<ImportOrExportSpecifier>parent).propertyName) {
+                return true;
+            }
+        }
+
         if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
             return (<Declaration>parent).name === name;
         }
