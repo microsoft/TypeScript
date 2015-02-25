@@ -2554,8 +2554,6 @@ module ts {
                 return false;
             }
 
-
-
             function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
 
