@@ -1118,6 +1118,29 @@ module ts {
     }
 
     // @internal
+    export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
+        // First try '_name'
+        if (baseName.charCodeAt(0) !== CharacterCodes._) {
+            var baseName = "_" + baseName;
+            if (!isExistingName(baseName)) {
+                return baseName;
+            }
+        }
+        // Find the first unique '_name_n', where n is a positive number
+        if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+            baseName += "_";
+        }
+        var i = 1;
+        while (true) {
+            name = baseName + i;
+            if (!isExistingName(name)) {
+                return name;
+            }
+            i++;
+        }
+    }
+
+    // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};

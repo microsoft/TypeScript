@@ -38,6 +38,11 @@ module ts {
         previous: ScopeFrame;
     }
 
+    interface NameLookup {
+        setLocation(location: Node): void;
+        isExistingName(name: string): boolean;
+    }
+
     type GetSymbolAccessibilityDiagnostic = (symbolAccesibilityResult: SymbolAccessiblityResult) => SymbolAccessibilityDiagnostic;
 
     interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
@@ -1535,6 +1540,7 @@ module ts {
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
+        var nameLookup: NameLookup;
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -1677,34 +1683,37 @@ module ts {
                 }
             }
 
-            function makeUniqueName(location: Node, baseName: string): string {
-                if (!isExistingName(location, baseName)) {
-                    // use current name as is
-                    return setGeneratedName(baseName);
+            function createNameLookup(): NameLookup {
+                var location: Node;
+                return {
+                    setLocation,
+                    isExistingName: checkName
                 }
 
-                // First try '_name'
-                if (baseName.charCodeAt(0) !== CharacterCodes._) {
-                    var baseName = "_" + baseName;
-                    if (!isExistingName(location, baseName)) {
-                        return setGeneratedName(baseName);
-                    }
+                function setLocation(l: Node): void {
+                    location = l;
                 }
-                // Find the first unique '_name_n', where n is a positive number
-                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
-                    baseName += "_";
-                }
-                var i = 1;
-                while (true) {
-                    name = baseName + i;
-                    if (!isExistingName(location, name)) {
-                        return setGeneratedName(name);
-                    }
-                    i++;
+
+                function checkName(name: string): boolean {
+                    Debug.assert(location !== undefined);
+                    return isExistingName(location, name);
                 }
             }
 
-            function setGeneratedName(name: string): string {
+            function makeUniqueName(location: Node, baseName: string): string {
+                var name: string
+                if (!isExistingName(location, baseName)) {
+                    name = baseName;
+                }
+                else {
+                    if (!nameLookup) {
+                        nameLookup = createNameLookup();
+                    }
+                    nameLookup.setLocation(location);
+                    name = generateUniqueName(baseName, nameLookup.isExistingName);
+                    nameLookup.setLocation(undefined);
+                }
+
                 if (!currentScopeNames) {
                     currentScopeNames = {};
                 }
@@ -1712,9 +1721,12 @@ module ts {
                 return currentScopeNames[name] = name;
             }
 
+            function isGeneratedName(name: string): boolean {
+                return currentScopeNames && hasProperty(currentScopeNames, name);
+            }
 
             function isExistingName(location: Node, name: string) {
-                return !resolver.isUnknownIdentifier(location, name) || (currentScopeNames && hasProperty(currentScopeNames, name));
+                return !resolver.isUnknownIdentifier(location, name) || isGeneratedName(name);
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -2484,9 +2496,9 @@ module ts {
             }
 
             function emitIdentifier(node: Identifier) {
-                var symbolId = getBlockScopedVariableId(node);
-                if (symbolId !== undefined && generatedBlockScopeNames) {
-                    var text = generatedBlockScopeNames[symbolId];
+                var variableId = getBlockScopedVariableId(node);
+                if (variableId !== undefined && generatedBlockScopeNames) {
+                    var text = generatedBlockScopeNames[variableId];
                     if (text) {
                         write(text);
                         return;
@@ -3882,11 +3894,11 @@ module ts {
                 }
 
                 var generatedName = makeUniqueName(getEnclosingBlockScopeContainer(node), (<Identifier>node).text);
-                var symbolId = resolver.getBlockScopedVariableId(<Identifier>node);
+                var variableId = resolver.getBlockScopedVariableId(<Identifier>node);
                 if (!generatedBlockScopeNames) {
                     generatedBlockScopeNames = [];
                 }
-                generatedBlockScopeNames[symbolId] = generatedName;
+                generatedBlockScopeNames[variableId] = generatedName;
             }
 
             function emitVariableStatement(node: VariableStatement) {
