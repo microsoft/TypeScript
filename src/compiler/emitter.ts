@@ -3726,6 +3726,10 @@ module ts {
             }
 
             function emitExportVariableAssignments(node: VariableDeclaration | BindingElement) {
+                if (node.kind === SyntaxKind.OmittedExpression) {
+                    return;
+                }
+
                 var name = (<VariableLikeDeclaration>node).name;
                 if (name.kind === SyntaxKind.Identifier) {
                     emitExportMemberAssignments(<Identifier>name);
