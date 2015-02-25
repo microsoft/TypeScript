@@ -97,6 +97,7 @@ module ts {
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
         var globalESSymbolType: ObjectType;
+        var globalIterableType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -3156,8 +3157,8 @@ module ts {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: string): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), 0);
+        function getGlobalType(name: string, arity = 0): ObjectType {
+            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -8844,70 +8845,79 @@ module ts {
         }
 
         function getIteratedType(iterable: Type, expressionForError: Expression): Type {
-            Debug.assert(languageVersion >= ScriptTarget.ES6);
-            if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
-                return iterable; // any or unknown
-            }
-
-            // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
-            // must have the following structure (annotated with the names of the variables below):
-            //
-            // { // iterable
-            //     [Symbol.iterator]: { // iteratorFunction
-            //         (): { // iterator
-            //             next: { // iteratorNextFunction
-            //                 (): { // iteratorNextResult
-            //                     value: T // iteratorNextValue
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            //
-            // T is the type we are after. At every level that involves analyzing return types
-            // of signatures, we union the return types of all the signatures.
-            var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
-            if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
-                return iteratorFunction; // any or unknown
-            }
-            
-            var iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
-            if (iteratorFunctionSignatures.length === 0) {
-                error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
-                return unknownType;
-            }
-
-            var iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
-            if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
-                return iterator; // any or unknown
-            }
-
-            var iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
-            if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
-                return iteratorNextFunction; // any or unknown
-            }
-            
-            var iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
-            if (iteratorNextFunctionSignatures.length === 0) {
-                error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
-                return unknownType;
-            }
-
-            var iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-            if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
-                return iteratorNextResult; // any or unknown
-            }
-
-            var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
-            if (!iteratorNextValue) {
-                error(expressionForError, Diagnostics.The_object_returned_by_the_next_method_of_the_iterator_must_have_a_value_property);
-                return unknownType;
-            }
-
-            return iteratorNextValue;
-            // TODO
-            // Now even though we have extracted the iteratorNextValue, we will have to validate that the type
+            var iteratedType = getIteratedTypeSubroutine(iterable, expressionForError);
+            // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
+            if (iteratedType !== unknownType) {
+                var completeIterableType = globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [iteratedType]) : emptyObjectType;
+                checkTypeAssignableTo(iterable, completeIterableType, expressionForError);
+            }
+
+            return iteratedType;
+            
+            function getIteratedTypeSubroutine(iterable: Type, expressionForError: Expression) {
+                Debug.assert(languageVersion >= ScriptTarget.ES6);
+                if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
+                    return iterable; // any or unknown
+                }
+
+                // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
+                // must have the following structure (annotated with the names of the variables below):
+                //
+                // { // iterable
+                //     [Symbol.iterator]: { // iteratorFunction
+                //         (): { // iterator
+                //             next: { // iteratorNextFunction
+                //                 (): { // iteratorNextResult
+                //                     value: T // iteratorNextValue
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                //
+                // T is the type we are after. At every level that involves analyzing return types
+                // of signatures, we union the return types of all the signatures.
+                var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
+                if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
+                    return iteratorFunction; // any or unknown
+                }
+
+                var iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
+                if (iteratorFunctionSignatures.length === 0) {
+                    error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                    return unknownType;
+                }
+
+                var iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
+                if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
+                    return iterator; // any or unknown
+                }
+
+                var iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
+                if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
+                    return iteratorNextFunction; // any or unknown
+                }
+
+                var iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
+                if (iteratorNextFunctionSignatures.length === 0) {
+                    error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
+                    return unknownType;
+                }
+
+                var iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+                if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
+                    return iteratorNextResult; // any or unknown
+                }
+
+                var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
+                if (!iteratorNextValue) {
+                    error(expressionForError, Diagnostics.The_object_returned_by_the_next_method_of_the_iterator_must_have_a_value_property);
+                    return unknownType;
+                }
+                
+                return iteratorNextValue;
+            }
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -10856,6 +10866,7 @@ module ts {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
+                globalIterableType = getGlobalType("Iterable", 1);
             }
             else {
                 globalTemplateStringsArrayType = unknownType;
