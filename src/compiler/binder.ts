@@ -15,12 +15,12 @@ module ts {
         if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
             return ModuleInstanceState.NonInstantiated;
         }
-        // 2. const enum declarations don't make module instantiated
+        // 2. const enum declarations
         else if (isConstEnumDeclaration(node)) {
             return ModuleInstanceState.ConstEnumOnly;
         }
-        // 3. non - exported import declarations
-        else if (node.kind === SyntaxKind.ImportDeclaration && !(node.flags & NodeFlags.Export)) {
+        // 3. non-exported import declarations
+        else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && !(node.flags & NodeFlags.Export)) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 4. other uninstantiated module declarations.
@@ -179,40 +179,38 @@ module ts {
         }
 
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
-            // Exported module members are given 2 symbols: A local symbol that is classified with an ExportValue,
-            // ExportType, or ExportContainer flag, and an associated export symbol with all the correct flags set
-            // on it. There are 2 main reasons:
-            //
-            //   1. We treat locals and exports of the same name as mutually exclusive within a container. 
-            //      That means the binder will issue a Duplicate Identifier error if you mix locals and exports
-            //      with the same name in the same container.
-            //      TODO: Make this a more specific error and decouple it from the exclusion logic.
-            //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
-            //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
-            //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-            var exportKind = 0;
-            if (symbolKind & SymbolFlags.Value) {
-                exportKind |= SymbolFlags.ExportValue;
+            var hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
+            if (symbolKind & SymbolFlags.Import) {
+                if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
+                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                }
+                else {
+                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                }
             }
-            if (symbolKind & SymbolFlags.Type) {
-                exportKind |= SymbolFlags.ExportType;
-            }
-            if (symbolKind & SymbolFlags.Namespace) {
-                exportKind |= SymbolFlags.ExportNamespace;
-            }
-
-            if (getCombinedNodeFlags(node) & NodeFlags.Export || (node.kind !== SyntaxKind.ImportDeclaration && isAmbientContext(container))) {
-                if (exportKind) {
+            else {
+                // Exported module members are given 2 symbols: A local symbol that is classified with an ExportValue,
+                // ExportType, or ExportContainer flag, and an associated export symbol with all the correct flags set
+                // on it. There are 2 main reasons:
+                //
+                //   1. We treat locals and exports of the same name as mutually exclusive within a container. 
+                //      That means the binder will issue a Duplicate Identifier error if you mix locals and exports
+                //      with the same name in the same container.
+                //      TODO: Make this a more specific error and decouple it from the exclusion logic.
+                //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
+                //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
+                //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
+                if (hasExportModifier || isAmbientContext(container)) {
+                    var exportKind = (symbolKind & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
+                        (symbolKind & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
+                        (symbolKind & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
                     var local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     node.localSymbol = local;
                 }
                 else {
-                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
                 }
-            }
-            else {
-                declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
             }
         }
 
@@ -310,6 +308,13 @@ module ts {
                     }
                 }
             }
+        }
+
+        function bindExportDeclaration(node: ExportDeclaration) {
+            if (!node.exportClause) {
+                ((<ExportContainer>container).exportStars || ((<ExportContainer>container).exportStars = [])).push(node);
+            }
+            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
         }
 
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
@@ -468,8 +473,22 @@ module ts {
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);
                     break;
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    bindExportDeclaration(<ExportDeclaration>node);
+                    break;
+                case SyntaxKind.ImportClause:
+                    if ((<ImportClause>node).name) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {

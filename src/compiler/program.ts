@@ -351,24 +351,23 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (isExternalModuleImportDeclaration(node) &&
-                    getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
-
-                    var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
-                    var moduleName = nameLiteral.text;
-                    if (moduleName) {
-                        var searchPath = basePath;
-                        while (true) {
-                            var searchName = normalizePath(combinePaths(searchPath, moduleName));
-                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) {
-                                break;
+                if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ExportDeclaration) {
+                    var moduleNameExpr = getExternalModuleName(node);
+                    if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
+                        var moduleNameText = (<LiteralExpression>moduleNameExpr).text;
+                        if (moduleNameText) {
+                            var searchPath = basePath;
+                            while (true) {
+                                var searchName = normalizePath(combinePaths(searchPath, moduleNameText));
+                                if (findModuleSourceFile(searchName + ".ts", moduleNameExpr) || findModuleSourceFile(searchName + ".d.ts", moduleNameExpr)) {
+                                    break;
+                                }
+                                var parentPath = getDirectoryPath(searchPath);
+                                if (parentPath === searchPath) {
+                                    break;
+                                }
+                                searchPath = parentPath;
                             }
-
-                            var parentPath = getDirectoryPath(searchPath);
-                            if (parentPath === searchPath) {
-                                break;
-                            }
-                            searchPath = parentPath;
                         }
                     }
                 }
@@ -379,10 +378,10 @@ module ts {
                     // The StringLiteral must specify a top - level external module name.
                     // Relative external module names are not permitted
                     forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (isExternalModuleImportDeclaration(node) &&
-                            getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleImportEqualsDeclaration(node) &&
+                            getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
 
-                            var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
+                            var nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
                             var moduleName = nameLiteral.text;
                             if (moduleName) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6
@@ -399,7 +398,7 @@ module ts {
                 }
             });
 
-            function findModuleSourceFile(fileName: string, nameLiteral: LiteralExpression) {
+            function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }

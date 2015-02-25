@@ -463,7 +463,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -574,7 +574,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     }
 
     colors = process.env.colors || process.env.color
-    colors = colors ? ' --no-colors ' : ''
+    colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
     reporter = process.env.reporter || process.env.r || 'dot';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally

@@ -21,10 +21,16 @@ function func2(a, b, c) { }
 ; // error at "a,b,c"
 function func3() { }
 ; // error at "args" 
-function func4(z, w) { }
+function func4(z, w) {
+    if (z === void 0) { z = null; }
+    if (w === void 0) { w = undefined; }
+}
 ; // error at "z,w"
 // these shouldn't be errors
-function noError1(x, y) { }
+function noError1(x, y) {
+    if (x === void 0) { x = 3; }
+    if (y === void 0) { y = 2; }
+}
 ;
 function noError2(x, y) { }
 ;

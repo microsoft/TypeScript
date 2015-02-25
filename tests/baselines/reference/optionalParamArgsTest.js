@@ -242,7 +242,10 @@ c1o1.C1M4();
 i1o1.C1M4();
 F4();
 L4();
-function fnOpt1(id, children, expectedPath, isRoot) { }
+function fnOpt1(id, children, expectedPath, isRoot) {
+    if (children === void 0) { children = []; }
+    if (expectedPath === void 0) { expectedPath = []; }
+}
 function fnOpt2(id, children, expectedPath, isRoot) { }
 fnOpt1(1, [2, 3], [1], true);
 fnOpt2(1, [2, 3], [1], true);

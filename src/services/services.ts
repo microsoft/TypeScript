@@ -801,7 +801,7 @@ module ts {
                         case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -970,6 +970,7 @@ module ts {
         kind: string;
         kindModifiers: string;
         matchKind: string;
+        isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
         containerName: string;
@@ -1552,77 +1553,48 @@ module ts {
             var file = this.getEntry(fileName);
             return file && file.scriptSnapshot;
         }
-
-        public getChangeRange(fileName: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
-            var currentVersion = this.getVersion(fileName);
-            if (lastKnownVersion === currentVersion) {
-                return unchangedTextChangeRange; // "No changes"
-            }
-
-            var scriptSnapshot = this.getScriptSnapshot(fileName);
-            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
-        }
     }
 
     class SyntaxTreeCache {
-        private hostCache: HostCache;
-
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentFileName: string = "";
-        private currentFileVersion: string = null;
-        private currentSourceFile: SourceFile = null;
+        private currentFileName: string;
+        private currentFileVersion: string;
+        private currentFileScriptSnapshot: IScriptSnapshot;
+        private currentSourceFile: SourceFile;
 
         constructor(private host: LanguageServiceHost) {
         }
 
-        private log(message: string) {
-            if (this.host.log) {
-                this.host.log(message);
+        public getCurrentSourceFile(fileName: string): SourceFile {
+            var scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            if (!scriptSnapshot) {
+                // The host does not know about this file.
+                throw new Error("Could not find file: '" + fileName + "'.");
             }
-        }
 
-        private initialize(fileName: string) {
-            // ensure that both source file and syntax tree are either initialized or not initialized
-            var start = new Date().getTime();
-            this.hostCache = new HostCache(this.host);
-            this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
-
-            var version = this.hostCache.getVersion(fileName);
+            var version = this.host.getScriptVersion(fileName);
             var sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var start = new Date().getTime();
+                // This is a new file, just parse it
                 sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
-                this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(fileName);
-
-                var editRange = this.hostCache.getChangeRange(fileName, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
-
-                var start = new Date().getTime();
+                // This is the same file, just a newer version. Incrementally parse the file.
+                var editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
-                this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFileName = fileName;
+                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentSourceFile = sourceFile;
             }
-        }
 
-        public getCurrentSourceFile(fileName: string): SourceFile {
-            this.initialize(fileName);
             return this.currentSourceFile;
-        }
-
-        public getCurrentScriptSnapshot(fileName: string): IScriptSnapshot {
-            return this.getCurrentSourceFile(fileName).scriptSnapshot;
         }
     }
 
@@ -1924,7 +1896,7 @@ module ts {
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral) {
             return isNameOfModuleDeclaration(node) ||
-                (isExternalModuleImportDeclaration(node.parent.parent) && getExternalModuleImportDeclarationExpression(node.parent.parent) === node);
+                (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node);
         }
 
         return false;
@@ -1986,7 +1958,7 @@ module ts {
         });
     }
 
-    /* @internal */ export function getContainerNode(node: Node): Node {
+    /* @internal */ export function getContainerNode(node: Node): Declaration {
         while (true) {
             node = node.parent;
             if (!node) {
@@ -2004,7 +1976,7 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ModuleDeclaration:
-                    return node;
+                    return <Declaration>node;
             }
         }
     }
@@ -2069,6 +2041,7 @@ module ts {
         }
 
         function getValidSourceFile(fileName: string): SourceFile {
+            fileName = normalizeSlashes(fileName);
             var sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
@@ -2157,7 +2130,7 @@ module ts {
                         }
 
                         // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostCache.getChangeRange(fileName, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
                         return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
                     }
                 }
@@ -2222,8 +2195,6 @@ module ts {
         function getSyntacticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
-
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
@@ -2234,7 +2205,6 @@ module ts {
         function getSemanticDiagnostics(fileName: string) {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName)
             var targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
@@ -2310,8 +2280,6 @@ module ts {
 
         function getCompletionsAtPosition(fileName: string, position: number) {
             synchronizeHostData();
-
-            fileName = normalizeSlashes(fileName);
 
             var syntacticStart = new Date().getTime();
             var sourceFile = getValidSourceFile(fileName);
@@ -2435,6 +2403,19 @@ module ts {
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
                 }
+                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                    // cursor is in import clause
+                    // try to show exported member for imported module
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
+                    if (showCompletionsInImportsClause(previousToken)) {
+                        var importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                        Debug.assert(importDeclaration !== undefined);
+                        var exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
+                        var filteredExports = filterModuleExports(exports, importDeclaration);
+                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                    }
+                }
                 else {
                     // Get scope members
                     isMemberCompletion = false;
@@ -2483,6 +2464,18 @@ module ts {
                     isRightOfIllegalDot(previousToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function showCompletionsInImportsClause(node: Node): boolean {
+                if (node) {
+                    // import {| 
+                    // import {a,|
+                    if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
+                        return node.parent.kind === SyntaxKind.NamedImports;
+                    }
+                }
+
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -2696,6 +2689,28 @@ module ts {
                 return false;
             }
 
+            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[] {
+                var exisingImports: Map<boolean> = {};
+
+                if (!importDeclaration.importClause) {
+                    return exports;
+                }
+
+                if (importDeclaration.importClause.namedBindings &&
+                    importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+
+                    forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        var name = el.propertyName || el.name;
+                        exisingImports[name.text] = true;
+                    });
+                }
+
+                if (isEmpty(exisingImports)) {
+                    return exports;
+                }
+                return filter(exports, e => !lookUp(exisingImports, e.name));
+            }
+
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -2731,8 +2746,6 @@ module ts {
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
-            fileName = normalizeSlashes(fileName);
-
             var sourceFile = getValidSourceFile(fileName);
 
             var session = activeCompletionSession;
@@ -3080,19 +3093,19 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 ts.forEach(symbol.declarations, declaration => {
-                    if (declaration.kind === SyntaxKind.ImportDeclaration) {
-                        var importDeclaration = <ImportDeclaration>declaration;
-                        if (isExternalModuleImportDeclaration(importDeclaration)) {
+                    if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                        var importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
+                        if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
                             displayParts.push(spacePart());
                             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportDeclarationExpression(importDeclaration)), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            var internalAliasSymbol = typeResolver.getSymbolAtLocation(importDeclaration.moduleReference);
+                            var internalAliasSymbol = typeResolver.getSymbolAtLocation(importEqualsDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
                                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -3195,7 +3208,6 @@ module ts {
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3241,7 +3253,6 @@ module ts {
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -3377,7 +3388,6 @@ module ts {
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
@@ -3926,7 +3936,6 @@ module ts {
         function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -4670,7 +4679,6 @@ module ts {
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var outputFiles: OutputFile[] = [];
@@ -4733,7 +4741,9 @@ module ts {
                         return SemanticMeaning.Namespace;
                     }
 
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ImportEqualsDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
                 // An external module can be a Value
@@ -4768,10 +4778,10 @@ module ts {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return isInternalModuleImportDeclaration(node.parent) && (<ImportDeclaration>node.parent).moduleReference === node;
+            return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
         }
 
-        function getMeaningFromRightHandSideOfImport(node: Node) {
+        function getMeaningFromRightHandSideOfImportEquals(node: Node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
 
             //     import a = |b|; // Namespace
@@ -4780,7 +4790,7 @@ module ts {
 
             if (node.parent.kind === SyntaxKind.QualifiedName &&
                 (<QualifiedName>node.parent).right === node &&
-                node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
                 return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
             }
             return SemanticMeaning.Namespace;
@@ -4791,7 +4801,7 @@ module ts {
                 return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
             }
             else if (isInRightSideOfImport(node)) {
-                return getMeaningFromRightHandSideOfImport(node);
+                return getMeaningFromRightHandSideOfImportEquals(node);
             }
             else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 return getMeaningFromDeclaration(node.parent);
@@ -4814,23 +4824,21 @@ module ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
         }
 
         /// Syntactic features
-        function getCurrentSourceFile(fileName: string): SourceFile {
-            fileName = normalizeSlashes(fileName);
-            var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return currentSourceFile;
+        function getSourceFile(fileName: string): SourceFile {
+            return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
         function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
-            fileName = ts.normalizeSlashes(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
             // Get node at the location
-            var node = getTouchingPropertyName(getCurrentSourceFile(fileName), startPos);
+            var node = getTouchingPropertyName(sourceFile, startPos);
 
             if (!node) {
                 return;
@@ -4884,19 +4892,19 @@ module ts {
 
         function getBreakpointStatementAtPosition(fileName: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            fileName = ts.normalizeSlashes(fileName);
-            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(fileName), position);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
-        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            fileName = normalizeSlashes(fileName);
+        function getNavigationBarItems(fileName: string): NavigationBarItem[]{
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             synchronizeHostData();
-            fileName = normalizeSlashes(fileName);
 
             var sourceFile = getValidSourceFile(fileName);
 
@@ -4970,8 +4978,7 @@ module ts {
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Make a scanner we can get trivia from.
             var triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
@@ -5189,13 +5196,12 @@ module ts {
 
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             var result: TextSpan[] = [];
 
             var token = getTouchingToken(sourceFile, position);
@@ -5248,10 +5254,8 @@ module ts {
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
-            fileName = normalizeSlashes(fileName);
-
             var start = new Date().getTime();
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
@@ -5263,22 +5267,17 @@ module ts {
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            fileName = normalizeSlashes(fileName);
-
-            var sourceFile = getCurrentSourceFile(fileName);
+            var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
@@ -5301,8 +5300,6 @@ module ts {
             // treating this as a semantic operation, we can access any tree without throwing 
             // anything away.
             synchronizeHostData();
-
-            fileName = normalizeSlashes(fileName);
 
             var sourceFile = getValidSourceFile(fileName);
 
@@ -5446,7 +5443,6 @@ module ts {
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
 
-            fileName = normalizeSlashes(fileName);
             var sourceFile = getValidSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
@@ -5530,7 +5526,7 @@ module ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
-            getSourceFile: getCurrentSourceFile,
+            getSourceFile,
             getProgram
         };
     }
@@ -5694,25 +5690,25 @@ module ts {
                          }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
-                             token = SyntaxKind.Identifier;
+                        token = SyntaxKind.Identifier;
                     }
                     else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
-                             // We have two keywords in a row.  Only treat the second as a keyword if 
-                             // it's a sequence that could legally occur in the language.  Otherwise
-                             // treat it as an identifier.  This way, if someone writes "private var"
-                             // we recognize that 'var' is actually an identifier here.
-                             token = SyntaxKind.Identifier;
+                        // We have two keywords in a row.  Only treat the second as a keyword if 
+                        // it's a sequence that could legally occur in the language.  Otherwise
+                        // treat it as an identifier.  This way, if someone writes "private var"
+                        // we recognize that 'var' is actually an identifier here.
+                        token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
                              token === SyntaxKind.LessThanToken) {
-                             // Could be the start of something generic.  Keep track of that by bumping 
-                             // up the current count of generic contexts we may be in.
-                             angleBracketStack++;
+                        // Could be the start of something generic.  Keep track of that by bumping 
+                        // up the current count of generic contexts we may be in.
+                        angleBracketStack++;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
-                             // If we think we're currently in something generic, then mark that that
-                             // generic entity is complete.
-                             angleBracketStack--;
+                        // If we think we're currently in something generic, then mark that that
+                        // generic entity is complete.
+                        angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
                              token === SyntaxKind.StringKeyword ||
@@ -5873,7 +5869,8 @@ module ts {
                 case SyntaxKind.EqualsToken:
                 case SyntaxKind.CommaToken:
                     return true;
-                default: return false;
+                default:
+                    return false;
             }
         }
 
@@ -5918,6 +5915,7 @@ module ts {
                 case SyntaxKind.SingleLineCommentTrivia:
                     return TokenClass.Comment;
                 case SyntaxKind.WhitespaceTrivia:
+                case SyntaxKind.NewLineTrivia:
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:

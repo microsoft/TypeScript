@@ -11,7 +11,9 @@ foo(() => { return false; });
 var f1 = function () { };
 var f2 = function (x, y) { };
 var f3 = function (x, y) { };
-var f4 = function (x, y, z) { };
+var f4 = function (x, y, z) {
+    if (z === void 0) { z = 10; }
+};
 function foo(func) { }
 foo(function () { return true; });
 foo(function () { return false; });

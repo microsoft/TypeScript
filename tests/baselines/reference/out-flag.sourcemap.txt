@@ -150,8 +150,8 @@ sourceFile:out-flag.ts
   >    {
   >        
 2 >        //
-1 >Emitted(11, 9) Source(14, 9) + SourceIndex(0) name (MyClass.SetCount)
-2 >Emitted(11, 11) Source(14, 11) + SourceIndex(0) name (MyClass.SetCount)
+1 >Emitted(11, 9) Source(14, 9) + SourceIndex(0) name (MyClass)
+2 >Emitted(11, 11) Source(14, 11) + SourceIndex(0) name (MyClass)
 ---
 >>>    };
 1 >^^^^
@@ -160,8 +160,8 @@ sourceFile:out-flag.ts
 1 >
   >    
 2 >    }
-1 >Emitted(12, 5) Source(15, 5) + SourceIndex(0) name (MyClass.SetCount)
-2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0) name (MyClass.SetCount)
+1 >Emitted(12, 5) Source(15, 5) + SourceIndex(0) name (MyClass)
+2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0) name (MyClass)
 ---
 >>>    return MyClass;
 1->^^^^
