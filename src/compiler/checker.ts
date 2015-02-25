@@ -751,7 +751,10 @@ module ts {
                     forEach(symbol.declarations, node => {
                         if (node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.ModuleDeclaration) {
                             forEach((<ExportContainer>node).exportStars, exportStar => {
-                                visit(resolveExternalModuleName(exportStar, exportStar.moduleSpecifier));
+                                var moduleSymbol = resolveExternalModuleName(exportStar, exportStar.moduleSpecifier);
+                                if (moduleSymbol) {
+                                    visit(moduleSymbol);
+                                }
                             });
                         }
                     });
