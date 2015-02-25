@@ -606,11 +606,21 @@ module ts {
             }
             return +(text.substring(start, pos));
         }
+        
+        function scanExactNumberOfHexDigits(count: number): number {
+            return scanHexDigits(/*minCount*/ count, /*maxCount*/ count);
+        }
+        
+        function scanMinimumNumberOfHexDigits(count: number): number {
+            return scanHexDigits(/*minCount*/ count, /*maxCount*/ undefined);
+        }
 
-        function scanHexDigits(count: number, mustMatchCount?: boolean): number {
+        function scanHexDigits(minCount: number, maxCount?: number): number {
+            var maxCountSpecified = maxCount !== undefined;
+            
             var digits = 0;
             var value = 0;
-            while (digits < count || !mustMatchCount) {
+            while (!maxCountSpecified || digits < maxCount) {
                 var ch = text.charCodeAt(pos);
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
@@ -627,7 +637,7 @@ module ts {
                 pos++;
                 digits++;
             }
-            if (digits < count) {
+            if (digits < minCount) {
                 value = -1;
             }
             return value;
@@ -766,7 +776,7 @@ module ts {
                     return "\"";
                 case CharacterCodes.x:
                 case CharacterCodes.u:
-                    var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, /*mustMatchCount*/ true);
+                    var ch = scanExactNumberOfHexDigits(ch === CharacterCodes.x ? 2 : 4);
                     if (ch >= 0) {
                         return String.fromCharCode(ch);
                     }
@@ -797,7 +807,7 @@ module ts {
             if (pos + 5 < len && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 var start = pos;
                 pos += 2;
-                var value = scanHexDigits(4, /*mustMatchCount*/ true);
+                var value = scanExactNumberOfHexDigits(4);
                 pos = start;
                 return value;
             }
@@ -1034,7 +1044,7 @@ module ts {
                     case CharacterCodes._0:
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            var value = scanHexDigits(1, /*mustMatchCount*/ false);
+                            var value = scanMinimumNumberOfHexDigits(1);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;
