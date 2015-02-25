@@ -7,7 +7,12 @@ foo(1, 'bar');
 
 
 //// [functionCall10.js]
-function foo() { }
+function foo() {
+    var a = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i - 0] = arguments[_i];
+    }
+}
 ;
 foo(0, 1);
 foo('foo');
