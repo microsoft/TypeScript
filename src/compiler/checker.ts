@@ -2765,7 +2765,7 @@ module ts {
                 return emptyArray;
             }
 
-            return mapToArray(module.exports)
+            return mapToArray(getExportsOfModule(module))
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {

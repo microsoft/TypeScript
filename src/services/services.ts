@@ -2408,7 +2408,7 @@ module ts {
                     // try to show exported member for imported module
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
-                    if (canShowCompletionInImportsClause(previousToken)) {
+                    if (showCompletionsInImportsClause(previousToken)) {
                         var importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
                         var exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
@@ -2466,11 +2466,13 @@ module ts {
                 return result;
             }
 
-            function canShowCompletionInImportsClause(node: Node): boolean {
-                // import {| 
-                // import {a,|
-                if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
-                    return node.parent.kind === SyntaxKind.NamedImports;
+            function showCompletionsInImportsClause(node: Node): boolean {
+                if (node) {
+                    // import {| 
+                    // import {a,|
+                    if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
+                        return node.parent.kind === SyntaxKind.NamedImports;
+                    }
                 }
 
                 return false;
@@ -2687,15 +2689,11 @@ module ts {
                 return false;
             }
 
-            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[]{
+            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[] {
                 var exisingImports: Map<boolean> = {};
 
                 if (!importDeclaration.importClause) {
                     return exports;
-                }
-
-                if (importDeclaration.importClause.name) {
-                    exisingImports[importDeclaration.importClause.name.text] = true;
                 }
 
                 if (importDeclaration.importClause.namedBindings &&
@@ -2710,9 +2708,7 @@ module ts {
                 if (isEmpty(exisingImports)) {
                     return exports;
                 }
-                else {
-                    return filter(exports, e => !lookUp(exisingImports, e.name));
-                }
+                return filter(exports, e => !lookUp(exisingImports, e.name));
             }
 
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
