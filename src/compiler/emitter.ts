@@ -3109,13 +3109,12 @@ module ts {
                     //
                     // So we only indent if the right side of the binary expression starts further in on the line 
                     // versus the left.
-                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
-                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
 
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
-                    var onDifferentLine = operatorEnd.line !== rightStart.line;
-                    if (onDifferentLine) {
+                    if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
+                        var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
+
                         // Also, if the right expression starts further in on the line than the left, then we'll indent.
                         var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                         var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
