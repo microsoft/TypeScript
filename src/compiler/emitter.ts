@@ -3994,7 +3994,7 @@ module ts {
                 write(" {");
                 scopeEmitStart(node);
 
-                var outPos = writer.getTextPos();
+                var initialTextPos = writer.getTextPos();
 
                 increaseIndent();
                 emitDetachedComments(body.statements);
@@ -4002,10 +4002,10 @@ module ts {
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
 
-                var preambleEmitted = writer.getTextPos() !== outPos;
+                var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
-                    for (var i = startIndex, n = body.statements.length; i < n; i++) {
+                    for (var i = 0, n = body.statements.length; i < n; i++) {
                         write(" ");
                         emit(body.statements[i]);
                     }
