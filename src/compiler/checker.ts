@@ -8828,20 +8828,7 @@ module ts {
                 return anyType;
             }
 
-            var variable = forOfStatement.initializer;
-            var links = getNodeLinks(variable);
-            if (!links.resolvedType) {
-                links.resolvedType = resolvingType;
-                var type = getIteratedType(getTypeOfExpression(forOfStatement.expression), forOfStatement.expression);
-                if (links.resolvedType === resolvingType) {
-                    links.resolvedType = type;
-                }
-            }
-            else if (links.resolvedType === resolvingType) {
-                links.resolvedType = anyType;
-            }
-
-            return links.resolvedType;
+            return getIteratedType(getTypeOfExpression(forOfStatement.expression), forOfStatement.expression);
         }
 
         function getIteratedType(iterable: Type, expressionForError: Expression): Type {
