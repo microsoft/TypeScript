@@ -6874,8 +6874,9 @@ module ts {
                     return anyType;
                 }
             }
-
-            getNodeLinks(node).flags |= getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved;
+            if (getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
+                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            }
             return getReturnTypeOfSignature(signature);
         }
 
@@ -6886,7 +6887,9 @@ module ts {
             }
 
             var signature = getResolvedSignature(node);
-            getNodeLinks(node).flags |= getNodeCheckFlags(node.tag) & NodeCheckFlags.ConditionallyRemoved;
+            if (getNodeCheckFlags(node.tag) & NodeCheckFlags.ConditionallyRemoved) {
+                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            }
             return getReturnTypeOfSignature(signature);
         }
 
@@ -9391,7 +9394,9 @@ module ts {
             checkGrammarStatementInAmbientContext(node)
 
             checkExpression(node.expression);
-            getNodeLinks(node).flags |= getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved;
+            if (getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
+                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
+            }
         }
 
         function checkIfStatement(node: IfStatement) {

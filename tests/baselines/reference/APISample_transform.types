@@ -3481,6 +3481,20 @@ declare module "typescript" {
         decoratorMetadata?: DecoratorMetadata[];
 >decoratorMetadata : DecoratorMetadata[]
 >DecoratorMetadata : DecoratorMetadata
+
+        decoratorUsage?: DecoratorUsageMetadata;
+>decoratorUsage : DecoratorUsageMetadata
+>DecoratorUsageMetadata : DecoratorUsageMetadata
+
+        obsolete?: ObsoleteMetadata;
+>obsolete : ObsoleteMetadata
+>ObsoleteMetadata : ObsoleteMetadata
+
+        conditionalSymbols?: string[];
+>conditionalSymbols : string[]
+
+        conditionallyRemoved?: boolean;
+>conditionallyRemoved : boolean
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol
@@ -3934,14 +3948,23 @@ declare module "typescript" {
         failedTypeParameterIndex?: number;
 >failedTypeParameterIndex : number
     }
-    interface DecoratorUsage {
->DecoratorUsage : DecoratorUsage
+    interface DecoratorUsageMetadata {
+>DecoratorUsageMetadata : DecoratorUsageMetadata
 
         ambient?: boolean;
 >ambient : boolean
 
         targets?: number;
 >targets : number
+    }
+    interface ObsoleteMetadata {
+>ObsoleteMetadata : ObsoleteMetadata
+
+        obsolete?: boolean;
+>obsolete : boolean
+
+        message?: string;
+>message : string
     }
     interface DecoratorMetadata {
 >DecoratorMetadata : DecoratorMetadata

@@ -1112,6 +1112,10 @@ declare module "typescript" {
         unionType?: UnionType;
         resolvedExports?: SymbolTable;
         decoratorMetadata?: DecoratorMetadata[];
+        decoratorUsage?: DecoratorUsageMetadata;
+        obsolete?: ObsoleteMetadata;
+        conditionalSymbols?: string[];
+        conditionallyRemoved?: boolean;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }
@@ -1264,9 +1268,13 @@ declare module "typescript" {
         inferredTypes: Type[];
         failedTypeParameterIndex?: number;
     }
-    interface DecoratorUsage {
+    interface DecoratorUsageMetadata {
         ambient?: boolean;
         targets?: number;
+    }
+    interface ObsoleteMetadata {
+        obsolete?: boolean;
+        message?: string;
     }
     interface DecoratorMetadata {
         symbol: Symbol;

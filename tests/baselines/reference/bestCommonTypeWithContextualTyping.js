@@ -17,7 +17,7 @@ var e: Ellement;
 var arr: Contextual[] = [e]; // Ellement[]
 var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: Ellement }
 
-var conditional: Contextual = null ? e : e; // Ellement
+var condition: Contextual = null ? e : e; // Ellement
 var contextualOr: Contextual = e || e; // Ellement
 
 //// [bestCommonTypeWithContextualTyping.js]
@@ -27,5 +27,5 @@ var e;
 // to Contextual, no errors.
 var arr = [e]; // Ellement[]
 var obj = { s: e }; // { s: Ellement; [s: string]: Ellement }
-var conditional = null ? e : e; // Ellement
+var condition = null ? e : e; // Ellement
 var contextualOr = e || e; // Ellement

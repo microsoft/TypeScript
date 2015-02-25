@@ -40,8 +40,8 @@ var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: 
 >s : Ellement
 >e : Ellement
 
-var conditional: Contextual = null ? e : e; // Ellement
->conditional : Contextual
+var condition: Contextual = null ? e : e; // Ellement
+>condition : Contextual
 >Contextual : Contextual
 >null ? e : e : Ellement
 >e : Ellement
