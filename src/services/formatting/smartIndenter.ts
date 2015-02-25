@@ -153,7 +153,7 @@ module ts.formatting {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             var commaItemInfo = findListItemInfo(commaToken);
             if (commaItemInfo && commaItemInfo.listItemIndex > 0) {
-                deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
+                return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
             }
             else {
                 // handle broken code gracefully
