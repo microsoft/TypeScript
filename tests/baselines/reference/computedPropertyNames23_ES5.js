@@ -16,8 +16,8 @@ var C = (function () {
         return 0;
     };
     C.prototype[(_a = {}, _a[this.bar()] =
-    1,
-    _a)[0]] = function () { };
+        1,
+        _a)[0]] = function () { };
     return C;
 })();
 var _a;
