@@ -12,8 +12,7 @@ function bar() {
             // 'await' here is an identifier, and not a yield expression.
             function foo(a = await) {
                 return new Promise(function (_resolve) {
-                    _resolve(__awaiter(function* () {
-                    }()));
+                    _resolve(__awaiter(function* () { }()));
                 });
             }
         }()));

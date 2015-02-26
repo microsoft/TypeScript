@@ -1115,8 +1115,6 @@ declare module "typescript" {
         referenced?: boolean;
         exportAssignSymbol?: Symbol;
         unionType?: UnionType;
-        awaitedType?: Type;
-        promiseType?: boolean;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }

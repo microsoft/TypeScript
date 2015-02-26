@@ -1391,8 +1391,6 @@ module ts {
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
         unionType?: UnionType;         // Containing union type for union property
-        awaitedType?: Type;            // Awaited type of symbol
-        promiseType?: boolean;         // True if the type represents a creatable promise
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }

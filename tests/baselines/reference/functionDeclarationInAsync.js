@@ -12,8 +12,7 @@ async function f(): Promise<void> {
 
 //// [functionDeclarationInAsync.js]
 function f() {
-    function hoisted() {
-    }
+    function hoisted() { }
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             hoisted();

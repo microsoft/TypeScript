@@ -7,5 +7,4 @@ declare class Promise<T> {
 var v = async function await(): Promise<void> { }
 
 //// [asyncFunctionExpression11.js]
-var v = , await = function () {
-};
+var v = , await = function () { };

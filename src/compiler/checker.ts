@@ -4876,7 +4876,7 @@ module ts {
         function renameSymbol(symbol: Symbol, name: string): void {
             if (!symbolNameOverrides) {
                 symbolNameOverrides = [];
-            }            
+            }
             symbolNameOverrides[symbol.id] = name;
         }
 
@@ -5587,9 +5587,9 @@ module ts {
             for (var i = 0; i < node.properties.length; i++) {
                 var memberDecl = node.properties[i];
                 var member = memberDecl.symbol;
-                if (memberDecl.kind === SyntaxKind.PropertyAssignment
-                    || memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment
-                    || isObjectLiteralMethod(memberDecl)) {
+                if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
+                    isObjectLiteralMethod(memberDecl)) {
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         var type = checkPropertyAssignment(<PropertyAssignment>memberDecl, contextualMapper);
                     }
@@ -6615,14 +6615,14 @@ module ts {
             }
         }
 
-        function createPromiseType(promisedType: Type, func: FunctionLikeDeclaration): Type {
+        function createPromiseType(promisedType: Type, location: Node): Type {
             if (globalPromiseSymbol) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = getAwaitedType(promisedType, /*fallbackType*/ promisedType);
+                promisedType = getAwaitedType(promisedType);
                 var promiseType = globalPromiseType || getDeclaredTypeOfSymbol(globalPromiseSymbol);
                 return promiseType !== emptyObjectType ? createTypeReference(<GenericType>promiseType, [promisedType]) : emptyObjectType;
             }
-            error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            error(location, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
             return unknownType;
         }
 
@@ -6737,9 +6737,6 @@ module ts {
             var isAsync = isAsyncFunction(node);
             if (isAsync) {
                 emitAwaiter = true;
-                if (languageVersion < ScriptTarget.ES6) {
-                    emitGenerator = true;
-                }
             }
             var links = getNodeLinks(node);
             var type = getTypeOfSymbol(node.symbol);
@@ -6781,21 +6778,18 @@ module ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             var isAsync = isAsyncFunction(node);
             var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
+            var promisedType: Type;
             if (returnType && isAsync) {
                 // From within an async function you can return either a non-promise value or a promise. Any 
                 // Promise/A+ compatible implementation will always assimilate any foreign promise, so we 
                 // should not be checking assignability of a promise to the return type. Instead, we need to 
                 // check assignability of the awaited type of the concise body against the promised type of 
                 // its return type annotation.
-                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
-                if (awaitableReturnType) {
-                    returnType = awaitableReturnType;
-                }
+                promisedType = checkAsyncFunctionReturnType(node, returnType);
             }
             if (returnType) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
             }
-
             if (node.body) {
                 if (node.body.kind === SyntaxKind.Block) {
                     checkSourceElement(node.body);
@@ -6803,10 +6797,10 @@ module ts {
                 else {
                     var exprType = checkExpression(<Expression>node.body);
                     if (returnType) {
-                        if (isAsync) {
-                            exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
-                        }
-                        checkTypeAssignableTo(exprType, returnType, node.body, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(
+                            isAsync ? getAwaitedType(exprType) : exprType,
+                            isAsync ? promisedType : returnType,
+                            node.body);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -6929,7 +6923,7 @@ module ts {
             }
 
             var operandType = checkExpression(node.expression);
-            return getAwaitedType(operandType, /*fallbackType*/ operandType);
+            return getAwaitedType(operandType);
         }
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
@@ -7331,7 +7325,7 @@ module ts {
             }
             if (resolveAwaitedType) {
                 if (!links.resolvedAwaitedType) {
-                    links.resolvedAwaitedType = getAwaitedType(links.resolvedType, links.resolvedType);
+                    links.resolvedAwaitedType = getAwaitedType(links.resolvedType);
                 }
                 return links.resolvedAwaitedType;
             }
@@ -8166,35 +8160,83 @@ module ts {
             }
         }
 
-        function getAwaitedType(type: Type, fallbackType?: Type, seen: boolean[] = []): Type {
-            // The *promised type* of a `Promise` is the type of its fulfilled value (e.g. `number` in `Promise<number>`).
-            // The *awaited type* of an expression is its *promised type* if the expression is a `Promise`; otherwise, it is the type of the expression
-            var seen: boolean[] = [];
-            if (!type || !globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
-                return fallbackType;
+        function getPromisedType(type: Type): Type {
+            // the "promised type" of a type is the type of the "value" argument of the "onfulfilled" callback.
+            if (!globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
+                return undefined;
             }
-            seen[type.id] = true;
-            if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
+            if (isTypeAssignableTo(type, globalIPromiseType)) {
+                var awaitedTypes: Type[] = [];
                 var thenProp = getPropertyOfType(type, "then");
                 var thenType = getTypeOfSymbol(thenProp);
                 var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
-                var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
-                var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
-                var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
-                if (seen[awaitedType.id]) {
-                    return fallbackType;
+                var thenSignatureCount = thenSignatures.length;
+                for (var i = 0; i < thenSignatureCount; i++) {
+                    var thenSignature = getErasedSignature(thenSignatures[i]);
+                    var onfulfilledParameterType = getTypeAtPosition(thenSignature, 0);
+                    var onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
+                    var onfulfilledParameterSignaturesCount = onfulfilledParameterSignatures.length;
+                    for (var j = 0; j < onfulfilledParameterSignaturesCount; j++) {
+                        var onfulfilledParameterSignature = onfulfilledParameterSignatures[i];
+                        var valueParameterType = getTypeAtPosition(onfulfilledParameterSignature, 0);
+                        if (valueParameterType !== type) {
+                            awaitedTypes.push(valueParameterType);
+                        }
+                    }
                 }
-                return getAwaitedType(awaitedType, /*fallbackType*/ awaitedType, seen);
+                return getUnionType(awaitedTypes);
             }
-            else {
-                if (isTypeAssignableTo(type, thenableType)) {
-                    error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
-                }
-                return fallbackType;
-            }
+            return undefined;
         }
 
-        function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {            
+        function getAwaitedType(type: Type): Type {
+            // The "awaited type" of an expression is its "promised type" if the expression is a `Promise`; otherwise, it is the type of the expression.
+            if (!globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
+                return type;
+            }
+            var promisedType = getPromisedType(type);
+            if (promisedType) {
+                // if we have a bad actor in the form of a promise whose promised type is the same promise, return the empty type.
+                // if this were the actual case in the JavaScript, this Promise would never resolve.
+                if (promisedType === type) {
+                    return emptyObjectType;
+                }
+
+                // unwrap any nested promises
+                var seen: boolean[];
+                while (true) {
+                    var nestedPromisedType = getPromisedType(promisedType);
+                    if (!nestedPromisedType) {
+                        // if this could not be unwrapped further, return the promised type
+                        return promisedType;
+                    }
+                    if (!seen) {
+                        // `seen` keeps track of types we've tried to await to avoid cycles
+                        seen = [];
+                        seen[type.id] = true;
+                        seen[promisedType.id] = true;
+                    }
+                    else if (seen[nestedPromisedType.id]) {
+                        // if we've already seen this type, this is a promise that would never resolve. As above, we return the empty type.
+                        return emptyObjectType;
+                    }
+                    seen[nestedPromisedType.id] = true;
+                    promisedType = nestedPromisedType;
+                }
+                return promisedType;
+            }
+
+            // if we didn't get a promised type, check the type does not have a callable then member.
+            if (isTypeAssignableTo(type, thenableType)) {
+                error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
+                return emptyObjectType;
+            }
+
+            // if the type was not a "promise" or a "thenable", return the type.
+            return type;
+        }
+
+        function checkAsyncFunctionReturnType(node: SignatureDeclaration, returnType: Type): Type {            
             // This checks that an async function has a valid Promise-compatible return type, and returns the *awaited type* of the promise.
             // An async function has a valid Promise-compatible return type if the return type has a construct signature that takes
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
@@ -8203,31 +8245,23 @@ module ts {
                 if (!returnType) {
                     returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
-                if (returnType && returnType.symbol) {
-                    var links = getSymbolLinks(returnType.symbol);
-                    if (!links.promiseType) {
-                        var type = getTypeOfSymbol(returnType.symbol);
-                        if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
-                            links.promiseType = true;
+                // get the constructor type of the return type
+                var declaredType = returnType.symbol ? getTypeOfSymbol(returnType.symbol) : emptyObjectType;
+                if (isTypeAssignableTo(declaredType, globalIPromiseConstructorType)) {
+                    var promisedType = getPromisedType(returnType);
+                    if (promisedType) {
+                        // unwrap the promised type
+                        var promiseConstructor = getPromiseConstructor(node);
+                        if (promiseConstructor) {
+                            emitAwaiter = true;
+                            checkExpressionOrQualifiedName(promiseConstructor);
+                            return getAwaitedType(promisedType);
                         }
-                    }
-                    if (links.promiseType) {
-                        var awaitedType = getAwaitedType(returnType);
-                        if (awaitedType) {
-                            var promiseConstructor = getPromiseConstructor(node);
-                            if (promiseConstructor) {
-                                checkExpressionOrQualifiedName(promiseConstructor);
-                            }
-                        }
-                        emitAwaiter = true;
-                        if (compilerOptions.target < ScriptTarget.ES6) {
-                            emitGenerator = true;
-                        }
-                        return awaitedType;
                     }
                 }
             }
             error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return emptyObjectType;
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
@@ -8276,21 +8310,13 @@ module ts {
 
             checkSourceElement(node.body);
 
-            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;            
-            if (!isAnyAccessor(node)) {
-                if (node.flags & NodeFlags.Async) {
-                    var awaitableReturnType = checkAwaitableReturnType(node, returnType);
-                    if (awaitableReturnType) {
-                        returnType = awaitableReturnType;
-                    }
-                    emitAwaiter = true;
-                    if (compilerOptions.target < ScriptTarget.ES6) {
-                        emitGenerator = true;
-                    }
+            if (node.type && !isAnyAccessor(node)) {
+                if (isAsyncFunction(node)) {
+                    var promisedType = checkAsyncFunctionReturnType(node, getTypeFromTypeNode(node.type));
+                    checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, promisedType);
                 }
-
-                if (returnType) {
-                    checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
+                else {
+                    checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
                 }
             }
 
@@ -8845,11 +8871,10 @@ module ts {
                                 error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                             }
                         }
+                        else if (func.type && !isAnyAccessor(func) && isAsyncFunction(func)) {
+                            checkTypeAssignableTo(getAwaitedType(exprType), getPromisedType(returnType), node.expression, /*headMessage*/ undefined);
+                        }
                         else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
-                            if (func.flags & NodeFlags.Async) {
-                                exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
-                                returnType = getAwaitedType(returnType, /*fallbackType*/ returnType);
-                            }
                             checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
                         }
                     }
@@ -9948,7 +9973,7 @@ module ts {
                     links.flags |= NodeCheckFlags.EmitAwaiter;
                 }
 
-                if (emitGenerator) {
+                if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
                     links.flags |= NodeCheckFlags.EmitGenerator;
                 }
 

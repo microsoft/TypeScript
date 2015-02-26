@@ -3627,13 +3627,6 @@ declare module "typescript" {
         unionType?: UnionType;
 >unionType : UnionType
 >UnionType : UnionType
-
-        awaitedType?: Type;
->awaitedType : Type
->Type : Type
-
-        promiseType?: boolean;
->promiseType : boolean
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol

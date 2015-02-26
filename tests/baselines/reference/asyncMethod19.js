@@ -19,7 +19,6 @@ var o = {
         });
     },
     await: ,
-    Promise: function () {
-    },
+    Promise: function () { },
     void:  > {}
 };
