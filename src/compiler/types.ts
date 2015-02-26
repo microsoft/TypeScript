@@ -933,7 +933,8 @@ module ts {
     export type ExportSpecifier = ImportOrExportSpecifier;
 
     export interface ExportAssignment extends Statement, ModuleElement {
-        exportName: Identifier;
+        isExportEquals?: boolean;
+        expression: Expression;
     }
 
     export interface FileReference extends TextRange {

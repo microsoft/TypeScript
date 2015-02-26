@@ -5,4 +5,4 @@ export function x(){
 
 // @Filename: foo2.ts
 import foo1 = require('./foo1');
-export = foo1.x; // Error, export assignment must be identifier only
+export = foo1.x; // Ok

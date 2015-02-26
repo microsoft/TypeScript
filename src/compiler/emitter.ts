@@ -700,8 +700,8 @@ module ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
-            write("export = ");
-            writeTextOfNode(currentSourceFile, node.exportName);
+            write(node.isExportEquals ? "export = " : "export default ");
+            writeTextOfNode(currentSourceFile, node.expression);
             write(";");
             writeLine();
         }
@@ -4759,15 +4759,14 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
+                // TODO: Handle export default expressions
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
                     var exportAssignment = getFirstExportAssignment(node);
                     emitStart(exportAssignment);
                     write("return ");
-                    emitStart(exportAssignment.exportName);
-                    write(exportName);
-                    emitEnd(exportAssignment.exportName);
+                    emit(exportAssignment.expression);
                     write(";");
                     emitEnd(exportAssignment);
                 }
@@ -4780,15 +4779,14 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
+                // TODO: Handle export default expressions
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
                     var exportAssignment = getFirstExportAssignment(node);
                     emitStart(exportAssignment);
                     write("module.exports = ");
-                    emitStart(exportAssignment.exportName);
-                    write(exportName);
-                    emitEnd(exportAssignment.exportName);
+                    emit(exportAssignment.expression);
                     write(";");
                     emitEnd(exportAssignment);
                 }

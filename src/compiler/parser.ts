@@ -278,7 +278,7 @@ module ts {
                     visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).exportName);
+                    visitNode(cbNode, (<ExportAssignment>node).expression);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -1500,6 +1500,10 @@ module ts {
             }
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
+                if (token === SyntaxKind.DefaultKeyword) {
+                    nextToken();
+                    return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
+                }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             nextToken();
@@ -4828,10 +4832,17 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
+        function parseExportAssignment(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
             setModifiers(node, modifiers);
-            node.exportName = parseIdentifier();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.isExportEquals = true;
+            }
+            else {
+                parseExpected(SyntaxKind.DefaultKeyword);
+            }
+            //node.exportName = parseIdentifier();
+            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
@@ -4898,7 +4909,7 @@ module ts {
         function nextTokenCanFollowExportKeyword() {
             nextToken();
             return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4915,8 +4926,8 @@ module ts {
             var modifiers = parseModifiers();
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
-                if (parseOptional(SyntaxKind.EqualsToken)) {
-                    return parseExportAssignmentTail(fullStart, modifiers);
+                if (token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken) {
+                    return parseExportAssignment(fullStart, modifiers);
                 }
                 if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
                     return parseExportDeclaration(fullStart, modifiers);

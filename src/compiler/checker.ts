@@ -693,9 +693,14 @@ module ts {
                         // The two types of exports are mutually exclusive.
                         error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
-                    if (node.exportName.text) {
-                        var meaning = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace;
-                        var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, node.exportName);
+                    if (node.expression.kind === SyntaxKind.Identifier && (<Identifier>node.expression).text) {
+                        var exportSymbol = resolveName(node, (<Identifier>node.expression).text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
+                            Diagnostics.Cannot_find_name_0, <Identifier>node.expression);
+                    }
+                    else {
+                        var exportSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "*default*");
+                        exportSymbol.parent = containerSymbol;
+                        (<TransientSymbol>exportSymbol).type = checkExpression(node.expression);
                     }
                     symbolLinks.exportAssignmentSymbol = exportSymbol || unknownSymbol;
                 }
@@ -9537,19 +9542,6 @@ module ts {
                     if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
-                    else if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
-                        var statements = (<ModuleBlock>node.body).statements;
-                        for (var i = 0, n = statements.length; i < n; i++) {
-                            var statement = statements[i];
-
-                            // TODO: AndersH: No reason to do a separate pass over the statements for this check, we should
-                            // just fold it into checkExportAssignment.
-                            if (statement.kind === SyntaxKind.ExportAssignment) {
-                                // Export assignments are not allowed in an internal module
-                                grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
-                            }
-                        }
-                    }
                 }
 
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -9704,11 +9696,14 @@ module ts {
         }
 
         function checkExportAssignment(node: ExportAssignment) {
+            if (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.Identifier) {
+                error(node, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                return;
+            }
             // Grammar checking
             if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
-
             var container = node.parent;
             if (container.kind !== SyntaxKind.SourceFile) {
                 // In a module, the immediate parent will be a block, so climb up one more parent
@@ -9906,6 +9901,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EnumMember:
+                case SyntaxKind.ExportAssignment:
                 case SyntaxKind.SourceFile:
                     forEachChild(node, checkFunctionExpressionBodies);
                     break;
@@ -10165,7 +10161,7 @@ module ts {
             }
 
             if (nodeOnRightSide.parent.kind === SyntaxKind.ExportAssignment) {
-                return (<ExportAssignment>nodeOnRightSide.parent).exportName === nodeOnRightSide && <ExportAssignment>nodeOnRightSide.parent;
+                return (<ExportAssignment>nodeOnRightSide.parent).expression === <Node>nodeOnRightSide && <ExportAssignment>nodeOnRightSide.parent;
             }
 
             return undefined;

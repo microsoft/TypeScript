@@ -174,7 +174,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ExportAssignment:
                         // span on export = id
-                        return textSpan(node, (<ExportAssignment>node).exportName);
+                        return textSpan(node, (<ExportAssignment>node).expression);
 
                     case SyntaxKind.ImportEqualsDeclaration:
                         // import statement without including semicolon
