@@ -121,7 +121,6 @@ module ts {
         WithKeyword,
         // Strict mode reserved words
         AsKeyword,
-        FromKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -131,7 +130,7 @@ module ts {
         PublicKeyword,
         StaticKeyword,
         YieldKeyword,
-        // TypeScript keywords
+        // Contextual keywords
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
@@ -144,7 +143,9 @@ module ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
+        FromKeyword,
         OfKeyword, // LastKeyword and LastToken
+
         // Parse tree nodes
 
         // Names
@@ -279,7 +280,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = OfKeyword,
+        LastToken = LastKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
