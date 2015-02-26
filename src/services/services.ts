@@ -9,6 +9,7 @@
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='inference.ts' />
 
 module ts {
     export var servicesVersion = "0.4"

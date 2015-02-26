@@ -65,7 +65,8 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
-	"navigateTo.ts",
+    "inference.ts",
+    "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
