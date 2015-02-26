@@ -5461,7 +5461,9 @@ module ts {
             var type = getContextualType(arrayLiteral);
             if (type) {
                 var index = indexOf(arrayLiteral.elements, node);
-                return getTypeOfPropertyOfContextualType(type, "" + index) || getIndexTypeOfContextualType(type, IndexKind.Number);
+                return getTypeOfPropertyOfContextualType(type, "" + index)
+                    || getIndexTypeOfContextualType(type, IndexKind.Number)
+                    || (languageVersion >= ScriptTarget.ES6 ? getIteratedType(type, /*expressionForError*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -8770,7 +8772,14 @@ module ts {
                 checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_of_statement, Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
                 var rightType = checkExpression(node.expression);
                 var iteratedType = getIteratedType(rightType, node.expression);
-                checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
+                
+                // iteratedType will be undefined if the rightType was missing properties/signatures
+                // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
+                // because we accessed properties from anyType, or it may have led to an error inside
+                // getIteratedType.
+                if (iteratedType) {
+                    checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
+                }
             }
 
             checkSourceElement(node.statement);
@@ -8828,15 +8837,22 @@ module ts {
                 return anyType;
             }
 
-            return getIteratedType(getTypeOfExpression(forOfStatement.expression), forOfStatement.expression);
+            // iteratedType will be undefined if the for-of expression type was missing properties/signatures
+            // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
+            // because we accessed properties from anyType, or it may have led to an error inside
+            // getIteratedType.
+            return getIteratedType(getTypeOfExpression(forOfStatement.expression), forOfStatement.expression) || anyType;
         }
 
+        /**
+         * When expressionForError is undefined, it means we should not report any errors.
+         */
         function getIteratedType(iterable: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
             var iteratedType = getIteratedTypeSubroutine(iterable, expressionForError);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
-            if (iteratedType !== unknownType) {
+            if (expressionForError && iteratedType) {
                 var completeIterableType = globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [iteratedType]) : emptyObjectType;
                 checkTypeAssignableTo(iterable, completeIterableType, expressionForError);
             }
@@ -8845,7 +8861,7 @@ module ts {
             
             function getIteratedTypeSubroutine(iterable: Type, expressionForError: Expression) {
                 if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
-                    return iterable; // any or unknown
+                    return undefined;
                 }
 
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
@@ -8867,40 +8883,46 @@ module ts {
                 // of signatures, we union the return types of all the signatures.
                 var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
                 if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
-                    return iteratorFunction; // any or unknown
+                    return undefined;
                 }
 
                 var iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorFunctionSignatures.length === 0) {
-                    error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
-                    return unknownType;
+                    if (expressionForError) {
+                        error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                    }
+                    return undefined;
                 }
 
                 var iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
                 if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
-                    return iterator; // any or unknown
+                    return undefined;
                 }
 
                 var iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
                 if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
-                    return iteratorNextFunction; // any or unknown
+                    return undefined;
                 }
 
                 var iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorNextFunctionSignatures.length === 0) {
-                    error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
-                    return unknownType;
+                    if (expressionForError) {
+                        error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
+                    }
+                    return undefined;
                 }
 
                 var iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
                 if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
-                    return iteratorNextResult; // any or unknown
+                    return undefined;
                 }
 
                 var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
                 if (!iteratorNextValue) {
-                    error(expressionForError, Diagnostics.The_object_returned_by_the_next_method_of_the_iterator_must_have_a_value_property);
-                    return unknownType;
+                    if (expressionForError) {
+                        error(expressionForError, Diagnostics.The_object_returned_by_the_next_method_of_the_iterator_must_have_a_value_property);
+                    }
+                    return undefined;
                 }
                 
                 return iteratorNextValue;
