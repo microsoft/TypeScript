@@ -1118,6 +1118,11 @@ module ts {
     }
 
     // @internal
+    export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
+        return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    // @internal
     export function nodeIsSynthesized(node: Node): boolean {
         return node.pos === -1 && node.end === -1;
     }

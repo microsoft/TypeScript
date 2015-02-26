@@ -5086,10 +5086,6 @@ module ts {
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
 
-        function isNameScopeBoundary(n: Node): boolean {
-            return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
-        }
-
         function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES6 || (symbol.flags & SymbolFlags.BlockScopedVariable) === 0) {
                 return;
@@ -5116,7 +5112,7 @@ module ts {
             }
 
             var current: Node = container;
-            while (current && !isNameScopeBoundary(current)) {
+            while (current && !nodeStartsNewLexicalEnvironment(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
                         grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));

@@ -3832,21 +3832,20 @@ module ts {
                         return current;
                     }
                     switch (current.kind) {
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.SwitchKeyword:
                         case SyntaxKind.CatchClause:
+                        case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.ForOfStatement:
-                        case SyntaxKind.SwitchKeyword:
                             return current;
                         case SyntaxKind.Block:
-                            if (isAnyFunction(current.parent)) {
-                                return current.parent;
-                            }
-                            else {
+                            // function block is not considered block-scope container
+                            // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                            if (!isAnyFunction(current.parent)) {
                                 return current;
                             }
-                        case SyntaxKind.SourceFile:
-                            return current;
                     }
 
                     current = current.parent;
