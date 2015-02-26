@@ -7411,7 +7411,7 @@ module ts {
                     return rightType;
             }
 
-            // Return type is true if there was no error, false if there was an error.
+            // Return true if there was no error, false if there was an error.
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 var offendingSymbolOperand =
                     someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
@@ -8758,7 +8758,7 @@ module ts {
                 grammarErrorOnFirstToken(node, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
                 return;
             }
-
+            
             checkGrammarForInOrForOfStatement(node)
 
             // Check the LHS and RHS
@@ -8769,17 +8769,27 @@ module ts {
             }
             else {
                 var varExpr = <Expression>node.initializer;
-                var leftType = checkExpression(varExpr);
-                checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_of_statement, Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
                 var rightType = checkExpression(node.expression);
                 var iteratedType = getIteratedType(rightType, node.expression);
                 
-                // iteratedType will be undefined if the rightType was missing properties/signatures
-                // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
-                // because we accessed properties from anyType, or it may have led to an error inside
-                // getIteratedType.
-                if (iteratedType) {
-                    checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
+                // There may be a destructuring assignment on the left side
+                if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // iteratedType may be undefined. In this case, we still want to check the structure of
+                    // varExpr, in particular making sure it's a valid LeftHandSideExpression. But we'd like
+                    // to short circuit the type relation checking as much as possible, so we pass the unknownType.
+                    checkDestructuringAssignment(varExpr, iteratedType || unknownType);
+                }
+                else {
+                    var leftType = checkExpression(varExpr);
+                    checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_of_statement, Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
+                
+                    // iteratedType will be undefined if the rightType was missing properties/signatures
+                    // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
+                    // because we accessed properties from anyType, or it may have led to an error inside
+                    // getIteratedType.
+                    if (iteratedType) {
+                        checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
+                    }
                 }
             }
 
