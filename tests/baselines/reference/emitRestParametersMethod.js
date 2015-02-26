@@ -21,8 +21,18 @@ var C = (function () {
             rest[_i - 1] = arguments[_i];
         }
     }
-    C.prototype.bar = function () { };
-    C.prototype.foo = function (x) { };
+    C.prototype.bar = function () {
+        var rest = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            rest[_i - 0] = arguments[_i];
+        }
+    };
+    C.prototype.foo = function (x) {
+        var rest = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
+        }
+    };
     return C;
 })();
 var D = (function () {
@@ -32,7 +42,17 @@ var D = (function () {
             rest[_i - 0] = arguments[_i];
         }
     }
-    D.prototype.bar = function () { };
-    D.prototype.foo = function (x) { };
+    D.prototype.bar = function () {
+        var rest = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            rest[_i - 0] = arguments[_i];
+        }
+    };
+    D.prototype.foo = function (x) {
+        var rest = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
+        }
+    };
     return D;
 })();

@@ -33,7 +33,7 @@ var C = (function (_super) {
         _super.call(this);
         (function () {
             var obj = (_a = {}, _a[(_super.call(this), "prop")] = function () { },
-            _a);
+                _a);
             var _a;
         });
     }

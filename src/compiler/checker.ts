@@ -56,6 +56,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
             getEmitResolver,
+            getExportsOfExternalModule,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -727,24 +728,24 @@ module ts {
             return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports;
         }
 
-        function getExportsOfModule(symbol: Symbol): SymbolTable {
-            var links = getSymbolLinks(symbol);
-            return links.resolvedExports || (links.resolvedExports = getExportsForModule(symbol));
+        function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
+            var links = getSymbolLinks(moduleSymbol);
+            return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        function getExportsForModule(symbol: Symbol): SymbolTable {
+        function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
             var result: SymbolTable;
             var visitedSymbols: Symbol[] = [];
-            visit(symbol);
-            return result;
+            visit(moduleSymbol);
+            return result || moduleSymbol.exports;
 
             function visit(symbol: Symbol) {
                 if (!contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
-                    if (!result) {
-                        result = symbol.exports;
-                    }
-                    else {
+                    if (symbol !== moduleSymbol) {
+                        if (!result) {
+                            result = cloneSymbolTable(moduleSymbol.exports);
+                        }
                         extendSymbolTable(result, symbol.exports);
                     }
                     forEach(symbol.declarations, node => {
@@ -2752,6 +2753,19 @@ module ts {
                 }
             });
             return result;
+        }
+
+        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[]{
+            if (!node.moduleSpecifier) {
+                return emptyArray;
+            }
+
+            var module = resolveExternalModuleName(node, node.moduleSpecifier);
+            if (!module || !module.exports) {
+                return emptyArray;
+            }
+
+            return mapToArray(getExportsOfModule(module))
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -6745,11 +6759,6 @@ module ts {
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
-            // Grammar checking
-            if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
-            }
-
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
@@ -10278,11 +10287,12 @@ module ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    if (isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
-                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) {
-                        var importSymbol = getSymbolOfNode(node.parent.parent);
-                        var moduleType = getTypeOfSymbol(importSymbol);
-                        return moduleType ? moduleType.symbol : undefined;
+                    var moduleName: Expression;
+                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
+                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
+                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) &&
+                            (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
+                        return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
 
                 // Intentional fall-through
