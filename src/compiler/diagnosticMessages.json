@@ -603,7 +603,14 @@
         "category": "Error",
         "code": 1194
     },
-
+    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
+        "category": "Error",
+        "code": 1195
+    },
+    "'}' expected.": {
+        "category": "Error",
+        "code":  1196
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

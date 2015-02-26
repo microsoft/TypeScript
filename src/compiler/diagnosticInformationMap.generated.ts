@@ -153,6 +153,8 @@ module ts {
         External_module_0_has_no_default_export_or_export_assignment: { code: 1192, category: DiagnosticCategory.Error, key: "External module '{0}' has no default export or export assignment." },
         An_export_declaration_cannot_have_modifiers: { code: 1193, category: DiagnosticCategory.Error, key: "An export declaration cannot have modifiers." },
         Export_declarations_are_not_permitted_in_an_internal_module: { code: 1194, category: DiagnosticCategory.Error, key: "Export declarations are not permitted in an internal module." },
+        An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive: { code: 1195, category: DiagnosticCategory.Error, key: "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive." },
+        expected: { code: 1196, category: DiagnosticCategory.Error, key: "'}' expected." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

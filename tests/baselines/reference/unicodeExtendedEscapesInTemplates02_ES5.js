@@ -4,4 +4,4 @@ var x = `\u{00}`;
 
 
 //// [unicodeExtendedEscapesInTemplates02_ES5.js]
-var x = "{00}";
+var x = "\0";

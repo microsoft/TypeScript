@@ -774,11 +774,44 @@ module ts {
                     return "\'";
                 case CharacterCodes.doubleQuote:
                     return "\"";
-                case CharacterCodes.x:
                 case CharacterCodes.u:
-                    var ch = scanExactNumberOfHexDigits(ch === CharacterCodes.x ? 2 : 4);
-                    if (ch >= 0) {
-                        return String.fromCharCode(ch);
+                    if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                        pos++;
+                        var escapedValue = scanMinimumNumberOfHexDigits(1);
+                        
+                        if (escapedValue < 0) {
+                            // TODO(drosen): give a proper error message for escaped values that are too large.
+                            error(Diagnostics.Hexadecimal_digit_expected)
+                            return "";
+                        }
+                        
+                        if (escapedValue > 0x10FFFF) {
+                            error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                            return "";
+                        }
+                        
+                        if (pos >= len) {
+                            error(Diagnostics.Unexpected_end_of_text);
+                            return "";
+                        }
+                        
+                        // Only swallow the following character up if it's a '}'.
+                        var escapeTerminator = text.charCodeAt(pos);
+                        if (escapeTerminator == CharacterCodes.closeBrace) {
+                            pos++;
+                        }
+                        else {
+                            // '}' expected.
+                            error(Diagnostics.expected);
+                        }
+                        
+                        return utf16EncodeAsString(escapedValue);
+                    }
+                    // fall through
+                case CharacterCodes.x:
+                    var escapedValue = scanExactNumberOfHexDigits(ch === CharacterCodes.x ? 2 : 4);
+                    if (escapedValue >= 0) {
+                        return String.fromCharCode(escapedValue);
                     }
                     else {
                         error(Diagnostics.Hexadecimal_digit_expected);
@@ -799,6 +832,20 @@ module ts {
                 default:
                     return String.fromCharCode(ch);
             }
+        }
+        
+        // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+        function utf16EncodeAsString(codePoint: number): string {
+            Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+            
+            if (codePoint <= 65535) {
+                return String.fromCharCode(codePoint);
+            }
+            
+            var codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
+            var codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+            
+            return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
