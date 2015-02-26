@@ -2304,9 +2304,12 @@ declare module "typescript" {
 >Statement : Statement
 >ModuleElement : ModuleElement
 
-        exportName: Identifier;
->exportName : Identifier
->Identifier : Identifier
+        isExportEquals?: boolean;
+>isExportEquals : boolean
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
     }
     interface FileReference extends TextRange {
 >FileReference : FileReference

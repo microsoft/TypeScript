@@ -788,7 +788,8 @@ declare module "typescript" {
     type ImportSpecifier = ImportOrExportSpecifier;
     type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Statement, ModuleElement {
-        exportName: Identifier;
+        isExportEquals?: boolean;
+        expression: Expression;
     }
     interface FileReference extends TextRange {
         fileName: string;
