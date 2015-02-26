@@ -10718,7 +10718,7 @@ module ts {
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
-            Debug.assert(n.parent !== undefined);
+            Debug.assert(!nodeIsSynthesized(n));
 
             // ignore name parts of property access expressions
             if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
@@ -10736,8 +10736,14 @@ module ts {
             var symbol = declarationSymbol ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-
-            return symbol && symbol.flags & SymbolFlags.BlockScopedVariable ? symbol.id : undefined;
+            
+            if (symbol && (symbol.flags & SymbolFlags.BlockScopedVariable)) {
+                // side-effect of calling this method:
+                //   assign id to symbol if it was not yet set
+                getSymbolLinks(symbol);
+                return symbol.id;
+            }
+            return undefined;
         }
 
         function createResolver(): EmitResolver {

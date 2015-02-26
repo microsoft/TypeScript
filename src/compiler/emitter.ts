@@ -32,7 +32,7 @@ module ts {
         leadingCommentRanges?: CommentRange[];
         trailingCommentRanges?: CommentRange[];
     }
-    
+
     interface ScopeFrame {
         names: Map<string>;
         previous: ScopeFrame;
@@ -2100,7 +2100,7 @@ module ts {
                     name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
-                var result = <Identifier>createNode(SyntaxKind.Identifier);
+                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;
             }
@@ -2645,14 +2645,6 @@ module ts {
                     emitListWithSpread(elements, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
                 }
-            }
-
-            function createSynthesizedNode(kind: SyntaxKind): Node {
-                var node = createNode(kind);
-                node.pos = -1;
-                node.end = -1;
-
-                return node;
             }
 
             function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
@@ -3551,9 +3543,9 @@ module ts {
             }
             
             function createVoidZero(): Expression {
-                var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                var zero = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
                 zero.text = "0";
-                var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                var result = <VoidExpression>createSynthesizedNode(SyntaxKind.VoidExpression);
                 result.expression = zero;
                 return result;
             }
@@ -3619,11 +3611,11 @@ module ts {
                     // we need to generate a temporary variable
                     value = ensureIdentifier(value);
                     // Return the expression 'value === void 0 ? defaultValue : value'
-                    var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
+                    var equals = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
-                    equals.operatorToken = createNode(SyntaxKind.EqualsEqualsEqualsToken);
+                    equals.operatorToken = createSynthesizedNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
-                    var cond = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
+                    var cond = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
                     cond.condition = equals;
                     cond.whenTrue = defaultValue;
                     cond.whenFalse = value;
@@ -3631,7 +3623,7 @@ module ts {
                 }
 
                 function createNumericLiteral(value: number) {
-                    var node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                    var node = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
                     node.text = "" + value;
                     return node;
                 }
@@ -3640,7 +3632,7 @@ module ts {
                     if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
                         return <LeftHandSideExpression>expr;
                     }
-                    var node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
+                    var node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
                     node.expression = expr;
                     return node;
                 }
@@ -3649,14 +3641,14 @@ module ts {
                     if (propName.kind !== SyntaxKind.Identifier) {
                         return createElementAccess(object, propName);
                     }
-                    var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression);
+                    var node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                     node.expression = parenthesizeForAccess(object);
                     node.name = propName;
                     return node;
                 }
 
                 function createElementAccess(object: Expression, index: Expression): Expression {
-                    var node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression);
+                    var node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
                     node.expression = parenthesizeForAccess(object);
                     node.argumentExpression = index;
                     return node;
@@ -3843,6 +3835,7 @@ module ts {
                         case SyntaxKind.CatchClause:
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
                         case SyntaxKind.SwitchKeyword:
                             return current;
                         case SyntaxKind.Block:
@@ -3872,12 +3865,12 @@ module ts {
             function renameNonTopLevelLetAndConst(node: Node): void {
                 // do not rename if
                 // - language version is ES6+
-                // - node is synthesized (does not have a parent)
+                // - node is synthesized
                 // - node is not identifier (can happen when tree is malformed)
                 // - node is definitely not name of variable declaration. 
                 // it still can be part of parameter declaration, this check will be done next
                 if (languageVersion >= ScriptTarget.ES6 ||
-                    !node.parent ||
+                    nodeIsSynthesized(node) ||
                     node.kind !== SyntaxKind.Identifier ||
                     (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
                     return;

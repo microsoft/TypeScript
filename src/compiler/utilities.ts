@@ -1118,6 +1118,20 @@ module ts {
     }
 
     // @internal
+    export function nodeIsSynthesized(node: Node): boolean {
+        return node.pos === -1 && node.end === -1;
+    }
+
+    // @internal
+    export function createSynthesizedNode(kind: SyntaxKind): Node {
+        var node = createNode(kind);
+        node.pos = -1;
+        node.end = -1;
+
+        return node;
+    }
+
+    // @internal
     export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
         // First try '_name'
         if (baseName.charCodeAt(0) !== CharacterCodes._) {
