@@ -177,10 +177,15 @@ module ts {
                 return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
             }
 
+            // Create the emit resolver outside of the "emitTime" tracking code below.  That way
+            // any cost associated with it (like type checking) are appropriate associated with
+            // the type-checking counter.
+            var emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+
             var start = new Date().getTime();
 
             var emitResult = emitFiles(
-                getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile),
+                emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
