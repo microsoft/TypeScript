@@ -4,4 +4,4 @@
 var x = `\x19\u0019 19`;
 
 //// [templateStringControlCharacterEscapes02.js]
-var x = " 1\u0039";
+var x = "\u0019\u0019 19";
