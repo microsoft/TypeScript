@@ -1702,6 +1702,7 @@ module ts {
 
             function makeUniqueName(location: Node, baseName: string): string {
                 var name: string
+                // first try to check if base name can be used as is
                 if (!isExistingName(location, baseName)) {
                     name = baseName;
                 }
@@ -1721,12 +1722,9 @@ module ts {
                 return currentScopeNames[name] = name;
             }
 
-            function isGeneratedName(name: string): boolean {
-                return currentScopeNames && hasProperty(currentScopeNames, name);
-            }
-
             function isExistingName(location: Node, name: string) {
-                return !resolver.isUnknownIdentifier(location, name) || isGeneratedName(name);
+                return !resolver.isUnknownIdentifier(location, name) ||
+                    (currentScopeNames && hasProperty(currentScopeNames, name));
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -3559,7 +3557,6 @@ module ts {
                 result.expression = zero;
                 return result;
             }
-            
 
             function emitExportMemberAssignments(name: Identifier) {
                 if (exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
@@ -3802,18 +3799,24 @@ module ts {
                     emitModuleMemberName(node);
 
                     var initializer = node.initializer;
-                    if (!initializer) {
+                    if (!initializer && languageVersion < ScriptTarget.ES6) {
+
                         // downlevel emit for non-initialized let bindings defined in loops
                         // for (...) {  let x; }
                         // should be
                         // for (...) { var <some-uniqie-name> = void 0; }
                         // this is necessary to preserve ES6 semantic in scenarios like
                         // for (...) { let x; console.log(x); x = 1 } // assignment on one iteration should not affect other iterations
-                        var initializer =
-                            languageVersion < ScriptTarget.ES6 &&
+                        var isUninitializedLet =
                             (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) &&
-                            (getCombinedFlagsForIdentifier(<Identifier>node.name) & NodeFlags.Let) &&
-                            createVoidZero();
+                            (getCombinedFlagsForIdentifier(<Identifier>node.name) & NodeFlags.Let);
+
+                        // NOTE: default initialization should not be added to let bindings in for-in\for-of statements
+                        if (isUninitializedLet &&
+                            node.parent.parent.kind !== SyntaxKind.ForInStatement &&
+                            node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
+                            initializer = createVoidZero();
+                        }
                     }
 
                     emitOptional(" = ", initializer);
@@ -3834,20 +3837,20 @@ module ts {
                 var current = node;
                 while (current) {
                     if (isAnyFunction(current)) {
-                        return current.parent;
+                        return current;
                     }
                     switch (current.kind) {
                         case SyntaxKind.CatchClause:
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.SwitchKeyword:
-                            return current.parent;
+                            return current;
                         case SyntaxKind.Block:
                             if (isAnyFunction(current.parent)) {
-                                return current.parent.parent;
+                                return current.parent;
                             }
                             else {
-                                return current.parent;
+                                return current;
                             }
                         case SyntaxKind.SourceFile:
                             return current;
@@ -3893,7 +3896,12 @@ module ts {
                     return;
                 }
 
-                var generatedName = makeUniqueName(getEnclosingBlockScopeContainer(node), (<Identifier>node).text);
+                var blockScopeContainer = getEnclosingBlockScopeContainer(node);
+                var parent = blockScopeContainer.kind === SyntaxKind.SourceFile
+                    ? blockScopeContainer
+                    : blockScopeContainer.parent;
+
+                var generatedName = makeUniqueName(parent, (<Identifier>node).text);
                 var variableId = resolver.getBlockScopedVariableId(<Identifier>node);
                 if (!generatedBlockScopeNames) {
                     generatedBlockScopeNames = [];

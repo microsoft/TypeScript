@@ -5119,9 +5119,9 @@ module ts {
             while (current && !isNameScopeBoundary(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
-                        getNodeLinks(current).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
                         grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
                     }
+                    // mark value declaration so during emit they can have a special handling
                     getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
                     break;
                 }
