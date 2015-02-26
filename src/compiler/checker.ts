@@ -5454,8 +5454,9 @@ module ts {
         }
 
         // In an array literal contextually typed by a type T, the contextual type of an element expression at index N is
-        // the type of the property with the numeric name N in T, if one exists. Otherwise, it is the type of the numeric
-        // index signature in T, if one exists.
+        // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
+        // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
+        // type of T.
         function getContextualTypeForElementExpression(node: Expression): Type {
             var arrayLiteral = <ArrayLiteralExpression>node.parent;
             var type = getContextualType(arrayLiteral);
