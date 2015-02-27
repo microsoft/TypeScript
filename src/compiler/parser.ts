@@ -2164,6 +2164,10 @@ module ts {
             var text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
 
+            if (scanner.hasExtendedUnicodeEscape()) {
+                node.hasExtendedUnicodeEscape = true;
+            }
+            
             if (scanner.isUnterminated()) {
                 node.isUnterminated = true;
             }

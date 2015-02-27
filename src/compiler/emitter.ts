@@ -2187,9 +2187,12 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
-                    node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
-                        node.text;
+                var text = languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)
+                    ? getDoubleQuotedStringTextOfLiteral(node)
+                    : node.parent
+                        ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node)
+                        : node.text; // TODO(drosen): Is this correct?
+                
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
@@ -2202,7 +2205,7 @@ module ts {
                 }
             }
             
-            function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
+            function getDoubleQuotedStringTextOfLiteral(node: LiteralExpression): string {
                 var result = escapeString(node.text);
                 result = replaceNonAsciiCharacters(result);
                 

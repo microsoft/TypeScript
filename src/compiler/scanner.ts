@@ -14,6 +14,7 @@ module ts {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
@@ -556,6 +557,7 @@ module ts {
         var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
+        var hasExtendedUnicodeEscape: boolean;
         var tokenIsUnterminated: boolean;
 
         function error(message: DiagnosticMessage, length?: number): void {
@@ -776,6 +778,7 @@ module ts {
                     return "\"";
                 case CharacterCodes.u:
                     if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                        hasExtendedUnicodeEscape = true;
                         pos++;
                         var escapedValue = scanMinimumNumberOfHexDigits(1);
                         
@@ -926,6 +929,7 @@ module ts {
 
         function scan(): SyntaxKind {
             startPos = pos;
+            hasExtendedUnicodeEscape = false;
             precedingLineBreak = false;
             tokenIsUnterminated = false;
             while (true) {
@@ -1393,6 +1397,7 @@ module ts {
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
             getTokenValue: () => tokenValue,
+            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,

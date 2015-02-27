@@ -1760,6 +1760,9 @@ declare module "typescript" {
 
         isUnterminated?: boolean;
 >isUnterminated : boolean
+
+        hasExtendedUnicodeEscape?: boolean;
+>hasExtendedUnicodeEscape : boolean
     }
     interface StringLiteralExpression extends LiteralExpression {
 >StringLiteralExpression : StringLiteralExpression
@@ -4576,6 +4579,9 @@ declare module "typescript" {
 
         getTokenValue(): string;
 >getTokenValue : () => string
+
+        hasExtendedUnicodeEscape(): boolean;
+>hasExtendedUnicodeEscape : () => boolean
 
         hasPrecedingLineBreak(): boolean;
 >hasPrecedingLineBreak : () => boolean

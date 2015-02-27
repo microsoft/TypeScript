@@ -4,4 +4,4 @@ var x = "\u{DDDDD}";
 
 
 //// [unicodeExtendedEscapesInStrings13_ES5.js]
-var x = "\u{DDDDD}";
+var x = "\uDB37\uDDDD";

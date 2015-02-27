@@ -4,4 +4,4 @@ var x = "\u{67";
 
 
 //// [unicodeExtendedEscapesInStrings21_ES5.js]
-var x = "\u{67";
+var x = "g";
