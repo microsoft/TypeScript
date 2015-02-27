@@ -10190,7 +10190,7 @@ module ts {
         }
 
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {
-            if (isDeclarationOrCatchVariableName(entityName)) {
+            if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
 
@@ -10255,7 +10255,7 @@ module ts {
                 return undefined;
             }
 
-            if (isDeclarationOrCatchVariableName(node)) {
+            if (isDeclarationName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
@@ -10351,7 +10351,7 @@ module ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationOrCatchVariableName(node)) {
+            if (isDeclarationName(node)) {
                 var symbol = getSymbolInfo(node);
                 return symbol && getTypeOfSymbol(symbol);
             }

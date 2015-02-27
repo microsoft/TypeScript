@@ -753,7 +753,7 @@ module ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationOrCatchVariableName(name: Node): boolean {
+    export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
@@ -768,10 +768,6 @@ module ts {
         if (isDeclaration(parent)) {
             return (<Declaration>parent).name === name;
         }
-
-        //if (parent.kind === SyntaxKind.CatchClause) {
-        //    return (<CatchClause>parent).name === name;
-        //}
 
         return false;
     }
