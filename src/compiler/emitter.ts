@@ -28,11 +28,6 @@ module ts {
         typeName?: DeclarationName;
     }
 
-    interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-    }
-
     // represents one LexicalEnvironment frame to store unique generated names
     interface ScopeFrame {
         names: Map<string>;
@@ -2757,7 +2752,7 @@ module ts {
                 });
 
                 // Finally, return the temp variable.
-                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, tempVar);
+                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, createIdentifier(tempVar.text, /*startsOnNewLine:*/ true));
 
                 var result = createParenthesizedExpression(propertyPatches);
                 
@@ -2780,7 +2775,7 @@ module ts {
                 var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
                 var maybeRightHandSide = tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
 
-                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide);
+                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide, /*startsOnNewLine:*/ true);
             }
 
             function tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
@@ -2853,8 +2848,8 @@ module ts {
                 return result;
             }
 
-            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
-                var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
+            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression, startsOnNewLine?: boolean): BinaryExpression {
+                var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression, startsOnNewLine);
                 result.operatorToken = createSynthesizedNode(operator);
                 result.left = left;
                 result.right = right;
@@ -2909,8 +2904,8 @@ module ts {
                 return result;
             }
             
-            function createIdentifier(name: string) {
-                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            function createIdentifier(name: string, startsOnNewLine?: boolean) {
+                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier, startsOnNewLine);
                 result.text = name;
 
                 return result;
@@ -3254,9 +3249,11 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
+                    var shouldPlaceOnNewLine = !nodeIsSynthesized(node) && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right);
+
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
-                    if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
+                    if (shouldPlaceOnNewLine || synthesizedNodeStartsOnNewLine(node.right)) {
                         increaseIndent();
                         writeLine();
                         emit(node.right);
@@ -3267,6 +3264,10 @@ module ts {
                         emit(node.right);
                     }
                 }
+            }
+
+            function synthesizedNodeStartsOnNewLine(node: Node) {
+                return nodeIsSynthesized(node) && (<SynthesizedNode>node).startsOnNewLine;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {

@@ -12,7 +12,8 @@ obj[Symbol.foo];
 
 //// [ES5SymbolProperty1.js]
 var Symbol;
-var obj = (_a = {}, _a[Symbol.foo] =
-    0, _a);
+var obj = (_a = {},
+    _a[Symbol.foo] = 0,
+    _a);
 obj[Symbol.foo];
 var _a;

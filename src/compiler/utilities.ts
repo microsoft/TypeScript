@@ -7,6 +7,12 @@ module ts {
         isNoDefaultLib?: boolean
     }
 
+    export interface SynthesizedNode extends Node {
+        leadingCommentRanges?: CommentRange[];
+        trailingCommentRanges?: CommentRange[];
+        startsOnNewLine: boolean;
+    }
+
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         var declarations = symbol.declarations;
         for (var i = 0; i < declarations.length; i++) {
@@ -1134,11 +1140,11 @@ module ts {
     }
 
     // @internal
-    export function createSynthesizedNode(kind: SyntaxKind): Node {
-        var node = createNode(kind);
+    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
+        var node = <SynthesizedNode>createNode(kind);
         node.pos = -1;
         node.end = -1;
-
+        node.startsOnNewLine = startsOnNewLine;
         return node;
     }
 
