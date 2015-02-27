@@ -192,6 +192,18 @@ module ts {
         return getBaseFileName(moduleName).replace(/\W/g, "_");
     }
 
+    export function isBlockOrCatchScoped(declaration: Declaration) {
+        return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
+            isCatchClauseVariableDeclaration(declaration);
+    }
+
+    export function isCatchClauseVariableDeclaration(declaration: Declaration) {
+        return declaration &&
+            declaration.kind === SyntaxKind.VariableDeclaration &&
+            declaration.parent &&
+            declaration.parent.kind === SyntaxKind.CatchClause;
+    }
+
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
@@ -757,9 +769,9 @@ module ts {
             return (<Declaration>parent).name === name;
         }
 
-        if (parent.kind === SyntaxKind.CatchClause) {
-            return (<CatchClause>parent).name === name;
-        }
+        //if (parent.kind === SyntaxKind.CatchClause) {
+        //    return (<CatchClause>parent).name === name;
+        //}
 
         return false;
     }
