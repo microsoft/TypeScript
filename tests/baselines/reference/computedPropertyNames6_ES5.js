@@ -12,9 +12,9 @@ var v = {
 var p1;
 var p2;
 var p3;
-var v = (_a = {}, _a[p1] =
-    0, _a[p2] =
-    1, _a[p3] =
-    2,
+var v = (_a = {},
+    _a[p1] = 0,
+    _a[p2] = 1,
+    _a[p3] = 2,
     _a);
 var _a;
