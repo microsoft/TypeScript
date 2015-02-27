@@ -2985,6 +2985,7 @@ interface MouseEvent extends UIEvent {
 declare var MouseEvent: {
     prototype: MouseEvent;
     new(): MouseEvent;
+    new(type: string, options: MouseEventInit): MouseEvent;
 }
 
 interface RangeException {
