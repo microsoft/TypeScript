@@ -4,13 +4,12 @@ tests/cases/compiler/constDeclarations-errors.ts(5,7): error TS1155: 'const' dec
 tests/cases/compiler/constDeclarations-errors.ts(5,11): error TS1155: 'const' declarations must be initialized
 tests/cases/compiler/constDeclarations-errors.ts(5,15): error TS1155: 'const' declarations must be initialized
 tests/cases/compiler/constDeclarations-errors.ts(5,27): error TS1155: 'const' declarations must be initialized
-tests/cases/compiler/constDeclarations-errors.ts(8,11): error TS1155: 'const' declarations must be initialized
-tests/cases/compiler/constDeclarations-errors.ts(11,27): error TS2449: The operand of an increment or decrement operator cannot be a constant.
-tests/cases/compiler/constDeclarations-errors.ts(14,11): error TS1155: 'const' declarations must be initialized
-tests/cases/compiler/constDeclarations-errors.ts(17,20): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(10,27): error TS2449: The operand of an increment or decrement operator cannot be a constant.
+tests/cases/compiler/constDeclarations-errors.ts(13,11): error TS1155: 'const' declarations must be initialized
+tests/cases/compiler/constDeclarations-errors.ts(16,20): error TS1155: 'const' declarations must be initialized
 
 
-==== tests/cases/compiler/constDeclarations-errors.ts (10 errors) ====
+==== tests/cases/compiler/constDeclarations-errors.ts (9 errors) ====
     
     // error, missing intialicer
     const c1;
@@ -29,10 +28,7 @@ tests/cases/compiler/constDeclarations-errors.ts(17,20): error TS1155: 'const' d
                               ~~
 !!! error TS1155: 'const' declarations must be initialized
     
-    // error, can not be unintalized
     for(const c in {}) { }
-              ~
-!!! error TS1155: 'const' declarations must be initialized
     
     // error, assigning to a const
     for(const c8 = 0; c8 < 1; c8++) { }

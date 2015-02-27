@@ -1,0 +1,60 @@
+=== tests/cases/compiler/downlevelLetConst13.ts ===
+
+'use strict'
+// exported let\const bindings should not be renamed
+
+export let foo = 10;
+>foo : number
+
+export const bar = "123"
+>bar : string
+
+export let [bar1] = [1];
+>bar1 : number
+>[1] : [number]
+
+export const [bar2] = [2];
+>bar2 : number
+>[2] : [number]
+
+export let {a: bar3} = { a: 1 };
+>a : unknown
+>bar3 : number
+>{ a: 1 } : { a: number; }
+>a : number
+
+export const {a: bar4} = { a: 1 };
+>a : unknown
+>bar4 : number
+>{ a: 1 } : { a: number; }
+>a : number
+
+export module M {
+>M : typeof M
+
+    export let baz = 100;
+>baz : number
+
+    export const baz2 = true;
+>baz2 : boolean
+
+    export let [bar5] = [1];
+>bar5 : number
+>[1] : [number]
+
+    export const [bar6] = [2];
+>bar6 : number
+>[2] : [number]
+
+    export let {a: bar7} = { a: 1 };
+>a : unknown
+>bar7 : number
+>{ a: 1 } : { a: number; }
+>a : number
+
+    export const {a: bar8} = { a: 1 };
+>a : unknown
+>bar8 : number
+>{ a: 1 } : { a: number; }
+>a : number
+}

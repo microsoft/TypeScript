@@ -31,6 +31,5 @@ s, _a[""] =
 1, _a[true] =
 0, _a["hello bye"] =
 0, _a["hello " + a + " bye"] =
-0,
-_a);
+0, _a);
 var _a;

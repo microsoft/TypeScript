@@ -17,6 +17,5 @@ var v = (_a = {}, _a[b] =
 0, _a[{}] =
 0, _a[undefined] =
 undefined, _a[null] =
-null,
-_a);
+null, _a);
 var _a;

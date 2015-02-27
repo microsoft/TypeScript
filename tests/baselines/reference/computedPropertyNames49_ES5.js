@@ -41,6 +41,5 @@ var x = (_a = {
             return 10;
         }
     }, enumerable: true, configurable: true }), _a.p2 =
-20,
-_a);
+20, _a);
 var _a;

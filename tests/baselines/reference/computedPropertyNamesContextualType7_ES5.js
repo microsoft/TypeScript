@@ -22,6 +22,5 @@ foo((_a = {
 function () { }, _a["hi" + "bye"] =
 true, _a[0 + 1] =
 0, _a[+"hi"] =
-[0],
-_a));
+[0], _a));
 var _a;

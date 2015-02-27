@@ -8,7 +8,6 @@ function foo() {
 //// [computedPropertyNames18_ES5.js]
 function foo() {
     var obj = (_a = {}, _a[this.bar] =
-    0,
-    _a);
+    0, _a);
     var _a;
 }
