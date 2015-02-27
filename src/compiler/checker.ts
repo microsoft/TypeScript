@@ -417,13 +417,6 @@ module ts {
                             break loop;
                         }
                         break;
-                    case SyntaxKind.CatchClause:
-                        var id = (<CatchClause>location).name;
-                        if (name === id.text) {
-                            result = location.symbol;
-                            break loop;
-                        }
-                        break;
                 }
                 lastLocation = location;
                 location = location.parent;
@@ -452,7 +445,8 @@ module ts {
                 }
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables cannot be used before their definition
-                    var declaration = forEach(result.declarations, d => getCombinedNodeFlags(d) & NodeFlags.BlockScoped ? d : undefined);
+                    var declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
+
                     Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
                     if (!isDefinedBefore(declaration, errorLocation)) {
                         error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
@@ -1998,7 +1992,7 @@ module ts {
                 }
                 // Handle catch clause variables
                 var declaration = symbol.valueDeclaration;
-                if (declaration.kind === SyntaxKind.CatchClause) {
+                if (declaration.parent.kind === SyntaxKind.CatchClause) {
                     return links.type = anyType;
                 }
                 // Handle variable, parameter or property
@@ -9090,18 +9084,29 @@ module ts {
             var catchClause = node.catchClause;
             if (catchClause) {
                 // Grammar checking
-                if (catchClause.type) {
-                    var sourceFile = getSourceFileOfNode(node);
-                    var colonStart = skipTrivia(sourceFile.text, catchClause.name.end);
-                    grammarErrorAtPos(sourceFile, colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+                if (catchClause.variableDeclaration) {
+                    if (catchClause.variableDeclaration.name.kind !== SyntaxKind.Identifier) {
+                        grammarErrorOnFirstToken(catchClause.variableDeclaration.name, Diagnostics.Catch_clause_variable_name_must_be_an_identifier);
+                    }
+                    else if (catchClause.variableDeclaration.type) {
+                        grammarErrorOnFirstToken(catchClause.variableDeclaration.type, Diagnostics.Catch_clause_variable_cannot_have_a_type_annotation);
+                    }
+                    else if (catchClause.variableDeclaration.initializer) {
+                        grammarErrorOnFirstToken(catchClause.variableDeclaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
+                    }
+                    else {
+                        // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
+                        // Catch production is eval or arguments
+                        checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>catchClause.variableDeclaration.name);
+                    }
                 }
-                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
-                // Catch production is eval or arguments
-                checkGrammarEvalOrArgumentsInStrictMode(node, catchClause.name);
 
                 checkBlock(catchClause.block);
             }
-            if (node.finallyBlock) checkBlock(node.finallyBlock);
+
+            if (node.finallyBlock) {
+                checkBlock(node.finallyBlock);
+            }
         }
 
         function checkIndexConstraints(type: Type) {
@@ -10213,11 +10218,6 @@ module ts {
                             copySymbol(location.symbol, meaning);
                         }
                         break;
-                    case SyntaxKind.CatchClause:
-                        if ((<CatchClause>location).name.text) {
-                            copySymbol(location.symbol, meaning);
-                        }
-                        break;
                 }
                 memberFlags = location.flags;
                 location = location.parent;
@@ -10354,7 +10354,7 @@ module ts {
         }
 
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {
-            if (isDeclarationOrFunctionExpressionOrCatchVariableName(entityName)) {
+            if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
 
@@ -10419,7 +10419,7 @@ module ts {
                 return undefined;
             }
 
-            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            if (isDeclarationName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
@@ -10515,7 +10515,7 @@ module ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            if (isDeclarationName(node)) {
                 var symbol = getSymbolInfo(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
@@ -11773,10 +11773,13 @@ module ts {
             }
         }
 
-        function checkGrammarEvalOrArgumentsInStrictMode(contextNode: Node, identifier: Identifier): boolean {
-            if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
-                var name = declarationNameToString(identifier);
-                return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        function checkGrammarEvalOrArgumentsInStrictMode(contextNode: Node, name: Node): boolean {
+            if (name && name.kind === SyntaxKind.Identifier) {
+                var identifier = <Identifier>name;
+                if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
+                    var nameText = declarationNameToString(identifier);
+                    return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+                }
             }
         }
 

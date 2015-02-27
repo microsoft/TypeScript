@@ -1,6 +1,6 @@
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(8,21): error TS1013: Catch clause parameter cannot have a type annotation.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(9,21): error TS1013: Catch clause parameter cannot have a type annotation.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,21): error TS1013: Catch clause parameter cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(8,23): error TS1196: Catch clause variable cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(9,23): error TS1196: Catch clause variable cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,23): error TS1196: Catch clause variable cannot have a type annotation.
 
 
 ==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (3 errors) ====
@@ -12,14 +12,14 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,21):
     
         // no type annotation allowed
         try { } catch (z: any) { }
-                        ~
-!!! error TS1013: Catch clause parameter cannot have a type annotation.
+                          ~~~
+!!! error TS1196: Catch clause variable cannot have a type annotation.
         try { } catch (a: number) { }
-                        ~
-!!! error TS1013: Catch clause parameter cannot have a type annotation.
+                          ~~~~~~
+!!! error TS1196: Catch clause variable cannot have a type annotation.
         try { } catch (y: string) { }
-                        ~
-!!! error TS1013: Catch clause parameter cannot have a type annotation.
+                          ~~~~~~
+!!! error TS1196: Catch clause variable cannot have a type annotation.
     }
     
     
