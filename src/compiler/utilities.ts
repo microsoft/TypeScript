@@ -706,6 +706,7 @@ module ts {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.FunctionExpression:
                 return true;
         }
         return false;
@@ -739,7 +740,7 @@ module ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+    export function isDeclarationOrCatchVariableName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
@@ -751,7 +752,7 @@ module ts {
             }
         }
 
-        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+        if (isDeclaration(parent)) {
             return (<Declaration>parent).name === name;
         }
 
