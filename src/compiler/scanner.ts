@@ -777,39 +777,12 @@ module ts {
                 case CharacterCodes.doubleQuote:
                     return "\"";
                 case CharacterCodes.u:
-                    if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.openBrace) {
                         hasExtendedUnicodeEscape = true;
                         pos++;
-                        var escapedValue = scanMinimumNumberOfHexDigits(1);
-                        
-                        if (escapedValue < 0) {
-                            // TODO(drosen): give a proper error message for escaped values that are too large.
-                            error(Diagnostics.Hexadecimal_digit_expected)
-                            return "";
-                        }
-                        
-                        if (escapedValue > 0x10FFFF) {
-                            error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
-                            return "";
-                        }
-                        
-                        if (pos >= len) {
-                            error(Diagnostics.Unexpected_end_of_text);
-                            return "";
-                        }
-                        
-                        // Only swallow the following character up if it's a '}'.
-                        var escapeTerminator = text.charCodeAt(pos);
-                        if (escapeTerminator == CharacterCodes.closeBrace) {
-                            pos++;
-                        }
-                        else {
-                            // '}' expected.
-                            error(Diagnostics.expected);
-                        }
-                        
-                        return utf16EncodeAsString(escapedValue);
+                        return scanExtendedUnicodeEscape();
                     }
+                    
                     // fall through
                 case CharacterCodes.x:
                     var escapedValue = scanExactNumberOfHexDigits(ch === CharacterCodes.x ? 2 : 4);
@@ -835,6 +808,41 @@ module ts {
                 default:
                     return String.fromCharCode(ch);
             }
+        }
+        
+        function scanExtendedUnicodeEscape(): string {
+            var hexStartPos = pos;
+            var escapedValue = scanMinimumNumberOfHexDigits(1);
+            var isInvalidExtendedEscape = false;
+
+            // Validate the value of the digit
+            if (escapedValue < 0) {
+                error(Diagnostics.Hexadecimal_digit_expected)
+                isInvalidExtendedEscape = true;
+            }
+            else if (escapedValue > 0x10FFFF) {
+                error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                isInvalidExtendedEscape = true;
+            }
+
+            if (pos >= len) {
+                error(Diagnostics.Unexpected_end_of_text);
+                isInvalidExtendedEscape = true;
+            }
+            else if (text.charCodeAt(pos) == CharacterCodes.closeBrace) {
+                // Only swallow the following character up if it's a '}'.
+                pos++;
+            }
+            else {
+                error(Diagnostics.expected); // '}' expected.
+                isInvalidExtendedEscape = true;
+            }
+
+            if (isInvalidExtendedEscape) {
+                return "";
+            }
+
+            return utf16EncodeAsString(escapedValue);
         }
         
         // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
