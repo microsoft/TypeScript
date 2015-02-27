@@ -2210,8 +2210,8 @@ sourceFile:contextualTyping.ts
 2 >Emitted(87, 14) Source(146, 14) + SourceIndex(0)
 3 >Emitted(87, 15) Source(146, 15) + SourceIndex(0)
 4 >Emitted(87, 16) Source(146, 37) + SourceIndex(0)
-5 >Emitted(87, 20) Source(146, 40) + SourceIndex(0)
-6 >Emitted(87, 21) Source(146, 41) + SourceIndex(0)
+5 >Emitted(87, 20) Source(146, 40) + SourceIndex(0) name (c9t5)
+6 >Emitted(87, 21) Source(146, 41) + SourceIndex(0) name (c9t5)
 ---
 >>>;
 1 >

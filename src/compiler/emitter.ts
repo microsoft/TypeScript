@@ -3088,69 +3088,19 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
-                    //
-                    //      Foo() ||
-                    //          Bar();
-                    //
-                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
-                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
-                    // i.e. if you have:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //          Baz();
-                    //
-                    // Then we don't want to emit it as:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //              Baz();
-                    //
-                    // So we only indent if the right side of the binary expression starts further in on the line 
-                    // versus the left.
-                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
-                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
-
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
-                    var onDifferentLine = operatorEnd.line !== rightStart.line;
-                    if (onDifferentLine) {
-                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
-                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
-                        var shouldIndent = rightStart.character > firstCharOfExpr;
-
-                        if (shouldIndent) {
-                            increaseIndent();
-                        }
-
+                    if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
+                        increaseIndent();
                         writeLine();
+                        emit(node.right);
+                        decreaseIndent();
                     }
                     else {
                         write(" ");
-                    }
-
-                    emit(node.right);
-
-                    if (shouldIndent) {
-                        decreaseIndent();
+                        emit(node.right);
                     }
                 }
-            }
-
-            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
-                var lineStart = getLineStarts(currentSourceFile)[line];
-                var text = currentSourceFile.text;
-
-                for (var i = lineStart; i < text.length; i++) {
-                    var ch = text.charCodeAt(i);
-                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
-                        break;
-                    }
-                }
-
-                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3992,58 +3942,21 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
-                // If the body has no statements, and we know there's no code that would cause any 
-                // prologue to be emitted, then just do a simple emit if the empty block.
-                if (body.statements.length === 0 && !anyParameterHasBindingPatternOrInitializer(node)) {
-                    emitFunctionBodyWithNoStatements(node, body);
-                }
-                else {
-                    emitFunctionBodyWithStatements(node, body);
-                }
-            }
-
-            function anyParameterHasBindingPatternOrInitializer(func: FunctionLikeDeclaration) {
-                return forEach(func.parameters, hasBindingPatternOrInitializer);
-            }
-
-            function hasBindingPatternOrInitializer(parameter: ParameterDeclaration) {
-                return parameter.initializer || isBindingPattern(parameter.name);
-            }
-
-            function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
-                var singleLine = isSingleLineEmptyBlock(node.body);
-
-                write(" {");
-                if (singleLine) {
-                    write(" ");
-                }
-                else {
-                    increaseIndent();
-                    writeLine();
-                }
-
-                emitLeadingCommentsOfPosition(body.statements.end);
-
-                if (!singleLine) {
-                    decreaseIndent();
-                }
-
-                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
-            }
-
-            function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
                 scopeEmitStart(node);
 
-                var outPos = writer.getTextPos();
+                var initialTextPos = writer.getTextPos();
 
                 increaseIndent();
                 emitDetachedComments(body.statements);
+
+                // Emit all the directive prologues (like "use strict").  These have to come before
+                // any other preamble code we write (like parameter initializers).
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
 
-                var preambleEmitted = writer.getTextPos() !== outPos;
+                var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (var i = 0, n = body.statements.length; i < n; i++) {
