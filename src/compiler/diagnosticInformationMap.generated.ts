@@ -451,6 +451,8 @@ module ts {
         File_0_must_have_extension_ts_or_d_ts: { code: 6054, category: DiagnosticCategory.Error, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: DiagnosticCategory.Message, key: "Do not emit declarations for code that has an '@internal' annotation." },
+        Specify_indent_size: { code: 6057, category: DiagnosticCategory.Message, key: "Specify indent size." },
+        Argument_for_indent_size_must_be_2_or_4: { code: 6058, category: DiagnosticCategory.Message, key: "Argument for indent size must be 2 or 4." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },

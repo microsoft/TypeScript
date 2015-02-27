@@ -363,7 +363,7 @@ module ts {
 
         function writeIndent() {
             if (lineStart) {
-                var indentString = getIndentString(indent);
+                var indentString = getIndentString(indent, IndentSize.Wide);
                 if (indentString) {
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }

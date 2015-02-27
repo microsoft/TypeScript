@@ -1797,6 +1797,14 @@
         "category": "Message",
         "code": 6056
     },
+    "Specify indent size.": {
+        "category": "Message",
+        "code": 6057
+    },
+    "Argument for indent size must be 2 or 4.": {
+        "category": "Message",
+        "code": 6058
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

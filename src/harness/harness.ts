@@ -798,7 +798,7 @@ module Harness {
 
         export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants = true) {
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
-            var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+            var result = ts.createSourceFile(fileName, sourceText, languageVersion, ts.IndentSize.Wide, /*setParentNodes:*/ assertInvariants);
             if (assertInvariants) {
                 Utils.assertInvariants(result, /*parent:*/ undefined);
             }
@@ -934,6 +934,7 @@ module Harness {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
+                options.indentSize = options.indentSize || ts.IndentSize.Wide;
                 options.module = options.module || ts.ModuleKind.None;
                 options.noErrorTruncation = true;
 
@@ -980,6 +981,20 @@ module Harness {
                                 options.target = <any>setting.value;
                             }
                             break;
+
+                        case "indentsize":
+                            if (typeof setting.value === "string") {
+                                if (setting.value.toLowerCase() === "2") {
+                                    options.indentSize = ts.IndentSize.Narrow;
+                                } else if (setting.value.toLowerCase() === "4") {
+                                    options.indentSize = ts.IndentSize.Wide;
+                                } else {
+                                    throw new Error('Unknown compile target ' + setting.value);
+                                }
+                            } else {
+                                options.indentSize = <any>setting.value;
+                            }
+
 
                         case 'noemitonerror':
                             options.noEmitOnError = !!setting.value;

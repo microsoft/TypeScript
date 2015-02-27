@@ -1247,6 +1247,10 @@ declare module "typescript" {
         ES6 = 2,
         Latest = 2,
     }
+    const enum IndentSize {
+        Narrow = 0,
+        Wide = 1,
+    }
     interface ParsedCommandLine {
         options: CompilerOptions;
         fileNames: string[];

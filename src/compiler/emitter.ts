@@ -53,16 +53,19 @@ module ts {
         referencePathsOutput: string;
     }
 
-    var indentStrings: string[] = ["", "    "];
-    export function getIndentString(level: number) {
-        if (indentStrings[level] === undefined) {
-            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+    var indentStrings: string[][] = [["", "  "], ["", "    "]];
+    export function getIndentString(level: number, indentSize: IndentSize) {
+        if (indentStrings[indentSize][level] === undefined) {
+            indentStrings[indentSize][level] = getIndentString(level - 1, indentSize) + indentStrings[indentSize][1];
         }
-        return indentStrings[level];
+        return indentStrings[indentSize][level];
     }
 
-    function getIndentSize() {
-        return indentStrings[1].length;
+    function getIndentSize(indentSize: IndentSize): number {
+        if(indentSize === IndentSize.Narrow) {
+            return 2;
+        }
+        return 4;
     }
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
@@ -79,7 +82,7 @@ module ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
-    function createTextWriter(newLine: String): EmitTextWriter {
+    function createTextWriter(newLine: String, indentSize: IndentSize): EmitTextWriter {
         var output = "";
         var indent = 0;
         var lineStart = true;
@@ -89,7 +92,7 @@ module ts {
         function write(s: string) {
             if (s && s.length) {
                 if (lineStart) {
-                    output += getIndentString(indent);
+                    output += getIndentString(indent, indentSize);
                     lineStart = false;
                 }
                 output += s;
@@ -140,7 +143,7 @@ module ts {
             getIndent: () => indent,
             getTextPos: () => output.length,
             getLine: () => lineCount + 1,
-            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getColumn: () => lineStart ? indent * getIndentSize(indentSize) + 1 : output.length - linePos + 1,
             getText: () => output,
         };
     }
@@ -183,6 +186,7 @@ module ts {
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
             var lineCount = getLineStarts(currentSourceFile).length;
+            var indentSize = typeof currentSourceFile.indentSize === 'number' ? currentSourceFile.indentSize : IndentSize.Wide;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
                 var nextLineStart = (currentLine + 1) === lineCount
@@ -192,11 +196,11 @@ module ts {
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos, indentSize);
                     }
 
                     // These are number of spaces writer is going to write at current indent
-                    var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+                    var currentWriterIndentSpacing = writer.getIndent() * getIndentSize(indentSize);
 
                     // Number of spaces we want to be writing
                     // eg: Assume writer indent
@@ -212,10 +216,10 @@ module ts {
                     //            More right indented comment */                  --4 = 8 - 4 + 11
                     //     class c { }
                     // }
-                    var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart, currentSourceFile.indentSize);
                     if (spacesToEmit > 0) {
-                        var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
-                        var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+                        var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize(indentSize);
+                        var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize(indentSize), indentSize);
 
                         // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
                         writer.rawWrite(indentSizeSpaceString);
@@ -259,12 +263,12 @@ module ts {
             }
         }
 
-        function calculateIndent(pos: number, end: number) {
+        function calculateIndent(pos: number, end: number, indentSize: IndentSize) {
             var currentLineIndent = 0;
             for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
                 if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
                     // Tabs = TabSize = indent size and go to next tabStop
-                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                    currentLineIndent += getIndentSize(indentSize) - (currentLineIndent % getIndentSize(indentSize));
                 }
                 else {
                     // Single space
@@ -357,7 +361,7 @@ module ts {
         var newLine = host.getNewLine();
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
-
+        var indentSize = typeof compilerOptions.indentSize === 'number' ? compilerOptions.indentSize : IndentSize.Wide;
         var write: (s: string) => void;
         var writeLine: () => void;
         var increaseIndent: () => void;
@@ -452,7 +456,7 @@ module ts {
         }
 
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
-            var writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
+            var writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine, indentSize);
             writer.trackSymbol = trackSymbol;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
@@ -1528,6 +1532,7 @@ module ts {
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        var indentSize = typeof compilerOptions.indentSize === 'number' ? compilerOptions.indentSize : IndentSize.Wide;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
@@ -1565,7 +1570,7 @@ module ts {
         };
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter(newLine);
+            var writer = createTextWriter(newLine, indentSize);
             var write = writer.write;
             var writeTextOfNode = writer.writeTextOfNode;
             var writeLine = writer.writeLine;

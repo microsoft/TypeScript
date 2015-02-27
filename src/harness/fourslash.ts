@@ -1436,7 +1436,7 @@ module FourSlash {
             var content = this.getFileContent(this.activeFile.fileName);
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, ts.IndentSize.Wide, /*version:*/ "0", /*setNodeParents:*/ false);
             var referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);

@@ -13,11 +13,11 @@ module ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-        
+
         // returned by CScript sys environment
         var unsupportedFileEncodingErrorCode = -2147024809;
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, indentSize: IndentSize, onError?: (message: string) => void): SourceFile {
             try {
                 var text = sys.readFile(fileName, options.charset);
             }
@@ -30,7 +30,7 @@ module ts {
                 text = "";
             }
 
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion, indentSize) : undefined;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -304,7 +304,7 @@ module ts {
                 }
 
                 // We haven't looked for this file, do so now and cache result
-                var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, hostErrorMessage => {
+                var file = filesByName[canonicalName] = host.getSourceFile(fileName, options.target, options.indentSize, hostErrorMessage => {
                     if (refFile) {
                         diagnostics.add(createFileDiagnostic(refFile, refStart, refLength,
                             Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));

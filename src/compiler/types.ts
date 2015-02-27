@@ -962,8 +962,9 @@ module ts {
         // The first node that causes this file to be an external module
         externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
+        indentSize: IndentSize;
         identifiers: Map<string>;
-        
+
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -1550,6 +1551,7 @@ module ts {
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
+        indentSize?: IndentSize;
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
@@ -1575,6 +1577,11 @@ module ts {
         ES5 = 1,
         ES6 = 2,
         Latest = ES6,
+    }
+
+    export const enum IndentSize {
+        Narrow = 0,
+        Wide = 1,
     }
 
     export interface ParsedCommandLine {
@@ -1735,7 +1742,7 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, indentSize: IndentSize, onError?: (message: string) => void): SourceFile;
         getDefaultLibFileName(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
         writeFile: WriteFileCallback;

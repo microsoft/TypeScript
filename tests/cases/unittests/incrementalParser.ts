@@ -20,7 +20,7 @@ module ts {
     }
 
     function createTree(text: IScriptSnapshot, version: string) {
-        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, version, /*setNodeParents:*/ true)
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, IndentSize.Wide, version, /*setNodeParents:*/ true)
     }
 
     function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {

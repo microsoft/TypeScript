@@ -760,11 +760,11 @@ module ts {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, sourceFile.indentSize, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
         }
 
         // Make sure we're not trying to incrementally update a source file more than once.  Once
-        // we do an update the original source file is considered unusbale from that point onwards. 
+        // we do an update the original source file is considered unusbale from that point onwards.
         //
         // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
         // tree and give them new positions and parents.  From that point on, trusting the old
@@ -817,14 +817,14 @@ module ts {
         // Now that we've set up our internal incremental state just proceed and parse the
         // source file in the normal fashion.  When possible the parser will retrieve and
         // reuse nodes from the old tree.
-        // 
+        //
         // Note: passing in 'true' for setNodeParents is very important.  When incrementally
         // parsing, we will be reusing nodes from the old tree, and placing it into new
-        // parents.  If we don't set the parents now, we'll end up with an observably 
-        // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
+        // parents.  If we don't set the parents now, we'll end up with an observably
+        // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
         // will immediately bail out of walking any subtrees when we can see that their parents
         // are already correct.
-        var result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)  
+        var result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, sourceFile.indentSize, syntaxCursor, /* setParentNode */ true)
 
         return result;
     }
@@ -971,15 +971,15 @@ module ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, indentSize: IndentSize, setParentNodes = false): SourceFile {
         var start = new Date().getTime();
-        var result = parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+        var result = parseSourceFile(fileName, sourceText, languageVersion, indentSize, /*syntaxCursor*/ undefined, setParentNodes);
 
         parseTime += new Date().getTime() - start;
         return result;
     }
 
-    function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
+    function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, indentSize: IndentSize, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext = 0;
         var identifiers: Map<string> = {};
         var identifierCount = 0;
@@ -995,6 +995,7 @@ module ts {
         sourceFile.parseDiagnostics = [];
         sourceFile.bindDiagnostics = [];
         sourceFile.languageVersion = languageVersion;
+        sourceFile.indentSize = indentSize;
         sourceFile.fileName = normalizePath(fileName);
         sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
 

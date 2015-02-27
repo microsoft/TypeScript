@@ -141,6 +141,12 @@ module ts {
             experimental: true
         },
         {
+            name: "indentSize",
+            type: { "2": IndentSize.Narrow, "4": IndentSize.Wide },
+            description: Diagnostics.Specify_indent_size,
+            error: Diagnostics.Argument_for_indent_size_must_be_2_or_4
+        },
+        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
@@ -161,7 +167,7 @@ module ts {
             description: Diagnostics.Watch_input_files,
         }
     ];
-    
+
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         var options: CompilerOptions = {};
         var fileNames: string[] = [];
