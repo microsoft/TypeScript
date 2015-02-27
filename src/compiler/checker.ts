@@ -5202,20 +5202,20 @@ module ts {
                     if (container && container.parent && container.parent.kind === SyntaxKind.ClassDeclaration) {
                         if (container.flags & NodeFlags.Static) {
                             canUseSuperExpression =
-                            container.kind === SyntaxKind.MethodDeclaration ||
-                            container.kind === SyntaxKind.MethodSignature ||
-                            container.kind === SyntaxKind.GetAccessor ||
-                            container.kind === SyntaxKind.SetAccessor;
+                                container.kind === SyntaxKind.MethodDeclaration ||
+                                container.kind === SyntaxKind.MethodSignature ||
+                                container.kind === SyntaxKind.GetAccessor ||
+                                container.kind === SyntaxKind.SetAccessor;
                         }
                         else {
                             canUseSuperExpression =
-                            container.kind === SyntaxKind.MethodDeclaration ||
-                            container.kind === SyntaxKind.MethodSignature ||
-                            container.kind === SyntaxKind.GetAccessor ||
-                            container.kind === SyntaxKind.SetAccessor ||
-                            container.kind === SyntaxKind.PropertyDeclaration ||
-                            container.kind === SyntaxKind.PropertySignature ||
-                            container.kind === SyntaxKind.Constructor;
+                                container.kind === SyntaxKind.MethodDeclaration ||
+                                container.kind === SyntaxKind.MethodSignature ||
+                                container.kind === SyntaxKind.GetAccessor ||
+                                container.kind === SyntaxKind.SetAccessor ||
+                                container.kind === SyntaxKind.PropertyDeclaration ||
+                                container.kind === SyntaxKind.PropertySignature ||
+                                container.kind === SyntaxKind.Constructor;
                         }
                     }
                 }
@@ -8879,10 +8879,6 @@ module ts {
             return iteratedType;
             
             function getIteratedTypeSubroutine(iterable: Type, expressionForError: Expression) {
-                if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
-                    return undefined;
-                }
-
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
                 // must have the following structure (annotated with the names of the variables below):
                 //
@@ -8900,6 +8896,19 @@ module ts {
                 //
                 // T is the type we are after. At every level that involves analyzing return types
                 // of signatures, we union the return types of all the signatures.
+                //
+                // Another thing to note is that at any step of this process, we could run into a dead end,
+                // meaning either the property is missing, or we run into the anyType. If either of these things
+                // happens, we return undefined to signal that we could not find the iterated type. If a property
+                // is missing, and the previous step did not result in 'any', then we also give an error if the
+                // caller requested it. Then the caller can decide what to do in the case where there is no iterated
+                // type. This is different from returning anyType, because that would signify that we have matched the
+                // whole pattern and that T (above) is 'any'.
+                
+                if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
+                    return undefined;
+                }
+
                 var iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
                 if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
                     return undefined;
@@ -10880,7 +10889,7 @@ module ts {
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
             globalArraySymbol = getGlobalTypeSymbol("Array");
-            globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, 1);
+            globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");
@@ -10894,7 +10903,7 @@ module ts {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
-                globalIterableType = getGlobalType("Iterable", 1);
+                globalIterableType = getGlobalType("Iterable", /*arity*/ 1);
             }
             else {
                 globalTemplateStringsArrayType = unknownType;
