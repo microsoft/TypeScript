@@ -1432,7 +1432,11 @@ module ts {
 
     interface DocumentRegistryEntry {
         sourceFile: SourceFile;
-        refCount: number;
+
+        // The number of language services that this source file is referenced in.   When no more
+        // language services are referencing the file, then the file can be removed from the 
+        // registry.
+        languageServiceRefCount: number;
         owners: string[];
     }
 
@@ -1661,6 +1665,8 @@ module ts {
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
+        // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
+        // for those settings.
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
@@ -1684,7 +1690,7 @@ module ts {
                     var entry = entries[i];
                     sourceFiles.push({
                         name: i,
-                        refCount: entry.refCount,
+                        refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
                 }
@@ -1697,45 +1703,52 @@ module ts {
             return JSON.stringify(bucketInfoArray, null, 2);
         }
 
-        function acquireDocument(
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true);
+        }
+
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false);
+        }
+
+        function acquireOrUpdateDocument(
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile {
+            version: string,
+            acquiring: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, fileName);
             if (!entry) {
+                Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
+
+                // Have never seen this file with these settings.  Create a new source file for it.
                 var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
                 bucket[fileName] = entry = {
                     sourceFile: sourceFile,
-                    refCount: 0,
+                    languageServiceRefCount: 0,
                     owners: []
                 };
             }
-            entry.refCount++;
+            else {
+                // We have an entry for this file.  However, it may be for a different version of 
+                // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
+                // return it as is.
+                if (entry.sourceFile.version !== version) {
+                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                }
+            }
 
-            return entry.sourceFile;
-        }
-
-        function updateDocument(
-            fileName: string,
-            compilationSettings: CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile {
-
-            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
-            Debug.assert(bucket !== undefined);
-            var entry = lookUp(bucket, fileName);
-            Debug.assert(entry !== undefined);
-
-            // Check with the host if anything actually changed.
-            if (entry.sourceFile.version !== version) {
-                // If so, ask the host for what changed between these two versions and then do the 
-                // actual incremental parsing.
-                var textChangeRange = scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot);
-                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
+            // If we're acquiring, then this is the first time this LS is asking for this document.
+            // Increase our ref count so we know there's another LS using the document.  If we're
+            // not acquiring, then that means the LS is 'updating' the file instead, and that means
+            // it has already acquired the document previously.  As such, we do not need to increase
+            // the ref count.
+            if (acquiring) {
+                entry.languageServiceRefCount++;
             }
 
             return entry.sourceFile;
@@ -1746,10 +1759,10 @@ module ts {
             Debug.assert(bucket !== undefined);
 
             var entry = lookUp(bucket, fileName);
-            entry.refCount--;
+            entry.languageServiceRefCount--;
 
-            Debug.assert(entry.refCount >= 0);
-            if (entry.refCount === 0) {
+            Debug.assert(entry.languageServiceRefCount >= 0);
+            if (entry.languageServiceRefCount === 0) {
                 delete bucket[fileName];
             }
         }
