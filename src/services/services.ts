@@ -1732,6 +1732,8 @@ module ts {
 
             // Check with the host if anything actually changed.
             if (entry.sourceFile.version !== version) {
+                // If so, ask the host for what changed between these two versions and then do the 
+                // actual incremental parsing.
                 var textChangeRange = scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot);
                 entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
             }
