@@ -2461,8 +2461,6 @@ module ts {
                         return false;
                     case SyntaxKind.LabeledStatement:
                         return (<LabeledStatement>node.parent).label === node;
-                    //case SyntaxKind.CatchClause:
-                    //    return (<CatchClause>node.parent).name === node;
                 }
             }
 
