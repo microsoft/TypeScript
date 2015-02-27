@@ -1,0 +1,10 @@
+tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapesES6.ts(4,7): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapesES6.ts (1 errors) ====
+    function f(...args: any[]) {
+    }
+    
+    f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'`;
+          
+!!! error TS1125: Hexadecimal digit expected.

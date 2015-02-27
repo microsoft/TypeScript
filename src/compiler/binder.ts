@@ -389,6 +389,7 @@ module ts {
 
         function bind(node: Node) {
             node.parent = parent;
+            
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);

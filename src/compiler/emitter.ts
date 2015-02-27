@@ -2161,7 +2161,7 @@ module ts {
                 }
             }
 
-            function emitParenthesized(node: Node, parenthesized: boolean) {
+            function emitParenthesizedIf(node: Node, parenthesized: boolean) {
                 if (parenthesized) {
                     write("(");
                 }
@@ -2294,6 +2294,72 @@ module ts {
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
                 return '"' + escapeString(node.text) + '"';
             }
+            
+            function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
+                // Find original source text, since we need to emit the raw strings of the tagged template.
+                // The raw strings contain the (escaped) strings of what the user wrote.
+                // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
+                var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                
+                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+                // thus we need to remove those characters.
+                // First template piece starts with "`", others with "}"
+                // Last template piece ends with "`", others with "${"
+                var isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+                text = text.substring(1, text.length - (isLast ? 1 : 2));
+                
+                // Newline normalization:
+                // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
+                // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
+                text = text.replace(/\r\n?/g, "\n");
+                text = escapeString(text);
+                
+                write('"' + text + '"');
+            }
+            
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
+                write("[");
+                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                    literalEmitter(<LiteralExpression>node.template);
+                }
+                else {
+                    literalEmitter((<TemplateExpression>node.template).head);
+                    forEach((<TemplateExpression>node.template).templateSpans, (child) => {
+                        write(", ");
+                        literalEmitter(child.literal);
+                    });
+                }
+                write("]");
+            }
+            
+            function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
+                var tempVariable = createAndRecordTempVariable(node);
+                write("(");
+                emit(tempVariable);
+                write(" = ");
+                emitDownlevelTaggedTemplateArray(node, emit);
+                write(", ");
+                
+                emit(tempVariable);
+                write(".raw = ");
+                emitDownlevelTaggedTemplateArray(node, emitDownlevelRawTemplateLiteral);
+                write(", ");
+                
+                emitParenthesizedIf(node.tag, needsParenthesisForPropertyAccessOrInvocation(node.tag));
+                write("(");
+                emit(tempVariable);
+                
+                // Now we emit the expressions
+                if (node.template.kind === SyntaxKind.TemplateExpression) {
+                    forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
+                        write(", ");
+                        var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
+                            && (<BinaryExpression>templateSpan.expression).operatorToken.kind === SyntaxKind.CommaToken;
+                        emitParenthesizedIf(templateSpan.expression, needsParens);
+                    });
+                }
+                write("))");
+            }
 
             function emitTemplateExpression(node: TemplateExpression): void {
                 // In ES6 mode and above, we can simply emit each portion of a template in order, but in
@@ -2338,7 +2404,8 @@ module ts {
                         write(" + ");
                     }
 
-                    emitParenthesized(templateSpan.expression, needsParens);
+                    emitParenthesizedIf(templateSpan.expression, needsParens);
+
                     // Only emit if the literal is non-empty.
                     // The binary '+' operator is left-associative, so the first string concatenation
                     // with the head will force the result up to this point to be a string.
@@ -2581,7 +2648,7 @@ module ts {
                 emit((<SpreadElementExpression>node).expression);
             }
 
-            function needsParenthesisForPropertyAccess(node: Expression) {
+            function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.ArrayLiteralExpression:
@@ -2611,7 +2678,7 @@ module ts {
                     var e = elements[pos];
                     if (e.kind === SyntaxKind.SpreadElementExpression) {
                         e = (<SpreadElementExpression>e).expression;
-                        emitParenthesized(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccess(e));
+                        emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
                     }
                     else {
@@ -3079,9 +3146,14 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                emit(node.tag);
-                write(" ");
-                emit(node.template);
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    emit(node.tag);
+                    write(" ");
+                    emit(node.template);
+                }
+                else {
+                    emitDownlevelTaggedTemplate(node);
+                }
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
@@ -3182,69 +3254,19 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    // We'd like to preserve newlines found in the original binary expression.  i.e. if a user has:
-                    //
-                    //      Foo() ||
-                    //          Bar();
-                    //
-                    // Then we'd like to emit it as such.  It seems like we'd only need to check for a newline and
-                    // then just indent and emit.  However, that will lead to a problem with deeply nested code.
-                    // i.e. if you have:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //          Baz();
-                    //
-                    // Then we don't want to emit it as:
-                    //
-                    //      Foo() ||
-                    //          Bar() ||
-                    //              Baz();
-                    //
-                    // So we only indent if the right side of the binary expression starts further in on the line 
-                    // versus the left.
-                    var operatorEnd = getLineAndCharacterOfPosition(currentSourceFile, node.operatorToken.end);
-                    var rightStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.right.pos));
-
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
-                    var onDifferentLine = operatorEnd.line !== rightStart.line;
-                    if (onDifferentLine) {
-                        // Also, if the right expression starts further in on the line than the left, then we'll indent.
-                        var exprStart = getLineAndCharacterOfPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        var firstCharOfExpr = getFirstNonWhitespaceCharacterIndexOnLine(exprStart.line);
-                        var shouldIndent = rightStart.character > firstCharOfExpr;
-
-                        if (shouldIndent) {
-                            increaseIndent();
-                        }
-
+                    if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
+                        increaseIndent();
                         writeLine();
+                        emit(node.right);
+                        decreaseIndent();
                     }
                     else {
                         write(" ");
-                    }
-
-                    emit(node.right);
-
-                    if (shouldIndent) {
-                        decreaseIndent();
+                        emit(node.right);
                     }
                 }
-            }
-
-            function getFirstNonWhitespaceCharacterIndexOnLine(line: number): number {
-                var lineStart = getLineStarts(currentSourceFile)[line];
-                var text = currentSourceFile.text;
-
-                for (var i = lineStart; i < text.length; i++) {
-                    var ch = text.charCodeAt(i);
-                    if (!isWhiteSpace(text.charCodeAt(i)) || isLineBreak(ch)) {
-                        break;
-                    }
-                }
-
-                return i - lineStart;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3301,7 +3323,7 @@ module ts {
             }
 
             function emitExpressionStatement(node: ExpressionStatement) {
-                emitParenthesized(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
+                emitParenthesizedIf(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
                 write(";");
             }
 
@@ -4196,58 +4218,21 @@ module ts {
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
-                // If the body has no statements, and we know there's no code that would cause any 
-                // prologue to be emitted, then just do a simple emit if the empty block.
-                if (body.statements.length === 0 && !anyParameterHasBindingPatternOrInitializer(node)) {
-                    emitFunctionBodyWithNoStatements(node, body);
-                }
-                else {
-                    emitFunctionBodyWithStatements(node, body);
-                }
-            }
-
-            function anyParameterHasBindingPatternOrInitializer(func: FunctionLikeDeclaration) {
-                return forEach(func.parameters, hasBindingPatternOrInitializer);
-            }
-
-            function hasBindingPatternOrInitializer(parameter: ParameterDeclaration) {
-                return parameter.initializer || isBindingPattern(parameter.name);
-            }
-
-            function emitFunctionBodyWithNoStatements(node: FunctionLikeDeclaration, body: Block) {
-                var singleLine = isSingleLineEmptyBlock(node.body);
-
-                write(" {");
-                if (singleLine) {
-                    write(" ");
-                }
-                else {
-                    increaseIndent();
-                    writeLine();
-                }
-
-                emitLeadingCommentsOfPosition(body.statements.end);
-
-                if (!singleLine) {
-                    decreaseIndent();
-                }
-
-                emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
-            }
-
-            function emitFunctionBodyWithStatements(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
                 scopeEmitStart(node);
 
-                var outPos = writer.getTextPos();
+                var initialTextPos = writer.getTextPos();
 
                 increaseIndent();
                 emitDetachedComments(body.statements);
+
+                // Emit all the directive prologues (like "use strict").  These have to come before
+                // any other preamble code we write (like parameter initializers).
                 var startIndex = emitDirectivePrologues(body.statements, /*startWithNewLine*/ true);
                 emitFunctionBodyPreamble(node);
                 decreaseIndent();
 
-                var preambleEmitted = writer.getTextPos() !== outPos;
+                var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
                 if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (var i = 0, n = body.statements.length; i < n; i++) {

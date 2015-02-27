@@ -501,71 +501,71 @@ declare module "typescript" {
         AsKeyword = 101,
 >AsKeyword : SyntaxKind
 
-        FromKeyword = 102,
->FromKeyword : SyntaxKind
-
-        ImplementsKeyword = 103,
+        ImplementsKeyword = 102,
 >ImplementsKeyword : SyntaxKind
 
-        InterfaceKeyword = 104,
+        InterfaceKeyword = 103,
 >InterfaceKeyword : SyntaxKind
 
-        LetKeyword = 105,
+        LetKeyword = 104,
 >LetKeyword : SyntaxKind
 
-        PackageKeyword = 106,
+        PackageKeyword = 105,
 >PackageKeyword : SyntaxKind
 
-        PrivateKeyword = 107,
+        PrivateKeyword = 106,
 >PrivateKeyword : SyntaxKind
 
-        ProtectedKeyword = 108,
+        ProtectedKeyword = 107,
 >ProtectedKeyword : SyntaxKind
 
-        PublicKeyword = 109,
+        PublicKeyword = 108,
 >PublicKeyword : SyntaxKind
 
-        StaticKeyword = 110,
+        StaticKeyword = 109,
 >StaticKeyword : SyntaxKind
 
-        YieldKeyword = 111,
+        YieldKeyword = 110,
 >YieldKeyword : SyntaxKind
 
-        AnyKeyword = 112,
+        AnyKeyword = 111,
 >AnyKeyword : SyntaxKind
 
-        BooleanKeyword = 113,
+        BooleanKeyword = 112,
 >BooleanKeyword : SyntaxKind
 
-        ConstructorKeyword = 114,
+        ConstructorKeyword = 113,
 >ConstructorKeyword : SyntaxKind
 
-        DeclareKeyword = 115,
+        DeclareKeyword = 114,
 >DeclareKeyword : SyntaxKind
 
-        GetKeyword = 116,
+        GetKeyword = 115,
 >GetKeyword : SyntaxKind
 
-        ModuleKeyword = 117,
+        ModuleKeyword = 116,
 >ModuleKeyword : SyntaxKind
 
-        RequireKeyword = 118,
+        RequireKeyword = 117,
 >RequireKeyword : SyntaxKind
 
-        NumberKeyword = 119,
+        NumberKeyword = 118,
 >NumberKeyword : SyntaxKind
 
-        SetKeyword = 120,
+        SetKeyword = 119,
 >SetKeyword : SyntaxKind
 
-        StringKeyword = 121,
+        StringKeyword = 120,
 >StringKeyword : SyntaxKind
 
-        SymbolKeyword = 122,
+        SymbolKeyword = 121,
 >SymbolKeyword : SyntaxKind
 
-        TypeKeyword = 123,
+        TypeKeyword = 122,
 >TypeKeyword : SyntaxKind
+
+        FromKeyword = 123,
+>FromKeyword : SyntaxKind
 
         OfKeyword = 124,
 >OfKeyword : SyntaxKind
@@ -882,10 +882,10 @@ declare module "typescript" {
         LastKeyword = 124,
 >LastKeyword : SyntaxKind
 
-        FirstFutureReservedWord = 103,
+        FirstFutureReservedWord = 102,
 >FirstFutureReservedWord : SyntaxKind
 
-        LastFutureReservedWord = 111,
+        LastFutureReservedWord = 110,
 >LastFutureReservedWord : SyntaxKind
 
         FirstTypeNode = 139,

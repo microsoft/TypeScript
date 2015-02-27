@@ -1,0 +1,9 @@
+=== tests/cases/compiler/taggedTemplateStringsHexadecimalEscapesES6.ts ===
+function f(...args: any[]) {
+>f : (...args: any[]) => void
+>args : any[]
+}
+
+f `\x0D${ "Interrupted CRLF" }\x0A`;
+>f : (...args: any[]) => void
+

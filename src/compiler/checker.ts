@@ -6806,11 +6806,6 @@ module ts {
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
-            // Grammar checking
-            if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
-            }
-
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
@@ -10339,11 +10334,12 @@ module ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    if (isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
-                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) {
-                        var importSymbol = getSymbolOfNode(node.parent.parent);
-                        var moduleType = getTypeOfSymbol(importSymbol);
-                        return moduleType ? moduleType.symbol : undefined;
+                    var moduleName: Expression;
+                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
+                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
+                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) &&
+                            (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
+                        return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
 
                 // Intentional fall-through

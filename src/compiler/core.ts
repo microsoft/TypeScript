@@ -607,7 +607,7 @@ module ts {
     }
 
     var backslashOrDoubleQuote = /[\"\\]/g;
-    var escapedCharsRegExp = /[\0-\19\t\v\f\b\0\r\n\u2028\u2029\u0085]/g;
+    var escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     var escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
@@ -624,7 +624,7 @@ module ts {
     };
 
     /**
-     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
+     * Based heavily on the abstract 'Quote'/ 'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters.
      * Note that this doesn't actually wrap the input in double quotes.
      */

@@ -975,8 +975,8 @@ sourceFile:recursiveClassReferenceTest.ts
   >
   >		
 2 >                }
-1 >Emitted(51, 17) Source(61, 3) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-2 >Emitted(51, 18) Source(61, 4) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
+1 >Emitted(51, 17) Source(61, 3) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.destroy)
+2 >Emitted(51, 18) Source(61, 4) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.destroy)
 ---
 >>>                return FindWidget;
 1->^^^^^^^^^^^^^^^^

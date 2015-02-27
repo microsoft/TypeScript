@@ -34,7 +34,7 @@ var x = (_a = {
         }
     }
 }, _a.p1 =
-10, _a.foo = Object.defineProperty({ get: function () {
+    10, _a.foo = Object.defineProperty({ get: function () {
         if (1 == 1) {
             return 10;
         }
@@ -46,5 +46,5 @@ var x = (_a = {
     }, enumerable: true, configurable: true }), _a[1 + 1] = Object.defineProperty({ get: function () {
         return 10;
     }, enumerable: true, configurable: true }), _a.p2 =
-20, _a);
+    20, _a);
 var _a;
