@@ -322,6 +322,7 @@ module ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+        ts.ioReadTime = 0;
         ts.parseTime = 0;
         ts.bindTime = 0;
         ts.checkTime = 0;
@@ -330,9 +331,12 @@ module ts {
         var start = new Date().getTime();
 
         var program = createProgram(fileNames, compilerOptions, compilerHost);
+        var programTime = new Date().getTime() - start;
+
         var exitStatus = compileProgram();
 
         var end = new Date().getTime() - start;
+        var compileTime = end - programTime;
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -353,10 +357,19 @@ module ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            reportTimeStatistic("Parse time", ts.parseTime);
+            // Individual component times.
+            // Note: we output 'programTime' as parseTime to match the tsc 1.3 behavior.  tsc 1.3
+            // measured parse time along with read IO as a single counter.  We preserve that 
+            // behavior so we can accurately compare times.  For actual parse times (in isolation)
+            // is reported below.
+            reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", ts.bindTime);
             reportTimeStatistic("Check time", ts.checkTime);
             reportTimeStatistic("Emit time", ts.emitTime);
+            
+            reportTimeStatistic("Parse time w/o IO", ts.parseTime);
+            reportTimeStatistic("IO read", ts.ioReadTime);
+            reportTimeStatistic("Compile time", compileTime);
             reportTimeStatistic("Total time", end);
         }
 
