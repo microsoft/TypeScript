@@ -705,9 +705,8 @@ declare module "typescript" {
         catchClause?: CatchClause;
         finallyBlock?: Block;
     }
-    interface CatchClause extends Declaration {
-        name: Identifier;
-        type?: TypeNode;
+    interface CatchClause extends Node {
+        variableDeclaration: VariableDeclaration;
         block: Block;
     }
     interface ModuleElement extends Node {

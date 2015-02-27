@@ -353,15 +353,8 @@ module ts {
         }
 
         function bindCatchVariableDeclaration(node: CatchClause) {
-            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.name.text || "__missing");
-            addDeclarationToSymbol(symbol, node, SymbolFlags.FunctionScopedVariable);
-            var saveParent = parent;
-            var savedBlockScopeContainer = blockScopeContainer;
-            parent = node;
-            setBlockScopeContainer(node, /*cleanLocals*/ true);
-            forEachChild(node, bind);
-            parent = saveParent;
-            blockScopeContainer = savedBlockScopeContainer;
+            bindChildren(node, /*symbolKind:*/ 0, /*isBlockScopeContainer:*/ true);
+
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
@@ -402,7 +395,7 @@ module ts {
                     if (isBindingPattern((<Declaration>node).name)) {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
-                    else if (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) {
+                    else if (isBlockOrCatchScoped(<Declaration>node)) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {

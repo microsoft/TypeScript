@@ -4756,7 +4756,7 @@ module ts {
 
         /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
         function isWriteAccess(node: Node): boolean {
-            if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            if (node.kind === SyntaxKind.Identifier && isDeclarationName(node)) {
                 return true;
             }
 
@@ -4918,7 +4918,7 @@ module ts {
             else if (isInRightSideOfImport(node)) {
                 return getMeaningFromRightHandSideOfImportEquals(node);
             }
-            else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            else if (isDeclarationName(node)) {
                 return getMeaningFromDeclaration(node.parent);
             }
             else if (isTypeReference(node)) {

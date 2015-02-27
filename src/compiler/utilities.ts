@@ -198,6 +198,18 @@ module ts {
         return getBaseFileName(moduleName).replace(/\W/g, "_");
     }
 
+    export function isBlockOrCatchScoped(declaration: Declaration) {
+        return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
+            isCatchClauseVariableDeclaration(declaration);
+    }
+
+    export function isCatchClauseVariableDeclaration(declaration: Declaration) {
+        return declaration &&
+            declaration.kind === SyntaxKind.VariableDeclaration &&
+            declaration.parent &&
+            declaration.parent.kind === SyntaxKind.CatchClause;
+    }
+
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
@@ -687,31 +699,33 @@ module ts {
 
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.ImportClause:
-            case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.VariableDeclaration:
                 return true;
         }
         return false;
@@ -745,7 +759,7 @@ module ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+    export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
@@ -757,12 +771,8 @@ module ts {
             }
         }
 
-        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+        if (isDeclaration(parent)) {
             return (<Declaration>parent).name === name;
-        }
-
-        if (parent.kind === SyntaxKind.CatchClause) {
-            return (<CatchClause>parent).name === name;
         }
 
         return false;

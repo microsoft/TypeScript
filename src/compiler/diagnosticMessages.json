@@ -27,10 +27,6 @@
         "category": "Error",
         "code": 1012
     },
-    "Catch clause parameter cannot have a type annotation.": {
-        "category": "Error",
-        "code": 1013
-    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -602,6 +598,18 @@
     "Export declarations are not permitted in an internal module.": {
         "category": "Error",
         "code": 1194
+    },
+    "Catch clause variable name must be an identifier.": {
+        "category": "Error",
+        "code": 1195
+    },
+    "Catch clause variable cannot have a type annotation.": {
+        "category": "Error",
+        "code": 1196
+    },
+    "Catch clause variable cannot have an initializer.": {
+        "category": "Error",
+        "code": 1197
     },
 
     "Duplicate identifier '{0}'.": {

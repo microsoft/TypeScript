@@ -2545,8 +2545,6 @@ module ts {
                         return false;
                     case SyntaxKind.LabeledStatement:
                         return (<LabeledStatement>node.parent).label === node;
-                    case SyntaxKind.CatchClause:
-                        return (<CatchClause>node.parent).name === node;
                 }
             }
 
@@ -3536,8 +3534,8 @@ module ts {
                 var endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.name);
-                emitToken(SyntaxKind.CloseParenToken, node.name.end);
+                emit(node.variableDeclaration);
+                emitToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : endPos);
                 write(" ");
                 emitBlock(node.block);
             }
