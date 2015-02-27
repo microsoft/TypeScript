@@ -4,4 +4,4 @@ var x = `\u{DDDDD}`;
 
 
 //// [unicodeExtendedEscapesInTemplates13_ES5.js]
-var x = "󝷝";
+var x = "\udb37\udddd";

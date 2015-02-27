@@ -2201,9 +2201,12 @@ module ts {
                     write(text);
                 }
             }
-
+            
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
-                return '"' + escapeString(node.text) + '"';
+                var result = escapeString(node.text);
+                result = replaceNonAsciiCharacters(result);
+                
+                return '"' + result + '"';
             }
             
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
