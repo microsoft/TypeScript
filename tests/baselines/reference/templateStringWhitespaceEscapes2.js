@@ -6,4 +6,4 @@
 
 //// [templateStringWhitespaceEscapes2.js]
 // <TAB>, <VT>, <FF>, <SP>, <NBSP>, <BOM>
-"\t\v\f \u00a0\ufeff";
+"\t\v\f \u00A0\uFEFF";

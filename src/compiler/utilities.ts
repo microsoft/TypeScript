@@ -1238,7 +1238,7 @@ module ts {
     }
     
     function get16BitUnicodeEscapeSequence(charCode: number): string {
-        var hexCharCode = charCode.toString(16);
+        var hexCharCode = charCode.toString(16).toUpperCase();
         var paddedHexCode = ("0000" + hexCharCode).slice(-4);
         return "\\u" + paddedHexCode;
     }
