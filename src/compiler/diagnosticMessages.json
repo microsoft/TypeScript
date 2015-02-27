@@ -1277,7 +1277,6 @@
         "category": "Error",
         "code": 2467
     },
-
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2500
@@ -1286,7 +1285,6 @@
         "category": "Error",
         "code": 2501
     },
-
     "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
         "category": "Error",
         "code": 2502
@@ -1832,11 +1830,11 @@
         "category": "Message",
         "code": 6056
     },
-    "Emit async functions when ECMAScript target version is lower than 'ES6' (experimental).": {
+    "Emit async functions when ECMAScript target version is lower than 'ES6'.": {
         "category": "Message",
         "code": 6057
     },
-    "Do not emit runtime helper functions (e.g. '__extends', '__awaiter'). Assumes manual reference to tslib.js (experimental).": {
+    "Do not emit runtime helper functions (e.g. '__extends', '__awaiter'). Assumes manual reference to tslib.js.": {
         "category": "Message",
         "code": 6058
     },

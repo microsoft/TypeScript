@@ -89,7 +89,7 @@ module ts {
         {
             name: "noHelpers",
             type: "boolean",
-            description: Diagnostics.Do_not_emit_runtime_helper_functions_e_g_extends_awaiter_Assumes_manual_reference_to_tslib_js_experimental,
+            description: Diagnostics.Do_not_emit_runtime_helper_functions_e_g_extends_awaiter_Assumes_manual_reference_to_tslib_js,
             experimental: true
         },
         {
@@ -158,7 +158,7 @@ module ts {
             name: "asyncFunctions",
             type: "boolean",
             experimental: true,
-            description: Diagnostics.Emit_async_functions_when_ECMAScript_target_version_is_lower_than_ES6_experimental,
+            description: Diagnostics.Emit_async_functions_when_ECMAScript_target_version_is_lower_than_ES6,
         },
         {
             name: "version",

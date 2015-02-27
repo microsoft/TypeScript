@@ -96,8 +96,8 @@ module ts {
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
         var globalPromiseType: ObjectType;
-        var globalIPromiseType: ObjectType;
-        var globalIPromiseConstructorType: ObjectType;
+        var globalPromiseLikeInterfaceType: ObjectType;
+        var globalPromiseConstructorLikeInterfaceType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -5015,9 +5015,7 @@ module ts {
         }
 
         function isLexicalArguments(node: Identifier): boolean {
-            if (node.text === "arguments"
-                && (node.parserContextFlags & ParserContextFlags.Yield && compilerOptions.target < ScriptTarget.ES6
-                    || node.parserContextFlags & ParserContextFlags.Await)) {
+            if (node.text === "arguments" && node.parserContextFlags & ParserContextFlags.Await) {
                 return true;
             }
             return false;
@@ -6616,6 +6614,7 @@ module ts {
         }
 
         function createPromiseType(promisedType: Type, location: Node): Type {
+            // creates a `Promise<T>` type where `T` is the promisedType argument
             if (globalPromiseSymbol) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType);
@@ -8162,10 +8161,10 @@ module ts {
 
         function getPromisedType(type: Type): Type {
             // the "promised type" of a type is the type of the "value" argument of the "onfulfilled" callback.
-            if (!globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
+            if (!globalPromiseLikeInterfaceType || !(type.flags & TypeFlags.ObjectType)) {
                 return undefined;
             }
-            if (isTypeAssignableTo(type, globalIPromiseType)) {
+            if (isTypeAssignableTo(type, globalPromiseLikeInterfaceType)) {
                 var awaitedTypes: Type[] = [];
                 var thenProp = getPropertyOfType(type, "then");
                 var thenType = getTypeOfSymbol(thenProp);
@@ -8191,9 +8190,12 @@ module ts {
 
         function getAwaitedType(type: Type): Type {
             // The "awaited type" of an expression is its "promised type" if the expression is a `Promise`; otherwise, it is the type of the expression.
-            if (!globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
+
+            // if we couldn't find the IPromise type, we cannot await. Also, we don't need to await a value that cannot have a `then` member.
+            if (!globalPromiseLikeInterfaceType || !(type.flags & TypeFlags.ObjectType)) {
                 return type;
             }
+
             var promisedType = getPromisedType(type);
             if (promisedType) {
                 // if we have a bad actor in the form of a promise whose promised type is the same promise, return the empty type.
@@ -8238,25 +8240,23 @@ module ts {
 
         function checkAsyncFunctionReturnType(node: SignatureDeclaration, returnType: Type): Type {            
             // This checks that an async function has a valid Promise-compatible return type, and returns the *awaited type* of the promise.
-            // An async function has a valid Promise-compatible return type if the return type has a construct signature that takes
-            // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
+            // An async function has a valid Promise-compatible return type if the resolved value of the return type has a construct 
+            // signature that takes in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
-            if (globalIPromiseConstructorType) {
-                if (!returnType) {
-                    returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-                }
-                // get the constructor type of the return type
-                var declaredType = returnType.symbol ? getTypeOfSymbol(returnType.symbol) : emptyObjectType;
-                if (isTypeAssignableTo(declaredType, globalIPromiseConstructorType)) {
-                    var promisedType = getPromisedType(returnType);
-                    if (promisedType) {
-                        // unwrap the promised type
-                        var promiseConstructor = getPromiseConstructor(node);
-                        if (promiseConstructor) {
-                            emitAwaiter = true;
-                            checkExpressionOrQualifiedName(promiseConstructor);
-                            return getAwaitedType(promisedType);
-                        }
+            if (!returnType) {
+                returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+            }
+            // get the constructor type of the return type                
+            var declaredType = returnType.symbol ? getTypeOfSymbol(returnType.symbol) : emptyObjectType;
+            if (isTypeAssignableTo(declaredType, globalPromiseConstructorLikeInterfaceType)) {
+                var promisedType = getPromisedType(returnType);
+                if (promisedType) {
+                    // unwrap the promised type
+                    var promiseConstructor = getPromiseConstructor(node);
+                    if (promiseConstructor) {
+                        emitAwaiter = true;
+                        checkExpressionOrQualifiedName(promiseConstructor);
+                        return getAwaitedType(promisedType);
                     }
                 }
             }
@@ -8727,6 +8727,7 @@ module ts {
 
                 node = node.parent;
             }
+            return false;
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -10657,23 +10658,23 @@ module ts {
 
             var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), /*arity*/ 1);
             if (iPromiseType !== emptyObjectType) {
-                globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
+                globalPromiseLikeInterfaceType = createTypeReference(<GenericType>iPromiseType, [anyType]);
             }
 
-            globalIPromiseConstructorType = getGlobalType("IPromiseConstructor");
+            globalPromiseConstructorLikeInterfaceType = getGlobalType("IPromiseConstructor");
 
             if (compilerOptions.target >= ScriptTarget.ES6) {
                 globalPromiseSymbol = getGlobalSymbol("Promise");
             }
             else {
-                globalPromiseSymbol = resolveName(undefined, "Promise", SymbolFlags.Type, undefined, undefined);
+                globalPromiseSymbol = resolveName(/*location*/ undefined, "Promise", SymbolFlags.Type, /*nameNotFoundMessages*/ undefined, /*nameArg*/ undefined);
             }
 
             if (globalPromiseSymbol) {
-                globalPromiseType = getTypeOfGlobalSymbol(globalPromiseSymbol, 1);
+                globalPromiseType = getTypeOfGlobalSymbol(globalPromiseSymbol, /*arity*/ 1);
             }
 
-            // thenable type that is used to verify against a non-promise "thenable" operand to `await`.
+            // build the thenable type that is used to verify against a non-promise "thenable" operand to `await`.
             var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
             getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
             thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
@@ -10861,26 +10862,17 @@ module ts {
             }
 
             switch (node.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ExportAssignment:
-                case SyntaxKind.VariableStatement:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.Parameter:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
-                default:
-                    return false;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!(<FunctionLikeDeclaration>node).asteriskToken) {
+                        return false;
+                    }
+                    break;
             }
+
+            return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
         }
 
         function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {

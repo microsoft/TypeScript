@@ -11,14 +11,14 @@
 })(this, function (exports) {
     var root = Function("return this;")();
 
-    exports.__extends = function (d, b) {
+    exports.__extends = root.__extends || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         __.prototype = b.prototype;
         d.prototype = new __();
     }
 
-    exports.__awaiter = function (gen) {
+    exports.__awaiter = root.__awaiter || function (gen) {
         function step(result) {
             while (true) {
                 var done = result.done, value = result.value, then;
@@ -33,7 +33,7 @@
         return step(gen.next());
     }
 
-    exports.__generator = function (body) {
+    exports.__generator = root.__generator || function (body) {
         var done, finallyStack, executing, state;
         function step(opcode, arg) {
             var trys, region, tryLabel, catchLabel, finallyLabel, endLabel;
@@ -112,9 +112,9 @@
 
     if (exports !== root) {
         exports.install = function () {
-            root.__extends = root.__extends || exports.__extends;
-            root.__awaiter = root.__awaiter || exports.__awaiter;
-            root.__generator = root.__generator || exports.__generator;
+            root.__extends = exports.__extends;
+            root.__awaiter = exports.__awaiter;
+            root.__generator = exports.__generator;
         }
     }
 });

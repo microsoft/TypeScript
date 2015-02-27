@@ -1105,7 +1105,7 @@ module ts {
 
         function setAsyncParameterContext(val: boolean) {
             setContextFlag(val, ParserContextFlags.AsyncParameter);
-        }
+        }        
 
         function allowInAnd<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.DisallowIn) {
@@ -1131,6 +1131,21 @@ module ts {
             return result;
         }
 
+        function doOutsideOfYieldOrAwaitOrParameterContext<T>(func: () => T): T {
+            var saveContextFlags = contextFlags & ParserContextFlags.ContextParameterFlags;
+            contextFlags &= ~saveContextFlags;
+            var result = func();
+            contextFlags |= saveContextFlags;
+            return result;
+        }
+
+        function doOutsideOfYieldOrAwaitOrParameterContextWhenInParameter<T>(func: () => T): T {
+            if (contextFlags & (ParserContextFlags.AsyncParameter | ParserContextFlags.GeneratorParameter)) {
+                return doOutsideOfYieldOrAwaitOrParameterContext(func);
+            }
+            return func();
+        }
+
         function inYieldContext() {
             return (contextFlags & ParserContextFlags.Yield) !== 0;
         }
@@ -1153,7 +1168,7 @@ module ts {
 
         function inAsyncParameterContext() {
             return (contextFlags & ParserContextFlags.AsyncParameter) !== 0;
-        }
+        }        
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
             var start = scanner.getTokenPos();
@@ -1432,24 +1447,10 @@ module ts {
             var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
 
-            var ambientFlags = ParserContextFlags.None;
-            
-            // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters. 
-            // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
-            if (!inGeneratorParameterContext()) {
-                ambientFlags |= ParserContextFlags.Yield;
-            }
-
-            // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters. 
-            // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
-            if (!inAsyncParameterContext()) {
-                ambientFlags |= ParserContextFlags.Await;
-            }
-
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            node.expression = setContextParametersAnd(parseExpression, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
+            node.expression = doOutsideOfYieldOrAwaitOrParameterContextWhenInParameter(parseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -1541,9 +1542,9 @@ module ts {
                     // "implements foo" is not considered a type name.
                     return isIdentifier() && !isNotHeritageClauseTypeName();
                 case ParsingContext.VariableDeclarations:
-                    return isIdentifierOrPattern();
+                    return isIdentifierOrBindingPattern();
                 case ParsingContext.ArrayBindingElements:
-                    return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern();
+                    return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isIdentifierOrBindingPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
@@ -2247,7 +2248,7 @@ module ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token);
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrBindingPattern() || isModifier(token);
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -2255,25 +2256,6 @@ module ts {
                 node.flags |= modifiers.flags;
                 node.modifiers = modifiers;
             }
-        }
-
-        function setContextParameters(explicitFlags: ParserContextFlags, ambientFlags: ParserContextFlags) {
-            // setContextParameters atomically returns the value of contextFlags at the time the function was 
-            // called, and updates contextFlags in the following fashion:
-            //
-            // - Any parser-generated flags not in the set of ambient flags are cleared from contextFlags
-            // - Explicit flags are set on contextFlags
-
-            var previousContextFlags = contextFlags;
-            contextFlags = (contextFlags & (ambientFlags | ~ParserContextFlags.ContextParameterFlags)) | explicitFlags;
-            return previousContextFlags;
-        }
-
-        function setContextParametersAnd<T>(callback: () => T, explicitFlags: ParserContextFlags, ambientFlags: ParserContextFlags): T {
-            var savedFlags = setContextParameters(explicitFlags, ambientFlags);
-            var result = callback();
-            contextFlags = savedFlags;
-            return result;
         }
 
         function parseParameter(): ParameterDeclaration {
@@ -2284,7 +2266,7 @@ module ts {
             // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.1
             //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
 
-            node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
+            node.name = parseIdentifierOrBindingPattern(/*inBindingElement*/ true);
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -2345,8 +2327,8 @@ module ts {
             //
             // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
             //      SingleNameBinding[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
-            //      [+GeneratorParameter]BindingPattern[?Yield,?Await,GeneratorParameter]Initializer[In]opt
-            //      [+AsyncParameter]BindingPattern[?Yield,?Await,GeneratorParameter]Initializer[In]opt
+            //      [+GeneratorParameter]BindingPattern[?Yield,?Await,?AsyncParameter,GeneratorParameter] Initializer[In]opt
+            //      [+AsyncParameter]BindingPattern[?Yield,?Await,?GeneratorParameter,AsyncParameter] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter]BindingPattern[?Yield,?Await]Initializer[In,?Yield,?Await]opt
             //
             // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 13.2.3
@@ -2354,14 +2336,29 @@ module ts {
             //      [+AsyncParameter]BindingIdentifier[Await]Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter]BindingIdentifier[?Yield,?Await]Initializer[In,?Yield,?Await]opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
-                var explicitFlags = ParserContextFlags.None;
-                if (yieldAndGeneratorParameterContext) {
-                    explicitFlags |= ParserContextFlags.Yield | ParserContextFlags.GeneratorParameter;
+                if (yieldAndGeneratorParameterContext || awaitAndAsyncParameterContext) {
+                    var saveContextFlags = contextFlags & ParserContextFlags.ContextParameterFlags;
+                    if (yieldAndGeneratorParameterContext) {
+                        contextFlags |= ParserContextFlags.Yield | ParserContextFlags.GeneratorParameter;
+                    }
+                    else {
+                        contextFlags &= ~ParserContextFlags.GeneratorParameter;
+                    }
+
+                    if (awaitAndAsyncParameterContext) {
+                        contextFlags |= ParserContextFlags.Await | ParserContextFlags.AsyncParameter;
+                    }
+                    else {
+                        contextFlags &= ~ParserContextFlags.AsyncParameter;
+                    }
                 }
-                if (awaitAndAsyncParameterContext) {
-                    explicitFlags |= ParserContextFlags.Await | ParserContextFlags.AsyncParameter;
+
+                var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
+
+                if (yieldAndGeneratorParameterContext || awaitAndAsyncParameterContext) {
+                    contextFlags = (contextFlags & ~ParserContextFlags.ContextParameterFlags) | saveContextFlags;
                 }
-                var result = setContextParametersAnd(parseDelimitedParameterList, explicitFlags, /*ambientFlags*/ ParserContextFlags.None);
+
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
@@ -2754,8 +2751,7 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var result = setContextParametersAnd(parseTypeWorker, /*explicitFlags*/ ParserContextFlags.None, /*ambientFlags*/ ParserContextFlags.None);
-            return result;
+            return doOutsideOfYieldOrAwaitOrParameterContext(parseTypeWorker);
         }
 
         function parseTypeWorker(): TypeNode {
@@ -2839,6 +2835,8 @@ module ts {
             return expr;
         }
 
+        
+
         function parseBindingElementInitializer(inParameter: boolean): Expression {
             // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
             //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
@@ -2849,22 +2847,7 @@ module ts {
             //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
             
-            var parseInitializer = inParameter ? parseParameterInitializer : parseNonParameterInitializer;
-            var ambientFlags = ParserContextFlags.None;
-            
-            // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters. 
-            // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
-            if (!inGeneratorParameterContext()) {
-                ambientFlags |= ParserContextFlags.Yield;
-            }
-
-            // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
-            // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
-            if (!inAsyncParameterContext()) {
-                ambientFlags |= ParserContextFlags.Await;
-            }
-
-            return setContextParametersAnd(parseInitializer, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
+            return doOutsideOfYieldOrAwaitOrParameterContextWhenInParameter(inParameter ? parseParameterInitializer : parseNonParameterInitializer);
         }
 
         function parseParameterInitializer() {
@@ -3093,6 +3076,8 @@ module ts {
         }
 
         function isParenthesizedArrowFunctionExpressionWorker() {
+            // A parenthesized arrow function can have an `async` modifier. If we're unable to 
+            // parse `async` as a modifier of an arrow function, then this is not an arrow function.
             if (token === SyntaxKind.AsyncKeyword && !parseContextualModifier(SyntaxKind.AsyncKeyword, /*isArrowFunction*/ true)) {
                 return Tristate.False;
             }
@@ -4314,7 +4299,7 @@ module ts {
             }
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-            node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
+            node.name = parseIdentifierOrBindingPattern(/*inBindingElement*/ true);
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
@@ -4329,7 +4314,7 @@ module ts {
             else {
                 parseExpected(SyntaxKind.ColonToken);
                 node.propertyName = <Identifier>id;
-                node.name = parseIdentifierOrPattern(/*inBindingElement*/ true);
+                node.name = parseIdentifierOrBindingPattern(/*inBindingElement*/ true);
             }
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
             return finishNode(node);
@@ -4351,7 +4336,7 @@ module ts {
             return finishNode(node);
         }
 
-        function isIdentifierOrPattern() {
+        function isIdentifierOrBindingPattern() {
             return isBindingPattern() || isIdentifier();
         }
 
@@ -4360,71 +4345,40 @@ module ts {
                 || token === SyntaxKind.OpenBraceToken;
         }
 
-        function parseIdentifierOrPattern(inBindingElement: boolean): Identifier | BindingPattern {
-            var explicitFlags = ParserContextFlags.None;
-            var ambientFlags = ParserContextFlags.None;
-            if (inBindingElement) {
-                if (isBindingPattern()) {
-                    // When we parse BindingPattern here, we always pass the ambient values for [Yield], [Await], [GeneratorParameter], and [AsyncParameter]:
-                    //
-                    // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
-                    //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
-                    //      [+AsyncParameter] BindingPattern[?Yield,?Await,AsyncParameter] Initializer[In]opt
-                    //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
-                    ambientFlags = ParserContextFlags.GeneratorParameter | ParserContextFlags.AsyncParameter | ParserContextFlags.Yield | ParserContextFlags.Await;
-                }
-                else {
-                    // When we parse BindingIdentifier here, we set [Yield] if [GeneratorParameter] is set; [Await] if [AsyncParameter] is 
-                    // set; otherwise, the we pass the ambient values for [Yield] and [Await]:
-                    //
-                    // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
-                    //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
-                    //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
-                    //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+        function parseIdentifierOrBindingPattern(inBindingElement: boolean): Identifier | BindingPattern {
+            // When we parse BindingPattern here, we always pass the ambient values for [Yield], [Await], [GeneratorParameter], and [AsyncParameter]:
+            //
+            // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
+            //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
+            //      [+AsyncParameter] BindingPattern[?Yield,?Await,AsyncParameter] Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+            //
+            // When we parse BindingIdentifier here, we set [Yield] if [GeneratorParameter] is set; [Await] if [AsyncParameter] is 
+            // set; otherwise, the we pass the ambient values for [Yield] and [Await]:
+            //
+            // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
+            //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
+            //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
+            //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
+            //
+            // We when we parse a VariableDeclaration, always pass the ambient values for [Yield] and [Await]
+            // VariableDeclaration[In,Yield,Await] : (Modified) 13.2.2
+            //      BindingIdentifier[?Yield,?Await] Initializer[?In]opt
+            //      BindingPattern[?Yield,?Await] Initializer[?In]
+            //
 
-                    // If [GeneratorParameter] is *set* we explicitly set [Yield]. 
-                    // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
-                    if (inGeneratorParameterContext()) {
-                        explicitFlags |= ParserContextFlags.Yield;
-                    }
-                    else {
-                        ambientFlags |= ParserContextFlags.Yield;
-                    }
-
-                    // If [AsyncParameter] is *set* we explicitly set [Await]. 
-                    // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
-                    if (inAsyncParameterContext()) {
-                        explicitFlags |= ParserContextFlags.Await;
-                    }
-                    else {
-                        ambientFlags |= ParserContextFlags.Await;
-                    }
-                }
-            }
-            else {
-                // VariableDeclaration[In,Yield,Await] : (Modified) 13.2.2
-                //      BindingIdentifier[?Yield,?Await] Initializer[?In]opt
-                //      BindingPattern[?Yield,?Await] Initializer[?In]
-                
-                // We always pass the ambient values for [Yield] and [Await]
-                ambientFlags = ParserContextFlags.Yield | ParserContextFlags.Await;
-            }
-            return setContextParametersAnd(parseIdentifierOrPatternWorker, explicitFlags, ambientFlags);
-        }
-
-        function parseIdentifierOrPatternWorker(): Identifier | BindingPattern {
             if (token === SyntaxKind.OpenBracketToken) {
                 return parseArrayBindingPattern();
             }
             if (token === SyntaxKind.OpenBraceToken) {
                 return parseObjectBindingPattern();
             }
-            return parseIdentifier();
+            return parseIdentifier();            
         }
 
         function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.name = parseIdentifierOrPattern(/*inBindingElement*/ false);
+            node.name = parseIdentifierOrBindingPattern(/*inBindingElement*/ false);
             node.type = parseTypeAnnotation();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
@@ -4655,21 +4609,7 @@ module ts {
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
                 //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
-                var ambientFlags = ParserContextFlags.None;
-
-                // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters.
-                // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
-                if (!inGeneratorParameterContext()) {
-                    ambientFlags |= ParserContextFlags.Yield;
-                }
-
-                // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
-                // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
-                if (!inAsyncParameterContext()) {
-                    ambientFlags |= ParserContextFlags.Await;
-                }
-
-                node.members = setContextParametersAnd(parseClassMembers, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
+                node.members = doOutsideOfYieldOrAwaitOrParameterContextWhenInParameter(parseClassMembers);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4685,22 +4625,11 @@ module ts {
             //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
 
             if (isHeritageClause()) {
-                var ambientFlags = ParserContextFlags.None;
                 if (isClassHeritageClause) {
-                    // If [GeneratorParameter] is *set* we do not set [Yield] so it will be cleared by setContextParameters.
-                    // If [GeneratorParameter] is *cleared* we pass the ambient value for [Yield].
-                    if (!inGeneratorParameterContext()) {
-                        ambientFlags |= ParserContextFlags.Yield;
-                    }
-
-                    // If [AsyncParameter] is *set* we do not set [Await] so it will be cleared by setContextParameters.
-                    // If [AsyncParameter] is *cleared* we pass the ambient value for [Await].
-                    if (!inAsyncParameterContext()) {
-                        ambientFlags |= ParserContextFlags.Await;
-                    }
+                    return doOutsideOfYieldOrAwaitOrParameterContextWhenInParameter(parseHeritageClausesWorker);
                 }
 
-                return setContextParametersAnd(parseHeritageClausesWorker, /*explicitFlags*/ ParserContextFlags.None, ambientFlags);
+                return parseHeritageClausesWorker();
             }
 
             return undefined;

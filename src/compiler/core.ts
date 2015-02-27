@@ -91,7 +91,55 @@ module ts {
         }
         return result;
     }
+
+    export function flatMap<T, U>(array: T[], f: (x: T) => U[]): U[]{
+        if (array) {
+            var result: U[] = [];
+            for (var i = 0, len = array.length; i < len; i++) {
+                var part = f(array[i]);
+                if (part) {
+                    result.push.apply(result, part);
+                }
+            }
+        }
+        return result;
+    }
+
+    export function foldLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function foldLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function foldLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var count = array.length;
+            if (count > 0) {
+                var pos = 0;
+                var result = arguments.length <= 2 ? array[pos++]: initial;
+                while (pos < count) {
+                    result = f(<U>result, array[pos++]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
     
+    export function foldRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function foldRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function foldRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var count = array.length;
+            if (count > 0) {
+                var pos = count - 1;
+                var result = arguments.length <= 2 ? array[pos--] : initial;
+                while (pos >= 0) {
+                    result = f(<U>result, array[pos--]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }    
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;

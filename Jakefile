@@ -46,7 +46,7 @@ var compilerSources = [
     "commandLineParser.ts",
     "tsc.ts",
     "diagnosticInformationMap.generated.ts",
-	"factory.generated.ts"
+    "factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 });
@@ -67,7 +67,7 @@ var servicesSources = [
     "program.ts",
     "commandLineParser.ts",
     "diagnosticInformationMap.generated.ts",
-	"factory.generated.ts"
+    "factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
@@ -148,7 +148,7 @@ var librarySourceMap = [
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
         { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
-		{ target: "tslib.d.ts", sources: ["tslib.d.ts"]}
+        { target: "tslib.d.ts", sources: ["tslib.d.ts"]}
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -308,7 +308,7 @@ var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
 file(processFactoryTs);
 compileFile(processFactoryJs, [processFactoryTs], [processFactoryTs], [], /*useBuiltCompile*/ false);
 file(factoryGeneratedTs, [processFactoryJs, factoryJson], function() {
-    var cmd = "node " + processFactoryJs + " "  + factoryJson;
+    var cmd = host + " " + processFactoryJs + " "  + factoryJson;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
@@ -344,7 +344,7 @@ compileFile(processDiagnosticMessagesJs,
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
-    var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
+    var cmd = host + " " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
@@ -551,7 +551,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 

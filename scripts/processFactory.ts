@@ -389,7 +389,6 @@ module ts {
             type = type.replace(/\s+/g, "");
             if (isUnionType(type)) {
                 var types = splitUnionType(type);
-                types.sort();
                 type = types.join("|");
             }
         }

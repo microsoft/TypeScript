@@ -1497,7 +1497,7 @@ module ts {
                 declFileName,
                 host.getCurrentDirectory(),
                 host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ false);
+                /*isAbsolutePathAnUrl*/ false);
 
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
@@ -1569,7 +1569,9 @@ module ts {
             var localsScope: Node;
             // holds locals for the current scope
             var locals: Locals;
-            // holds locals that should be unique in all contexts, this is for downlevel rewrite of catch clauses and downlevel let/const
+            
+            // holds locals that should be unique in all contexts. 
+            // this is used for downlevel rewrite of catch clauses and downlevel let/const
             var globals: Map<boolean>;
 
             var tempParameters: Identifier[];
@@ -2725,8 +2727,9 @@ module ts {
             }
 
             function emitAwaitExpression(node: AwaitExpression) {
-                // NOTE: even though 'await' is syntatically valid in ES6 and earlier, we will emit the expression here if we reach this point
-                // as a fallback when there is an error during grammar check.
+                // NOTE: even though 'await' is not syntatically valid in ES6 and earlier, we will emit the 
+                // expression here if we reach this point as a fallback when there is an error during grammar 
+                // check.
                 write(tokenToString(SyntaxKind.AwaitKeyword));
                 write(" ");
                 emit(node.expression);
@@ -3284,13 +3287,13 @@ module ts {
                 locals = undefined;
                 tempParameters = undefined;
 
+                // accessors cannot be marked async
                 if (!isAnyAccessor(node)) {
                     if (node.flags & NodeFlags.Async) {
                         ensureLocals();
                         node = AsyncFunctionRewriter.rewrite(node, resolver.getPromiseConstructor(node), locals, compilerOptions);
                     }
                 }
-
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (shouldEmitAsArrowFunction(node)) {

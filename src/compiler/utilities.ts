@@ -434,11 +434,8 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return true;
-
-
             }
         }
-
         return false;
     }
 
