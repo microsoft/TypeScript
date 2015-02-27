@@ -2,7 +2,7 @@
 .SYNOPSIS
 Run this PowerShell script to enable dev mode and/or a custom script for the TypeScript language service, e.g.
 
-PS C:\> .\scripts\VSDevMode.ps1 -enableDevMode -tsScript C:\src\TypeScript\built\local\typescriptServices.js
+PS C:\> .\scripts\VSDevMode.ps1 -enableDevMode -tsScript C:\src\TypeScript\built\local\
 
 Note: If you get security errors, try running powershell as an Administrator and with the "-executionPolicy remoteSigned" switch
 
@@ -13,7 +13,7 @@ Set to "12" for Dev12 (VS2013) or "14" (the default) for Dev14 (VS2015)
 Pass this switch to enable attaching a debugger to the language service
 
 .PARAMETER tsScript
-The path to a custom language service script to use, e.g. "C:\src\TypeScript\built\local\typescriptServices.js"
+The path to a directory containing a custom language service script to use (typescriptServices.js), e.g. "C:\src\TypeScript\built\local\"
 #>
 Param(
     [int]$vsVersion = 14,
