@@ -1752,8 +1752,6 @@ module ts {
             });
         }
 
-
-
         function recordModuleName() {
             var importPath = scanner.getTokenValue();
             var pos = scanner.getTokenPos();
@@ -1824,7 +1822,7 @@ module ts {
                         if (token === SyntaxKind.OpenBraceToken) {
                             token = scanner.scan();
                             // consume "{ a as B, c, d as D}" clauses
-                            while (token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.CloseBraceToken) {
+                            while (token !== SyntaxKind.CloseBraceToken) {
                                 token = scanner.scan();
                             }
 
@@ -1864,7 +1862,7 @@ module ts {
                     if (token === SyntaxKind.OpenBraceToken) {
                         token = scanner.scan();
                         // consume "{ a as B, c, d as D}" clauses
-                        while (token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.CloseBraceToken) {
+                        while (token !== SyntaxKind.CloseBraceToken) {
                             token = scanner.scan();
                         }
 
