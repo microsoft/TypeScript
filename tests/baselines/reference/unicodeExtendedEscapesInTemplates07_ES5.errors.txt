@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates07_ES5.ts(4,19): error TS1195: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates07_ES5.ts(4,19): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
 
 
 ==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates07_ES5.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTempl
     //  1. Assert: 0 ≤ cp ≤ 0x10FFFF.
     var x = `\u{110000}`;
                       
-!!! error TS1195: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
     

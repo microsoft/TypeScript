@@ -2033,17 +2033,13 @@ declare module "typescript" {
 >finallyBlock : Block
 >Block : Block
     }
-    interface CatchClause extends Declaration {
+    interface CatchClause extends Node {
 >CatchClause : CatchClause
->Declaration : Declaration
+>Node : Node
 
-        name: Identifier;
->name : Identifier
->Identifier : Identifier
-
-        type?: TypeNode;
->type : TypeNode
->TypeNode : TypeNode
+        variableDeclaration: VariableDeclaration;
+>variableDeclaration : VariableDeclaration
+>VariableDeclaration : VariableDeclaration
 
         block: Block;
 >block : Block

@@ -27,10 +27,6 @@
         "category": "Error",
         "code": 1012
     },
-    "Catch clause parameter cannot have a type annotation.": {
-        "category": "Error",
-        "code": 1013
-    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -603,13 +599,25 @@
         "category": "Error",
         "code": 1194
     },
-    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
+    "Catch clause variable name must be an identifier.": {
         "category": "Error",
         "code": 1195
     },
+    "Catch clause variable cannot have a type annotation.": {
+        "category": "Error",
+        "code": 1196
+    },
+    "Catch clause variable cannot have an initializer.": {
+        "category": "Error",
+        "code": 1197
+    },
+    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
+        "category": "Error",
+        "code": 1198
+    },
     "'}' expected.": {
         "category": "Error",
-        "code":  1196
+        "code":  1199
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

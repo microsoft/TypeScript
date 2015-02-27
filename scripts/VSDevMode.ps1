@@ -37,12 +37,38 @@ if(!(Test-Path $tsRegKey)){
 }
 
 if($tsScript -ne ""){
-    if(!(Test-Path $tsScript)){
-        Throw "Could not locate the TypeScript language service script at ${tsScript}"
+    $tsScriptServices =  "${tsScript}\typescriptServices.js"
+    $tsScriptlib = "${tsScript}\lib.d.ts"
+    $tsES6Scriptlib = "${tsScript}\lib.es6.d.ts"
+    
+    if(!(Test-Path $tsScriptServices)){
+        Throw "Could not locate the TypeScript language service script at ${tsScriptServices}"
     }
-    Set-ItemProperty -path $tsRegKey -name CustomTypeScriptServicesFileLocation -value "${tsScript}"
-    Write-Host "Enabled custom TypeScript language service at ${tsScript} for Dev${vsVersion}"
+    else {
+        $path = resolve-path ${tsScriptServices}
+        Set-ItemProperty -path $tsRegKey -name CustomTypeScriptServicesFileLocation -value "${path}"
+        Write-Host "Enabled custom TypeScript language service at ${path} for Dev${vsVersion}"
+    }
+
+    if(!(Test-Path $tsScriptlib)){
+        Throw "Could not locate the TypeScript default library at ${tsScriptlib}"
+    }
+    else {
+        $path = resolve-path ${tsScriptlib}
+        Set-ItemProperty -path $tsRegKey -name CustomDefaultLibraryLocation -value "${path}"
+        Write-Host "Enabled custom TypeScript default library at ${path} for Dev${vsVersion}"
+    }
+
+    if(!(Test-Path $tsES6Scriptlib)){
+        Throw "Could not locate the TypeScript default ES6 library at ${tsES6Scriptlib}"
+    }
+    else {
+        $path = resolve-path ${tsES6Scriptlib}
+        Set-ItemProperty -path $tsRegKey -name CustomDefaultES6LibraryLocation -value "${path}"
+        Write-Host "Enabled custom TypeScript default ES6 library at ${path} for Dev${vsVersion}"
+    }
 }
+
 if($enableDevMode){
     Set-ItemProperty -path $tsRegKey -name EnableDevMode -value 1
     Write-Host "Enabled developer mode for Dev${vsVersion}"

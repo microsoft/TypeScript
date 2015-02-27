@@ -1523,6 +1523,10 @@ module ts {
         return diagnostics;
     }
 
+    interface SynthesizedNode extends Node {
+        startsOnNewLine: boolean;
+    }
+
     // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
@@ -2467,8 +2471,6 @@ module ts {
                         return false;
                     case SyntaxKind.LabeledStatement:
                         return (<LabeledStatement>node.parent).label === node;
-                    case SyntaxKind.CatchClause:
-                        return (<CatchClause>node.parent).name === node;
                 }
             }
 
@@ -2628,12 +2630,17 @@ module ts {
                 }
             }
 
-            function createSynthesizedNode(kind: SyntaxKind): Node {
-                var node = createNode(kind);
+            function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
+                var node = <SynthesizedNode>createNode(kind);
                 node.pos = -1;
                 node.end = -1;
+                node.startsOnNewLine = startsOnNewLine;
 
                 return node;
+            }
+
+            function isSynthesized(node: Node) {
+                return node.pos === -1 && node.end === -1;
             }
 
             function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
@@ -2669,7 +2676,7 @@ module ts {
                 });
 
                 // Finally, return the temp variable.
-                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, tempVar);
+                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, createIdentifier(tempVar.text, /*startsOnNewLine:*/ true));
 
                 var result = createParenthesizedExpression(propertyPatches);
                 
@@ -2692,7 +2699,7 @@ module ts {
                 var leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
                 var maybeRightHandSide = tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
 
-                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide);
+                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide, /*startsOnNewLine:*/ true);
             }
 
             function tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
@@ -2765,8 +2772,8 @@ module ts {
                 return result;
             }
 
-            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
-                var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
+            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression, startsOnNewLine?: boolean): BinaryExpression {
+                var result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression, startsOnNewLine);
                 result.operatorToken = createSynthesizedNode(operator);
                 result.left = left;
                 result.right = right;
@@ -2821,8 +2828,8 @@ module ts {
                 return result;
             }
             
-            function createIdentifier(name: string) {
-                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            function createIdentifier(name: string, startsOnNewLine?: boolean) {
+                var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier, startsOnNewLine);
                 result.text = name;
 
                 return result;
@@ -3166,9 +3173,11 @@ module ts {
 
                     write(tokenToString(node.operatorToken.kind));
 
+                    var shouldPlaceOnNewLine = !isSynthesized(node) && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right);
+
                     // Check if the right expression is on a different line versus the operator itself.  If so,
                     // we'll emit newline.
-                    if (!nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) {
+                    if (shouldPlaceOnNewLine || synthesizedNodeStartsOnNewLine(node.right)) {
                         increaseIndent();
                         writeLine();
                         emit(node.right);
@@ -3179,6 +3188,10 @@ module ts {
                         emit(node.right);
                     }
                 }
+            }
+
+            function synthesizedNodeStartsOnNewLine(node: Node) {
+                return isSynthesized(node) && (<SynthesizedNode>node).startsOnNewLine;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3434,8 +3447,8 @@ module ts {
                 var endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.name);
-                emitToken(SyntaxKind.CloseParenToken, node.name.end);
+                emit(node.variableDeclaration);
+                emitToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : endPos);
                 write(" ");
                 emitBlock(node.block);
             }

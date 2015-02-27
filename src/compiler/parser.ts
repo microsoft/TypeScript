@@ -222,8 +222,7 @@ module ts {
                     visitNode(cbNode, (<TryStatement>node).catchClause) ||
                     visitNode(cbNode, (<TryStatement>node).finallyBlock);
             case SyntaxKind.CatchClause:
-                return visitNode(cbNode, (<CatchClause>node).name) ||
-                    visitNode(cbNode, (<CatchClause>node).type) ||
+                return visitNode(cbNode, (<CatchClause>node).variableDeclaration) ||
                     visitNode(cbNode, (<CatchClause>node).block);
             case SyntaxKind.ClassDeclaration:
                 return visitNodes(cbNodes, node.modifiers) ||
@@ -3977,9 +3976,10 @@ module ts {
         function parseCatchClause(): CatchClause {
             var result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
-            parseExpected(SyntaxKind.OpenParenToken);
-            result.name = parseIdentifier();
-            result.type = parseTypeAnnotation();
+            if (parseExpected(SyntaxKind.OpenParenToken)) {
+                result.variableDeclaration = parseVariableDeclaration();
+            }
+
             parseExpected(SyntaxKind.CloseParenToken);
             result.block = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
             return finishNode(result);

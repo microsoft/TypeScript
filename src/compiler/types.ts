@@ -815,9 +815,8 @@ module ts {
         finallyBlock?: Block;
     }
 
-    export interface CatchClause extends Declaration {
-        name: Identifier;
-        type?: TypeNode;
+    export interface CatchClause extends Node {
+        variableDeclaration: VariableDeclaration;
         block: Block;
     }
 
