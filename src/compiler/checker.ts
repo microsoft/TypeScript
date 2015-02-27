@@ -5091,13 +5091,20 @@ module ts {
                 return;
             }
 
-            // - check if binding is used in some function 
+            // - check if binding is used in some function
             // (stop the walk when reaching container of binding declaration)
             // - if first check succeeded - check if variable is declared inside the loop
 
-            // var decl -> var decl list -> parent
-            var container = (<VariableDeclaration>symbol.valueDeclaration).parent.parent;
+            // nesting structure:
+            // (variable declaration or binding element) -> variable declaration list -> container
+            var container: Node = symbol.valueDeclaration;
+            while (container.kind !== SyntaxKind.VariableDeclarationList) {
+                container = container.parent;
+            }
+            // get the parent of variable declaration list
+            container = container.parent;
             if (container.kind === SyntaxKind.VariableStatement) {
+                // if parent is variable statement - get its parent
                 container = container.parent;
             }
             
@@ -10719,6 +10726,12 @@ module ts {
             // ignore name parts of property access expressions
             if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
                 (<PropertyAccessExpression>n.parent).name === n) {
+                return undefined;
+            }
+
+            // ignore property names in object binding patterns
+            if (n.parent.kind === SyntaxKind.BindingElement &&
+                (<BindingElement>n.parent).propertyName === n) {
                 return undefined;
             }
 
