@@ -665,7 +665,7 @@ module ts {
     }
 
     export function isBindingPattern(node: Node) {
-        return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+        return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
     export function isInAmbientContext(node: Node): boolean {

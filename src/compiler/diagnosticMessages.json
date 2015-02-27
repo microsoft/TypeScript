@@ -1320,6 +1320,10 @@
         "category": "Error",
         "code": 2490
     },
+    "The left-hand side of a 'for...in' statement cannot be a destructuring pattern.": {
+        "category": "Error",
+        "code": 2491
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

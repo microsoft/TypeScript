@@ -8806,6 +8806,11 @@ module ts {
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
             //   and Expr must be an expression of type Any, an object type, or a type parameter type.                        
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                var variable = (<VariableDeclarationList>node.initializer).declarations[0];
+                if (variable && isBindingPattern(variable.name)) {
+                    error(variable.name, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
+                }
+                
                 checkForInOrForOfVariableDeclaration(node);
             }
             else {
@@ -8815,7 +8820,10 @@ module ts {
                 //   and Expr must be an expression of type Any, an object type, or a type parameter type.
                 var varExpr = <Expression>node.initializer;
                 var leftType = checkExpression(varExpr);
-                if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike)) {
+                if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
+                    error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
+                }
+                else if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
