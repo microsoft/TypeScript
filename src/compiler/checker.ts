@@ -280,7 +280,7 @@ module ts {
                 Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
                 if (symbol.flags & meaning) {
                     return symbol;
-                }   
+                }
 
                 if (symbol.flags & SymbolFlags.Import) {
                     var target = resolveImport(symbol);
@@ -10716,7 +10716,7 @@ module ts {
         }
 
         function isUnknownIdentifier(location: Node, name: string): boolean {
-            return !resolveName(location, name, SymbolFlags.Value | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
+            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 

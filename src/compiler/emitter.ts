@@ -33,11 +33,17 @@ module ts {
         trailingCommentRanges?: CommentRange[];
     }
 
+    // represents one LexicalEnvironment frame to store unique generated names
     interface ScopeFrame {
         names: Map<string>;
         previous: ScopeFrame;
     }
 
+    // isExisingName function has signature string -> boolean, however check if name is unique should be performed 
+    // in the context of some location. Instead of creating function expression and closing over location 
+    // every time isExisingName is called we use one single instance of NameLookup that is effectively a
+    // handrolled closure where value of location can be swapped. This allows to avoid allocations of closures on
+    // every call and use one shared instance instead
     interface NameLookup {
         setLocation(location: Node): void;
         isExistingName(name: string): boolean;
@@ -1663,6 +1669,8 @@ module ts {
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
             return;
 
+            // enters the new lexical environment
+            // return value should be passed to matching call to exitNameScope.
             function enterNameScope(): boolean {
                 var names = currentScopeNames;
                 currentScopeNames = undefined;
@@ -1683,6 +1691,8 @@ module ts {
                 }
             }
 
+            // creates instance of NameLookup to be used in 'isExisingName' checks.
+            // see comment for NameLookup for more information
             function createNameLookup(): NameLookup {
                 var location: Node;
                 return {
