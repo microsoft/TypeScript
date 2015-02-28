@@ -1270,31 +1270,21 @@ module ts {
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
-          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
-          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
-          * registry originally.
-          *
-          * @param sourceFile The original sourceFile object to update
           * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file 
-          * was not found in the registry and a new one was created.
+          * @param scriptSnapshot Text of the file. 
+          * @param version Current version of the file.
           */
         updateDocument(
-            sourceFile: SourceFile,
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            textChangeRange: TextChangeRange): SourceFile;
+            version: string): SourceFile;
 
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
@@ -1442,7 +1432,11 @@ module ts {
 
     interface DocumentRegistryEntry {
         sourceFile: SourceFile;
-        refCount: number;
+
+        // The number of language services that this source file is referenced in.   When no more
+        // language services are referencing the file, then the file can be removed from the 
+        // registry.
+        languageServiceRefCount: number;
         owners: string[];
     }
 
@@ -1671,6 +1665,8 @@ module ts {
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
+        // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
+        // for those settings.
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
@@ -1694,7 +1690,7 @@ module ts {
                     var entry = entries[i];
                     sourceFiles.push({
                         name: i,
-                        refCount: entry.refCount,
+                        refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
                 }
@@ -1707,43 +1703,54 @@ module ts {
             return JSON.stringify(bucketInfoArray, null, 2);
         }
 
-        function acquireDocument(
-            fileName: string,
-            compilationSettings: CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile {
-
-            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            var entry = lookUp(bucket, fileName);
-            if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
-
-                bucket[fileName] = entry = {
-                    sourceFile: sourceFile,
-                    refCount: 0,
-                    owners: []
-                };
-            }
-            entry.refCount++;
-
-            return entry.sourceFile;
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true);
         }
 
-        function updateDocument(
-            sourceFile: SourceFile,
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false);
+        }
+
+        function acquireOrUpdateDocument(
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            textChangeRange: TextChangeRange
-            ): SourceFile {
+            acquiring: boolean): SourceFile {
 
-            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
-            Debug.assert(bucket !== undefined);
+            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, fileName);
-            Debug.assert(entry !== undefined);
+            if (!entry) {
+                Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
-            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
+                // Have never seen this file with these settings.  Create a new source file for it.
+                var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
+
+                bucket[fileName] = entry = {
+                    sourceFile: sourceFile,
+                    languageServiceRefCount: 0,
+                    owners: []
+                };
+            }
+            else {
+                // We have an entry for this file.  However, it may be for a different version of 
+                // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
+                // return it as is.
+                if (entry.sourceFile.version !== version) {
+                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                }
+            }
+
+            // If we're acquiring, then this is the first time this LS is asking for this document.
+            // Increase our ref count so we know there's another LS using the document.  If we're
+            // not acquiring, then that means the LS is 'updating' the file instead, and that means
+            // it has already acquired the document previously.  As such, we do not need to increase
+            // the ref count.
+            if (acquiring) {
+                entry.languageServiceRefCount++;
+            }
+
             return entry.sourceFile;
         }
 
@@ -1752,10 +1759,10 @@ module ts {
             Debug.assert(bucket !== undefined);
 
             var entry = lookUp(bucket, fileName);
-            entry.refCount--;
+            entry.languageServiceRefCount--;
 
-            Debug.assert(entry.refCount >= 0);
-            if (entry.refCount === 0) {
+            Debug.assert(entry.languageServiceRefCount >= 0);
+            if (entry.languageServiceRefCount === 0) {
                 delete bucket[fileName];
             }
         }
@@ -2162,19 +2169,34 @@ module ts {
                 // it is safe to reuse the souceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
-
                     // Check if the old program had this file already
                     var oldSourceFile = program && program.getSourceFile(fileName);
                     if (oldSourceFile) {
-                        // This SourceFile is safe to reuse, return it
-                        if (sourceFileUpToDate(oldSourceFile)) {
-                            return oldSourceFile;
-                        }
-
-                        // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
-                        return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                        // We already had a source file for this file name.  Go to the registry to 
+                        // ensure that we get the right up to date version of it.  We need this to
+                        // address the following 'race'.  Specifically, say we have the following:
+                        //
+                        //      LS1
+                        //          \
+                        //           DocumentRegistry
+                        //          /
+                        //      LS2
+                        //
+                        // Each LS has a reference to file 'foo.ts' at version 1.  LS2 then updates
+                        // it's version of 'foo.ts' to version 2.  This will cause LS2 and the 
+                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will 
+                        // have version 1.  And *importantly* this source file will be *corrupt*.
+                        // The act of creating version 2 of the file irrevocably damages the version
+                        // 1 file.
+                        //
+                        // So, later when we call into LS1, we need to make sure that it doesn't use
+                        // it's source file any more, and instead defers to DocumentRegistry to get
+                        // either version 1, version 2 (or some other version) depending on what the 
+                        // host says should be used.
+                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
                     }
+
+                    // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
@@ -2228,8 +2250,8 @@ module ts {
 
         function dispose(): void {
             if (program) {
-                forEach(program.getSourceFiles(),
-                    (f) => { documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()); });
+                forEach(program.getSourceFiles(), f =>
+                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
             }
         }
 
