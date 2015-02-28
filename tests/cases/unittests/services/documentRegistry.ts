@@ -50,12 +50,14 @@ describe("DocumentRegistry", () => {
     });
 
     it("Acquiring document gets correct version 2", () => {
-        debugger;
         var documentRegistry = ts.createDocumentRegistry();
         var defaultCompilerOptions = ts.getDefaultCompilerOptions();
 
         var contents = "var x = 1;"
         var snapshot = ts.ScriptSnapshot.fromString(contents);
+
+        // Always treat any change as a full change.
+        snapshot.getChangeRange = old => ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length);
 
         // Simulate one LS getting the document.
         var f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
@@ -64,11 +66,9 @@ describe("DocumentRegistry", () => {
         var f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
 
         // Now LS1 updates their document.
-        var f3 = documentRegistry.updateDocument(f1, "file1.ts", defaultCompilerOptions, snapshot, /* version */ "2",
-            ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length));
+        var f3 = documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "2");
 
         // Now LS2 tries to update their document.  
-        var f4 = documentRegistry.updateDocument(f1, "file1.ts", defaultCompilerOptions, snapshot, /* version */ "3",
-            ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length));
+        var f4 = documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "3");
     });
 });
