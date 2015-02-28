@@ -811,7 +811,6 @@ module ts {
         }
         
         function scanExtendedUnicodeEscape(): string {
-            var hexStartPos = pos;
             var escapedValue = scanMinimumNumberOfHexDigits(1);
             var isInvalidExtendedEscape = false;
 
