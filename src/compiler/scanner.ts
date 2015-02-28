@@ -609,20 +609,26 @@ module ts {
             return +(text.substring(start, pos));
         }
         
+        /**
+         * Scans the given number of hexadecimal digits in the text,
+         * returning -1 if the given number is unavailable.
+         */
         function scanExactNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*maxCount*/ count);
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
         }
         
+        /**
+         * Scans as many hexadecimal digits as are available in the text,
+         * returning -1 if the given number of digits was unavailable.
+         */
         function scanMinimumNumberOfHexDigits(count: number): number {
-            return scanHexDigits(/*minCount*/ count, /*maxCount*/ undefined);
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true);
         }
 
-        function scanHexDigits(minCount: number, maxCount?: number): number {
-            var maxCountSpecified = maxCount !== undefined;
-            
+        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean): number {
             var digits = 0;
             var value = 0;
-            while (!maxCountSpecified || digits < maxCount) {
+            while (digits < minCount || scanAsManyAsPossible) {
                 var ch = text.charCodeAt(pos);
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
@@ -777,22 +783,19 @@ module ts {
                 case CharacterCodes.doubleQuote:
                     return "\"";
                 case CharacterCodes.u:
+                    // '\u{DDDDDDDD}'
                     if (pos < len && text.charCodeAt(pos) === CharacterCodes.openBrace) {
                         hasExtendedUnicodeEscape = true;
                         pos++;
                         return scanExtendedUnicodeEscape();
                     }
                     
-                    // fall through
+                    // '\uDDDD'
+                    return scanHexadecimalEscape(/*numDigits*/ 4)
+                    
                 case CharacterCodes.x:
-                    var escapedValue = scanExactNumberOfHexDigits(ch === CharacterCodes.x ? 2 : 4);
-                    if (escapedValue >= 0) {
-                        return String.fromCharCode(escapedValue);
-                    }
-                    else {
-                        error(Diagnostics.Hexadecimal_digit_expected);
-                        return ""
-                    }
+                    // '\xDD'
+                    return scanHexadecimalEscape(/*numDigits*/ 2)
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
@@ -807,6 +810,18 @@ module ts {
                     return ""
                 default:
                     return String.fromCharCode(ch);
+            }
+        }
+        
+        function scanHexadecimalEscape(numDigits: number): string {
+            var escapedValue = scanExactNumberOfHexDigits(numDigits);
+            
+            if (escapedValue >= 0) {
+                return String.fromCharCode(escapedValue);
+            }
+            else {
+                error(Diagnostics.Hexadecimal_digit_expected);
+                return ""
             }
         }
         

@@ -2211,7 +2211,7 @@ module ts {
             
             function getDoubleQuotedStringTextOfLiteral(node: LiteralExpression): string {
                 var result = escapeString(node.text);
-                result = replaceNonAsciiCharacters(result);
+                result = escapeNonAsciiCharacters(result);
                 
                 return '"' + result + '"';
             }
