@@ -5080,6 +5080,18 @@ module ts {
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
 
+        function isInsideFunction(node: Node, threshold: Node): boolean {
+            var current = node;
+            while (current && current !== threshold) {
+                if (isAnyFunction(current)) {
+                    return true;
+                }
+                current = current.parent;
+            }
+
+            return false;
+        }
+
         function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES6 ||
                 (symbol.flags & SymbolFlags.BlockScopedVariable) === 0 ||
@@ -5104,21 +5116,13 @@ module ts {
                 container = container.parent;
             }
             
-            var inFunction = false;
-            var current = node.parent;
-            while (current && current !== container) {
-                if (isAnyFunction(current)) {
-                    inFunction = true;
-                    break;
-                }
-                current = current.parent;
-            }
+            var inFunction = isInsideFunction(node.parent, container);
 
-            var current: Node = container;
+            var current = container;
             while (current && !nodeStartsNewLexicalEnvironment(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
-                        grammarErrorOnFirstToken(current, Diagnostics.Code_in_the_loop_captures_block_scoped_variable_0_in_closure_This_is_natively_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                        grammarErrorOnFirstToken(current, Diagnostics.Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
                     }
                     // mark value declaration so during emit they can have a special handling
                     getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
@@ -10744,7 +10748,12 @@ module ts {
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             
-            if (symbol && (symbol.flags & SymbolFlags.BlockScopedVariable)) {
+            var isLetOrConst =
+                symbol &&
+                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
+                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
+
+            if (isLetOrConst) {
                 // side-effect of calling this method:
                 //   assign id to symbol if it was not yet set
                 getSymbolLinks(symbol);

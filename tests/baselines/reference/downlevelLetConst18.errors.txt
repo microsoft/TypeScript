@@ -1,12 +1,12 @@
-tests/cases/compiler/downlevelLetConst18.ts(3,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(3,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
 tests/cases/compiler/downlevelLetConst18.ts(4,14): error TS2393: Duplicate function implementation.
-tests/cases/compiler/downlevelLetConst18.ts(7,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(7,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
 tests/cases/compiler/downlevelLetConst18.ts(8,14): error TS2393: Duplicate function implementation.
-tests/cases/compiler/downlevelLetConst18.ts(11,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst18.ts(15,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst18.ts(19,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst18.ts(23,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst18.ts(27,1): error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(11,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(15,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(19,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(23,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst18.ts(27,1): error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
 
 
 ==== tests/cases/compiler/downlevelLetConst18.ts (9 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/downlevelLetConst18.ts(27,1): error TS4091: Code in the loo
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         function foo() { x };
                  ~~~
 !!! error TS2393: Duplicate function implementation.
@@ -22,7 +22,7 @@ tests/cases/compiler/downlevelLetConst18.ts(27,1): error TS4091: Code in the loo
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         function foo() { x };
                  ~~~
 !!! error TS2393: Duplicate function implementation.
@@ -30,31 +30,31 @@ tests/cases/compiler/downlevelLetConst18.ts(27,1): error TS4091: Code in the loo
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         (() => { x })();
     }
     
     for (const x = 1; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         (() => { x })();
     }
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         ({ foo() { x }})
     }
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         ({ get foo() { return x } })
     }
     
     for (let x; ;) {
     ~~~
-!!! error TS4091: Code in the loop captures block-scoped variable 'x' in closure. This is natively supported in ECMAScript 6 or higher.
+!!! error TS4091: Loop contains block-scoped variable 'x' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.
         ({ set foo(v) { x } })
     }
     

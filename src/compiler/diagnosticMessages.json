@@ -1581,7 +1581,7 @@
         "category": "Error",
         "code": 4081
     },
-    "Code in the loop captures block-scoped variable '{0}' in closure. This is natively supported in ECMAScript 6 or higher.": {
+    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 4091
     },

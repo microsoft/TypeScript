@@ -34,16 +34,6 @@ module ts {
         previous: ScopeFrame;
     }
 
-    // isExisingName function has signature string -> boolean, however check if name is unique should be performed 
-    // in the context of some location. Instead of creating function expression and closing over location 
-    // every time isExisingName is called we use one single instance of NameLookup that is effectively a
-    // handrolled closure where value of location can be swapped. This allows to avoid allocations of closures on
-    // every call and use one shared instance instead
-    interface NameLookup {
-        setLocation(location: Node): void;
-        isExistingName(name: string): boolean;
-    }
-
     type GetSymbolAccessibilityDiagnostic = (symbolAccesibilityResult: SymbolAccessiblityResult) => SymbolAccessibilityDiagnostic;
 
     interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
@@ -1541,7 +1531,6 @@ module ts {
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
-        var nameLookup: NameLookup;
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -1686,38 +1675,14 @@ module ts {
                 }
             }
 
-            // creates instance of NameLookup to be used in 'isExisingName' checks.
-            // see comment for NameLookup for more information
-            function createNameLookup(): NameLookup {
-                var location: Node;
-                return {
-                    setLocation,
-                    isExistingName: checkName
-                }
-
-                function setLocation(l: Node): void {
-                    location = l;
-                }
-
-                function checkName(name: string): boolean {
-                    Debug.assert(location !== undefined);
-                    return isExistingName(location, name);
-                }
-            }
-
-            function makeUniqueName(location: Node, baseName: string): string {
+            function generateUniqueNameForLocation(location: Node, baseName: string): string {
                 var name: string
                 // first try to check if base name can be used as is
                 if (!isExistingName(location, baseName)) {
                     name = baseName;
                 }
                 else {
-                    if (!nameLookup) {
-                        nameLookup = createNameLookup();
-                    }
-                    nameLookup.setLocation(location);
-                    name = generateUniqueName(baseName, nameLookup.isExistingName);
-                    nameLookup.setLocation(undefined);
+                    name = generateUniqueName(baseName, n => isExistingName(location, n));
                 }
 
                 if (!currentScopeNames) {
@@ -2560,7 +2525,7 @@ module ts {
 
             function getBlockScopedVariableId(node: Identifier): number {
                 // return undefined for synthesized nodes
-                return node.parent && resolver.getBlockScopedVariableId(node);
+                return !nodeIsSynthesized(node) && resolver.getBlockScopedVariableId(node);
             }
 
             function emitIdentifier(node: Identifier) {
@@ -3924,7 +3889,7 @@ module ts {
                     ? blockScopeContainer
                     : blockScopeContainer.parent;
 
-                var generatedName = makeUniqueName(parent, (<Identifier>node).text);
+                var generatedName = generateUniqueNameForLocation(parent, (<Identifier>node).text);
                 var variableId = resolver.getBlockScopedVariableId(<Identifier>node);
                 if (!generatedBlockScopeNames) {
                     generatedBlockScopeNames = [];

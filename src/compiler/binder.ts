@@ -244,10 +244,13 @@ module ts {
             }
 
             if (isBlockScopeContainer) {
-                // clean locals in block scope container if
-                // - current node does not have local variables
-                // - current node is not source file (source file always have locals)
-                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) == 0 && node.kind !== SyntaxKind.SourceFile);
+                // in incremental scenarios we might reuse nodes that already have locals being allocated
+                // during the bind step these locals should be dropped to prevent using stale data.
+                // locals should always be dropped unless they were previously initialized by the binder
+                // these cases are:
+                // - node has locals (symbolKind & HasLocals) !== 0
+                // - node is a source file
+                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
@@ -354,7 +357,6 @@ module ts {
 
         function bindCatchVariableDeclaration(node: CatchClause) {
             bindChildren(node, /*symbolKind:*/ 0, /*isBlockScopeContainer:*/ true);
-
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
