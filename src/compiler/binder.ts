@@ -51,22 +51,26 @@ module ts {
         }
     }
 
-    export function bindSourceFile(file: SourceFile): void {
+    export function bindSourceFile(file: SourceFile, createNodeMap?: boolean): void {
         var start = new Date().getTime();
-        bindSourceFileWorker(file);
+        bindSourceFileWorker(file, createNodeMap);
         bindTime += new Date().getTime() - start;
     }
 
-    function bindSourceFileWorker(file: SourceFile): void {
+    function bindSourceFileWorker(file: SourceFile, createNodeMap: boolean): void {
         var parent: Node;
         var container: Node;
         var blockScopeContainer: Node;
         var lastContainer: Node;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
+        var addDeclarationToSymbol = createNodeMap
+            ? addDeclarationToSymbolAndNodeMap
+            : addDeclarationToSymbolWorker;
 
         if (!file.locals) {
             file.locals = {};
+            file.nodeToSymbol = createNodeMap ? [] : undefined;
             container = blockScopeContainer = file;
             bind(file);
             file.symbolCount = symbolCount;
@@ -77,7 +81,7 @@ module ts {
             return new Symbol(flags, name);
         }
 
-        function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
+        function addDeclarationToSymbolWorker(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
             symbol.flags |= symbolKind;
             if (!symbol.declarations) symbol.declarations = [];
             symbol.declarations.push(node);
@@ -85,6 +89,11 @@ module ts {
             if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
             node.symbol = symbol;
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
+        }
+
+        function addDeclarationToSymbolAndNodeMap(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
+            addDeclarationToSymbolWorker(symbol, node, symbolKind);
+            file.nodeToSymbol[getNodeId(node)] = symbol;
         }
 
         // Should not be called on a declaration with a computed property name,

@@ -735,6 +735,7 @@ module ts {
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
+        public nodeToSymbol: Symbol[];
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -1282,11 +1283,11 @@ module ts {
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * @param scriptSnapshot Text of the file. Only used if the file was not found
           * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
+          * @param version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
-          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file 
+          * @param textChangeRange Change ranges since the last snapshot. Only used if the file 
           * was not found in the registry and a new one was created.
           */
         updateDocument(
@@ -2061,6 +2062,7 @@ module ts {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var ruleProvider: formatting.RulesProvider;
         var program: Program;
+        var inferenceEngine: InferenceEngine;
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
@@ -2121,7 +2123,10 @@ module ts {
             var newSettings = hostCache.compilationSettings();
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
-            // Now create a new compiler
+            // Now create a new compiler.  Also, ensure we have an inference engine.
+            inferenceEngine = inferenceEngine || createInferenceEngine();
+            var inferenceEngineUpdater = inferenceEngine.createEngineUpdater();
+
             var newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
@@ -2135,18 +2140,20 @@ module ts {
 
             // Release any files we have acquired in the old program but are 
             // not part of the new program.
-            if (program) {
+            if (program) { 
                 var oldSourceFiles = program.getSourceFiles();
                 for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
                     var fileName = oldSourceFiles[i].fileName;
                     if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(fileName, oldSettings);
+                        inferenceEngineUpdater.onSourceFileRemoved(oldSourceFiles[i]);
                     }
                 }
             }
 
             program = newProgram;
             typeInfoResolver = program.getTypeChecker();
+            inferenceEngineUpdater.updateInferenceEngine(program);
 
             return;
 
@@ -2172,14 +2179,23 @@ module ts {
                             return oldSourceFile;
                         }
 
-                        // We have an older version of the sourceFile, incrementally parse the changes
+                        // Let the inference engine know we're about to update this source file.
+                        inferenceEngineUpdater.onBeforeSourceFileUpdated(oldSourceFile);
+
+                        // We have an older version of the sourceFile, incrementally parse the changes.
                         var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
-                        return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                        var result = documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+
+                        inferenceEngineUpdater.onAfterSourceFileUpdated(result);
+
+                        return result;
                     }
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                var result = documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                inferenceEngineUpdater.onSourceFileAdded(result);
+                return result;
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
@@ -2229,8 +2245,11 @@ module ts {
 
         function dispose(): void {
             if (program) {
-                forEach(program.getSourceFiles(),
-                    (f) => { documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()); });
+                forEach(program.getSourceFiles(), f =>
+                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+
+                program = undefined;
+                inferenceEngine = undefined;
             }
         }
 

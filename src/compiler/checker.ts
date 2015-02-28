@@ -5,6 +5,15 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    /* @internal */
+    export function getNodeId(node: Node) {
+        if (!node.id) {
+            node.id = nextNodeId++;
+        }
+
+        return node.id;
+    }
+
     /* @internal */ export var checkTime = 0;
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
@@ -262,7 +271,7 @@ module ts {
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            if (!node.id) node.id = nextNodeId++;
+            var id = getNodeId(node);
             return nodeLinks[node.id] || (nodeLinks[node.id] = {});
         }
 
