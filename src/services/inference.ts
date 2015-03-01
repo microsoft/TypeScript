@@ -1,51 +1,4 @@
 module ts {
-    //interface ESMap<K, V> {
-    //    clear(): void;
-    //    delete(key: K): boolean;
-    //    forEach(callbackfn: (value: V, index: K, map: ESMap<K, V>) => void, thisArg?: any): void;
-    //    get(key: K): V;
-    //    has(key: K): boolean;
-    //    set(key: K, value: V): ESMap<K, V>;
-    //    size: number;
-    //}
-
-    //type NodeToNodeMap = ESMap<Node, Node>;
-
-    //interface Set<T> {
-    //    _setBrand: any;
-    //}
-
-    //function createSet<T>(): Set<T> {
-    //    return <Set<T>><any>new Map<T, boolean>();
-    //}
-
-    //function setAdd<T>(set: Set<T>, value: T): void {
-    //    var map = <ESMap<T,boolean>><any>set;
-    //    map.set(value, true);
-    //}
-
-    //function setRemove<T>(set: Set<T>, value: T): void {
-    //    var map = <ESMap<T, boolean>><any>set;
-    //    map.delete(value);
-    //}
-
-    //function setContains<T>(set: Set<T>, value: T) {
-    //    var map = <ESMap<T, boolean>><any>set;
-    //    map.has(value);
-    //}
-
-    //function setForEach<T>(set: Set<T>, callback: (v: T) => void): void {
-    //    var map = <ESMap<T, boolean>><any>set;
-    //    // Avoid an allocation by passing 'callback' as the 'this' arg to
-    //    // map.forEach.
-    //    map.forEach(setForEachCallback, callback);
-    //}
-
-    //function setForEachCallback<T>(value: boolean, key: T) {
-    //    var callback: (v: T) => void = this;
-    //    callback(key);
-    //} 
-
     /* @internal */
     export interface InferenceEngine {
         createEngineUpdater(): InferenceEngineUpdater;
@@ -350,7 +303,7 @@ module ts {
                 recordAddedSymbols(sourceFile.nodeToSymbol);
             }
 
-            function recordAddedSymbols(nodeToSymbol: NodeToSymbolMap) {
+            function recordAddedSymbols(nodeToSymbol: Symbol[]) {
                 nodeToSymbol.forEach(recordAddedSymbolsHelper);
             }
 
@@ -360,14 +313,14 @@ module ts {
                 }
             }
 
-            function recordRemovedSymbols(nodeToSymbol: NodeToSymbolMap) {
-                // Avoid a closure by passing 'removedValueSymbols' along as the thisArg.
-                nodeToSymbol.forEach(function (s) {
-                    var symbols: Symbol[] = this;
-                    if (s.valueDeclaration) {
-                        symbols.push(s);
-                    }
-                }, removedValueSymbols);
+            function recordRemovedSymbols(nodeToSymbol: Symbol[]) {
+                nodeToSymbol.forEach(recordRemovedSymbolsHelper);
+            }
+
+            function recordRemovedSymbolsHelper(s: Symbol) {
+                if (s.valueDeclaration) {
+                    removedValueSymbols.push(s);
+                }
             }
 
             function onSourceFileRemoved(sourceFile: SourceFile) {
@@ -407,14 +360,14 @@ module ts {
                 var newNodeMap = newFile.nodeToSymbol;
 
                 // Walk both node tables determining which symbols were added and which were removed.
-                oldNodeMap.forEach((symbol, node) => {
-                    if (!newNodeMap.has(node)) {
+                oldNodeMap.forEach((symbol, nodeId) => {
+                    if (!newNodeMap[nodeId]) {
                         removedValueSymbols.push(symbol);
                     }
                 });
 
-                newNodeMap.forEach((symbol, node) => {
-                    if (!oldNodeMap.has(node)) {
+                newNodeMap.forEach((symbol, nodeId) => {
+                    if (!oldNodeMap[nodeId]) {
                         addedValueSymbols.push(symbol);
                     }
                 });

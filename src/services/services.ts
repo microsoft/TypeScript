@@ -735,7 +735,7 @@ module ts {
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
-        public nodeToSymbol: NodeToSymbolMap;
+        public nodeToSymbol: Symbol[];
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -1279,17 +1279,8 @@ module ts {
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-<<<<<<< HEAD
-          * @param scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @param version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @param textChangeRange Change ranges since the last snapshot. Only used if the file 
-          * was not found in the registry and a new one was created.
-=======
           * @param scriptSnapshot Text of the file. 
           * @param version Current version of the file.
->>>>>>> master
           */
         updateDocument(
             fileName: string,
@@ -2319,7 +2310,7 @@ module ts {
                         // either version 1, version 2 (or some other version) depending on what the 
                         // host says should be used.
                         var newSourceFile = documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
-                        inferenceEngineUpdater.onSourceFileUpdated(oldSourceFile, newSourceFile);
+                        //inferenceEngineUpdater.onSourceFileUpdated(oldSourceFile, newSourceFile);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
@@ -2327,7 +2318,7 @@ module ts {
 
                 // Could not find this file in the old program, create a new SourceFile for it.
                 var result = documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
-                inferenceEngineUpdater.onSourceFileAdded(result);
+                //inferenceEngineUpdater.onSourceFileAdded(result);
                 return result;
             }
 
