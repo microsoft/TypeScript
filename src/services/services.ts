@@ -4044,12 +4044,28 @@ module ts {
                         break;
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
-                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                        // We want to store any numbers/strings if they were a name that could be
+                        // related to a declaration.  So, if we have 'import x = require("something")'
+                        // then we want 'something' to be in the name table.  Similarly, if we have
+                        // "a['propname']" then we want to store "propname" in the name table.
+                        if (isDeclarationName(node) ||
+                            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+                            isArgumentOfElementAccessExpression(node)) {
+
+                            nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                        }
                         break;
                     default:
                         forEachChild(node, walk);
                 }
             } 
+        }
+
+        function isArgumentOfElementAccessExpression(node: Node) {
+            return node &&
+                node.parent &&
+                node.parent.kind === SyntaxKind.ElementAccessExpression &&
+                (<ElementAccessExpression>node.parent).argumentExpression === node;
         }
 
         function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
