@@ -746,7 +746,10 @@ module ts {
                     forEach(symbol.declarations, node => {
                         if (node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.ModuleDeclaration) {
                             forEach((<ExportContainer>node).exportStars, exportStar => {
-                                visit(resolveExternalModuleName(exportStar, exportStar.moduleSpecifier));
+                                var moduleSymbol = resolveExternalModuleName(exportStar, exportStar.moduleSpecifier);
+                                if (moduleSymbol) {
+                                    visit(moduleSymbol);
+                                }
                             });
                         }
                     });
@@ -5079,8 +5082,61 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
+            checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
+        }
+
+        function isInsideFunction(node: Node, threshold: Node): boolean {
+            var current = node;
+            while (current && current !== threshold) {
+                if (isAnyFunction(current)) {
+                    return true;
+                }
+                current = current.parent;
+            }
+
+            return false;
+        }
+
+        function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
+            if (languageVersion >= ScriptTarget.ES6 ||
+                (symbol.flags & SymbolFlags.BlockScopedVariable) === 0 ||
+                symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause) {
+                return;
+            }
+
+            // - check if binding is used in some function
+            // (stop the walk when reaching container of binding declaration)
+            // - if first check succeeded - check if variable is declared inside the loop
+
+            // nesting structure:
+            // (variable declaration or binding element) -> variable declaration list -> container
+            var container: Node = symbol.valueDeclaration;
+            while (container.kind !== SyntaxKind.VariableDeclarationList) {
+                container = container.parent;
+            }
+            // get the parent of variable declaration list
+            container = container.parent;
+            if (container.kind === SyntaxKind.VariableStatement) {
+                // if parent is variable statement - get its parent
+                container = container.parent;
+            }
+            
+            var inFunction = isInsideFunction(node.parent, container);
+
+            var current = container;
+            while (current && !nodeStartsNewLexicalEnvironment(current)) {
+                if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
+                    if (inFunction) {
+                        grammarErrorOnFirstToken(current, Diagnostics.Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                    }
+                    // mark value declaration so during emit they can have a special handling
+                    getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                    break;
+                }
+                current = current.parent;
+            }
         }
 
         function captureLexicalThis(node: Node, container: Node): void {
@@ -10631,25 +10687,8 @@ module ts {
             }
 
             function makeUniqueName(baseName: string): string {
-                // First try '_name'
-                if (baseName.charCodeAt(0) !== CharacterCodes._) {
-                    var baseName = "_" + baseName;
-                    if (!isExistingName(baseName)) {
-                        return generatedNames[baseName] = baseName;
-                    }
-                }
-                // Find the first unique '_name_n', where n is a positive number
-                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
-                    baseName += "_";
-                }
-                var i = 1;
-                while (true) {
-                    name = baseName + i;
-                    if (!isExistingName(name)) {
-                        return generatedNames[name] = name;
-                    }
-                    i++;
-                }
+                var name = generateUniqueName(baseName, isExistingName);
+                return generatedNames[name] = name;
             }
 
             function assignGeneratedName(node: Node, name: string) {
@@ -10850,6 +10889,46 @@ module ts {
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 
+        function getBlockScopedVariableId(n: Identifier): number {
+            Debug.assert(!nodeIsSynthesized(n));
+
+            // ignore name parts of property access expressions
+            if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
+                (<PropertyAccessExpression>n.parent).name === n) {
+                return undefined;
+            }
+
+            // ignore property names in object binding patterns
+            if (n.parent.kind === SyntaxKind.BindingElement &&
+                (<BindingElement>n.parent).propertyName === n) {
+                return undefined;
+            }
+
+            // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
+            var declarationSymbol: Symbol =
+                (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
+                 n.parent.kind === SyntaxKind.BindingElement
+                    ? getSymbolOfNode(n.parent)
+                    : undefined;
+
+            var symbol = declarationSymbol ||
+                getNodeLinks(n).resolvedSymbol ||
+                resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            
+            var isLetOrConst =
+                symbol &&
+                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
+                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
+
+            if (isLetOrConst) {
+                // side-effect of calling this method:
+                //   assign id to symbol if it was not yet set
+                getSymbolLinks(symbol);
+                return symbol.id;
+            }
+            return undefined;
+        }
+
         function createResolver(): EmitResolver {
             return {
                 getGeneratedNameForNode,
@@ -10866,6 +10945,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                getBlockScopedVariableId,
             };
         }
 
@@ -11641,15 +11721,6 @@ module ts {
 
             if (!declarationList.declarations.length) {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
-            }
-
-            if (languageVersion < ScriptTarget.ES6) {
-                if (isLet(declarationList)) {
-                    return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
-                else if (isConst(declarationList)) {
-                    return grammarErrorOnFirstToken(declarationList, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
             }
         }
 

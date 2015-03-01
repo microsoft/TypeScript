@@ -17,7 +17,7 @@ class FooIterator {
 }
 
 //// [for-of21.js]
-for (var v of new FooIterator) {
+for (const v of new FooIterator) {
     v;
 }
 var Foo = (function () {

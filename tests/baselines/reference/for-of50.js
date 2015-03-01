@@ -7,7 +7,7 @@ for (const [k, v] of map) {
 
 //// [for-of50.js]
 var map = new Map([["", true]]);
-for (var [k, v] of map) {
+for (const [k, v] of map) {
     k;
     v;
 }

@@ -17,7 +17,7 @@ class FooIterator {
 }
 
 //// [for-of23.js]
-for (var v of new FooIterator) {
+for (const v of new FooIterator) {
     const v = 0; // new scope
 }
 var Foo = (function () {

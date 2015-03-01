@@ -1204,6 +1204,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        getBlockScopedVariableId(node: Identifier): number;
     }
 
     export const enum SymbolFlags {
@@ -1329,6 +1330,7 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed  = 0x00000080,
+        BlockScopedBindingInLoop = 0x00000100,
     }
 
     export interface NodeLinks {
