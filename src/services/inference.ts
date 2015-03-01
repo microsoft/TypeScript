@@ -67,35 +67,46 @@ module ts {
     interface TypeInformation {
     }
 
-    interface References {
-        [fileName: string]: Set<Node>;
+    //interface References {
+    //    [fileName: string]: Set<Node>;
+    //}
+
+    interface BidirectionalReferences {
+        declarationToReferences: ESMap<Node, Set<Node>>;
+        referenceToDeclaration: ESMap<Node, Node>;
+    }
+
+    function createBidirectionalReferences(): BidirectionalReferences {
+        return {
+            declarationToReferences: new Map<Node, Set<Node>>(),
+            referenceToDeclaration: new Map<Node, Node>()
+        };
     }
 
     interface ReferencesManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
 
-        getReferencesToNode(node: Node): References;
-        getReferencesToSymbol(symbol: Symbol): References;
+        //getReferencesToNode(node: Node): References;
+        //getReferencesToSymbol(symbol: Symbol): References;
     }
 
     function createReferencesManager(): ReferencesManager {
         // Maps a symbol's value declaration to a per file map of all the references to it.
-        var declarationNodeToFileNameToReferenceNodes = new Map<Node, References>();
-        var fileNameToReferenceNodeToDeclarationNode: Map<NodeToNodeMap> = {};
+        var fileNameToBidirectionalReferences: Map<BidirectionalReferences> = {};
 
         return {
             update,
-            getReferencesToNode,
-            getReferencesToSymbol
+            //getReferencesToNode,
+            //getReferencesToSymbol
         };
 
-        function getReferencesToNode(declarationNode: Node): References {
-            return declarationNodeToFileNameToReferenceNodes.get(declarationNode);
-        }
+        //function getReferencesToNode(declarationNode: Node): References {
+        //    return declarationNodeToFileNameToReferenceNodes.get(declarationNode);
+        //}
 
-        function getReferencesToSymbol(symbol: Symbol): References {
-            return getReferencesToNode(symbol ? symbol.valueDeclaration : undefined);
-        }
+        //function getReferencesToSymbol(symbol: Symbol): References {
+        //    return getReferencesToNode(symbol ? symbol.valueDeclaration : undefined);
+        //}
 
         function update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
             // First purge all data that has been removed.  This includes file removes and symbol removes.
@@ -148,7 +159,13 @@ module ts {
         function resolveReferences(program: Program, file: SourceFile, shouldResolve: Map<boolean>): void {
             var typeChecker = program.getTypeChecker();
             var fileName = file.fileName;
-            var referenceNodeToDeclarationNode = fileNameToReferenceNodeToDeclarationNode[fileName] || (fileNameToReferenceNodeToDeclarationNode[fileName] = new Map<Node, Node>());
+            var bidirectionalReferences = fileNameToBidirectionalReferences[fileName] || (fileNameToBidirectionalReferences[fileName] = createBidirectionalReferences());
+
+            var declarationToReferences = bidirectionalReferences.declarationToReferences;
+            var referenceToDeclaration = bidirectionalReferences.referenceToDeclaration;
+
+            // We're doing a partial resolve if we were asked to only check a subset of names.            
+            var partialResolve = shouldResolve !== undefined;
 
             walk(file);
 
@@ -173,12 +190,16 @@ module ts {
                 if (symbol && symbol.valueDeclaration) {
                     var declarationNode = symbol.valueDeclaration;
 
-                    // this node may have previously referenced some other symbol.  Remove this
-                    // node from that symbol's reference set.
-                    removeExistingReferences(referenceNode, declarationNode);
+                    if (partialResolve) {
+                        // this node may have previously referenced some other symbol.  Remove this
+                        // node from that symbol's reference set.  We don't need to do this if this
+                        // is a full resolve because then the node could never be in any reference
+                        // list already.
+                        removeExistingReferences(referenceNode, declarationNode);
+                    }
 
                     // Also, add a link from the reference node to the symbol's node.
-                    referenceNodeToDeclarationNode.set(referenceNode, declarationNode);
+                    referenceToDeclaration.set(referenceNode, declarationNode);
 
                     // Add a link from the symbol's node to the reference node.
                     var referenceNodes = getSymbolReferenceNodesInFile(declarationNode, fileName);
@@ -187,27 +208,23 @@ module ts {
             }
 
             function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
-                var previousDeclarationNode = referenceNodeToDeclarationNode.get(referenceNode);
+                var previousDeclarationNode = referenceToDeclaration.get(referenceNode);
                 if (previousDeclarationNode !== declarationNode) {
-                    var fileNameToReferenceNodes = declarationNodeToFileNameToReferenceNodes.get(previousDeclarationNode);
-                    if (fileNameToReferenceNodes) {
-                        var referenceNodes = fileNameToReferenceNodes[fileName];
-                        if (referenceNodes) {
-                            setRemove(referenceNodes, referenceNode);
-                        }
+                    var references = declarationToReferences.get(declarationNode);
+                    if (references) {
+                        setRemove(references, referenceNode);
                     }
                 }
             }
-        }
 
-        function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Set<Node> {
-            var fileNameToReferenceNodes = declarationNodeToFileNameToReferenceNodes.get(declarationNode);
-            if (fileNameToReferenceNodes === undefined) {
-                fileNameToReferenceNodes = {};
-                declarationNodeToFileNameToReferenceNodes.set(declarationNode, fileNameToReferenceNodes);
+            function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Set<Node> {
+                var referenceNodes = declarationToReferences.get(declarationNode);
+                if (!referenceNodes) {
+                    referenceNodes = createSet<Node>();
+                    declarationToReferences.set(declarationNode, referenceNodes);
+                }
+                return referenceNodes;
             }
-
-            return fileNameToReferenceNodes[fileName] || (fileNameToReferenceNodes[fileName] = createSet<Node>());
         }
 
         function removeFiles(files: SourceFile[]): void {
@@ -219,44 +236,21 @@ module ts {
         function removeFile(file: SourceFile): void {
             Debug.assert(!!file.nodeToSymbol);
 
-            // Walk all the symbol declaration nodes.  If any of them have a reference in the
-            // specified file, then remove those references from the symbol.
-
-            // Note: we avoid creating a closure by passing in the fileName as the 'thisArg'.
-            declarationNodeToFileNameToReferenceNodes.forEach(function (references, node) {
-                var fileName: string = this;
-                if (hasProperty(references, fileName)) {
-                    delete references[fileName];
-                }
-            }, file.fileName);
-
-            // Now remove all the reference links we have for nodes in this file to declarations.
-            fileNameToReferenceNodeToDeclarationNode[file.fileName] = undefined;
-
-            //// Now, go through all the references in this file, and remove the reference nodes
-            //// from the symbols that they're referring to.
-            //var nodeToNodeMap = fileToNodeReferences[file.fileName];
-
-            //// TODO: should we just delete here?
-            //fileToNodeReferences[file.fileName] = undefined;
-
-            //if (nodeToNodeMap) {
-            //    nodeToNodeMap.forEach(removeReference, file.fileName);
-            //}
+            // TODO(cyrusn): Should we use delete here?
+            fileNameToBidirectionalReferences[file.fileName] = undefined;
         }
 
-        //function removeReference(declarationNode: Node, referenceNode: Node) {
-        //    var referenceNodeFileName = <string>this;
-
-        //}
-
         function removeSymbols(removedSymbols: Symbol[]): void {
-            for (var i = 0, n = removedSymbols.length; i < n; i++) {
-                // Now that the symbol has been removed, there's no need to store any references
-                // for it.
-                var node = removedSymbols[i].valueDeclaration;
-                Debug.assert(!!node);
-                declarationNodeToFileNameToReferenceNodes.delete(node);
+            for (var fileName in fileNameToBidirectionalReferences) {
+                var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
+                if (bidirectionalReferences) {
+                    var declarationToReferences = bidirectionalReferences.declarationToReferences;
+
+                    for (var i = 0, n = removeSymbols.length; i < n; i++) {
+                        var symbol = removedSymbols[i];
+                        declarationToReferences.delete(symbol.valueDeclaration);
+                    }
+                }
             }
         }
 
