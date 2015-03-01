@@ -1,7 +1,16 @@
-type NodeToNodeMap = Map<ts.Node, ts.Node>;
-type LibSet = Map<Object, boolean>;
-
 module ts {
+    interface ESMap<K, V> {
+        clear(): void;
+        delete(key: K): boolean;
+        forEach(callbackfn: (value: V, index: K, map: ESMap<K, V>) => void, thisArg?: any): void;
+        get(key: K): V;
+        has(key: K): boolean;
+        set(key: K, value: V): ESMap<K, V>;
+        size: number;
+    }
+
+    type NodeToNodeMap = ESMap<Node, Node>;
+
     interface Set<T> {
         _setBrand: any;
     }
@@ -11,22 +20,22 @@ module ts {
     }
 
     function setAdd<T>(set: Set<T>, value: T): void {
-        var map = <LibSet><any>set;
+        var map = <ESMap<T,boolean>><any>set;
         map.set(value, true);
     }
 
     function setRemove<T>(set: Set<T>, value: T): void {
-        var map = <LibSet><any>set;
+        var map = <ESMap<T, boolean>><any>set;
         map.delete(value);
     }
 
     function setContains<T>(set: Set<T>, value: T) {
-        var map = <LibSet><any>set;
+        var map = <ESMap<T, boolean>><any>set;
         map.has(value);
     }
 
     function setForEach<T>(set: Set<T>, callback: (v: T) => void): void {
-        var map = <LibSet><any>set;
+        var map = <ESMap<T, boolean>><any>set;
         // Avoid an allocation by passing 'callback' as the 'this' arg to
         // map.forEach.
         map.forEach(setForEachCallback, callback);
