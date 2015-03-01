@@ -224,10 +224,16 @@ module ts {
                     continue;
                 }
 
-                // Walk the file and check any identifiers that match the name of any of the 
-                // symbols we've added or removed.  If so, determine what symbol the identifier
-                // binds to now.
-                resolveReferences(program, file, changedSymbolNames);
+                var nameTable = getNameTable(file);
+
+                // Only process the file if it could be affected by the symbols that were added or
+                // removed.
+                if (keysIntersect(nameTable, changedSymbolNames)) {
+                    // Walk the file and check any identifiers that match the name of any of the 
+                    // symbols we've added or removed.  If so, determine what symbol the identifier
+                    // binds to now.
+                    resolveReferences(program, file, changedSymbolNames);
+                }
             }
 
             return;
@@ -237,6 +243,18 @@ module ts {
                     changedSymbolNames[s.name] = true;
                 }
             }
+        }
+
+        function keysIntersect(nameTable: Map<string>, changedSymbolNames: Map<boolean>) {
+            for (var symbolName in changedSymbolNames) {
+                if (hasProperty(changedSymbolNames, symbolName)) {
+                    if (hasProperty(nameTable, symbolName)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 
