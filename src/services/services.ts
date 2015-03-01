@@ -735,7 +735,7 @@ module ts {
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
-        public nodeToSymbol: Symbol[];
+        public nodeToSymbol: NodeToSymbolMap;
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -1877,7 +1877,8 @@ module ts {
         return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
     }
 
-    function isRightSideOfPropertyAccess(node: Node) {
+    /* @internal */
+    export function isRightSideOfPropertyAccess(node: Node) {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
@@ -2179,16 +2180,13 @@ module ts {
                             return oldSourceFile;
                         }
 
-                        // Let the inference engine know we're about to update this source file.
-                        inferenceEngineUpdater.onBeforeSourceFileUpdated(oldSourceFile);
-
                         // We have an older version of the sourceFile, incrementally parse the changes.
                         var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
-                        var result = documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                        var newSourceFile = documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
 
-                        inferenceEngineUpdater.onAfterSourceFileUpdated(result);
+                        inferenceEngineUpdater.onSourceFileUpdated(oldSourceFile, newSourceFile);
 
-                        return result;
+                        return newSourceFile;
                     }
                 }
 

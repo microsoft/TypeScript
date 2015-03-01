@@ -1,3 +1,5 @@
+type NodeToSymbolMap = Map<ts.Node, ts.Symbol>;
+
 module ts {
     export interface Map<T> {
         [index: string]: T;
@@ -972,7 +974,7 @@ module ts {
         
         // Maps from node ids in this source file to the symbol created for it.
         // Only created if 'createNodeMap: true' is passed to bindSourceFile.
-        /* @internal */ nodeToSymbol: Symbol[];
+        /* @internal */ nodeToSymbol: NodeToSymbolMap;
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.

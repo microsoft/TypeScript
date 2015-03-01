@@ -1,3 +1,5 @@
+type NodeToFileReferencesMap = Map<Node,ts.Map<Node[]>>
+
 module ts {
     /* @internal */
     export interface InferenceEngine {
@@ -7,9 +9,7 @@ module ts {
     export interface InferenceEngineUpdater {
         onSourceFileAdded(file: SourceFile): void;
         onSourceFileRemoved(file: SourceFile): void;
-
-        onBeforeSourceFileUpdated(file: SourceFile): void;
-        onAfterSourceFileUpdated(file: SourceFile): void;
+        onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile): void;
 
         updateInferenceEngine(program: Program);
     }
@@ -22,6 +22,192 @@ module ts {
     interface TypeInformation {
     }
 
+    interface References {
+        [fileName: string]: Node[];
+    }
+
+    interface ReferencesManager {
+        update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
+
+        getReferencesToNode(node: Node): References;
+        getReferencesToSymbol(symbol: Symbol): References;
+    }
+
+    function createReferencesManager(): ReferencesManager {
+        // Maps node id to a per file map of all the references to it.
+        var symbolDeclarationNodeToReferences = new Map<Node, References>();
+
+        return {
+            update,
+            getReferencesToNode,
+            getReferencesToSymbol
+        };
+
+        function getReferencesToNode(node: Node): References {
+            return symbolDeclarationNodeToReferences.get(node);
+        }
+
+        function getReferencesToSymbol(symbol: Symbol): References {
+            return getReferencesToNode(symbol ? symbol.valueDeclaration : undefined);
+        }
+
+        function update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
+            // First purge all data that has been removed.  This includes file removes and symbol removes.
+            removeFiles(removedFiles);
+            removeSymbols(removedSymbols);
+
+            // Now remove from all symbols, any references to any updated files.  We're going to
+            // re-resolve all the updated files and figure out what all the identifiers in them
+            // mean after the edits within.
+            processUpdatedFiles(program, updatedFiles);
+
+            // Now, process untouched files to see if identifiers in them might resolve to different 
+            // symbols.
+            processUntouchedFiles(program, addedFiles, updatedFiles, removedSymbols, addedSymbols);
+
+            // Finally, add the reference links for all the files that were added to the program.
+            addFiles(program, addedFiles);
+        }
+
+        function processUpdatedFiles(program: Program, files: SourceFile[]) {
+            for (var i = 0, n = files.length; i < n; i++) {
+                var file = files[i];
+
+                // We're going to re-resolve everything in this file.  THat means that we want to
+                // remove any information about what symbols have references within this file.  We
+                // can do this just by calling 'removeFile'.
+                // 
+                // This also ensures that no symbols are pointing to reference nodes that are no
+                // longer valid (due to being incrementally parsed).
+                removeFile(file);
+                 
+                // Now we go through and bind all the identifiers in this file.  This will ensure
+                // that any references in this file to symbols are properly recorded.  We can do
+                // this just by calling 'addFile'.
+                addFile(program, file);
+            }
+        }
+
+        function addFiles(program: Program, files: SourceFile[]): void {
+            for (var i = 0, n = files.length; i < n; i++) {
+                addFile(program, files[i]);
+            }
+        }
+
+        function addFile(program: Program, file: SourceFile): void {
+            // Pass undefined for 'examineName' so that we examine all names in this file.
+            resolveReferences(program, file, /*examineName:*/ undefined);
+        }
+
+        function resolveReferences(program: Program, file: SourceFile, shouldResolve: Map<boolean>): void {
+            var typeChecker = program.getTypeChecker();
+            var fileName = file.fileName;
+            walk(file);
+
+            function walk(node: Node) {
+                if (!node) {
+                    return;
+                }
+
+                if (node.kind === SyntaxKind.Identifier && isExpression(node) && !isRightSideOfPropertyAccess(node)) {
+                    // If we're processing all nodes (i.e. shouldResolve is undefined), or this 
+                    // identifier was something we want to examine, then go ahead.
+                    if (!shouldResolve && shouldResolve[(<Identifier>node).text]) {
+                        var symbol = typeChecker.getSymbolAtLocation(node);
+                        addReference(symbol, node);
+                    }
+                }
+
+                forEachChild(node, walk);
+            }
+
+            function addReference(fromSymbol: Symbol, toNode: Node) {
+                if (fromSymbol && fromSymbol.valueDeclaration) {
+                    var symbolNode = fromSymbol.valueDeclaration;
+                    var references = symbolDeclarationNodeToReferences.get(symbolNode);
+                    if (references === undefined) {
+                        references = {};
+                        symbolDeclarationNodeToReferences.set(symbolNode, references);
+                    }
+
+                    var referenceNodes = references[fileName];
+                    if (referenceNodes === undefined) {
+                        referenceNodes = [];
+                        references[fileName] = referenceNodes;
+                    }
+
+                    referenceNodes.push(toNode);
+                }
+            }
+        }
+
+        function removeFiles(files: SourceFile[]): void {
+            for (var i = 0, n = files.length; i < n; i++) {
+                removeFile(files[i]);
+            }
+        }
+
+        function removeFile(file: SourceFile): void {
+            Debug.assert(!!file.nodeToSymbol);
+
+            // Walk all the symbol declaration nodes.  If any of them have a reference in the
+            // specified file, then remove those references from the symbol.
+
+            // Note: we avoid creating a closure by passing in the fileName as the 'thisArg'.
+            symbolDeclarationNodeToReferences.forEach(function (references, node) {
+                var fileName: string = this;
+                if (hasProperty(references, fileName)) {
+                    delete references[fileName];
+                }
+            }, file.fileName);
+
+            // At this point, there should be no symbols that point to references in the file that
+            // was removed
+        }
+
+        function removeSymbols(removedSymbols: Symbol[]): void {
+            for (var i = 0, n = removedSymbols.length; i < n; i++) {
+                // Now that the symbol has been removed, there's no need to store any references
+                // for it.
+                var node = removedSymbols[i].valueDeclaration;
+                Debug.assert(!!node);
+                symbolDeclarationNodeToReferences.delete(node);
+            }
+        }
+
+        function processUntouchedFiles(program: Program, addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]) {
+            // Determine the name of symbols added/removed.  We'll walk all non-added, non-updated 
+            // files in the program if they could be affected by those names and we'll try 
+            // re-resolving any identifiers that match those names to see if they've changed. 
+            // We don't need to hit added files because we'll already have fully processed them
+            // to determine references.
+            var changedSymbolNames: Map<boolean> = {};
+            forEach(removedSymbols, addChangedSymbolName);
+            forEach(addedSymbols, addChangedSymbolName);
+            
+            var allSourceFiles = program.getSourceFiles();
+            for (var i = 0, n = allSourceFiles.length; i < n; i++) {
+                var file = allSourceFiles[i];
+                if (contains(addedFiles, file) || contains(updatedFiles, file)) {
+                    continue;
+                }
+
+                // Walk the file and check any identifiers that match the name of any of the 
+                // symbols we've added or removed.  If so, determine what symbol the identifier
+                // binds to now.
+                resolveReferences(program, file, changedSymbolNames);
+            }
+
+            return;
+
+            function addChangedSymbolName(s: Symbol) {
+                if (!isReservedMemberName(s.name)) {
+                    changedSymbolNames[s.name] = true;
+                }
+            }
+        }
+    }
+
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
         var nodeIdToSymbolInferenceInformation: SymbolInferenceInformation[] = [];
@@ -29,6 +215,7 @@ module ts {
         var numericLiteralTypeInformation = createPrimitiveTypeInformation("number");
 
         //var fileNameToSourceFileId: ts.Map<number>
+        var referenceManager = createReferencesManager();
 
         return <InferenceEngine>{
             createEngineUpdater
@@ -41,63 +228,123 @@ module ts {
 
         function createEngineUpdater(): InferenceEngineUpdater {
             var typeChecker: TypeChecker;
+            
+            var addedFiles: SourceFile[] = [];
+            var removedFiles: SourceFile[] = [];
+            var oldUpdatedFiles: SourceFile[] = [];
+            var newUpdatedFiles: SourceFile[] = [];
+
+            var addedValueSymbols: Symbol[] = [];
+            var removedValueSymbols: Symbol[] = [];
 
             return {
                 onSourceFileAdded,
                 onSourceFileRemoved,
-                onBeforeSourceFileUpdated,
-                onAfterSourceFileUpdated,
+                onSourceFileUpdated,
                 updateInferenceEngine
             };
 
-            function onSourceFileAdded(sourceFile: SourceFile) {
-                Debug.assert(!sourceFile.locals, "File should not have been bound!");
-                Debug.assert(!sourceFile.nodeToSymbol, "File should not have a node map!");
+            function assertOnlyOperationOnThisFile(sourceFile) {
+                Debug.assert(!contains(addedFiles, sourceFile), "Trying to process a file that was already added.");
+                Debug.assert(!contains(removedFiles, sourceFile), "Trying to process a file that was already removed.");
+                Debug.assert(!contains(oldUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");
+                Debug.assert(!contains(newUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");
+            }
 
+            function onSourceFileAdded(sourceFile: SourceFile) {
+                assertOnlyOperationOnThisFile(sourceFile);
+
+                if (sourceFile.locals) {
+                    Debug.assert(!!sourceFile.nodeToSymbol,
+                        "If the source file was bound, it should have been asked to create the node map!");
+                }
+
+                // Put the file into the added list so we will process it entirely for references.
+                addedFiles.push(sourceFile);
+                
                 // Bind the file so that we can use its symbols.  Also, ensure that we have a node map
                 // created for it as well so we can diff the symbols between edits.
                 bindSourceFile(sourceFile, /*createNodeMap:*/ true);
+
+                // Record what symbols were added.  We'll use this to rescan the rest of the source
+                // files to see if they have a reference to any of these symbols. 
+                recordAddedSymbols(sourceFile.nodeToSymbol);
+            }
+
+            function recordAddedSymbols(nodeToSymbol: NodeToSymbolMap) {
+                // Avoid a closure by passing 'addedValueSymbols' along as the thisArg.
+                nodeToSymbol.forEach(function (s) {
+                    var symbols: Symbol[] = this;
+                    if (s.valueDeclaration) {
+                        symbols.push(s);
+                    }
+                }, addedValueSymbols);
+            }
+
+            function recordRemovedSymbols(nodeToSymbol: NodeToSymbolMap) {
+                // Avoid a closure by passing 'removedValueSymbols' along as the thisArg.
+                nodeToSymbol.forEach(function (s) {
+                    var symbols: Symbol[] = this;
+                    if (s.valueDeclaration) {
+                        symbols.push(s);
+                    }
+                }, removedValueSymbols);
             }
 
             function onSourceFileRemoved(sourceFile: SourceFile) {
+                assertOnlyOperationOnThisFile(sourceFile);
+
+                // Put the file in the removed list so we throw away all references to symbols
+                // declared in it, as well as all references in it to symbols elsewhere.
+                removedFiles.push(sourceFile);
+
+                // Record which symbols were removed by this operation. We'll remove all the
+                // references to this symbol, and we'll rescan all the files to see if anything
+                // with a matching name might bind to something else.
+                recordRemovedSymbols(sourceFile.nodeToSymbol);
             }
 
-            function onBeforeSourceFileUpdated(sourceFile: SourceFile) {
-                Debug.assert(!!sourceFile.nodeToSymbol, "We should have an node map for this file!");
-                fileNameToNodeMap[sourceFile.fileName] = sourceFile.nodeToSymbol;
-            }
+            function onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile) {
+                assertOnlyOperationOnThisFile(oldFile);
+                assertOnlyOperationOnThisFile(newFile);
 
-            function onAfterSourceFileUpdated(sourceFile: SourceFile) {
-                Debug.assert(!sourceFile.locals, "File should not have been bound!");
-                Debug.assert(!sourceFile.nodeToSymbol, "File should not have a node map!");
-
-                bindSourceFile(sourceFile, /*createNodeMap:*/ true);
-
-                Debug.assert(!!fileNameToNodeMap[sourceFile.fileName]);
-                var oldNodeMap = fileNameToNodeMap[sourceFile.fileName];
-                var newNodeMap = sourceFile.nodeToSymbol;
-
-                var deletedNodeKeys: string[] = [];
-                var addedNodeKeys: string[] = [];
-                var changedNodeKeys: string[] = [];
-
-                for (var oldKey in oldNodeMap) {
-                    if (newNodeMap[oldKey]) {
-                        changedNodeKeys.push(oldKey);
-                    }
-                    else {
-                        deletedNodeKeys.push(oldKey);
-                    }
+                if (oldFile === newFile) {
+                    // If the file wasn't actually changed (for example, we just got an empty change
+                    // range notification, then no need to bother doing anything with it.
+                    return;
                 }
 
-                for (var newKey in newNodeMap) {
-                    if (!oldNodeMap[newKey]) {
-                        addedNodeKeys.push(newKey);
+                oldUpdatedFiles.push(oldFile);
+                newUpdatedFiles.push(newFile);
+
+                Debug.assert(!!oldFile.nodeToSymbol, "We should have a node map for the old file!");
+                Debug.assert(!newFile.locals, "The new file should not have been bound!");
+                Debug.assert(!newFile.nodeToSymbol, "The new file should not have a node map!");
+
+                // Bind the new file, ensuring that we have symbols and the node map for it.
+                bindSourceFile(newFile, /*createNodeMap:*/ true);
+
+                var oldNodeMap = oldFile.nodeToSymbol;
+                var newNodeMap = newFile.nodeToSymbol;
+
+                // Walk both node tables determining which symbols were added and which were removed.
+                oldNodeMap.forEach((symbol, node) => {
+                    if (!newNodeMap.has(node)) {
+                        removedValueSymbols.push(symbol);
                     }
-                }
+                });
+
+                newNodeMap.forEach((symbol, node) => {
+                    if (!oldNodeMap.has(node)) {
+                        addedValueSymbols.push(symbol);
+                    }
+                });
             }
 
             function updateInferenceEngine(program: Program) {
+                // First update all the references we have.
+                referenceManager.update(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
+
                 typeChecker = program.getTypeChecker();
 
                 var sourceFiles = program.getSourceFiles();
@@ -237,8 +484,6 @@ module ts {
         //    onSourceFileCreated,
         //    onProgramCreated
         //};
-
-        var fileNameToNodeMap: ts.Map<Symbol[]> = {};
 
 
 

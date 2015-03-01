@@ -70,7 +70,7 @@ module ts {
 
         if (!file.locals) {
             file.locals = {};
-            file.nodeToSymbol = createNodeMap ? [] : undefined;
+            file.nodeToSymbol = createNodeMap ? new Map<Node,Symbol>() : undefined;
             container = blockScopeContainer = file;
             bind(file);
             file.symbolCount = symbolCount;
@@ -93,7 +93,7 @@ module ts {
 
         function addDeclarationToSymbolAndNodeMap(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
             addDeclarationToSymbolWorker(symbol, node, symbolKind);
-            file.nodeToSymbol[getNodeId(node)] = symbol;
+            file.nodeToSymbol.set(node, symbol);
         }
 
         // Should not be called on a declaration with a computed property name,
