@@ -1,6 +1,42 @@
-type NodeToFileReferencesMap = Map<Node,ts.Map<Node[]>>
+type NodeToNodeMap = Map<ts.Node, ts.Node>;
+type LibSet = Map<Object, boolean>;
 
 module ts {
+    interface Set<T> {
+        _setBrand: any;
+    }
+
+    function createSet<T>(): Set<T> {
+        return <Set<T>><any>new Map<T, boolean>();
+    }
+
+    function setAdd<T>(set: Set<T>, value: T): void {
+        var map = <LibSet><any>set;
+        map.set(value, true);
+    }
+
+    function setRemove<T>(set: Set<T>, value: T): void {
+        var map = <LibSet><any>set;
+        map.delete(value);
+    }
+
+    function setContains<T>(set: Set<T>, value: T) {
+        var map = <LibSet><any>set;
+        map.has(value);
+    }
+
+    function setForEach<T>(set: Set<T>, callback: (v: T) => void): void {
+        var map = <LibSet><any>set;
+        // Avoid an allocation by passing 'callback' as the 'this' arg to
+        // map.forEach.
+        map.forEach(setForEachCallback, callback);
+    }
+
+    function setForEachCallback<T>(value: boolean, key: T) {
+        var callback: (v: T) => void = this;
+        callback(key);
+    } 
+
     /* @internal */
     export interface InferenceEngine {
         createEngineUpdater(): InferenceEngineUpdater;
@@ -23,7 +59,7 @@ module ts {
     }
 
     interface References {
-        [fileName: string]: Node[];
+        [fileName: string]: Set<Node>;
     }
 
     interface ReferencesManager {
@@ -34,8 +70,9 @@ module ts {
     }
 
     function createReferencesManager(): ReferencesManager {
-        // Maps node id to a per file map of all the references to it.
-        var symbolDeclarationNodeToReferences = new Map<Node, References>();
+        // Maps a symbol's value declaration to a per file map of all the references to it.
+        var declarationNodeToFileNameToReferenceNodes = new Map<Node, References>();
+        var fileNameToReferenceNodeToDeclarationNode: Map<NodeToNodeMap> = {};
 
         return {
             update,
@@ -43,8 +80,8 @@ module ts {
             getReferencesToSymbol
         };
 
-        function getReferencesToNode(node: Node): References {
-            return symbolDeclarationNodeToReferences.get(node);
+        function getReferencesToNode(declarationNode: Node): References {
+            return declarationNodeToFileNameToReferenceNodes.get(declarationNode);
         }
 
         function getReferencesToSymbol(symbol: Symbol): References {
@@ -102,6 +139,8 @@ module ts {
         function resolveReferences(program: Program, file: SourceFile, shouldResolve: Map<boolean>): void {
             var typeChecker = program.getTypeChecker();
             var fileName = file.fileName;
+            var referenceNodeToDeclarationNode = fileNameToReferenceNodeToDeclarationNode[fileName] || (fileNameToReferenceNodeToDeclarationNode[fileName] = new Map<Node, Node>());
+
             walk(file);
 
             function walk(node: Node) {
@@ -114,31 +153,52 @@ module ts {
                     // identifier was something we want to examine, then go ahead.
                     if (!shouldResolve && shouldResolve[(<Identifier>node).text]) {
                         var symbol = typeChecker.getSymbolAtLocation(node);
-                        addReference(symbol, node);
+                        addSymbolReference(symbol, node);
                     }
                 }
 
                 forEachChild(node, walk);
             }
 
-            function addReference(fromSymbol: Symbol, toNode: Node) {
-                if (fromSymbol && fromSymbol.valueDeclaration) {
-                    var symbolNode = fromSymbol.valueDeclaration;
-                    var references = symbolDeclarationNodeToReferences.get(symbolNode);
-                    if (references === undefined) {
-                        references = {};
-                        symbolDeclarationNodeToReferences.set(symbolNode, references);
-                    }
+            function addSymbolReference(symbol: Symbol, referenceNode: Node) {
+                if (symbol && symbol.valueDeclaration) {
+                    var declarationNode = symbol.valueDeclaration;
 
-                    var referenceNodes = references[fileName];
-                    if (referenceNodes === undefined) {
-                        referenceNodes = [];
-                        references[fileName] = referenceNodes;
-                    }
+                    // this node may have previously referenced some other symbol.  Remove this
+                    // node from that symbol's reference set.
+                    removeExistingReferences(referenceNode, declarationNode);
 
-                    referenceNodes.push(toNode);
+                    // Also, add a link from the reference node to the symbol's node.
+                    referenceNodeToDeclarationNode.set(referenceNode, declarationNode);
+
+                    // Add a link from the symbol's node to the reference node.
+                    var referenceNodes = getSymbolReferenceNodesInFile(declarationNode, fileName);
+                    setAdd(referenceNodes, referenceNode);
                 }
             }
+
+            function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
+                var previousDeclarationNode = referenceNodeToDeclarationNode.get(referenceNode);
+                if (previousDeclarationNode !== declarationNode) {
+                    var fileNameToReferenceNodes = declarationNodeToFileNameToReferenceNodes.get(previousDeclarationNode);
+                    if (fileNameToReferenceNodes) {
+                        var referenceNodes = fileNameToReferenceNodes[fileName];
+                        if (referenceNodes) {
+                            setRemove(referenceNodes, referenceNode);
+                        }
+                    }
+                }
+            }
+        }
+
+        function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Set<Node> {
+            var fileNameToReferenceNodes = declarationNodeToFileNameToReferenceNodes.get(declarationNode);
+            if (fileNameToReferenceNodes === undefined) {
+                fileNameToReferenceNodes = {};
+                declarationNodeToFileNameToReferenceNodes.set(declarationNode, fileNameToReferenceNodes);
+            }
+
+            return fileNameToReferenceNodes[fileName] || (fileNameToReferenceNodes[fileName] = createSet<Node>());
         }
 
         function removeFiles(files: SourceFile[]): void {
@@ -154,16 +214,32 @@ module ts {
             // specified file, then remove those references from the symbol.
 
             // Note: we avoid creating a closure by passing in the fileName as the 'thisArg'.
-            symbolDeclarationNodeToReferences.forEach(function (references, node) {
+            declarationNodeToFileNameToReferenceNodes.forEach(function (references, node) {
                 var fileName: string = this;
                 if (hasProperty(references, fileName)) {
                     delete references[fileName];
                 }
             }, file.fileName);
 
-            // At this point, there should be no symbols that point to references in the file that
-            // was removed
+            // Now remove all the reference links we have for nodes in this file to declarations.
+            fileNameToReferenceNodeToDeclarationNode[file.fileName] = undefined;
+
+            //// Now, go through all the references in this file, and remove the reference nodes
+            //// from the symbols that they're referring to.
+            //var nodeToNodeMap = fileToNodeReferences[file.fileName];
+
+            //// TODO: should we just delete here?
+            //fileToNodeReferences[file.fileName] = undefined;
+
+            //if (nodeToNodeMap) {
+            //    nodeToNodeMap.forEach(removeReference, file.fileName);
+            //}
         }
+
+        //function removeReference(declarationNode: Node, referenceNode: Node) {
+        //    var referenceNodeFileName = <string>this;
+
+        //}
 
         function removeSymbols(removedSymbols: Symbol[]): void {
             for (var i = 0, n = removedSymbols.length; i < n; i++) {
@@ -171,7 +247,7 @@ module ts {
                 // for it.
                 var node = removedSymbols[i].valueDeclaration;
                 Debug.assert(!!node);
-                symbolDeclarationNodeToReferences.delete(node);
+                declarationNodeToFileNameToReferenceNodes.delete(node);
             }
         }
 
@@ -272,13 +348,13 @@ module ts {
             }
 
             function recordAddedSymbols(nodeToSymbol: NodeToSymbolMap) {
-                // Avoid a closure by passing 'addedValueSymbols' along as the thisArg.
-                nodeToSymbol.forEach(function (s) {
-                    var symbols: Symbol[] = this;
-                    if (s.valueDeclaration) {
-                        symbols.push(s);
-                    }
-                }, addedValueSymbols);
+                nodeToSymbol.forEach(recordAddedSymbolsHelper);
+            }
+
+            function recordAddedSymbolsHelper(s: Symbol) {
+                if (s.valueDeclaration) {
+                    addedValueSymbols.push(s);
+                }
             }
 
             function recordRemovedSymbols(nodeToSymbol: NodeToSymbolMap) {
