@@ -9,9 +9,9 @@ a;
 //// [letAsIdentifierInStrictMode.js]
 "use strict";
 var ;
-let ;
+var ;
 10;
 var a = 10;
-let ;
+var ;
 30;
-let a;
+var a;

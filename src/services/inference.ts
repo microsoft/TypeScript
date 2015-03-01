@@ -1,50 +1,50 @@
 module ts {
-    interface ESMap<K, V> {
-        clear(): void;
-        delete(key: K): boolean;
-        forEach(callbackfn: (value: V, index: K, map: ESMap<K, V>) => void, thisArg?: any): void;
-        get(key: K): V;
-        has(key: K): boolean;
-        set(key: K, value: V): ESMap<K, V>;
-        size: number;
-    }
+    //interface ESMap<K, V> {
+    //    clear(): void;
+    //    delete(key: K): boolean;
+    //    forEach(callbackfn: (value: V, index: K, map: ESMap<K, V>) => void, thisArg?: any): void;
+    //    get(key: K): V;
+    //    has(key: K): boolean;
+    //    set(key: K, value: V): ESMap<K, V>;
+    //    size: number;
+    //}
 
-    type NodeToNodeMap = ESMap<Node, Node>;
+    //type NodeToNodeMap = ESMap<Node, Node>;
 
-    interface Set<T> {
-        _setBrand: any;
-    }
+    //interface Set<T> {
+    //    _setBrand: any;
+    //}
 
-    function createSet<T>(): Set<T> {
-        return <Set<T>><any>new Map<T, boolean>();
-    }
+    //function createSet<T>(): Set<T> {
+    //    return <Set<T>><any>new Map<T, boolean>();
+    //}
 
-    function setAdd<T>(set: Set<T>, value: T): void {
-        var map = <ESMap<T,boolean>><any>set;
-        map.set(value, true);
-    }
+    //function setAdd<T>(set: Set<T>, value: T): void {
+    //    var map = <ESMap<T,boolean>><any>set;
+    //    map.set(value, true);
+    //}
 
-    function setRemove<T>(set: Set<T>, value: T): void {
-        var map = <ESMap<T, boolean>><any>set;
-        map.delete(value);
-    }
+    //function setRemove<T>(set: Set<T>, value: T): void {
+    //    var map = <ESMap<T, boolean>><any>set;
+    //    map.delete(value);
+    //}
 
-    function setContains<T>(set: Set<T>, value: T) {
-        var map = <ESMap<T, boolean>><any>set;
-        map.has(value);
-    }
+    //function setContains<T>(set: Set<T>, value: T) {
+    //    var map = <ESMap<T, boolean>><any>set;
+    //    map.has(value);
+    //}
 
-    function setForEach<T>(set: Set<T>, callback: (v: T) => void): void {
-        var map = <ESMap<T, boolean>><any>set;
-        // Avoid an allocation by passing 'callback' as the 'this' arg to
-        // map.forEach.
-        map.forEach(setForEachCallback, callback);
-    }
+    //function setForEach<T>(set: Set<T>, callback: (v: T) => void): void {
+    //    var map = <ESMap<T, boolean>><any>set;
+    //    // Avoid an allocation by passing 'callback' as the 'this' arg to
+    //    // map.forEach.
+    //    map.forEach(setForEachCallback, callback);
+    //}
 
-    function setForEachCallback<T>(value: boolean, key: T) {
-        var callback: (v: T) => void = this;
-        callback(key);
-    } 
+    //function setForEachCallback<T>(value: boolean, key: T) {
+    //    var callback: (v: T) => void = this;
+    //    callback(key);
+    //} 
 
     /* @internal */
     export interface InferenceEngine {
@@ -56,7 +56,7 @@ module ts {
         onSourceFileRemoved(file: SourceFile): void;
         onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile): void;
 
-        updateInferenceEngine(program: Program);
+        updateInferenceEngine(program: Program): void;
     }
 
     interface SymbolInferenceInformation {
@@ -72,14 +72,18 @@ module ts {
     //}
 
     interface BidirectionalReferences {
-        declarationToReferences: ESMap<Node, Set<Node>>;
-        referenceToDeclaration: ESMap<Node, Node>;
+        // Maps from the node-id of the reference to the declaration node.
+        referenceToDeclaration: Node[];
+
+        // Maps from the node-id of the declaration to a map from the node-id of a reference
+        // to the reference node.
+        declarationToReferences: Node[][];
     }
 
     function createBidirectionalReferences(): BidirectionalReferences {
         return {
-            declarationToReferences: new Map<Node, Set<Node>>(),
-            referenceToDeclaration: new Map<Node, Node>()
+            declarationToReferences: [],
+            referenceToDeclaration: []
         };
     }
 
@@ -199,31 +203,27 @@ module ts {
                     }
 
                     // Also, add a link from the reference node to the symbol's node.
-                    referenceToDeclaration.set(referenceNode, declarationNode);
+                    referenceToDeclaration[getNodeId(referenceNode)] = declarationNode;
 
                     // Add a link from the symbol's node to the reference node.
                     var referenceNodes = getSymbolReferenceNodesInFile(declarationNode, fileName);
-                    setAdd(referenceNodes, referenceNode);
+                    referenceNodes[getNodeId(referenceNode)] = referenceNode;
                 }
             }
 
             function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
-                var previousDeclarationNode = referenceToDeclaration.get(referenceNode);
+                var previousDeclarationNode = referenceToDeclaration[getNodeId(referenceNode)];
                 if (previousDeclarationNode !== declarationNode) {
-                    var references = declarationToReferences.get(declarationNode);
+                    var references = declarationToReferences[getNodeId(declarationNode)];
                     if (references) {
-                        setRemove(references, referenceNode);
+                        delete references[getNodeId(referenceNode)];
                     }
                 }
             }
 
-            function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Set<Node> {
-                var referenceNodes = declarationToReferences.get(declarationNode);
-                if (!referenceNodes) {
-                    referenceNodes = createSet<Node>();
-                    declarationToReferences.set(declarationNode, referenceNodes);
-                }
-                return referenceNodes;
+            function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Node[]{
+                var declarationNodeId = getNodeId(declarationNode);
+                return declarationToReferences[declarationNodeId] || (declarationToReferences[declarationNodeId] = []);
             }
         }
 
@@ -248,7 +248,7 @@ module ts {
 
                     for (var i = 0, n = removeSymbols.length; i < n; i++) {
                         var symbol = removedSymbols[i];
-                        declarationToReferences.delete(symbol.valueDeclaration);
+                        delete declarationToReferences[getNodeId(symbol.valueDeclaration)];
                     }
                 }
             }
@@ -323,7 +323,7 @@ module ts {
                 updateInferenceEngine
             };
 
-            function assertOnlyOperationOnThisFile(sourceFile) {
+            function assertOnlyOperationOnThisFile(sourceFile: SourceFile) {
                 Debug.assert(!contains(addedFiles, sourceFile), "Trying to process a file that was already added.");
                 Debug.assert(!contains(removedFiles, sourceFile), "Trying to process a file that was already removed.");
                 Debug.assert(!contains(oldUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");

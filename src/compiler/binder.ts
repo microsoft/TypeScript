@@ -71,7 +71,8 @@ module ts {
         if (!file.locals) {
             file.locals = {};
             file.nodeToSymbol = createNodeMap ? new Map<Node,Symbol>() : undefined;
-            container = blockScopeContainer = file;
+            container = file;
+            setBlockScopeContainer(file, /*cleanLocals*/ false);
             bind(file);
             file.symbolCount = symbolCount;
         }
@@ -79,6 +80,13 @@ module ts {
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
             return new Symbol(flags, name);
+        }
+
+        function setBlockScopeContainer(node: Node, cleanLocals: boolean) {
+            blockScopeContainer = node;
+            if (cleanLocals) {
+                blockScopeContainer.locals = undefined;
+            }
         }
 
         function addDeclarationToSymbolWorker(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
@@ -245,7 +253,13 @@ module ts {
             }
 
             if (isBlockScopeContainer) {
-                blockScopeContainer = node;
+                // in incremental scenarios we might reuse nodes that already have locals being allocated
+                // during the bind step these locals should be dropped to prevent using stale data.
+                // locals should always be dropped unless they were previously initialized by the binder
+                // these cases are:
+                // - node has locals (symbolKind & HasLocals) !== 0
+                // - node is a source file
+                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
