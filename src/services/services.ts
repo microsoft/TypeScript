@@ -4138,43 +4138,6 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function initializeNameTable(sourceFile: SourceFile): void {
-            var nameTable: Map<string> = {};
-
-            walk(sourceFile);
-            sourceFile.nameTable = nameTable;
-
-            function walk(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        nameTable[(<Identifier>node).text] = (<Identifier>node).text;
-                        break;
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NumericLiteral:
-                        // We want to store any numbers/strings if they were a name that could be
-                        // related to a declaration.  So, if we have 'import x = require("something")'
-                        // then we want 'something' to be in the name table.  Similarly, if we have
-                        // "a['propname']" then we want to store "propname" in the name table.
-                        if (isDeclarationName(node) ||
-                            node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                            isArgumentOfElementAccessExpression(node)) {
-
-                            nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
-                        }
-                        break;
-                    default:
-                        forEachChild(node, walk);
-                }
-            } 
-        }
-
-        function isArgumentOfElementAccessExpression(node: Node) {
-            return node &&
-                node.parent &&
-                node.parent.kind === SyntaxKind.ElementAccessExpression &&
-                (<ElementAccessExpression>node.parent).argumentExpression === node;
-        }
-
         function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
@@ -4241,13 +4204,9 @@ module ts {
                     forEach(sourceFiles, sourceFile => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        if (!sourceFile.nameTable) {
-                            initializeNameTable(sourceFile)
-                        }
+                        var nameTable = getNameTable(sourceFile);
 
-                        Debug.assert(sourceFile.nameTable !== undefined);
-
-                        if (lookUp(sourceFile.nameTable, internedName)) {
+                        if (lookUp(nameTable, internedName)) {
                             result = result || [];
                             getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                         }
@@ -5789,6 +5748,52 @@ module ts {
             getSourceFile,
             getProgram
         };
+    }
+
+    /* @internal */
+    export function getNameTable(sourceFile: SourceFile): Map<string> {
+        if (!sourceFile.nameTable) {
+            initializeNameTable(sourceFile)
+        }
+
+        return sourceFile.nameTable;
+    }
+
+    function initializeNameTable(sourceFile: SourceFile): void {
+        var nameTable: Map<string> = {};
+
+        walk(sourceFile);
+        sourceFile.nameTable = nameTable;
+
+        function walk(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    nameTable[(<Identifier>node).text] = (<Identifier>node).text;
+                    break;
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    // We want to store any numbers/strings if they were a name that could be
+                    // related to a declaration.  So, if we have 'import x = require("something")'
+                    // then we want 'something' to be in the name table.  Similarly, if we have
+                    // "a['propname']" then we want to store "propname" in the name table.
+                    if (isDeclarationName(node) ||
+                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
+                        isArgumentOfElementAccessExpression(node)) {
+
+                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                    }
+                    break;
+                default:
+                    forEachChild(node, walk);
+            }
+        }
+    }
+
+    function isArgumentOfElementAccessExpression(node: Node) {
+        return node &&
+            node.parent &&
+            node.parent.kind === SyntaxKind.ElementAccessExpression &&
+            (<ElementAccessExpression>node.parent).argumentExpression === node;
     }
 
     /// Classifier
