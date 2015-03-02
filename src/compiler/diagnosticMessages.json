@@ -615,7 +615,7 @@
         "category": "Error",
         "code": 1198
     },
-    "'}' expected.": {
+    "Unterminated Unicode escape sequence.": {
         "category": "Error",
         "code":  1199
     },

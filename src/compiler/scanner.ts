@@ -848,7 +848,7 @@ module ts {
                 pos++;
             }
             else {
-                error(Diagnostics.expected); // '}' expected.
+                error(Diagnostics.Unterminated_Unicode_escape_sequence);
                 isInvalidExtendedEscape = true;
             }
 
