@@ -176,13 +176,6 @@ module ts {
         return true;
     }
 
-    export function sparseArrayIsEmpty<T>(array: T[]) {
-        for (var id in array) {
-            return false;
-        }
-        return true;
-    }
-
     export function clone<T>(object: T): T {
         var result: any = {};
         for (var id in object) {

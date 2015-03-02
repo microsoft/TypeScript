@@ -20,23 +20,91 @@ module ts {
     interface TypeInformation {
     }
 
+    interface ReferenceToDeclarationMap {
+        _nodeToNodeMapBrand: any;
+    }
+
+    function createReferenceToDeclarationMap(): ReferenceToDeclarationMap {
+        return <ReferenceToDeclarationMap><any>[];
+    }
+
+    function referenceToDeclarationMap_get(map: ReferenceToDeclarationMap, referenceNode: Node): Node {
+        var array = <Node[]><any>map;
+        return array[getNodeId(referenceNode)];
+    }
+
+    function referenceToDeclarationMap_set(map: ReferenceToDeclarationMap, referenceNode: Node, declarationNode: Node) {
+        var array = <Node[]><any>map;
+        array[getNodeId(referenceNode)] = declarationNode;
+    }
+
+    interface DeclarationToReferencesMap {
+        _nodeToNodesMapBrand: any;
+    }
+
+    function createDeclarationToReferencesMap(): DeclarationToReferencesMap {
+        return <DeclarationToReferencesMap><any>[];
+    }
+
+    function declarationToReferencesMap_get(map: DeclarationToReferencesMap, declarationNode: Node): References {
+        var array = <References[]><any>map;
+        return array[getNodeId(declarationNode)];
+    }
+
+    function declarationToReferencesMap_getOrCreate(map: DeclarationToReferencesMap, declarationNode: Node): References {
+        var array = <References[]><any>map;
+        var declarationId = getNodeId(declarationNode);
+        return array[declarationId] || (array[declarationId] = createReferences());
+    }
+
+    function declarationToReferences_delete(map: DeclarationToReferencesMap, declarationNode: Node): void {
+        var array = <References[]><any>map;
+        delete array[getNodeId(declarationNode)];
+    }
+
+    interface References {
+        _referencesBrand: any;
+    }
+
+    function createReferences(): References {
+        return <References><any>[];
+    }
+
+    function references_add(references: References, referenceNode: Node): void {
+        var array = <Node[]><any>references;
+        array[getNodeId(referenceNode)] = referenceNode;
+    }
+
+    function references_delete(references: References, referenceNode: Node): void {
+        var array = <Node[]><any>references;
+        delete array[getNodeId(referenceNode)];
+    }
+
+    function references_isEmpty(references: References): boolean {
+        var array = <Node[]><any>references;
+        for (var id in array) {
+            return false;
+        }
+        return true;
+    }
+
     //interface References {
     //    [fileName: string]: Set<Node>;
     //}
 
     interface BidirectionalReferences {
         // Maps from the node-id of the reference to the declaration node.
-        referenceToDeclaration: Node[];
+        referenceToDeclaration: ReferenceToDeclarationMap;
 
         // Maps from the node-id of the declaration to a map from the node-id of a reference
         // to the reference node.
-        declarationToReferences: Node[][];
+        declarationToReferences: DeclarationToReferencesMap;
     }
 
     function createBidirectionalReferences(): BidirectionalReferences {
         return {
-            declarationToReferences: [],
-            referenceToDeclaration: []
+            declarationToReferences: createDeclarationToReferencesMap(),
+            referenceToDeclaration: createReferenceToDeclarationMap(),
         };
     }
 
@@ -157,14 +225,13 @@ module ts {
                     }
 
                     var declarationNodeId = getNodeId(declarationNode);
-                    var referenceNodeId = getNodeId(referenceNode);
 
                     // Also, add a link from the reference node to the symbol's node.
-                    referenceToDeclaration[referenceNodeId] = declarationNode;
+                    referenceToDeclarationMap_set(referenceToDeclaration, referenceNode, declarationNode);
 
                     // Add a link from the symbol's node to the reference node.
-                    var referenceNodes = getSymbolReferenceNodesInFile(declarationNode);
-                    referenceNodes[referenceNodeId] = referenceNode;
+                    var referenceNodes = declarationToReferencesMap_getOrCreate(declarationToReferences, declarationNode);
+                    references_add(referenceNodes, referenceNode);
 
                     // Mark that this file is referenced by this symbol.
                     var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = {});
@@ -174,29 +241,22 @@ module ts {
 
             function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
                 var referenceNodeId = getNodeId(referenceNode);
-                var previousDeclarationNode = referenceToDeclaration[referenceNodeId];
+                var previousDeclarationNode = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode);
                 if (previousDeclarationNode !== declarationNode) {
-                    var previousDeclarationNodeId = getNodeId(previousDeclarationNode);
-
-                    var references = declarationToReferences[previousDeclarationNodeId];
+                    var references = declarationToReferencesMap_get(declarationToReferences, previousDeclarationNode);
                     if (references) {
-                        delete references[referenceNodeId];
+                        references_delete(references, referenceNode);
 
                         // If there are no more references from the old declaration to this
                         // file, then mark that appropriately.
-                        if (sparseArrayIsEmpty(references)) {
-                            var fileWithReferences = declarationToFilesWithReferences[previousDeclarationNodeId];
+                        if (references_isEmpty(references)) {
+                            var fileWithReferences = declarationToFilesWithReferences[getNodeId(previousDeclarationNode)];
                             if (fileWithReferences) {
                                 delete fileWithReferences[fileName];
                             }
                         }
                     }
                 }
-            }
-
-            function getSymbolReferenceNodesInFile(declarationNode: Node): Node[]{
-                var declarationNodeId = getNodeId(declarationNode);
-                return declarationToReferences[declarationNodeId] || (declarationToReferences[declarationNodeId] = []);
             }
         }
 
@@ -233,7 +293,7 @@ module ts {
             var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
             if (bidirectionalReferences) {
                 var declarationToReferences = bidirectionalReferences.declarationToReferences;
-                delete declarationToReferences[getNodeId(symbol.valueDeclaration)];
+                declarationToReferences_delete(declarationToReferences, symbol.valueDeclaration);
             }
         }
 
