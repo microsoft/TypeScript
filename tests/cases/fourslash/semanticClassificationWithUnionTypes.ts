@@ -1,4 +1,4 @@
-﻿////module /*0*/M {
+////module /*0*/M {
 ////    export interface /*1*/I {
 ////    }
 ////}
