@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement11.ts(1,1): error TS9003: 'for...of' statements are not currently supported.
+tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement11.ts(1,1): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement11.ts (1 errors) ====
     for (const [a, b] of X) {
     ~~~
-!!! error TS9003: 'for...of' statements are not currently supported.
+!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
     }
