@@ -1,4 +1,4 @@
-﻿
+
 ////{| "itemName": "\"Multiline\\r\\nMadness\"", "kind": "module" |}
 ////declare module "Multiline\r\nMadness" {
 ////}

@@ -1,4 +1,4 @@
-﻿/////**
+/////**
 //// * This is a class.
 //// */
 ////class /* But it has no name! */ {
