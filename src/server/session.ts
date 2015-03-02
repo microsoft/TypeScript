@@ -181,18 +181,29 @@ module ts.server {
         }
 
         semanticCheck(file: string, project: Project) {
-            var diags = project.compilerService.languageService.getSemanticDiagnostics(file);
-            if (diags) {
-                var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+            try {
+                var diags = project.compilerService.languageService.getSemanticDiagnostics(file);
+
+                if (diags) {
+                    var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
+                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                }
+            }
+            catch (err) {
+                this.logError(err, "semantic check");
             }
         }
 
         syntacticCheck(file: string, project: Project) {
-            var diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
-            if (diags) {
-                var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+            try {
+                var diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
+                if (diags) {
+                    var bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
+                    this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                }
+            }
+            catch (err) {
+                this.logError(err, "syntactic check");
             }
         }
 
@@ -553,10 +564,7 @@ module ts.server {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
                 }
-                // update project structure on idle commented out
-                // until we can have the host return only the root files
-                // from getScriptFileNames()
-                //this.updateProjectStructure(this.changeSeq, (n) => n == this.changeSeq);
+                this.updateProjectStructure(this.changeSeq, (n) => n == this.changeSeq);
             }
         }
 

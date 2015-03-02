@@ -431,7 +431,7 @@ exports.tests = (function () {
     }));
     testRunner.addTest(new TestCase("Check binary file doesn't match", function () {
         return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
-        !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
+            !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
     }));
     // Command-line parameter tests
     testRunner.addTest(new TestCase("Check App defaults", function () {

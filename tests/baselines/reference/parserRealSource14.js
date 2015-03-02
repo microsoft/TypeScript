@@ -999,8 +999,8 @@ var TypeScript;
                 //  0123
                 // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid
                 var inclusive = hasFlag(options, 1 /* EdgeInclusive */) ||
-                cur.nodeType === TypeScript.NodeType.Name ||
-                pos === script.limChar; // Special "EOF" case
+                    cur.nodeType === TypeScript.NodeType.Name ||
+                    pos === script.limChar; // Special "EOF" case
                 var minChar = cur.minChar;
                 var limChar = cur.limChar + (inclusive ? 1 : 0);
                 if (pos >= minChar && pos < limChar) {

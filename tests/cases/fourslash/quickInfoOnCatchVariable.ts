@@ -6,4 +6,4 @@
 
 goTo.marker();
 verify.quickInfoExists();
-verify.quickInfoIs("(var) e: any");
+verify.quickInfoIs("(local var) e: any");
