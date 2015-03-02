@@ -50,6 +50,7 @@ module ts {
     function createReferencesManager(): ReferencesManager {
         // Maps a symbol's value declaration to a per file map of all the references to it.
         var fileNameToBidirectionalReferences: Map<BidirectionalReferences> = {};
+        var declarationToFilesWithReferences: ts.Map<boolean>[] = [];
 
         return {
             update,
@@ -155,26 +156,45 @@ module ts {
                         removeExistingReferences(referenceNode, declarationNode);
                     }
 
+                    var declarationNodeId = getNodeId(declarationNode);
+                    var referenceNodeId = getNodeId(referenceNode);
+
                     // Also, add a link from the reference node to the symbol's node.
-                    referenceToDeclaration[getNodeId(referenceNode)] = declarationNode;
+                    referenceToDeclaration[referenceNodeId] = declarationNode;
 
                     // Add a link from the symbol's node to the reference node.
-                    var referenceNodes = getSymbolReferenceNodesInFile(declarationNode, fileName);
-                    referenceNodes[getNodeId(referenceNode)] = referenceNode;
+                    var referenceNodes = getSymbolReferenceNodesInFile(declarationNode);
+                    referenceNodes[referenceNodeId] = referenceNode;
+
+                    // Mark that this file is referenced by this symbol.
+                    var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = {});
+                    filesWithReferences[fileName] = true;
                 }
             }
 
             function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
-                var previousDeclarationNode = referenceToDeclaration[getNodeId(referenceNode)];
+                var referenceNodeId = getNodeId(referenceNode);
+                var previousDeclarationNode = referenceToDeclaration[referenceNodeId];
                 if (previousDeclarationNode !== declarationNode) {
-                    var references = declarationToReferences[getNodeId(declarationNode)];
+                    var previousDeclarationNodeId = getNodeId(previousDeclarationNode);
+
+                    var references = declarationToReferences[previousDeclarationNodeId];
                     if (references) {
-                        delete references[getNodeId(referenceNode)];
+                        delete references[referenceNodeId];
+
+                        // If there are no more references from the old declaration to this
+                        // file, then mark that appropriately.
+                        if (sparseArrayIsEmpty(references)) {
+                            var fileWithReferences = declarationToFilesWithReferences[previousDeclarationNodeId];
+                            if (fileWithReferences) {
+                                delete fileWithReferences[fileName];
+                            }
+                        }
                     }
                 }
             }
 
-            function getSymbolReferenceNodesInFile(declarationNode: Node, fileName: string): Node[]{
+            function getSymbolReferenceNodesInFile(declarationNode: Node): Node[]{
                 var declarationNodeId = getNodeId(declarationNode);
                 return declarationToReferences[declarationNodeId] || (declarationToReferences[declarationNodeId] = []);
             }
@@ -188,22 +208,32 @@ module ts {
 
         function removeFile(file: SourceFile): void {
             Debug.assert(!!file.nodeToSymbol);
-
-            // TODO(cyrusn): Should we use delete here?
-            fileNameToBidirectionalReferences[file.fileName] = undefined;
+            
+            delete fileNameToBidirectionalReferences[file.fileName];
         }
 
         function removeSymbols(removedSymbols: Symbol[]): void {
-            for (var fileName in fileNameToBidirectionalReferences) {
-                var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
-                if (bidirectionalReferences) {
-                    var declarationToReferences = bidirectionalReferences.declarationToReferences;
-
-                    for (var i = 0, n = removeSymbols.length; i < n; i++) {
-                        var symbol = removedSymbols[i];
-                        delete declarationToReferences[getNodeId(symbol.valueDeclaration)];
+            for (var i = 0, n = removedSymbols.length; i < n; i++) {
+                var symbol = removedSymbols[i];
+                var declarationNodeId = getNodeId(symbol.valueDeclaration)
+                var filesWithReferences = declarationToFilesWithReferences[declarationNodeId];
+                if (filesWithReferences) {
+                    for (var fileName in filesWithReferences) {
+                        if (hasProperty(filesWithReferences, fileName)) {
+                            removeReferencesToSymbol(symbol, fileName);
+                        }
                     }
+
+                    delete declarationToFilesWithReferences[declarationNodeId];
                 }
+            }
+        }
+
+        function removeReferencesToSymbol(symbol: Symbol, fileName: string) {
+            var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
+            if (bidirectionalReferences) {
+                var declarationToReferences = bidirectionalReferences.declarationToReferences;
+                delete declarationToReferences[getNodeId(symbol.valueDeclaration)];
             }
         }
 
