@@ -1,4 +1,4 @@
-﻿////module m {
+////module m {
 ////    export interface Foo {
 ////        [|abc|]
 ////    }

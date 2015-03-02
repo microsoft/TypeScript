@@ -1,4 +1,4 @@
-﻿/// <reference path='fourslash.ts' />
+/// <reference path='fourslash.ts' />
 
 //// var /*valueDeclaration1*/name = "hello";
 //// var /*valueDeclaration2*/id = 100000;
