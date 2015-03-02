@@ -58,9 +58,10 @@ module ts {
     }
 
     export interface SourceFile {
-        version: string;
-        scriptSnapshot: IScriptSnapshot;
-        nameTable: Map<string>;
+        /* @internal */ version: string;
+        /* @internal */ scriptSnapshot: IScriptSnapshot;
+        /* @internal */ nameTable: Map<string>;
+
         getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];

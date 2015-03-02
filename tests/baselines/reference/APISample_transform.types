@@ -4992,17 +4992,6 @@ declare module "typescript" {
     interface SourceFile {
 >SourceFile : SourceFile
 
-        version: string;
->version : string
-
-        scriptSnapshot: IScriptSnapshot;
->scriptSnapshot : IScriptSnapshot
->IScriptSnapshot : IScriptSnapshot
-
-        nameTable: Map<string>;
->nameTable : Map<string>
->Map : Map<T>
-
         getNamedDeclarations(): Declaration[];
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
