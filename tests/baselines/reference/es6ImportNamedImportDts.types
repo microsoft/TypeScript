@@ -53,7 +53,7 @@ export var xxxx = new a();
 >a : typeof a
 
 import { a11 as b } from "server";
->a11 : unknown
+>a11 : typeof b
 >b : typeof b
 
 export var xxxx1 = new b();
@@ -63,7 +63,7 @@ export var xxxx1 = new b();
 
 import { x, a12 as y } from "server";
 >x : typeof x
->a12 : unknown
+>a12 : typeof y
 >y : typeof y
 
 export var xxxx2 = new x();
@@ -77,7 +77,7 @@ export var xxxx3 = new y();
 >y : typeof y
 
 import { x11 as z,  } from "server";
->x11 : unknown
+>x11 : typeof z
 >z : typeof z
 
 export var xxxx4 = new z();
@@ -108,9 +108,9 @@ export var xxxx7 = new x1();
 >x1 : typeof x1
 
 import { a111 as a11, x111 as x11 } from "server";
->a111 : unknown
+>a111 : typeof a11
 >a11 : typeof a11
->x111 : unknown
+>x111 : typeof x11
 >x11 : typeof x11
 
 export var xxxx8 = new a11();
@@ -132,7 +132,7 @@ export var z111 = new z1();
 >z1 : typeof z1
 
 import { z2 as z3 } from "server";
->z2 : unknown
+>z2 : typeof z3
 >z3 : typeof z3
 
 export var z2 = new z3(); // z2 shouldn't give redeclare error
@@ -145,6 +145,6 @@ import { aaaa } from "server";
 >aaaa : typeof aaaa
 
 import { aaaa1 as bbbb } from "server";
->aaaa1 : unknown
+>aaaa1 : typeof bbbb
 >bbbb : typeof bbbb
 

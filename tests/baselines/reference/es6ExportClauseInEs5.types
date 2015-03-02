@@ -22,12 +22,12 @@ export { c };
 >c : typeof c
 
 export { c as c2 };
->c : unknown
+>c : typeof c
 >c2 : typeof c
 
 export { i, m as instantiatedModule };
 >i : unknown
->m : unknown
+>m : typeof m
 >instantiatedModule : typeof m
 
 export { uninstantiated };

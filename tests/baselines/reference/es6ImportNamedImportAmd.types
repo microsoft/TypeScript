@@ -36,7 +36,7 @@ var xxxx = a;
 >a : number
 
 import { a as b } from "es6ImportNamedImportAmd_0";
->a : unknown
+>a : number
 >b : number
 
 var xxxx = b;
@@ -45,7 +45,7 @@ var xxxx = b;
 
 import { x, a as y } from "es6ImportNamedImportAmd_0";
 >x : number
->a : unknown
+>a : number
 >y : number
 
 var xxxx = x;
@@ -57,7 +57,7 @@ var xxxx = y;
 >y : number
 
 import { x as z,  } from "es6ImportNamedImportAmd_0";
->x : unknown
+>x : number
 >z : number
 
 var xxxx = z;
@@ -84,9 +84,9 @@ var xxxx = x1;
 >x1 : number
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
->a1 : unknown
+>a1 : number
 >a11 : number
->x1 : unknown
+>x1 : number
 >x11 : number
 
 var xxxx = a11;
@@ -105,7 +105,7 @@ var z111 = z1;
 >z1 : number
 
 import { z2 as z3 } from "es6ImportNamedImportAmd_0";
->z2 : unknown
+>z2 : number
 >z3 : number
 
 var z2 = z3; // z2 shouldn't give redeclare error
@@ -118,6 +118,6 @@ import { aaaa } from "es6ImportNamedImportAmd_0";
 
 // These are elided
 import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
->aaaa : unknown
+>aaaa : number
 >bbbb : number
 

@@ -24,12 +24,12 @@ export { c } from "server";
 >c : typeof c
 
 export { c as c2 } from "server";
->c : unknown
+>c : typeof c
 >c2 : typeof c
 
 export { i, m as instantiatedModule } from "server";
 >i : unknown
->m : unknown
+>m : typeof instantiatedModule
 >instantiatedModule : typeof instantiatedModule
 
 export { uninstantiated } from "server";

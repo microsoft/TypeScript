@@ -105,7 +105,7 @@ var z111 = z1;
 >z1 : number
 
 import { z2 as z3 } from "es6ImportNamedImportInEs5_0";
->z2 : unknown
+>z2 : number
 >z3 : number
 
 var z2 = z3; // z2 shouldn't give redeclare error
@@ -118,6 +118,6 @@ import { aaaa } from "es6ImportNamedImportInEs5_0";
 
 // These are elided
 import { aaaa as bbbb } from "es6ImportNamedImportInEs5_0";
->aaaa : unknown
+>aaaa : number
 >bbbb : number
 
