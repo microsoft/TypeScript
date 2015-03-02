@@ -863,11 +863,7 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ExportContainer {
-        exportStars?: ExportDeclaration[];  // List of 'export *' statements (initialized by binding)
-    }
-
-    export interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    export interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -912,7 +908,7 @@ module ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends Statement, ModuleElement {
+    export interface ExportDeclaration extends Declaration, ModuleElement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -932,7 +928,7 @@ module ts {
     export type ImportSpecifier = ImportOrExportSpecifier;
     export type ExportSpecifier = ImportOrExportSpecifier;
 
-    export interface ExportAssignment extends Statement, ModuleElement {
+    export interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
         expression: Expression;
     }
@@ -946,7 +942,7 @@ module ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration, ExportContainer {
+    export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
@@ -1191,7 +1187,7 @@ module ts {
     export interface EmitResolver {
         getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        getExportAssignmentName(node: SourceFile): string;
+        hasExportDefaultValue(node: SourceFile): boolean;
         isReferencedImportDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
@@ -1227,11 +1223,9 @@ module ts {
         Signature               = 0x00020000,  // Call, construct, or index signature
         TypeParameter           = 0x00040000,  // Type parameter
         TypeAlias               = 0x00080000,  // Type alias
-
-        // Export markers (see comment in declareModuleMember in binder)
-        ExportValue             = 0x00100000,  // Exported value marker
-        ExportType              = 0x00200000,  // Exported type marker
-        ExportNamespace         = 0x00400000,  // Exported namespace marker
+        ExportValue             = 0x00100000,  // Exported value marker (see comment in declareModuleMember in binder)
+        ExportType              = 0x00200000,  // Exported type marker (see comment in declareModuleMember in binder)
+        ExportNamespace         = 0x00400000,  // Exported namespace marker (see comment in declareModuleMember in binder)
         Import                  = 0x00800000,  // Import
         Instantiated            = 0x01000000,  // Instantiated symbol
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
@@ -1239,6 +1233,7 @@ module ts {
         Prototype               = 0x08000000,  // Prototype property (no source representation)
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
+        ExportStar              = 0x40000000,  // Export * declaration
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -1306,10 +1301,9 @@ module ts {
         declaredType?: Type;                // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        exportAssignmentChecked?: boolean;  // True if export assignment was checked
-        exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
         unionType?: UnionType;              // Containing union type for union property
         resolvedExports?: SymbolTable;      // Resolved exports of module
+        exportsChecked?: boolean;           // True if exports of external module have been checked
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }

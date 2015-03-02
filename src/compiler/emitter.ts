@@ -1580,6 +1580,7 @@ module ts {
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
             var exportSpecifiers: Map<ExportSpecifier[]>;
+            var exportDefault: ExportAssignment | ExportSpecifier;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -3446,7 +3447,7 @@ module ts {
             }
 
             function emitExportMemberAssignments(name: Identifier) {
-                if (exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportDefault && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     forEach(exportSpecifiers[name.text], specifier => {
                         writeLine();
                         emitStart(specifier.name);
@@ -4665,12 +4666,19 @@ module ts {
             function createExternalModuleInfo(sourceFile: SourceFile) {
                 externalImports = [];
                 exportSpecifiers = {};
+                exportDefault = undefined;
                 forEach(sourceFile.statements, node => {
                     if (node.kind === SyntaxKind.ExportDeclaration && !(<ExportDeclaration>node).moduleSpecifier) {
                         forEach((<ExportDeclaration>node).exportClause.elements, specifier => {
+                            if (specifier.name.text === "default") {
+                                exportDefault = exportDefault || specifier;
+                            }
                             var name = (specifier.propertyName || specifier.name).text;
                             (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                         });
+                    }
+                    else if (node.kind === SyntaxKind.ExportAssignment) {
+                        exportDefault = exportDefault || <ExportAssignment>node;
                     }
                     else {
                         var info = createExternalImportInfo(node);
@@ -4759,17 +4767,7 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                // TODO: Handle export default expressions
-                var exportName = resolver.getExportAssignmentName(node);
-                if (exportName) {
-                    writeLine();
-                    var exportAssignment = getFirstExportAssignment(node);
-                    emitStart(exportAssignment);
-                    write("return ");
-                    emit(exportAssignment.expression);
-                    write(";");
-                    emitEnd(exportAssignment);
-                }
+                emitExportDefault(node, /*emitAsReturn*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -4779,16 +4777,22 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                // TODO: Handle export default expressions
-                var exportName = resolver.getExportAssignmentName(node);
-                if (exportName) {
+                emitExportDefault(node, /*emitAsReturn*/ false);
+            }
+
+            function emitExportDefault(sourceFile: SourceFile, emitAsReturn: boolean) {
+                if (exportDefault && resolver.hasExportDefaultValue(sourceFile)) {
                     writeLine();
-                    var exportAssignment = getFirstExportAssignment(node);
-                    emitStart(exportAssignment);
-                    write("module.exports = ");
-                    emit(exportAssignment.expression);
+                    emitStart(exportDefault);
+                    write(emitAsReturn ? "return " : "module.exports = ");
+                    if (exportDefault.kind === SyntaxKind.ExportAssignment) {
+                        emit((<ExportAssignment>exportDefault).expression);
+                    }
+                    else {
+                        emit((<ExportSpecifier>exportDefault).propertyName);
+                    }
                     write(";");
-                    emitEnd(exportAssignment);
+                    emitEnd(exportDefault);
                 }
             }
 
@@ -4845,6 +4849,7 @@ module ts {
                 else {
                     externalImports = undefined;
                     exportSpecifiers = undefined;
+                    exportDefault = undefined;
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
                     emitTempDeclarations(/*newLine*/ true);

@@ -112,6 +112,10 @@ module ts {
                     return "__new";
                 case SyntaxKind.IndexSignature:
                     return "__index";
+                case SyntaxKind.ExportAssignment:
+                    return "default";
+                case SyntaxKind.ExportDeclaration:
+                    return "__export";
             }
         }
 
@@ -137,9 +141,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -310,13 +314,6 @@ module ts {
             }
         }
 
-        function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
-                ((<ExportContainer>container).exportStars || ((<ExportContainer>container).exportStars = [])).push(node);
-            }
-            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
-        }
-
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
@@ -478,9 +475,6 @@ module ts {
                 case SyntaxKind.ExportSpecifier:
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
                     break;
-                case SyntaxKind.ExportDeclaration:
-                    bindExportDeclaration(<ExportDeclaration>node);
-                    break;
                 case SyntaxKind.ImportClause:
                     if ((<ImportClause>node).name) {
                         bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
@@ -488,6 +482,22 @@ module ts {
                     else {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    if (!(<ExportDeclaration>node).exportClause) {
+                        // All export * declarations are collected in an __export symbol
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.ExportStar, 0);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
+                    }
+                    else {
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
