@@ -5514,7 +5514,7 @@ module ts {
                 var index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES6 ? getIteratedType(type, /*expressionForError*/ undefined) : undefined);
+                    || (languageVersion >= ScriptTarget.ES6 ? checkIteratedType(type, /*expressionForError*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -7024,7 +7024,7 @@ module ts {
             return true;
         }
 
-        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVarianleMessage: DiagnosticMessage): boolean {
+        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
             function findSymbol(n: Node): Symbol {
                 var symbol = getNodeLinks(n).resolvedSymbol;
                 // Because we got the symbol from the resolvedSymbol property, it might be of kind
@@ -7091,7 +7091,7 @@ module ts {
                 return false;
             }
             if (isConstVariableReference(n)) {
-                error(n, constantVarianleMessage);
+                error(n, constantVariableMessage);
                 return false;
             }
             return true;
@@ -7465,8 +7465,8 @@ module ts {
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 var offendingSymbolOperand =
                     someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
-                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
-                            undefined;
+                    someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                    undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
                     return false;
@@ -8812,15 +8812,17 @@ module ts {
             checkGrammarForInOrForOfStatement(node)
 
             // Check the LHS and RHS
-            // If decl: Check var decl, which will check the RHS
-            // If expr: Check LHS, check that it's a reference, and check that RHS is assignable to it, which will check RHS
+            // If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
+            // via getTypeForVariableDeclarationInForOfStatement.
+            // If the LHS is an expression, check the LHS, as a destructuring assignment or as a reference.
+            // Then check that the RHS is assignable to it.
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                 checkForInOrForOfVariableDeclaration(node);
             }
             else {
                 var varExpr = <Expression>node.initializer;
                 var rightType = checkExpression(node.expression);
-                var iteratedType = getIteratedType(rightType, node.expression);
+                var iteratedType = checkIteratedType(rightType, node.expression);
                 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -8831,10 +8833,11 @@ module ts {
                 }
                 else {
                     var leftType = checkExpression(varExpr);
-                    checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_of_statement, Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
+                    checkReferenceExpression(varExpr, /*invalidReferenceMessage*/ Diagnostics.Invalid_left_hand_side_in_for_of_statement,
+                        /*constantVariableMessage*/ Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
                 
                     // iteratedType will be undefined if the rightType was missing properties/signatures
-                    // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
+                    // required to get its iteratedType (like [Symbol.iterator] or next). This may be
                     // because we accessed properties from anyType, or it may have led to an error inside
                     // getIteratedType.
                     if (iteratedType) {
@@ -8894,6 +8897,7 @@ module ts {
 
         function checkForInOrForOfVariableDeclaration(iterationStatement: ForInStatement | ForOfStatement): void {
             var variableDeclarationList = <VariableDeclarationList>iterationStatement.initializer;
+            // checkGrammarForInOrForOfStatement will check that there is exactly one declaration.
             if (variableDeclarationList.declarations.length >= 1) {
                 var decl = variableDeclarationList.declarations[0];
                 checkVariableDeclaration(decl);
@@ -8907,28 +8911,31 @@ module ts {
             }
 
             // iteratedType will be undefined if the for-of expression type was missing properties/signatures
-            // required to get it's iteratedType (like [Symbol.iterator] or next). This may be
+            // required to get its iteratedType (like [Symbol.iterator] or next). This may be
             // because we accessed properties from anyType, or it may have led to an error inside
             // getIteratedType.
-            return getIteratedType(getTypeOfExpression(forOfStatement.expression), forOfStatement.expression) || anyType;
+            var expressionType = getTypeOfExpression(forOfStatement.expression);
+            return checkIteratedType(expressionType, forOfStatement.expression) || anyType;
         }
 
         /**
          * When expressionForError is undefined, it means we should not report any errors.
          */
-        function getIteratedType(iterable: Type, expressionForError: Expression): Type {
+        function checkIteratedType(iterable: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
-            var iteratedType = getIteratedTypeSubroutine(iterable, expressionForError);
+            var iteratedType = getIteratedType(iterable, expressionForError);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (expressionForError && iteratedType) {
-                var completeIterableType = globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [iteratedType]) : emptyObjectType;
+                var completeIterableType = globalIterableType !== emptyObjectType
+                    ? createTypeReference(<GenericType>globalIterableType, [iteratedType])
+                    : emptyObjectType;
                 checkTypeAssignableTo(iterable, completeIterableType, expressionForError);
             }
 
             return iteratedType;
             
-            function getIteratedTypeSubroutine(iterable: Type, expressionForError: Expression) {
+            function getIteratedType(iterable: Type, expressionForError: Expression) {
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
                 // must have the following structure (annotated with the names of the variables below):
                 //
@@ -8998,7 +9005,7 @@ module ts {
                 var iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
                 if (!iteratorNextValue) {
                     if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_object_returned_by_the_next_method_of_the_iterator_must_have_a_value_property);
+                        error(expressionForError, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
                     }
                     return undefined;
                 }
@@ -11671,17 +11678,17 @@ module ts {
                     }
                     if (node.initializer) {
                         // Error on equals token which immediate precedes the initializer
-                        return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                        var equalsTokenLength = "=".length;
+                        return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - equalsTokenLength,
+                            equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                     }
                 }
-                else {
-                    if (!node.initializer) {
-                        if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
-                            return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
-                        }
-                        if (isConst(node)) {
-                            return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
-                        }
+                else if (!node.initializer) {
+                    if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
+                        return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+                    }
+                    if (isConst(node)) {
+                        return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
             }

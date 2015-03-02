@@ -1324,7 +1324,7 @@
         "category": "Error",
         "code": 2489
     },
-    "The object returned by the next method of the iterator must have a 'value' property.": {
+    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
         "category": "Error",
         "code": 2490
     },
