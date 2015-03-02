@@ -5217,7 +5217,7 @@ module ts {
             return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOnSameLine);
         }
 
-        function isDeclarationStart(): boolean {
+        function isDeclarationStart(followsModifier?: boolean): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.ConstKeyword:
@@ -5250,7 +5250,7 @@ module ts {
                 case SyntaxKind.AtToken:
                     // a lookahead here is too costly, and decorators are only valid on a declaration. 
                     // We will assume we are parsing a declaration here and report an error later
-                    return true;
+                    return !followsModifier;
             }
         }
 
@@ -5277,12 +5277,12 @@ module ts {
         function nextTokenCanFollowExportKeyword() {
             nextToken();
             return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+                token === SyntaxKind.OpenBraceToken || isDeclarationStart(/*followsModifier*/ true);
         }
 
         function nextTokenIsDeclarationStart() {
             nextToken();
-            return isDeclarationStart();
+            return isDeclarationStart(/*followsModifier*/ true);
         }
 
         function nextTokenIsAsKeyword() {
