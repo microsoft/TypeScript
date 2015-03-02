@@ -1,4 +1,4 @@
-﻿/// <reference path='fourslash.ts' />
+/// <reference path='fourslash.ts' />
 
 //// var name1 = undefined, id1 = undefined;
 //// var /*obj1*/obj1 = {/*name1*/name1, /*id1*/id1};
