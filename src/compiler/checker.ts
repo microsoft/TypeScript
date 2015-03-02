@@ -8798,7 +8798,7 @@ module ts {
                 if (!isTypeAssignableTo(globalMemberDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalMemberDecoratorFunctionType)) {
                     flags &= ~DecoratorFlags.MemberDecoratorFunctionValidTargetsMask;
                 }
-                if (isTypeAssignableTo(globalParameterDecoratorFunctionType, widenedType) || isTypeAssignableTo(exprType, globalParameterDecoratorFunctionType)) {
+                if (!isTypeAssignableTo(globalParameterDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalParameterDecoratorFunctionType)) {
                     flags &= ~DecoratorFlags.ParameterDecoratorFunctionValidTargetsMask;
                 }
             }
