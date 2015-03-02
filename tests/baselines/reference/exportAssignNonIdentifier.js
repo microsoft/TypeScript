@@ -39,7 +39,6 @@ var Foo3 = (function () {
     return Foo3;
 })();
 ; // Error, not an expression
-module.exports = ;
 //// [foo4.js]
 module.exports = true;
 //// [foo5.js]

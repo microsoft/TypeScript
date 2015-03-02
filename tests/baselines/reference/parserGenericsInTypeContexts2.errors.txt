@@ -12,9 +12,9 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (10 errors) ====
     class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
-                    ~~~~~~~~~~~~~~~~
+                    ~
 !!! error TS2304: Cannot find name 'A'.
-                                                ~~~~~~~~~~~~~~~~
+                                                ~
 !!! error TS2304: Cannot find name 'B'.
     }
     
@@ -22,26 +22,26 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
             ~~~~~~~~~~~~~~~~
 !!! error TS2315: Type 'C' is not generic.
     var v2: D<X<T>, Y<Z<T>>> = null;
-            ~~~~~~~~~~~~~~~~
+            ~
 !!! error TS2304: Cannot find name 'D'.
     var v3: E.F<X<T>, Y<Z<T>>>;
-            ~~~~~~~~~~~~~~~~~~
+            ~
 !!! error TS2304: Cannot find name 'E'.
     var v4: G.H.I<X<T>, Y<Z<T>>>;
-            ~~~~~~~~~~~~~~~~~~~~
+            ~
 !!! error TS2304: Cannot find name 'G'.
     var v6: K<X<T>, Y<Z<T>>>[];
-            ~~~~~~~~~~~~~~~~
+            ~
 !!! error TS2304: Cannot find name 'K'.
     
     
     function f1(a: E<X<T>, Y<Z<T>>>) {
-                   ~~~~~~~~~~~~~~~~
+                   ~
 !!! error TS2304: Cannot find name 'E'.
     }
     
     function f2(): F<X<T>, Y<Z<T>>> {
-                   ~~~~~~~~~~~~~~~~
+                   ~
 !!! error TS2304: Cannot find name 'F'.
                    ~~~~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.

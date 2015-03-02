@@ -743,10 +743,7 @@ declare module "typescript" {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    interface ExportContainer {
-        exportStars?: ExportDeclaration[];
-    }
-    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -771,7 +768,7 @@ declare module "typescript" {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface ExportDeclaration extends Statement, ModuleElement {
+    interface ExportDeclaration extends Declaration, ModuleElement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -786,7 +783,7 @@ declare module "typescript" {
     }
     type ImportSpecifier = ImportOrExportSpecifier;
     type ExportSpecifier = ImportOrExportSpecifier;
-    interface ExportAssignment extends Statement, ModuleElement {
+    interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
         expression: Expression;
     }
@@ -796,7 +793,7 @@ declare module "typescript" {
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
-    interface SourceFile extends Declaration, ExportContainer {
+    interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
         fileName: string;
@@ -960,7 +957,7 @@ declare module "typescript" {
     interface EmitResolver {
         getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        getExportAssignmentName(node: SourceFile): string;
+        hasExportDefaultValue(node: SourceFile): boolean;
         isReferencedImportDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
@@ -1004,6 +1001,7 @@ declare module "typescript" {
         Prototype = 134217728,
         UnionProperty = 268435456,
         Optional = 536870912,
+        ExportStar = 1073741824,
         Enum = 384,
         Variable = 3,
         Value = 107455,
@@ -1057,10 +1055,9 @@ declare module "typescript" {
         declaredType?: Type;
         mapper?: TypeMapper;
         referenced?: boolean;
-        exportAssignmentChecked?: boolean;
-        exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
         resolvedExports?: SymbolTable;
+        exportsChecked?: boolean;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }

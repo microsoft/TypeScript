@@ -2306,18 +2306,10 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >EnumMember : EnumMember
     }
-    interface ExportContainer {
->ExportContainer : ExportContainer
-
-        exportStars?: ExportDeclaration[];
->exportStars : ExportDeclaration[]
->ExportDeclaration : ExportDeclaration
-    }
-    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    interface ModuleDeclaration extends Declaration, ModuleElement {
 >ModuleDeclaration : ModuleDeclaration
 >Declaration : Declaration
 >ModuleElement : ModuleElement
->ExportContainer : ExportContainer
 
         name: Identifier | LiteralExpression;
 >name : Identifier | LiteralExpression
@@ -2395,9 +2387,9 @@ declare module "typescript" {
 >name : Identifier
 >Identifier : Identifier
     }
-    interface ExportDeclaration extends Statement, ModuleElement {
+    interface ExportDeclaration extends Declaration, ModuleElement {
 >ExportDeclaration : ExportDeclaration
->Statement : Statement
+>Declaration : Declaration
 >ModuleElement : ModuleElement
 
         exportClause?: NamedExports;
@@ -2445,9 +2437,9 @@ declare module "typescript" {
 >ExportSpecifier : ImportOrExportSpecifier
 >ImportOrExportSpecifier : ImportOrExportSpecifier
 
-    interface ExportAssignment extends Statement, ModuleElement {
+    interface ExportAssignment extends Declaration, ModuleElement {
 >ExportAssignment : ExportAssignment
->Statement : Statement
+>Declaration : Declaration
 >ModuleElement : ModuleElement
 
         isExportEquals?: boolean;
@@ -2471,10 +2463,9 @@ declare module "typescript" {
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
     }
-    interface SourceFile extends Declaration, ExportContainer {
+    interface SourceFile extends Declaration {
 >SourceFile : SourceFile
 >Declaration : Declaration
->ExportContainer : ExportContainer
 
         statements: NodeArray<ModuleElement>;
 >statements : NodeArray<ModuleElement>
@@ -3110,8 +3101,8 @@ declare module "typescript" {
 >EmitResolver : EmitResolver
 
         getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
->getGeneratedNameForNode : (node: EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration) => string
->node : EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration
+>getGeneratedNameForNode : (node: EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration) => string
+>node : EnumDeclaration | ModuleDeclaration | ImportDeclaration | ExportDeclaration
 >ModuleDeclaration : ModuleDeclaration
 >EnumDeclaration : EnumDeclaration
 >ImportDeclaration : ImportDeclaration
@@ -3122,8 +3113,8 @@ declare module "typescript" {
 >node : Identifier
 >Identifier : Identifier
 
-        getExportAssignmentName(node: SourceFile): string;
->getExportAssignmentName : (node: SourceFile) => string
+        hasExportDefaultValue(node: SourceFile): boolean;
+>hasExportDefaultValue : (node: SourceFile) => boolean
 >node : SourceFile
 >SourceFile : SourceFile
 
@@ -3300,6 +3291,9 @@ declare module "typescript" {
         Optional = 536870912,
 >Optional : SymbolFlags
 
+        ExportStar = 1073741824,
+>ExportStar : SymbolFlags
+
         Enum = 384,
 >Enum : SymbolFlags
 
@@ -3464,13 +3458,6 @@ declare module "typescript" {
         referenced?: boolean;
 >referenced : boolean
 
-        exportAssignmentChecked?: boolean;
->exportAssignmentChecked : boolean
-
-        exportAssignmentSymbol?: Symbol;
->exportAssignmentSymbol : Symbol
->Symbol : Symbol
-
         unionType?: UnionType;
 >unionType : UnionType
 >UnionType : UnionType
@@ -3478,6 +3465,9 @@ declare module "typescript" {
         resolvedExports?: SymbolTable;
 >resolvedExports : SymbolTable
 >SymbolTable : SymbolTable
+
+        exportsChecked?: boolean;
+>exportsChecked : boolean
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol

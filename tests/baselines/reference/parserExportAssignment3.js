@@ -2,4 +2,3 @@
 export =
 
 //// [parserExportAssignment3.js]
-module.exports = ;

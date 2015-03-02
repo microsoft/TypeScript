@@ -20,7 +20,7 @@ tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedMo
     
     var m = M2;
     var p: m.Point; // Error
-           ~~~~~~~
+           ~
 !!! error TS2304: Cannot find name 'm'.
     
     
