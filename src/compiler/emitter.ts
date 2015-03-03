@@ -3825,6 +3825,15 @@ module ts {
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
+            function emitDeclarationName(node: Declaration) {
+                if (node.name) {
+                    emitNode(node.name);
+                }
+                else {
+                    write(resolver.getGeneratedNameForNode(node));
+                }
+            }
+
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3842,10 +3851,10 @@ module ts {
                 }
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                 }
                 emitSignatureAndBody(node);
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -3917,7 +3926,7 @@ module ts {
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -4125,7 +4134,7 @@ module ts {
                         emitStart(member);
                         emitStart((<PropertyDeclaration>member).name);
                         if (staticFlag) {
-                            emitNode(node.name);
+                            emitDeclarationName(node);
                         }
                         else {
                             write("this");
@@ -4152,7 +4161,7 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitNode(node.name); // TODO (shkamat,drosen): comment for why emitNode instead of emit.
+                        emitDeclarationName(node);
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
@@ -4174,7 +4183,7 @@ module ts {
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitNode(node.name);
+                            emitDeclarationName(node);
                             if (!(member.flags & NodeFlags.Static)) {
                                 write(".prototype");
                             }
@@ -4221,7 +4230,7 @@ module ts {
 
             function emitClassDeclaration(node: ClassDeclaration) {
                 write("var ");
-                emitNode(node.name);
+                emitDeclarationName(node);
                 write(" = (function (");
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
@@ -4234,7 +4243,7 @@ module ts {
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -4245,7 +4254,7 @@ module ts {
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                 });
                 write(";");
                 decreaseIndent();
@@ -4264,7 +4273,7 @@ module ts {
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -4292,7 +4301,7 @@ module ts {
                     }
                     emitStart(<Node>ctor || node);
                     write("function ");
-                    emitNode(node.name);
+                    emitDeclarationName(node);
                     emitSignatureParameters(ctor);
                     write(" {");
                     scopeEmitStart(node, "constructor");
@@ -4796,7 +4805,7 @@ module ts {
                         emit((<ExportSpecifier>exportDefault).propertyName);
                     }
                     else {
-                        emit((<Declaration>exportDefault).name);
+                        emitDeclarationName(<Declaration>exportDefault);
                     }
                     write(";");
                     emitEnd(exportDefault);
