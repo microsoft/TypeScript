@@ -75,40 +75,41 @@ fn5 `${ (n) => n.substr(0) }`;
 
 //// [taggedTemplateStringsWithOverloadResolution3.js]
 function fn1() { return null; }
-var s = fn1 "" + undefined;
+var s = (_a = ["", ""], _a.raw = ["", ""], fn1(_a, undefined));
 // No candidate overloads found
-fn1 "" + {}; // Error
+(_b = ["", ""], _b.raw = ["", ""], fn1(_b, {})); // Error
 function fn2() { return undefined; }
-var d1 = fn2 "" + 0 + undefined; // contextually typed
-var d2 = fn2 "" + 0 + undefined; // any
+var d1 = (_c = ["", "", ""], _c.raw = ["", "", ""], fn2(_c, 0, undefined)); // contextually typed
+var d2 = (_d = ["", "", ""], _d.raw = ["", "", ""], fn2(_d, 0, undefined)); // any
 d1.foo(); // error
 d2(); // no error (typed as any)
 // Generic and non-generic overload where generic overload is the only candidate
-fn2 "" + 0 + ''; // OK
+(_e = ["", "", ""], _e.raw = ["", "", ""], fn2(_e, 0, '')); // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
-fn2 "" + '' + 0; // OK
+(_f = ["", "", ""], _f.raw = ["", "", ""], fn2(_f, '', 0)); // OK
 function fn3() { return null; }
-var s = fn3 "" + 3;
-var s = fn3 "" + '' + 3 + '';
-var n = fn3 "" + 5 + 5 + 5;
+var s = (_g = ["", ""], _g.raw = ["", ""], fn3(_g, 3));
+var s = (_h = ["", "", "", ""], _h.raw = ["", "", "", ""], fn3(_h, '', 3, ''));
+var n = (_j = ["", "", "", ""], _j.raw = ["", "", "", ""], fn3(_j, 5, 5, 5));
 var n;
 // Generic overloads with differing arity tagging with arguments matching each overload type parameter count
-var s = fn3 "" + 4;
-var s = fn3 "" + '' + '' + '';
-var n = fn3 "" + '' + '' + 3;
+var s = (_k = ["", ""], _k.raw = ["", ""], fn3(_k, 4));
+var s = (_l = ["", "", "", ""], _l.raw = ["", "", "", ""], fn3(_l, '', '', ''));
+var n = (_m = ["", "", "", ""], _m.raw = ["", "", "", ""], fn3(_m, '', '', 3));
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
-fn3 ""; // Error
+(_n = [""], _n.raw = [""], fn3(_n)); // Error
 function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
-fn4 "" + '' + 3;
-fn4 "" + 3 + '';
-fn4 "" + 3 + undefined;
-fn4 "" + '' + null;
+(_o = ["", "", ""], _o.raw = ["", "", ""], fn4(_o, '', 3));
+(_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, 3, ''));
+(_q = ["", "", ""], _q.raw = ["", "", ""], fn4(_q, 3, undefined));
+(_r = ["", "", ""], _r.raw = ["", "", ""], fn4(_r, '', null));
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
-fn4 "" + null + null; // Error
+(_s = ["", "", ""], _s.raw = ["", "", ""], fn4(_s, null, null)); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
-fn4 "" + true + null;
-fn4 "" + null + true;
+(_t = ["", "", ""], _t.raw = ["", "", ""], fn4(_t, true, null));
+(_u = ["", "", ""], _u.raw = ["", "", ""], fn4(_u, null, true));
 function fn5() { return undefined; }
-fn5 "" + function (n) { return n.toFixed(); }; // will error; 'n' should have type 'string'.
-fn5 "" + function (n) { return n.substr(0); };
+(_v = ["", ""], _v.raw = ["", ""], fn5(_v, function (n) { return n.toFixed(); })); // will error; 'n' should have type 'string'.
+(_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) { return n.substr(0); }));
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w;

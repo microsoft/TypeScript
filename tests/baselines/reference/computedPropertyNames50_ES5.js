@@ -33,19 +33,23 @@ var x = (_a = {
             return 10;
         }
     }
-}, _a.p1 =
-    10, _a.foo = Object.defineProperty({ get: function () {
-        if (1 == 1) {
+},
+    _a.p1 = 10,
+    _a.foo = Object.defineProperty({ get: function () {
+            if (1 == 1) {
+                return 10;
+            }
+        }, enumerable: true, configurable: true }),
+    _a[1 + 1] = Object.defineProperty({ get: function () {
+            throw 10;
+        }, enumerable: true, configurable: true }),
+    _a[1 + 1] = Object.defineProperty({ set: function () {
+            // just throw
+            throw 10;
+        }, enumerable: true, configurable: true }),
+    _a[1 + 1] = Object.defineProperty({ get: function () {
             return 10;
-        }
-    }, enumerable: true, configurable: true }), _a[1 + 1] = Object.defineProperty({ get: function () {
-        throw 10;
-    }, enumerable: true, configurable: true }), _a[1 + 1] = Object.defineProperty({ set: function () {
-        // just throw
-        throw 10;
-    }, enumerable: true, configurable: true }), _a[1 + 1] = Object.defineProperty({ get: function () {
-        return 10;
-    }, enumerable: true, configurable: true }), _a.p2 =
-    20,
+        }, enumerable: true, configurable: true }),
+    _a.p2 = 20,
     _a);
 var _a;

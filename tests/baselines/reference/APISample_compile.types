@@ -501,71 +501,71 @@ declare module "typescript" {
         AsKeyword = 101,
 >AsKeyword : SyntaxKind
 
-        FromKeyword = 102,
->FromKeyword : SyntaxKind
-
-        ImplementsKeyword = 103,
+        ImplementsKeyword = 102,
 >ImplementsKeyword : SyntaxKind
 
-        InterfaceKeyword = 104,
+        InterfaceKeyword = 103,
 >InterfaceKeyword : SyntaxKind
 
-        LetKeyword = 105,
+        LetKeyword = 104,
 >LetKeyword : SyntaxKind
 
-        PackageKeyword = 106,
+        PackageKeyword = 105,
 >PackageKeyword : SyntaxKind
 
-        PrivateKeyword = 107,
+        PrivateKeyword = 106,
 >PrivateKeyword : SyntaxKind
 
-        ProtectedKeyword = 108,
+        ProtectedKeyword = 107,
 >ProtectedKeyword : SyntaxKind
 
-        PublicKeyword = 109,
+        PublicKeyword = 108,
 >PublicKeyword : SyntaxKind
 
-        StaticKeyword = 110,
+        StaticKeyword = 109,
 >StaticKeyword : SyntaxKind
 
-        YieldKeyword = 111,
+        YieldKeyword = 110,
 >YieldKeyword : SyntaxKind
 
-        AnyKeyword = 112,
+        AnyKeyword = 111,
 >AnyKeyword : SyntaxKind
 
-        BooleanKeyword = 113,
+        BooleanKeyword = 112,
 >BooleanKeyword : SyntaxKind
 
-        ConstructorKeyword = 114,
+        ConstructorKeyword = 113,
 >ConstructorKeyword : SyntaxKind
 
-        DeclareKeyword = 115,
+        DeclareKeyword = 114,
 >DeclareKeyword : SyntaxKind
 
-        GetKeyword = 116,
+        GetKeyword = 115,
 >GetKeyword : SyntaxKind
 
-        ModuleKeyword = 117,
+        ModuleKeyword = 116,
 >ModuleKeyword : SyntaxKind
 
-        RequireKeyword = 118,
+        RequireKeyword = 117,
 >RequireKeyword : SyntaxKind
 
-        NumberKeyword = 119,
+        NumberKeyword = 118,
 >NumberKeyword : SyntaxKind
 
-        SetKeyword = 120,
+        SetKeyword = 119,
 >SetKeyword : SyntaxKind
 
-        StringKeyword = 121,
+        StringKeyword = 120,
 >StringKeyword : SyntaxKind
 
-        SymbolKeyword = 122,
+        SymbolKeyword = 121,
 >SymbolKeyword : SyntaxKind
 
-        TypeKeyword = 123,
+        TypeKeyword = 122,
 >TypeKeyword : SyntaxKind
+
+        FromKeyword = 123,
+>FromKeyword : SyntaxKind
 
         OfKeyword = 124,
 >OfKeyword : SyntaxKind
@@ -882,10 +882,10 @@ declare module "typescript" {
         LastKeyword = 124,
 >LastKeyword : SyntaxKind
 
-        FirstFutureReservedWord = 103,
+        FirstFutureReservedWord = 102,
 >FirstFutureReservedWord : SyntaxKind
 
-        LastFutureReservedWord = 111,
+        LastFutureReservedWord = 110,
 >LastFutureReservedWord : SyntaxKind
 
         FirstTypeNode = 139,
@@ -2030,17 +2030,13 @@ declare module "typescript" {
 >finallyBlock : Block
 >Block : Block
     }
-    interface CatchClause extends Declaration {
+    interface CatchClause extends Node {
 >CatchClause : CatchClause
->Declaration : Declaration
+>Node : Node
 
-        name: Identifier;
->name : Identifier
->Identifier : Identifier
-
-        type?: TypeNode;
->type : TypeNode
->TypeNode : TypeNode
+        variableDeclaration: VariableDeclaration;
+>variableDeclaration : VariableDeclaration
+>VariableDeclaration : VariableDeclaration
 
         block: Block;
 >block : Block
@@ -3063,6 +3059,11 @@ declare module "typescript" {
 >location : Node
 >Node : Node
 >name : string
+
+        getBlockScopedVariableId(node: Identifier): number;
+>getBlockScopedVariableId : (node: Identifier) => number
+>node : Identifier
+>Identifier : Identifier
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
@@ -3374,6 +3375,9 @@ declare module "typescript" {
 
         EnumValuesComputed = 128,
 >EnumValuesComputed : NodeCheckFlags
+
+        BlockScopedBindingInLoop = 256,
+>BlockScopedBindingInLoop : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks
@@ -4892,17 +4896,6 @@ declare module "typescript" {
     interface SourceFile {
 >SourceFile : SourceFile
 
-        version: string;
->version : string
-
-        scriptSnapshot: IScriptSnapshot;
->scriptSnapshot : IScriptSnapshot
->IScriptSnapshot : IScriptSnapshot
-
-        nameTable: Map<string>;
->nameTable : Map<string>
->Map : Map<T>
-
         getNamedDeclarations(): Declaration[];
 >getNamedDeclarations : () => Declaration[]
 >Declaration : Declaration
@@ -5853,36 +5846,24 @@ declare module "typescript" {
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
-          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
-          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
-          * registry originally.
-          *
-          * @param sourceFile The original sourceFile object to update
           * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file
-          * was not found in the registry and a new one was created.
+          * @param scriptSnapshot Text of the file.
+          * @param version Current version of the file.
           */
-        updateDocument(sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile;
->updateDocument : (sourceFile: SourceFile, fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange) => SourceFile
->sourceFile : SourceFile
->SourceFile : SourceFile
+        updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+>updateDocument : (fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string) => SourceFile
 >fileName : string
 >compilationSettings : CompilerOptions
 >CompilerOptions : CompilerOptions
 >scriptSnapshot : IScriptSnapshot
 >IScriptSnapshot : IScriptSnapshot
 >version : string
->textChangeRange : TextChangeRange
->TextChangeRange : TextChangeRange
 >SourceFile : SourceFile
 
         /**

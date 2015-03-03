@@ -3,6 +3,7 @@
 
 module ts {
     /* @internal */ export var emitTime = 0;
+    /* @internal */ export var ioReadTime = 0;
 
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
@@ -19,7 +20,9 @@ module ts {
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
+                var start = new Date().getTime();
                 var text = sys.readFile(fileName, options.charset);
+                ioReadTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {

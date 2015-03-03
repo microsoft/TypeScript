@@ -4,7 +4,7 @@ var obj = {
 }
 
 //// [computedPropertyNames20_ES5.js]
-var obj = (_a = {}, _a[this.bar] =
-    0,
+var obj = (_a = {},
+    _a[this.bar] = 0,
     _a);
 var _a;
