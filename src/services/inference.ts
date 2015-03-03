@@ -391,7 +391,15 @@ module ts {
                 Debug.assert(!contains(newUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");
             }
 
+            function isJavascriptFile(sourceFile: SourceFile) {
+                return fileExtensionIs(sourceFile.fileName, ".js");
+            }
+
             function onSourceFileAdded(sourceFile: SourceFile) {
+                if (!isJavascriptFile(sourceFile)) {
+                    return;
+                }
+
                 assertOnlyOperationOnThisFile(sourceFile);
 
                 if (sourceFile.locals) {
@@ -432,6 +440,10 @@ module ts {
             }
 
             function onSourceFileRemoved(sourceFile: SourceFile) {
+                if (!isJavascriptFile(sourceFile)) {
+                    return;
+                }
+
                 assertOnlyOperationOnThisFile(sourceFile);
 
                 // Put the file in the removed list so we throw away all references to symbols
@@ -445,6 +457,11 @@ module ts {
             }
 
             function onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile) {
+                Debug.assert(oldFile.fileName === newFile.fileName);
+                if (!isJavascriptFile(oldFile)) {
+                    return;
+                }
+
                 assertOnlyOperationOnThisFile(oldFile);
                 assertOnlyOperationOnThisFile(newFile);
 
