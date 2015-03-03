@@ -1,4 +1,4 @@
-tests/cases/compiler/downlevelLetConst17.ts(66,1): error TS9003: 'for...of' statements are not currently supported.
+tests/cases/compiler/downlevelLetConst17.ts(66,1): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
 
 
 ==== tests/cases/compiler/downlevelLetConst17.ts (1 errors) ====
@@ -69,6 +69,6 @@ tests/cases/compiler/downlevelLetConst17.ts(66,1): error TS9003: 'for...of' stat
     // TODO: update once for-of statements are supported downlevel
     for (const x of []) {
     ~~~
-!!! error TS9003: 'for...of' statements are not currently supported.
+!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
         use(x);
     }

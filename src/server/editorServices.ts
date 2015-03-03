@@ -1259,7 +1259,7 @@ module ts.server {
 
         getText(rangeStart: number, rangeLength: number) {
             var accum = "";
-            if (rangeLength > 0) {
+            if ((rangeLength > 0) && (rangeStart < this.root.charCount())) {
                 this.walk(rangeStart, rangeLength, {
                     goSubtree: true,
                     done: false,
@@ -1322,14 +1322,14 @@ module ts.server {
                 }
                 else if (pos >= this.root.charCount()) {
                     // insert at end
-                    var endString = this.getText(pos - 1, 1);
+                    pos = this.root.charCount() - 1;
+                    var endString = this.getText(pos, 1);
                     if (newText) {
                         newText = endString + newText;
                     }
                     else {
                         newText = endString;
                     }
-                    pos = pos - 1;
                     deleteLength = 0;
                     walker.suppressTrailingText = true;
                 }
