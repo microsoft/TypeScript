@@ -2214,14 +2214,14 @@ module ts {
                     return getQuotedEscapedLiteralText('"', node.text, '"');
                 }
                 
-                // If we don't need to downlevel, and we can reach the original source text using
+                // If we don't need to downlevel and we can reach the original source text using
                 // the node's parent reference, then simply get the text as it was originally written.
                 if (node.parent) {
                     return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 }
                 
-                // If we can't reach the original source text, use the canonical form of it's a number,
-                // or a escaped quoted form of the original text if it's string-like.
+                // If we can't reach the original source text, use the canonical form if it's a number,
+                // or an escaped quoted form of the original text if it's string-like.
                 switch (node.kind) {
                     case SyntaxKind.StringLiteral:
                         return getQuotedEscapedLiteralText('"', node.text, '"');
