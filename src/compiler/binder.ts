@@ -67,6 +67,7 @@ module ts {
         var addDeclarationToSymbol = createNodeMap
             ? addDeclarationToSymbolAndNodeMap
             : addDeclarationToSymbolWorker;
+        var universalFlags = fileExtensionIs(file.fileName, ".js") ? SymbolFlags.JavascriptSymbol : 0;
 
         if (!file.locals) {
             file.locals = {};
@@ -79,7 +80,7 @@ module ts {
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
-            return new Symbol(flags, name);
+            return new Symbol(flags | universalFlags, name);
         }
 
         function setBlockScopeContainer(node: Node, cleanLocals: boolean) {

@@ -3254,6 +3254,9 @@ declare module "typescript" {
         Optional = 536870912,
 >Optional : SymbolFlags
 
+        JavascriptSymbol = 1073741824,
+>JavascriptSymbol : SymbolFlags
+
         Enum = 384,
 >Enum : SymbolFlags
 

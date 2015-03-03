@@ -1244,6 +1244,7 @@ module ts {
         Prototype               = 0x08000000,  // Prototype property (no source representation)
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
+        JavascriptSymbol        = 0x40000000,  // Symbol declared in a javascript file.
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
