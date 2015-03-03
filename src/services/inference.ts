@@ -213,37 +213,43 @@ module ts {
             }
 
             function addSymbolReference(symbol: Symbol, referenceNode: Node) {
-                if (symbol && symbol.valueDeclaration) {
-                    var declarationNode = symbol.valueDeclaration;
+                // Only record references to JavaScript symbols.
+                var isJavaScriptDeclaration = symbol && symbol.valueDeclaration && symbol.flags & SymbolFlags.JavascriptSymbol;
+                var declarationNode = isJavaScriptDeclaration ? symbol.valueDeclaration : undefined;
+                
+                if (partialResolve) {
+                    // this node may have previously referenced some other symbol.  Remove this
+                    // node from that symbol's reference set.  We don't need to do this if this
+                    // is a full resolve because then the node could never be in any reference
+                    // list already.
+                    //
+                    // Note: we do this even if we are now resolving to a TypeScript declaration. 
+                    // That's because we still want to remove any old references if we previously
+                    // resolved to a JavaScript symbol but now no longer aren't.
+                    removeExistingReferences(referenceNode, declarationNode);
+                }
 
-                    if (partialResolve) {
-                        // this node may have previously referenced some other symbol.  Remove this
-                        // node from that symbol's reference set.  We don't need to do this if this
-                        // is a full resolve because then the node could never be in any reference
-                        // list already.
-                        removeExistingReferences(referenceNode, declarationNode);
-                    }
-
-                    var declarationNodeId = getNodeId(declarationNode);
-
-                    // Also, add a link from the reference node to the symbol's node.
+                if (isJavaScriptDeclaration) {
+                    // First, add a link from the reference node to the symbol's declaration node.
                     referenceToDeclarationMap_set(referenceToDeclaration, referenceNode, declarationNode);
 
-                    // Add a link from the symbol's node to the reference node.
+                    // Add a link from the symbol's declaration node to the reference node.
                     var referenceNodes = declarationToReferencesMap_getOrCreate(declarationToReferences, declarationNode);
                     references_add(referenceNodes, referenceNode);
 
                     // Mark that this file is referenced by this symbol.
+                    var declarationNodeId = getNodeId(declarationNode);
                     var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = {});
                     filesWithReferences[fileName] = true;
                 }
             }
 
             function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
-                var referenceNodeId = getNodeId(referenceNode);
                 var previousDeclarationNode = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode);
+
                 if (previousDeclarationNode !== declarationNode) {
                     var references = declarationToReferencesMap_get(declarationToReferences, previousDeclarationNode);
+
                     if (references) {
                         references_delete(references, referenceNode);
 
@@ -251,6 +257,7 @@ module ts {
                         // file, then mark that appropriately.
                         if (references_isEmpty(references)) {
                             var fileWithReferences = declarationToFilesWithReferences[getNodeId(previousDeclarationNode)];
+
                             if (fileWithReferences) {
                                 delete fileWithReferences[fileName];
                             }
