@@ -88,9 +88,42 @@ module ts {
         return true;
     }
 
-    //interface References {
-    //    [fileName: string]: Set<Node>;
-    //}
+    interface StringSet {
+        _stringSetBrand: any;
+    }
+
+    function createStringSet(): StringSet {
+        return <StringSet>{};
+    }
+
+    function stringSet_add(set: StringSet, value: string): void {
+        var map = <Map<boolean>><any>set;
+        map[value] = true;
+    }
+
+    function stringSet_delete(set: StringSet, value: string): void {
+        var map = <Map<boolean>><any>set;
+        delete map[value];
+    }
+
+    function stringSet_contains(set: StringSet, value: string): boolean {
+        var map = <Map<boolean>><any>set;
+        return hasProperty(map, value);
+    }
+
+    function stringSet_intersects(set1: StringSet, set2: StringSet): boolean {
+        // TODO(cyrusn): Ideally we'd only enumerate the smaller of the two sets.  However, just
+        // knowing the count is itself an O(n) operation.
+        var map1 = <Map<boolean>><any>set1;
+        var map2 = <Map<boolean>><any>set2;
+        for (var k in map) {
+            if (hasProperty(map1, k) &&
+                hasProperty(map2, k)) {
+
+                return true;
+            }
+        }
+    }
 
     interface BidirectionalReferences {
         // Maps from the node-id of the reference to the declaration node.
@@ -116,73 +149,131 @@ module ts {
     }
 
     function createReferencesManager(): ReferencesManager {
+        // Kept around for debugging purposes.
+        var latestProgram: Program;
+
         // Maps a symbol's value declaration to a per file map of all the references to it.
         var fileNameToBidirectionalReferences: Map<BidirectionalReferences> = {};
         var declarationToFilesWithReferences: ts.Map<boolean>[] = [];
 
+        // We delay responding to all changes we hear about until we actually get a request for 
+        // some reference information.  This allows us to avoid costly computation for every 
+        // change to the LS, and instead only us to batch it all up into one piece of work that
+        // needs to be done.
+        //
+        // In general, the work to remove information is fairly cheap.  Our maps are keyed in a 
+        // fashion that makes that possible.Add / changes, on the other hand, are more expensive
+        // as they require walking trees and resolving identifiers.  So we front-load removals,
+        // and we defer adds/updates.
+        //
+        var filesToFullyResolve: StringSet;
+        var filesToPartiallyResolve: StringSet;
+        var addedOrRemovedSymbolNames: StringSet;
+
+        resetDeferredData();
+
         return {
             update,
-            //getReferencesToNode,
-            //getReferencesToSymbol
         };
 
-        //function getReferencesToNode(declarationNode: Node): References {
-        //    return declarationNodeToFileNameToReferenceNodes.get(declarationNode);
-        //}
+        function ensureUpToDate(program: Program): void {
+            Debug.assert(latestProgram === program);
+            Debug.assert(!stringSet_intersects(filesToFullyResolve, filesToPartiallyResolve));
 
-        //function getReferencesToSymbol(symbol: Symbol): References {
-        //    return getReferencesToNode(symbol ? symbol.valueDeclaration : undefined);
-        //}
+            // First, go and resolve all identifiers in the files we need to fully resolve.
+            forEach(program.getSourceFiles(), f => {
+                if (stringSet_contains(filesToFullyResolve, f.fileName)) {
+                    // Pass in undefined to indicate that all identifiers should be resolved.
+                    resolveReferences(program, f, /*shouldResolve:*/ undefined);
+                }
+            });
+
+            // Now go and resolve added/removed identifiers in the files we need to partially resolve.
+            forEach(program.getSourceFiles(), f => {
+                if (stringSet_contains(filesToPartiallyResolve, f.fileName)) {
+                    var nameTable = getNameTable(f);
+
+                    // Only process the file if it could be affected by the symbols that were added or
+                    // removed.
+                    if (keysIntersect(nameTable, addedOrRemovedSymbolNames)) {
+                        resolveReferences(program, f, addedOrRemovedSymbolNames);
+                    }
+                }
+            });
+
+            // Now reset all the deferred data now that we've incorporated it.
+            resetDeferredData();
+        }
+
+        function keysIntersect<T, U>(nameTable: Map<T>, changedSymbolNames: StringSet) {
+            // For now we assume the set of changed symbol names is considered to be smaller than 
+            // the set of names in the file.  If we could figure out which one was actually smaller
+            // we could enumerate the small one instead.
+            for (var symbolName in changedSymbolNames) {
+                if (stringSet_contains(changedSymbolNames, symbolName) &&
+                    hasProperty(nameTable, symbolName)) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function resetDeferredData() {
+            filesToFullyResolve = createStringSet();
+            filesToPartiallyResolve = createStringSet();
+            addedOrRemovedSymbolNames = createStringSet();
+        }
 
         function update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
-            // First purge all data that has been removed.  This includes file removes and symbol removes.
+            // First purge all data that has been removed.  First, remove all the data for files that
+            // were removed *as well as* files that were updated.  We don't need any of the data about
+            // the former, and we're going to recompute all the data about the latter.
             removeFiles(removedFiles);
+            removeFiles(updatedFiles);
+
+            // For all the symbols that have been removed, delete all the mappings from the 
+            // declaration of the symbol to all its references.  Note: there will still be
+            // mappings from the references in some files to the declaration.  However,
+            // these will get 'fixed' when we go and update all references later.
             removeSymbols(removedSymbols);
 
-            // Now remove from all symbols, any references to any updated files.  We're going to
-            // re-resolve all the updated files and figure out what all the identifiers in them
-            // mean after the edits within.
-            processUpdatedFiles(program, updatedFiles);
+            // Now, mark all files that were added or updated as files that will need full 
+            // resolution.If the file was previously marked as needing partial resolution, then
+            // remove it from that list as full resolution overrides partial resolution.
+            var addedOrUpdatedFiles = addedFiles.concat(updatedFiles);
+            forEach(addedOrUpdatedFiles, f => {
+                stringSet_add(filesToFullyResolve, f.fileName);
+                stringSet_delete(filesToPartiallyResolve, f.fileName);
+            });
 
-            // Now, process untouched files to see if identifiers in them might resolve to different 
-            // symbols.
-            processUntouchedFiles(program, addedFiles, updatedFiles, removedSymbols, addedSymbols);
+            // Mark all untouched files as files we'll need to go in partially resolve.  For these
+            // files we only need to check identifiers that match the names of symbols that were
+            // added or removed.  Also, don't bother marking as needing partial resolution if the
+            // file has already been marked as needing full resolution.
+            var untouchedFiles = filter(program.getSourceFiles(), f => !contains(addedOrUpdatedFiles, f));
+            forEach(untouchedFiles, f => {
+                if (!stringSet_contains(filesToFullyResolve, f.fileName)) {
+                    stringSet_add(filesToPartiallyResolve, f.fileName);
+                }
+            });
 
-            // Finally, add the reference links for all the files that were added to the program.
-            addFiles(program, addedFiles);
+            // Use the added and removed symbol lists to keep track of the names of identifiers in 
+            // untouched files that should be re-resolved.  
+            forEach(removedSymbols, s => {
+                stringSet_add(addedOrRemovedSymbolNames, s.name);
+            });
+            forEach(addedSymbols, s => {
+                stringSet_add(addedOrRemovedSymbolNames, s.name);
+            });
+
+            latestProgram = program;
         }
 
-        function processUpdatedFiles(program: Program, files: SourceFile[]) {
-            for (var i = 0, n = files.length; i < n; i++) {
-                var file = files[i];
-
-                // We're going to re-resolve everything in this file.  THat means that we want to
-                // remove any information about what symbols have references within this file.  We
-                // can do this just by calling 'removeFile'.
-                // 
-                // This also ensures that no symbols are pointing to reference nodes that are no
-                // longer valid (due to being incrementally parsed).
-                removeFile(file);
-                 
-                // Now we go through and bind all the identifiers in this file.  This will ensure
-                // that any references in this file to symbols are properly recorded.  We can do
-                // this just by calling 'addFile'.
-                addFile(program, file);
-            }
-        }
-
-        function addFiles(program: Program, files: SourceFile[]): void {
-            for (var i = 0, n = files.length; i < n; i++) {
-                addFile(program, files[i]);
-            }
-        }
-
-        function addFile(program: Program, file: SourceFile): void {
-            // Pass undefined for 'examineName' so that we examine all names in this file.
-            resolveReferences(program, file, /*examineName:*/ undefined);
-        }
-
-        function resolveReferences(program: Program, file: SourceFile, shouldResolve: Map<boolean>): void {
+        // If 'identifierNamesToResolve' is undefined, then that means that all identifiers should 
+        // be resolved.
+        function resolveReferences(program: Program, file: SourceFile, identifierNamesToResolve: StringSet): void {
             var typeChecker = program.getTypeChecker();
             var fileName = file.fileName;
             var bidirectionalReferences = fileNameToBidirectionalReferences[fileName] || (fileNameToBidirectionalReferences[fileName] = createBidirectionalReferences());
@@ -191,7 +282,7 @@ module ts {
             var referenceToDeclaration = bidirectionalReferences.referenceToDeclaration;
 
             // We're doing a partial resolve if we were asked to only check a subset of names.            
-            var partialResolve = shouldResolve !== undefined;
+            var partialResolve = identifierNamesToResolve !== undefined;
 
             walk(file);
 
@@ -203,7 +294,7 @@ module ts {
                 if (node.kind === SyntaxKind.Identifier && isExpression(node) && !isRightSideOfPropertyAccess(node)) {
                     // If we're processing all nodes (i.e. shouldResolve is undefined), or this 
                     // identifier was something we want to examine, then go ahead.
-                    if (!shouldResolve && shouldResolve[(<Identifier>node).text]) {
+                    if (!identifierNamesToResolve || stringSet_contains(identifierNamesToResolve, (<Identifier>node).text)) {
                         var symbol = typeChecker.getSymbolAtLocation(node);
                         addSymbolReference(symbol, node);
                     }
@@ -227,6 +318,14 @@ module ts {
                     // That's because we still want to remove any old references if we previously
                     // resolved to a JavaScript symbol but now no longer aren't.
                     removeExistingReferences(referenceNode, declarationNode);
+                }
+                else {
+                    // Ensure that if this is a full resolve that the reference node doesn't map
+                    // to any declaration.  Because we are doing a full resolve, we should have
+                    // already deleted all information about all the references in this file when
+                    // we called removeFile.
+                    var previousDeclaration = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode)
+                    Debug.assert(!previousDeclaration);
                 }
 
                 if (isJavaScriptDeclaration) {
@@ -269,14 +368,11 @@ module ts {
 
         function removeFiles(files: SourceFile[]): void {
             for (var i = 0, n = files.length; i < n; i++) {
-                removeFile(files[i]);
-            }
-        }
+                var file = files[i];
 
-        function removeFile(file: SourceFile): void {
-            Debug.assert(!!file.nodeToSymbol);
-            
-            delete fileNameToBidirectionalReferences[file.fileName];
+                Debug.assert(!!file.nodeToSymbol);
+                delete fileNameToBidirectionalReferences[file.fileName];
+            }
         }
 
         function removeSymbols(removedSymbols: Symbol[]): void {
@@ -302,56 +398,6 @@ module ts {
                 var declarationToReferences = bidirectionalReferences.declarationToReferences;
                 declarationToReferences_delete(declarationToReferences, symbol.valueDeclaration);
             }
-        }
-
-        function processUntouchedFiles(program: Program, addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]) {
-            // Determine the name of symbols added/removed.  We'll walk all non-added, non-updated 
-            // files in the program if they could be affected by those names and we'll try 
-            // re-resolving any identifiers that match those names to see if they've changed. 
-            // We don't need to hit added files because we'll already have fully processed them
-            // to determine references.
-            var changedSymbolNames: Map<boolean> = {};
-            forEach(removedSymbols, addChangedSymbolName);
-            forEach(addedSymbols, addChangedSymbolName);
-            
-            var allSourceFiles = program.getSourceFiles();
-            for (var i = 0, n = allSourceFiles.length; i < n; i++) {
-                var file = allSourceFiles[i];
-                if (contains(addedFiles, file) || contains(updatedFiles, file)) {
-                    continue;
-                }
-
-                var nameTable = getNameTable(file);
-
-                // Only process the file if it could be affected by the symbols that were added or
-                // removed.
-                if (keysIntersect(nameTable, changedSymbolNames)) {
-                    // Walk the file and check any identifiers that match the name of any of the 
-                    // symbols we've added or removed.  If so, determine what symbol the identifier
-                    // binds to now.
-                    resolveReferences(program, file, changedSymbolNames);
-                }
-            }
-
-            return;
-
-            function addChangedSymbolName(s: Symbol) {
-                if (!isReservedMemberName(s.name)) {
-                    changedSymbolNames[s.name] = true;
-                }
-            }
-        }
-
-        function keysIntersect(nameTable: Map<string>, changedSymbolNames: Map<boolean>) {
-            for (var symbolName in changedSymbolNames) {
-                if (hasProperty(changedSymbolNames, symbolName)) {
-                    if (hasProperty(nameTable, symbolName)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
     }
 
