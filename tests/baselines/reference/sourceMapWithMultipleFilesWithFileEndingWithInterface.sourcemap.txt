@@ -129,36 +129,25 @@ sourceFile:tests/cases/compiler/b.ts
 ---
 >>>    var c1 = (function () {
 1->^^^^
-2 >    ^^^^
-3 >        ^^
-4 >          ^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-2 >    export class 
-3 >        c1
 1->Emitted(7, 5) Source(2, 5) + SourceIndex(1) name (m1)
-2 >Emitted(7, 9) Source(2, 18) + SourceIndex(1) name (m1)
-3 >Emitted(7, 11) Source(2, 20) + SourceIndex(1) name (m1)
 ---
 >>>        function c1() {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^^
+2 >        ^^->
 1->
-2 >        export class 
-3 >                 c1
 1->Emitted(8, 9) Source(2, 5) + SourceIndex(1) name (m1.c1)
-2 >Emitted(8, 18) Source(2, 18) + SourceIndex(1) name (m1.c1)
-3 >Emitted(8, 20) Source(2, 20) + SourceIndex(1) name (m1.c1)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^->
-1 > {
+1->export class c1 {
   >    
 2 >        }
-1 >Emitted(9, 9) Source(3, 5) + SourceIndex(1) name (m1.c1.constructor)
+1->Emitted(9, 9) Source(3, 5) + SourceIndex(1) name (m1.c1.constructor)
 2 >Emitted(9, 10) Source(3, 6) + SourceIndex(1) name (m1.c1.constructor)
 ---
 >>>        return c1;
@@ -188,21 +177,18 @@ sourceFile:tests/cases/compiler/b.ts
 >>>    m1.c1 = c1;
 1->^^^^
 2 >    ^^^^^
-3 >         ^^^
-4 >            ^^
-5 >              ^
-6 >               ^^^^^^->
+3 >         ^^^^^
+4 >              ^
+5 >               ^^^^^^->
 1->
 2 >    c1
-3 >         
-4 >            c1 {
-  >                }
-5 >              
+3 >          {
+  >             }
+4 >              
 1->Emitted(12, 5) Source(2, 18) + SourceIndex(1) name (m1)
 2 >Emitted(12, 10) Source(2, 20) + SourceIndex(1) name (m1)
-3 >Emitted(12, 13) Source(2, 18) + SourceIndex(1) name (m1)
-4 >Emitted(12, 15) Source(3, 6) + SourceIndex(1) name (m1)
-5 >Emitted(12, 16) Source(3, 6) + SourceIndex(1) name (m1)
+3 >Emitted(12, 15) Source(3, 6) + SourceIndex(1) name (m1)
+4 >Emitted(12, 16) Source(3, 6) + SourceIndex(1) name (m1)
 ---
 >>>})(m1 || (m1 = {}));
 1->
