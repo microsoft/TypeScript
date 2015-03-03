@@ -3,7 +3,6 @@
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
-var child_process = require("child_process");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -26,7 +25,8 @@ var thirdParty = "ThirdPartyNoticeText.txt";
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
    process.env.path = nodeModulesPathPrefix + process.env.path;
-} else if (process.env.PATH !== undefined) {
+} 
+else if (process.env.PATH !== undefined) {
    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
@@ -203,7 +203,8 @@ function concatenateFiles(destinationFile, sourceFiles) {
 var useDebugMode = true;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
-/* Compiles a file from a list of sources
+
+   /* Compiles a file from a list of sources
     * @param outFile: the target file name
     * @param sources: an array of the names of the source files
     * @param prereqs: prerequisite tasks to compiling the file
@@ -214,8 +215,9 @@ var compilerFilename = "tsc.js";
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
+    * @async
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+    function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -254,17 +256,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");
-        console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd]);
-        // Add listeners for output and error
-        ex.addListener("stdout", function(output) {
-            process.stdout.write(output);
-        });
-        ex.addListener("stderr", function(error) {
-            process.stderr.write(error);
-        });
-        ex.addListener("cmdEnd", function() {
+        exec(cmd, function() {
+            console.log("")
             if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
                 for (var i in prefixes) {
                     prependFile(prefixes[i], outFile);
@@ -274,14 +268,14 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             if (callback) {
                 callback();
             }
-
-            complete();
-        });
-        ex.addListener("error", function() {
+            else {
+                complete();
+            }
+        }, /* errorHandler */ function() {
             fs.unlinkSync(outFile);
             fail("Compilation of " + outFile + " unsuccessful");
         });
-        ex.run();
+
     }, {async: true});
 }
 
@@ -324,19 +318,8 @@ compileFile(processDiagnosticMessagesJs,
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
-    console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
-    ex.addListener("cmdEnd", function() {
-        complete();
-    });
-    ex.run();
+
+    exec(cmd);
 }, {async: true})
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -401,6 +384,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
+                complete();
            });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
@@ -449,10 +433,8 @@ compileFile(word2mdJs,
 file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
     var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
-    console.log(cmd);
-    child_process.exec(cmd, function () {
-        complete();
-    });
+
+    exec(cmd);
 }, {async: true})
 
 
@@ -503,22 +485,24 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler) {
-    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
-    // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
+/* Executes a command
+ * @param cmd: command to execute
+ * @param completeHandler?: a function to execute after the command ends
+ * @param errorHandler?: a function to execute if an error occurs
+ * @async
+ */
+function exec(cmd, completeHandler, errorHandler) {
+    console.log(cmd);
+    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true, interactive: true});
     ex.addListener("cmdEnd", function() {
         if (completeHandler) {
             completeHandler();
         }
-        complete();
+        else {
+            complete();
+        }
     });
-    ex.addListener("error", function(e, status) {
+    ex.addListener("error", errorHandler || function(e, status) {
         fail("Process exited with code " + status);
     })
 
@@ -537,7 +521,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
@@ -548,10 +532,14 @@ function writeTestConfigFile(tests, testConfigFile) {
     fs.writeFileSync('test.config', testConfigContents);
 }
 
+/* Removes project output
+ * @async
+ */
 function deleteTemporaryProjectOutput() {
     if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
         jake.rmRf(path.join(localBaseline, "projectOutput/"));
     }
+    complete();
 }
 
 var testTimeout = 20000;
@@ -580,14 +568,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
+
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
+
     exec(cmd);
 }, { async: true });
 
@@ -619,7 +607,6 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
 
     tests = tests ? tests : '';
     var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
-    console.log(cmd);
     exec(cmd);
 }, {async: true});
 
@@ -635,14 +622,12 @@ function getDiffTool() {
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
-    console.log(cmd)
     exec(cmd);
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
-    console.log(cmd)
     exec(cmd);
 }, {async: true});
 
@@ -689,13 +674,6 @@ task("webhost", [webhostJsPath], function() {
     jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), "tests/webhost/", {silent: true});
 });
 
-// Perf compiler
-var perftscPath = "tests/perftsc.ts";
-var perftscJsPath = "built/local/perftsc.js";
-compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
-desc("Builds augmented version of the compiler for perf tests");
-task("perftsc", [perftscJsPath]);
-
 // Instrumented compiler
 var loggedIOpath = harnessDirectory + 'loggedIO.ts';
 var loggedIOJsPath = builtLocalDirectory + 'loggedIO.js';
@@ -704,14 +682,12 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
     jake.mkdirP(temp);
     var options = "--outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
-    console.log(cmd + "\n");
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+
+    exec(cmd, function() {
         fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
         jake.rmRf(temp);
         complete();
     });
-    ex.run();
 }, {async: true});
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
@@ -721,10 +697,6 @@ compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath],
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
-    console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
-        complete();
-    });
-    ex.run();
+
+    exec(cmd);
 }, { async: true });
