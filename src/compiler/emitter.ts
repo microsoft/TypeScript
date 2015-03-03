@@ -1580,7 +1580,6 @@ module ts {
             var generatedBlockScopeNames: string[];
 
             var extendsEmitted = false;
-            var tempCount = 0;
             var tempVariables: Identifier[];
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
@@ -4219,10 +4218,8 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
-                var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
-                tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
 
@@ -4261,7 +4258,6 @@ module ts {
 
                 exitNameScope(popFrame);
 
-                tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
             }
@@ -4576,10 +4572,8 @@ module ts {
                 }
 
                 function emitConstructorOfClass() {
-                    var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
                     var saveTempParameters = tempParameters;
-                    tempCount = 0;
                     tempVariables = undefined;
                     tempParameters = undefined;
 
@@ -4648,7 +4642,6 @@ module ts {
 
                     exitNameScope(popFrame);
 
-                    tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                     tempParameters = saveTempParameters;
                 }
@@ -4776,16 +4769,13 @@ module ts {
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
-                    var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
-                    tempCount = 0;
                     tempVariables = undefined;
                     var popFrame = enterNameScope();
 
                     emit(node.body);
 
                     exitNameScope(popFrame);
-                    tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                 }
                 else {
