@@ -3491,10 +3491,10 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
+                write("var ");
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     var variableDeclarationList = <VariableDeclarationList>node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
-                        write("var ");
                         var decl = variableDeclarationList.declarations[0];
                         // TODO handle binding patterns
                         emit(decl.name);
@@ -3537,13 +3537,25 @@ module ts {
                 // v = _a[_i];
                 if (decl) {
                     emit(decl.name);
-                    write(" = ");
-                    emit(rhsReference)
-                    write("[");
-                    emit(counter);
-                    write("];");
-                    writeLine();
                 }
+                else if (variableDeclarationList) {
+                    // It's an empty declaration list. This can only happen in an error case, if the user wrote
+                    //     for (var of []) {}
+                    var emptyDeclarationListTemp = createTempVariable(node, /*forLoopVariable*/ false);
+                    write("var ");
+                    emit(emptyDeclarationListTemp);
+                }
+                else {
+                    // Initializer is an expression. Emit the expression in the body, so that it's
+                    // evaluated on every iteration.
+                    emit(node.initializer);
+                }
+                write(" = ");
+                emit(rhsReference)
+                write("[");
+                emit(counter);
+                write("];");
+                writeLine();
                 
                 if (node.statement.kind === SyntaxKind.Block) {
                     emitLines((<Block>node.statement).statements);
