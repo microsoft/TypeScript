@@ -611,7 +611,14 @@
         "category": "Error",
         "code": 1197
     },
-
+    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
+        "category": "Error",
+        "code": 1198
+    },
+    "Unterminated Unicode escape sequence.": {
+        "category": "Error",
+        "code":  1199
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
