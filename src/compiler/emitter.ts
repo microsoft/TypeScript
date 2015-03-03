@@ -3444,6 +3444,10 @@ module ts {
             }
 
             function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.ForOfStatement) {
+                    return emitDownLevelForOfStatement(node);
+                }
+                
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -3469,6 +3473,97 @@ module ts {
                 emit(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
+            }
+            
+            function emitDownLevelForOfStatement(node: ForOfStatement) {
+                // The following ES6 code:
+                //
+                //    for (var v of expr) { }
+                //
+                // should be emitted as
+                //
+                //    for (var v, _i = 0, _a = expr; _i < _a.length; _i++) {
+                //        v = _a[_i];
+                //    }
+                //
+                // where _a and _i are temps emitted to capture the RHS and the counter,
+                // respectively.
+                // When the left hand side is an expression instead of a var declaration,
+                // the "var v" is not emitted.
+                // When the left hand side is a let/const, the v is renamed if there is
+                // another v in scope.
+                // Note that all assignments to the LHS are emitted in the body, including
+                // all destructuring.
+                // Note also that because an extra statement is needed to assign to the LHS,
+                // for-of bodies are always emitted as blocks.
+                
+                var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                    if (variableDeclarationList.declarations.length >= 1) {
+                        write("var ");
+                        var decl = variableDeclarationList.declarations[0];
+                        // TODO handle binding patterns
+                        emit(decl.name);
+                        write(", ");
+                    }
+                }
+                
+                // Do not call create recordTempDeclaration because we are declaring the temps
+                // right here. Recording means they will be declared later.
+                var counter = createTempVariable(node, /*forLoopVariable*/ true);
+                var rhsReference = createTempVariable(node, /*forLoopVariable*/ false);
+                
+                // _i = 0, 
+                emit(counter);
+                write(" = 0, ");
+                
+                // _a = expr;
+                emit(rhsReference);
+                write(" = ");
+                emit(node.expression);
+                write("; ");
+                
+                // _i < _a.length;
+                emit(counter);
+                write(" < ");
+                emit(rhsReference);
+                write(".length; ");
+                
+                // _i++)
+                emit(counter);
+                write("++");
+                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                
+                // Body
+                write(" {");
+                writeLine();
+                increaseIndent();
+                
+                // Initialize LHS
+                // v = _a[_i];
+                if (decl) {
+                    emit(decl.name);
+                    write(" = ");
+                    emit(rhsReference)
+                    write("[");
+                    emit(counter);
+                    write("];");
+                    writeLine();
+                }
+                
+                if (node.statement.kind === SyntaxKind.Block) {
+                    emitLines((<Block>node.statement).statements);
+                }
+                else {
+                    emit(node.statement);
+                }
+                
+                writeLine();
+                decreaseIndent();
+                write("}");
             }
 
             function emitBreakOrContinueStatement(node: BreakOrContinueStatement) {
