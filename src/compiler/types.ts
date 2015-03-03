@@ -298,14 +298,15 @@ module ts {
         Private =           0x00000020,  // Property/Method
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
-        MultiLine =         0x00000100,  // Multi-line array or object literal
-        Synthetic =         0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00000400,  // Node is a .d.ts file
-        Let =               0x00000800,  // Variable declaration
-        Const =             0x00001000,  // Variable declaration
-        OctalLiteral =      0x00002000,
+        Default =           0x00000100,  // Function/Class (export default declaration)
+        MultiLine =         0x00000200,  // Multi-line array or object literal
+        Synthetic =         0x00000400,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00000800,  // Node is a .d.ts file
+        Let =               0x00001000,  // Variable declaration
+        Const =             0x00002000,  // Variable declaration
+        OctalLiteral =      0x00004000,
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -1185,7 +1186,7 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+        getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
         hasExportDefaultValue(node: SourceFile): boolean;
         isReferencedImportDeclaration(node: Node): boolean;

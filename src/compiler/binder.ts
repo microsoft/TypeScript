@@ -112,10 +112,13 @@ module ts {
                     return "__new";
                 case SyntaxKind.IndexSignature:
                     return "__index";
-                case SyntaxKind.ExportAssignment:
-                    return "default";
                 case SyntaxKind.ExportDeclaration:
                     return "__export";
+                case SyntaxKind.ExportAssignment:
+                    return "default";
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    return node.flags & NodeFlags.Default ? "default" : undefined;
             }
         }
 
@@ -126,7 +129,7 @@ module ts {
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            var name = getDeclarationName(node);
+            var name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 if (symbol.flags & excludes) {

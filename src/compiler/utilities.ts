@@ -901,6 +901,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;

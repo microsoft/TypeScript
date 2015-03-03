@@ -1580,7 +1580,7 @@ module ts {
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
             var exportSpecifiers: Map<ExportSpecifier[]>;
-            var exportDefault: ExportAssignment | ExportSpecifier;
+            var exportDefault: FunctionDeclaration | ClassDeclaration | ExportAssignment | ExportSpecifier;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -3912,7 +3912,7 @@ module ts {
                     emitExpressionFunctionBody(node, <Expression>node.body);
                 }
 
-                if (node.flags & NodeFlags.Export) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -4243,11 +4243,10 @@ module ts {
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
-                function emitClassReturnStatement() {
+                emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
                     emitNode(node.name);
-                }
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end, emitClassReturnStatement);
+                });
                 write(";");
                 decreaseIndent();
                 writeLine();
@@ -4260,7 +4259,7 @@ module ts {
                 }
                 write(");");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -4269,7 +4268,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
 
@@ -4680,6 +4679,11 @@ module ts {
                     else if (node.kind === SyntaxKind.ExportAssignment) {
                         exportDefault = exportDefault || <ExportAssignment>node;
                     }
+                    else if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
+                        if (node.flags & NodeFlags.Export && node.flags & NodeFlags.Default) {
+                            exportDefault = exportDefault || <FunctionDeclaration | ClassDeclaration>node;
+                        }
+                    }
                     else {
                         var info = createExternalImportInfo(node);
                         if (info) {
@@ -4788,8 +4792,11 @@ module ts {
                     if (exportDefault.kind === SyntaxKind.ExportAssignment) {
                         emit((<ExportAssignment>exportDefault).expression);
                     }
-                    else {
+                    else if (exportDefault.kind === SyntaxKind.ExportSpecifier) {
                         emit((<ExportSpecifier>exportDefault).propertyName);
+                    }
+                    else {
+                        emit((<Declaration>exportDefault).name);
                     }
                     write(";");
                     emitEnd(exportDefault);

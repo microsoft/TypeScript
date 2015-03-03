@@ -8268,7 +8268,7 @@ module ts {
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
             // well known symbols.
-            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+            if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
                 // This check will account for methods in class/interface declarations,
                 // as well as accessors in classes/object literals
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
@@ -8998,10 +8998,12 @@ module ts {
             // Grammar checking
             checkGrammarClassDeclarationHeritageClauses(node);
 
-            checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
+            if (node.name) {
+                checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
+                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            }
             checkTypeParameters(node.typeParameters);
-            checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -9014,9 +9016,9 @@ module ts {
             if (type.baseTypes.length) {
                 if (produceDiagnostics) {
                     var baseType = type.baseTypes[0];
-                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
-                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
+                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseType.symbol !== resolveEntityName(baseTypeNode.typeName, SymbolFlags.Value)) {
                         error(baseTypeNode, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
@@ -9038,7 +9040,7 @@ module ts {
                         if (t !== unknownType) {
                             var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(type, t, node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -10414,6 +10416,10 @@ module ts {
 
             function generateNames(node: Node) {
                 switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                        generateNameForFunctionOrClassDeclaration(<Declaration>node);
+                        break;
                     case SyntaxKind.ModuleDeclaration:
                         generateNameForModuleOrEnum(<ModuleDeclaration>node);
                         generateNames((<ModuleDeclaration>node).body);
@@ -10426,6 +10432,9 @@ module ts {
                         break;
                     case SyntaxKind.ExportDeclaration:
                         generateNameForExportDeclaration(<ExportDeclaration>node);
+                        break;
+                    case SyntaxKind.ExportAssignment:
+                        generateNameForExportAssignment(<ExportAssignment>node);
                         break;
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.ModuleBlock:
@@ -10464,6 +10473,12 @@ module ts {
                 getNodeLinks(node).generatedName = unescapeIdentifier(name);
             }
 
+            function generateNameForFunctionOrClassDeclaration(node: Declaration) {
+                if (!node.name) {
+                    assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
+
             function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
                 if (node.name.kind === SyntaxKind.Identifier) {
                     var name = node.name.text;
@@ -10490,9 +10505,15 @@ module ts {
                     generateNameForImportOrExportDeclaration(node);
                 }
             }
+
+            function generateNameForExportAssignment(node: ExportAssignment) {
+                if (node.expression.kind !== SyntaxKind.Identifier) {
+                    assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
         }
 
-        function getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration) {
+        function getGeneratedNameForNode(node: Node) {
             var links = getNodeLinks(node);
             if (!links.generatedName) {
                 getGeneratedNamesForSourceFile(getSourceFile(node));
