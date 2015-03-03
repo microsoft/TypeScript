@@ -2090,15 +2090,7 @@ module ts {
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
             // name should be one that is appropriate for a for loop variable.
             function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
-                var name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (name && !isExistingName(location, name)) {
-                        break;
-                    }
-                    // _a .. _h, _j ... _z, _0, _1, ...
-                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
-                    tempCount++;
-                }
+                var name = generateUniqueNameForLocation(location, /*baseName*/ forLoopVariable ? "_i" : "_a");
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;

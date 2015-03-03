@@ -35,6 +35,6 @@ function foo2() {
     }
     return undefined;
 }
-var c = (_b = ["", ""], _b.raw = ["", ""], foo2(_b, 1)); // number
+var c = (_a_1 = ["", ""], _a_1.raw = ["", ""], foo2(_a_1, 1)); // number
 var d = foo2([], 1); // number
-var _a, _b;
+var _a, _a_1;

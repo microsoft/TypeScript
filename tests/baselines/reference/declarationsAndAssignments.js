@@ -184,9 +184,9 @@ function f21() {
 function f0() {
     var _a = [1, "hello"];
     var x = ([1, "hello"])[0];
-    var _b = [1, "hello"], x = _b[0], y = _b[1];
-    var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2]; // Error
-    var _d = [0, 1, 2], z = _d[2];
+    var _a_1 = [1, "hello"], x = _a_1[0], y = _a_1[1];
+    var _a_2 = [1, "hello"], x = _a_2[0], y = _a_2[1], z = _a_2[2]; // Error
+    var _a_3 = [0, 1, 2], z = _a_3[2];
     var x;
     var y;
 }
@@ -203,60 +203,60 @@ function f2() {
     var _a = { x: 5, y: "hello" };
     var x = ({ x: 5, y: "hello" }).x;
     var y = ({ x: 5, y: "hello" }).y;
-    var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
+    var _a_1 = { x: 5, y: "hello" }, x = _a_1.x, y = _a_1.y;
     var x;
     var y;
     var a = ({ x: 5, y: "hello" }).x;
     var b = ({ x: 5, y: "hello" }).y;
-    var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
+    var _a_2 = { x: 5, y: "hello" }, a = _a_2.x, b = _a_2.y;
     var a;
     var b;
 }
 function f3() {
-    var _a = [1, ["hello", [true]]], x = _a[0], _b = _a[1], y = _b[0], z = _b[1][0];
+    var _a = [1, ["hello", [true]]], x = _a[0], _a_1 = _a[1], y = _a_1[0], z = _a_1[1][0];
     var x;
     var y;
     var z;
 }
 function f4() {
-    var _a = { a: 1, b: { a: "hello", b: { a: true } } }, x = _a.a, _b = _a.b, y = _b.a, z = _b.b.a;
+    var _a = { a: 1, b: { a: "hello", b: { a: true } } }, x = _a.a, _a_1 = _a.b, y = _a_1.a, z = _a_1.b.a;
     var x;
     var y;
     var z;
 }
 function f6() {
-    var _a = [1, "hello"], _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? "" : _c;
+    var _a = [1, "hello"], _a_1 = _a[0], x = _a_1 === void 0 ? 0 : _a_1, _a_2 = _a[1], y = _a_2 === void 0 ? "" : _a_2;
     var x;
     var y;
 }
 function f7() {
-    var _a = [1, "hello"], _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 1 : _c; // Error, initializer for y must be string
+    var _a = [1, "hello"], _a_1 = _a[0], x = _a_1 === void 0 ? 0 : _a_1, _a_2 = _a[1], y = _a_2 === void 0 ? 1 : _a_2; // Error, initializer for y must be string
     var x;
     var y;
 }
 function f8() {
     var _a = [], a = _a[0], b = _a[1], c = _a[2]; // Ok, [] is an array
-    var _b = [1], d = _b[0], e = _b[1], f = _b[2]; // Error, [1] is a tuple
+    var _a_1 = [1], d = _a_1[0], e = _a_1[1], f = _a_1[2]; // Error, [1] is a tuple
 }
 function f9() {
     var _a = {}, a = _a[0], b = _a[1]; // Error, not array type
-    var _b = { 0: 10, 1: 20 }, c = _b[0], d = _b[1]; // Error, not array type
-    var _c = [10, 20], e = _c[0], f = _c[1];
+    var _a_1 = { 0: 10, 1: 20 }, c = _a_1[0], d = _a_1[1]; // Error, not array type
+    var _a_2 = [10, 20], e = _a_2[0], f = _a_2[1];
 }
 function f10() {
     var _a = {}, a = _a.a, b = _a.b; // Error
-    var _b = [], a = _b.a, b = _b.b; // Error
+    var _a_1 = [], a = _a_1.a, b = _a_1.b; // Error
 }
 function f11() {
     var _a = { x: 10, y: "hello" }, a = _a.x, b = _a.y;
-    var _b = { 0: 10, 1: "hello" }, a = _b[0], b = _b[1];
-    var _c = { "<": 10, ">": "hello" }, a = _c["<"], b = _c[">"];
-    var _d = [10, "hello"], a = _d[0], b = _d[1];
+    var _a_1 = { 0: 10, 1: "hello" }, a = _a_1[0], b = _a_1[1];
+    var _a_2 = { "<": 10, ">": "hello" }, a = _a_2["<"], b = _a_2[">"];
+    var _a_3 = [10, "hello"], a = _a_3[0], b = _a_3[1];
     var a;
     var b;
 }
 function f12() {
-    var _a = [1, ["hello", { x: 5, y: true }]], a = _a[0], _b = _a[1], _c = _b === void 0 ? ["abc", { x: 10, y: false }] : _b, b = _c[0], _d = _c[1], x = _d.x, c = _d.y;
+    var _a = [1, ["hello", { x: 5, y: true }]], a = _a[0], _a_1 = _a[1], _a_2 = _a_1 === void 0 ? ["abc", { x: 10, y: false }] : _a_1, b = _a_2[0], _a_3 = _a_2[1], x = _a_3.x, c = _a_3.y;
     var a;
     var b;
     var x;
@@ -264,10 +264,10 @@ function f12() {
 }
 function f13() {
     var _a = [1, "hello"], x = _a[0], y = _a[1];
-    var _b = [[x, y], { x: x, y: y }], a = _b[0], b = _b[1];
+    var _a_1 = [[x, y], { x: x, y: y }], a = _a_1[0], b = _a_1[1];
 }
 function f14(_a) {
-    var _b = _a[0], a = _b === void 0 ? 1 : _b, _c = _a[1], _d = _c[0], b = _d === void 0 ? "hello" : _d, _e = _c[1], x = _e.x, _f = _e.y, c = _f === void 0 ? false : _f;
+    var _a_1 = _a[0], a = _a_1 === void 0 ? 1 : _a_1, _a_2 = _a[1], _a_3 = _a_2[0], b = _a_3 === void 0 ? "hello" : _a_3, _a_4 = _a_2[1], x = _a_4.x, _a_5 = _a_4.y, c = _a_5 === void 0 ? false : _a_5;
     var a;
     var b;
     var c;
@@ -290,7 +290,7 @@ function f16() {
     var _a = f15(), a = _a.a, b = _a.b, c = _a.c;
 }
 function f17(_a) {
-    var _b = _a.a, a = _b === void 0 ? "" : _b, _c = _a.b, b = _c === void 0 ? 0 : _c, _d = _a.c, c = _d === void 0 ? false : _d;
+    var _a_1 = _a.a, a = _a_1 === void 0 ? "" : _a_1, _a_2 = _a.b, b = _a_2 === void 0 ? 0 : _a_2, _a_3 = _a.c, c = _a_3 === void 0 ? false : _a_3;
 }
 f17({});
 f17({ a: "hello" });
@@ -301,20 +301,20 @@ function f18() {
     var b;
     var aa;
     (_a = { a: a, b: b }, a = _a.a, b = _a.b, _a);
-    (_b = { b: b, a: a }, a = _b.a, b = _b.b, _b);
-    _c = [a, b], aa[0] = _c[0], b = _c[1];
-    _d = [b, a], a = _d[0], b = _d[1]; // Error
-    _e = [2, "def"], _f = _e[0], a = _f === void 0 ? 1 : _f, _g = _e[1], b = _g === void 0 ? "abc" : _g;
-    var _a, _b, _c, _d, _e, _f, _g;
+    (_a_1 = { b: b, a: a }, a = _a_1.a, b = _a_1.b, _a_1);
+    _a_2 = [a, b], aa[0] = _a_2[0], b = _a_2[1];
+    _a_3 = [b, a], a = _a_3[0], b = _a_3[1]; // Error
+    _a_4 = [2, "def"], _a_5 = _a_4[0], a = _a_5 === void 0 ? 1 : _a_5, _a_6 = _a_4[1], b = _a_6 === void 0 ? "abc" : _a_6;
+    var _a, _a_1, _a_2, _a_3, _a_4, _a_5, _a_6;
 }
 function f19() {
     var a, b;
     _a = [1, 2], a = _a[0], b = _a[1];
-    _b = [b, a], a = _b[0], b = _b[1];
-    (_c = { b: b, a: a }, a = _c.a, b = _c.b, _c);
-    _d = ([[2, 3]])[0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
-    var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
-    var _a, _b, _c, _d, _e, _f;
+    _a_1 = [b, a], a = _a_1[0], b = _a_1[1];
+    (_a_2 = { b: b, a: a }, a = _a_2.a, b = _a_2.b, _a_2);
+    _a_3 = ([[2, 3]])[0], _a_4 = _a_3 === void 0 ? [1, 2] : _a_3, a = _a_4[0], b = _a_4[1];
+    var x = (_a_5 = [1, 2], a = _a_5[0], b = _a_5[1], _a_5);
+    var _a, _a_1, _a_2, _a_3, _a_4, _a_5;
 }
 function f20() {
     var a;
@@ -322,14 +322,14 @@ function f20() {
     var y;
     var z;
     var _a = [1, 2, 3], a = _a.slice(0);
-    var _b = [1, 2, 3], x = _b[0], a = _b.slice(1);
-    var _c = [1, 2, 3], x = _c[0], y = _c[1], a = _c.slice(2);
-    var _d = [1, 2, 3], x = _d[0], y = _d[1], z = _d[2], a = _d.slice(3);
-    _e = [1, 2, 3], a = _e.slice(0);
-    _f = [1, 2, 3], x = _f[0], a = _f.slice(1);
-    _g = [1, 2, 3], x = _g[0], y = _g[1], a = _g.slice(2);
-    _h = [1, 2, 3], x = _h[0], y = _h[1], z = _h[2], a = _h.slice(3);
-    var _e, _f, _g, _h;
+    var _a_1 = [1, 2, 3], x = _a_1[0], a = _a_1.slice(1);
+    var _a_2 = [1, 2, 3], x = _a_2[0], y = _a_2[1], a = _a_2.slice(2);
+    var _a_3 = [1, 2, 3], x = _a_3[0], y = _a_3[1], z = _a_3[2], a = _a_3.slice(3);
+    _a_4 = [1, 2, 3], a = _a_4.slice(0);
+    _a_5 = [1, 2, 3], x = _a_5[0], a = _a_5.slice(1);
+    _a_6 = [1, 2, 3], x = _a_6[0], y = _a_6[1], a = _a_6.slice(2);
+    _a_7 = [1, 2, 3], x = _a_7[0], y = _a_7[1], z = _a_7[2], a = _a_7.slice(3);
+    var _a_4, _a_5, _a_6, _a_7;
 }
 function f21() {
     var a;
@@ -337,12 +337,12 @@ function f21() {
     var y;
     var z;
     var _a = [1, "hello", true], a = _a.slice(0);
-    var _b = [1, "hello", true], x = _b[0], a = _b.slice(1);
-    var _c = [1, "hello", true], x = _c[0], y = _c[1], a = _c.slice(2);
-    var _d = [1, "hello", true], x = _d[0], y = _d[1], z = _d[2], a = _d.slice(3);
-    _e = [1, "hello", true], a = _e.slice(0);
-    _f = [1, "hello", true], x = _f[0], a = _f.slice(1);
-    _g = [1, "hello", true], x = _g[0], y = _g[1], a = _g.slice(2);
-    _h = [1, "hello", true], x = _h[0], y = _h[1], z = _h[2], a = _h.slice(3);
-    var _e, _f, _g, _h;
+    var _a_1 = [1, "hello", true], x = _a_1[0], a = _a_1.slice(1);
+    var _a_2 = [1, "hello", true], x = _a_2[0], y = _a_2[1], a = _a_2.slice(2);
+    var _a_3 = [1, "hello", true], x = _a_3[0], y = _a_3[1], z = _a_3[2], a = _a_3.slice(3);
+    _a_4 = [1, "hello", true], a = _a_4.slice(0);
+    _a_5 = [1, "hello", true], x = _a_5[0], a = _a_5.slice(1);
+    _a_6 = [1, "hello", true], x = _a_6[0], y = _a_6[1], a = _a_6.slice(2);
+    _a_7 = [1, "hello", true], x = _a_7[0], y = _a_7[1], z = _a_7[2], a = _a_7.slice(3);
+    var _a_4, _a_5, _a_6, _a_7;
 }

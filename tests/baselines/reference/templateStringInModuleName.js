@@ -11,7 +11,7 @@ declare;
 {
 }
 declare;
-(_b = ["M", ""], _b.raw = ["M", ""], module(_b, 2));
+(_a_1 = ["M", ""], _a_1.raw = ["M", ""], module(_a_1, 2));
 {
 }
-var _a, _b;
+var _a, _a_1;

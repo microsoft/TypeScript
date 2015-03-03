@@ -81,8 +81,8 @@ obj.foo.apply(obj, [1, 2].concat(a));
 obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
 xa[1].foo(1, 2, "abc");
 (_a = xa[1]).foo.apply(_a, [1, 2].concat(a));
-(_b = xa[1]).foo.apply(_b, [1, 2].concat(a, ["abc"]));
-(_c = xa[1]).foo.apply(_c, [1, 2, "abc"]);
+(_a_1 = xa[1]).foo.apply(_a_1, [1, 2].concat(a, ["abc"]));
+(_a_2 = xa[1]).foo.apply(_a_2, [1, 2, "abc"]);
 var C = (function () {
     function C(x, y) {
         var z = [];
@@ -114,4 +114,4 @@ var D = (function (_super) {
 })(C);
 // Only supported in when target is ES6
 var c = new C(1, 2, ...a);
-var _a, _b, _c;
+var _a, _a_1, _a_2;

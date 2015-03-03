@@ -99,62 +99,62 @@ function noParams(n) { }
 (_a = [""], _a.raw = [""], noParams(_a));
 // Generic tag with parameter which does not use type parameter
 function noGenericParams(n) { }
-(_b = [""], _b.raw = [""], noGenericParams(_b));
+(_a_1 = [""], _a_1.raw = [""], noGenericParams(_a_1));
 // Generic tag with multiple type parameters and only one used in parameter type annotation
 function someGenerics1a(n, m) { }
-(_c = ["", ""], _c.raw = ["", ""], someGenerics1a(_c, 3));
+(_a_2 = ["", ""], _a_2.raw = ["", ""], someGenerics1a(_a_2, 3));
 function someGenerics1b(n, m) { }
-(_d = ["", ""], _d.raw = ["", ""], someGenerics1b(_d, 3));
+(_a_3 = ["", ""], _a_3.raw = ["", ""], someGenerics1b(_a_3, 3));
 // Generic tag with argument of function type whose parameter is of type parameter type
 function someGenerics2a(strs, n) { }
-(_e = ["", ""], _e.raw = ["", ""], someGenerics2a(_e, function (n) { return n; }));
+(_a_4 = ["", ""], _a_4.raw = ["", ""], someGenerics2a(_a_4, function (n) { return n; }));
 function someGenerics2b(strs, n) { }
-(_f = ["", ""], _f.raw = ["", ""], someGenerics2b(_f, function (n, x) { return n; }));
+(_a_5 = ["", ""], _a_5.raw = ["", ""], someGenerics2b(_a_5, function (n, x) { return n; }));
 // Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3(strs, producer) { }
-(_g = ["", ""], _g.raw = ["", ""], someGenerics3(_g, function () { return ''; }));
-(_h = ["", ""], _h.raw = ["", ""], someGenerics3(_h, function () { return undefined; }));
-(_j = ["", ""], _j.raw = ["", ""], someGenerics3(_j, function () { return 3; }));
+(_a_6 = ["", ""], _a_6.raw = ["", ""], someGenerics3(_a_6, function () { return ''; }));
+(_a_7 = ["", ""], _a_7.raw = ["", ""], someGenerics3(_a_7, function () { return undefined; }));
+(_a_8 = ["", ""], _a_8.raw = ["", ""], someGenerics3(_a_8, function () { return 3; }));
 // 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4(strs, n, f) { }
-(_k = ["", "", ""], _k.raw = ["", "", ""], someGenerics4(_k, 4, function () { return null; }));
-(_l = ["", "", ""], _l.raw = ["", "", ""], someGenerics4(_l, '', function () { return 3; }));
-(_m = ["", "", ""], _m.raw = ["", "", ""], someGenerics4(_m, null, null));
+(_a_9 = ["", "", ""], _a_9.raw = ["", "", ""], someGenerics4(_a_9, 4, function () { return null; }));
+(_a_10 = ["", "", ""], _a_10.raw = ["", "", ""], someGenerics4(_a_10, '', function () { return 3; }));
+(_a_11 = ["", "", ""], _a_11.raw = ["", "", ""], someGenerics4(_a_11, null, null));
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5(strs, n, f) { }
-(_n = ["", " ", ""], _n.raw = ["", " ", ""], someGenerics5(_n, 4, function () { return null; }));
-(_o = ["", "", ""], _o.raw = ["", "", ""], someGenerics5(_o, '', function () { return 3; }));
-(_p = ["", "", ""], _p.raw = ["", "", ""], someGenerics5(_p, null, null));
+(_a_12 = ["", " ", ""], _a_12.raw = ["", " ", ""], someGenerics5(_a_12, 4, function () { return null; }));
+(_a_13 = ["", "", ""], _a_13.raw = ["", "", ""], someGenerics5(_a_13, '', function () { return 3; }));
+(_a_14 = ["", "", ""], _a_14.raw = ["", "", ""], someGenerics5(_a_14, null, null));
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6(strs, a, b, c) { }
-(_q = ["", "", "", ""], _q.raw = ["", "", "", ""], someGenerics6(_q, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_r = ["", "", "", ""], _r.raw = ["", "", "", ""], someGenerics6(_r, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_s = ["", "", "", ""], _s.raw = ["", "", "", ""], someGenerics6(_s, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_15 = ["", "", "", ""], _a_15.raw = ["", "", "", ""], someGenerics6(_a_15, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_16 = ["", "", "", ""], _a_16.raw = ["", "", "", ""], someGenerics6(_a_16, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_17 = ["", "", "", ""], _a_17.raw = ["", "", "", ""], someGenerics6(_a_17, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 // Generic tag with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7(strs, a, b, c) { }
-(_t = ["", "", "", ""], _t.raw = ["", "", "", ""], someGenerics7(_t, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_u = ["", "", "", ""], _u.raw = ["", "", "", ""], someGenerics7(_u, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_v = ["", "", "", ""], _v.raw = ["", "", "", ""], someGenerics7(_v, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_18 = ["", "", "", ""], _a_18.raw = ["", "", "", ""], someGenerics7(_a_18, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_19 = ["", "", "", ""], _a_19.raw = ["", "", "", ""], someGenerics7(_a_19, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+(_a_20 = ["", "", "", ""], _a_20.raw = ["", "", "", ""], someGenerics7(_a_20, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) { return n; }
-var x = (_w = ["", ""], _w.raw = ["", ""], someGenerics8(_w, someGenerics7));
-(_x = ["", "", "", ""], _x.raw = ["", "", "", ""], x(_x, null, null, null));
+var x = (_a_21 = ["", ""], _a_21.raw = ["", ""], someGenerics8(_a_21, someGenerics7));
+(_a_22 = ["", "", "", ""], _a_22.raw = ["", "", "", ""], x(_a_22, null, null, null));
 // Generic tag with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9(strs, a, b, c) {
     return null;
 }
-var a9a = (_y = ["", "", "", ""], _y.raw = ["", "", "", ""], someGenerics9(_y, '', 0, []));
+var a9a = (_a_23 = ["", "", "", ""], _a_23.raw = ["", "", "", ""], someGenerics9(_a_23, '', 0, []));
 var a9a;
-var a9e = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, undefined, { x: 6, z: new Date() }, { x: 6, y: '' }));
+var a9e = (_a_24 = ["", "", "", ""], _a_24.raw = ["", "", "", ""], someGenerics9(_a_24, undefined, { x: 6, z: new Date() }, { x: 6, y: '' }));
 var a9e;
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type
-var a9d = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, { x: 3 }, { x: 6 }, { x: 6 }));
+var a9d = (_a_25 = ["", "", "", ""], _a_25.raw = ["", "", "", ""], someGenerics9(_a_25, { x: 3 }, { x: 6 }, { x: 6 }));
 var a9d;
 // Generic tag with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;
-var a = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, 7, anyVar, 4));
+var a = (_a_26 = ["", "", "", ""], _a_26.raw = ["", "", "", ""], someGenerics9(_a_26, 7, anyVar, 4));
 var a;
 // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
-var arr = (_2 = ["", "", "", ""], _2.raw = ["", "", "", ""], someGenerics9(_2, [], null, undefined));
+var arr = (_a_27 = ["", "", "", ""], _a_27.raw = ["", "", "", ""], someGenerics9(_a_27, [], null, undefined));
 var arr;
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
+var _a, _a_1, _a_2, _a_3, _a_4, _a_5, _a_6, _a_7, _a_8, _a_9, _a_10, _a_11, _a_12, _a_13, _a_14, _a_15, _a_16, _a_17, _a_18, _a_19, _a_20, _a_21, _a_22, _a_23, _a_24, _a_25, _a_26, _a_27;
