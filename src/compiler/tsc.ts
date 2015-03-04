@@ -258,7 +258,7 @@ module ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
             // Return existing SourceFile object if one is available
             if (cachedProgram) {
                 var sourceFile = cachedProgram.getSourceFile(fileName);
