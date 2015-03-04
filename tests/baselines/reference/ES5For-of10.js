@@ -13,8 +13,8 @@ function foo() {
 }
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     foo().x = _a[_i];
-    for (var _i_1 = 0, _a_1 = []; _i_1 < _a_1.length; _i_1++) {
-        foo().x = _a_1[_i_1];
+    for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        foo().x = _c[_b];
         var p = foo().x;
     }
 }

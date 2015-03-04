@@ -1684,7 +1684,11 @@ module ts {
                 else {
                     name = generateUniqueName(baseName, n => isExistingName(location, n));
                 }
-
+                
+                return putNameInCurrentScopeNames(name);
+            }
+            
+            function putNameInCurrentScopeNames(name: string): string {
                 if (!currentScopeNames) {
                     currentScopeNames = {};
                 }
@@ -2099,6 +2103,11 @@ module ts {
                     name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
+                
+                // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
+                // we just generated.
+                putNameInCurrentScopeNames(name);
+                
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;

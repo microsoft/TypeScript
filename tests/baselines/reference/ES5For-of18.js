@@ -12,7 +12,7 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var v = _a[_i];
     v;
 }
-for (var _i = 0, _b = []; _i < _b.length; _i++) {
-    var _v = _b[_i];
+for (var _b = 0, _c = []; _b < _c.length; _b++) {
+    var _v = _c[_b];
     _v;
 }

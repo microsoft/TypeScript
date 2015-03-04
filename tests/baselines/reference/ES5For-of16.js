@@ -11,8 +11,8 @@ for (let v of []) {
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var v = _a[_i];
     v;
-    for (var _i_1 = 0, _a_1 = []; _i_1 < _a_1.length; _i_1++) {
-        var _v = _a_1[_i_1];
+    for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        var _v = _c[_b];
         var x = _v;
         _v++;
     }
