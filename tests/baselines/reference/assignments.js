@@ -52,7 +52,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E = null; // Error
-0 /* A */ = null; // OK per spec, Error per implementation (509581)
+E.A = null; // OK per spec, Error per implementation (509581)
 function fn() { }
 fn = null; // Should be error
 var v;

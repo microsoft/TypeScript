@@ -967,14 +967,14 @@ var TypeScript;
         // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
         // we don't find the "precomment" attached to the errorneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
-        GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 1 << 1] = "DontPruneSearchBasedOnPosition";
+        GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 2] = "DontPruneSearchBasedOnPosition";
     })(TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));
     var GetAstPathOptions = TypeScript.GetAstPathOptions;
     ///
     /// Return the stack of AST nodes containing "position"
     ///
     function getAstPathToPosition(script, pos, options) {
-        if (options === void 0) { options = 0 /* Default */; }
+        if (options === void 0) { options = GetAstPathOptions.Default; }
         var lookInComments = function (comments) {
             if (comments && comments.length > 0) {
                 for (var i = 0; i < comments.length; i++) {
@@ -998,7 +998,7 @@ var TypeScript;
                 //  bar
                 //  0123
                 // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid
-                var inclusive = hasFlag(options, 1 /* EdgeInclusive */) ||
+                var inclusive = hasFlag(options, GetAstPathOptions.EdgeInclusive) ||
                     cur.nodeType === TypeScript.NodeType.Name ||
                     pos === script.limChar; // Special "EOF" case
                 var minChar = cur.minChar;

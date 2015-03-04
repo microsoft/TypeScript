@@ -4612,15 +4612,12 @@ module ts {
             }
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {
-                if (!member.initializer || isConst(member.parent)) {
-                    var value = resolver.getConstantValue(member);
-                    if (value !== undefined) {
-                        write(value.toString());
-                        return;
-                    }
+                var value = resolver.getConstantValue(member);
+                if (value !== undefined) {
+                    write(value.toString());
+                    return;
                 }
-
-                if (member.initializer) {
+                else if (member.initializer) {
                     emit(member.initializer);
                 }
                 else {

@@ -95,7 +95,7 @@ var M1;
         EConst1[EConst1["F"] = 8] = "F";
     })(M1.EConst1 || (M1.EConst1 = {}));
     var EConst1 = M1.EConst1;
-    var x = [3 /* A */, 2 /* B */, 1 /* C */, 7 /* D */, 9 /* E */, 8 /* F */];
+    var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
 })(M1 || (M1 = {}));
 // Enum with only computed members across 2 declarations with the same root module 
 var M2;
@@ -169,6 +169,6 @@ var M6;
         })(A.Color || (A.Color = {}));
         var Color = A.Color;
     })(A = M6.A || (M6.A = {}));
-    var t = 1 /* Yellow */;
-    t = 0 /* Red */;
+    var t = A.Color.Yellow;
+    t = A.Color.Red;
 })(M6 || (M6 = {}));

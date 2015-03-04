@@ -70,7 +70,7 @@ var E;
 })(E || (E = {}));
 ;
 var x = 4;
-var e = 1 /* B */;
+var e = E.B;
 var a;
 var w = window;
 // Assign to expression++
