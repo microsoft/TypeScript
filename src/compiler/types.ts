@@ -1227,7 +1227,7 @@ module ts {
         ExportValue             = 0x00100000,  // Exported value marker (see comment in declareModuleMember in binder)
         ExportType              = 0x00200000,  // Exported type marker (see comment in declareModuleMember in binder)
         ExportNamespace         = 0x00400000,  // Exported namespace marker (see comment in declareModuleMember in binder)
-        Import                  = 0x00800000,  // Import
+        Import                  = 0x00800000,  // An alias for another symbol
         Instantiated            = 0x01000000,  // Instantiated symbol
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
