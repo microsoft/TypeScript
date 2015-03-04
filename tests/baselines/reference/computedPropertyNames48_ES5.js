@@ -26,10 +26,10 @@ var a;
 extractIndexer((_a = {},
     _a[a] = "",
     _a)); // Should return string
-extractIndexer((_a_1 = {},
-    _a_1[0 /* x */] = "",
-    _a_1)); // Should return string
-extractIndexer((_a_2 = {},
-    _a_2["" || 0] = "",
-    _a_2)); // Should return any (widened form of undefined)
-var _a, _a_1, _a_2;
+extractIndexer((_b = {},
+    _b[0 /* x */] = "",
+    _b)); // Should return string
+extractIndexer((_c = {},
+    _c["" || 0] = "",
+    _c)); // Should return any (widened form of undefined)
+var _a, _b, _c;

@@ -58,4 +58,4 @@ var c2 = new C2(["10", 10, !!10]);
 var _a = [c2.x, c2.y, c2.z], c2_x = _a[0], c2_y = _a[1], c2_z = _a[2];
 var c3 = new C3({ x: 0, y: "", z: false });
 c3 = new C3({ x: 0, "y": "y", z: true });
-var _a_1 = [c3.x, c3.y, c3.z], c3_x = _a_1[0], c3_y = _a_1[1], c3_z = _a_1[2];
+var _b = [c3.x, c3.y, c3.z], c3_x = _b[0], c3_y = _b[1], c3_z = _b[2];

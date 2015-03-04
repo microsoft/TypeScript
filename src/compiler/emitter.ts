@@ -1580,6 +1580,7 @@ module ts {
             var generatedBlockScopeNames: string[];
 
             var extendsEmitted = false;
+            var tempCount = 0;
             var tempVariables: Identifier[];
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
@@ -2089,7 +2090,15 @@ module ts {
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
             // name should be one that is appropriate for a for loop variable.
             function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
-                var name = generateUniqueNameForLocation(location, /*baseName*/ forLoopVariable ? "_i" : "_a");
+                var name = forLoopVariable ? "_i" : undefined;
+                while (true) {
+                    if (name && !isExistingName(location, name)) {
+                        break;
+                    }
+                    // _a .. _h, _j ... _z, _0, _1, ...
+                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
+                    tempCount++;
+                }
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;
@@ -4259,8 +4268,10 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
+                var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
+                tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
 
@@ -4299,6 +4310,7 @@ module ts {
 
                 exitNameScope(popFrame);
 
+                tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
             }
@@ -4613,8 +4625,10 @@ module ts {
                 }
 
                 function emitConstructorOfClass() {
+                    var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
                     var saveTempParameters = tempParameters;
+                    tempCount = 0;
                     tempVariables = undefined;
                     tempParameters = undefined;
 
@@ -4683,6 +4697,7 @@ module ts {
 
                     exitNameScope(popFrame);
 
+                    tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                     tempParameters = saveTempParameters;
                 }
@@ -4810,13 +4825,16 @@ module ts {
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
+                    var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
+                    tempCount = 0;
                     tempVariables = undefined;
                     var popFrame = enterNameScope();
 
                     emit(node.body);
 
                     exitNameScope(popFrame);
+                    tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                 }
                 else {

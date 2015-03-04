@@ -37,8 +37,8 @@ declare function f6(_i: string); // no codegen no error
 // Functions
 function f1(_i) {
     var restParameters = [];
-    for (var _i_1 = 1; _i_1 < arguments.length; _i_1++) {
-        restParameters[_i_1 - 1] = arguments[_i_1];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        restParameters[_a - 1] = arguments[_a];
     }
     var _i = 10; // no error
 }
@@ -47,8 +47,8 @@ function f1NoError(_i) {
 }
 function f3() {
     var restParameters = [];
-    for (var _i_1 = 0; _i_1 < arguments.length; _i_1++) {
-        restParameters[_i_1 - 0] = arguments[_i_1];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        restParameters[_a - 0] = arguments[_a];
     }
     var _i = 10; // no error
 }
@@ -57,8 +57,8 @@ function f3NoError() {
 }
 function f4(_i) {
     var rest = [];
-    for (var _i_1 = 1; _i_1 < arguments.length; _i_1++) {
-        rest[_i_1 - 1] = arguments[_i_1];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        rest[_a - 1] = arguments[_a];
     }
 }
 function f4NoError(_i) {
