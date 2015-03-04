@@ -9953,7 +9953,7 @@ module ts {
                 var defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
                     if (hasExportedMembers(moduleSymbol)) {
-                        var declaration = getDeclarationOfImportSymbol(defaultSymbol);
+                        var declaration = getDeclarationOfImportSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
