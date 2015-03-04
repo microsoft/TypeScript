@@ -9684,7 +9684,7 @@ module ts {
                             }
                         }
                     }
-                    else if (node.kind !== SyntaxKind.ExportAssignment && node.flags & NodeFlags.Export) {
+                    else if (node.kind !== SyntaxKind.ExportAssignment && node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                         return true;
                     }
                 }
