@@ -40,6 +40,13 @@ module ts {
         array[getNodeId(referenceNode)] = declarationNode;
     }
 
+    function referenceToDeclarationMap_forEach(map: ReferenceToDeclarationMap, f: (refId: number, declarationNode: Node) => void) {
+        var array = <Node[]><any>map;
+        array.forEach((declarationNode, refId) => {
+            f(refId, declarationNode);
+        });
+    }
+
     interface DeclarationToReferencesMap {
         _nodeToNodesMapBrand: any;
     }
@@ -62,6 +69,13 @@ module ts {
     function declarationToReferences_delete(map: DeclarationToReferencesMap, declarationNode: Node): void {
         var array = <References[]><any>map;
         delete array[getNodeId(declarationNode)];
+    }
+
+    function declarationToReferences_forEach(map: DeclarationToReferencesMap, f: (declarationNodeId: number, references: References) => void) {
+        var array = <References[]><any>map;
+        array.forEach((references, declarationNodeId) => {
+            f(declarationNodeId, references);
+        });
     }
 
     interface References {
@@ -90,6 +104,11 @@ module ts {
         return true;
     }
 
+    function references_forEach(references: References, f: (referenceNode: Node) => void) {
+        var array = <Node[]><any>references;
+        array.forEach(f);
+    }
+
     interface StringSet {
         _stringSetBrand: any;
     }
@@ -111,6 +130,15 @@ module ts {
     function stringSet_contains(set: StringSet, value: string): boolean {
         var map = <Map<boolean>><any>set;
         return hasProperty(map, value);
+    }
+
+    function stringSet_forEach(set: StringSet, f: (v: string) => void): void {
+        var map = <Map<boolean>><any>set;
+        for (var k in map) {
+            if (hasProperty(map, k)) {
+                f(k);
+            }
+        }
     }
 
     function stringSet_intersects(set1: StringSet, set2: StringSet): boolean {
@@ -147,6 +175,8 @@ module ts {
     export interface ReferencesManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
 
+        // For testing purposes only
+        toJSON(program: Program): any;
         //getReferencesToNode(node: Node): References;
         //getReferencesToSymbol(symbol: Symbol): References;
     }
@@ -177,7 +207,122 @@ module ts {
 
         return {
             update,
+            toJSON
         };
+
+        function toJSON(program: Program): any {
+            ensureUpToDate(program);
+
+            return {
+                declarationToFilesWithReferences: convertDeclarationToFilesWithReferences(),
+                fileNameToBidirectionalReferences: convertFileNameToBidirectionalReferences()
+            }
+
+            function getNode(nodeId: number): Node {
+                var result = forEach(latestProgram.getSourceFiles(), findNode);
+                Debug.assert(!!result);
+                return result;
+
+                function findNode(node: Node): Node {
+                    if (node && node.id === nodeId) {
+                        return node;
+                    }
+
+                    return forEachChild(node, findNode);
+                }
+            }
+
+            function convertDeclarationToFilesWithReferences(): any {
+                var result: any[] = [];
+                declarationToFilesWithReferences.forEach((files, declarationNodeId) => {
+                    var declarationInfo = getDeclarationInfo(getNode(declarationNodeId), /*full:*/ true);
+                    var fileNames: string[] = [];
+                    stringSet_forEach(files, f => { fileNames.push(f) });
+                    result.push({ declarationInfo, fileNames });
+                });
+
+                return result;
+            }
+
+            function convertFileNameToBidirectionalReferences() {
+                var result: any = {};
+
+                for (var fileName in fileNameToBidirectionalReferences) {
+                    var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
+                    if (bidirectionalReferences) {
+                        result[fileName] = convertBidirectionalReferences(bidirectionalReferences);
+                    }
+                }
+
+                return result;
+            }
+
+            function convertBidirectionalReferences(bidirectionalReferences: BidirectionalReferences) {
+                return {
+                    referenceToDeclaration: convertReferenceToDeclarationMap(bidirectionalReferences.referenceToDeclaration),
+                    declarationToReferences: convertDeclarationToReferencesMap(bidirectionalReferences.declarationToReferences)
+                };
+            }
+
+            function convertReferenceToDeclarationMap(referenceToDeclaration: ReferenceToDeclarationMap) {
+                var result: any[] = [];
+                referenceToDeclarationMap_forEach(referenceToDeclaration, (referenceId, declarationNode) => {
+                    result.push({
+                        referenceInfo: getReferenceInfo(getNode(referenceId)),
+                        declarationInfo: getDeclarationInfo(declarationNode, /*full:*/ false)
+                    });
+                });
+
+                return result;
+            }
+
+            function convertDeclarationToReferencesMap(declarationToReferences: DeclarationToReferencesMap): any {
+                var result: any[] = [];
+                declarationToReferences_forEach(declarationToReferences, (declarationNodeId, references) => {
+                    result.push({
+                        declarationInfo: getDeclarationInfo(getNode(declarationNodeId), /*full:*/ false),
+                        references: convertReferences(references)
+                    });
+                });
+
+                return result;
+            }
+
+            function convertReferences(references: References): any {
+                var result: any[] = [];
+                references_forEach(references, referenceNode => {
+                    result.push(getReferenceInfo(referenceNode));
+                });
+                return result;
+            }
+
+            function getDeclarationInfo(node: Node, full: boolean) {
+                var symbol = node.symbol;
+                var result = { symbolName: symbol.name };
+                fillNodeInfo(symbol.valueDeclaration, result, full);
+                return result;
+            }
+
+            function getReferenceInfo(node: Node) {
+                Debug.assert(node.kind === SyntaxKind.Identifier);
+
+                var result = { text: (<Identifier>node).text };
+                fillNodeInfo(node, result, /*full:*/ true);
+
+                return result;
+            }
+
+            function fillNodeInfo(node: Node, result: any, full: boolean): void {
+                result.id = node.id;
+
+                if (full) {
+                    var sourceFile = getSourceFileOfNode(node);
+                    var start = skipTrivia(sourceFile.text, node.pos);
+                    result.fileName = sourceFile.fileName;
+                    result.start = start;
+                }
+            }
+        }
 
         function ensureUpToDate(program: Program): void {
             Debug.assert(latestProgram === program);
@@ -342,7 +487,7 @@ module ts {
                     // Mark that this file is referenced by this symbol.
                     var declarationNodeId = getNodeId(declarationNode);
                     var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = createStringSet());
-                    filesWithReferences[fileName] = true;
+                    stringSet_add(filesWithReferences, fileName);
                 }
             }
 
