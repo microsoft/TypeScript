@@ -1693,8 +1693,37 @@ module ts {
             }
 
             function isExistingName(location: Node, name: string) {
-                return !resolver.isUnknownIdentifier(location, name) ||
-                    (currentScopeNames && hasProperty(currentScopeNames, name));
+                // check if resolver is aware of this name (if name was seen during the typecheck)
+                if (!resolver.isUnknownIdentifier(location, name)) {
+                    return true;
+                }
+
+                // check if name is present in generated names that were introduced by the emitter
+                if (currentScopeNames && hasProperty(currentScopeNames, name)) {
+                    return true;
+                }
+
+                // check generated names in outer scopes
+                // var x;
+                // function foo() {
+                //    let x; // 1
+                //    function bar() {
+                //        {
+                //            let x; // 2
+                //        }
+                //        console.log(x); // 3
+                //    }
+                //}
+                // here both x(1) and x(2) should be renamed and their names should be different
+                // so x in (3) will refer to x(1)
+                var frame = lastFrame;
+                while (frame) {
+                    if (hasProperty(frame.names, name)) {
+                        return true;
+                    }
+                    frame = frame.previous;
+                }
+                return false;
             }
 
             function initializeEmitterWithSourceMaps() {
