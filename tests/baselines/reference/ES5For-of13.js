@@ -4,7 +4,7 @@ for (let v of []) {
 }
 
 //// [ES5For-of13.js]
-for (var v, _i = 0, _a = []; _i < _a.length; _i++) {
-    v = _a[_i];
+for (var _i = 0, _a = []; _i < _a.length; _i++) {
+    var v = _a[_i];
     var x = v;
 }

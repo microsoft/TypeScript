@@ -7,11 +7,11 @@ for (let v of []) {
 }
 
 //// [ES5For-of20.js]
-for (var v, _i = 0, _a = []; _i < _a.length; _i++) {
-    v = _a[_i];
+for (var _i = 0, _a = []; _i < _a.length; _i++) {
+    var v = _a[_i];
     var _v;
-    for (var _v_1, _i_1 = 0, _a_1 = [_v_1]; _i_1 < _a_1.length; _i_1++) {
-        _v_1 = _a_1[_i_1];
+    for (var _i_1 = 0, _a_1 = [v]; _i_1 < _a_1.length; _i_1++) {
+        var _v_1 = _a_1[_i_1];
         var _v_2;
     }
 }
