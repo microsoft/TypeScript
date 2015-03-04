@@ -2,6 +2,8 @@ module ts {
     /* @internal */
     export interface InferenceEngine {
         createEngineUpdater(): InferenceEngineUpdater;
+
+        /* @internal */ referencesManager_forTestingPurposesOnly: ReferencesManager;
     }
 
     export interface InferenceEngineUpdater {
@@ -141,7 +143,8 @@ module ts {
         };
     }
 
-    interface ReferencesManager {
+    /* @internal */
+    export interface ReferencesManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
 
         //getReferencesToNode(node: Node): References;
@@ -154,7 +157,7 @@ module ts {
 
         // Maps a symbol's value declaration to a per file map of all the references to it.
         var fileNameToBidirectionalReferences: Map<BidirectionalReferences> = {};
-        var declarationToFilesWithReferences: ts.Map<boolean>[] = [];
+        var declarationToFilesWithReferences: StringSet[] = [];
 
         // We delay responding to all changes we hear about until we actually get a request for 
         // some reference information.  This allows us to avoid costly computation for every 
@@ -338,7 +341,7 @@ module ts {
 
                     // Mark that this file is referenced by this symbol.
                     var declarationNodeId = getNodeId(declarationNode);
-                    var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = {});
+                    var filesWithReferences = declarationToFilesWithReferences[declarationNodeId] || (declarationToFilesWithReferences[declarationNodeId] = createStringSet());
                     filesWithReferences[fileName] = true;
                 }
             }
@@ -358,7 +361,7 @@ module ts {
                             var fileWithReferences = declarationToFilesWithReferences[getNodeId(previousDeclarationNode)];
 
                             if (fileWithReferences) {
-                                delete fileWithReferences[fileName];
+                                stringSet_delete(fileWithReferences, fileName);
                             }
                         }
                     }
@@ -382,7 +385,7 @@ module ts {
                 var filesWithReferences = declarationToFilesWithReferences[declarationNodeId];
                 if (filesWithReferences) {
                     for (var fileName in filesWithReferences) {
-                        if (hasProperty(filesWithReferences, fileName)) {
+                        if (stringSet_contains(filesWithReferences, fileName)) {
                             removeReferencesToSymbol(symbol, fileName);
                         }
                     }
@@ -410,9 +413,9 @@ module ts {
         //var fileNameToSourceFileId: ts.Map<number>
         var referenceManager = createReferencesManager();
 
-        return <InferenceEngine>{
-            createEngineUpdater
-            //onBeforeUpdateSourceFile
+        return {
+            createEngineUpdater,
+            referencesManager_forTestingPurposesOnly: referenceManager
         };
 
         function createPrimitiveTypeInformation(name: string): TypeInformation {
@@ -555,12 +558,12 @@ module ts {
                 // First update all the references we have.
                 referenceManager.update(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
 
-                typeChecker = program.getTypeChecker();
+                //typeChecker = program.getTypeChecker();
 
-                var sourceFiles = program.getSourceFiles();
-                for (var i = 0, n = sourceFiles.length; i < n; i++) {
-                    processSourceFile(sourceFiles[i]);
-                }
+                //var sourceFiles = program.getSourceFiles();
+                //for (var i = 0, n = sourceFiles.length; i < n; i++) {
+                //    processSourceFile(sourceFiles[i]);
+                //}
             }
 
             function processSourceFile(sourceFile: SourceFile) {
