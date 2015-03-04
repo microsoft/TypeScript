@@ -583,6 +583,7 @@ declare module "typescript" {
     interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;
+        hasExtendedUnicodeEscape?: boolean;
     }
     interface StringLiteralExpression extends LiteralExpression {
         _stringLiteralExpressionBrand: any;
@@ -1454,6 +1455,7 @@ declare module "typescript" {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;

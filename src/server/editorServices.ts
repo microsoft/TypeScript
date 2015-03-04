@@ -1063,7 +1063,7 @@ module ts.server {
         }
     }
 
-    class ScriptVersionCache {
+    export class ScriptVersionCache {
         changes: TextChange[] = [];
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
@@ -1216,7 +1216,7 @@ module ts.server {
         }
     }
 
-    class LineIndex {
+    export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
@@ -1304,7 +1304,20 @@ module ts.server {
                     var checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
                 var walker = new EditWalker();
-                if (deleteLength > 0) {
+                if (pos >= this.root.charCount()) {
+                    // insert at end
+                    pos = this.root.charCount() - 1;
+                    var endString = this.getText(pos, 1);
+                    if (newText) {
+                        newText = endString + newText;
+                    }
+                    else {
+                        newText = endString;
+                    }
+                    deleteLength = 0;
+                    walker.suppressTrailingText = true;
+                }
+                else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
@@ -1320,21 +1333,10 @@ module ts.server {
                         }
                     }
                 }
-                else if (pos >= this.root.charCount()) {
-                    // insert at end
-                    pos = this.root.charCount() - 1;
-                    var endString = this.getText(pos, 1);
-                    if (newText) {
-                        newText = endString + newText;
-                    }
-                    else {
-                        newText = endString;
-                    }
-                    deleteLength = 0;
-                    walker.suppressTrailingText = true;
+                if (pos < this.root.charCount()) {
+                    this.root.walk(pos, deleteLength, walker);
+                    walker.insertLines(newText);
                 }
-                this.root.walk(pos, deleteLength, walker);
-                walker.insertLines(newText);
                 if (this.checkEdits) {
                     var updatedText = this.getText(0, this.root.charCount());
                     Debug.assert(checkText == updatedText, "buffer edit mismatch");

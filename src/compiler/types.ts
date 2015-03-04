@@ -655,6 +655,7 @@ module ts {
     export interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;
+        hasExtendedUnicodeEscape?: boolean;
     }
 
     export interface StringLiteralExpression extends LiteralExpression {

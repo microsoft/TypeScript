@@ -1693,8 +1693,37 @@ module ts {
             }
 
             function isExistingName(location: Node, name: string) {
-                return !resolver.isUnknownIdentifier(location, name) ||
-                    (currentScopeNames && hasProperty(currentScopeNames, name));
+                // check if resolver is aware of this name (if name was seen during the typecheck)
+                if (!resolver.isUnknownIdentifier(location, name)) {
+                    return true;
+                }
+
+                // check if name is present in generated names that were introduced by the emitter
+                if (currentScopeNames && hasProperty(currentScopeNames, name)) {
+                    return true;
+                }
+
+                // check generated names in outer scopes
+                // var x;
+                // function foo() {
+                //    let x; // 1
+                //    function bar() {
+                //        {
+                //            let x; // 2
+                //        }
+                //        console.log(x); // 3
+                //    }
+                //}
+                // here both x(1) and x(2) should be renamed and their names should be different
+                // so x in (3) will refer to x(1)
+                var frame = lastFrame;
+                while (frame) {
+                    if (hasProperty(frame.names, name)) {
+                        return true;
+                    }
+                    frame = frame.previous;
+                }
+                return false;
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -2223,36 +2252,70 @@ module ts {
                 }
             }
 
-            function isBinaryOrOctalIntegerLiteral(text: string): boolean {
-                if (text.length <= 0) {
-                    return false;
+            function isBinaryOrOctalIntegerLiteral(node: LiteralExpression, text: string): boolean {
+                if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+                    switch (text.charCodeAt(1)) {
+                        case CharacterCodes.b:
+                        case CharacterCodes.B:
+                        case CharacterCodes.o:
+                        case CharacterCodes.O:
+                            return true;
+                    }
                 }
-
-                if (text.charCodeAt(1) === CharacterCodes.B || text.charCodeAt(1) === CharacterCodes.b ||
-                    text.charCodeAt(1) === CharacterCodes.O || text.charCodeAt(1) === CharacterCodes.o) {
-                    return true;
-                }
+                
                 return false;
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
-                    node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
-                        node.text;
+                var text = getLiteralText(node);
+                
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
-                // For version below ES6, emit binary integer literal and octal integer literal in canonical form
-                else if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
+                // For versions below ES6, emit binary & octal literals in their canonical decimal form.
+                else if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
                     write(node.text);
                 }
                 else {
                     write(text);
                 }
             }
-
-            function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
-                return '"' + escapeString(node.text) + '"';
+            
+            function getLiteralText(node: LiteralExpression) {
+                // Any template literal or string literal with an extended escape
+                // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
+                if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+                    return getQuotedEscapedLiteralText('"', node.text, '"');
+                }
+                
+                // If we don't need to downlevel and we can reach the original source text using
+                // the node's parent reference, then simply get the text as it was originally written.
+                if (node.parent) {
+                    return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                }
+                
+                // If we can't reach the original source text, use the canonical form if it's a number,
+                // or an escaped quoted form of the original text if it's string-like.
+                switch (node.kind) {
+                    case SyntaxKind.StringLiteral:
+                        return getQuotedEscapedLiteralText('"', node.text, '"');
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return getQuotedEscapedLiteralText('`', node.text, '`');
+                    case SyntaxKind.TemplateHead:
+                        return getQuotedEscapedLiteralText('`', node.text, '${');
+                    case SyntaxKind.TemplateMiddle:
+                        return getQuotedEscapedLiteralText('}', node.text, '${');
+                    case SyntaxKind.TemplateTail:
+                        return getQuotedEscapedLiteralText('}', node.text, '`');
+                    case SyntaxKind.NumericLiteral:
+                        return node.text;
+                }
+                
+                Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+            }
+            
+            function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
+                return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
             }
             
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
