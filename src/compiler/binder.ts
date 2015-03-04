@@ -197,7 +197,7 @@ module ts {
 
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             var hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
-            if (symbolKind & SymbolFlags.Import) {
+            if (symbolKind & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                 }
@@ -486,11 +486,11 @@ module ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ImportClause:
                     if ((<ImportClause>node).name) {
-                        bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                        bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     }
                     else {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
@@ -506,7 +506,7 @@ module ts {
                 case SyntaxKind.ExportAssignment:
                     if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                     }
                     else {
                         // An export default clause with an expression exports a value

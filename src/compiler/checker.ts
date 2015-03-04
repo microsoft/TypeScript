@@ -54,7 +54,7 @@ module ts {
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
-            getAliasedSymbol: resolveImport,
+            getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfExternalModule,
         };
@@ -167,7 +167,7 @@ module ts {
             if (flags & SymbolFlags.SetAccessor) result |= SymbolFlags.SetAccessorExcludes;
             if (flags & SymbolFlags.TypeParameter) result |= SymbolFlags.TypeParameterExcludes;
             if (flags & SymbolFlags.TypeAlias) result |= SymbolFlags.TypeAliasExcludes;
-            if (flags & SymbolFlags.Import) result |= SymbolFlags.ImportExcludes;
+            if (flags & SymbolFlags.Alias) result |= SymbolFlags.AliasExcludes;
             return result;
         }
 
@@ -283,10 +283,9 @@ module ts {
                     return symbol;
                 }
 
-                if (symbol.flags & SymbolFlags.Import) {
-                    var target = resolveImport(symbol);
-                    // unknown symbol will mean that there were reported error during import resolution
-                    // treat it as positive answer to avoid cascading errors
+                if (symbol.flags & SymbolFlags.Alias) {
+                    var target = resolveAlias(symbol);
+                    // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
                     if (target === unknownSymbol || target.flags & meaning) {
                         return symbol;
                     }
@@ -333,7 +332,7 @@ module ts {
                         if (!isExternalModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
-                            if (!(result.flags & SymbolFlags.Import && getDeclarationOfImportSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
+                            if (!(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
                                 break loop;
                             }
                             result = undefined;
@@ -456,14 +455,14 @@ module ts {
             return result;
         }
 
-        // An import symbol is created by one of the following declarations:
+        // An alias symbol is created by one of the following declarations:
         // import <symbol> = ...
         // import <symbol> from ...
         // import * as <symbol> from ...
         // import { x as <symbol> } from ...
         // export { x as <symbol> } from ...
         // export default ...
-        function isImportSymbolDeclaration(node: Node): boolean {
+        function isAliasSymbolDeclaration(node: Node): boolean {
             return node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
                 node.kind === SyntaxKind.NamespaceImport ||
@@ -472,8 +471,8 @@ module ts {
                 node.kind === SyntaxKind.ExportAssignment;
         }
 
-        function getDeclarationOfImportSymbol(symbol: Symbol): Declaration {
-            return forEach(symbol.declarations, d => isImportSymbolDeclaration(d) ? d : undefined);
+        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
+            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -510,7 +509,7 @@ module ts {
                         error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
                         return;
                     }
-                    return symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) ? symbol : resolveImport(symbol);
+                    return symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) ? symbol : resolveAlias(symbol);
                 }
             }
         }
@@ -546,12 +545,12 @@ module ts {
             }
         }
 
-        function resolveImport(symbol: Symbol): Symbol {
-            Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");
+        function resolveAlias(symbol: Symbol): Symbol {
+            Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
             var links = getSymbolLinks(symbol);
             if (!links.target) {
                 links.target = resolvingSymbol;
-                var node = getDeclarationOfImportSymbol(symbol);
+                var node = getDeclarationOfAliasSymbol(symbol);
                 var target = getTargetOfImportDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
@@ -568,20 +567,20 @@ module ts {
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportAssignment | ExportSpecifier) {
             var symbol = getSymbolOfNode(node);
-            var target = resolveImport(symbol);
+            var target = resolveAlias(symbol);
             if (target && target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target)) {
-                markImportSymbolAsReferenced(symbol);
+                markAliasSymbolAsReferenced(symbol);
             }
         }
 
-        // When an import symbol (i.e. an alias) is referenced, we need to mark the entity it references as referenced and in turn
-        // repeat that until we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking
-        // the target of the alias as an expression (which recursively takes us back here if the target references another alias).
-        function markImportSymbolAsReferenced(symbol: Symbol) {
+        // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
+        // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
+        // the alias as an expression (which recursively takes us back here if the target references another alias).
+        function markAliasSymbolAsReferenced(symbol: Symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.referenced) {
                 links.referenced = true;
-                var node = getDeclarationOfImportSymbol(symbol);
+                var node = getDeclarationOfAliasSymbol(symbol);
                 if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
@@ -628,7 +627,7 @@ module ts {
             return symbol.parent ? getFullyQualifiedName(symbol.parent) + "." + symbolToString(symbol) : symbolToString(symbol);
         }
 
-        // Resolves a qualified name and any involved import aliases
+        // Resolves a qualified name and any involved aliases
         function resolveEntityName(name: EntityName, meaning: SymbolFlags): Symbol {
             if (getFullWidth(name) === 0) {
                 return undefined;
@@ -652,7 +651,7 @@ module ts {
                 }
             }
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
-            return symbol.flags & meaning ? symbol : resolveImport(symbol);
+            return symbol.flags & meaning ? symbol : resolveAlias(symbol);
         }
 
         function isExternalModuleNameRelative(moduleName: string): boolean {
@@ -709,8 +708,8 @@ module ts {
                 if (symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) {
                     return symbol;
                 }
-                if (symbol.flags & SymbolFlags.Import) {
-                    return resolveImport(symbol);
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return resolveAlias(symbol);
                 }
             }
         }
@@ -792,9 +791,9 @@ module ts {
                 return true;
             }
 
-            // If it is an import, then it is a value if the symbol it resolves to is a value.
-            if (symbol.flags & SymbolFlags.Import) {
-                return (resolveImport(symbol).flags & SymbolFlags.Value) !== 0;
+            // If it is an alias, then it is a value if the symbol it resolves to is a value.
+            if (symbol.flags & SymbolFlags.Alias) {
+                return (resolveAlias(symbol).flags & SymbolFlags.Value) !== 0;
             }
 
             return false;
@@ -936,13 +935,13 @@ module ts {
 
                 // Check if symbol is any of the alias
                 return forEachValue(symbols, symbolFromSymbolTable => {
-                    if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
+                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias) {
                         if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
                             // Is this external alias, then use it to name
                             ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
 
-                            var resolvedImportedSymbol = resolveImport(symbolFromSymbolTable);
-                            if (isAccessible(symbolFromSymbolTable, resolveImport(symbolFromSymbolTable))) {
+                            var resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
+                            if (isAccessible(symbolFromSymbolTable, resolveAlias(symbolFromSymbolTable))) {
                                 return [symbolFromSymbolTable];
                             }
 
@@ -978,7 +977,7 @@ module ts {
                 }
 
                 // Qualify if the symbol from symbol table has same meaning as expected
-                symbolFromSymbolTable = (symbolFromSymbolTable.flags & SymbolFlags.Import) ? resolveImport(symbolFromSymbolTable) : symbolFromSymbolTable;
+                symbolFromSymbolTable = (symbolFromSymbolTable.flags & SymbolFlags.Alias) ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
                 if (symbolFromSymbolTable.flags & meaning) {
                     qualify = true;
                     return true;
@@ -1675,9 +1674,9 @@ module ts {
                         return true;
                     }
 
-                    // if symbolOfNode is import declaration, resolve the symbol declaration and check
-                    if (symbolOfNode.flags & SymbolFlags.Import) {
-                        return isSymbolUsedInExportAssignment(resolveImport(symbolOfNode));
+                    // if symbolOfNode is alias declaration, resolve the symbol declaration and check
+                    if (symbolOfNode.flags & SymbolFlags.Alias) {
+                        return isSymbolUsedInExportAssignment(resolveAlias(symbolOfNode));
                     }
                 }
 
@@ -1687,9 +1686,9 @@ module ts {
                         return true;
                     }
 
-                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Import)) {
-                        // if export assigned symbol is import declaration, resolve the import
-                        resolvedExportSymbol = resolvedExportSymbol || resolveImport(exportAssignmentSymbol);
+                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Alias)) {
+                        // if export assigned symbol is alias declaration, resolve the alias
+                        resolvedExportSymbol = resolvedExportSymbol || resolveAlias(exportAssignmentSymbol);
                         if (resolvedExportSymbol === symbol) {
                             return true;
                         }
@@ -2113,10 +2112,10 @@ module ts {
             return links.type;
         }
 
-        function getTypeOfImport(symbol: Symbol): Type {
+        function getTypeOfAlias(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = getTypeOfSymbol(resolveImport(symbol));
+                links.type = getTypeOfSymbol(resolveAlias(symbol));
             }
             return links.type;
         }
@@ -2145,8 +2144,8 @@ module ts {
             if (symbol.flags & SymbolFlags.Accessor) {
                 return getTypeOfAccessors(symbol);
             }
-            if (symbol.flags & SymbolFlags.Import) {
-                return getTypeOfImport(symbol);
+            if (symbol.flags & SymbolFlags.Alias) {
+                return getTypeOfAlias(symbol);
             }
             return unknownType;
         }
@@ -2312,10 +2311,10 @@ module ts {
             return <TypeParameter>links.declaredType;
         }
 
-        function getDeclaredTypeOfImport(symbol: Symbol): Type {
+        function getDeclaredTypeOfAlias(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
-                links.declaredType = getDeclaredTypeOfSymbol(resolveImport(symbol));
+                links.declaredType = getDeclaredTypeOfSymbol(resolveAlias(symbol));
             }
             return links.declaredType;
         }
@@ -2337,8 +2336,8 @@ module ts {
             if (symbol.flags & SymbolFlags.TypeParameter) {
                 return getDeclaredTypeOfTypeParameter(symbol);
             }
-            if (symbol.flags & SymbolFlags.Import) {
-                return getDeclaredTypeOfImport(symbol);
+            if (symbol.flags & SymbolFlags.Alias) {
+                return getDeclaredTypeOfAlias(symbol);
             }
             return unknownType;
         }
@@ -5032,8 +5031,8 @@ module ts {
                 error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
             }
 
-            if (symbol.flags & SymbolFlags.Import && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol))) {
-                markImportSymbolAsReferenced(symbol);
+            if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
+                markAliasSymbolAsReferenced(symbol);
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -8320,7 +8319,7 @@ module ts {
                         return SymbolFlags.ExportType | SymbolFlags.ExportValue;
                     case SyntaxKind.ImportEqualsDeclaration:
                         var result: SymbolFlags = 0;
-                        var target = resolveImport(getSymbolOfNode(d));
+                        var target = resolveAlias(getSymbolOfNode(d));
                         forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
                         return result;
                     default:
@@ -9803,9 +9802,9 @@ module ts {
             return true;
         }
 
-        function checkImportSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
+        function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
             var symbol = getSymbolOfNode(node);
-            var target = resolveImport(symbol);
+            var target = resolveAlias(symbol);
             if (target !== unknownSymbol) {
                 var excludedMeanings =
                     (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
@@ -9823,7 +9822,7 @@ module ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-            checkImportSymbol(node);
+            checkAliasSymbol(node);
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
@@ -9856,7 +9855,7 @@ module ts {
                     markExportAsReferenced(node);
                 }
                 if (isInternalModuleImportEqualsDeclaration(node)) {
-                    var target = resolveImport(getSymbolOfNode(node));
+                    var target = resolveAlias(getSymbolOfNode(node));
                     if (target !== unknownSymbol) {
                         if (target.flags & SymbolFlags.Value) {
                             // Target is a value symbol, check that it is not hidden by a local declaration with the same name
@@ -9885,7 +9884,7 @@ module ts {
         }
 
         function checkExportSpecifier(node: ExportSpecifier) {
-            checkImportSymbol(node);
+            checkAliasSymbol(node);
             if (!(<ExportDeclaration>node.parent.parent).moduleSpecifier) {
                 markExportAsReferenced(node);
             }
@@ -9953,7 +9952,7 @@ module ts {
                 var defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
                     if (hasExportedMembers(moduleSymbol)) {
-                        var declaration = getDeclarationOfImportSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
+                        var declaration = getDeclarationOfAliasSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
@@ -10421,7 +10420,7 @@ module ts {
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
                 return resolveEntityName(<Identifier>entityName,
-                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
+                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
             if (entityName.kind !== SyntaxKind.PropertyAccessExpression) {
@@ -10442,9 +10441,9 @@ module ts {
                 }
 
                 if (entityName.kind === SyntaxKind.Identifier) {
-                    // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
+                    // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
                     // return the alias symbol.
-                    var meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Import;
+                    var meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Alias;
                     return resolveEntityName(<Identifier>entityName, meaning);
                 }
                 else if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
@@ -10464,9 +10463,9 @@ module ts {
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
                 var meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-                // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
+                // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
                 // return the alias symbol.
-                meaning |= SymbolFlags.Import;
+                meaning |= SymbolFlags.Alias;
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
 
@@ -10647,8 +10646,8 @@ module ts {
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
-                    // We conservatively include import symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Import)) {
+                    // We conservatively include alias symbols to cover cases where they're emitted as locals
+                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
                     }
                 }
@@ -10763,8 +10762,8 @@ module ts {
             return getGeneratedNameForNode(node);
         }
 
-        function getImportNameSubstitution(symbol: Symbol): string {
-            var declaration = getDeclarationOfImportSymbol(symbol);
+        function getAliasNameSubstitution(symbol: Symbol): string {
+            var declaration = getDeclarationOfAliasSymbol(symbol);
             if (declaration && declaration.kind === SyntaxKind.ImportSpecifier) {
                 var moduleName = getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent);
                 var propertyName = (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
@@ -10802,8 +10801,8 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Import) {
-                    return getImportNameSubstitution(symbol);
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return getAliasNameSubstitution(symbol);
                 }
             }
         }
@@ -10818,11 +10817,11 @@ module ts {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
-            return isImportResolvedToValue(getSymbolOfNode(node));
+            return isAliasResolvedToValue(getSymbolOfNode(node));
         }
 
-        function isImportResolvedToValue(symbol: Symbol): boolean {
-            var target = resolveImport(symbol);
+        function isAliasResolvedToValue(symbol: Symbol): boolean {
+            var target = resolveAlias(symbol);
             // const enums and modules that contain only const enums are not considered values from the emit perespective
             return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
         }
@@ -10831,14 +10830,14 @@ module ts {
             return isConstEnumSymbol(s) || s.constEnumOnlyModule;
         }
 
-        function isReferencedImportDeclaration(node: Node): boolean {
-            if (isImportSymbolDeclaration(node)) {
+        function isReferencedAliasDeclaration(node: Node): boolean {
+            if (isAliasSymbolDeclaration(node)) {
                 var symbol = getSymbolOfNode(node);
                 if (getSymbolLinks(symbol).referenced) {
                     return true;
                 }
             }
-            return forEachChild(node, isReferencedImportDeclaration);
+            return forEachChild(node, isReferencedAliasDeclaration);
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
@@ -10932,7 +10931,7 @@ module ts {
 
             var symbol = declarationSymbol ||
                 getNodeLinks(n).resolvedSymbol ||
-                resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Import, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             
             var isLetOrConst =
                 symbol &&
@@ -10953,7 +10952,7 @@ module ts {
                 getGeneratedNameForNode,
                 getExpressionNameSubstitution,
                 hasExportDefaultValue,
-                isReferencedImportDeclaration,
+                isReferencedAliasDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,

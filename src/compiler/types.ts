@@ -1191,7 +1191,7 @@ module ts {
         getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
         hasExportDefaultValue(node: SourceFile): boolean;
-        isReferencedImportDeclaration(node: Node): boolean;
+        isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
@@ -1230,7 +1230,7 @@ module ts {
         ExportValue             = 0x00100000,  // Exported value marker (see comment in declareModuleMember in binder)
         ExportType              = 0x00200000,  // Exported type marker (see comment in declareModuleMember in binder)
         ExportNamespace         = 0x00400000,  // Exported namespace marker (see comment in declareModuleMember in binder)
-        Import                  = 0x00800000,  // An alias for another symbol (see comment in isImportSymbolDeclaration in checker)
+        Alias                   = 0x00800000,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
         Instantiated            = 0x01000000,  // Instantiated symbol
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
@@ -1270,9 +1270,9 @@ module ts {
         SetAccessorExcludes = Value & ~GetAccessor,
         TypeParameterExcludes = Type & ~TypeParameter,
         TypeAliasExcludes = Type,
-        ImportExcludes = Import,  // Imports collide with all other imports with the same name
+        AliasExcludes = Alias,
 
-        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Import,
+        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
