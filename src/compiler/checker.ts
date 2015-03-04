@@ -248,14 +248,6 @@ module ts {
             }
         }
 
-        function extendSymbolTable(target: SymbolTable, source: SymbolTable) {
-            for (var id in source) {
-                if (!hasProperty(target, id)) {
-                    target[id] = source[id];
-                }
-            }
-        }
-
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
             if (!symbol.id) symbol.id = nextSymbolId++;
@@ -723,6 +715,14 @@ module ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable) {
+            for (var id in source) {
+                if (id !== "default" && !hasProperty(target, id)) {
+                    target[id] = source[id];
+                }
+            }
+        }
+
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
             if (compilerOptions.target < ScriptTarget.ES6) {
                 // A default export hides all other exports in CommonJS and AMD modules
@@ -747,7 +747,7 @@ module ts {
                         if (!result) {
                             result = cloneSymbolTable(moduleSymbol.exports);
                         }
-                        extendSymbolTable(result, symbol.exports);
+                        extendExportSymbols(result, symbol.exports);
                     }
                     // All export * declarations are collected in an __export symbol by the binder
                     var exportStars = symbol.exports["__export"];
