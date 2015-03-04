@@ -77,7 +77,7 @@ v = 1;
     {
       "declarationInfo": {
         "symbolName": "v",
-        "id": 20703,
+        "id": 1,
         "fileName": "file1.js",
         "start": 4
       },
@@ -93,13 +93,13 @@ v = 1;
         {
           "referenceInfo": {
             "text": "v",
-            "id": 20704,
+            "id": 2,
             "fileName": "file1.js",
             "start": 7
           },
           "declarationInfo": {
             "symbolName": "v",
-            "id": 20703
+            "id": 1
           }
         }
       ],
@@ -107,12 +107,12 @@ v = 1;
         {
           "declarationInfo": {
             "symbolName": "v",
-            "id": 20703
+            "id": 1
           },
           "references": [
             {
               "text": "v",
-              "id": 20704,
+              "id": 2,
               "fileName": "file1.js",
               "start": 7
             }
@@ -125,13 +125,13 @@ v = 1;
         {
           "referenceInfo": {
             "text": "v",
-            "id": 20705,
+            "id": 3,
             "fileName": "file2.js",
             "start": 0
           },
           "declarationInfo": {
             "symbolName": "v",
-            "id": 20703
+            "id": 1
           }
         }
       ],
@@ -139,12 +139,12 @@ v = 1;
         {
           "declarationInfo": {
             "symbolName": "v",
-            "id": 20703
+            "id": 1
           },
           "references": [
             {
               "text": "v",
-              "id": 20705,
+              "id": 3,
               "fileName": "file2.js",
               "start": 0
             }

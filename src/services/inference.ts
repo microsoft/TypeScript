@@ -212,6 +212,8 @@ module ts {
 
         function toJSON(program: Program): any {
             ensureUpToDate(program);
+            var idMapping: number[] = [];
+            var nextId = 1;
 
             return {
                 declarationToFilesWithReferences: convertDeclarationToFilesWithReferences(),
@@ -313,7 +315,7 @@ module ts {
             }
 
             function fillNodeInfo(node: Node, result: any, full: boolean): void {
-                result.id = node.id;
+                result.id = mapId(node.id);
 
                 if (full) {
                     var sourceFile = getSourceFileOfNode(node);
@@ -321,6 +323,10 @@ module ts {
                     result.fileName = sourceFile.fileName;
                     result.start = start;
                 }
+            }
+
+            function mapId(id: number) {
+                return idMapping[id] || (idMapping[id] = nextId++);
             }
         }
 
