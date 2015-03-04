@@ -963,10 +963,6 @@ module ts {
         externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
-        
-        /* @internal */ nodeCount: number;
-        /* @internal */ identifierCount: number;
-        /* @internal */ symbolCount: number;
 
         // File level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
@@ -975,9 +971,17 @@ module ts {
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
         
+        // Maps from node ids in this source file to the symbol created for it.
+        // Only created if 'createNodeMap: true' is passed to bindSourceFile.
+        /* @internal */ nodeToSymbol: Symbol[];
+
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
+        
+        /* @internal */ nodeCount: number;
+        /* @internal */ identifierCount: number;
+        /* @internal */ symbolCount: number;
     }
 
     export interface ScriptReferenceHost {
@@ -1241,6 +1245,7 @@ module ts {
         Prototype               = 0x08000000,  // Prototype property (no source representation)
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
+        JavascriptSymbol        = 0x40000000,  // Symbol declared in a javascript file.
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,

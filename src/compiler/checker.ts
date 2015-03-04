@@ -5,6 +5,15 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    /* @internal */
+    export function getNodeId(node: Node) {
+        if (!node.id) {
+            node.id = nextNodeId++;
+        }
+
+        return node.id;
+    }
+
     /* @internal */ export var checkTime = 0;
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
@@ -263,7 +272,7 @@ module ts {
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            if (!node.id) node.id = nextNodeId++;
+            var id = getNodeId(node);
             return nodeLinks[node.id] || (nodeLinks[node.id] = {});
         }
 
@@ -822,17 +831,6 @@ module ts {
             var type = <ObjectType>createType(kind);
             type.symbol = symbol;
             return type;
-        }
-
-        // A reserved member name starts with two underscores, but the third character cannot be an underscore
-        // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
-        // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
-        // Symbol instance.
-        function isReservedMemberName(name: string) {
-            return name.charCodeAt(0) === CharacterCodes._ &&
-                name.charCodeAt(1) === CharacterCodes._ &&
-                name.charCodeAt(2) !== CharacterCodes._ &&
-                name.charCodeAt(2) !== CharacterCodes.at;
         }
 
         function getNamedMembers(members: SymbolTable): Symbol[] {

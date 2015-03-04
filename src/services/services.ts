@@ -9,6 +9,7 @@
 /// <reference path='utilities.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='inference.ts' />
 
 module ts {
     export var servicesVersion = "0.4"
@@ -735,6 +736,7 @@ module ts {
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
+        public nodeToSymbol: Symbol[];
 
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -1990,7 +1992,8 @@ module ts {
         return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
     }
 
-    function isRightSideOfPropertyAccess(node: Node) {
+    /* @internal */
+    export function isRightSideOfPropertyAccess(node: Node) {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
@@ -2175,6 +2178,7 @@ module ts {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var ruleProvider: formatting.RulesProvider;
         var program: Program;
+        var inferenceEngine: InferenceEngine;
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
@@ -2235,7 +2239,10 @@ module ts {
             var newSettings = hostCache.compilationSettings();
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
-            // Now create a new compiler
+            // Now create a new compiler.  Also, ensure we have an inference engine.
+            inferenceEngine = inferenceEngine || createInferenceEngine();
+            var inferenceEngineUpdater = inferenceEngine.createEngineUpdater();
+
             var newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
@@ -2249,18 +2256,20 @@ module ts {
 
             // Release any files we have acquired in the old program but are 
             // not part of the new program.
-            if (program) {
+            if (program) { 
                 var oldSourceFiles = program.getSourceFiles();
                 for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
                     var fileName = oldSourceFiles[i].fileName;
                     if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(fileName, oldSettings);
+                        // inferenceEngineUpdater.onSourceFileRemoved(oldSourceFiles[i]);
                     }
                 }
             }
 
             program = newProgram;
             typeInfoResolver = program.getTypeChecker();
+            // inferenceEngineUpdater.updateInferenceEngine(program);
 
             return;
 
@@ -2301,14 +2310,17 @@ module ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the 
                         // host says should be used.
-                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                        var newSourceFile = documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                        //inferenceEngineUpdater.onSourceFileUpdated(oldSourceFile, newSourceFile);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                var result = documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                //inferenceEngineUpdater.onSourceFileAdded(result);
+                return result;
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
@@ -2360,6 +2372,9 @@ module ts {
             if (program) {
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+
+                program = undefined;
+                inferenceEngine = undefined;
             }
         }
 

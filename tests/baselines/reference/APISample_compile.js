@@ -974,6 +974,7 @@ declare module "typescript" {
         Prototype = 134217728,
         UnionProperty = 268435456,
         Optional = 536870912,
+        JavascriptSymbol = 1073741824,
         Enum = 384,
         Variable = 3,
         Value = 107455,
