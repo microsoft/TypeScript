@@ -2873,6 +2873,12 @@ module ts {
 
                 return result;
             }
+            
+            function createExpressionStatement(expression: Expression): ExpressionStatement {
+                var result = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+                result.expression = expression;
+                return result;
+            }
 
             function createMemberAccessForPropertyName(expression: LeftHandSideExpression, memberName: DeclarationName): PropertyAccessExpression | ElementAccessExpression {
                 if (memberName.kind === SyntaxKind.Identifier) {
@@ -3473,8 +3479,8 @@ module ts {
                 //
                 // should be emitted as
                 //
-                //    for (var v, _i = 0, _a = expr; _i < _a.length; _i++) {
-                //        v = _a[_i];
+                //    for (var _i = 0, _a = expr; _i < _a.length; _i++) {
+                //        var v = _a[_i];
                 //    }
                 //
                 // where _a and _i are temps emitted to capture the RHS and the counter,
@@ -3491,16 +3497,11 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
+                // This is the var keyword for the counter and rhsReference. The var keyword for
+                // the LHS will be emitted inside the body.
                 write("var ");
-                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
-                    if (variableDeclarationList.declarations.length >= 1) {
-                        var decl = variableDeclarationList.declarations[0];
-                        // TODO handle binding patterns
-                        emit(decl);
-                        write(", ");
-                    }
-                }
+                
+                // Do not emit the LHS var declaration yet, because it might contain destructuring.
                 
                 // Do not call create recordTempDeclaration because we are declaring the temps
                 // right here. Recording means they will be declared later.
@@ -3534,33 +3535,56 @@ module ts {
                 increaseIndent();
                 
                 // Initialize LHS
-                // v = _a[_i];
-                if (decl) {
-                    emit(decl.name);
-                }
-                else if (variableDeclarationList) {
-                    // It's an empty declaration list. This can only happen in an error case, if the user wrote
-                    //     for (var of []) {}
-                    var emptyDeclarationListTemp = createTempVariable(node, /*forLoopVariable*/ false);
+                // var v = _a[_i];
+                var rhsIterationValue = createElementAccessExpression(rhsReference, counter);
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
-                    emit(emptyDeclarationListTemp);
+                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                    if (variableDeclarationList.declarations.length >= 1) {
+                        var declaration = variableDeclarationList.declarations[0];
+                        if (isBindingPattern(declaration.name)) {
+                            // This works whether the declaration is a var, let, or const.
+                            // It will use rhsIterationValue _a[_i] as the initializer.
+                            emitDestructuring(declaration, rhsIterationValue);
+                        }
+                        else {
+                            // The following call does not include the initializer, so we have
+                            // to emit it separately.
+                            emit(declaration);
+                            write(" = ");
+                            emit(rhsIterationValue);
+                        }
+                    }
+                    else {
+                        // It's an empty declaration list. This can only happen in an error case, if the user wrote
+                        //     for (var of []) {}
+                        var emptyDeclarationListTemp = createTempVariable(node, /*forLoopVariable*/ false);
+                        emit(emptyDeclarationListTemp);
+                        write(" = ");
+                        emit(rhsIterationValue);
+                    }
                 }
                 else {
                     // Initializer is an expression. Emit the expression in the body, so that it's
                     // evaluated on every iteration.
-                    emit(node.initializer);
+                    var assignmentExpression = createBinaryExpression(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue, /*startsOnNewLine*/ false);
+                    var assignmentExpressionStatement = createExpressionStatement(assignmentExpression);
+                    if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
+                        // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
+                        emitDestructuring(assignmentExpressionStatement);
+                    }
+                    else {
+                        emit(assignmentExpression);
+                    }
                 }
-                write(" = ");
-                emit(rhsReference)
-                write("[");
-                emit(counter);
-                write("];");
-                writeLine();
+                write(";");
                 
                 if (node.statement.kind === SyntaxKind.Block) {
                     emitLines((<Block>node.statement).statements);
                 }
                 else {
+                    writeLine();
                     emit(node.statement);
                 }
                 
@@ -3723,13 +3747,14 @@ module ts {
                 }
             }
 
-            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
+            // Note that a destructuring assignment can be either an ExpressionStatement or a BinaryExpression.
+            function emitDestructuring(root: ExpressionStatement | BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
                 var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
-                if (root.kind === SyntaxKind.BinaryExpression) {
-                    emitAssignmentExpression(<BinaryExpression>root);
+                if (root.kind === SyntaxKind.ExpressionStatement || root.kind === SyntaxKind.BinaryExpression) {
+                    emitAssignmentExpression(<ExpressionStatement | BinaryExpression>root);
                 }
                 else {
                     emitBindingElement(<BindingElement>root, value);
@@ -3868,13 +3893,14 @@ module ts {
                     }
                 }
 
-                function emitAssignmentExpression(root: BinaryExpression) {
-                    var target = root.left;
-                    var value = root.right;
-                    if (root.parent.kind === SyntaxKind.ExpressionStatement) {
-                        emitDestructuringAssignment(target, value);
-                    }
-                    else {
+                function emitAssignmentExpression(root: ExpressionStatement | BinaryExpression) {
+                    // Synthesized nodes will not have parents, so the ExpressionStatements will have to be passed
+                    // in directly. Otherwise, it will crash when we access the parent of a synthesized binary expression.
+                    var emitParenthesized = root.kind !== SyntaxKind.ExpressionStatement && root.parent.kind !== SyntaxKind.ExpressionStatement;
+                    var expression = <BinaryExpression>(root.kind === SyntaxKind.ExpressionStatement ? (<ExpressionStatement>root).expression : <BinaryExpression>root);
+                    var target = expression.left;
+                    var value = expression.right;
+                    if (emitParenthesized) {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
@@ -3885,6 +3911,9 @@ module ts {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write(")");
                         }
+                    }
+                    else {
+                        emitDestructuringAssignment(target, value);
                     }
                 }
 
