@@ -571,18 +571,24 @@ module ts {
             }
         }
 
+        // When an import symbol (i.e. an alias) is referenced, we need to mark the entity it references as referenced and in turn
+        // repeat that until we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking
+        // the target of the alias as an expression (which recursively takes us back here if the target references another alias).
         function markImportSymbolAsReferenced(symbol: Symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.referenced) {
                 links.referenced = true;
                 var node = getDeclarationOfImportSymbol(symbol);
                 if (node.kind === SyntaxKind.ExportAssignment) {
+                    // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
                 }
                 else if (node.kind === SyntaxKind.ExportSpecifier) {
+                    // export { <symbol> } or export { <symbol> as foo }
                     checkExpressionCached((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name);
                 }
                 else if (isInternalModuleImportEqualsDeclaration(node)) {
+                    // import foo = <symbol>
                     checkExpressionCached(<Expression>(<ImportEqualsDeclaration>node).moduleReference);
                 }
             }
@@ -717,6 +723,7 @@ module ts {
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
             if (compilerOptions.target < ScriptTarget.ES6) {
+                // A default export hides all other exports in CommonJS and AMD modules
                 var defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
                     return {
@@ -729,6 +736,8 @@ module ts {
             visit(moduleSymbol);
             return result || moduleSymbol.exports;
 
+            // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
+            // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol) {
                 if (!contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
@@ -738,6 +747,7 @@ module ts {
                         }
                         extendSymbolTable(result, symbol.exports);
                     }
+                    // All export * declarations are collected in an __export symbol by the binder
                     var exportStars = symbol.exports["__export"];
                     if (exportStars) {
                         forEach(exportStars.declarations, node => {

@@ -129,7 +129,9 @@ module ts {
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
+            // The exported symbol for an export default function/class node is always named "default"
             var name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 if (symbol.flags & excludes) {
@@ -495,9 +497,11 @@ module ts {
                     break;
                 case SyntaxKind.ExportAssignment:
                     if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                        // An export default clause with an identifier exports all meanings of that identifier
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
                     }
                     else {
+                        // An export default clause with an expression exports a value
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                     }
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
