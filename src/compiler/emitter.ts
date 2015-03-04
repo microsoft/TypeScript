@@ -3497,7 +3497,7 @@ module ts {
                     if (variableDeclarationList.declarations.length >= 1) {
                         var decl = variableDeclarationList.declarations[0];
                         // TODO handle binding patterns
-                        emit(decl.name);
+                        emit(decl);
                         write(", ");
                     }
                 }
@@ -3944,7 +3944,7 @@ module ts {
                     }
                 }
                 else {
-                    var isLet = renameNonTopLevelLetAndConst(<Identifier>node.name);
+                    renameNonTopLevelLetAndConst(<Identifier>node.name);
                     emitModuleMemberName(node);
 
                     var initializer = node.initializer;

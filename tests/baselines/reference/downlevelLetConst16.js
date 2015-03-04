@@ -404,7 +404,8 @@ function foo6() {
 }
 // TODO: once for-of is supported downlevel
 function foo7() {
-    for (var _x of []) {
+    for (var _x, _i = 0, _a = []; _i < _a.length; _i++) {
+        _x = _a[_i];
         use(_x);
     }
     use(x);
@@ -422,7 +423,8 @@ function foo9() {
     use(x);
 }
 function foo10() {
-    for (var _x of []) {
+    for (var _x, _i = 0, _a = []; _i < _a.length; _i++) {
+        _x = _a[_i];
         use(_x);
     }
     use(x);

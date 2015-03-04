@@ -119,6 +119,7 @@ for (var _x_11 in []) {
     use(_x_11);
 }
 // TODO: update once for-of statements are supported downlevel
-for (var _x_12 of []) {
+for (var _x_12, _i = 0, _a = []; _i < _a.length; _i++) {
+    _x_12 = _a[_i];
     use(_x_12);
 }
