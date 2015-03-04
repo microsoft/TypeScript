@@ -3123,8 +3123,8 @@ declare module "typescript" {
 >node : SourceFile
 >SourceFile : SourceFile
 
-        isReferencedImportDeclaration(node: Node): boolean;
->isReferencedImportDeclaration : (node: Node) => boolean
+        isReferencedAliasDeclaration(node: Node): boolean;
+>isReferencedAliasDeclaration : (node: Node) => boolean
 >node : Node
 >Node : Node
 
@@ -3280,8 +3280,8 @@ declare module "typescript" {
         ExportNamespace = 4194304,
 >ExportNamespace : SymbolFlags
 
-        Import = 8388608,
->Import : SymbolFlags
+        Alias = 8388608,
+>Alias : SymbolFlags
 
         Instantiated = 16777216,
 >Instantiated : SymbolFlags
@@ -3376,8 +3376,8 @@ declare module "typescript" {
         TypeAliasExcludes = 793056,
 >TypeAliasExcludes : SymbolFlags
 
-        ImportExcludes = 8388608,
->ImportExcludes : SymbolFlags
+        AliasExcludes = 8388608,
+>AliasExcludes : SymbolFlags
 
         ModuleMember = 8914931,
 >ModuleMember : SymbolFlags
