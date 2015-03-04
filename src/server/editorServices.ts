@@ -101,13 +101,7 @@ module ts.server {
         }
 
         getScriptFileNames() {
-            var filenames: string[] = [];
-            for (var filename in this.filenameToScript) {
-                if (this.filenameToScript[filename] && this.filenameToScript[filename].isOpen) {
-                    filenames.push(filename);
-                }
-            }
-            return filenames;
+            return this.roots.map(root => root.fileName);
         }
 
         getScriptVersion(filename: string) {
@@ -536,15 +530,35 @@ module ts.server {
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
+
+            // First loop through all open files that are referenced by projects but are not
+            // project roots.  For each referenced file, see if the default project still
+            // references that file.  If so, then just keep the file in the referenced list.
+            // If not, add the file to an unattached list, to be rechecked later.
+
+            var openFilesReferenced: ScriptInfo[] = [];
+            var unattachedOpenFiles: ScriptInfo[] = [];
+
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                var refdFile = this.openFilesReferenced[i];
-                refdFile.defaultProject.updateGraph();
-                var sourceFile = refdFile.defaultProject.getSourceFile(refdFile);
-                if (!sourceFile) {
-                    this.openFilesReferenced = copyListRemovingItem(refdFile, this.openFilesReferenced);
-                    this.addOpenFile(refdFile);
+                var referencedFile = this.openFilesReferenced[i];
+                referencedFile.defaultProject.updateGraph();
+                var sourceFile = referencedFile.defaultProject.getSourceFile(referencedFile);
+                if (sourceFile) {
+                    openFilesReferenced.push(referencedFile);
+                }
+                else {
+                    unattachedOpenFiles.push(referencedFile);
                 }
             }
+            this.openFilesReferenced = openFilesReferenced;
+
+            // Then, loop through all of the open files that are project roots.
+            // For each root file, note the project that it roots.  Then see if 
+            // any other projects newly reference the file.  If zero projects
+            // newly reference the file, keep it as a root.  If one or more
+            // projects newly references the file, remove its project from the
+            // inferred projects list (since it is no longer a root) and add
+            // the file to the open, referenced file list.
             var openFileRoots: ScriptInfo[] = [];
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
                 var rootFile = this.openFileRoots[i];
@@ -555,12 +569,19 @@ module ts.server {
                     openFileRoots.push(rootFile);
                 }
                 else {
-                    // remove project from inferred projects list
+                    // remove project from inferred projects list because root captured
                     this.inferredProjects = copyListRemovingItem(rootedProject, this.inferredProjects);
                     this.openFilesReferenced.push(rootFile);
                 }
             }
             this.openFileRoots = openFileRoots;
+
+            // Finally, if we found any open, referenced files that are no longer
+            // referenced by their default project, treat them as newly opened
+            // by the editor. 
+            for (var i = 0, len = unattachedOpenFiles.length; i < len; i++) {
+                this.addOpenFile(unattachedOpenFiles[i]);
+            }
             this.printProjects();
         }
 
@@ -1042,7 +1063,7 @@ module ts.server {
         }
     }
 
-    class ScriptVersionCache {
+    export class ScriptVersionCache {
         changes: TextChange[] = [];
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
@@ -1195,7 +1216,7 @@ module ts.server {
         }
     }
 
-    class LineIndex {
+    export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
@@ -1238,7 +1259,7 @@ module ts.server {
 
         getText(rangeStart: number, rangeLength: number) {
             var accum = "";
-            if (rangeLength > 0) {
+            if ((rangeLength > 0) && (rangeStart < this.root.charCount())) {
                 this.walk(rangeStart, rangeLength, {
                     goSubtree: true,
                     done: false,
@@ -1283,7 +1304,20 @@ module ts.server {
                     var checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
                 var walker = new EditWalker();
-                if (deleteLength > 0) {
+                if (pos >= this.root.charCount()) {
+                    // insert at end
+                    pos = this.root.charCount() - 1;
+                    var endString = this.getText(pos, 1);
+                    if (newText) {
+                        newText = endString + newText;
+                    }
+                    else {
+                        newText = endString;
+                    }
+                    deleteLength = 0;
+                    walker.suppressTrailingText = true;
+                }
+                else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
@@ -1299,21 +1333,10 @@ module ts.server {
                         }
                     }
                 }
-                else if (pos >= this.root.charCount()) {
-                    // insert at end
-                    var endString = this.getText(pos - 1, 1);
-                    if (newText) {
-                        newText = endString + newText;
-                    }
-                    else {
-                        newText = endString;
-                    }
-                    pos = pos - 1;
-                    deleteLength = 0;
-                    walker.suppressTrailingText = true;
+                if (pos < this.root.charCount()) {
+                    this.root.walk(pos, deleteLength, walker);
+                    walker.insertLines(newText);
                 }
-                this.root.walk(pos, deleteLength, walker);
-                walker.insertLines(newText);
                 if (this.checkEdits) {
                     var updatedText = this.getText(0, this.root.charCount());
                     Debug.assert(checkText == updatedText, "buffer edit mismatch");

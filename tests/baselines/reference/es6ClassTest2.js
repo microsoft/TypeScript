@@ -240,7 +240,12 @@ var SplatMonster = (function () {
             args[_i - 0] = arguments[_i];
         }
     }
-    SplatMonster.prototype.roar = function (name) { };
+    SplatMonster.prototype.roar = function (name) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+    };
     return SplatMonster;
 })();
 function foo() { return true; }

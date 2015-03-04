@@ -1,4 +1,4 @@
-﻿/// <reference path='..\services\services.ts' />
+/// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
 /// <reference path='..\server\client.ts' />
 /// <reference path='harness.ts' />

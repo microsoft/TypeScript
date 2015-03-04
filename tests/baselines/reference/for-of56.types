@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of56.ts ===
+for (var let of []) {}
+>let : any
+>[] : undefined[]
+

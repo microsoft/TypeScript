@@ -121,7 +121,6 @@ module ts {
         WithKeyword,
         // Strict mode reserved words
         AsKeyword,
-        FromKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -131,7 +130,7 @@ module ts {
         PublicKeyword,
         StaticKeyword,
         YieldKeyword,
-        // TypeScript keywords
+        // Contextual keywords
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
@@ -144,7 +143,9 @@ module ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
+        FromKeyword,
         OfKeyword, // LastKeyword and LastToken
+
         // Parse tree nodes
 
         // Names
@@ -279,7 +280,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = OfKeyword,
+        LastToken = LastKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -655,6 +656,7 @@ module ts {
     export interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;
+        hasExtendedUnicodeEscape?: boolean;
     }
 
     export interface StringLiteralExpression extends LiteralExpression {
@@ -814,9 +816,8 @@ module ts {
         finallyBlock?: Block;
     }
 
-    export interface CatchClause extends Declaration {
-        name: Identifier;
-        type?: TypeNode;
+    export interface CatchClause extends Node {
+        variableDeclaration: VariableDeclaration;
         block: Block;
     }
 
@@ -1098,6 +1099,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1201,6 +1203,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        getBlockScopedVariableId(node: Identifier): number;
     }
 
     export const enum SymbolFlags {
@@ -1324,6 +1327,7 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed  = 0x00000080,
+        BlockScopedBindingInLoop = 0x00000100,
     }
 
     export interface NodeLinks {

@@ -23,16 +23,16 @@ import { a } from "es6ImportNamedImport_0";
 >a : number
 
 import { a as b } from "es6ImportNamedImport_0";
->a : unknown
+>a : number
 >b : number
 
 import { x, a as y } from "es6ImportNamedImport_0";
 >x : number
->a : unknown
+>a : number
 >y : number
 
 import { x as z,  } from "es6ImportNamedImport_0";
->x : unknown
+>x : number
 >z : number
 
 import { m,  } from "es6ImportNamedImport_0";
@@ -43,8 +43,8 @@ import { a1, x1 } from "es6ImportNamedImport_0";
 >x1 : number
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImport_0";
->a1 : unknown
+>a1 : number
 >a11 : number
->x1 : unknown
+>x1 : number
 >x11 : number
 

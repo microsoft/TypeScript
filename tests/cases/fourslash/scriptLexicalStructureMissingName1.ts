@@ -1,4 +1,4 @@
-﻿////export function
+////export function
 /////**
 //// * This is a class.
 //// */

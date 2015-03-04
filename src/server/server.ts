@@ -206,7 +206,10 @@ module ts.server {
         }
 
     };
-
+    var ioSession = new IOSession(ts.sys, logger);
+    process.on('uncaughtException', function(err: Error) {
+        ioSession.logError(err, "unknown");
+    });
     // Start listening
-    new IOSession(ts.sys, logger).listen();
+    ioSession.listen();
 }

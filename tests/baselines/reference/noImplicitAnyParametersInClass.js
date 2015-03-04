@@ -155,9 +155,19 @@ var C = (function () {
     // Implicit-'any' errors for x, and z.
     C.prototype.pub_f5 = function (x, y, z) { };
     // Implicit-'any[]' errors for r.
-    C.prototype.pub_f6 = function () { };
+    C.prototype.pub_f6 = function () {
+        var r = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            r[_i - 0] = arguments[_i];
+        }
+    };
     // Implicit-'any'/'any[]' errors for x, r.
-    C.prototype.pub_f7 = function (x) { };
+    C.prototype.pub_f7 = function (x) {
+        var r = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            r[_i - 1] = arguments[_i];
+        }
+    };
     C.prototype.pub_f8 = function (x3, y3) { };
     ///////////////////////////////////////////
     // No implicit-'any' errors.
@@ -171,9 +181,19 @@ var C = (function () {
     // Implicit-'any' errors for x, and z.
     C.prototype.priv_f5 = function (x, y, z) { };
     // Implicit-'any[]' errors for r.
-    C.prototype.priv_f6 = function () { };
+    C.prototype.priv_f6 = function () {
+        var r = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            r[_i - 0] = arguments[_i];
+        }
+    };
     // Implicit-'any'/'any[]' errors for x, r.
-    C.prototype.priv_f7 = function (x) { };
+    C.prototype.priv_f7 = function (x) {
+        var r = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            r[_i - 1] = arguments[_i];
+        }
+    };
     C.prototype.priv_f8 = function (x3, y3) { };
     return C;
 })();

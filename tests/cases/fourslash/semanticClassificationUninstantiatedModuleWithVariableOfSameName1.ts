@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts"/>
+/// <reference path="fourslash.ts"/>
 
 ////declare module /*0*/M {
 ////    interface /*1*/I {

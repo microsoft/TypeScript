@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputSingleFile.baseline
 // @out: outputDir/singleFile.js
