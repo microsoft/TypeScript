@@ -139,11 +139,6 @@ module ts {
         updateInferenceEngine(program: Program): void;
     }
 
-    //interface SymbolInformation {
-    //    // flowTypeInformationInto(information: TypeInformation): void;
-    //    getTypeInformation(): TypeInformation;
-    //}
-
     const enum TypeInformationKind {
         // Simple primitives (like number, string, etc.)
         Primitive,
@@ -823,19 +818,21 @@ module ts {
         }
 
         function decomposePossibleUnionAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
-            // We flatten all union types.  That way there is a single linear representation for
-            // unions, and we don't have to compare any sort of tree structure.
-            if (type.kind === TypeInformationKind.Union) {
-                var constituentTypes = (<UnionTypeInformation>type).types;
-                for (var i = 0, n = constituentTypes.length; i < n; i++) {
-                    var constituent = constituentTypes[i];
-                    Debug.assert(constituent.kind !== TypeInformationKind.Union);
+            if (type) {
+                // We flatten all union types.  That way there is a single linear representation for
+                // unions, and we don't have to compare any sort of tree structure.
+                if (type.kind === TypeInformationKind.Union) {
+                    var constituentTypes = (<UnionTypeInformation>type).types;
+                    for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                        var constituent = constituentTypes[i];
+                        Debug.assert(constituent.kind !== TypeInformationKind.Union);
 
-                    addSingleTypeToSet(constituentTypes[i], types);
+                        addSingleTypeToSet(constituentTypes[i], types);
+                    }
                 }
-            }
-            else {
-                addSingleTypeToSet(type, types);
+                else {
+                    addSingleTypeToSet(type, types);
+                }
             }
         }
 
@@ -878,6 +875,19 @@ module ts {
             decomposePossibleUnionAndAddToSet(type2, types);
 
             Debug.assert(types.length >= 2);
+
+            return createUnionTypeFromTypes(types);
+        }
+
+        function createUnionTypeFromTypes(types: TypeInformation[]): TypeInformation {
+            if (types.length === 0) {
+                return undefined;
+            }
+
+            if (types.length === 1) {
+                return types[0];
+            }
+
             Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
 
             // Cap the number of types we'll keep in a union type at 8.
@@ -1071,6 +1081,108 @@ module ts {
         }
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
+            // Walk the tree, producing type information for expressions, and pulling on declarations 
+            // when necessary.  This will produce a TypeInformation object that represents the type
+            // of the expression, but still has many type constraints that have not been evaluated 
+            // yet.  For example "a + b" will be a PlusInformation along with two SymbolInformations.
+            var typeInformation = getTypeInformationWorker(program, _node);
+
+            // So, what we want to go do is 'evaluate' all these unevaluated parts.  Now, outside
+            // of symbols, the type information is entirely structural, without any recursion.  
+            // However because of the symbols, the structure can recurse.  Because of that, we 
+            // keep track of the stack of symbols we're walking through so far to prevent recursing
+            // infinitely.
+            var symbolStack: SymbolTypeInformation[] = [];
+            return evaluateTypeInformation(typeInformation, symbolStack);
+        }
+
+        function evaluateTypeInformation(typeInformation: TypeInformation, symbolStack: SymbolTypeInformation[]): TypeInformation {
+            switch (typeInformation.kind) {
+                case TypeInformationKind.Primitive:
+                    // Primitive types are already as processed as possible.
+                    return typeInformation;
+
+                case TypeInformationKind.Symbol: return evaluateSymbolTypeInformation(<SymbolTypeInformation>typeInformation, symbolStack);
+                case TypeInformationKind.Plus: return evaluatePlusTypeInformation(<PlusTypeInformation>typeInformation, symbolStack);
+                case TypeInformationKind.Union: return evaluateUnionTypeInformation(<UnionTypeInformation>typeInformation, symbolStack);
+            }
+
+            throw new Error("Unhandled case in evaluateTypeInformation.");
+        }
+
+        function evaluateUnionTypeInformation(typeInformation: UnionTypeInformation, symbolStack: SymbolTypeInformation[]) {
+            var types = typeInformation.types;
+            var evaluatedTypes: TypeInformation[];
+
+            for (var i = 0, n = types.length; i < n; i++) {
+                var type = types[i];
+                var evaluatedType = evaluateTypeInformation(type, symbolStack);
+
+                if (!evaluatedTypes && type !== evaluatedType) {
+                    evaluatedTypes = types.slice(0, i);
+                }
+
+                if (evaluatedTypes) {
+                    decomposePossibleUnionAndAddToSet(evaluatedType, evaluatedTypes);
+                }
+            }
+
+            if (!evaluatedTypes) {
+                // If no subtypes evaluated out to anything different, then just return this type.
+                return typeInformation;
+            }
+
+            return createUnionTypeFromTypes(evaluatedTypes);
+        }
+
+        function evaluatePlusTypeInformation(typeInformation: PlusTypeInformation, symbolStack: SymbolTypeInformation[]) {
+            // Go through and evaluate all the components of the plus expression.
+            var allAreNumber = true;
+            var definitelyNotNumber = false;
+
+            var types = typeInformation.types;
+            for (var i = 0, n = types.length; i < n; i++) {
+                var type = evaluateTypeInformation(types[i], symbolStack);
+                if (type === stringPrimitiveTypeInformation) {
+                    // The moment we hit something we think is definitely a string, then we can
+                    // immediately assume this plus expression evaluates out to a string.
+                    return stringPrimitiveTypeInformation;
+                }
+
+                if (!type) {
+                    // We hit something unknown.  Record this as it means we should no longer 
+                    // evaluate out to the number type.
+                    allAreNumber = false;
+                }
+                else if (type !== numberPrimitiveTypeInformation) {
+                    // We got an actual type, but it wasn't a number (or a string).  There's no 
+                    // way to add something like that and get a number back.  So the only option
+                    // is that we are getting a string.
+                    return stringPrimitiveTypeInformation;
+                }
+            }
+
+            if (allAreNumber && typeInformation.types.length > 0) {
+                // If all we added were numbers, then we're a number.
+                return numberPrimitiveTypeInformation;
+            }
+
+            // Not enough information to be sure.  This could be a number or a string.
+            return stringOrNumberUnionType;
+        }
+
+        function evaluateSymbolTypeInformation(typeInformation: SymbolTypeInformation, symbolStack: SymbolTypeInformation[]) {
+            if (contains(symbolStack, typeInformation)) {
+                return undefined;
+            }
+
+            symbolStack.push(typeInformation);
+            var result = evaluateTypeInformation(typeInformation.type, symbolStack);
+            symbolStack.pop();
+            return result;
+        }
+
+        function getTypeInformationWorker(program: Program, _node: Node): TypeInformation {
             if (_node) {
                 if (isExpression(_node)) {
                     return getTypeInformationForExpression(ts.getSourceFileOfNode(_node), <Expression>_node,
@@ -1400,46 +1512,5 @@ module ts {
                 return undefined;
             }
         }
-
-        //return {
-        //    onBeforeUpdateSourceFile,
-        //    onAfterUpdateSourceFile,
-        //    onSourceFileCreated,
-        //    onProgramCreated
-        //};
-
-
-
-        /*
-        function onProgramCreated(_program: Program) {
-            var oldProgram = program;
-            program = _program;
-
-
-
-            // Create a type checker to ensure that all our declarations in the program are bound.
-            typeChecker = program.getTypeChecker();
-
-            if (program !== undefined) {
-
-            }
-
-            program = _program;
-
-
-            walkProgram();
-        }
-
-        function walkProgram() {
-            var sourceFiles = program.getSourceFiles();
-            forEach(sourceFiles, walk);
-        }
-
-        function walk(node: Node) {
-            if (node.symbol) {
-
-            }
-        }
-        */
     }
 }
