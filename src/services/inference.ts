@@ -139,10 +139,10 @@ module ts {
         updateInferenceEngine(program: Program): void;
     }
 
-    interface SymbolInferenceInformation {
-        flowTypeInformationInto(information: TypeInformation): void;
-        getTypeInformation(): TypeInformation;
-    }
+    //interface SymbolInformation {
+    //    // flowTypeInformationInto(information: TypeInformation): void;
+    //    getTypeInformation(): TypeInformation;
+    //}
 
     const enum TypeInformationKind {
         // Simple primitives (like number, string, etc.)
@@ -152,7 +152,11 @@ module ts {
         Union,
 
         // Plus types, for when we have: a + b
-        Plus
+        Plus,
+
+        // Type information for a declared symbol. (like 'var v').  All references to 'v'
+        // will get this type information.
+        Symbol,
     }
 
     /* @internal */
@@ -169,6 +173,11 @@ module ts {
     interface PlusTypeInformation extends TypeInformation {
         _plusTypeInformationBrand: any;
         types: TypeInformation[];
+    }
+
+    interface SymbolTypeInformation extends TypeInformation {
+        declarationId: number;
+        type: TypeInformation;
     }
 
     interface ReferenceToDeclarationMap {
@@ -239,12 +248,12 @@ module ts {
         return <References><any>[];
     }
 
-    function references_add(references: References, referenceNode: Node): void {
+    function references_add(references: References, referenceNode: Identifier): void {
         var array = <Node[]><any>references;
         array[getNodeId(referenceNode)] = referenceNode;
     }
 
-    function references_delete(references: References, referenceNode: Node): void {
+    function references_delete(references: References, referenceNode: Identifier): void {
         var array = <Node[]><any>references;
         delete array[getNodeId(referenceNode)];
     }
@@ -257,8 +266,8 @@ module ts {
         return true;
     }
 
-    function references_forEach(references: References, f: (referenceNode: Node) => void) {
-        var array = <Node[]><any>references;
+    function references_forEach(references: References, f: (referenceNode: Identifier) => void) {
+        var array = <Identifier[]><any>references;
         array.forEach(f);
     }
 
@@ -332,7 +341,8 @@ module ts {
         toJSON(program: Program): any;
 
         // Returns a map, keyed by file names, to the references to this symbol.
-        getReferences(program: Program, symbol: Symbol): Map<References>;
+        getReferencesToSymbol(program: Program, symbol: Symbol): Map<References>;
+        getReferencesToDeclarationNode(program: Program, declarationNode: Node): Map<References>;
 
         getBidirectionalReferences(fileName: string): BidirectionalReferences;
     }
@@ -362,7 +372,8 @@ module ts {
 
         return {
             update,
-            getReferences,
+            getReferencesToDeclarationNode,
+            getReferencesToSymbol,
             getBidirectionalReferences,
             toJSON
         };
@@ -371,10 +382,13 @@ module ts {
             return fileNameToBidirectionalReferences[fileName];
         }
 
-        function getReferences(program: Program, symbol: Symbol): Map<References> {
-            ensureUpToDate(program);
-            if (symbol && symbol.valueDeclaration) {
-                var declarationNode = symbol.valueDeclaration;
+        function getReferencesToSymbol(program: Program, symbol: Symbol): Map<References> {
+            return getReferencesToDeclarationNode(program, symbol && symbol.valueDeclaration);
+        }
+
+        function getReferencesToDeclarationNode(program: Program, declarationNode: Node): Map<References> {
+            if (declarationNode) {
+                ensureUpToDate(program);
 
                 var filesWithReferences = declarationToFilesWithReferences[getNodeId(declarationNode)];
                 if (filesWithReferences) {
@@ -633,18 +647,20 @@ module ts {
                 }
 
                 if (node.kind === SyntaxKind.Identifier && isExpression(node) && !isRightSideOfPropertyAccess(node)) {
+                    var identifier = <Identifier>node;
+
                     // If we're processing all nodes (i.e. shouldResolve is undefined), or this 
                     // identifier was something we want to examine, then go ahead.
-                    if (!identifierNamesToResolve || stringSet_contains(identifierNamesToResolve, (<Identifier>node).text)) {
+                    if (!identifierNamesToResolve || stringSet_contains(identifierNamesToResolve, identifier.text)) {
                         var symbol = typeChecker.getSymbolAtLocation(node);
-                        addSymbolReference(symbol, node);
+                        addSymbolReference(symbol, identifier);
                     }
                 }
 
                 forEachChild(node, walk);
             }
 
-            function addSymbolReference(symbol: Symbol, referenceNode: Node) {
+            function addSymbolReference(symbol: Symbol, referenceNode: Identifier) {
                 // Only record references to JavaScript symbols.
                 var isJavaScriptDeclaration = symbol && symbol.valueDeclaration && symbol.flags & SymbolFlags.JavascriptSymbol;
                 var declarationNode = isJavaScriptDeclaration ? symbol.valueDeclaration : undefined;
@@ -684,7 +700,7 @@ module ts {
                 }
             }
 
-            function removeExistingReferences(referenceNode: Node, declarationNode: Node) {
+            function removeExistingReferences(referenceNode: Identifier, declarationNode: Node) {
                 var previousDeclarationNode = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode);
 
                 if (previousDeclarationNode !== declarationNode) {
@@ -744,7 +760,7 @@ module ts {
 
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
-        var nodeIdToSymbolInferenceInformation: SymbolInferenceInformation[] = [];
+        var declarationIdToSymbolTypeInformation: SymbolTypeInformation[] = [];
         var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
         var nextPrimitiveId = 0;
 
@@ -1054,12 +1070,11 @@ module ts {
             }
         }
 
-        function getTypeInformation(program: Program, node: Node): TypeInformation {
-            if (node) {
-                if (isExpression(node)) {
-                    var sourceFile = ts.getSourceFileOfNode(node);
-                    return getTypeInformationForExpression(sourceFile, <Expression>node,
-                        getContextualTypeInformation(<Expression>node));
+        function getTypeInformation(program: Program, _node: Node): TypeInformation {
+            if (_node) {
+                if (isExpression(_node)) {
+                    return getTypeInformationForExpression(ts.getSourceFileOfNode(_node), <Expression>_node,
+                        getContextualTypeInformation(<Expression>_node));
                 }
             }
 
@@ -1099,15 +1114,25 @@ module ts {
             function getTypeInformationForBinaryExpression(sourceFile: SourceFile, node: BinaryExpression, contextualTypeInformation: TypeInformation) {
                 switch (node.operatorToken.kind) {
                     case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.AsteriskEqualsToken:
                     case SyntaxKind.SlashToken:
+                    case SyntaxKind.SlashEqualsToken:
                     case SyntaxKind.PercentToken:
+                    case SyntaxKind.PercentEqualsToken:
                     case SyntaxKind.MinusToken:
+                    case SyntaxKind.MinusEqualsToken:
                     case SyntaxKind.LessThanLessThanToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
                     case SyntaxKind.GreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
                     case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
                     case SyntaxKind.AmpersandToken:
+                    case SyntaxKind.AmpersandEqualsToken:
                     case SyntaxKind.CaretToken:
+                    case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarToken:
+                    case SyntaxKind.BarEqualsToken:
                         return numberPrimitiveTypeInformation;
 
                     case SyntaxKind.InKeyword:
@@ -1131,11 +1156,16 @@ module ts {
                         // result that is of the same type as the second operand.
                         return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
 
+                    case SyntaxKind.EqualsToken:
+                        // The result is a value with the type of expr.
+                        return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
+
                     case SyntaxKind.BarBarToken:
                         return getTypeInformationForBarBarBinaryExpression(sourceFile, node, contextualTypeInformation);
 
                     case SyntaxKind.PlusToken:
-                        return getTypeInformationForPlusBinaryExpression(sourceFile, node);
+                    case SyntaxKind.PlusEqualsToken:
+                        return getTypeInformationForPlusOrPlusEqualsExpression(sourceFile, node);
                 }
 
                 throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
@@ -1159,7 +1189,7 @@ module ts {
                 }
             }
 
-            function getTypeInformationForPlusBinaryExpression(sourceFile: SourceFile, node: BinaryExpression) {
+            function getTypeInformationForPlusOrPlusEqualsExpression(sourceFile: SourceFile, node: BinaryExpression) {
                 var leftType = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
                 var rightType = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
 
@@ -1246,22 +1276,89 @@ module ts {
                 }
             }
 
-            function getTypeInformationForDeclaration(declaration: Node): TypeInformation {
-                //var id = getNodeId(declaration);
-                //var symbolInformation = declarationIdToSymbolInformation[id];
-                //if (!symbolInformation) {
-                //    // This is the first time we've been asked about this symbol. Create the information
-                //    // object for it, and cache it so it is available for all subsequent requests. Then, 
-                //    // find all the references to the symbol and flow in any type information we can
-                //    // find at the reference point into it.
-                //    symbolInformation = createSymbolInformation(declaration);
-                //    declarationIdToSymbolInformation[id] = symbolInformation;
+            function getTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
+                Debug.assert(!!declarationNode);
 
-                //    var references = referenceManager.getReferences(
-                //}
+                var declarationId = getNodeId(declarationNode);
+                var symbolTypeInformation = declarationIdToSymbolTypeInformation[declarationId];
+                if (!symbolTypeInformation) {
+                    // This is the first time we've been asked about this symbol. Create the information
+                    // object for it, and cache it so it is available for all subsequent requests. Then, 
+                    // find all the references to the symbol and flow in any type information we can
+                    // find at the reference point into it.
+                    
+                    var type: TypeInformation = undefined;
+                    symbolTypeInformation = {
+                        declarationId,
+                        type,
+                        kind: TypeInformationKind.Symbol,
+                        getHashCode: () => hashCombine(TypeInformationKind.Symbol, declarationId),
+                        equals: function (o) {
+                            // symbolInformation has identity semantics.
+                            return this === o;
+                        }
+                    };
 
-                //return symbolInformation.getTypeInformation();
-                return undefined;
+                    declarationIdToSymbolTypeInformation[declarationId] = symbolTypeInformation;
+
+                    // The declaration may have an initializer, use that to populate the initial 
+                    // type of this symbol.
+                    type = computeTypeInformationForDeclaration(declarationNode);
+
+                    // Now check all the references, and flow their information into the symbol.
+                    var referencesMap = referenceManager.getReferencesToDeclarationNode(program, declarationNode);
+                    if (referencesMap) {
+                        for (var fileName in referencesMap) {
+                            var references = getProperty(referencesMap, fileName);
+                            if (references) {
+                                var sourceFile = program.getSourceFile(fileName);
+                                references_forEach(references, referenceNode => {
+                                    type = createUnionTypeInformation(type, computeTypeInformationForReference(sourceFile, referenceNode));
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return symbolTypeInformation;
+            }
+
+            function computeTypeInformationForDeclaration(node: Node) {
+                Debug.assert(!!node);
+                switch (node.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                        return computeTypeInformationForVariableDeclaration(<VariableDeclaration>node);
+                }
+
+                throw new Error("Unhandled case in computeTypeInformationForDeclaration");
+            }
+
+            function computeTypeInformationForVariableDeclaration(node: VariableDeclaration) {
+                return getTypeInformationForExpression(ts.getSourceFileOfNode(node), node.initializer, /*contextualTypeInformation:*/ undefined);
+            }
+
+            function computeTypeInformationForReference(sourceFile: SourceFile, node: Identifier) {
+                Debug.assert(node.kind === SyntaxKind.Identifier);
+
+                // Walk out of all surrounding parentheses.
+                var current: Node = node;
+                while (current.parent && current.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                    current = current.parent;
+                }
+
+                if (current.parent && current.parent.kind === SyntaxKind.BinaryExpression) {
+                    var binaryExpression = <BinaryExpression>current.parent;
+
+                    if (current === binaryExpression.left &&
+                        isAssignmentOperator(binaryExpression.operatorToken.kind)) {
+
+                        // If the reference is on the left of an assignment, then the type of the
+                        // assignment flows into the reference.
+                        return getTypeInformationForExpression(sourceFile, binaryExpression, /*contextualTypeInformation:*/ undefined);
+                    }
+                }
+
+                throw new Error("Unhandled case in computeTypeInformationForReference");
             }
 
             function getTypeInformationForParenthesizedExpression(sourceFile: SourceFile, node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {
