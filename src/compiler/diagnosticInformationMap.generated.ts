@@ -327,7 +327,6 @@ module ts {
         Property_0_does_not_exist_on_const_enum_1: { code: 2479, category: DiagnosticCategory.Error, key: "Property '{0}' does not exist on 'const' enum '{1}'." },
         let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations: { code: 2480, category: DiagnosticCategory.Error, key: "'let' is not allowed to be used as a name in 'let' or 'const' declarations." },
         Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1: { code: 2481, category: DiagnosticCategory.Error, key: "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'." },
-        for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher: { code: 2482, category: DiagnosticCategory.Error, key: "'for...of' statements are only available when targeting ECMAScript 6 or higher." },
         The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation: { code: 2483, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...of' statement cannot use a type annotation." },
         Export_declaration_conflicts_with_exported_declaration_of_0: { code: 2484, category: DiagnosticCategory.Error, key: "Export declaration conflicts with exported declaration of '{0}'" },
         The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant: { code: 2485, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...of' statement cannot be a previously defined constant." },

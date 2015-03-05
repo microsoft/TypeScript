@@ -1299,10 +1299,6 @@
         "category": "Error",
         "code": 2481
     },
-    "'for...of' statements are only available when targeting ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 2482
-    },
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2483

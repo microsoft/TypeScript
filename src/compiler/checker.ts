@@ -8777,11 +8777,6 @@ module ts {
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
-            if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
-                return;
-            }
-
             checkGrammarForInOrForOfStatement(node)
 
             // Check the LHS and RHS
