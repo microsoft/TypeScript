@@ -175,11 +175,7 @@ module ts {
             referenceToDeclaration: createReferenceToDeclarationMap(),
         };
     }
-
-    interface ReferencesPerFile {
-        [fileName: string]: References;
-    }
-
+    
     /* @internal */
     export interface ReferencesManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
@@ -187,10 +183,8 @@ module ts {
         // For testing purposes only
         toJSON(program: Program): any;
 
-        getReferences(program: Program, symbol: Symbol): ReferencesPerFile;
-
-        //getReferencesToNode(node: Node): References;
-        //getReferencesToSymbol(symbol: Symbol): References;
+        // Returns a map, keyed by file names, to the references to this symbol.
+        getReferences(program: Program, symbol: Symbol): Map<References>;
     }
 
     function createReferencesManager(): ReferencesManager {
@@ -222,14 +216,14 @@ module ts {
             toJSON
         };
 
-        function getReferences(program: Program, symbol: Symbol): ReferencesPerFile {
+        function getReferences(program: Program, symbol: Symbol): Map<References> {
             ensureUpToDate(program);
             if (symbol && symbol.valueDeclaration) {
                 var declarationNode = symbol.valueDeclaration;
 
                 var filesWithReferences = declarationToFilesWithReferences[getNodeId(declarationNode)];
                 if (filesWithReferences) {
-                    var result: ReferencesPerFile = {};
+                    var result: Map<References> = {};
 
                     stringSet_forEach(filesWithReferences, fileName => {
                         var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
