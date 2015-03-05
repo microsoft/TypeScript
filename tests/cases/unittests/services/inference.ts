@@ -373,7 +373,6 @@ var z;
         });
 
         it("UnionOfDifferentTypesShouldProduceUnion", () => {
-            debugger;
             var engineAndProgram = createInferenceEngineWithContent({
                 "file1.js": "var v = true || ''"
             });
@@ -384,6 +383,19 @@ var z;
 
             var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "(boolean | string)");
+        });
+
+        it("UnionShouldBeFlat", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = true || '' || 0"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "(boolean | number | string)");
         });
     });
 });
