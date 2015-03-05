@@ -1639,10 +1639,12 @@ module ts {
             }
 
             if (root) {
+                currentSourceFile = root;
                 emit(root);
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
+                    currentSourceFile = sourceFile;
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emit(sourceFile);
                     }
@@ -1698,7 +1700,7 @@ module ts {
 
             function isExistingName(location: Node, name: string) {
                 // check if resolver is aware of this name (if name was seen during the typecheck)
-                if (!resolver.isUnknownIdentifier(location, name)) {
+                if (!resolver.isUnknownIdentifier(location, name, currentSourceFile)) {
                     return true;
                 }
 
@@ -5191,7 +5193,6 @@ module ts {
             }
 
             function emitSourceFile(node: SourceFile) {
-                currentSourceFile = node;
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);

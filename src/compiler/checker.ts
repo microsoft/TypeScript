@@ -10891,9 +10891,9 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function isUnknownIdentifier(location: Node, name: string): boolean {
+        function isUnknownIdentifier(location: Node, name: string, sourceFile: SourceFile): boolean {
             return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
-                !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
+                !hasProperty(getGeneratedNamesForSourceFile(sourceFile), name);
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
