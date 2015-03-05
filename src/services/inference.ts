@@ -727,6 +727,7 @@ module ts {
     export function createInferenceEngine(): InferenceEngine {
         var nodeIdToSymbolInferenceInformation: SymbolInferenceInformation[] = [];
         var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
+        var nextPrimitiveId = 0;
 
         var booleanPrimitiveTypeInformation = createPrimitiveTypeInformation("boolean");
         var numberPrimitiveTypeInformation = createPrimitiveTypeInformation("number");
@@ -742,7 +743,6 @@ module ts {
             referencesManager_forTestingPurposesOnly: referenceManager
         };
 
-        var nextPrimitiveId = 0;
         function createPrimitiveTypeInformation(name: string): TypeInformation {
             var id = nextPrimitiveId++;
             return {

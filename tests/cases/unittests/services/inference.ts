@@ -231,7 +231,6 @@ var z;
             });
 
             it("File is re-resolved if it is affected by an edit in another file.", () => {
-                debugger;
                 var file1Contents =
                     `var x;
 var y;
@@ -358,6 +357,33 @@ var z;
 
             var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "boolean");
+        });
+
+        it("UnionOfTheSameTypeShouldNotProduceUnion", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = true || false"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "boolean");
+        });
+
+        it("UnionOfDifferentTypesShouldProduceUnion", () => {
+            debugger;
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = true || ''"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "(boolean | string)");
         });
     });
 });
