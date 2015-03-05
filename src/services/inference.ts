@@ -1,5 +1,89 @@
 module ts {
     /* @internal */
+    export interface HashTable<Key, Value> {
+        get(k: Key): Value;
+        set(k: Key, v: Value): void;
+
+        // same as 'set', except this will throw if the key is already in the hashtable.
+        add(k: Key, v: Value): void;
+    }
+
+    var defaultGetHashCode = k => k.getHashCode(); 
+    var defaultEquals = (k1, k2) => {
+        if (k1 === k2) {
+            return true;
+        }
+        if (!k1 || !k2) {
+            return false;
+        }
+        return (<any>k1).equals(k2);
+    };
+
+    interface KeyValuePair<Key, Value> {
+        key: Key;
+        value: Value;
+    }
+    
+    /* @internal */
+    export function createHashTable<Key, Value>(getHashCode?: (k: Key) => number, equals?: (k1: Key, k2: Key) => boolean): HashTable<Key, Value> {
+        getHashCode = getHashCode || defaultGetHashCode;
+        equals = equals || defaultEquals;
+
+        var buckets: KeyValuePair<Key, Value>[][] = [];
+
+        return {
+            get,
+            set,
+            add,
+        };
+
+        function set(key: Key, value: Value): void {
+            return setOrAdd(key, value, /*throwOnExistingMapping*/ false);
+        }
+
+        function add(key: Key, value: Value): void {
+            return setOrAdd(key, value, /*throwOnExistingMapping*/ true);
+        }
+
+        function setOrAdd(key: Key, value: Value, throwOnExistingMapping: boolean): void {
+            var hash = getHashCode(key) | 0;
+            var pairs = buckets[hash] || (buckets[hash] = []);
+            for (var i = 0, n = pairs.length; i < n; i++) {
+                var pair = pairs[i];
+                if (equals(key, pair.key)) {
+                    if (throwOnExistingMapping) {
+                        throw new Error("Key was already in the hashtable");
+                    }
+
+                    pair.value = value;
+                    return;
+                }
+            }
+
+            pairs.push({ key, value });
+        }
+
+        function getPairs(key: Key) {
+            var hash = getHashCode(key) | 0;
+            return buckets[hash];
+        }
+
+        function get(key: Key): Value {
+            var pairs = getPairs(key);
+            if (pairs) {
+                for (var i = 0, n = pairs.length; i < n; i++) {
+                    var pair = pairs[i];
+                    if (equals(key, pair.key)) {
+                        return pair.value;
+                    }
+                }
+            }
+        }
+    }
+}
+
+module ts {
+    /* @internal */
     export interface InferenceEngine {
         createEngineUpdater(): InferenceEngineUpdater;
         getTypeInformation(node: Node): TypeInformation;
