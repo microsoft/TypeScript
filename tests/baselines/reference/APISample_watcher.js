@@ -648,6 +648,7 @@ declare module "typescript" {
     }
     interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
     interface ElementAccessExpression extends MemberExpression {
@@ -2108,7 +2109,9 @@ function watch(rootFileNames, options) {
         });
     }
     function logErrors(fileName) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(fileName)).concat(services.getSemanticDiagnostics(fileName));
+        var allDiagnostics = services.getCompilerOptionsDiagnostics()
+            .concat(services.getSyntacticDiagnostics(fileName))
+            .concat(services.getSemanticDiagnostics(fileName));
         allDiagnostics.forEach(function (diagnostic) {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
@@ -2121,6 +2124,7 @@ function watch(rootFileNames, options) {
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).
+    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
 watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });

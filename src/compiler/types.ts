@@ -693,6 +693,7 @@ module ts {
 
     export interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
 

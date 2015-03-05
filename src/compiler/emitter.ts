@@ -3036,9 +3036,30 @@ module ts {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
+
                 emit(node.expression);
+
+                var indented = false;
+                var isSynthesied = nodeIsSynthesized(node);
+                if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.expression, node.dotToken)) {
+                    indented = true;
+                    increaseIndent();
+                    writeLine();
+                }
+
                 write(".");
+
+                if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.dotToken, node.name) && !indented) {
+                    indented = true;
+                    increaseIndent();
+                    writeLine();
+                }
+
                 emit(node.name);
+
+                if (indented) {
+                    decreaseIndent();
+                }
             }
 
             function emitQualifiedName(node: QualifiedName) {

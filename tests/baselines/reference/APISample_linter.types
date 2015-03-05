@@ -1889,6 +1889,10 @@ declare module "typescript" {
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
 
+        dotToken: Node;
+>dotToken : Node
+>Node : Node
+
         name: Identifier;
 >name : Identifier
 >Identifier : Identifier
