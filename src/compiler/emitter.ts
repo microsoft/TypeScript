@@ -3523,17 +3523,26 @@ module ts {
                 
                 // Do not call create recordTempDeclaration because we are declaring the temps
                 // right here. Recording means they will be declared later.
+                // In the case where the user wrote an identifier as the RHS, like this:
+                //
+                //     for (var v of arr) { }
+                //
+                // we don't want to emit a temporary variable for the RHS, just use it directly.
+                var rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
                 var counter = createTempVariable(node, /*forLoopVariable*/ true);
-                var rhsReference = createTempVariable(node, /*forLoopVariable*/ false);
+                var rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
                 
-                // _i = 0, 
+                // _i = 0
                 emit(counter);
-                write(" = 0, ");
+                write(" = 0");
                 
-                // _a = expr;
-                emit(rhsReference);
-                write(" = ");
-                emit(node.expression);
+                if (!rhsIsIdentifier) {
+                    // , _a = expr
+                    write(", ");
+                    emit(rhsReference);
+                    write(" = ");
+                    emit(node.expression);
+                }
                 write("; ");
                 
                 // _i < _a.length;
