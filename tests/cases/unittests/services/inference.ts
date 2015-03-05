@@ -59,7 +59,7 @@ describe('JavascriptInference', function () {
     }
 
     function validateReferenceManager(engineAndProgram: EngineAndProgram, expected: string): void {
-        var referenceManager = engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly;
+        var referenceManager = engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly;
 
         var actual = normalize(JSON.stringify(referenceManager.toJSON(engineAndProgram.program), undefined, "  ")).trim();
         expected = normalize(expected).trim();
@@ -211,7 +211,7 @@ var z;
                 });
 
                 // First, ensure the initial data has been computed.
-                engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
 
                 engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "b");
                 validateReferenceManager(engineAndProgram,
@@ -245,7 +245,7 @@ var z;
                 });
 
                 // First, ensure the initial data has been computed.
-                engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
 
                 engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "a");
                 validateReferenceManager(engineAndProgram,

@@ -128,7 +128,7 @@ module ts {
         createEngineUpdater(): InferenceEngineUpdater;
         getTypeInformation(program: Program, node: Node): TypeInformation;
 
-        /* @internal */ referencesManager_forTestingPurposesOnly: ReferencesManager;
+        /* @internal */ referenceManager_forTestingPurposesOnly: ReferenceManager;
     }
 
     export interface InferenceEngineUpdater {
@@ -329,7 +329,7 @@ module ts {
     }
     
     /* @internal */
-    export interface ReferencesManager {
+    export interface ReferenceManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
 
         // For testing purposes only
@@ -342,7 +342,7 @@ module ts {
         getBidirectionalReferences(program: Program, fileName: string): BidirectionalReferences;
     }
 
-    function createReferencesManager(): ReferencesManager {
+    function createReferenceManager(): ReferenceManager {
         var latestProgram: Program;
 
         // Maps a symbol's value declaration to a per file map of all the references to it.
@@ -766,12 +766,12 @@ module ts {
 
         var stringOrNumberUnionType = createUnionTypeInformation(stringPrimitiveTypeInformation, numberPrimitiveTypeInformation);
 
-        var referenceManager = createReferencesManager();
+        var referenceManager = createReferenceManager();
         
         return {
             createEngineUpdater,
             getTypeInformation,
-            referencesManager_forTestingPurposesOnly: referenceManager
+            referenceManager_forTestingPurposesOnly: referenceManager
         };
 
         function createPrimitiveTypeInformation(name: string): TypeInformation {
