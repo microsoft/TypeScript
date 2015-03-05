@@ -236,10 +236,6 @@ module ts {
         };
     }
 
-    interface FileTextRange extends TextRange {
-        sourceFile: SourceFile;
-    }
-
     /* @internal */
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
         var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
@@ -250,7 +246,7 @@ module ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
-        var errorNode: Node;
+        var errorNode = node;
         switch (node.kind) {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
@@ -267,23 +263,11 @@ module ts {
                 break;
         }
         
-        if (node.kind === SyntaxKind.FunctionExpression) {
-            var functionExpression = <FunctionExpression>node;
-            if (nodeIsMissing(functionExpression.name)) {
-                // If it's an anonymous function expression, put the error on the first token.
-                return getSpanOfTokenAtPosition(sourceFile, node.pos);
-            }
-            else {
-                errorNode = functionExpression.name;
-            }
+        if (errorNode === undefined) {
+            // If we don't have a better node, then just set the error on the first token of 
+            // construct.
+            return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
-
-        // We now have the ideal error span, but it may be a node that is optional and absent
-        // (e.g. the name of a function expression), in which case errorSpan will be undefined.
-        // Alternatively, it might be required and missing (e.g. the name of a module), in which
-        // case its pos will equal its end (length 0). In either of these cases, we should fall
-        // back to the original node that the error was issued on.
-        errorNode = nodeIsMissing(errorNode) ? node : errorNode;
 
         var pos = nodeIsMissing(errorNode)
             ? errorNode.pos
