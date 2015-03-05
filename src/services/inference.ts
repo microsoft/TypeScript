@@ -1,11 +1,23 @@
 module ts {
     /* @internal */
+    export interface Equatable {
+        equals(other: Equatable): boolean
+    }
+
+    /* @internal */
+    export interface Hashable extends Equatable {
+        getHashCode(): number;
+    }
+
+    /* @internal */
     export interface HashTable<Key, Value> {
-        get(k: Key): Value;
-        set(k: Key, v: Value): void;
+        get(key: Key): Value;
+        getOrAdd(k: Key, value: Value): Value;
+
+        set(key: Key, value: Value): void;
 
         // same as 'set', except this will throw if the key is already in the hashtable.
-        add(k: Key, v: Value): void;
+        add(key: Key, value: Value): void;
     }
 
     var defaultGetHashCode = k => k.getHashCode(); 
@@ -16,13 +28,26 @@ module ts {
         if (!k1 || !k2) {
             return false;
         }
-        return (<any>k1).equals(k2);
+        return k1.equals(k2);
     };
 
     interface KeyValuePair<Key, Value> {
         key: Key;
         value: Value;
     }
+
+    function integerMultiply(v1: number, v2: number): number {
+        var v1_high = (v1 >>> 16) & 0xFFFF;
+        var vl_low = v1 & 0xFFFF;
+        var v2_high = (v2 >>> 16) & 0xFFFF;
+        var v2_low = v2 & 0xFFFF;
+        return ((vl_low * v2_low) + (((v1_high * v2_low + vl_low * v2_high) << 16) >>> 0) | 0);
+    }
+
+    /* @internal */
+    export function hashCombine(newKey: number, currentKey: number): number {
+        return (integerMultiply(currentKey, 0xA5555529) + newKey) | 0;
+    } 
     
     /* @internal */
     export function createHashTable<Key, Value>(getHashCode?: (k: Key) => number, equals?: (k1: Key, k2: Key) => boolean): HashTable<Key, Value> {
@@ -33,6 +58,7 @@ module ts {
 
         return {
             get,
+            getOrAdd,
             set,
             add,
         };
@@ -45,9 +71,14 @@ module ts {
             return setOrAdd(key, value, /*throwOnExistingMapping*/ true);
         }
 
-        function setOrAdd(key: Key, value: Value, throwOnExistingMapping: boolean): void {
+        function getOrCreatePairs(key: Key) {
             var hash = getHashCode(key) | 0;
-            var pairs = buckets[hash] || (buckets[hash] = []);
+            return buckets[hash] || (buckets[hash] = []);
+        }
+
+        function setOrAdd(key: Key, value: Value, throwOnExistingMapping: boolean): void {
+            var pairs = getOrCreatePairs(key);
+
             for (var i = 0, n = pairs.length; i < n; i++) {
                 var pair = pairs[i];
                 if (equals(key, pair.key)) {
@@ -63,13 +94,9 @@ module ts {
             pairs.push({ key, value });
         }
 
-        function getPairs(key: Key) {
-            var hash = getHashCode(key) | 0;
-            return buckets[hash];
-        }
-
         function get(key: Key): Value {
-            var pairs = getPairs(key);
+            var hash = getHashCode(key) | 0;
+            var pairs = buckets[hash];
             if (pairs) {
                 for (var i = 0, n = pairs.length; i < n; i++) {
                     var pair = pairs[i];
@@ -78,6 +105,19 @@ module ts {
                     }
                 }
             }
+        }
+
+        function getOrAdd(key: Key, value: Value): Value {
+            var pairs = getOrCreatePairs(key);
+            for (var i = 0, n = pairs.length; i < n; i++) {
+                var pair = pairs[i];
+                if (equals(key, pair.key)) {
+                    return pair.value;
+                }
+            }
+            
+            pairs.push({ key, value });
+            return value;
         }
     }
 }
@@ -104,7 +144,18 @@ module ts {
         getTypeInformation(): TypeInformation;
     }
 
-    interface TypeInformation {
+    const enum TypeInformationKind {
+        Primitive,
+        Union
+    }
+
+    interface TypeInformation extends Hashable {
+        kind: TypeInformationKind;
+        equals(other: TypeInformation): boolean;
+    }
+
+    interface UnionTypeInformation extends TypeInformation {
+        types: TypeInformation[];
     }
 
     interface ReferenceToDeclarationMap {
@@ -680,6 +731,7 @@ module ts {
         var stringPrimitiveTypeInformation = createPrimitiveTypeInformation("string");
 
         var referenceManager = createReferencesManager();
+        var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
 
         return {
             createEngineUpdater,
@@ -687,8 +739,19 @@ module ts {
             referencesManager_forTestingPurposesOnly: referenceManager
         };
 
+        var nextPrimitiveId = 0;
         function createPrimitiveTypeInformation(name: string): TypeInformation {
-            return {};
+            var id = nextPrimitiveId++;
+            return {
+                kind: TypeInformationKind.Primitive,
+                getHashCode: () => id,
+
+                // Use a function expression here so that 'this' refers to the object literal instance.
+                equals: function (o) {
+                    // Primitives has reference identity.
+                    return o === this;
+                }
+            };
         }
 
         function createEngineUpdater(): InferenceEngineUpdater {
@@ -1028,7 +1091,46 @@ module ts {
             throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
         }
 
-        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation) {
+        function addTypesToSet(type: TypeInformation, types: TypeInformation[]) {
+            // We flatten all union types.  That way there is a single linear representation for
+            // unions, and we don't have to compare any sort of tree structure.
+            if (type.kind === TypeInformationKind.Union) {
+                var constituentTypes = (<UnionTypeInformation>type).types;
+                for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                    addTypesToSet(constituentTypes[i], types);
+                }
+
+                return;
+            }
+
+            // We want to put the type into the list in sorted order.
+            var hashCode = type.getHashCode();
+            for (var i = 0, n = types.length; i < n; i++) {
+                var currentType = types[i];
+                var currentTypeHashCode = currentType.getHashCode();
+
+                if (currentTypeHashCode < hashCode) {
+                    // Keep going to find the right place to insert the item.
+                    continue;
+                }
+                else if (currentTypeHashCode === hashCode) {
+                    if (type.equals(currentType)) {
+                        // Was already in the set.  No need to add it again.
+                        return;
+                    }
+                }
+                else {
+                    // Found the first type that should go after the type we're adding.
+                    types.splice(i, /*deleteCount:*/ 0, type);
+                    return;
+                }
+            }
+
+            // Couldn't find a place in the list to put it.  So just put it at the end.
+            types.push(type);
+        }
+
+        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation): TypeInformation {
             if (!type1) {
                 return type2;
             }
@@ -1037,7 +1139,61 @@ module ts {
                 return type1;
             }
 
-            throw new Error("not yet implemented");
+            if (type1.equals(type2)) {
+                return type1;
+            }
+
+            var types: TypeInformation[] = [];
+            addTypesToSet(type1, types);
+            addTypesToSet(type2, types);
+
+            Debug.assert(types.length >= 2);
+            Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
+
+            // Cap the number of types we'll keep in a union type at 8.
+            types = types.length > 8 ? types.slice(0, 8) : types;
+
+            var hash: number = TypeInformationKind.Union;
+            for (var i = 0, n = types.length; i < n; i++) {
+                hash = hashCombine(types[i].getHashCode(), hash);
+            }
+
+            var unionType: UnionTypeInformation = {
+                types,
+                kind: TypeInformationKind.Union,
+                getHashCode: () => hash,
+                equals: function (t) {
+                    if (this === t) {
+                        return true;
+                    }
+
+                    return t && t.kind === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>t).types);
+                }
+            };
+
+            return cachedTypes.getOrAdd(unionType, unionType);
+        }
+
+        function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
+            if (array1 === array2) {
+                return true;
+            }
+
+            if (!array1 || !array2) {
+                return false;
+            }
+
+            if (array1.length !== array2.length) {
+                return false;
+            }
+
+            for (var i = 0, n = array1.length; i < n; i++) {
+                if (!array1[i].equals(array2[i])) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         function getTypeInformationForBarBarBinaryExpression(node: BinaryExpression, contextualTypeInformation: TypeInformation) {
