@@ -725,14 +725,16 @@ module ts {
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
         var nodeIdToSymbolInferenceInformation: SymbolInferenceInformation[] = [];
+        var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
 
         var booleanPrimitiveTypeInformation = createPrimitiveTypeInformation("boolean");
         var numberPrimitiveTypeInformation = createPrimitiveTypeInformation("number");
         var stringPrimitiveTypeInformation = createPrimitiveTypeInformation("string");
 
-        var referenceManager = createReferencesManager();
-        var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
+        var stringOrNumberUnionType = createUnionTypeInformation(stringPrimitiveTypeInformation, numberPrimitiveTypeInformation);
 
+        var referenceManager = createReferencesManager();
+        
         return {
             createEngineUpdater,
             getTypeInformation,
@@ -750,7 +752,9 @@ module ts {
                 equals: function (o) {
                     // Primitives has reference identity.
                     return o === this;
-                }
+                },
+
+                toString: () => name
             };
         }
 
@@ -831,7 +835,8 @@ module ts {
                     }
 
                     return t && t.kind === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>t).types);
-                }
+                },
+                toString: function () { return "(" + this.types.join(" | ") + ")" }
             };
 
             return cachedTypes.getOrAdd(unionType, unionType);
@@ -1192,6 +1197,11 @@ module ts {
 
                 case SyntaxKind.AmpersandAmpersandToken:
                     // The && operator permits the operands to be of any type and produces a result of the same type as the second operand.
+                    return getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ undefined);
+
+                case SyntaxKind.CommaToken:
+                    // The comma operator permits the operands to be of any type and produces a 
+                    // result that is of the same type as the second operand.
                     return getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ undefined);
 
                 case SyntaxKind.BarBarToken:
