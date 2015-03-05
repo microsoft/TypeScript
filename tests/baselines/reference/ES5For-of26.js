@@ -10,3 +10,4 @@ for (var _i = 0, _a = [2, 3]; _i < _a.length; _i++) {
     a;
     b;
 }
+//# sourceMappingURL=ES5For-of26.js.map

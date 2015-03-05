@@ -1,3 +1,4 @@
-for (let v of []) {
+//@sourcemap: true
+for (let v of ['a', 'b', 'c']) {
     var x = v;
 }

@@ -2067,6 +2067,9 @@ module ts {
 
                 function emitNodeWithMap(node: Node) {
                     if (node) {
+                        if (nodeIsSynthesized(node)) {
+                            return emitNode(node);
+                        }
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
                             emitNode(node);
@@ -3517,9 +3520,6 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                // This is the var keyword for the counter and rhsReference. The var keyword for
-                // the LHS will be emitted inside the body.
-                write("var ");
                 
                 // Do not emit the LHS var declaration yet, because it might contain destructuring.
                 
@@ -3533,29 +3533,42 @@ module ts {
                 var rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
                 var counter = createTempVariable(node, /*forLoopVariable*/ true);
                 var rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
+
+                // This is the var keyword for the counter and rhsReference. The var keyword for
+                // the LHS will be emitted inside the body.
+                emitStart(node.expression);
+                write("var ");
                 
                 // _i = 0
-                emit(counter);
+                emitNode(counter);
                 write(" = 0");
+                emitEnd(node.expression);
                 
                 if (!rhsIsIdentifier) {
                     // , _a = expr
                     write(", ");
-                    emit(rhsReference);
+                    emitStart(node.expression);
+                    emitNode(rhsReference);
                     write(" = ");
-                    emit(node.expression);
+                    emitNode(node.expression);
+                    emitEnd(node.expression);
                 }
                 write("; ");
                 
                 // _i < _a.length;
-                emit(counter);
+                emitStart(node.initializer);
+                emitNode(counter);
                 write(" < ");
-                emit(rhsReference);
-                write(".length; ");
+                emitNode(rhsReference);
+                write(".length");
+                emitEnd(node.initializer);
+                write("; ");
                 
                 // _i++)
-                emit(counter);
+                emitStart(node.initializer);
+                emitNode(counter);
                 write("++");
+                emitEnd(node.initializer);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 
                 // Body
@@ -3566,6 +3579,7 @@ module ts {
                 // Initialize LHS
                 // var v = _a[_i];
                 var rhsIterationValue = createElementAccessExpression(rhsReference, counter);
+                emitStart(node.initializer);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
                     var variableDeclarationList = <VariableDeclarationList>node.initializer;
@@ -3579,18 +3593,18 @@ module ts {
                         else {
                             // The following call does not include the initializer, so we have
                             // to emit it separately.
-                            emit(declaration);
+                            emitNode(declaration);
                             write(" = ");
-                            emit(rhsIterationValue);
+                            emitNode(rhsIterationValue);
                         }
                     }
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (var of []) {}
                         var emptyDeclarationListTemp = createTempVariable(node, /*forLoopVariable*/ false);
-                        emit(emptyDeclarationListTemp);
+                        emitNode(emptyDeclarationListTemp);
                         write(" = ");
-                        emit(rhsIterationValue);
+                        emitNode(rhsIterationValue);
                     }
                 }
                 else {
@@ -3604,9 +3618,10 @@ module ts {
                         emitDestructuring(assignmentExpressionStatement);
                     }
                     else {
-                        emit(assignmentExpression);
+                        emitNode(assignmentExpression);
                     }
                 }
+                emitEnd(node.initializer);
                 write(";");
                 
                 if (node.statement.kind === SyntaxKind.Block) {
