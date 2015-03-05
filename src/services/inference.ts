@@ -2,6 +2,7 @@ module ts {
     /* @internal */
     export interface InferenceEngine {
         createEngineUpdater(): InferenceEngineUpdater;
+        getTypeInformation(node: Node): TypeInformation;
 
         /* @internal */ referencesManager_forTestingPurposesOnly: ReferencesManager;
     }
@@ -175,18 +176,24 @@ module ts {
         };
     }
 
+    interface ReferencesPerFile {
+        [fileName: string]: References;
+    }
+
     /* @internal */
     export interface ReferencesManager {
         update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
 
         // For testing purposes only
         toJSON(program: Program): any;
+
+        getReferences(program: Program, symbol: Symbol): ReferencesPerFile;
+
         //getReferencesToNode(node: Node): References;
         //getReferencesToSymbol(symbol: Symbol): References;
     }
 
     function createReferencesManager(): ReferencesManager {
-        // Kept around for debugging purposes.
         var latestProgram: Program;
 
         // Maps a symbol's value declaration to a per file map of all the references to it.
@@ -211,8 +218,35 @@ module ts {
 
         return {
             update,
+            getReferences,
             toJSON
         };
+
+        function getReferences(program: Program, symbol: Symbol): ReferencesPerFile {
+            ensureUpToDate(program);
+            if (symbol && symbol.valueDeclaration) {
+                var declarationNode = symbol.valueDeclaration;
+
+                var filesWithReferences = declarationToFilesWithReferences[getNodeId(declarationNode)];
+                if (filesWithReferences) {
+                    var result: ReferencesPerFile = {};
+
+                    stringSet_forEach(filesWithReferences, fileName => {
+                        var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
+                        if (bidirectionalReferences) {
+                            var references = declarationToReferencesMap_get(bidirectionalReferences.declarationToReferences, declarationNode);
+                            if (references) {
+                                result[fileName] = references;
+                            }
+                        }
+                    });
+
+                    return result;
+                }
+            }
+
+            return undefined;
+        }
 
         function toJSON(program: Program): any {
             ensureUpToDate(program);
@@ -225,7 +259,7 @@ module ts {
             }
 
             function getNode(nodeId: number): Node {
-                var result = forEach(latestProgram.getSourceFiles(), findNode);
+                var result = forEach(program.getSourceFiles(), findNode);
                 Debug.assert(!!result);
                 return result;
 
@@ -565,11 +599,11 @@ module ts {
         var stringLiteralTypeInformation = createPrimitiveTypeInformation("string");
         var numericLiteralTypeInformation = createPrimitiveTypeInformation("number");
 
-        //var fileNameToSourceFileId: ts.Map<number>
         var referenceManager = createReferencesManager();
 
         return {
             createEngineUpdater,
+            getTypeInformation,
             referencesManager_forTestingPurposesOnly: referenceManager
         };
 
@@ -845,6 +879,10 @@ module ts {
                     return symbolInformation.getTypeInformation();
                 }
             }
+        }
+
+        function getTypeInformation(node: Node): TypeInformation {
+            return undefined;
         }
         //return {
         //    onBeforeUpdateSourceFile,
