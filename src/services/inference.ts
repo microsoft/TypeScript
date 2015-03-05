@@ -363,8 +363,6 @@ module ts {
         var filesToPartiallyResolve: StringSet;
         var addedOrRemovedSymbolNames: StringSet;
 
-        resetDeferredData();
-
         return {
             update,
             getReferencesToDeclarationNode,
@@ -528,6 +526,10 @@ module ts {
         }
 
         function ensureUpToDate(program: Program): void {
+            if (!filesToFullyResolve) {
+                return;
+            }
+
             Debug.assert(latestProgram === program);
             Debug.assert(!stringSet_intersects(filesToFullyResolve, filesToPartiallyResolve));
 
@@ -553,7 +555,9 @@ module ts {
             });
 
             // Now reset all the deferred data now that we've incorporated it.
-            resetDeferredData();
+            filesToFullyResolve = undefined;
+            filesToPartiallyResolve = undefined;
+            addedOrRemovedSymbolNames = undefined;
         }
 
         function keysIntersect<T, U>(nameTable: Map<T>, changedSymbolNames: StringSet) {
@@ -571,13 +575,11 @@ module ts {
             return false;
         }
 
-        function resetDeferredData() {
-            filesToFullyResolve = createStringSet();
-            filesToPartiallyResolve = createStringSet();
-            addedOrRemovedSymbolNames = createStringSet();
-        }
-
         function update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
+            filesToFullyResolve = filesToFullyResolve || createStringSet();
+            filesToPartiallyResolve = filesToPartiallyResolve || createStringSet();
+            addedOrRemovedSymbolNames = addedOrRemovedSymbolNames || createStringSet();
+
             // First purge all data that has been removed.  First, remove all the data for files that
             // were removed *as well as* files that were updated.  We don't need any of the data about
             // the former, and we're going to recompute all the data about the latter.
@@ -1078,7 +1080,34 @@ module ts {
             function updateInferenceEngine(program: Program) {
                 // First update all the references we have.
                 referenceManager.update(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
+
+                // Now, go through all the removed files and updated files and remove any cached 
+                // information we have for the declarations in them. When we need that information
+                // again we'll just pull on them to get them to be recomputed.
+                var touchedFiles = oldUpdatedFiles.concat(removedFiles);
+                for (var i = 0, n = touchedFiles.length; i < n; i++) {
+                    clearSymbolTypeInformation(touchedFiles[i]);
+                }
             }
+        }
+
+        function clearSymbolTypeInformation(file: SourceFile) {
+            file.nodeToSymbol.forEach(symbol => {
+                if (symbol.valueDeclaration) {
+                    var declarationId = getNodeId(symbol.valueDeclaration);
+
+                    var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
+
+                    if (symbolInformation) {
+                        // Clear out the type for this symbol.  That way anyone pointing at it 
+                        // won't get any stale information about it.
+                        symbolInformation.type = undefined;
+
+                        // And remove teh symbol information from our cache entirely.
+                        delete declarationIdToSymbolTypeInformation[declarationId];
+                    }
+                }
+            });
         }
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
