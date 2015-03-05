@@ -145,8 +145,14 @@ module ts {
     }
 
     const enum TypeInformationKind {
+        // Simple primitives (like number, string, etc.)
         Primitive,
-        Union
+
+        // Union types, like "string | number" when you have: "foo" || 0
+        Union,
+
+        // Plus types, for when we have: a + b
+        Plus
     }
 
     /* @internal */
@@ -156,6 +162,12 @@ module ts {
     }
 
     interface UnionTypeInformation extends TypeInformation {
+        _unionTypeInformationBrand: any;
+        types: TypeInformation[];
+    }
+
+    interface PlusTypeInformation extends TypeInformation {
+        _plusTypeInformationBrand: any;
         types: TypeInformation[];
     }
 
@@ -759,22 +771,11 @@ module ts {
             };
         }
 
-        function addTypesToSet(type: TypeInformation, types: TypeInformation[]) {
-            // We flatten all union types.  That way there is a single linear representation for
-            // unions, and we don't have to compare any sort of tree structure.
-            if (type.kind === TypeInformationKind.Union) {
-                var constituentTypes = (<UnionTypeInformation>type).types;
-                for (var i = 0, n = constituentTypes.length; i < n; i++) {
-                    addTypesToSet(constituentTypes[i], types);
-                }
-
-                return;
-            }
-
+        function addSingleTypeToSet(type: TypeInformation, typeSet: TypeInformation[]) {
             // We want to put the type into the list in sorted order.
             var hashCode = type.getHashCode();
-            for (var i = 0, n = types.length; i < n; i++) {
-                var currentType = types[i];
+            for (var i = 0, n = typeSet.length; i < n; i++) {
+                var currentType = typeSet[i];
                 var currentTypeHashCode = currentType.getHashCode();
 
                 if (currentTypeHashCode < hashCode) {
@@ -789,13 +790,51 @@ module ts {
                 }
                 else {
                     // Found the first type that should go after the type we're adding.
-                    types.splice(i, /*deleteCount:*/ 0, type);
+                    typeSet.splice(i, /*deleteCount:*/ 0, type);
                     return;
                 }
             }
 
             // Couldn't find a place in the list to put it.  So just put it at the end.
-            types.push(type);
+            typeSet.push(type);
+        }
+
+        function decomposePossibleUnionAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
+            // We flatten all union types.  That way there is a single linear representation for
+            // unions, and we don't have to compare any sort of tree structure.
+            if (type.kind === TypeInformationKind.Union) {
+                var constituentTypes = (<UnionTypeInformation>type).types;
+                for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                    var constituent = constituentTypes[i];
+                    Debug.assert(constituent.kind !== TypeInformationKind.Union);
+
+                    addSingleTypeToSet(constituentTypes[i], types);
+                }
+            }
+            else {
+                addSingleTypeToSet(type, types);
+            }
+        }
+
+        function decomposePossiblePlusAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
+            if (!type) {
+                return;
+            }
+
+            // We flatten all plus types.  That way there is a single linear representation for
+            // pluses, and we don't have to compare any sort of tree structure.
+            if (type.kind === TypeInformationKind.Plus) {
+                var constituentTypes = (<PlusTypeInformation>type).types;
+                for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                    var constituent = constituentTypes[i];
+                    Debug.assert(constituent.kind !== TypeInformationKind.Plus);
+
+                    addSingleTypeToSet(constituentTypes[i], types);
+                }
+            }
+            else {
+                addSingleTypeToSet(type, types);
+            }
         }
 
         function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation): TypeInformation {
@@ -812,8 +851,8 @@ module ts {
             }
 
             var types: TypeInformation[] = [];
-            addTypesToSet(type1, types);
-            addTypesToSet(type2, types);
+            decomposePossibleUnionAndAddToSet(type1, types);
+            decomposePossibleUnionAndAddToSet(type2, types);
 
             Debug.assert(types.length >= 2);
             Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
@@ -821,12 +860,9 @@ module ts {
             // Cap the number of types we'll keep in a union type at 8.
             types = types.length > 8 ? types.slice(0, 8) : types;
 
-            var hash: number = TypeInformationKind.Union;
-            for (var i = 0, n = types.length; i < n; i++) {
-                hash = hashCombine(types[i].getHashCode(), hash);
-            }
+            var hash = computeHash(TypeInformationKind.Union, types);
 
-            var unionType: UnionTypeInformation = {
+            var unionType = <UnionTypeInformation>{
                 types,
                 kind: TypeInformationKind.Union,
                 getHashCode: () => hash,
@@ -841,6 +877,14 @@ module ts {
             };
 
             return cachedTypes.getOrAdd(unionType, unionType);
+        }
+
+        function computeHash(hash: number, items: Hashable[]) {
+            for (var i = 0, n = items.length; i < n; i++) {
+                hash = hashCombine(items[i].getHashCode(), hash);
+            }
+
+            return hash;
         }
 
         function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
@@ -1213,6 +1257,9 @@ module ts {
 
                 case SyntaxKind.BarBarToken:
                     return getTypeInformationForBarBarBinaryExpression(node, contextualTypeInformation);
+
+                case SyntaxKind.PlusToken:
+                    return getTypeInformationForPlusBinaryExpression(node);
             }
 
             throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
@@ -1234,6 +1281,66 @@ module ts {
                 var rightTypeInformation = getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ leftTypeInformation);
                 return createUnionTypeInformation(leftTypeInformation, rightTypeInformation);
             }
+        }
+
+        function getTypeInformationForPlusBinaryExpression(node: BinaryExpression) {
+            var leftType = getTypeInformationForExpression(node.left, /*contextualTypeInformation:*/ undefined);
+            var rightType = getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ undefined);
+
+            // If one operand is the null or undefined value, it is treated as having the type of the other operand. 
+            leftType = leftType || rightType;
+            rightType = rightType || leftType;
+
+            // If both operands are of the Number primitive type, the result is of the Number primitive type.
+            if (leftType === numberPrimitiveTypeInformation && rightType === numberPrimitiveTypeInformation) {
+                return numberPrimitiveTypeInformation;
+            }
+
+            // If one or both operands are of the String primitive type, the result is of the String primitive type.
+            if (leftType === stringPrimitiveTypeInformation || rightType === stringPrimitiveTypeInformation) {
+                return stringPrimitiveTypeInformation;
+            }
+
+            if (!leftType && !rightType) {
+                // If we literally know nothing about either side of the + expression, then treat
+                // this as being either number or string.
+                return stringOrNumberUnionType;
+            }
+
+            if (leftType === stringOrNumberUnionType && rightType === stringOrNumberUnionType) {
+                return stringOrNumberUnionType;
+            }
+
+            // Not enough information at this point to make an up front type determination.  
+            // Return a constraint to see if we can figure out the type later.
+            Debug.assert(leftType !== undefined || rightType !== undefined);
+
+            // If one of the types is undefined, place it last.
+            var types: TypeInformation[] = [];
+            decomposePossiblePlusAndAddToSet(leftType, types);
+            decomposePossiblePlusAndAddToSet(rightType, types);
+
+            Debug.assert(filter(types, t => t.kind === TypeInformationKind.Plus).length === 0, "We should never plus types");
+
+            // Cap the number of types we'll keep in a plus type at 8.
+            types = types.length > 8 ? types.slice(0, 8) : types;
+
+            var hash = computeHash(TypeInformationKind.Plus, types);
+
+            var result = <PlusTypeInformation>{
+                types,
+                kind: TypeInformationKind.Plus,
+                equals: function (other) {
+                    if (this === other) {
+                        return true;
+                    }
+
+                    return other && other.kind === TypeInformationKind.Plus && sequenceEquals(this.types, (<PlusTypeInformation>other).types);
+                },
+                getHashCode: () => hash
+            };
+
+            return cachedTypes.getOrAdd(result, result);
         }
 
         function getTypeInformationForConditionalExpression(node: ConditionalExpression, contextualTypeInformation: TypeInformation) {

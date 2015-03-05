@@ -417,5 +417,70 @@ var v2 = true || '' || 0;`
 
             assert.isTrue(typeInformation1 === typeInformation2);
         });
+
+        it("PlusOfNumberAndNullIsNumber", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = 0 + null"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "number");
+        });
+
+        it("PlusOfNullAndNullIsNumberOrString", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = null + null"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "(number | string)");
+        });
+
+        it("PlusOfNumberAndNumberIsNumber", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = 0 + 1"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "number");
+        });
+
+        it("PlusOfNumberAndStringIsString", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = 0 + ''"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "string");
+        });
+
+        it("PlusOfStringAndNullIsString", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = null + ''"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "string");
+        });
     });
 });
