@@ -3203,11 +3203,13 @@ declare module "typescript" {
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
-        isUnknownIdentifier(location: Node, name: string): boolean;
->isUnknownIdentifier : (location: Node, name: string) => boolean
+        isUnknownIdentifier(location: Node, name: string, sourceFile: SourceFile): boolean;
+>isUnknownIdentifier : (location: Node, name: string, sourceFile: SourceFile) => boolean
 >location : Node
 >Node : Node
 >name : string
+>sourceFile : SourceFile
+>SourceFile : SourceFile
 
         getBlockScopedVariableId(node: Identifier): number;
 >getBlockScopedVariableId : (node: Identifier) => number
