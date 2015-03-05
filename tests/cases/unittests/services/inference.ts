@@ -316,7 +316,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "number");
         });
 
@@ -329,7 +329,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "string");
         });
 
@@ -342,7 +342,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "boolean");
         });
 
@@ -355,7 +355,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "boolean");
         });
 
@@ -368,7 +368,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "boolean");
         });
 
@@ -381,7 +381,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "(boolean | string)");
         });
 
@@ -394,7 +394,7 @@ var z;
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "(boolean | number | string)");
         });
 
@@ -409,10 +409,10 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation1: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation1: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation1.toString(), "(boolean | number | string)");
 
-            var typeInformation2: ts.TypeInformation = engine.getTypeInformation(file.statements[1].declarationList.declarations[0].initializer);
+            var typeInformation2: ts.TypeInformation = engine.getTypeInformation(program, file.statements[1].declarationList.declarations[0].initializer);
             assert.equal(typeInformation2.toString(), "(boolean | number | string)");
 
             assert.isTrue(typeInformation1 === typeInformation2);
@@ -427,7 +427,7 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "number");
         });
 
@@ -440,7 +440,7 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "(number | string)");
         });
 
@@ -453,7 +453,7 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "number");
         });
 
@@ -466,7 +466,7 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "string");
         });
 
@@ -479,7 +479,7 @@ var v2 = true || '' || 0;`
             var program = engineAndProgram.program;
             var file = <any>program.getSourceFiles()[0];
 
-            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "string");
         });
     });
