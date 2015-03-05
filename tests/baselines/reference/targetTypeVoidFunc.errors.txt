@@ -4,7 +4,7 @@ tests/cases/compiler/targetTypeVoidFunc.ts(2,12): error TS2322: Type '() => void
 ==== tests/cases/compiler/targetTypeVoidFunc.ts (1 errors) ====
     function f1(): { new (): number; } {
         return function () { return; }
-               ~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'new () => number'.
     }; 
     
