@@ -20,8 +20,8 @@ module ts {
         add(key: Key, value: Value): void;
     }
 
-    var defaultGetHashCode = k => k.getHashCode(); 
-    var defaultEquals = (k1, k2) => {
+    var defaultGetHashCode = (k: Hashable) => k.getHashCode(); 
+    var defaultEquals = (k1: Equatable, k2: Equatable) => {
         if (k1 === k2) {
             return true;
         }
@@ -51,8 +51,8 @@ module ts {
     
     /* @internal */
     export function createHashTable<Key, Value>(getHashCode?: (k: Key) => number, equals?: (k1: Key, k2: Key) => boolean): HashTable<Key, Value> {
-        getHashCode = getHashCode || defaultGetHashCode;
-        equals = equals || defaultEquals;
+        getHashCode = getHashCode || <any>defaultGetHashCode;
+        equals = equals || <any>defaultEquals;
 
         var buckets: KeyValuePair<Key, Value>[][] = [];
 
@@ -754,6 +754,111 @@ module ts {
             };
         }
 
+        function addTypesToSet(type: TypeInformation, types: TypeInformation[]) {
+            // We flatten all union types.  That way there is a single linear representation for
+            // unions, and we don't have to compare any sort of tree structure.
+            if (type.kind === TypeInformationKind.Union) {
+                var constituentTypes = (<UnionTypeInformation>type).types;
+                for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                    addTypesToSet(constituentTypes[i], types);
+                }
+
+                return;
+            }
+
+            // We want to put the type into the list in sorted order.
+            var hashCode = type.getHashCode();
+            for (var i = 0, n = types.length; i < n; i++) {
+                var currentType = types[i];
+                var currentTypeHashCode = currentType.getHashCode();
+
+                if (currentTypeHashCode < hashCode) {
+                    // Keep going to find the right place to insert the item.
+                    continue;
+                }
+                else if (currentTypeHashCode === hashCode) {
+                    if (type.equals(currentType)) {
+                        // Was already in the set.  No need to add it again.
+                        return;
+                    }
+                }
+                else {
+                    // Found the first type that should go after the type we're adding.
+                    types.splice(i, /*deleteCount:*/ 0, type);
+                    return;
+                }
+            }
+
+            // Couldn't find a place in the list to put it.  So just put it at the end.
+            types.push(type);
+        }
+
+        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation): TypeInformation {
+            if (!type1) {
+                return type2;
+            }
+
+            if (!type2) {
+                return type1;
+            }
+
+            if (type1.equals(type2)) {
+                return type1;
+            }
+
+            var types: TypeInformation[] = [];
+            addTypesToSet(type1, types);
+            addTypesToSet(type2, types);
+
+            Debug.assert(types.length >= 2);
+            Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
+
+            // Cap the number of types we'll keep in a union type at 8.
+            types = types.length > 8 ? types.slice(0, 8) : types;
+
+            var hash: number = TypeInformationKind.Union;
+            for (var i = 0, n = types.length; i < n; i++) {
+                hash = hashCombine(types[i].getHashCode(), hash);
+            }
+
+            var unionType: UnionTypeInformation = {
+                types,
+                kind: TypeInformationKind.Union,
+                getHashCode: () => hash,
+                equals: function (t) {
+                    if (this === t) {
+                        return true;
+                    }
+
+                    return t && t.kind === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>t).types);
+                }
+            };
+
+            return cachedTypes.getOrAdd(unionType, unionType);
+        }
+
+        function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
+            if (array1 === array2) {
+                return true;
+            }
+
+            if (!array1 || !array2) {
+                return false;
+            }
+
+            if (array1.length !== array2.length) {
+                return false;
+            }
+
+            for (var i = 0, n = array1.length; i < n; i++) {
+                if (!array1[i].equals(array2[i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         function createEngineUpdater(): InferenceEngineUpdater {
             var typeChecker: TypeChecker;
             
@@ -1044,8 +1149,13 @@ module ts {
             if (node) {
                 switch (node.kind) {
                     case SyntaxKind.BinaryExpression:           return getTypeInformationForBinaryExpression(<BinaryExpression>node, contextualTypeInformation);
+                    case SyntaxKind.ConditionalExpression:      return getTypeInformationForConditionalExpression(<ConditionalExpression>node, contextualTypeInformation);
+                    case SyntaxKind.DeleteExpression:           return getTypeInformationForDeleteExpression(<DeleteExpression>node);
                     case SyntaxKind.ParenthesizedExpression:    return getTypeInformationForParenthesizedExpression(<ParenthesizedExpression>node, contextualTypeInformation);
                     case SyntaxKind.PostfixUnaryExpression:     return getTypeInformationForPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    case SyntaxKind.PrefixUnaryExpression:      return getTypeInformationForPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                    case SyntaxKind.TypeOfExpression:           return getTypeInformationForTypeOfExpression(<TypeOfExpression>node);
+                    case SyntaxKind.VoidExpression:             return getTypeInformationForVoidExpression(<VoidExpression>node);
                 }
 
                 throw new Error("Unhandled case in getTypeInformationForExpression");
@@ -1091,111 +1201,6 @@ module ts {
             throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
         }
 
-        function addTypesToSet(type: TypeInformation, types: TypeInformation[]) {
-            // We flatten all union types.  That way there is a single linear representation for
-            // unions, and we don't have to compare any sort of tree structure.
-            if (type.kind === TypeInformationKind.Union) {
-                var constituentTypes = (<UnionTypeInformation>type).types;
-                for (var i = 0, n = constituentTypes.length; i < n; i++) {
-                    addTypesToSet(constituentTypes[i], types);
-                }
-
-                return;
-            }
-
-            // We want to put the type into the list in sorted order.
-            var hashCode = type.getHashCode();
-            for (var i = 0, n = types.length; i < n; i++) {
-                var currentType = types[i];
-                var currentTypeHashCode = currentType.getHashCode();
-
-                if (currentTypeHashCode < hashCode) {
-                    // Keep going to find the right place to insert the item.
-                    continue;
-                }
-                else if (currentTypeHashCode === hashCode) {
-                    if (type.equals(currentType)) {
-                        // Was already in the set.  No need to add it again.
-                        return;
-                    }
-                }
-                else {
-                    // Found the first type that should go after the type we're adding.
-                    types.splice(i, /*deleteCount:*/ 0, type);
-                    return;
-                }
-            }
-
-            // Couldn't find a place in the list to put it.  So just put it at the end.
-            types.push(type);
-        }
-
-        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation): TypeInformation {
-            if (!type1) {
-                return type2;
-            }
-
-            if (!type2) {
-                return type1;
-            }
-
-            if (type1.equals(type2)) {
-                return type1;
-            }
-
-            var types: TypeInformation[] = [];
-            addTypesToSet(type1, types);
-            addTypesToSet(type2, types);
-
-            Debug.assert(types.length >= 2);
-            Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
-
-            // Cap the number of types we'll keep in a union type at 8.
-            types = types.length > 8 ? types.slice(0, 8) : types;
-
-            var hash: number = TypeInformationKind.Union;
-            for (var i = 0, n = types.length; i < n; i++) {
-                hash = hashCombine(types[i].getHashCode(), hash);
-            }
-
-            var unionType: UnionTypeInformation = {
-                types,
-                kind: TypeInformationKind.Union,
-                getHashCode: () => hash,
-                equals: function (t) {
-                    if (this === t) {
-                        return true;
-                    }
-
-                    return t && t.kind === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>t).types);
-                }
-            };
-
-            return cachedTypes.getOrAdd(unionType, unionType);
-        }
-
-        function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
-            if (array1 === array2) {
-                return true;
-            }
-
-            if (!array1 || !array2) {
-                return false;
-            }
-
-            if (array1.length !== array2.length) {
-                return false;
-            }
-
-            for (var i = 0, n = array1.length; i < n; i++) {
-                if (!array1[i].equals(array2[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         function getTypeInformationForBarBarBinaryExpression(node: BinaryExpression, contextualTypeInformation: TypeInformation) {
             // If the || expression is contextually typed (section 4.19), the operands are 
             // contextually typed by the same type. Otherwise, the left operand is not contextually
@@ -1214,6 +1219,21 @@ module ts {
             }
         }
 
+        function getTypeInformationForConditionalExpression(node: ConditionalExpression, contextualTypeInformation: TypeInformation) {
+            // If the conditional expression is contextually typed (section 4.19), expr1 and expr2 
+            // are contextually typed by the same type.Otherwise, expr1 and expr2 are not 
+            // contextually typed. type of the result is the union type of the types of expr1 and 
+            // expr2.
+            return createUnionTypeInformation(
+                getTypeInformationForExpression(node.whenTrue, contextualTypeInformation),
+                getTypeInformationForExpression(node.whenFalse, contextualTypeInformation));
+        }
+
+        function getTypeInformationForDeleteExpression(node: DeleteExpression) {
+            // The 'delete' operator takes an operand of any type and produces a result of the Boolean primitive type.
+            return booleanPrimitiveTypeInformation;
+        }
+
         function getTypeInformationForParenthesizedExpression(node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {
             // The type of a parenthesized expression is whatever the type of its sub-expression is.
             // The sub-expression *is* contextually typed.
@@ -1223,6 +1243,34 @@ module ts {
         function getTypeInformationForPostfixUnaryExpression(node: PostfixUnaryExpression) {
             // a++ or b-- are always considered to be the number type.
             return numberPrimitiveTypeInformation;
+        }
+
+        function getTypeInformationForPrefixUnaryExpression(node: PrefixUnaryExpression) {
+            switch (node.operator) {
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.TildeToken:
+                    return numberPrimitiveTypeInformation;
+
+                case SyntaxKind.ExclamationToken:
+                    return booleanPrimitiveTypeInformation;
+            }
+
+            throw new Error("Unhandled case in getTypeInformationForPrefixUnaryExpression");
+        }
+
+        function getTypeInformationForTypeOfExpression(node: TypeOfExpression) {
+            // The 'typeof' operator takes an operand of any type and produces a value of the String primitive type.
+            return stringPrimitiveTypeInformation;
+        }
+
+        function getTypeInformationForVoidExpression(node: VoidExpression): TypeInformation {
+            // The 'void' operator takes an operand of any type and produces the value 'undefined'.
+            // The type of the result is the Undefined type
+            //
+            // We don't actually use something to represent the 'undefined type'.  We just model that
+            // as the absence of any actual type information.
+            return undefined;
         }
 
         //return {
