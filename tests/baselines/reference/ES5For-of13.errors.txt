@@ -2,7 +2,7 @@ tests/cases/conformance/statements/for-ofStatements/ES5For-of13.ts(1,1): error T
 
 
 ==== tests/cases/conformance/statements/for-ofStatements/ES5For-of13.ts (1 errors) ====
-    for (let v of []) {
+    for (let v of ['a', 'b', 'c']) {
     ~~~
 !!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
         var x = v;
