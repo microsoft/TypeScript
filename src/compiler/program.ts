@@ -423,13 +423,11 @@ module ts {
                 return;
             }
 
-            var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModule && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
-                var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
-                var errorLength = externalModuleErrorSpan.end - errorStart;
-                diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+            var firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
+            if (firstExternalModuleSourceFile && !options.module) {
+                // We cannot use createDiagnosticFromNode because nodes do not have parents yet       
+                var span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot
@@ -437,7 +435,7 @@ module ts {
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 (options.mapRoot &&  // there is --mapRoot Specified and there would be multiple js files generated
-                    (!options.out || firstExternalModule !== undefined))) {
+                    (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
                 var commonPathComponents: string[];
                 forEach(files, sourceFile => {

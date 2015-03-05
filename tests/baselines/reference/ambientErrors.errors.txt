@@ -1,5 +1,5 @@
 tests/cases/conformance/ambient/ambientErrors.ts(2,15): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(6,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/ambient/ambientErrors.ts(6,18): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/ambient/ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1184: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(24,5): error TS1066: Ambient enum elements can only have integer literal initializers.
@@ -25,7 +25,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
     // Ambient functions with invalid overloads
     declare function fn(x: number): string;
     declare function fn(x: 'foo'): number;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     ~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     
     // Ambient functions with duplicate signatures

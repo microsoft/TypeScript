@@ -36,12 +36,10 @@ tests/cases/compiler/implicitAnyFromCircularInference.ts(46,5): error TS7023: 'x
     
     // Error expected
     var f1 = function () {
-             ~~~~~~~~~~~~~
-        return f1();
-    ~~~~~~~~~~~~~~~~
-    };
-    ~
+             ~~~~~~~~
 !!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return f1();
+    };
     
     // Error expected
     var f2 = () => f2();
