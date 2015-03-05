@@ -339,7 +339,7 @@ module ts {
         getReferencesToSymbol(program: Program, symbol: Symbol): Map<References>;
         getReferencesToDeclarationNode(program: Program, declarationNode: Node): Map<References>;
 
-        getBidirectionalReferences(fileName: string): BidirectionalReferences;
+        getBidirectionalReferences(program: Program, fileName: string): BidirectionalReferences;
     }
 
     function createReferencesManager(): ReferencesManager {
@@ -373,7 +373,8 @@ module ts {
             toJSON
         };
 
-        function getBidirectionalReferences(fileName: string) {
+        function getBidirectionalReferences(program: Program, fileName: string) {
+            ensureUpToDate(program);
             return fileNameToBidirectionalReferences[fileName];
         }
 
@@ -1379,7 +1380,7 @@ module ts {
             function getTypeInformationForIdentifier(sourceFile: SourceFile, node: Identifier) {
                 // See if this identifier is a reference to some JS symbol.  If so, then it has whatever
                 // type the declaration has.
-                var bidirectionalReferences = referenceManager.getBidirectionalReferences(sourceFile.fileName);
+                var bidirectionalReferences = referenceManager.getBidirectionalReferences(program, sourceFile.fileName);
                 if (bidirectionalReferences) {
                     var declarationNode = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, node);
                     if (declarationNode) {
@@ -1430,6 +1431,8 @@ module ts {
                             }
                         }
                     }
+
+                    symbolTypeInformation.type = type;
                 }
 
                 return symbolTypeInformation;
@@ -1470,7 +1473,8 @@ module ts {
                     }
                 }
 
-                throw new Error("Unhandled case in computeTypeInformationForReference");
+                // TODO(cyrusn): If necessary, add more cases where we a reference can be found 
+                // where we can flow type information.
             }
 
             function getTypeInformationForParenthesizedExpression(sourceFile: SourceFile, node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {

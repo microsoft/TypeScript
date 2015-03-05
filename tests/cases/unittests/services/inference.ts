@@ -483,4 +483,27 @@ var v2 = true || '' || 0;`
             assert.equal(typeInformation.toString(), "string");
         });
     });
+
+    describe("ExpressionInferenceWithReferences", () => {
+        it("MultipleAssignment", () => {
+            debugger;
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": 
+`var a;
+var b;
+a = true;
+b = 0;
+var c;
+c = a || b;
+var d = c;`
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(program, file.statements[6].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "(boolean | number)");
+        });
+    });
 });
