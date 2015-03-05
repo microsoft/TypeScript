@@ -397,5 +397,25 @@ var z;
             var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
             assert.equal(typeInformation.toString(), "(boolean | number | string)");
         });
+
+        it("UnionShouldHaveReferenceIdentity", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": 
+`var v1 = true || '' || 0;
+var v2 = true || '' || 0;`
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation1: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation1.toString(), "(boolean | number | string)");
+
+            var typeInformation2: ts.TypeInformation = engine.getTypeInformation(file.statements[1].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation2.toString(), "(boolean | number | string)");
+
+            assert.isTrue(typeInformation1 === typeInformation2);
+        });
     });
 });
