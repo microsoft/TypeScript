@@ -149,7 +149,8 @@ module ts {
         Union
     }
 
-    interface TypeInformation extends Hashable {
+    /* @internal */
+    export interface TypeInformation extends Hashable {
         kind: TypeInformationKind;
         equals(other: TypeInformation): boolean;
     }
@@ -1153,6 +1154,12 @@ module ts {
         function getTypeInformationForExpression(node: Expression, contextualTypeInformation: TypeInformation): TypeInformation {
             if (node) {
                 switch (node.kind) {
+                    case SyntaxKind.NumericLiteral: return numberPrimitiveTypeInformation;
+                    case SyntaxKind.StringLiteral:  return stringPrimitiveTypeInformation;
+                    case SyntaxKind.TrueKeyword:    return booleanPrimitiveTypeInformation;
+                    case SyntaxKind.FalseKeyword:   return booleanPrimitiveTypeInformation;
+                    case SyntaxKind.NullKeyword:    return undefined;
+
                     case SyntaxKind.BinaryExpression:           return getTypeInformationForBinaryExpression(<BinaryExpression>node, contextualTypeInformation);
                     case SyntaxKind.ConditionalExpression:      return getTypeInformationForConditionalExpression(<ConditionalExpression>node, contextualTypeInformation);
                     case SyntaxKind.DeleteExpression:           return getTypeInformationForDeleteExpression(<DeleteExpression>node);

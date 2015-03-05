@@ -143,7 +143,7 @@ var harnessSources = [
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
-    "services/referencesManager.ts"
+    "services/inference.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

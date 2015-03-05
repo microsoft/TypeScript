@@ -1,4 +1,5 @@
 /// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path='..\..\..\..\src\harness\harness.ts' />
 /// <reference path="..\..\..\..\src\services\inference.ts" />
 
 interface EngineAndProgram {
@@ -6,7 +7,7 @@ interface EngineAndProgram {
     program: ts.Program;
 }
 
-describe('ReferencesManager', function () {
+describe('JavascriptInference', function () {
     function createProgramWithSourceFiles(files: ts.Map<ts.SourceFile>) {
         var fileNames: string[] = [];
         ts.forEachKey(files, k => { fileNames.push(k); });
@@ -70,19 +71,46 @@ describe('ReferencesManager', function () {
         assert.equal(actual, expected);
     }
 
-    describe("References in an initial set of files.", () => {
-        it("CrossFileReference1", () => {
-            var engineAndProgram = createInferenceEngineWithContent({
-                "file1.js":
-`var v;
+    function withUpdate(engineAndProgram: EngineAndProgram, fileName: string, start: number, length: number, replacement: string): EngineAndProgram {
+        var inferenceEngine = engineAndProgram.inferenceEngine;
+        var oldProgram = engineAndProgram.program;
+        var oldFile = oldProgram.getSourceFile(fileName);
+
+        var newFiles: ts.Map<ts.SourceFile> = {};
+        ts.map(oldProgram.getSourceFiles(), f => {
+            if (f !== oldFile) {
+                newFiles[f.fileName] = f;
+            }
+        });
+
+        var oldText = oldFile.text;
+        var newText = oldText.substr(0, start) + replacement + oldText.substr(start + length);
+        var newFile = ts.updateSourceFile(oldFile, newText, ts.createTextChangeRange(ts.createTextSpan(start, length), replacement.length), /*aggressiveChecks:*/ true);
+
+        var updater = inferenceEngine.createEngineUpdater();
+        updater.onSourceFileUpdated(oldFile, newFile);
+
+        newFiles[newFile.fileName] = newFile;
+        var newProgram = createProgramWithSourceFiles(newFiles);
+
+        updater.updateInferenceEngine(newProgram);
+        return { inferenceEngine, program: newProgram };
+    }
+
+    describe("ReferencesManager", () => {
+        describe("References in an initial set of files.", () => {
+            it("CrossFileReference1", () => {
+                var engineAndProgram = createInferenceEngineWithContent({
+                    "file1.js":
+                    `var v;
 v = 1;
 `,
-                "file2.js":
-`v = 2`
-            });
+                    "file2.js":
+                    `v = 2`
+                });
 
-            validateReferenceManager(engineAndProgram, 
-`{
+                validateReferenceManager(engineAndProgram,
+                    `{
   "declarationToFilesWithReferences": [
     {
       "declarationInfo": {
@@ -164,56 +192,30 @@ v = 1;
     }
   }
 }`);
-        });
-    });
-
-    function withUpdate(engineAndProgram: EngineAndProgram, fileName: string, start: number, length: number, replacement: string): EngineAndProgram {
-        var inferenceEngine = engineAndProgram.inferenceEngine;
-        var oldProgram = engineAndProgram.program;
-        var oldFile = oldProgram.getSourceFile(fileName);
-
-        var newFiles: ts.Map<ts.SourceFile> = {};
-        ts.map(oldProgram.getSourceFiles(), f => {
-            if (f !== oldFile) {
-                newFiles[f.fileName] = f;
-            }
+            });
         });
 
-        var oldText = oldFile.text;
-        var newText = oldText.substr(0, start) + replacement + oldText.substr(start + length);
-        var newFile = ts.updateSourceFile(oldFile, newText, ts.createTextChangeRange(ts.createTextSpan(start, length), replacement.length), /*aggressiveChecks:*/ true);
-
-        var updater = inferenceEngine.createEngineUpdater();
-        updater.onSourceFileUpdated(oldFile, newFile);
-
-        newFiles[newFile.fileName] = newFile;
-        var newProgram = createProgramWithSourceFiles(newFiles);
-        
-        updater.updateInferenceEngine(newProgram);
-        return { inferenceEngine, program: newProgram };
-    }
-
-    describe("References after an edit.", () => {
-        it("File is untouched if it is not affected by an edit in another file.", () => {
-            var file1Contents =
-`var x;
+        describe("References after an edit.", () => {
+            it("File is untouched if it is not affected by an edit in another file.", () => {
+                var file1Contents =
+                    `var x;
 var y;
 // pointless code just so the edit doesn't affect 'y'.
-return 1 + 1; 
+return 1 + 1;
 var z;
 `
 
-            var engineAndProgram = createInferenceEngineWithContent({
-                "file1.js": file1Contents,
-                "file2.js": `a = 1`
-            });
+                var engineAndProgram = createInferenceEngineWithContent({
+                    "file1.js": file1Contents,
+                    "file2.js": `a = 1`
+                });
 
-            // First, ensure the initial data has been computed.
-            engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                // First, ensure the initial data has been computed.
+                engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
 
-            engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "b");
-            validateReferenceManager(engineAndProgram,
-`{
+                engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "b");
+                validateReferenceManager(engineAndProgram,
+                    `{
   "declarationToFilesWithReferences": [],
   "fileNameToBidirectionalReferences": {
     "file2.js": {
@@ -226,29 +228,29 @@ var z;
     }
   }
 }`);
-        });
+            });
 
-        it("File is re-resolved if it is affected by an edit in another file.", () => {
-            debugger;
-            var file1Contents =
-`var x;
+            it("File is re-resolved if it is affected by an edit in another file.", () => {
+                debugger;
+                var file1Contents =
+                    `var x;
 var y;
 // pointless code just so the edit doesn't affect 'y'.
 return 1 + 1;
 var z;
 `
 
-            var engineAndProgram = createInferenceEngineWithContent({
-                "file1.js": file1Contents,
-                "file2.js": `a = 1`
-            });
+                var engineAndProgram = createInferenceEngineWithContent({
+                    "file1.js": file1Contents,
+                    "file2.js": `a = 1`
+                });
 
-            // First, ensure the initial data has been computed.
-            engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                // First, ensure the initial data has been computed.
+                engineAndProgram.inferenceEngine.referencesManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
 
-            engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "a");
-            validateReferenceManager(engineAndProgram,
-`{
+                engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "a");
+                validateReferenceManager(engineAndProgram,
+                    `{
   "declarationToFilesWithReferences": [
     {
       "declarationInfo": {
@@ -301,6 +303,61 @@ var z;
     }
   }
 }`);
+            });
+        });
+    });
+
+    describe("SimpleExpressionInference", () => {
+        it("NumberInference", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = 0"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "number");
+        });
+
+        it("StringInference", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = ''"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "string");
+        });
+
+        it("BooleanInference1", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = true"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "boolean");
+        });
+
+        it("BooleanInference2", () => {
+            var engineAndProgram = createInferenceEngineWithContent({
+                "file1.js": "var v = false"
+            });
+
+            var engine = engineAndProgram.inferenceEngine;
+            var program = engineAndProgram.program;
+            var file = <any>program.getSourceFiles()[0];
+
+            var typeInformation: ts.TypeInformation = engine.getTypeInformation(file.statements[0].declarationList.declarations[0].initializer);
+            assert.equal(typeInformation.toString(), "boolean");
         });
     });
 });
