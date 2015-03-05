@@ -590,8 +590,10 @@ module ts {
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
         var nodeIdToSymbolInferenceInformation: SymbolInferenceInformation[] = [];
-        var stringLiteralTypeInformation = createPrimitiveTypeInformation("string");
-        var numericLiteralTypeInformation = createPrimitiveTypeInformation("number");
+
+        var booleanPrimitiveTypeInformation = createPrimitiveTypeInformation("boolean");
+        var numberPrimitiveTypeInformation = createPrimitiveTypeInformation("number");
+        var stringPrimitiveTypeInformation = createPrimitiveTypeInformation("string");
 
         var referenceManager = createReferencesManager();
 
@@ -852,9 +854,9 @@ module ts {
                 if (expression) {
                     switch (expression.kind) {
                         case SyntaxKind.StringLiteral:
-                            return stringLiteralTypeInformation;
+                            return stringPrimitiveTypeInformation;
                         case SyntaxKind.NumericLiteral:
-                            return numericLiteralTypeInformation;
+                            return numberPrimitiveTypeInformation;
                         case SyntaxKind.Identifier:
                             return computeIdentifierTypeInformation(<Identifier>expression);
                     }
@@ -876,8 +878,113 @@ module ts {
         }
 
         function getTypeInformation(node: Node): TypeInformation {
+            if (node) {
+                if (isExpression(node)) {
+                    return getTypeInformationForExpression(<Expression>node,
+                        getContextualTypeInformation(<Expression>node));
+                }
+            }
+
             return undefined;
         }
+
+        function getContextualTypeInformation(node: Expression): TypeInformation {
+            // TODO(cyrusn): add support for flowing contextual type information into an expression.
+            return undefined;
+        }
+
+        function getTypeInformationForExpression(node: Expression, contextualTypeInformation: TypeInformation): TypeInformation {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.BinaryExpression:           return getTypeInformationForBinaryExpression(<BinaryExpression>node, contextualTypeInformation);
+                    case SyntaxKind.ParenthesizedExpression:    return getTypeInformationForParenthesizedExpression(<ParenthesizedExpression>node, contextualTypeInformation);
+                    case SyntaxKind.PostfixUnaryExpression:     return getTypeInformationForPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                }
+
+                throw new Error("Unhandled case in getTypeInformationForExpression");
+            }
+
+            return undefined;
+        }
+
+        function getTypeInformationForBinaryExpression(node: BinaryExpression, contextualTypeInformation: TypeInformation) {
+            switch (node.operatorToken.kind) {
+                case SyntaxKind.AsteriskToken:
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.PercentToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.LessThanLessThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.CaretToken:
+                case SyntaxKind.BarToken:
+                    return numberPrimitiveTypeInformation;
+
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.InstanceOfKeyword:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                    return booleanPrimitiveTypeInformation;
+
+                case SyntaxKind.AmpersandAmpersandToken:
+                    // The && operator permits the operands to be of any type and produces a result of the same type as the second operand.
+                    return getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ undefined);
+
+                case SyntaxKind.BarBarToken:
+                    return getTypeInformationForBarBarBinaryExpression(node, contextualTypeInformation);
+            }
+
+            throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
+        }
+
+        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation) {
+            if (!type1) {
+                return type2;
+            }
+
+            if (!type2) {
+                return type1;
+            }
+
+            throw new Error("not yet implemented");
+        }
+
+        function getTypeInformationForBarBarBinaryExpression(node: BinaryExpression, contextualTypeInformation: TypeInformation) {
+            // If the || expression is contextually typed (section 4.19), the operands are 
+            // contextually typed by the same type. Otherwise, the left operand is not contextually
+            // typed and the right operand is contextually typed by the type of the left operand. 
+            //
+            // The type of the result is the union type of the two operand types.
+            if (contextualTypeInformation) {
+                return createUnionTypeInformation(
+                    getTypeInformationForExpression(node.left, contextualTypeInformation),
+                    getTypeInformationForExpression(node.right, contextualTypeInformation));
+            }
+            else {
+                var leftTypeInformation = getTypeInformationForExpression(node.left, /*contextualTypeInformation:*/ undefined);
+                var rightTypeInformation = getTypeInformationForExpression(node.right, /*contextualTypeInformation:*/ leftTypeInformation);
+                return createUnionTypeInformation(leftTypeInformation, rightTypeInformation);
+            }
+        }
+
+        function getTypeInformationForParenthesizedExpression(node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {
+            // The type of a parenthesized expression is whatever the type of its sub-expression is.
+            // The sub-expression *is* contextually typed.
+            return getTypeInformationForExpression(node.expression, contextualTypeInformation);
+        }
+
+        function getTypeInformationForPostfixUnaryExpression(node: PostfixUnaryExpression) {
+            // a++ or b-- are always considered to be the number type.
+            return numberPrimitiveTypeInformation;
+        }
+
         //return {
         //    onBeforeUpdateSourceFile,
         //    onAfterUpdateSourceFile,
