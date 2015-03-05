@@ -218,32 +218,39 @@ module ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-
-        var start = getTokenPosOfNode(node, file);
-        var length = node.end - start;
-
-        return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
+        return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
-        var length = node.end - start;
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
         return {
-            file,
-            start,
-            length,
+            file: sourceFile,
+            start: span.start,
+            length: span.length,
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText
         };
     }
 
-    export function getErrorSpanForNode(node: Node): Node {
-        var errorSpan: Node;
+    interface FileTextRange extends TextRange {
+        sourceFile: SourceFile;
+    }
+
+    /* @internal */
+    export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
+        var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
+        scanner.setTextPos(pos);
+        scanner.scan();
+        var start = scanner.getTokenPos();
+        return createTextSpanFromBounds(start, scanner.getTextPos());
+    }
+
+    export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        var errorNode: Node;
         switch (node.kind) {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
@@ -254,8 +261,21 @@ module ts {
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
-                errorSpan = (<Declaration>node).name;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                errorNode = (<Declaration>node).name;
                 break;
+        }
+        
+        if (node.kind === SyntaxKind.FunctionExpression) {
+            var functionExpression = <FunctionExpression>node;
+            if (nodeIsMissing(functionExpression.name)) {
+                // If it's an anonymous function expression, put the error on the first token.
+                return getSpanOfTokenAtPosition(sourceFile, node.pos);
+            }
+            else {
+                errorNode = functionExpression.name;
+            }
         }
 
         // We now have the ideal error span, but it may be a node that is optional and absent
@@ -263,7 +283,13 @@ module ts {
         // Alternatively, it might be required and missing (e.g. the name of a module), in which
         // case its pos will equal its end (length 0). In either of these cases, we should fall
         // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
+        errorNode = nodeIsMissing(errorNode) ? node : errorNode;
+
+        var pos = nodeIsMissing(errorNode)
+            ? errorNode.pos
+            : skipTrivia(sourceFile.text, errorNode.pos);
+
+        return createTextSpanFromBounds(pos, errorNode.end);
     }
 
     export function isExternalModule(file: SourceFile): boolean {

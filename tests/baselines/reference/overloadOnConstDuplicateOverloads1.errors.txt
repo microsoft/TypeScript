@@ -1,13 +1,13 @@
-tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts(1,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts(2,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts(1,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts(2,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 
 
 ==== tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts (2 errors) ====
     function foo(a: 'hi', x: string);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(a: 'hi', x: string);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(a: any, x: any) {
     }
