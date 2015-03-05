@@ -56,6 +56,10 @@ module ts {
     }
 
     function declarationToReferencesMap_get(map: DeclarationToReferencesMap, declarationNode: Node): References {
+        if (!declarationNode) {
+            return undefined;
+        }
+
         var array = <References[]><any>map;
         return array[getNodeId(declarationNode)];
     }
