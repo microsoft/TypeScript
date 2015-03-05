@@ -1,4 +1,4 @@
-tests/cases/compiler/overloadOnConstConstraintChecks4.ts(9,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/overloadOnConstConstraintChecks4.ts(9,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
 ==== tests/cases/compiler/overloadOnConstConstraintChecks4.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/overloadOnConstConstraintChecks4.ts(9,1): error TS2394: Ove
     function foo(name: 'hi'): B;
     function foo(name: 'bye'): C;
     function foo(name: string): A; // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(name: any): Z {
         return null;
