@@ -1047,7 +1047,64 @@ module ts {
                 Debug.assert(!lastUpdatedSourceFile, "We already have an outstanding updated file!");
                 lastUpdatedSourceFile = oldFile;
 
-                // TODO: Use the text change range to determine what information to flush.
+                var changeRoot = getRootOfChange(oldFile, textChangeRange);
+
+                clearCachedInformationForAffectedNodes(oldFile, changeRoot);
+            }
+
+            function clearCachedInformationForAffectedNodes(file: SourceFile, rootNode: Node) {
+
+            }
+
+            function getRootOfChange(file: SourceFile, textChangeRange: TextChangeRange) {
+                var startNode = getNode(file, textChangeRange.span.start);
+                var endNode = getNode(file, textSpanEnd(textChangeRange.span));
+
+                var commonContainer = getCommonContainer(startNode, endNode);
+
+                // Walk up anything that would be contextually typed.  We use this as a weak form 
+                // of detecting what is affected by this edit.
+                for (var current = commonContainer.parent; current; current = current.parent) {
+                    if (!isExpression(current) && !isObjectLiteralMethod(current)) {
+                        break;
+                    }
+                }
+
+                return current;
+            }
+
+            function getNode(sourceFile: SourceFile, position: number): Node {
+                var bestNode: Node = sourceFile;
+                walk(sourceFile);
+                return bestNode;
+
+                function walk(node: Node) {
+                    if (!node || !intersects(node, position)) {
+                        return undefined;
+                    }
+
+                    bestNode = node;
+                    forEachChild(node, walk);
+                }
+            }
+
+            function intersects(node: Node, position: number) {
+                return position >= node.pos
+            }
+
+            function getCommonContainer(node1: Node, node2: Node) {
+                var containers: Node[] = [];
+                for (var current = node1; current; current = current.parent) {
+                    containers.push(current);
+                }
+
+                for (var current = node2; current; current = current.parent) {
+                    if (contains(containers, current)) {
+                        return current;
+                    }
+                }
+
+                throw new Error("Unreachable");
             }
 
             function onAfterSourceFileUpdated(newFile: SourceFile, textChangeRange: TextChangeRange) {
