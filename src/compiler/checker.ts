@@ -4853,6 +4853,13 @@ module ts {
                                 narrowedType = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
                             }
                             break;
+                        case SyntaxKind.CaseClause:
+                            // In a case clause of a switch statement using typeof 
+                            var parent = (<CaseClause>node).parent;
+                            if((<SwitchStatement>parent).expression.kind === SyntaxKind.TypeOfExpression){
+                                narrowedType = checkExpression((<TypeOfExpression>(<CaseClause>node).expression).text);
+                            }
+                            break;
                         case SyntaxKind.BinaryExpression:
                             // In the right operand of an && or ||, narrow based on left operand
                             if (child === (<BinaryExpression>node).right) {
