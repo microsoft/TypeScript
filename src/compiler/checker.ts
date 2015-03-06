@@ -9158,6 +9158,15 @@ module ts {
                         grammarErrorOnFirstToken(catchClause.variableDeclaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
                     }
                     else {
+                        var identifierName = (<Identifier>catchClause.variableDeclaration.name).text;
+                        var locals = catchClause.block.locals;
+                        if (locals && hasProperty(locals, identifierName)) {
+                            var localSymbol = locals[identifierName]
+                            if (localSymbol && (localSymbol.flags & SymbolFlags.BlockScopedVariable) !== 0) {
+                                grammarErrorOnNode(localSymbol.valueDeclaration, Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, identifierName);
+                            }
+                        }
+
                         // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
                         // Catch production is eval or arguments
                         checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>catchClause.variableDeclaration.name);
