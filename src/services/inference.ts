@@ -138,7 +138,7 @@ module ts {
         onBeforeSourceFileUpdated(oldFile: SourceFile, textChangeRange: TextChangeRange): void;
         onAfterSourceFileUpdated(newFile: SourceFile, textChangeRange: TextChangeRange): void;
 
-        updateInferenceEngine(program: Program): void;
+        finishUpdate(program: Program): void;
     }
 
     const enum TypeInformationKind {
@@ -332,16 +332,18 @@ module ts {
     
     /* @internal */
     export interface ReferenceManager {
-        update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
+        onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
+
+        updateReferences(program: Program): void;
 
         // For testing purposes only
-        toJSON(program: Program): any;
+        toJSON(): any;
 
         // Returns a map, keyed by file names, to the references to this symbol.
-        getReferencesToSymbol(program: Program, symbol: Symbol): Map<References>;
-        getReferencesToDeclarationNode(program: Program, declarationNode: Node): Map<References>;
+        getReferencesToSymbol(symbol: Symbol): Map<References>;
+        getReferencesToDeclarationNode(declarationNode: Node): Map<References>;
 
-        getBidirectionalReferences(program: Program, fileName: string): BidirectionalReferences;
+        getBidirectionalReferences(fileName: string): BidirectionalReferences;
     }
 
     function createReferenceManager(): ReferenceManager {
@@ -366,26 +368,24 @@ module ts {
         var addedOrRemovedSymbolNames: StringSet;
 
         return {
-            update,
+            onAfterProgramCreated,
+            updateReferences,
             getReferencesToDeclarationNode,
             getReferencesToSymbol,
             getBidirectionalReferences,
             toJSON
         };
 
-        function getBidirectionalReferences(program: Program, fileName: string) {
-            ensureUpToDate(program);
+        function getBidirectionalReferences(fileName: string) {
             return fileNameToBidirectionalReferences[fileName];
         }
 
-        function getReferencesToSymbol(program: Program, symbol: Symbol): Map<References> {
-            return getReferencesToDeclarationNode(program, symbol && symbol.valueDeclaration);
+        function getReferencesToSymbol(symbol: Symbol): Map<References> {
+            return getReferencesToDeclarationNode(symbol && symbol.valueDeclaration);
         }
 
-        function getReferencesToDeclarationNode(program: Program, declarationNode: Node): Map<References> {
+        function getReferencesToDeclarationNode(declarationNode: Node): Map<References> {
             if (declarationNode) {
-                ensureUpToDate(program);
-
                 var filesWithReferences = declarationToFilesWithReferences[getNodeId(declarationNode)];
                 if (filesWithReferences) {
                     var result: Map<References> = {};
@@ -407,8 +407,7 @@ module ts {
             return undefined;
         }
 
-        function toJSON(program: Program): any {
-            ensureUpToDate(program);
+        function toJSON(): any {
             var idMapping: number[] = [];
             var nextId = 1;
 
@@ -418,7 +417,7 @@ module ts {
             }
 
             function getNode(nodeId: number): Node {
-                var result = forEach(program.getSourceFiles(), findNode);
+                var result = forEach(latestProgram.getSourceFiles(), findNode);
                 Debug.assert(!!result);
                 return result;
 
@@ -527,7 +526,7 @@ module ts {
             }
         }
 
-        function ensureUpToDate(program: Program): void {
+        function updateReferences(program: Program): void {
             if (!filesToFullyResolve) {
                 return;
             }
@@ -577,7 +576,7 @@ module ts {
             return false;
         }
 
-        function update(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
+        function onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
             filesToFullyResolve = filesToFullyResolve || createStringSet();
             filesToPartiallyResolve = filesToPartiallyResolve || createStringSet();
             addedOrRemovedSymbolNames = addedOrRemovedSymbolNames || createStringSet();
@@ -642,11 +641,7 @@ module ts {
             walk(file);
 
             function walk(node: Node) {
-                if (!node) {
-                    return;
-                }
-
-                if (node.kind === SyntaxKind.Identifier && isExpression(node) && !isRightSideOfPropertyAccess(node)) {
+                if (isStandAloneIdentifier(node)) {
                     var identifier = <Identifier>node;
 
                     // If we're processing all nodes (i.e. shouldResolve is undefined), or this 
@@ -963,7 +958,7 @@ module ts {
                 onSourceFileRemoved,
                 onBeforeSourceFileUpdated,
                 onAfterSourceFileUpdated,
-                updateInferenceEngine
+                finishUpdate
             };
 
             function assertOnlyOperationOnThisFile(sourceFile: SourceFile) {
@@ -1053,7 +1048,17 @@ module ts {
             }
 
             function clearCachedInformationForAffectedNodes(file: SourceFile, rootNode: Node) {
+                walk(rootNode);
 
+                function walk(node: Node) {
+                    if (node && node.kind === SyntaxKind.BinaryExpression) {
+                        var binaryExpression = <BinaryExpression>node;
+                        if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken && isStandAloneIdentifier(binaryExpression.left)) {
+                        }
+                    }
+
+                    forEachChild(node, walk);
+                }
             }
 
             function getRootOfChange(file: SourceFile, textChangeRange: TextChangeRange) {
@@ -1078,9 +1083,9 @@ module ts {
                 walk(sourceFile);
                 return bestNode;
 
-                function walk(node: Node) {
+                function walk(node: Node): void {
                     if (!node || !intersects(node, position)) {
-                        return undefined;
+                        return;
                     }
 
                     bestNode = node;
@@ -1154,11 +1159,11 @@ module ts {
                 });
             }
 
-            function updateInferenceEngine(program: Program) {
+            function finishUpdate(program: Program) {
                 Debug.assert(!lastUpdatedSourceFile, "We have an outstanding updated file we never heard about");
 
                 // First update all the references we have.
-                referenceManager.update(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
+                referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
 
                 //// Now, go through all the removed files and updated files and remove any cached 
                 //// information we have for the declarations in them. When we need that information
@@ -1190,6 +1195,8 @@ module ts {
         //}
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
+            referenceManager.updateReferences(program);
+
             // Walk the tree, producing type information for expressions, and pulling on declarations 
             // when necessary.  This will produce a TypeInformation object that represents the type
             // of the expression, but still has many type constraints that have not been evaluated 
@@ -1488,7 +1495,7 @@ module ts {
             function getTypeInformationForIdentifier(sourceFile: SourceFile, node: Identifier) {
                 // See if this identifier is a reference to some JS symbol.  If so, then it has whatever
                 // type the declaration has.
-                var bidirectionalReferences = referenceManager.getBidirectionalReferences(program, sourceFile.fileName);
+                var bidirectionalReferences = referenceManager.getBidirectionalReferences(sourceFile.fileName);
                 if (bidirectionalReferences) {
                     var declarationNode = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, node);
                     if (declarationNode) {
@@ -1527,7 +1534,7 @@ module ts {
                     type = computeTypeInformationForDeclaration(declarationNode);
 
                     // Now check all the references, and flow their information into the symbol.
-                    var referencesMap = referenceManager.getReferencesToDeclarationNode(program, declarationNode);
+                    var referencesMap = referenceManager.getReferencesToDeclarationNode(declarationNode);
                     if (referencesMap) {
                         for (var fileName in referencesMap) {
                             var references = getProperty(referencesMap, fileName);
@@ -1624,5 +1631,9 @@ module ts {
                 return undefined;
             }
         }
+    }
+
+    function isStandAloneIdentifier(node: Node) {
+        return node && node.kind === SyntaxKind.Identifier && isExpression(node) && !isRightSideOfPropertyAccess(node)
     }
 }

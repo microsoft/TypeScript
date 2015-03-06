@@ -49,7 +49,7 @@ describe('JavascriptInference', function () {
             updater.onSourceFileAdded(f);
         });
 
-        updater.updateInferenceEngine(program);
+        updater.finishUpdate(program);
 
         return { inferenceEngine, program };
     }
@@ -61,7 +61,8 @@ describe('JavascriptInference', function () {
     function validateReferenceManager(engineAndProgram: EngineAndProgram, expected: string): void {
         var referenceManager = engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly;
 
-        var actual = normalize(JSON.stringify(referenceManager.toJSON(engineAndProgram.program), undefined, "  ")).trim();
+        referenceManager.updateReferences(engineAndProgram.program);
+        var actual = normalize(JSON.stringify(referenceManager.toJSON(), undefined, "  ")).trim();
         expected = normalize(expected).trim();
 
         //if (actual !== expected) {
@@ -95,7 +96,7 @@ describe('JavascriptInference', function () {
         newFiles[newFile.fileName] = newFile;
         var newProgram = createProgramWithSourceFiles(newFiles);
 
-        updater.updateInferenceEngine(newProgram);
+        updater.finishUpdate(newProgram);
         return { inferenceEngine, program: newProgram };
     }
 
@@ -213,7 +214,8 @@ var z;
                 });
 
                 // First, ensure the initial data has been computed.
-                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.updateReferences(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON();
 
                 engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "b");
                 validateReferenceManager(engineAndProgram,
@@ -247,7 +249,8 @@ var z;
                 });
 
                 // First, ensure the initial data has been computed.
-                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.updateReferences(engineAndProgram.program);
+                engineAndProgram.inferenceEngine.referenceManager_forTestingPurposesOnly.toJSON();
 
                 engineAndProgram = withUpdate(engineAndProgram, "file1.js", file1Contents.indexOf("z"), "z".length, "a");
                 validateReferenceManager(engineAndProgram,

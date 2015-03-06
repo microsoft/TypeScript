@@ -2287,7 +2287,7 @@ module ts {
 
             program = newProgram;
             typeInfoResolver = program.getTypeChecker();
-            // inferenceEngineUpdater.updateInferenceEngine(program);
+            // inferenceEngineUpdater.finishUpdate();
 
             return;
 
