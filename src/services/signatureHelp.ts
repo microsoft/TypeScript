@@ -264,12 +264,16 @@ module ts.SignatureHelp {
                     // the comma. That amounts to taking the ceiling of half the index.
                     var argumentIndex = (listItemInfo.listItemIndex + 1) >> 1;
 
+                    var argumentCount = getCommaBasedArgCount(list);
+
+                    Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
+
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
                         argumentsSpan: getApplicableSpanForArguments(list),
                         argumentIndex: argumentIndex,
-                        argumentCount: getCommaBasedArgCount(list)
+                        argumentCount: argumentCount
                     };
                 }
             }
@@ -346,6 +350,8 @@ module ts.SignatureHelp {
             var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? 1
                 : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
+
+            Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
             return {
                 kind: ArgumentListKind.TaggedTemplateArguments,
@@ -511,6 +517,8 @@ module ts.SignatureHelp {
             if (selectedItemIndex < 0) {
                 selectedItemIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
             }
+
+            Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
             return {
                 items,
