@@ -7,6 +7,28 @@ module ts.inference {
         equals(other: Equatable): boolean
     }
 
+    export function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
+        if (array1 === array2) {
+            return true;
+        }
+
+        if (!array1 || !array2) {
+            return false;
+        }
+
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            if (!array1[i].equals(array2[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /* @internal */
     export interface Hashable extends Equatable {
         getHashCode(): number;
@@ -123,6 +145,15 @@ module ts.inference {
             return value;
         }
     }
+
+    /* @internal */
+    export function computeHash(hash: number, items: Hashable[]) {
+        for (var i = 0, n = items.length; i < n; i++) {
+            hash = hashCombine(items[i].getHashCode(), hash);
+        }
+
+        return hash;
+    }
 }
 
 module ts.inference {
@@ -160,35 +191,157 @@ module ts.inference {
     }
 
     /* @internal */
-    export interface TypeInformation extends Hashable {
-        kind: TypeInformationKind;
-        equals(other: TypeInformation): boolean;
+    export class TypeInformation implements Hashable {
+        public kind(): TypeInformationKind {
+            throw new Error("abstract");
+        }
+
+        public equals(other: TypeInformation): boolean {
+            throw new Error("abstract");
+        }
+
+        public getHashCode(): number {
+            throw new Error("abstract");
+        }
     }
 
-    interface UnionTypeInformation extends TypeInformation {
-        _unionTypeInformationBrand: any;
-        types: TypeInformation[];
+    class UnionTypeInformation extends TypeInformation {
+        private hash: number;
+
+        constructor(public types: TypeInformation[]) {
+            super();
+            this.hash = computeHash(TypeInformationKind.Union, types);
+        }
+
+        public kind() {
+            return TypeInformationKind.Union;
+        }
+
+        public getHashCode() {
+            return this.hash;
+        }
+
+        public equals(other: TypeInformation) {
+            if (this === other) {
+                return true;
+            }
+
+            return other && other.kind() === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>other).types);
+        }
+
+        public toString() {
+            return "(" + this.types.join(" | ") + ")";
+        }
     }
 
-    interface PlusTypeInformation extends TypeInformation {
-        _plusTypeInformationBrand: any;
-        types: TypeInformation[];
+    class PlusTypeInformation extends TypeInformation {
+        private hash: number;
+
+        constructor(public types: TypeInformation[]) {
+            super();
+            this.hash = computeHash(TypeInformationKind.Plus, types);
+        }
+        
+        public kind() {
+            return TypeInformationKind.Plus;
+        }
+
+        public equals(other) {
+            if (this === other) {
+                return true;
+            }
+
+            return other && other.kind === TypeInformationKind.Plus && sequenceEquals(this.types, (<PlusTypeInformation>other).types);
+        }
+
+        public getHashCode() {
+            return this.hash;
+        }
+
+        public toString() {
+            return "(" + this.types.join(" + ") + ")";
+        }
+    };
+
+    class PrimitiveTypeInformation extends TypeInformation {
+        private static nextPrimitiveId = 1;
+
+        private id: number;
+
+        constructor(private name: string) {
+            super();
+            this.id = PrimitiveTypeInformation.nextPrimitiveId++;
+        }
+
+        public kind() {
+            return TypeInformationKind.Primitive;
+        }
+
+        public getHashCode() {
+            return this.id;
+        }
+
+        public equals(o: TypeInformation) {
+            // Primitives have reference identity.
+            return o === this;
+        }
+
+        public toString() {
+            return this.name;
+        }
     }
 
-    interface SymbolTypeInformation extends TypeInformation {
-        declarationId: number;
-        type: TypeInformation;
+    class SymbolTypeInformation extends TypeInformation {
+        private type: TypeInformation;
+        private computingType = false;
+
+        constructor(private declarationNode, private computeType: (declarationNode: Node) => TypeInformation) {
+            super();
+        }
+
+        public kind() {
+            return TypeInformationKind.Symbol;
+        }
+
+        public getHashCode() {
+            return hashCombine(TypeInformationKind.Symbol, getNodeId(this.declarationNode));
+        }
+
+        public equals(o: TypeInformation) {
+            // symbolInformation has identity semantics.
+            return this === o;
+        }
+
+        public clearType() {
+            this.type = undefined;
+            this.computingType = false;
+        }
+
+        public getType() {
+            // Prevent recursion.
+            if (this.computingType) {
+                return undefined;
+            }
+
+            this.computingType = true;
+            this.type = this.computeType(this.declarationNode);
+            this.computingType = false;
+            return this.type;
+        }
+
+        public toString() {
+            return "Symbol(" + getNodeId(this.declarationNode) + ")";
+        }
     }
    
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
         var declarationIdToSymbolTypeInformation: SymbolTypeInformation[] = [];
         var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
-        var nextPrimitiveId = 0;
 
-        var booleanPrimitiveTypeInformation = createPrimitiveTypeInformation("boolean");
-        var numberPrimitiveTypeInformation = createPrimitiveTypeInformation("number");
-        var stringPrimitiveTypeInformation = createPrimitiveTypeInformation("string");
+        var booleanPrimitiveTypeInformation = new PrimitiveTypeInformation("boolean");
+        var numberPrimitiveTypeInformation = new PrimitiveTypeInformation("number");
+        var stringPrimitiveTypeInformation = new PrimitiveTypeInformation("string");
 
         var stringOrNumberUnionType = createUnionTypeInformation(stringPrimitiveTypeInformation, numberPrimitiveTypeInformation);
 
@@ -199,22 +352,6 @@ module ts.inference {
             getTypeInformation,
             referenceManager_forTestingPurposesOnly: referenceManager
         };
-
-        function createPrimitiveTypeInformation(name: string): TypeInformation {
-            var id = nextPrimitiveId++;
-            return {
-                kind: TypeInformationKind.Primitive,
-                getHashCode: () => id,
-
-                // Use a function expression here so that 'this' refers to the object literal instance.
-                equals: function (o) {
-                    // Primitives has reference identity.
-                    return o === this;
-                },
-
-                toString: () => name
-            };
-        }
 
         function addSingleTypeToSet(type: TypeInformation, typeSet: TypeInformation[]) {
             // We want to put the type into the list in sorted order.
@@ -248,11 +385,11 @@ module ts.inference {
             if (type) {
                 // We flatten all union types.  That way there is a single linear representation for
                 // unions, and we don't have to compare any sort of tree structure.
-                if (type.kind === TypeInformationKind.Union) {
+                if (type.kind() === TypeInformationKind.Union) {
                     var constituentTypes = (<UnionTypeInformation>type).types;
                     for (var i = 0, n = constituentTypes.length; i < n; i++) {
                         var constituent = constituentTypes[i];
-                        Debug.assert(constituent.kind !== TypeInformationKind.Union);
+                        Debug.assert(constituent.kind() !== TypeInformationKind.Union);
 
                         addSingleTypeToSet(constituentTypes[i], types);
                     }
@@ -270,11 +407,11 @@ module ts.inference {
 
             // We flatten all plus types.  That way there is a single linear representation for
             // pluses, and we don't have to compare any sort of tree structure.
-            if (type.kind === TypeInformationKind.Plus) {
+            if (type.kind() === TypeInformationKind.Plus) {
                 var constituentTypes = (<PlusTypeInformation>type).types;
                 for (var i = 0, n = constituentTypes.length; i < n; i++) {
                     var constituent = constituentTypes[i];
-                    Debug.assert(constituent.kind !== TypeInformationKind.Plus);
+                    Debug.assert(constituent.kind() !== TypeInformationKind.Plus);
 
                     addSingleTypeToSet(constituentTypes[i], types);
                 }
@@ -315,58 +452,13 @@ module ts.inference {
                 return types[0];
             }
 
-            Debug.assert(filter(types, t => t.kind === TypeInformationKind.Union).length === 0, "We should never nest union types");
+            Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Union).length === 0, "We should never nest union types");
 
             // Cap the number of types we'll keep in a union type at 8.
             types = types.length > 8 ? types.slice(0, 8) : types;
 
-            var hash = computeHash(TypeInformationKind.Union, types);
-
-            var unionType = <UnionTypeInformation>{
-                types,
-                kind: TypeInformationKind.Union,
-                getHashCode: () => hash,
-                equals: function (t) {
-                    if (this === t) {
-                        return true;
-                    }
-
-                    return t && t.kind === TypeInformationKind.Union && sequenceEquals(this.types, (<UnionTypeInformation>t).types);
-                },
-                toString: function () { return "(" + this.types.join(" | ") + ")" }
-            };
-
+            var unionType = new UnionTypeInformation(types);
             return cachedTypes.getOrAdd(unionType, unionType);
-        }
-
-        function computeHash(hash: number, items: Hashable[]) {
-            for (var i = 0, n = items.length; i < n; i++) {
-                hash = hashCombine(items[i].getHashCode(), hash);
-            }
-
-            return hash;
-        }
-
-        function sequenceEquals<T>(array1: Equatable[], array2: Equatable[]): boolean {
-            if (array1 === array2) {
-                return true;
-            }
-
-            if (!array1 || !array2) {
-                return false;
-            }
-
-            if (array1.length !== array2.length) {
-                return false;
-            }
-
-            for (var i = 0, n = array1.length; i < n; i++) {
-                if (!array1[i].equals(array2[i])) {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         function createEngineUpdater(): InferenceEngineUpdater {
@@ -475,16 +567,34 @@ module ts.inference {
             }
 
             function clearCachedInformationForAffectedNodes(file: SourceFile, rootNode: Node) {
+                // Any references we see used here we will clear the cached type information for.
+
+                var bidirectionalReferences = referenceManager.getBidirectionalReferences(file.fileName);
+                if (!bidirectionalReferences) {
+                    return;
+                }
+
                 walk(rootNode);
 
                 function walk(node: Node) {
-                    if (node && node.kind === SyntaxKind.BinaryExpression) {
-                        var binaryExpression = <BinaryExpression>node;
-                        if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken && isStandAloneIdentifier(binaryExpression.left)) {
+                    if (node && node.kind === SyntaxKind.Identifier) {
+                        var declarationNode = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, node);
+                        if (declarationNode) {
+                            clearCachedTypes(declarationNode);
                         }
                     }
 
                     forEachChild(node, walk);
+                }
+            }
+
+            function clearCachedTypes(declarationNode: Node) {
+                if (declarationNode) {
+                    var declarationNodeId = getNodeId(declarationNode);
+                    var symbolInformation = declarationIdToSymbolTypeInformation[declarationNodeId];
+                    if (symbolInformation) {
+                        symbolInformation.clearType();
+                    }
                 }
             }
 
@@ -592,6 +702,28 @@ module ts.inference {
                 // First update all the references we have.
                 referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
 
+                // Now, go through the removed symbols, and remove the cached information we have for them.
+                for (var i = 0, n = removedValueSymbols.length; i < n; i++) {
+                    var removedSymbol = removedValueSymbols[i];
+                    var declarationNode = removedSymbol.valueDeclaration;
+                    if (declarationNode) {
+                        var declarationId = getNodeId(declarationNode);
+                        var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
+
+                        if (symbolInformation) {
+                            // Remove any type information we've cached about this symbol.  Anyone
+                            // still referring to this symbol will get no type information from it.
+                            // Note: in general, if we update the graph properly, no one should still
+                            // point at it.  However, we want to be defensive here to prevent old
+                            // symbols from keeping too much stuff alive.
+                            symbolInformation.clearType();
+
+                            // And delete the symbol from the cache.
+                            delete declarationIdToSymbolTypeInformation[declarationId];
+                        }
+                    }
+                }
+
                 //// Now, go through all the removed files and updated files and remove any cached 
                 //// information we have for the declarations in them. When we need that information
                 //// again we'll just pull on them to get them to be recomputed.
@@ -640,7 +772,7 @@ module ts.inference {
         }
 
         function evaluateTypeInformation(typeInformation: TypeInformation, symbolStack: SymbolTypeInformation[]): TypeInformation {
-            switch (typeInformation.kind) {
+            switch (typeInformation.kind()) {
                 case TypeInformationKind.Primitive:
                     // Primitive types are already as processed as possible.
                     return typeInformation;
@@ -720,7 +852,7 @@ module ts.inference {
             }
 
             symbolStack.push(typeInformation);
-            var result = evaluateTypeInformation(typeInformation.type, symbolStack);
+            var result = evaluateTypeInformation(typeInformation.getType(), symbolStack);
             symbolStack.pop();
             return result;
         }
@@ -881,26 +1013,12 @@ module ts.inference {
                 decomposePossiblePlusAndAddToSet(leftType, types);
                 decomposePossiblePlusAndAddToSet(rightType, types);
 
-                Debug.assert(filter(types, t => t.kind === TypeInformationKind.Plus).length === 0, "We should never plus types");
+                Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Plus).length === 0, "We should never plus types");
 
                 // Cap the number of types we'll keep in a plus type at 8.
                 types = types.length > 8 ? types.slice(0, 8) : types;
 
-                var hash = computeHash(TypeInformationKind.Plus, types);
-
-                var result = <PlusTypeInformation>{
-                    types,
-                    kind: TypeInformationKind.Plus,
-                    equals: function (other) {
-                        if (this === other) {
-                            return true;
-                        }
-
-                        return other && other.kind === TypeInformationKind.Plus && sequenceEquals(this.types, (<PlusTypeInformation>other).types);
-                    },
-                    getHashCode: () => hash
-                };
-
+                var result = new PlusTypeInformation(types);
                 return cachedTypes.getOrAdd(result, result);
             }
 
@@ -942,45 +1060,44 @@ module ts.inference {
                     // find all the references to the symbol and flow in any type information we can
                     // find at the reference point into it.
                     
-                    var type: TypeInformation = undefined;
-                    symbolTypeInformation = {
-                        declarationId,
-                        type,
-                        kind: TypeInformationKind.Symbol,
-                        getHashCode: () => hashCombine(TypeInformationKind.Symbol, declarationId),
-                        equals: function (o) {
-                            // symbolInformation has identity semantics.
-                            return this === o;
-                        }
-                    };
+                    symbolTypeInformation = new SymbolTypeInformation(declarationNode, node => computeTypeInformationForDeclaration(node));
 
                     declarationIdToSymbolTypeInformation[declarationId] = symbolTypeInformation;
-
-                    // The declaration may have an initializer, use that to populate the initial 
-                    // type of this symbol.
-                    type = computeTypeInformationForDeclaration(declarationNode);
-
-                    // Now check all the references, and flow their information into the symbol.
-                    var referencesMap = referenceManager.getReferencesToDeclarationNode(declarationNode);
-                    if (referencesMap) {
-                        for (var fileName in referencesMap) {
-                            var references = getProperty(referencesMap, fileName);
-                            if (references) {
-                                var sourceFile = program.getSourceFile(fileName);
-                                references_forEach(references, referenceNode => {
-                                    type = createUnionTypeInformation(type, computeTypeInformationForReference(sourceFile, referenceNode));
-                                });
-                            }
-                        }
-                    }
-
-                    symbolTypeInformation.type = type;
                 }
 
                 return symbolTypeInformation;
             }
 
-            function computeTypeInformationForDeclaration(node: Node) {
+            function computeTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
+                // This may get called after a declaration has been removed.  If so, then we simply
+                // return no type information.
+                var symbolInformation = declarationIdToSymbolTypeInformation[getNodeId(declarationNode)];
+                if (!symbolInformation) {
+                    return undefined;
+                }
+
+                // The declaration may have an initializer, use that to populate the initial 
+                // type of this symbol.
+                var type = computeTypeInformationForDeclarationWorker(declarationNode);
+
+                // Now check all the references, and flow their information into the symbol.
+                var referencesMap = referenceManager.getReferencesToDeclarationNode(declarationNode);
+                if (referencesMap) {
+                    for (var fileName in referencesMap) {
+                        var references = getProperty(referencesMap, fileName);
+                        if (references) {
+                            var sourceFile = program.getSourceFile(fileName);
+                            references_forEach(references, referenceNode => {
+                                type = createUnionTypeInformation(type, computeTypeInformationForReference(sourceFile, referenceNode));
+                            });
+                        }
+                    }
+                }
+
+                return type;
+            }
+
+            function computeTypeInformationForDeclarationWorker(node: Node) {
                 Debug.assert(!!node);
                 switch (node.kind) {
                     case SyntaxKind.VariableDeclaration:
