@@ -266,7 +266,7 @@ module ts.SignatureHelp {
 
                     var argumentCount = getCommaBasedArgCount(list);
 
-                    Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
+                    Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
@@ -351,7 +351,7 @@ module ts.SignatureHelp {
                 ? 1
                 : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
-            Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
+            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
             return {
                 kind: ArgumentListKind.TaggedTemplateArguments,
@@ -518,7 +518,7 @@ module ts.SignatureHelp {
                 selectedItemIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
             }
 
-            Debug.assert(argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
+            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
             return {
                 items,
