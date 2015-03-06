@@ -221,7 +221,7 @@ module ts.inference {
             return this.hash;
         }
 
-        public equals(other: TypeInformation) {
+        public equals(other: TypeInformation): boolean {
             if (this === other) {
                 return true;
             }
@@ -246,12 +246,12 @@ module ts.inference {
             return TypeInformationKind.Plus;
         }
 
-        public equals(other) {
+        public equals(other: TypeInformation): boolean {
             if (this === other) {
                 return true;
             }
 
-            return other && other.kind === TypeInformationKind.Plus && sequenceEquals(this.types, (<PlusTypeInformation>other).types);
+            return other && other.kind() === TypeInformationKind.Plus && sequenceEquals(this.types, (<PlusTypeInformation>other).types);
         }
 
         public getHashCode() {
@@ -281,7 +281,7 @@ module ts.inference {
             return this.id;
         }
 
-        public equals(o: TypeInformation) {
+        public equals(o: TypeInformation): boolean {
             // Primitives have reference identity.
             return o === this;
         }
@@ -295,7 +295,7 @@ module ts.inference {
         private type: TypeInformation;
         private computingType = false;
 
-        constructor(private declarationNode, private computeType: (declarationNode: Node) => TypeInformation) {
+        constructor(private declarationNode: Node, private computeType: (declarationNode: Node) => TypeInformation) {
             super();
         }
 
@@ -307,7 +307,7 @@ module ts.inference {
             return hashCombine(TypeInformationKind.Symbol, getNodeId(this.declarationNode));
         }
 
-        public equals(o: TypeInformation) {
+        public equals(o: TypeInformation): boolean {
             // symbolInformation has identity semantics.
             return this === o;
         }
