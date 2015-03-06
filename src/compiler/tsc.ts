@@ -250,7 +250,7 @@ module ts {
 
             var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!commandLine.options.watch) {
+            if (!compilerOptions.watch) {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -269,7 +269,7 @@ module ts {
             }
             // Use default host function
             var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && commandLine.options.watch) {
+            if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
                 sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
             }
