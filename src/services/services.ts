@@ -1252,6 +1252,13 @@ module ts {
       */
     export interface DocumentRegistry {
         /**
+         * Retrieves this document from the registry.  If the document is not in the registry, then 
+         * 'undefined' will be returned.
+         */
+        /* @internal */
+        getDocument(fileName: string, compilationSettings: CompilerOptions): SourceFile;
+
+        /**
           * Request a stored SourceFile with a given fileName and compilationSettings.
           * The first call to acquire will call createLanguageServiceSourceFile to generate
           * the SourceFile if was not found in the registry.
@@ -1672,6 +1679,24 @@ module ts {
         // for those settings.
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
+        return {
+            getDocument,
+            acquireDocument,
+            updateDocument,
+            releaseDocument,
+            reportStats
+        };
+
+        function getDocument(fileName: string, compilationSettings: CompilerOptions) {
+            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
+            var entry = lookUp(bucket, fileName);
+            if (!entry) {
+                return undefined;
+            }
+
+            return entry.sourceFile;
+        }
+
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
             return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
         }
@@ -1769,13 +1794,6 @@ module ts {
                 delete bucket[fileName];
             }
         }
-
-        return {
-            acquireDocument,
-            updateDocument,
-            releaseDocument,
-            reportStats
-        };
     }
 
     export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
@@ -2287,8 +2305,14 @@ module ts {
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
                     // Check if the old program had this file already
-                    var oldSourceFile = program && program.getSourceFile(fileName);
-                    if (oldSourceFile) {
+                    if (program && program.getSourceFile(fileName)) {
+                        // !! IMPORTANT !!
+                        // Even if the program had this source file, we must not use this 'old' 
+                        // source file in any way.  This is because the old source file may 
+                        // already have been mutated from some other LS (see below example for
+                        // explanation).  So, instead, we always defer to the registry for its
+                        // view of the old source file.
+
                         // We already had a source file for this file name.  Go to the registry to 
                         // ensure that we get the right up to date version of it.  We need this to
                         // address the following 'race'.  Specifically, say we have the following:
@@ -2310,8 +2334,14 @@ module ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the 
                         // host says should be used.
+                        var oldSourceFile = documentRegistry.getDocument(fileName, newSettings);
+                        Debug.assert(!!oldSourceFile);
+                        
+                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
+                        //inferenceEngineUpdater.onBeforeSourceFileUpdated(oldSourceFile, textChangeRange);
+
                         var newSourceFile = documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
-                        //inferenceEngineUpdater.onSourceFileUpdated(oldSourceFile, newSourceFile);
+                        // inferenceEngineUpdater.onAfterSourceFileUpdated(newSourceFile, textChangeRange);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.

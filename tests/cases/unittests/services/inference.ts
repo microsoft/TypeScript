@@ -85,10 +85,12 @@ describe('JavascriptInference', function () {
 
         var oldText = oldFile.text;
         var newText = oldText.substr(0, start) + replacement + oldText.substr(start + length);
-        var newFile = ts.updateSourceFile(oldFile, newText, ts.createTextChangeRange(ts.createTextSpan(start, length), replacement.length), /*aggressiveChecks:*/ true);
+        var changeRange = ts.createTextChangeRange(ts.createTextSpan(start, length), replacement.length);
 
         var updater = inferenceEngine.createEngineUpdater();
-        updater.onSourceFileUpdated(oldFile, newFile);
+        updater.onBeforeSourceFileUpdated(oldFile, changeRange);
+        var newFile = ts.updateSourceFile(oldFile, newText, changeRange, /*aggressiveChecks:*/ true);
+        updater.onAfterSourceFileUpdated(newFile, changeRange);
 
         newFiles[newFile.fileName] = newFile;
         var newProgram = createProgramWithSourceFiles(newFiles);

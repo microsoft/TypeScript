@@ -134,7 +134,9 @@ module ts {
     export interface InferenceEngineUpdater {
         onSourceFileAdded(file: SourceFile): void;
         onSourceFileRemoved(file: SourceFile): void;
-        onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile): void;
+
+        onBeforeSourceFileUpdated(oldFile: SourceFile, textChangeRange: TextChangeRange): void;
+        onAfterSourceFileUpdated(newFile: SourceFile, textChangeRange: TextChangeRange): void;
 
         updateInferenceEngine(program: Program): void;
     }
@@ -959,7 +961,8 @@ module ts {
             return {
                 onSourceFileAdded,
                 onSourceFileRemoved,
-                onSourceFileUpdated,
+                onBeforeSourceFileUpdated,
+                onAfterSourceFileUpdated,
                 updateInferenceEngine
             };
 
@@ -1035,11 +1038,28 @@ module ts {
                 recordRemovedSymbols(sourceFile.nodeToSymbol);
             }
 
-            function onSourceFileUpdated(oldFile: SourceFile, newFile: SourceFile) {
-                Debug.assert(oldFile.fileName === newFile.fileName);
+            var lastUpdatedSourceFile: SourceFile;
+            function onBeforeSourceFileUpdated(oldFile: SourceFile, textChangeRange: TextChangeRange) {
                 if (!isJavascriptFile(oldFile)) {
                     return;
                 }
+
+                Debug.assert(!lastUpdatedSourceFile, "We already have an outstanding updated file!");
+                lastUpdatedSourceFile = oldFile;
+
+                // TODO: Use the text change range to determine what information to flush.
+            }
+
+            function onAfterSourceFileUpdated(newFile: SourceFile, textChangeRange: TextChangeRange) {
+                if (!isJavascriptFile(newFile)) {
+                    return;
+                }
+
+                Debug.assert(!!lastUpdatedSourceFile, "We were never notified about this file being updated");
+                Debug.assert(lastUpdatedSourceFile.fileName === newFile.fileName);
+
+                var oldFile = lastUpdatedSourceFile;
+                lastUpdatedSourceFile = undefined;
 
                 assertOnlyOperationOnThisFile(oldFile);
                 assertOnlyOperationOnThisFile(newFile);
@@ -1078,37 +1098,39 @@ module ts {
             }
 
             function updateInferenceEngine(program: Program) {
+                Debug.assert(!lastUpdatedSourceFile, "We have an outstanding updated file we never heard about");
+
                 // First update all the references we have.
                 referenceManager.update(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
 
-                // Now, go through all the removed files and updated files and remove any cached 
-                // information we have for the declarations in them. When we need that information
-                // again we'll just pull on them to get them to be recomputed.
-                var touchedFiles = oldUpdatedFiles.concat(removedFiles);
-                for (var i = 0, n = touchedFiles.length; i < n; i++) {
-                    clearSymbolTypeInformation(touchedFiles[i]);
-                }
+                //// Now, go through all the removed files and updated files and remove any cached 
+                //// information we have for the declarations in them. When we need that information
+                //// again we'll just pull on them to get them to be recomputed.
+                //var touchedFiles = oldUpdatedFiles.concat(removedFiles);
+                //for (var i = 0, n = touchedFiles.length; i < n; i++) {
+                //    clearSymbolTypeInformation(touchedFiles[i]);
+                //}
             }
         }
 
-        function clearSymbolTypeInformation(file: SourceFile) {
-            file.nodeToSymbol.forEach(symbol => {
-                if (symbol.valueDeclaration) {
-                    var declarationId = getNodeId(symbol.valueDeclaration);
+        //function clearSymbolTypeInformation(file: SourceFile) {
+        //    file.nodeToSymbol.forEach(symbol => {
+        //        if (symbol.valueDeclaration) {
+        //            var declarationId = getNodeId(symbol.valueDeclaration);
 
-                    var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
+        //            var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
 
-                    if (symbolInformation) {
-                        // Clear out the type for this symbol.  That way anyone pointing at it 
-                        // won't get any stale information about it.
-                        symbolInformation.type = undefined;
+        //            if (symbolInformation) {
+        //                // Clear out the type for this symbol.  That way anyone pointing at it 
+        //                // won't get any stale information about it.
+        //                symbolInformation.type = undefined;
 
-                        // And remove teh symbol information from our cache entirely.
-                        delete declarationIdToSymbolTypeInformation[declarationId];
-                    }
-                }
-            });
-        }
+        //                // And remove teh symbol information from our cache entirely.
+        //                delete declarationIdToSymbolTypeInformation[declarationId];
+        //            }
+        //        }
+        //    });
+        //}
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
             // Walk the tree, producing type information for expressions, and pulling on declarations 
