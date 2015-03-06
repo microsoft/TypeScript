@@ -49,6 +49,25 @@ module FourSlashInterface {
         position: number;
         data?: any;
     }
+    
+    export interface EditorOptions {
+        IndentSize: number;
+        TabSize: number;
+        NewLineCharacter: string;
+        ConvertTabsToSpaces: boolean;
+    }
+
+    export interface FormatCodeOptions extends EditorOptions {
+        InsertSpaceAfterCommaDelimiter: boolean;
+        InsertSpaceAfterSemicolonInForStatements: boolean;
+        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        PlaceOpenBraceOnNewLineForFunctions: boolean;
+        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        [s: string]: boolean | number| string;
+    }
 
     export interface Range {
         fileName: string;
@@ -539,6 +558,14 @@ module FourSlashInterface {
     export class format {
         public document() {
             FourSlash.currentTestState.formatDocument();
+        }
+
+        public copyFormatOptions(): FormatCodeOptions {
+            return FourSlash.currentTestState.copyFormatOptions();
+        }
+
+        public setFormatOptions(options: FormatCodeOptions) {
+            return FourSlash.currentTestState.setFormatOptions(options);
         }
 
         public selection(startMarker: string, endMarker: string) {

@@ -430,5 +430,20 @@ class D { }\r\n\
                 comment(">>>>>>> Branch - a"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
+
+        it("'of' keyword", function () {
+            testLexicalClassification("for (var of of of) { }",
+                ts.EndOfLineState.Start,
+                keyword("for"),
+                punctuation("("),
+                keyword("var"),
+                keyword("of"),
+                keyword("of"),
+                keyword("of"),
+                punctuation(")"),
+                punctuation("{"),
+                punctuation("}"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
     });
 });

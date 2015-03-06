@@ -93,12 +93,8 @@ function f4() {
     a = { x: 1, y: _any };
     a = { x: 1, y: _any, z: 1 };
     a = { x: 1 }; // error
-    var mf = function m(n) {
-        return false;
-    };
-    var zf = function z(n) {
-        return true;
-    };
+    var mf = function m(n) { return false; };
+    var zf = function z(n) { return true; };
     mf = zf;
     mf(_any);
     zf(_any);

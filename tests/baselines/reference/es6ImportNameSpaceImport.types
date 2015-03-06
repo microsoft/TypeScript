@@ -1,0 +1,9 @@
+=== tests/cases/compiler/es6ImportNameSpaceImport_0.ts ===
+
+export var a = 10;
+>a : number
+
+=== tests/cases/compiler/es6ImportNameSpaceImport_1.ts ===
+import * as nameSpaceBinding from "es6ImportNameSpaceImport_0";
+>nameSpaceBinding : typeof nameSpaceBinding
+

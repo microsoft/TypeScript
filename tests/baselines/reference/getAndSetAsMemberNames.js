@@ -49,13 +49,9 @@ var C4 = (function () {
 })();
 var C5 = (function () {
     function C5() {
-        this.set = function () {
-            return true;
-        };
+        this.set = function () { return true; };
     }
-    C5.prototype.get = function () {
-        return true;
-    };
+    C5.prototype.get = function () { return true; };
     Object.defineProperty(C5.prototype, "t", {
         set: function (x) { },
         enumerable: true,

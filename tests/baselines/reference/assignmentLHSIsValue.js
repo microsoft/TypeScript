@@ -84,17 +84,11 @@ var C = (function () {
     function C() {
         this = value;
     }
-    C.prototype.foo = function () {
-        this = value;
-    };
-    C.sfoo = function () {
-        this = value;
-    };
+    C.prototype.foo = function () { this = value; };
+    C.sfoo = function () { this = value; };
     return C;
 })();
-function foo() {
-    this = value;
-}
+function foo() { this = value; }
 this = value;
 // identifiers: module, class, enum, function
 var M;
@@ -129,12 +123,8 @@ var Derived = (function (_super) {
         _super.call(this);
         _super.prototype. = value;
     }
-    Derived.prototype.foo = function () {
-        _super.prototype. = value;
-    };
-    Derived.sfoo = function () {
-        _super. = value;
-    };
+    Derived.prototype.foo = function () { _super.prototype. = value; };
+    Derived.sfoo = function () { _super. = value; };
     return Derived;
 })(C);
 // function expression

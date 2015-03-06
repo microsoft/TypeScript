@@ -2,5 +2,4 @@
 var v = { get foo() }
 
 //// [accessorWithoutBody1.js]
-var v = { get foo() {
-} };
+var v = { get foo() { } };

@@ -1,9 +1,10 @@
-tests/cases/compiler/complicatedPrivacy.ts(24,38): error TS1005: ';' expected.
+tests/cases/compiler/complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
+tests/cases/compiler/complicatedPrivacy.ts(35,5): error TS1170: A computed property name in a type literal must directly refer to a built-in symbol.
 tests/cases/compiler/complicatedPrivacy.ts(35,6): error TS2304: Cannot find name 'number'.
 tests/cases/compiler/complicatedPrivacy.ts(73,49): error TS2305: Module 'mglo5' has no exported member 'i6'.
 
 
-==== tests/cases/compiler/complicatedPrivacy.ts (3 errors) ====
+==== tests/cases/compiler/complicatedPrivacy.ts (4 errors) ====
     module m1 {
         export module m2 {
     
@@ -15,6 +16,8 @@ tests/cases/compiler/complicatedPrivacy.ts(73,49): error TS2305: Module 'mglo5' 
     
             export class C2 implements m3.i3 {
                 public get p1(arg) {
+                           ~~
+!!! error TS1054: A 'get' accessor cannot have parameters.
                     return new C1();
                 }
     
@@ -28,8 +31,6 @@ tests/cases/compiler/complicatedPrivacy.ts(73,49): error TS2305: Module 'mglo5' 
         }
     
         export function f2(arg1: { x?: C1, y: number }) {
-                                         ~
-!!! error TS1005: ';' expected.
         }
     
         export function f3(): {
@@ -41,6 +42,8 @@ tests/cases/compiler/complicatedPrivacy.ts(73,49): error TS2305: Module 'mglo5' 
         export function f4(arg1: 
         {
         [number]: C1; // Used to be indexer, now it is a computed property
+        ~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must directly refer to a built-in symbol.
          ~~~~~~
 !!! error TS2304: Cannot find name 'number'.
         }) {

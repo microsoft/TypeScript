@@ -87,9 +87,7 @@ var RegisteredUser = (function (_super) {
             var x = function () { return super.sayHello.call(this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () {
-            return function () { return super.; };
-        })();
+        (function () { return function () { return super.; }; })();
     }
     RegisteredUser.prototype.sayHello = function () {
         // super call in a method
@@ -99,9 +97,7 @@ var RegisteredUser = (function (_super) {
             var x = function () { return super.sayHello.call(this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () {
-            return function () { return super.; };
-        })();
+        (function () { return function () { return super.; }; })();
     };
     RegisteredUser.staticFunction = function () {
         var _this = this;

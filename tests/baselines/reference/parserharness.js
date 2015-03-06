@@ -2627,9 +2627,7 @@ var Harness;
                     var description = b.description + (prop ? ": " + prop : '');
                     emitLog('testStart', { desc: description });
                     emitLog('pass', {
-                        desc: description,
-                        pass: true,
-                        perfResults: {
+                        desc: description, pass: true, perfResults: {
                             mean: b.results[prop].mean(),
                             min: b.results[prop].min(),
                             max: b.results[prop].max(),
@@ -2694,18 +2692,10 @@ var Harness;
                 this.fileCollection[s] = writer;
                 return writer;
             };
-            EmitterIOHost.prototype.directoryExists = function (s) {
-                return false;
-            };
-            EmitterIOHost.prototype.fileExists = function (s) {
-                return typeof this.fileCollection[s] !== 'undefined';
-            };
-            EmitterIOHost.prototype.resolvePath = function (s) {
-                return s;
-            };
-            EmitterIOHost.prototype.reset = function () {
-                this.fileCollection = {};
-            };
+            EmitterIOHost.prototype.directoryExists = function (s) { return false; };
+            EmitterIOHost.prototype.fileExists = function (s) { return typeof this.fileCollection[s] !== 'undefined'; };
+            EmitterIOHost.prototype.resolvePath = function (s) { return s; };
+            EmitterIOHost.prototype.reset = function () { this.fileCollection = {}; };
             EmitterIOHost.prototype.toArray = function () {
                 var result = [];
                 for (var p in this.fileCollection) {
@@ -3511,21 +3501,11 @@ var Harness;
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //
-        TypeScriptLS.prototype.information = function () {
-            return false;
-        };
-        TypeScriptLS.prototype.debug = function () {
-            return true;
-        };
-        TypeScriptLS.prototype.warning = function () {
-            return true;
-        };
-        TypeScriptLS.prototype.error = function () {
-            return true;
-        };
-        TypeScriptLS.prototype.fatal = function () {
-            return true;
-        };
+        TypeScriptLS.prototype.information = function () { return false; };
+        TypeScriptLS.prototype.debug = function () { return true; };
+        TypeScriptLS.prototype.warning = function () { return true; };
+        TypeScriptLS.prototype.error = function () { return true; };
+        TypeScriptLS.prototype.fatal = function () { return true; };
         TypeScriptLS.prototype.log = function (s) {
             // For debugging...
             //IO.printLine("TypeScriptLS:" + s);

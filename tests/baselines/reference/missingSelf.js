@@ -22,9 +22,7 @@ c2.b();
 var CalcButton = (function () {
     function CalcButton() {
     }
-    CalcButton.prototype.a = function () {
-        this.onClick();
-    };
+    CalcButton.prototype.a = function () { this.onClick(); };
     CalcButton.prototype.onClick = function () { };
     return CalcButton;
 })();

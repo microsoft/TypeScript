@@ -1,2 +1,0 @@
-//// [computedPropertyNamesSourceMap1.js.map]
-{"version":3,"file":"computedPropertyNamesSourceMap1.js","sourceRoot":"","sources":["computedPropertyNamesSourceMap1.ts"],"names":["C","C.constructor","C[\"hello\"]"],"mappings":"AAAA,IAAM,CAAC;IAAPA,SAAMA,CAACA;IAIPC,CAACA;IAHGD,YAACA,OAAOA,CAACA,GAATA;QACIE,QAAQA,CAACA;IACbA,CAACA;IACLF,QAACA;AAADA,CAACA,AAJD,IAIC"}

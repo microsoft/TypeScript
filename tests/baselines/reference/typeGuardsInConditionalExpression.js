@@ -142,8 +142,9 @@ function foo7(x) {
 }
 function foo8(x) {
     var b;
-    return typeof x === "string" ? x === "hello" : ((b = x) && (typeof x === "boolean" ? x // boolean
-     : x == 10)); // number
+    return typeof x === "string" ? x === "hello" : ((b = x) &&
+        (typeof x === "boolean" ? x // boolean
+         : x == 10)); // number
 }
 function foo9(x) {
     var y = 10;

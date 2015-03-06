@@ -55,18 +55,9 @@ var c;
 var a;
 var b;
 var d;
-var e = function (x) {
-    var y;
-    return y;
-};
-function f(x) {
-    var y;
-    return y;
-}
-var g = function f(x) {
-    var y;
-    return y;
-};
+var e = function (x) { var y; return y; };
+function f(x) { var y; return y; }
+var g = function f(x) { var y; return y; };
 var D = (function (_super) {
     __extends(D, _super);
     function D() {

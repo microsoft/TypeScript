@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread.ts(52,21): error TS2468: Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/expressions/functionCalls/callWithSpread.ts(52,21): error TS2472: Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/callWithSpread.ts (1 errors) ====
@@ -55,5 +55,5 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread.ts(52,21): erro
     // Only supported in when target is ES6
     var c = new C(1, 2, ...a);
                         ~~~~
-!!! error TS2468: Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.
+!!! error TS2472: Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.
     

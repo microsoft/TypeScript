@@ -35,9 +35,13 @@ module ts.formatting {
         // Space after keyword but not before ; or : or ?
         public NoSpaceBeforeSemicolon: Rule;
         public NoSpaceBeforeColon: Rule;
-        public NoSpaceBeforeQMark: Rule;
+        public NoSpaceBeforeQuestionMark: Rule;
         public SpaceAfterColon: Rule;
-        public SpaceAfterQMark: Rule;
+        // insert space after '?' only when it is used in conditional operator
+        public SpaceAfterQuestionMarkInConditionalOperator: Rule;
+        // in other cases there should be no space between '?' and next token
+        public NoSpaceAfterQuestionMark: Rule;
+
         public SpaceAfterSemicolon: Rule;
 
         // Space/new line after }.
@@ -92,6 +96,7 @@ module ts.formatting {
         public NoSpaceBeforeComma: Rule;
 
         public SpaceAfterCertainKeywords: Rule;
+        public SpaceAfterLetConstInVariableDeclaration: Rule;
         public NoSpaceBeforeOpenParenInFuncCall: Rule;
         public SpaceAfterFunctionInFuncDecl: Rule;
         public NoSpaceBeforeOpenParenInFuncDecl: Rule;
@@ -215,9 +220,10 @@ module ts.formatting {
             // Space after keyword but not before ; or : or ?
             this.NoSpaceBeforeSemicolon = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.SemicolonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeColon = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.ColonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
-            this.NoSpaceBeforeQMark = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.QuestionToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
+            this.NoSpaceBeforeQuestionMark = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.QuestionToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
             this.SpaceAfterColon = new Rule(RuleDescriptor.create3(SyntaxKind.ColonToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Space));
-            this.SpaceAfterQMark = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Space));
+            this.SpaceAfterQuestionMarkInConditionalOperator = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsConditionalOperatorContext), RuleAction.Space));
+            this.NoSpaceAfterQuestionMark = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.SpaceAfterSemicolon = new Rule(RuleDescriptor.create3(SyntaxKind.SemicolonToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Space after }.
@@ -238,7 +244,7 @@ module ts.formatting {
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
-            this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
+            this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
             this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia]);
@@ -283,6 +289,7 @@ module ts.formatting {
             this.NoSpaceBeforeComma = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CommaToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             this.SpaceAfterCertainKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.VarKeyword, SyntaxKind.ThrowKeyword, SyntaxKind.NewKeyword, SyntaxKind.DeleteKeyword, SyntaxKind.ReturnKeyword, SyntaxKind.TypeOfKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterLetConstInVariableDeclaration = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.LetKeyword, SyntaxKind.ConstKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsStartOfVariableDeclarationList), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionCallOrNewContext, Rules.IsPreviousTokenNotComma), RuleAction.Delete));
             this.SpaceAfterFunctionInFuncDecl = new Rule(RuleDescriptor.create3(SyntaxKind.FunctionKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Delete));
@@ -341,7 +348,8 @@ module ts.formatting {
             this.HighPriorityCommonRules =
             [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
-                this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQMark, this.SpaceAfterQMark,
+                this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQuestionMark, this.SpaceAfterQuestionMarkInConditionalOperator,
+                this.NoSpaceAfterQuestionMark,
                 this.NoSpaceBeforeDot, this.NoSpaceAfterDot,
                 this.NoSpaceAfterUnaryPrefixOperator,
                 this.NoSpaceAfterUnaryPreincrementOperator, this.NoSpaceAfterUnaryPredecrementOperator,
@@ -356,6 +364,7 @@ module ts.formatting {
                 this.SpaceAfterFunctionInFuncDecl, this.NewLineAfterOpenBraceInBlockContext, this.SpaceAfterGetSetInMember,
                 this.NoSpaceBetweenReturnAndSemicolon,
                 this.SpaceAfterCertainKeywords,
+                this.SpaceAfterLetConstInVariableDeclaration,
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
@@ -452,7 +461,7 @@ module ts.formatting {
                     return true;
 
                 // equal in import a = module('a');
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
                 // equal in var a = 0;
                 case SyntaxKind.VariableDeclaration:
                 // equal in p = 0;
@@ -464,12 +473,21 @@ module ts.formatting {
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:
                     return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
+                // Technically, "of" is not a binary operator, but format it the same way as "in"
+                case SyntaxKind.ForOfStatement:
+                    return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
+                case SyntaxKind.BindingElement:
+                    return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             }
             return false;
         }
 
         static IsNotBinaryOpContext(context: FormattingContext): boolean {
             return !Rules.IsBinaryOpContext(context);
+        }
+
+        static IsConditionalOperatorContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.ConditionalExpression;
         }
 
         static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
@@ -592,6 +610,7 @@ module ts.formatting {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.DoStatement:
@@ -628,6 +647,11 @@ module ts.formatting {
 
         static IsSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine();
+        }
+
+        static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {
+            return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList && 
+                context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
         }
 
         static IsNotFormatOnEnter(context: FormattingContext): boolean {

@@ -35,21 +35,21 @@ var M;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_1) {
     var d = (function () {
         function d(M, p) {
-            if (p === void 0) { p = _M.x; }
+            if (p === void 0) { p = _M_1.x; }
             this.M = M;
         }
         return d;
     })();
 })(M || (M = {}));
 var M;
-(function (_M) {
+(function (_M_2) {
     var d2 = (function () {
         function d2() {
             var M = 10;
-            var p = _M.x;
+            var p = _M_2.x;
         }
         return d2;
     })();

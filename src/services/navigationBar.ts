@@ -50,6 +50,38 @@ module ts.NavigationBar {
                     case SyntaxKind.ArrayBindingPattern:
                         forEach((<BindingPattern>node).elements, visit);
                         break;
+
+                    case SyntaxKind.ExportDeclaration:
+                        // Handle named exports case e.g.:
+                        //    export {a, b as B} from "mod";
+                        if ((<ExportDeclaration>node).exportClause) {
+                            forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.ImportDeclaration:
+                        var importClause = (<ImportDeclaration>node).importClause;
+                        if (importClause) {
+                            // Handle default import case e.g.:
+                            //    import d from "mod";
+                            if (importClause.name) {
+                                childNodes.push(importClause);
+                            }
+
+                            // Handle named bindings in imports e.g.:
+                            //    import * as NS from "mod";
+                            //    import {a, b as B} from "mod";
+                            if (importClause.namedBindings) {
+                                if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    childNodes.push(importClause.namedBindings);
+                                }
+                                else {
+                                    forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                }
+                            }
+                        }
+                        break;
+
                     case SyntaxKind.BindingElement:
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern((<VariableDeclaration>node).name)) {
@@ -62,7 +94,11 @@ module ts.NavigationBar {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ExportSpecifier:
                         childNodes.push(node);
+                        break;
                 }
             }
 
@@ -97,8 +133,7 @@ module ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    // TODO(jfreeman): How do we sort declarations with computed names?
-                    return (<Identifier>n1.name).text.localeCompare((<Identifier>n2.name).text);
+                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -292,9 +327,16 @@ module ts.NavigationBar {
                     else {
                         return createItem(node, getTextOfNode(name), ts.ScriptElementKind.variableElement);
                     }
-                
+
                 case SyntaxKind.Constructor:
                     return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
+
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamespaceImport:
+                    return createItem(node, getTextOfNode((<Declaration>node).name), ts.ScriptElementKind.alias);
             }
 
             return undefined;
@@ -424,11 +466,11 @@ module ts.NavigationBar {
                     });
 
                     // Add the constructor parameters in as children of the class (for property parameters).
-                    // Note that *all* parameters will be added to the nodes array, but parameters that
+                    // Note that *all non-binding pattern named* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
-                    var nodes: Node[] = removeComputedProperties(node);
+                    var nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
-                        nodes.push.apply(nodes, constructor.parameters);
+                        nodes.push.apply(nodes, filter(constructor.parameters, p => !isBindingPattern(p.name)));
                     }
 
                     var childItems = getItemsWorker(sortNodes(nodes), createChildItem);
@@ -455,7 +497,7 @@ module ts.NavigationBar {
             }
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
+                var childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
@@ -466,8 +508,15 @@ module ts.NavigationBar {
             }
         }
 
-        function removeComputedProperties(node: ClassDeclaration | InterfaceDeclaration | EnumDeclaration): Declaration[] {
+        function removeComputedProperties(node: EnumDeclaration): Declaration[] {
             return filter<Declaration>(node.members, member => member.name === undefined || member.name.kind !== SyntaxKind.ComputedPropertyName);
+        }
+
+        /**
+         * Like removeComputedProperties, but retains the properties with well known symbol names
+         */
+        function removeDynamicallyNamedProperties(node: ClassDeclaration | InterfaceDeclaration): Declaration[]{
+            return filter<Declaration>(node.members, member => !hasDynamicName(member));
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {

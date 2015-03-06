@@ -32,15 +32,7 @@ module ts {
             }
 
             function autoCollapse(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return false;
-                }
-
-                return true;
+                return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
             }
 
             var depth = 0;
@@ -61,6 +53,7 @@ module ts {
                             // to be the entire span of the parent.
                             if (parent.kind === SyntaxKind.DoStatement ||
                                 parent.kind === SyntaxKind.ForInStatement ||
+                                parent.kind === SyntaxKind.ForOfStatement ||
                                 parent.kind === SyntaxKind.ForStatement ||
                                 parent.kind === SyntaxKind.IfStatement ||
                                 parent.kind === SyntaxKind.WhileStatement ||

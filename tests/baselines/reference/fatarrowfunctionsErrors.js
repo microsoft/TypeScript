@@ -21,9 +21,7 @@ foo(function () {
     return 0;
 });
 foo((1), { return: 0 });
-foo(function (x) {
-    return x;
-});
+foo(function (x) { return x; });
 foo(function (x) {
     if (x === void 0) { x = 0; }
     return x;
@@ -35,4 +33,9 @@ false ? (function () { return null; }) : null;
 var x1 = function () { };
 var x2 = function (a) { };
 var x3 = function (a) { };
-var x4 = function () { };
+var x4 = function () {
+    var a = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i - 0] = arguments[_i];
+    }
+};

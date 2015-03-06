@@ -87,8 +87,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 
         allDiagnostics.forEach(diagnostic => {
             if (diagnostic.file) {
-                var lineChar = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line},${lineChar.character}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
+                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
             }
             else {
                 console.log(`  Error: ${diagnostic.messageText}`);

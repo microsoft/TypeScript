@@ -28,16 +28,12 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.Origin = function () {
-        return { x: 0, y: 0 };
-    }; // unexpected error here bug 840246
+    Point.Origin = function () { return { x: 0, y: 0 }; }; // unexpected error here bug 840246
     return Point;
 })();
 var Point;
 (function (Point) {
-    function Origin() {
-        return null;
-    }
+    function Origin() { return null; }
     Point.Origin = Origin; //expected duplicate identifier error
 })(Point || (Point = {}));
 var A;
@@ -47,17 +43,13 @@ var A;
             this.x = x;
             this.y = y;
         }
-        Point.Origin = function () {
-            return { x: 0, y: 0 };
-        }; // unexpected error here bug 840246
+        Point.Origin = function () { return { x: 0, y: 0 }; }; // unexpected error here bug 840246
         return Point;
     })();
     A.Point = Point;
     var Point;
     (function (Point) {
-        function Origin() {
-            return "";
-        }
+        function Origin() { return ""; }
         Point.Origin = Origin; //expected duplicate identifier error
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

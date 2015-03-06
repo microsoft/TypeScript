@@ -37,34 +37,20 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "y", {
-        get: function () {
-            return this.x;
-        },
-        set: function (x) {
-            this.y = this.x;
-        },
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () {
-        return this.foo;
-    };
+    C.prototype.foo = function () { return this.foo; };
     Object.defineProperty(C, "y", {
-        get: function () {
-            return this.x;
-        },
-        set: function (x) {
-            this.y = this.x;
-        },
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.foo = function () {
-        return this.foo;
-    };
-    C.bar = function () {
-        this.foo();
-    };
+    C.foo = function () { return this.foo; };
+    C.bar = function () { this.foo(); };
     return C;
 })();
 // added level of function nesting
@@ -79,9 +65,7 @@ var C2 = (function () {
         },
         set: function (x) {
             var _this = this;
-            (function () {
-                _this.y = _this.x;
-            });
+            (function () { _this.y = _this.x; });
         },
         enumerable: true,
         configurable: true
@@ -98,9 +82,7 @@ var C2 = (function () {
         },
         set: function (x) {
             var _this = this;
-            (function () {
-                _this.y = _this.x;
-            });
+            (function () { _this.y = _this.x; });
         },
         enumerable: true,
         configurable: true

@@ -56,9 +56,19 @@ function f4(x, y, z) { }
 // Implicit-'any' errors for x, and z.
 function f5(x, y, z) { }
 // Implicit-'any[]' error for r.
-function f6() { }
+function f6() {
+    var r = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        r[_i - 0] = arguments[_i];
+    }
+}
 // Implicit-'any'/'any[]' errors for x, r.
-function f7(x) { }
+function f7(x) {
+    var r = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        r[_i - 1] = arguments[_i];
+    }
+}
 function f8(x3, y3) { }
 // No implicit-'any' errors.
 var f9 = function () { return ""; };

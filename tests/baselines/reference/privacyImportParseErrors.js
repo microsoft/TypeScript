@@ -407,7 +407,6 @@ var m1;
     var m1_im2_private_v2_private = new m1_im2_private.c1();
     var m1_im2_private_v3_private = m1_im2_private.f1;
     var m1_im2_private_v4_private = m1_im2_private.f1();
-    var m1_im3_private = require("m1_M3_public");
     m1.m1_im3_private_v1_public = m1_im3_private.c1;
     m1.m1_im3_private_v2_public = new m1_im3_private.c1();
     m1.m1_im3_private_v3_public = m1_im3_private.f1;
@@ -416,7 +415,6 @@ var m1;
     var m1_im3_private_v2_private = new m1_im3_private.c1();
     var m1_im3_private_v3_private = m1_im3_private.f1;
     var m1_im3_private_v4_private = m1_im3_private.f1();
-    var m1_im4_private = require("m1_M4_private");
     m1.m1_im4_private_v1_public = m1_im4_private.c1;
     m1.m1_im4_private_v2_public = new m1_im4_private.c1();
     m1.m1_im4_private_v3_public = m1_im4_private.f1;
@@ -478,7 +476,6 @@ var m2;
     var m1_im2_private_v2_private = new m1_im2_private.c1();
     var m1_im2_private_v3_private = m1_im2_private.f1;
     var m1_im2_private_v4_private = m1_im2_private.f1();
-    var m1_im3_private = require("m2_M3_public");
     m2.m1_im3_private_v1_public = m1_im3_private.c1;
     m2.m1_im3_private_v2_public = new m1_im3_private.c1();
     m2.m1_im3_private_v3_public = m1_im3_private.f1;
@@ -487,7 +484,6 @@ var m2;
     var m1_im3_private_v2_private = new m1_im3_private.c1();
     var m1_im3_private_v3_private = m1_im3_private.f1;
     var m1_im3_private_v4_private = m1_im3_private.f1();
-    var m1_im4_private = require("m2_M4_private");
     m2.m1_im4_private_v1_public = m1_im4_private.c1;
     m2.m1_im4_private_v2_public = new m1_im4_private.c1();
     m2.m1_im4_private_v3_public = m1_im4_private.f1;
@@ -570,14 +566,14 @@ var glo_im4_private_v4_private = glo_im4_private.f1();
 exports.glo_im1_public = glo_M1_public;
 exports.glo_im2_public = glo_M3_private;
 var m2;
-(function (m2) {
+(function (_m2) {
     var m4;
     (function (m4) {
         var a = 10;
     })(m4 || (m4 = {}));
 })(m2 || (m2 = {}));
 var m3;
-(function (m3) {
+(function (_m3) {
     var m4;
     (function (m4) {
         var a = 10;

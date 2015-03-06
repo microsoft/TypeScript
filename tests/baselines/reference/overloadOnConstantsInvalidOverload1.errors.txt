@@ -1,5 +1,5 @@
-tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(6,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(7,1): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(6,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(7,10): error TS2381: A signature with an implementation cannot use a string literal type.
 tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(11,5): error TS2345: Argument of type 'string' is not assignable to parameter of type '"SPAN"'.
 
 
@@ -10,15 +10,13 @@ tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts(11,5): error TS2345:
     class Derived3 extends Base { biz() { } }
     
     function foo(name: "SPAN"): Derived1;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(name: "DIV"): Derived2 {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return null;
-    ~~~~~~~~~~~~~~~~
-    }
-    ~
+             ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
+        return null;
+    }
     
     foo("HI");
         ~~~~

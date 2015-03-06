@@ -30,10 +30,10 @@ var Z;
 var A;
 (function (A) {
     var M;
-    (function (M) {
+    (function (_M) {
         function bar() {
         }
-        M.bar = bar;
+        _M.bar = bar;
         M.bar(); // Should call Z.M.bar
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));

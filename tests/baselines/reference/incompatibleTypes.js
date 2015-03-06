@@ -106,9 +106,7 @@ function if1(a) { }
 var c1;
 var c2;
 if1(c1);
-function of1(a) {
-    return null;
-}
+function of1(a) { return null; }
 of1({ e: 0, f: 0 });
 function foo(fn) {
 }

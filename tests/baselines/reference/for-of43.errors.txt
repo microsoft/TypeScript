@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/for-ofStatements/for-of43.ts(2,25): error TS2322: Type 'boolean' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/es6/for-ofStatements/for-of43.ts (1 errors) ====
+    var array = [{ x: "", y: 0 }]
+    for (var {x: a = "", y: b = true} of array) {
+                            ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+        a;
+        b;
+    }

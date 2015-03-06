@@ -6,7 +6,6 @@ var __extends = this.__extends || function (d, b) {
 };
 var m2;
 (function (m2) {
-    m2.mExported = require("mExported");
     m2.c1 = new m2.mExported.me.class1;
     function f1() {
         return new m2.mExported.me.class1();
@@ -33,7 +32,6 @@ var m2;
         }
         return class2;
     })(mExported.me.class1);
-    var mNonExported = require("mNonExported");
     m2.c3 = new mNonExported.mne.class1;
     function f3() {
         return new mNonExported.mne.class1();

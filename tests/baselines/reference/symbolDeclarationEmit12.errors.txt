@@ -1,0 +1,27 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(4,28): error TS4031: Public property '[Symbol.iterator]' of exported class has or is using private name 'I'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(5,33): error TS4073: Parameter 'x' of public method from exported class has or is using private name 'I'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(6,40): error TS4055: Return type of public method from exported class has or is using private name 'I'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,34): error TS4037: Parameter '[Symbol.isRegExp]' of public property setter from exported class has or is using private name 'I'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (4 errors) ====
+    module M {
+        interface I { }
+        export class C {
+            [Symbol.iterator]: I;
+                               ~
+!!! error TS4031: Public property '[Symbol.iterator]' of exported class has or is using private name 'I'.
+            [Symbol.toPrimitive](x: I) { }
+                                    ~
+!!! error TS4073: Parameter 'x' of public method from exported class has or is using private name 'I'.
+            [Symbol.isConcatSpreadable](): I {
+                                           ~
+!!! error TS4055: Return type of public method from exported class has or is using private name 'I'.
+                return undefined
+            }
+            get [Symbol.isRegExp]() { return undefined; }
+            set [Symbol.isRegExp](x: I) { }
+                                     ~
+!!! error TS4037: Parameter '[Symbol.isRegExp]' of public property setter from exported class has or is using private name 'I'.
+        }
+    }

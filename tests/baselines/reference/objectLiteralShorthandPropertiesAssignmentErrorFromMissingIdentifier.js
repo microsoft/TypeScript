@@ -12,12 +12,8 @@ var person2: { name: string, id: number } = bar("hello", 5);
 var id = 10000;
 var name = "my name";
 var person = { name: name, id: id }; // error
-function bar(name, id) {
-    return { name: name, id: id };
-} // error
-function foo(name, id) {
-    return { name: name, id: id };
-} // error
+function bar(name, id) { return { name: name, id: id }; } // error
+function foo(name, id) { return { name: name, id: id }; } // error
 var person1 = name, id;
 ; // error : Can't use shorthand in the type position
 var person2 = bar("hello", 5);

@@ -104,9 +104,7 @@ var WithCandidates;
         return C;
     })();
     var c;
-    var r4 = c.foo2(1, function (a) {
-        return '';
-    }); // string, contextual signature instantiation is applied to generic functions
+    var r4 = c.foo2(1, function (a) { return ''; }); // string, contextual signature instantiation is applied to generic functions
     var r5 = c.foo2(1, function (a) { return ''; }); // string
     var r6 = c.foo2('', function (a) { return 1; }); // number
     var C2 = (function () {
@@ -119,9 +117,7 @@ var WithCandidates;
     })();
     var c2;
     var r7 = c2.foo3(1, function (a) { return ''; }, ''); // string
-    var r8 = c2.foo3(1, function (a) {
-        return '';
-    }, ''); // string
+    var r8 = c2.foo3(1, function (a) { return ''; }, ''); // string
     var C3 = (function () {
         function C3() {
         }
@@ -136,8 +132,6 @@ var WithCandidates;
         var r10 = c.foo2(1, function (x) { return ''; }); // string
         var r11 = c3.foo3(1, function (x) { return ''; }, ''); // error
         var r11b = c3.foo3(1, function (x) { return ''; }, 1); // error
-        var r12 = c3.foo3(1, function (a) {
-            return '';
-        }, 1); // error
+        var r12 = c3.foo3(1, function (a) { return ''; }, 1); // error
     }
 })(WithCandidates || (WithCandidates = {}));

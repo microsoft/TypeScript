@@ -15,9 +15,7 @@ t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type
 var X = (function () {
     function X() {
     }
-    X.prototype.f = function (t) {
-        return { a: t };
-    };
+    X.prototype.f = function (t) { return { a: t }; };
     return X;
 })();
 var x;

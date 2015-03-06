@@ -607,7 +607,7 @@ module ts {
     }
 
     var backslashOrDoubleQuote = /[\"\\]/g;
-    var escapedCharsRegExp = /[\0-\19\t\v\f\b\0\r\n\u2028\u2029\u0085]/g;
+    var escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     var escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
@@ -622,29 +622,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    /**
-     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters.
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    export function escapeString(s: string): string {
-        // Prioritize '"' and '\'
-        s = backslashOrDoubleQuote.test(s) ? s.replace(backslashOrDoubleQuote, getReplacement) : s;
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
-
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || unicodeEscape(c);
-        }
-
-        function unicodeEscape(c: string): string {
-            var hexCharCode = c.charCodeAt(0).toString(16);
-            var paddedHexCode = ("0000" + hexCharCode).slice(-4);
-            return "\\u" + paddedHexCode;
-        }
-    }
 
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";

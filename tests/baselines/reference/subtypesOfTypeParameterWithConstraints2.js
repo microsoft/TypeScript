@@ -249,12 +249,8 @@ function f11(x) {
     var r7 = true ? x : function () { }; // ok
 }
 function f12(x) {
-    var r8 = true ? function (x) {
-        return x;
-    } : x; // ok
-    var r8b = true ? x : function (x) {
-        return x;
-    }; // ok, type parameters not identical across declarations
+    var r8 = true ? function (x) { return x; } : x; // ok
+    var r8b = true ? x : function (x) { return x; }; // ok, type parameters not identical across declarations
 }
 function f13(x) {
     var i1;

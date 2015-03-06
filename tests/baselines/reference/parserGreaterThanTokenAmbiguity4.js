@@ -3,4 +3,5 @@
 > 2;
 
 //// [parserGreaterThanTokenAmbiguity4.js]
-1 >  > 2;
+1 >
+ > 2;

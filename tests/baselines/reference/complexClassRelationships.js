@@ -68,9 +68,7 @@ var Derived = (function (_super) {
 })(Base);
 var BaseCollection = (function () {
     function BaseCollection(f) {
-        (function (item) {
-            return [item.Components];
-        });
+        (function (item) { return [item.Components]; });
     }
     return BaseCollection;
 })();
@@ -83,9 +81,7 @@ var Thing = (function () {
     function Thing() {
     }
     Object.defineProperty(Thing.prototype, "Components", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });

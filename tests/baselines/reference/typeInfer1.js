@@ -19,7 +19,5 @@ var x = {
     WriteLine: function (s) { }
 };
 var yyyyyyyy = {
-    Moo: function () {
-        return "cow";
-    }
+    Moo: function () { return "cow"; }
 };

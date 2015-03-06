@@ -87,9 +87,7 @@ for (var x in '' ? c : d) { }
 for (var x in 42 ? d[x] : c[x]) { }
 for (var x in c[23]) { }
 for (var x in (function (x) { return x; })) { }
-for (var x in function (x, y) {
-    return x + y;
-}) { }
+for (var x in function (x, y) { return x + y; }) { }
 var A = (function () {
     function A() {
     }

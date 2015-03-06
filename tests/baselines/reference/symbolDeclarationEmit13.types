@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit13.ts ===
+class C {
+>C : C
+
+    get [Symbol.isRegExp]() { return ""; }
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+
+    set [Symbol.toStringTag](x) { }
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+>x : any
+}

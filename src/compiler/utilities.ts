@@ -7,6 +7,12 @@ module ts {
         isNoDefaultLib?: boolean
     }
 
+    export interface SynthesizedNode extends Node {
+        leadingCommentRanges?: CommentRange[];
+        trailingCommentRanges?: CommentRange[];
+        startsOnNewLine: boolean;
+    }
+
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         var declarations = symbol.declarations;
         for (var i = 0; i < declarations.length; i++) {
@@ -105,11 +111,16 @@ module ts {
         return <SourceFile>node;
     }
 
+    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
+        Debug.assert(line >= 0);
+        return getLineStarts(sourceFile)[line];
+    }
+
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
         var loc = getLineAndCharacterOfPosition(file, node.pos);
-        return file.fileName + "(" + loc.line + "," + loc.character + ")";
+        return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
     export function getStartPosOfNode(node: Node): number {
@@ -181,6 +192,24 @@ module ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
+    // Make an identifier from an external module name by extracting the string after the last "/" and replacing
+    // all non-alphanumeric characters with underscores
+    export function makeIdentifierFromModuleName(moduleName: string): string {
+        return getBaseFileName(moduleName).replace(/\W/g, "_");
+    }
+
+    export function isBlockOrCatchScoped(declaration: Declaration) {
+        return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
+            isCatchClauseVariableDeclaration(declaration);
+    }
+
+    export function isCatchClauseVariableDeclaration(declaration: Declaration) {
+        return declaration &&
+            declaration.kind === SyntaxKind.VariableDeclaration &&
+            declaration.parent &&
+            declaration.parent.kind === SyntaxKind.CatchClause;
+    }
+
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
@@ -189,32 +218,35 @@ module ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-
-        var start = getTokenPosOfNode(node, file);
-        var length = node.end - start;
-
-        return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
+        return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
-        var length = node.end - start;
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
         return {
-            file,
-            start,
-            length,
+            file: sourceFile,
+            start: span.start,
+            length: span.length,
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText
         };
     }
 
-    export function getErrorSpanForNode(node: Node): Node {
-        var errorSpan: Node;
+    /* @internal */
+    export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
+        var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
+        scanner.setTextPos(pos);
+        scanner.scan();
+        var start = scanner.getTokenPos();
+        return createTextSpanFromBounds(start, scanner.getTextPos());
+    }
+
+    export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        var errorNode = node;
         switch (node.kind) {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
@@ -225,16 +257,23 @@ module ts {
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
-                errorSpan = (<Declaration>node).name;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                errorNode = (<Declaration>node).name;
                 break;
         }
+        
+        if (errorNode === undefined) {
+            // If we don't have a better node, then just set the error on the first token of 
+            // construct.
+            return getSpanOfTokenAtPosition(sourceFile, node.pos);
+        }
 
-        // We now have the ideal error span, but it may be a node that is optional and absent
-        // (e.g. the name of a function expression), in which case errorSpan will be undefined.
-        // Alternatively, it might be required and missing (e.g. the name of a module), in which
-        // case its pos will equal its end (length 0). In either of these cases, we should fall
-        // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
+        var pos = nodeIsMissing(errorNode)
+            ? errorNode.pos
+            : skipTrivia(sourceFile.text, errorNode.pos);
+
+        return createTextSpanFromBounds(pos, errorNode.end);
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -343,6 +382,7 @@ module ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
@@ -560,7 +600,8 @@ module ts {
                             forStatement.condition === node ||
                             forStatement.iterator === node;
                     case SyntaxKind.ForInStatement:
-                        var forInStatement = <ForInStatement>parent;
+                    case SyntaxKind.ForOfStatement:
+                        var forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -584,17 +625,32 @@ module ts {
                (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
-    export function isExternalModuleImportDeclaration(node: Node) {
-        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
+    export function isExternalModuleImportEqualsDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
 
-    export function getExternalModuleImportDeclarationExpression(node: Node) {
-        Debug.assert(isExternalModuleImportDeclaration(node));
-        return (<ExternalModuleReference>(<ImportDeclaration>node).moduleReference).expression;
+    export function getExternalModuleImportEqualsDeclarationExpression(node: Node) {
+        Debug.assert(isExternalModuleImportEqualsDeclaration(node));
+        return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportDeclaration(node: Node) {
-        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
+    export function isInternalModuleImportEqualsDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
+    }
+
+    export function getExternalModuleName(node: Node): Expression {
+        if (node.kind === SyntaxKind.ImportDeclaration) {
+            return (<ImportDeclaration>node).moduleSpecifier;
+        }
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            var reference = (<ImportEqualsDeclaration>node).moduleReference;
+            if (reference.kind === SyntaxKind.ExternalModuleReference) {
+                return (<ExternalModuleReference>reference).expression;
+            }
+        }
+        if (node.kind === SyntaxKind.ExportDeclaration) {
+            return (<ExportDeclaration>node).moduleSpecifier;
+        }
     }
 
     export function hasDotDotDotToken(node: Node) {
@@ -637,7 +693,7 @@ module ts {
     }
 
     export function isBindingPattern(node: Node) {
-        return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+        return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
     export function isInAmbientContext(node: Node): boolean {
@@ -653,27 +709,33 @@ module ts {
 
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.BindingElement:
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.VariableDeclaration:
                 return true;
         }
         return false;
@@ -688,6 +750,7 @@ module ts {
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
             case SyntaxKind.ForStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.LabeledStatement:
@@ -706,18 +769,20 @@ module ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+    export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
 
         var parent = name.parent;
-        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
-            return (<Declaration>parent).name === name;
+        if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
+            if ((<ImportOrExportSpecifier>parent).propertyName) {
+                return true;
+            }
         }
 
-        if (parent.kind === SyntaxKind.CatchClause) {
-            return (<CatchClause>parent).name === name;
+        if (isDeclaration(parent)) {
+            return (<Declaration>parent).name === name;
         }
 
         return false;
@@ -759,36 +824,12 @@ module ts {
     }
 
     export function getAncestor(node: Node, kind: SyntaxKind): Node {
-        switch (kind) {
-            // special-cases that can be come first
-            case SyntaxKind.ClassDeclaration:
-                while (node) {
-                    switch (node.kind) {
-                        case SyntaxKind.ClassDeclaration:
-                            return <ClassDeclaration>node;
-                        case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.TypeAliasDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportDeclaration:
-                            // early exit cases - declarations cannot be nested in classes
-                            return undefined;
-                        default:
-                            node = node.parent;
-                            continue;
-                    }
-                }
-                break;
-            default:
-                while (node) {
-                    if (node.kind === kind) {
-                        return node;
-                    }
-                    node = node.parent;
-                }
-                break;
+        while (node) {
+            if (node.kind === kind) {
+                return node;
+            }
+            node = node.parent;
         }
-
         return undefined;
     }
 
@@ -833,6 +874,54 @@ module ts {
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    /**
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
+     */
+    export function hasDynamicName(declaration: Declaration): boolean {
+        return declaration.name &&
+            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+    }
+
+    /**
+     * Checks if the expression is of the form:
+     *    Symbol.name
+     * where Symbol is literally the word "Symbol", and name is any identifierName
+     */
+    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
+        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+    }
+
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return (<Identifier | LiteralExpression>name).text;
+        }
+        if (name.kind === SyntaxKind.ComputedPropertyName) {
+            var nameExpression = (<ComputedPropertyName>name).expression;
+            if (isWellKnownSymbolSyntactically(nameExpression)) {
+                var rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+        }
+
+        return undefined;
+    }
+
+    export function getPropertyNameForKnownSymbolName(symbolName: string): string {
+        return "__@" + symbolName;
+    }
+
+    /**
+     * Includes the word "Symbol" with unicode escapes
+     */
+    export function isESSymbolIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
     export function isModifier(token: SyntaxKind): boolean {
@@ -1057,10 +1146,47 @@ module ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
     }
 
-    // @internal
+    export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
+        return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    export function nodeIsSynthesized(node: Node): boolean {
+        return node.pos === -1 && node.end === -1;
+    }
+
+    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
+        var node = <SynthesizedNode>createNode(kind);
+        node.pos = -1;
+        node.end = -1;
+        node.startsOnNewLine = startsOnNewLine;
+        return node;
+    }
+
+    export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
+        // First try '_name'
+        if (baseName.charCodeAt(0) !== CharacterCodes._) {
+            var baseName = "_" + baseName;
+            if (!isExistingName(baseName)) {
+                return baseName;
+            }
+        }
+        // Find the first unique '_name_n', where n is a positive number
+        if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+            baseName += "_";
+        }
+        var i = 1;
+        while (true) {
+            var name = baseName + i;
+            if (!isExistingName(name)) {
+                return name;
+            }
+            i++;
+        }
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};
@@ -1138,5 +1264,56 @@ module ts {
                 }
             }
         }
+    }
+    
+    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
+    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
+    // the language service. These characters should be escaped when printing, and if any characters are added,
+    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
+    // There is no reason for this other than that JSON.stringify does not handle it either.
+    var escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    var escapedCharsMap: Map<string> = {
+        "\0": "\\0",
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\\": "\\\\",
+        "\"": "\\\"",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
+    /**
+     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
+    export function escapeString(s: string): string {
+        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+
+        return s;
+
+        function getReplacement(c: string) {
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+        }
+    }
+    
+    function get16BitUnicodeEscapeSequence(charCode: number): string {
+        var hexCharCode = charCode.toString(16).toUpperCase();
+        var paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        return "\\u" + paddedHexCode;
+    }
+    
+    var nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    export function escapeNonAsciiCharacters(s: string): string {
+        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
+        // Otherwise just return the original string.
+        return nonAsciiCharacters.test(s) ?
+            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
+            s;
     }
 }

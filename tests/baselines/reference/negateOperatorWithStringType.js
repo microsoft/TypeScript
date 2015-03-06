@@ -44,15 +44,11 @@ var ResultIsNumber12 = -STRING.charAt(0);
 // - operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
-function foo() {
-    return "abc";
-}
+function foo() { return "abc"; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return "";
-    };
+    A.foo = function () { return ""; };
     return A;
 })();
 var M;
@@ -66,9 +62,7 @@ var ResultIsNumber2 = -STRING1;
 // string type literal
 var ResultIsNumber3 = -"";
 var ResultIsNumber4 = -{ x: "", y: "" };
-var ResultIsNumber5 = -{ x: "", y: function (s) {
-    return s;
-} };
+var ResultIsNumber5 = -{ x: "", y: function (s) { return s; } };
 // string type expressions
 var ResultIsNumber6 = -objA.a;
 var ResultIsNumber7 = -M.n;

@@ -6,7 +6,5 @@ var x = foo([{a:1}]);
 
 
 //// [functionOverloads38.js]
-function foo(bar) {
-    return bar;
-}
+function foo(bar) { return bar; }
 var x = foo([{ a: 1 }]);

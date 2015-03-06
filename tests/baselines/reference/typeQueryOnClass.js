@@ -82,9 +82,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.prototype.baz = function (x) {
-        return '';
-    };
+    C.prototype.baz = function (x) { return ''; };
     Object.defineProperty(C.prototype, "ic", {
         get: function () {
             return 1;

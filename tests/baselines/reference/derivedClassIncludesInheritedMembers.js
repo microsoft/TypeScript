@@ -52,18 +52,14 @@ var Base = (function () {
     }
     Base.prototype.b = function () { };
     Object.defineProperty(Base.prototype, "c", {
-        get: function () {
-            return '';
-        },
+        get: function () { return ''; },
         set: function (v) { },
         enumerable: true,
         configurable: true
     });
     Base.s = function () { };
     Object.defineProperty(Base, "t", {
-        get: function () {
-            return '';
-        },
+        get: function () { return ''; },
         set: function (v) { },
         enumerable: true,
         configurable: true

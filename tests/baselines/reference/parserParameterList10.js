@@ -7,6 +7,12 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
+    C.prototype.foo = function () {
+        if (bar === void 0) { bar = 0; }
+        var bar = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            bar[_i - 0] = arguments[_i];
+        }
+    };
     return C;
 })();

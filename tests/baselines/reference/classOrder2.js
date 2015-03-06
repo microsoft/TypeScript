@@ -31,9 +31,7 @@ var A = (function (_super) {
     function A() {
         _super.apply(this, arguments);
     }
-    A.prototype.foo = function () {
-        this.bar();
-    };
+    A.prototype.foo = function () { this.bar(); };
     return A;
 })(B);
 var B = (function () {

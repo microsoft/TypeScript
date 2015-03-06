@@ -64,9 +64,7 @@ var NonGeneric;
             enumerable: true,
             configurable: true
         });
-        C.prototype.fn = function () {
-            return this;
-        };
+        C.prototype.fn = function () { return this; };
         return C;
     })();
     var D = (function (_super) {
@@ -98,9 +96,7 @@ var Generic;
             enumerable: true,
             configurable: true
         });
-        C.prototype.fn = function () {
-            return this;
-        };
+        C.prototype.fn = function () { return this; };
         return C;
     })();
     var D = (function (_super) {

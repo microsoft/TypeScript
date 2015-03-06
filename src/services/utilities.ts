@@ -6,12 +6,11 @@ module ts {
     }
 
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
+        Debug.assert(line >= 0);
         var lineStarts = sourceFile.getLineStarts();
         
-        // lines returned by SourceFile.getLineAndCharacterForPosition are 1-based
-        var lineIndex = line - 1;
-        if (lineIndex === lineStarts.length - 1) {
+        var lineIndex = line;
+        if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
             return sourceFile.text.length - 1;
         }
@@ -32,15 +31,10 @@ module ts {
         }
     }
 
-    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 1);
-        return sourceFile.getLineStarts()[line - 1];
-    }
-
-    export function getStartLinePositionForPosition(position: number, sourceFile: SourceFile): number {
+    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getLineAndCharacterFromPosition(position).line;
-        return lineStarts[line - 1];
+        var line = sourceFile.getLineAndCharacterOfPosition(position).line;
+        return lineStarts[line];
     }
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {

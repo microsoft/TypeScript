@@ -85,62 +85,24 @@ var getParamType3 = {
 
 //// [objectLiteralGettersAndSetters.js]
 // Get and set accessor with the same name
-var sameName1a = { get 'a'() {
-    return '';
-}, set a(n) {
-    var p = n;
-    var p;
-} };
-var sameName2a = { get 0.0() {
-    return '';
-}, set 0(n) {
-    var p = n;
-    var p;
-} };
-var sameName3a = { get 0x20() {
-    return '';
-}, set 3.2e1(n) {
-    var p = n;
-    var p;
-} };
-var sameName4a = { get ''() {
-    return '';
-}, set ""(n) {
-    var p = n;
-    var p;
-} };
-var sameName5a = { get '\t'() {
-    return '';
-}, set '\t'(n) {
-    var p = n;
-    var p;
-} };
-var sameName6a = { get 'a'() {
-    return '';
-}, set a(n) {
-    var p = n;
-    var p;
-} };
+var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p; } };
+var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p; } };
+var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p; } };
+var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p; } };
+var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p; } };
+var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p; } };
 // PropertyName CallSignature{FunctionBody} is equivalent to PropertyName:function CallSignature{FunctionBody}
-var callSig1 = { num: function (n) {
-    return '';
-} };
+var callSig1 = { num: function (n) { return ''; } };
 var callSig1;
-var callSig2 = { num: function (n) {
-    return '';
-} };
+var callSig2 = { num: function (n) { return ''; } };
 var callSig2;
 var callSig3 = { num: function (n) { return ''; } };
 var callSig3;
 // Get accessor only, type of the property is the annotated return type of the get accessor
-var getter1 = { get x() {
-    return undefined;
-} };
+var getter1 = { get x() { return undefined; } };
 var getter1;
 // Get accessor only, type of the property is the inferred return type of the get accessor
-var getter2 = { get x() {
-    return '';
-} };
+var getter2 = { get x() { return ''; } };
 var getter2;
 // Set accessor only, type of the property is the param type of the set accessor
 var setter1 = { set x(n) { } };
@@ -150,18 +112,10 @@ var setter2 = { set x(n) { } };
 var setter2;
 var anyVar;
 // Get and set accessor with matching type annotations
-var sameType1 = { get x() {
-    return undefined;
-}, set x(n) { } };
-var sameType2 = { get x() {
-    return undefined;
-}, set x(n) { } };
-var sameType3 = { get x() {
-    return undefined;
-}, set x(n) { } };
-var sameType4 = { get x() {
-    return undefined;
-}, set x(n) { } };
+var sameType1 = { get x() { return undefined; }, set x(n) { } };
+var sameType2 = { get x() { return undefined; }, set x(n) { } };
+var sameType3 = { get x() { return undefined; }, set x(n) { } };
+var sameType4 = { get x() { return undefined; }, set x(n) { } };
 // Type of unannotated get accessor return type is the type annotation of the set accessor param
 var setParamType1 = {
     set n(x) { },
@@ -187,14 +141,10 @@ var getParamType1 = {
         var y = x;
         var y;
     },
-    get n() {
-        return '';
-    }
+    get n() { return ''; }
 };
 var getParamType2 = {
-    get n() {
-        return '';
-    },
+    get n() { return ''; },
     set n(x) {
         var y = x;
         var y;
@@ -202,9 +152,7 @@ var getParamType2 = {
 };
 // Type of unannotated accessors is the inferred return type of the get accessor
 var getParamType3 = {
-    get n() {
-        return '';
-    },
+    get n() { return ''; },
     set n(x) {
         var y = x;
         var y;

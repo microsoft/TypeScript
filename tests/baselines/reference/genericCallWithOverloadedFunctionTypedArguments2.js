@@ -46,10 +46,7 @@ var NonGenericParameter;
     function foo4(cb) {
         return cb;
     }
-    var r3 = foo4(function (x) {
-        var r;
-        return r;
-    }); // ok
+    var r3 = foo4(function (x) { var r; return r; }); // ok
 })(NonGenericParameter || (NonGenericParameter = {}));
 var GenericParameter;
 (function (GenericParameter) {

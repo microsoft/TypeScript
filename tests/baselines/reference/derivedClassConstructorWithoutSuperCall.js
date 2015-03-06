@@ -66,9 +66,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        var r = function () {
-            _super.call(this);
-        }; // error
+        var r = function () { _super.call(this); }; // error
     }
     return Derived3;
 })(Base2);

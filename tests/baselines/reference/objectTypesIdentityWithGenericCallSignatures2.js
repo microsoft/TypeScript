@@ -105,31 +105,23 @@ function foo15(x: any) { }
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function (x, y) {
-        return null;
-    };
+    A.prototype.foo = function (x, y) { return null; };
     return A;
 })();
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function (x, y) {
-        return null;
-    };
+    B.prototype.foo = function (x, y) { return null; };
     return B;
 })();
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x, y) {
-        return null;
-    };
+    C.prototype.foo = function (x, y) { return null; };
     return C;
 })();
 var a;
-var b = { foo: function (x, y) {
-    return x;
-} };
+var b = { foo: function (x, y) { return x; } };
 function foo1(x) { }
 function foo1b(x) { }
 function foo1c(x) { }
