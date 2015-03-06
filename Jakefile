@@ -70,6 +70,7 @@ var servicesSources = [
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
+    "referenceManager.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",

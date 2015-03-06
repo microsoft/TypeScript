@@ -2196,7 +2196,7 @@ module ts {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var ruleProvider: formatting.RulesProvider;
         var program: Program;
-        var inferenceEngine: InferenceEngine;
+        var inferenceEngine: inference.InferenceEngine;
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
@@ -2258,7 +2258,7 @@ module ts {
             var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
             // Now create a new compiler.  Also, ensure we have an inference engine.
-            inferenceEngine = inferenceEngine || createInferenceEngine();
+            inferenceEngine = inferenceEngine || inference.createInferenceEngine();
             var inferenceEngineUpdater = inferenceEngine.createEngineUpdater();
 
             var newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
