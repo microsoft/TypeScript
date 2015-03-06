@@ -97,13 +97,17 @@ module ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
 
-                Debug.assert(n1.name.kind === SyntaxKind.Identifier || n1.name.kind === SyntaxKind.StringLiteral, `Expected n1.name is a ${n1.name.kind},\ 
+                if (n1.name) {
+                    Debug.assert(n1.name.kind === SyntaxKind.Identifier || n1.name.kind === SyntaxKind.StringLiteral, `Expected n1.name is a ${n1.name.kind},\
  where SyntaxKind.ComputedPropertyName is ${SyntaxKind.ComputedPropertyName} and SyntaxKind.BindingPattern is ${SyntaxKind.ArrayBindingPattern} or\
  ${SyntaxKind.ObjectBindingPattern}`);
+                }
 
-                Debug.assert(n2.name.kind === SyntaxKind.Identifier || n2.name.kind === SyntaxKind.StringLiteral, `Expected n2.name is a ${n2.name.kind},\
+                if (n2.name) {
+                    Debug.assert(n2.name.kind === SyntaxKind.Identifier || n2.name.kind === SyntaxKind.StringLiteral, `Expected n2.name is a ${n2.name.kind},\
  where SyntaxKind.ComputedPropertyName is ${SyntaxKind.ComputedPropertyName} and SyntaxKind.BindingPattern is ${SyntaxKind.ArrayBindingPattern} or\
  ${SyntaxKind.ObjectBindingPattern}`);
+                }
 
                 if (n1.name && (<Identifier>n1.name).text && n2.name) {
                     // TODO(jfreeman): How do we sort declarations with computed names?
