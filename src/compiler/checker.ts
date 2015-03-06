@@ -9160,7 +9160,7 @@ module ts {
                     else {
                         var identifierName = (<Identifier>catchClause.variableDeclaration.name).text;
                         var locals = catchClause.block.locals;
-                        if (locals && locals[identifierName]) {
+                        if (locals && hasProperty(locals, identifierName)) {
                             var localSymbol = locals[identifierName]
                             if (localSymbol && (localSymbol.flags & SymbolFlags.BlockScopedVariable) !== 0) {
                                 grammarErrorOnNode(localSymbol.valueDeclaration, Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, identifierName);
