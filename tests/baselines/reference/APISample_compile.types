@@ -1636,9 +1636,17 @@ declare module "typescript" {
 >condition : Expression
 >Expression : Expression
 
+        questionToken: Node;
+>questionToken : Node
+>Node : Node
+
         whenTrue: Expression;
 >whenTrue : Expression
 >Expression : Expression
+
+        colonToken: Node;
+>colonToken : Node
+>Node : Node
 
         whenFalse: Expression;
 >whenFalse : Expression
@@ -1745,6 +1753,10 @@ declare module "typescript" {
         expression: LeftHandSideExpression;
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
+
+        dotToken: Node;
+>dotToken : Node
+>Node : Node
 
         name: Identifier;
 >name : Identifier
