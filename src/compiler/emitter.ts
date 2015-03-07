@@ -4203,7 +4203,7 @@ module ts {
                 }
 
                 // For es6 and higher we can emit the expression as is.  However, in the case 
-                // where the expression might end up looking like a block when down-leveled, we'll
+                // where the expression might end up looking like a block when emitted, we'll
                 // also wrap it in parentheses first.  For example if you have: a => <foo>{}
                 // then we need to generate: a => ({})
                 write(" ");
