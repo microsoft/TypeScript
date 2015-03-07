@@ -8,9 +8,9 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383
 tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or not exported.
 tests/cases/conformance/functions/functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/conformance/functions/functionOverloadErrors.ts(94,1): error TS2394: Overload signature is not compatible with function implementation.
-tests/cases/conformance/functions/functionOverloadErrors.ts(99,1): error TS2394: Overload signature is not compatible with function implementation.
-tests/cases/conformance/functions/functionOverloadErrors.ts(103,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(94,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(99,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(103,10): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
@@ -129,20 +129,20 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Function overloads with fewer params than implementation signature
     function fewerParams();
-    ~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
     function fewerParams(n: string) {
     }
     
     //Function implementation whose parameter types are not assignable to all corresponding overload signature parameters
     function fn13(n: string);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
     function fn13(n: number) { }
     
     //Function overloads where return types are not all subtype of implementation return type
     function fn14(n: string): string;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
     function fn14() {
         return 3;

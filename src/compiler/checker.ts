@@ -8560,7 +8560,7 @@ module ts {
                             // since LHS will be block scoped name instead of function scoped
                             if (!namesShareScope) {
                                 var name = symbolToString(localDeclarationSymbol);
-                                error(getErrorSpanForNode(node), Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
+                                error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
                             }
                         }
                     }
@@ -9113,6 +9113,15 @@ module ts {
                         grammarErrorOnFirstToken(catchClause.variableDeclaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
                     }
                     else {
+                        var identifierName = (<Identifier>catchClause.variableDeclaration.name).text;
+                        var locals = catchClause.block.locals;
+                        if (locals && hasProperty(locals, identifierName)) {
+                            var localSymbol = locals[identifierName]
+                            if (localSymbol && (localSymbol.flags & SymbolFlags.BlockScopedVariable) !== 0) {
+                                grammarErrorOnNode(localSymbol.valueDeclaration, Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, identifierName);
+                            }
+                        }
+
                         // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
                         // Catch production is eval or arguments
                         checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>catchClause.variableDeclaration.name);
@@ -11828,19 +11837,11 @@ module ts {
             return sourceFile.parseDiagnostics.length > 0;
         }
 
-        function scanToken(scanner: Scanner, pos: number) {
-            scanner.setTextPos(pos);
-            scanner.scan();
-            var start = scanner.getTokenPos();
-            return start;
-        }
-
         function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
-                var start = scanToken(scanner, node.pos);
-                diagnostics.add(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                var span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11855,9 +11856,7 @@ module ts {
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var span = getErrorSpanForNode(node);
-                var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.add(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                diagnostics.add(createDiagnosticForNode(node, message, arg0, arg1, arg2));
                 return true;
             }
         }
@@ -11994,9 +11993,8 @@ module ts {
         function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
-                scanToken(scanner, node.pos);
-                diagnostics.add(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                var span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                diagnostics.add(createFileDiagnostic(sourceFile, textSpanEnd(span), /*length*/ 0, message, arg0, arg1, arg2));
                 return true;
             }
         }
