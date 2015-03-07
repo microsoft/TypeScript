@@ -43,7 +43,9 @@ var Bugs;
                 rest[_i - 1] = arguments[_i];
             }
             var index = rest[0];
-            return typeof args[index] !== 'undefined' ? args[index] : match;
+            return typeof args[index] !== 'undefined'
+                ? args[index]
+                : match;
         });
         return result;
     }

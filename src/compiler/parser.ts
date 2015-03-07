@@ -120,6 +120,7 @@ module ts {
                 return visitNodes(cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<PropertyAccessExpression>node).dotToken) ||
                     visitNode(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
@@ -156,7 +157,9 @@ module ts {
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
             case SyntaxKind.SpreadElementExpression:
                 return visitNode(cbNode, (<SpreadElementExpression>node).expression);
@@ -1327,11 +1330,14 @@ module ts {
 
         function parseOptionalToken(t: SyntaxKind): Node {
             if (token === t) {
-                var node = createNode(t);
-                nextToken();
-                return finishNode(node);
+                return parseTokenNode();
             }
             return undefined;
+        }
+
+        function parseExpectedToken(t: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+            return parseOptionalToken(t) ||
+                createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
         }
 
         function parseTokenNode<T extends Node>(): T {
@@ -2162,8 +2168,7 @@ module ts {
                 literal = parseLiteralNode();
             }
             else {
-                literal = <LiteralExpression>createMissingNode(
-                    SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -3186,7 +3191,8 @@ module ts {
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
-            if (!parseOptional(SyntaxKind.QuestionToken)) {
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (!questionToken) {
                 return leftOperand;
             }
 
@@ -3194,8 +3200,10 @@ module ts {
             // we do not that for the 'whenFalse' part.  
             var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
+            node.questionToken = questionToken;
             node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
-            parseExpected(SyntaxKind.ColonToken);
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition:*/ false,
+                Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
@@ -3458,7 +3466,7 @@ module ts {
             // If it wasn't then just try to parse out a '.' and report an error.
             var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition:*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
             return finishNode(node);
         }
@@ -3474,10 +3482,11 @@ module ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                var dotOrBracketStart = scanner.getTokenPos();
-                if (parseOptional(SyntaxKind.DotToken)) {
+                var dotToken = parseOptionalToken(SyntaxKind.DotToken);
+                if (dotToken) {
                     var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
+                    propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
