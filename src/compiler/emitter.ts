@@ -3179,35 +3179,38 @@ module ts {
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
-                if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
-                    var operand = (<TypeAssertion>node.expression).expression;
+                if (!node.parent || node.parent.kind !== SyntaxKind.ArrowFunction) {
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
+                        var operand = (<TypeAssertion>node.expression).expression;
 
-                    // Make sure we consider all nested cast expressions, e.g.:
-                    // (<any><number><any>-A).x;
-                    while (operand.kind == SyntaxKind.TypeAssertionExpression) {
-                        operand = (<TypeAssertion>operand).expression;
-                    }
+                        // Make sure we consider all nested cast expressions, e.g.:
+                        // (<any><number><any>-A).x;
+                        while (operand.kind == SyntaxKind.TypeAssertionExpression) {
+                            operand = (<TypeAssertion>operand).expression;
+                        }
 
-                    // We have an expression of the form: (<Type>SubExpr)
-                    // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
-                    // Omitting the parentheses, however, could cause change in the semantics of the generated
-                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
-                    //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
-                    //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
-                    //      new (<any>A()) should be emitted as new (A()) and not new A()
-                    //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                    if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
-                        operand.kind !== SyntaxKind.VoidExpression &&
-                        operand.kind !== SyntaxKind.TypeOfExpression &&
-                        operand.kind !== SyntaxKind.DeleteExpression &&
-                        operand.kind !== SyntaxKind.PostfixUnaryExpression &&
-                        operand.kind !== SyntaxKind.NewExpression &&
-                        !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                        !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
-                        emit(operand);
-                        return;
+                        // We have an expression of the form: (<Type>SubExpr)
+                        // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
+                        // Omitting the parentheses, however, could cause change in the semantics of the generated
+                        // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
+                        //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
+                        //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
+                        //      new (<any>A()) should be emitted as new (A()) and not new A()
+                        //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
+                        if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
+                            operand.kind !== SyntaxKind.VoidExpression &&
+                            operand.kind !== SyntaxKind.TypeOfExpression &&
+                            operand.kind !== SyntaxKind.DeleteExpression &&
+                            operand.kind !== SyntaxKind.PostfixUnaryExpression &&
+                            operand.kind !== SyntaxKind.NewExpression &&
+                            !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
+                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
+                            emit(operand);
+                            return;
+                        }
                     }
                 }
+
                 write("(");
                 emit(node.expression);
                 write(")");
@@ -4202,9 +4205,19 @@ module ts {
                     return;
                 }
 
-                // For es6 and higher we can emit the expression as is.
+                // For es6 and higher we can emit the expression as is.  However, in the case 
+                // where the expression might end up looking like a block when emitted, we'll
+                // also wrap it in parentheses first.  For example if you have: a => <foo>{}
+                // then we need to generate: a => ({})
                 write(" ");
-                emit(body);
+
+                // Unwrap all type assertions.
+                var current = body;
+                while (current.kind === SyntaxKind.TypeAssertionExpression) {
+                    current = (<TypeAssertion>current).expression;
+                }
+
+                emitParenthesizedIf(body, current.kind === SyntaxKind.ObjectLiteralExpression);
             }
 
             function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
