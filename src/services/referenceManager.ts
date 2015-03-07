@@ -156,9 +156,32 @@ module ts.inference {
 
     /* @internal */
     export interface ReferenceManager {
-        onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
-
-        updateReferences(program: Program): void;
+        // Used to tell the reference manager that a new program was created, as well as what 
+        // changes occurred between this new program and the last program the reference manager 
+        // was notified about.
+        //
+        // IMPORTANT: The reference manager defers doing expensive work until 'updateReferences' 
+        // is called.  As such, query operation on the reference manager can return stale 
+        // information.  Clients should call 'updateReferences' first to ensure the references
+        // manager is up to date.  This call will also return what changes happened in untouched
+        // files so that clients can determine what information they might need to update as well.
+        //
+        // This includes which files were added and removed from the program, which files were updated
+        // (i.e. edited), and what symbols we ended up adding/removing.  The removed symbols list
+        // contains the symbols that were removed because they were part of a file that was 
+        // removed, or because they were removed as part of an edit.  The added symbols list 
+        // contains the symbols that were added because they were part of a file that was added,
+        // or because they were added as part of an edit.
+        //
+        // None of these three file lists intersect.  A file can only be in the removed/added/updated list
+        // at most one.  The union of the file lists is not the same as the list of files in the 
+        // program.  There will still be files in the program that were not touched at all and 
+        // are the same from the last version of the program to this one.
+        onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[],
+            removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
+        
+        // 
+        updateReferences(program: Program): ts.Map<References>;
 
         // For testing purposes only
         toJSON(): any;
@@ -351,9 +374,9 @@ module ts.inference {
             }
         }
 
-        function updateReferences(program: Program): void {
+        function updateReferences(program: Program): Map<References> {
             if (!filesToFullyResolve) {
-                return;
+                return undefined;
             }
 
             Debug.assert(latestProgram === program);
@@ -363,11 +386,13 @@ module ts.inference {
             forEach(program.getSourceFiles(), f => {
                 if (stringSet_contains(filesToFullyResolve, f.fileName)) {
                     // Pass in undefined to indicate that all identifiers should be resolved.
-                    resolveReferences(program, f, /*shouldResolve:*/ undefined);
+                    resolveReferences(program, f, /*shouldResolve:*/ undefined, /*changedReferences:*/ undefined);
                 }
             });
 
             // Now go and resolve added/removed identifiers in the files we need to partially resolve.
+            var result: Map<References> = {};
+
             forEach(program.getSourceFiles(), f => {
                 if (stringSet_contains(filesToPartiallyResolve, f.fileName)) {
                     var nameTable = getNameTable(f);
@@ -375,7 +400,10 @@ module ts.inference {
                     // Only process the file if it could be affected by the symbols that were added or
                     // removed.
                     if (keysIntersect(nameTable, addedOrRemovedSymbolNames)) {
-                        resolveReferences(program, f, addedOrRemovedSymbolNames);
+                        var changedReferences = createReferences();
+                        result[f.fileName] = changedReferences;
+
+                        resolveReferences(program, f, addedOrRemovedSymbolNames, changedReferences);
                     }
                 }
             });
@@ -384,6 +412,8 @@ module ts.inference {
             filesToFullyResolve = undefined;
             filesToPartiallyResolve = undefined;
             addedOrRemovedSymbolNames = undefined;
+
+            return result;
         }
 
         function keysIntersect<T, U>(nameTable: Map<T>, changedSymbolNames: StringSet) {
@@ -452,7 +482,7 @@ module ts.inference {
 
         // If 'identifierNamesToResolve' is undefined, then that means that all identifiers should 
         // be resolved.
-        function resolveReferences(program: Program, file: SourceFile, identifierNamesToResolve: StringSet): void {
+        function resolveReferences(program: Program, file: SourceFile, identifierNamesToResolve: StringSet, changedReferences: References): void {
             var typeChecker = program.getTypeChecker();
             var fileName = file.fileName;
             var bidirectionalReferences = fileNameToBidirectionalReferences[fileName] || (fileNameToBidirectionalReferences[fileName] = createBidirectionalReferences());
@@ -524,6 +554,8 @@ module ts.inference {
                 var previousDeclarationNode = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode);
 
                 if (previousDeclarationNode !== declarationNode) {
+                    references_add(changedReferences, referenceNode);
+
                     var references = declarationToReferencesMap_get(declarationToReferences, previousDeclarationNode);
 
                     if (references) {

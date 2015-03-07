@@ -483,6 +483,12 @@ module ts.inference {
             referenceManager_forTestingPurposesOnly: referenceManager
         };
 
+        function updateReferenceManagerAndProcessUpdates(program: Program): void {
+            var updates = referenceManager.updateReferences(program);
+            if (updates) {
+            }
+        }
+
         function createEngineUpdater(): InferenceEngineUpdater {
             var typeChecker: TypeChecker;
 
@@ -753,8 +759,7 @@ module ts.inference {
         }
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
-            // updateReferenceManagerAndProcessUpdates(program);
-            referenceManager.updateReferences(program);
+            updateReferenceManagerAndProcessUpdates(program);
 
             // Walk the tree, producing type information for expressions, and pulling on declarations 
             // when necessary.  This will produce a TypeInformation object that represents the type
