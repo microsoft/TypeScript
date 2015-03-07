@@ -6,10 +6,9 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNam
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts (4 errors) ====
     var x: TypeModule1.
-           ~~~~~~~~~~~~
-    module TypeModule2 {
-    ~~~~~~
+           ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeModule1'.
+    module TypeModule2 {
            ~~~~~~~~~~~
 !!! error TS1005: '=' expected.
            ~~~~~~~~~~~

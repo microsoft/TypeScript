@@ -21,7 +21,7 @@ test.ts(3,8): error TS2304: Cannot find name 'Array'.
     /// <reference no-default-lib="true"/>
     
     var x: Array<number>;
-           ~~~~~~~~~~~~~
+           ~~~~~
 !!! error TS2304: Cannot find name 'Array'.
     
     

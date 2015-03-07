@@ -14,7 +14,7 @@
 //// import ref2 = require("refFile2");
 //// import noExistref2 = require(/*5*/"NotExistRefFile2"/*6*/);
 //// import invalidRef1  /*7*/require/*8*/("refFile2");
-//// /*9*/import invalidRef2 = requi/*10*/("refFile2");
+//// import invalidRef2 = /*9*/requi/*10*/(/*10A*/"refFile2");
 //// var obj: /*11*/C/*12*/;
 //// var obj1: D;
 //// var obj2: ref2.E;
@@ -25,8 +25,6 @@ verify.errorExistsBetweenMarkers("1", "2");
 verify.errorExistsBetweenMarkers("3", "4");
 verify.errorExistsBetweenMarkers("5", "6");
 verify.errorExistsBetweenMarkers("7", "8");
-verify.errorExistsBetweenMarkers("9", "10");  // At this position,  there are two diagnostic messages: ';' expected, Cannot find name 'requi' 
+verify.errorExistsBetweenMarkers("9", "10");
+verify.errorExistsBetweenMarkers("10", "10A");
 verify.errorExistsBetweenMarkers("11", "12");
-
-
-

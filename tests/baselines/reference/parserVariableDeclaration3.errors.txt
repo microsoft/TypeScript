@@ -13,7 +13,7 @@ tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDe
                          ~~~~~~~
 !!! error TS2304: Cannot find name 'Harness'.
           , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                                                           ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.

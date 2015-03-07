@@ -120,6 +120,13 @@ module ts {
                     return "__new";
                 case SyntaxKind.IndexSignature:
                     return "__index";
+                case SyntaxKind.ExportDeclaration:
+                    return "__export";
+                case SyntaxKind.ExportAssignment:
+                    return "default";
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    return node.flags & NodeFlags.Default ? "default" : undefined;
             }
         }
 
@@ -130,7 +137,9 @@ module ts {
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            var name = getDeclarationName(node);
+            // The exported symbol for an export default function/class node is always named "default"
+            var name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 if (symbol.flags & excludes) {
@@ -145,9 +154,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -188,7 +197,7 @@ module ts {
 
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             var hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
-            if (symbolKind & SymbolFlags.Import) {
+            if (symbolKind & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                 }
@@ -322,13 +331,6 @@ module ts {
                     }
                 }
             }
-        }
-
-        function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
-                ((<ExportContainer>container).exportStars || ((<ExportContainer>container).exportStars = [])).push(node);
-            }
-            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
         }
 
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
@@ -484,18 +486,33 @@ module ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
-                    break;
-                case SyntaxKind.ExportDeclaration:
-                    bindExportDeclaration(<ExportDeclaration>node);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ImportClause:
                     if ((<ImportClause>node).name) {
-                        bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                        bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     }
                     else {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    if (!(<ExportDeclaration>node).exportClause) {
+                        // All export * declarations are collected in an __export symbol
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.ExportStar, 0);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                        // An export default clause with an identifier exports all meanings of that identifier
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    }
+                    else {
+                        // An export default clause with an expression exports a value
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {

@@ -1,6 +1,6 @@
 tests/cases/compiler/moduleVisibilityTest3.ts(20,22): error TS2304: Cannot find name 'modes'.
-tests/cases/compiler/moduleVisibilityTest3.ts(20,33): error TS2305: Module '_modes' has no exported member 'Mode'.
-tests/cases/compiler/moduleVisibilityTest3.ts(21,16): error TS2305: Module '_modes' has no exported member 'Mode'.
+tests/cases/compiler/moduleVisibilityTest3.ts(20,39): error TS2305: Module '_modes' has no exported member 'Mode'.
+tests/cases/compiler/moduleVisibilityTest3.ts(21,22): error TS2305: Module '_modes' has no exported member 'Mode'.
 
 
 ==== tests/cases/compiler/moduleVisibilityTest3.ts (3 errors) ====
@@ -26,10 +26,10 @@ tests/cases/compiler/moduleVisibilityTest3.ts(21,16): error TS2305: Module '_mod
          constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
                          ~~~~~
 !!! error TS2304: Cannot find name 'modes'.
-                                    ~~~~~~~~~~
+                                          ~~~~
 !!! error TS2305: Module '_modes' has no exported member 'Mode'.
              var x:modes.Mode;
-                   ~~~~~~~~~~
+                         ~~~~
 !!! error TS2305: Module '_modes' has no exported member 'Mode'.
          }
         
