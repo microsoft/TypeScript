@@ -203,7 +203,138 @@ module ts.inference {
         public getHashCode(): number {
             throw new Error("abstract");
         }
+
+        private static cachedTypes = createHashTable<TypeInformation, TypeInformation>();
+
+        public static createUnionType(type1: TypeInformation, type2: TypeInformation) {
+            if (!type1) {
+                return type2;
+            }
+
+            if (!type2) {
+                return type1;
+            }
+
+            if (type1.equals(type2)) {
+                return type1;
+            }
+
+            var types: TypeInformation[] = [];
+            decomposePossibleUnionAndAddToSet(type1, types);
+            decomposePossibleUnionAndAddToSet(type2, types);
+
+            Debug.assert(types.length >= 2);
+
+            return TypeInformation.createUnionTypeFromTypes(types);
+        }
+
+        public static createUnionTypeFromTypes(types: TypeInformation[]): TypeInformation {
+            if (types.length === 0) {
+                return undefined;
+            }
+
+            if (types.length === 1) {
+                return types[0];
+            }
+
+            Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Union).length === 0, "We should never nest union types");
+
+            // Cap the number of types we'll keep in a union type at 8.
+            types = types.length > 8 ? types.slice(0, 8) : types;
+
+            var unionType = new UnionTypeInformation(types);
+            return TypeInformation.cachedTypes.getOrAdd(unionType, unionType);
+        }
+
+        public static createPlusType(leftType: TypeInformation, rightType: TypeInformation) {
+            // Not enough information at this point to make an up front type determination.  
+            // Return a constraint to see if we can figure out the type later.
+            Debug.assert(leftType !== undefined || rightType !== undefined);
+
+            // If one of the types is undefined, place it last.
+            var types: TypeInformation[] = [];
+            decomposePossiblePlusAndAddToSet(leftType, types);
+            decomposePossiblePlusAndAddToSet(rightType, types);
+
+            Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Plus).length === 0, "We should never plus types");
+
+            // Cap the number of types we'll keep in a plus type at 8.
+            types = types.length > 8 ? types.slice(0, 8) : types;
+
+            var result = new PlusTypeInformation(types);
+            return TypeInformation.cachedTypes.getOrAdd(result, result);
+        }
     }
+
+    function decomposePossiblePlusAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
+        if (!type) {
+            return;
+        }
+
+        // We flatten all plus types.  That way there is a single linear representation for
+        // pluses, and we don't have to compare any sort of tree structure.
+        if (type.kind() === TypeInformationKind.Plus) {
+            var constituentTypes = (<PlusTypeInformation>type).types;
+            for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                var constituent = constituentTypes[i];
+                Debug.assert(constituent.kind() !== TypeInformationKind.Plus);
+
+                addSingleTypeToSet(constituentTypes[i], types);
+            }
+        }
+        else {
+            addSingleTypeToSet(type, types);
+        }
+    }
+
+
+    function decomposePossibleUnionAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
+        if (type) {
+            // We flatten all union types.  That way there is a single linear representation for
+            // unions, and we don't have to compare any sort of tree structure.
+            if (type.kind() === TypeInformationKind.Union) {
+                var constituentTypes = (<UnionTypeInformation>type).types;
+                for (var i = 0, n = constituentTypes.length; i < n; i++) {
+                    var constituent = constituentTypes[i];
+                    Debug.assert(constituent.kind() !== TypeInformationKind.Union);
+
+                    addSingleTypeToSet(constituentTypes[i], types);
+                }
+            }
+            else {
+                addSingleTypeToSet(type, types);
+            }
+        }
+    }
+
+    function addSingleTypeToSet(type: TypeInformation, typeSet: TypeInformation[]) {
+        // We want to put the type into the list in sorted order.
+        var hashCode = type.getHashCode();
+        for (var i = 0, n = typeSet.length; i < n; i++) {
+            var currentType = typeSet[i];
+            var currentTypeHashCode = currentType.getHashCode();
+
+            if (currentTypeHashCode < hashCode) {
+                // Keep going to find the right place to insert the item.
+                continue;
+            }
+            else if (currentTypeHashCode === hashCode) {
+                if (type.equals(currentType)) {
+                    // Was already in the set.  No need to add it again.
+                    return;
+                }
+            }
+            else {
+                // Found the first type that should go after the type we're adding.
+                typeSet.splice(i, /*deleteCount:*/ 0, type);
+                return;
+            }
+        }
+
+        // Couldn't find a place in the list to put it.  So just put it at the end.
+        typeSet.push(type);
+    }
+
 
     class UnionTypeInformation extends TypeInformation {
         private hash: number;
@@ -337,13 +468,12 @@ module ts.inference {
     /* @internal */
     export function createInferenceEngine(): InferenceEngine {
         var declarationIdToSymbolTypeInformation: SymbolTypeInformation[] = [];
-        var cachedTypes = createHashTable<TypeInformation, TypeInformation>();
 
         var booleanPrimitiveTypeInformation = new PrimitiveTypeInformation("boolean");
         var numberPrimitiveTypeInformation = new PrimitiveTypeInformation("number");
         var stringPrimitiveTypeInformation = new PrimitiveTypeInformation("string");
 
-        var stringOrNumberUnionType = createUnionTypeInformation(stringPrimitiveTypeInformation, numberPrimitiveTypeInformation);
+        var stringOrNumberUnionType = TypeInformation.createUnionType(stringPrimitiveTypeInformation, numberPrimitiveTypeInformation);
 
         var referenceManager = createReferenceManager();
         
@@ -352,114 +482,6 @@ module ts.inference {
             getTypeInformation,
             referenceManager_forTestingPurposesOnly: referenceManager
         };
-
-        function addSingleTypeToSet(type: TypeInformation, typeSet: TypeInformation[]) {
-            // We want to put the type into the list in sorted order.
-            var hashCode = type.getHashCode();
-            for (var i = 0, n = typeSet.length; i < n; i++) {
-                var currentType = typeSet[i];
-                var currentTypeHashCode = currentType.getHashCode();
-
-                if (currentTypeHashCode < hashCode) {
-                    // Keep going to find the right place to insert the item.
-                    continue;
-                }
-                else if (currentTypeHashCode === hashCode) {
-                    if (type.equals(currentType)) {
-                        // Was already in the set.  No need to add it again.
-                        return;
-                    }
-                }
-                else {
-                    // Found the first type that should go after the type we're adding.
-                    typeSet.splice(i, /*deleteCount:*/ 0, type);
-                    return;
-                }
-            }
-
-            // Couldn't find a place in the list to put it.  So just put it at the end.
-            typeSet.push(type);
-        }
-
-        function decomposePossibleUnionAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
-            if (type) {
-                // We flatten all union types.  That way there is a single linear representation for
-                // unions, and we don't have to compare any sort of tree structure.
-                if (type.kind() === TypeInformationKind.Union) {
-                    var constituentTypes = (<UnionTypeInformation>type).types;
-                    for (var i = 0, n = constituentTypes.length; i < n; i++) {
-                        var constituent = constituentTypes[i];
-                        Debug.assert(constituent.kind() !== TypeInformationKind.Union);
-
-                        addSingleTypeToSet(constituentTypes[i], types);
-                    }
-                }
-                else {
-                    addSingleTypeToSet(type, types);
-                }
-            }
-        }
-
-        function decomposePossiblePlusAndAddToSet(type: TypeInformation, types: TypeInformation[]) {
-            if (!type) {
-                return;
-            }
-
-            // We flatten all plus types.  That way there is a single linear representation for
-            // pluses, and we don't have to compare any sort of tree structure.
-            if (type.kind() === TypeInformationKind.Plus) {
-                var constituentTypes = (<PlusTypeInformation>type).types;
-                for (var i = 0, n = constituentTypes.length; i < n; i++) {
-                    var constituent = constituentTypes[i];
-                    Debug.assert(constituent.kind() !== TypeInformationKind.Plus);
-
-                    addSingleTypeToSet(constituentTypes[i], types);
-                }
-            }
-            else {
-                addSingleTypeToSet(type, types);
-            }
-        }
-
-        function createUnionTypeInformation(type1: TypeInformation, type2: TypeInformation): TypeInformation {
-            if (!type1) {
-                return type2;
-            }
-
-            if (!type2) {
-                return type1;
-            }
-
-            if (type1.equals(type2)) {
-                return type1;
-            }
-
-            var types: TypeInformation[] = [];
-            decomposePossibleUnionAndAddToSet(type1, types);
-            decomposePossibleUnionAndAddToSet(type2, types);
-
-            Debug.assert(types.length >= 2);
-
-            return createUnionTypeFromTypes(types);
-        }
-
-        function createUnionTypeFromTypes(types: TypeInformation[]): TypeInformation {
-            if (types.length === 0) {
-                return undefined;
-            }
-
-            if (types.length === 1) {
-                return types[0];
-            }
-
-            Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Union).length === 0, "We should never nest union types");
-
-            // Cap the number of types we'll keep in a union type at 8.
-            types = types.length > 8 ? types.slice(0, 8) : types;
-
-            var unionType = new UnionTypeInformation(types);
-            return cachedTypes.getOrAdd(unionType, unionType);
-        }
 
         function createEngineUpdater(): InferenceEngineUpdater {
             var typeChecker: TypeChecker;
@@ -731,6 +753,7 @@ module ts.inference {
         }
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
+            // updateReferenceManagerAndProcessUpdates(program);
             referenceManager.updateReferences(program);
 
             // Walk the tree, producing type information for expressions, and pulling on declarations 
@@ -784,7 +807,7 @@ module ts.inference {
                 return typeInformation;
             }
 
-            return createUnionTypeFromTypes(evaluatedTypes);
+            return TypeInformation.createUnionTypeFromTypes(evaluatedTypes);
         }
 
         function evaluatePlusTypeInformation(typeInformation: PlusTypeInformation, symbolStack: SymbolTypeInformation[]) {
@@ -942,14 +965,14 @@ module ts.inference {
                 //
                 // The type of the result is the union type of the two operand types.
                 if (contextualTypeInformation) {
-                    return createUnionTypeInformation(
+                    return TypeInformation.createUnionType(
                         getTypeInformationForExpression(sourceFile, node.left, contextualTypeInformation),
                         getTypeInformationForExpression(sourceFile, node.right, contextualTypeInformation));
                 }
                 else {
                     var leftTypeInformation = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
                     var rightTypeInformation = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ leftTypeInformation);
-                    return createUnionTypeInformation(leftTypeInformation, rightTypeInformation);
+                    return TypeInformation.createUnionType(leftTypeInformation, rightTypeInformation);
                 }
             }
 
@@ -981,22 +1004,7 @@ module ts.inference {
                     return stringOrNumberUnionType;
                 }
 
-                // Not enough information at this point to make an up front type determination.  
-                // Return a constraint to see if we can figure out the type later.
-                Debug.assert(leftType !== undefined || rightType !== undefined);
-
-                // If one of the types is undefined, place it last.
-                var types: TypeInformation[] = [];
-                decomposePossiblePlusAndAddToSet(leftType, types);
-                decomposePossiblePlusAndAddToSet(rightType, types);
-
-                Debug.assert(filter(types, t => t.kind() === TypeInformationKind.Plus).length === 0, "We should never plus types");
-
-                // Cap the number of types we'll keep in a plus type at 8.
-                types = types.length > 8 ? types.slice(0, 8) : types;
-
-                var result = new PlusTypeInformation(types);
-                return cachedTypes.getOrAdd(result, result);
+                return TypeInformation.createPlusType(leftType, rightType);
             }
 
             function getTypeInformationForConditionalExpression(sourceFile: SourceFile, node: ConditionalExpression, contextualTypeInformation: TypeInformation) {
@@ -1004,7 +1012,7 @@ module ts.inference {
                 // are contextually typed by the same type.Otherwise, expr1 and expr2 are not 
                 // contextually typed. type of the result is the union type of the types of expr1 and 
                 // expr2.
-                return createUnionTypeInformation(
+                return TypeInformation.createUnionType(
                     getTypeInformationForExpression(sourceFile, node.whenTrue, contextualTypeInformation),
                     getTypeInformationForExpression(sourceFile, node.whenFalse, contextualTypeInformation));
             }
@@ -1065,7 +1073,7 @@ module ts.inference {
                         if (references) {
                             var sourceFile = program.getSourceFile(fileName);
                             references_forEach(references, referenceNode => {
-                                type = createUnionTypeInformation(type, computeTypeInformationForReference(sourceFile, referenceNode));
+                                type = TypeInformation.createUnionType(type, computeTypeInformationForReference(sourceFile, referenceNode));
                             });
                         }
                     }
