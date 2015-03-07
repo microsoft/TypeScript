@@ -411,7 +411,7 @@ module ts {
             // The emitter emitted something, inform the caller if that happened in the presence
             // of diagnostics or not.
             if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
-                ExitStatus.DiagnosticsPresent_OutputsGenerated;
+                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
 
             return ExitStatus.Success;
