@@ -4862,6 +4862,9 @@ declare module "typescript" {
 >TypeChecker : TypeChecker
 }
 declare module "typescript" {
+    var version: string;
+>version : string
+
     function createCompilerHost(options: CompilerOptions): CompilerHost;
 >createCompilerHost : (options: CompilerOptions) => CompilerHost
 >options : CompilerOptions

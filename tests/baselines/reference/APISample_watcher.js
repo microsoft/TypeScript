@@ -1541,6 +1541,7 @@ declare module "typescript" {
     function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
 }
 declare module "typescript" {
+    var version: string;
     function createCompilerHost(options: CompilerOptions): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;

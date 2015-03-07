@@ -5,6 +5,8 @@ module ts {
     /* @internal */ export var emitTime = 0;
     /* @internal */ export var ioReadTime = 0;
 
+    export var version = "1.5.0.0";
+
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
         var existingDirectories: Map<boolean> = {};
