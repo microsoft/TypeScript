@@ -2014,7 +2014,7 @@ module ts {
 
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
+            isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
@@ -3799,7 +3799,7 @@ module ts {
                         }
                     }
                     // Do not cross function boundaries.
-                    else if (!isAnyFunction(node)) {
+                    else if (!isFunctionLike(node)) {
                         forEachChild(node, aggregate);
                     }
                 };
@@ -3931,7 +3931,7 @@ module ts {
                         statementAccumulator.push(<BreakOrContinueStatement>node);
                     }
                     // Do not cross function boundaries.
-                    else if (!isAnyFunction(node)) {
+                    else if (!isFunctionLike(node)) {
                         forEachChild(node, aggregate);
                     }
                 };
@@ -3962,7 +3962,7 @@ module ts {
                             break;
                         default:
                             // Don't cross function boundaries.
-                            if (isAnyFunction(node)) {
+                            if (isFunctionLike(node)) {
                                 return undefined;
                             }
                             break;
