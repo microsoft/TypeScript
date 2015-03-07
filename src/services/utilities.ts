@@ -414,7 +414,7 @@ module ts {
             else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
-            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
 
             return SymbolDisplayPartKind.text;

@@ -2575,7 +2575,7 @@ module ts {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                     // This is an alias, follow what it aliases
-                    if (symbol && symbol.flags & SymbolFlags.Import) {
+                    if (symbol && symbol.flags & SymbolFlags.Alias) {
                         symbol = typeInfoResolver.getAliasedSymbol(symbol);
                     }
 
@@ -2639,7 +2639,7 @@ module ts {
                     isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     var symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -3016,7 +3016,7 @@ module ts {
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
-                if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+                if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
                 if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             }
 
@@ -3104,7 +3104,7 @@ module ts {
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
-            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Import) {
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
@@ -3151,7 +3151,7 @@ module ts {
                                 symbolKind = ScriptElementKind.constructorImplementationElement;
                                 addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                             }
-                            else if (symbolFlags & SymbolFlags.Import) {
+                            else if (symbolFlags & SymbolFlags.Alias) {
                                 symbolKind = ScriptElementKind.alias;
                                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                                 displayParts.push(textPart(symbolKind));
@@ -3304,7 +3304,7 @@ module ts {
                     }
                 }
             }
-            if (symbolFlags & SymbolFlags.Import) {
+            if (symbolFlags & SymbolFlags.Alias) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
@@ -3513,7 +3513,7 @@ module ts {
             // get the aliased symbol instead. This allows for goto def on an import e.g.
             //   import {A, B} from "mod";
             // to jump to the implementation directelly.
-            if (symbol.flags & SymbolFlags.Import) {
+            if (symbol.flags & SymbolFlags.Alias) {
                 var declaration = symbol.declarations[0];
                 if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
                     symbol = typeInfoResolver.getAliasedSymbol(symbol);
@@ -4269,7 +4269,7 @@ module ts {
             }
 
             function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
-                return (symbol.flags & SymbolFlags.Import) && forEach(symbol.declarations, declaration => {
+                return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
                     return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
                 });
             }
@@ -4344,7 +4344,7 @@ module ts {
 
                 // If the symbol is an import we would like to find it if we are looking for what it imports.
                 // So consider it visibile outside its declaration scope.
-                if (symbol.flags & SymbolFlags.Import) {
+                if (symbol.flags & SymbolFlags.Alias) {
                     return undefined;
                 }
 

@@ -2,7 +2,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,1): err
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,21): error TS2305: Module 'Harness' has no exported member 'Assert'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,29): error TS2305: Module 'Harness' has no exported member 'Assert'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2304: Cannot find name 'require'.
@@ -140,7 +140,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
 !!! error TS6053: File 'diff.ts' not found.
     
     declare var assert: Harness.Assert;
-                        ~~~~~~~~~~~~~~
+                                ~~~~~~
 !!! error TS2305: Module 'Harness' has no exported member 'Assert'.
     declare var it;
     declare var describe;
@@ -857,7 +857,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
             /** Mimics having multiple files, later concatenated to a single file. */
             export class EmitterIOHost implements TypeScript.EmitterIOHost {
-                                                  ~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
     
                 private fileCollection = {};
@@ -913,7 +913,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
-                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                           ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                         ~~~~~~~~~~
@@ -940,7 +940,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             var compiler: TypeScript.TypeScriptCompiler;
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
             recreate();
     
@@ -1156,7 +1156,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
 !!! error TS2304: Cannot find name 'TypeScript'.
                                                                                             ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
-                                                                                                                      ~~~~~~~~~~~~~~~~~
+                                                                                                                      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
@@ -1174,7 +1174,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                     else {
                         for (var m = 0; m < compiler.scripts.members.length; m++) {
                             var script2 = <TypeScript.Script>compiler.scripts.members[m];
-                                           ~~~~~~~~~~~~~~~~~
+                                           ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             if (script2.locationInfo.filename !== 'lib.d.ts') {
                                 if (targetPosition > -1) {
@@ -1218,7 +1218,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 }
     
                 private getTypeInfoName(ast : TypeScript.AST) {
-                                              ~~~~~~~~~~~~~~
+                                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                     var name = '';
                     switch (ast.nodeType) {
@@ -1262,7 +1262,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.RegexLiteral>ast).text;
-                                     ~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.QString:
@@ -1274,7 +1274,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.NumberLiteral>ast).text;
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.Return:
@@ -1286,30 +1286,30 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.InterfaceDeclaration>ast).name.actualText;
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ModuleDeclaration:
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.ModuleDeclaration>ast).name.actualText;
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.ClassDeclaration:
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = (<TypeScript.ClassDeclaration>ast).name.actualText;
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         case TypeScript.NodeType.FuncDecl:
                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             name = !(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText; // name == null for lambdas
-                                      ~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
-                                                                             ~~~~~~~~~~~~~~~~~~~
+                                                                             ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                             break;
                         default:
@@ -1338,7 +1338,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
               * @param references the set of referenced files used by the given code
               */
             export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
-                                                                                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                                                ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 reset();
     
@@ -1409,7 +1409,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
                 /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
                 constructor(public fileResults: { filename: string; file: WriterAggregator; }[], errorLines: string[], public scripts: TypeScript.Script[]) {
-                                                                                                                                       ~~~~~~~~~~~~~~~~~
+                                                                                                                                       ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                     var lines = [];
                     fileResults.forEach(v => lines = lines.concat(v.file.lines));
@@ -1493,10 +1493,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
-                                                                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                 ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var script: TypeScript.Script = null;
-                            ~~~~~~~~~~~~~~~~~
+                            ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
     
@@ -1504,7 +1504,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                     if (compiler.units[i].filename === uName) {
                         updateUnit(code, uName);
                         script = <TypeScript.Script>compiler.scripts.members[i];
-                                  ~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
@@ -1531,9 +1531,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
-                                                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                               ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
-                                                                                                                                                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                                                                                    ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 path = switchToForwardSlashes(path);
                 var filename = path.match(/[^\/]*$/)[0];
@@ -1543,9 +1543,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
-                                                                                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                 ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
-                                                                                                                                                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                                                                                                      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 // not recursive
                 function clone/* <T> */(source: any, target: any) {
@@ -1603,16 +1603,16 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
-                                         ~~~~~~~~~~~~~~~~~~~~~~~~
+                                         ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.emit(ioHost, usePullEmitter);
             }
     
             export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
-                                                                                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                                        ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var scripts: TypeScript.Script[] = [];
-                             ~~~~~~~~~~~~~~~~~
+                             ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
     
                 reset();
@@ -1695,7 +1695,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 name: string;
                 originalFilePath: string;
                 references: TypeScript.IFileReference[];
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
             }
     
@@ -1738,7 +1738,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 var currentFileOptions = {};
                 var currentFileName = null;
                 var refs: TypeScript.IFileReference[] = [];
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
     
                 for (var i = 0; i < lines.length; i++) {
@@ -1831,7 +1831,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
         export class ScriptInfo {
             public version: number;
             public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
-                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                            ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
     
             constructor(public name: string, public content: string, public isResident: boolean, public maxScriptVersions: number) {
@@ -1869,7 +1869,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             }
     
             public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
-                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                              ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 if (this.version == version) {
                     // No edits!
@@ -1897,10 +1897,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
         }
     
         export class TypeScriptLS implements Services.ILanguageServiceShimHost {
-                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                             ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
             private ls: Services.ILanguageServiceShim = null;
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
     
             public scripts: ScriptInfo[] = [];
@@ -2002,7 +2002,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
              *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
              */
             public getLanguageService(): Services.ILanguageServiceShim {
-                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                         ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
                              ~~~~~~~~
@@ -2014,9 +2014,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
             /** Parse file given its source text */
             public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
-                                                                 ~~~~~~~~~~~~~~~~~~~~~~
+                                                                 ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
-                                                                                          ~~~~~~~~~~~~~~~~~
+                                                                                          ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var parser = new TypeScript.Parser();
                                  ~~~~~~~~~~
@@ -2057,7 +2057,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
              * @param col 0 based index
             */
             public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
-                                                                                   ~~~~~~~~~~~~~~~~~~~
+                                                                                   ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 var script = this.ls.languageService.getScriptAST(fileName);
                 assert.notNull(script);
@@ -2073,7 +2073,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
             /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
             public checkEdits(sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) {
-                                                                                       ~~~~~~~~~~~~~~~~~
+                                                                                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 var script = readFile(sourceFileName);
                 var formattedScript = this.applyEdits(script, edits);
@@ -2086,7 +2086,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
             /** Apply an array of text edits to a string, and return the resulting string. */
             public applyEdits(content: string, edits: Services.TextEdit[]): string {
-                                                      ~~~~~~~~~~~~~~~~~
+                                                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 var result = content;
                 edits = this.normalizeEdits(edits);
@@ -2103,18 +2103,18 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
             /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
             private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
-                                          ~~~~~~~~~~~~~~~~~
+                                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
-                                                                ~~~~~~~~~~~~~~~~~
+                                                                ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 var result: Services.TextEdit[] = [];
-                            ~~~~~~~~~~~~~~~~~
+                            ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
     
                 function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
-                                         ~~~~~~~~~~~~~~~~~
+                                         ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
-                                                                       ~~~~~~~~~~~~~~~~~
+                                                                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                     var result = [];
                     for (var i = 0; i < edits.length; i++) {

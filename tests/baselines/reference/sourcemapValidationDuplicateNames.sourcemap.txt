@@ -68,36 +68,25 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 ---
 >>>    var c = (function () {
 1->^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-2 >    export class 
-3 >        c
 1->Emitted(4, 5) Source(3, 5) + SourceIndex(0) name (m1)
-2 >Emitted(4, 9) Source(3, 18) + SourceIndex(0) name (m1)
-3 >Emitted(4, 10) Source(3, 19) + SourceIndex(0) name (m1)
 ---
 >>>        function c() {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^
+2 >        ^^->
 1->
-2 >        export class 
-3 >                 c
 1->Emitted(5, 9) Source(3, 5) + SourceIndex(0) name (m1.c)
-2 >Emitted(5, 18) Source(3, 18) + SourceIndex(0) name (m1.c)
-3 >Emitted(5, 19) Source(3, 19) + SourceIndex(0) name (m1.c)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^->
-1 > {
+1->export class c {
   >    
 2 >        }
-1 >Emitted(6, 9) Source(4, 5) + SourceIndex(0) name (m1.c.constructor)
+1->Emitted(6, 9) Source(4, 5) + SourceIndex(0) name (m1.c.constructor)
 2 >Emitted(6, 10) Source(4, 6) + SourceIndex(0) name (m1.c.constructor)
 ---
 >>>        return c;
@@ -127,21 +116,18 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 >>>    m1.c = c;
 1->^^^^
 2 >    ^^^^
-3 >        ^^^
-4 >           ^
-5 >            ^
-6 >             ^^^^^^^^->
+3 >        ^^^^
+4 >            ^
+5 >             ^^^^^^^^->
 1->
 2 >    c
-3 >        
-4 >           c {
-  >               }
-5 >            
+3 >         {
+  >            }
+4 >            
 1->Emitted(9, 5) Source(3, 18) + SourceIndex(0) name (m1)
 2 >Emitted(9, 9) Source(3, 19) + SourceIndex(0) name (m1)
-3 >Emitted(9, 12) Source(3, 18) + SourceIndex(0) name (m1)
-4 >Emitted(9, 13) Source(4, 6) + SourceIndex(0) name (m1)
-5 >Emitted(9, 14) Source(4, 6) + SourceIndex(0) name (m1)
+3 >Emitted(9, 13) Source(4, 6) + SourceIndex(0) name (m1)
+4 >Emitted(9, 14) Source(4, 6) + SourceIndex(0) name (m1)
 ---
 >>>})(m1 || (m1 = {}));
 1->

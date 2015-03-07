@@ -12,7 +12,7 @@ interface server {
 
     (): server.Server;
 >server : unknown
->Server : server.Server
+>Server : default.Server
 
     startTime: Date;
 >startTime : Date
