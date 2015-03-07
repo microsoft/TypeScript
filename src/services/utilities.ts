@@ -283,7 +283,7 @@ module ts {
             return (<CallExpression>node).typeArguments;
         }
 
-        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+        if (isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
             return (<FunctionLikeDeclaration>node).typeParameters;
         }
 

@@ -5045,7 +5045,7 @@ module ts {
         function isInsideFunction(node: Node, threshold: Node): boolean {
             var current = node;
             while (current && current !== threshold) {
-                if (isAnyFunction(current)) {
+                if (isFunctionLike(current)) {
                     return true;
                 }
                 current = current.parent;
@@ -8550,7 +8550,7 @@ module ts {
                             // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                             var namesShareScope =
                                 container &&
-                                (container.kind === SyntaxKind.Block && isAnyFunction(container.parent) ||
+                                (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
                                     (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
                                     container.kind === SyntaxKind.SourceFile);
 
@@ -9065,7 +9065,7 @@ module ts {
             if (!checkGrammarStatementInAmbientContext(node)) {
                 var current = node.parent;
                 while (current) {
-                    if (isAnyFunction(current)) {
+                    if (isFunctionLike(current)) {
                         break;
                     }
                     if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.text === node.label.text) {
@@ -11623,7 +11623,7 @@ module ts {
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
             var current: Node = node;
             while (current) {
-                if (isAnyFunction(current)) {
+                if (isFunctionLike(current)) {
                     return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
                 }
 
@@ -11954,7 +11954,7 @@ module ts {
 
                 // Find containing block which is either Block, ModuleBlock, SourceFile
                 var links = getNodeLinks(node);
-                if (!links.hasReportedStatementInAmbientContext && isAnyFunction(node.parent)) {
+                if (!links.hasReportedStatementInAmbientContext && isFunctionLike(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
                 }
                 

@@ -3888,7 +3888,7 @@ module ts {
             function getEnclosingBlockScopeContainer(node: Node): Node {
                 var current = node;
                 while (current) {
-                    if (isAnyFunction(current)) {
+                    if (isFunctionLike(current)) {
                         return current;
                     }
                     switch (current.kind) {
@@ -3903,7 +3903,7 @@ module ts {
                         case SyntaxKind.Block:
                             // function block is not considered block-scope container
                             // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                            if (!isAnyFunction(current.parent)) {
+                            if (!isFunctionLike(current.parent)) {
                                 return current;
                             }
                     }
