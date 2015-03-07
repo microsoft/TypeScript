@@ -561,8 +561,15 @@ module ts.inference {
                 Debug.assert(!lastUpdatedSourceFile, "We already have an outstanding updated file!");
                 lastUpdatedSourceFile = oldFile;
 
+                // Before we go and reparse the file, go through and remove information that we 
+                // think will be affected by the edit.  We do this by finding a suitable range
+                // to invalidate, and then going through and dumping the type information for any
+                // symbols we see referenced in that range.
+                //
+                // Our general approach is to find the closest containing node that encompasses
+                // the text change.  Then, if that's an expression, we keep walking upwards to 
+                // the highest expression level.
                 var changeRoot = getRootOfChange(oldFile, textChangeRange);
-
                 clearCachedInformationForAffectedNodes(oldFile, changeRoot);
             }
 
@@ -599,14 +606,11 @@ module ts.inference {
             }
 
             function getRootOfChange(file: SourceFile, textChangeRange: TextChangeRange) {
-                var startNode = getNode(file, textChangeRange.span.start);
-                var endNode = getNode(file, textSpanEnd(textChangeRange.span));
-
-                var commonContainer = getCommonContainer(startNode, endNode);
+                var container = getNode(file, textChangeRange.span.start, textSpanEnd(textChangeRange.span));
 
                 // Walk up anything that would be contextually typed.  We use this as a weak form 
                 // of detecting what is affected by this edit.
-                for (var current = commonContainer.parent; current; current = current.parent) {
+                for (var current = container.parent; current; current = current.parent) {
                     if (!isExpression(current) && !isObjectLiteralMethod(current)) {
                         break;
                     }
@@ -615,13 +619,13 @@ module ts.inference {
                 return current;
             }
 
-            function getNode(sourceFile: SourceFile, position: number): Node {
+            function getNode(sourceFile: SourceFile, start: number, end: number): Node {
                 var bestNode: Node = sourceFile;
                 walk(sourceFile);
                 return bestNode;
 
                 function walk(node: Node): void {
-                    if (!node || !intersects(node, position)) {
+                    if (!node || !overlaps(node, start, end)) {
                         return;
                     }
 
@@ -630,8 +634,8 @@ module ts.inference {
                 }
             }
 
-            function intersects(node: Node, position: number) {
-                return position >= node.pos
+            function overlaps(node: Node, start: number, end: number) {
+                return node.pos <= start && node.end >= end;
             }
 
             function getCommonContainer(node1: Node, node2: Node) {
@@ -699,10 +703,7 @@ module ts.inference {
             function finishUpdate(program: Program) {
                 Debug.assert(!lastUpdatedSourceFile, "We have an outstanding updated file we never heard about");
 
-                // First update all the references we have.
-                referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
-
-                // Now, go through the removed symbols, and remove the cached information we have for them.
+                // First, go through the removed symbols, and remove the cached information we have for them.
                 for (var i = 0, n = removedValueSymbols.length; i < n; i++) {
                     var removedSymbol = removedValueSymbols[i];
                     var declarationNode = removedSymbol.valueDeclaration;
@@ -724,34 +725,10 @@ module ts.inference {
                     }
                 }
 
-                //// Now, go through all the removed files and updated files and remove any cached 
-                //// information we have for the declarations in them. When we need that information
-                //// again we'll just pull on them to get them to be recomputed.
-                //var touchedFiles = oldUpdatedFiles.concat(removedFiles);
-                //for (var i = 0, n = touchedFiles.length; i < n; i++) {
-                //    clearSymbolTypeInformation(touchedFiles[i]);
-                //}
+                // Now, notify the reference manager of the updates.
+                referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
             }
         }
-
-        //function clearSymbolTypeInformation(file: SourceFile) {
-        //    file.nodeToSymbol.forEach(symbol => {
-        //        if (symbol.valueDeclaration) {
-        //            var declarationId = getNodeId(symbol.valueDeclaration);
-
-        //            var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
-
-        //            if (symbolInformation) {
-        //                // Clear out the type for this symbol.  That way anyone pointing at it 
-        //                // won't get any stale information about it.
-        //                symbolInformation.type = undefined;
-
-        //                // And remove teh symbol information from our cache entirely.
-        //                delete declarationIdToSymbolTypeInformation[declarationId];
-        //            }
-        //        }
-        //    });
-        //}
 
         function getTypeInformation(program: Program, _node: Node): TypeInformation {
             referenceManager.updateReferences(program);
