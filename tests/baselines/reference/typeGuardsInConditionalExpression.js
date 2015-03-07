@@ -157,7 +157,8 @@ function foo10(x) {
     var b;
     return typeof x === "string" ? x // string
      : ((b = x) // x is number | boolean
-     && typeof x === "number" && x.toString()); // x is number
+        && typeof x === "number"
+        && x.toString()); // x is number
 }
 function foo11(x) {
     // Mixing typeguards
@@ -165,8 +166,9 @@ function foo11(x) {
     var b;
     return typeof x === "string" ? x // number | boolean | string - changed in the false branch
      : ((b = x) // x is number | boolean | string - because the assignment changed it
-     && typeof x === "number" && (x = 10) // assignment to x
-     && x); // x is number | boolean | string
+        && typeof x === "number"
+        && (x = 10) // assignment to x
+        && x); // x is number | boolean | string
 }
 function foo12(x) {
     // Mixing typeguards
@@ -174,5 +176,6 @@ function foo12(x) {
     var b;
     return typeof x === "string" ? (x = 10 && x.toString().length) // number | boolean | string - changed here
      : ((b = x) // x is number | boolean | string  - changed in true branch
-     && typeof x === "number" && x); // x is number
+        && typeof x === "number"
+        && x); // x is number
 }

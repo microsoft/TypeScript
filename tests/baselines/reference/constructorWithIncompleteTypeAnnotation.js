@@ -314,8 +314,7 @@ var TypeScriptAllInOne;
         Program.prototype.if = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
-             ^
-                retValue;
+                ^ retValue;
             bfs.TYPES();
             if (retValue != 0) {
                 return 1 &&

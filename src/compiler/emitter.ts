@@ -3290,25 +3290,45 @@ module ts {
                 else {
                     emit(node.left);
 
-                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
-                        write(" ");
+                    // If there was a newline between the left side of the binary expression and the
+                    // operator, then try to preserve that.
+                    var indented = false;
+                    var isSynthesied = nodeIsSynthesized(node);
+                    if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.left, node.operatorToken)) {
+                        indented = true;
+                        increaseIndent();
+                        writeLine();
+                    }
+                    else {
+                        // Otherwise just emit the operator right afterwards.  For everything but
+                        // comma, emit a space before the operator.
+                        if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                            write(" ");
+                        }
                     }
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    var shouldPlaceOnNewLine = !nodeIsSynthesized(node) && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right);
+                    // If there was a newline after the operator (or this is a synthesized node that
+                    // wants to be on a new line), then put a newline in.  But only if we haven't 
+                    // already done this for the left side.
+                    var wantsIndent = (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) ||
+                        synthesizedNodeStartsOnNewLine(node.right);
 
-                    // Check if the right expression is on a different line versus the operator itself.  If so,
-                    // we'll emit newline.
-                    if (shouldPlaceOnNewLine || synthesizedNodeStartsOnNewLine(node.right)) {
+                    if (wantsIndent && !indented) {
+                        indented = true;
                         increaseIndent();
                         writeLine();
                         emit(node.right);
-                        decreaseIndent();
                     }
                     else {
                         write(" ");
                         emit(node.right);
+                    }
+
+                    // If we indented the left or the right side, then dedent now.
+                    if (indented) {
+                        decreaseIndent();
                     }
                 }
             }
