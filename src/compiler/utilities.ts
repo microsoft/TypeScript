@@ -399,13 +399,14 @@ module ts {
     export function isVariableLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Parameter:
                 case SyntaxKind.BindingElement:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.VariableDeclaration:
                     return true;
             }
         }
