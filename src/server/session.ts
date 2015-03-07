@@ -463,17 +463,41 @@ module ts.server {
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
                 compilerService.formatCodeOptions); 
             if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
-                // TODO: get these options from host
-                var editorOptions: ts.EditorOptions = {
-                    IndentSize: 4,
-                    TabSize: 4,
-                    NewLineCharacter: "\n",
-                    ConvertTabsToSpaces: true,
-                };
-                var indentPosition = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
-                var spaces = generateSpaces(indentPosition);
-                if (indentPosition > 0) {
-                    edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                var scriptInfo = compilerService.host.getScriptInfo(file);
+                if (scriptInfo) {
+                    var lineInfo = scriptInfo.getLineInfo(line);
+                    if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
+                        var lineText = lineInfo.leaf.text;
+                        if (lineText.search("\\S") < 0) {
+                            // TODO: get these options from host
+                            var editorOptions: ts.EditorOptions = {
+                                IndentSize: 4,
+                                TabSize: 4,
+                                NewLineCharacter: "\n",
+                                ConvertTabsToSpaces: true,
+                            };
+                            var indentPosition =
+                                compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            for (var i = 0, len = lineText.length; i < len; i++) {
+                                if (lineText.charAt(i) == " ") {
+                                    indentPosition--;
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            if (indentPosition > 0) {
+                                var spaces = generateSpaces(indentPosition);
+                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                            }
+                            else if (indentPosition < 0) {
+                                edits.push({
+                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
+                                    newText: ""
+                                });
+                            }
+                        }
+                    }
                 }
             }
 
@@ -491,7 +515,7 @@ module ts.server {
                 };
             });
         }
- 
+
         getCompletions(line: number, col: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
             if (!prefix) {
                 prefix = "";
