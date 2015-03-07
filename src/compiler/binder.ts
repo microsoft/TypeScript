@@ -538,7 +538,7 @@ module ts {
                     //  var x;
                     // }
                     // 'var x' will be placed into the function locals and 'let x' - into the locals of the block
-                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isAnyFunction(node.parent));
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isFunctionLike(node.parent));
                     break;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
