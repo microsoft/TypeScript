@@ -700,8 +700,8 @@ module ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
-            write("export = ");
-            writeTextOfNode(currentSourceFile, node.exportName);
+            write(node.isExportEquals ? "export = " : "export default ");
+            writeTextOfNode(currentSourceFile, node.expression);
             write(";");
             writeLine();
         }
@@ -1585,6 +1585,7 @@ module ts {
             var tempParameters: Identifier[];
             var externalImports: ExternalImportInfo[];
             var exportSpecifiers: Map<ExportSpecifier[]>;
+            var exportDefault: FunctionDeclaration | ClassDeclaration | ExportAssignment | ExportSpecifier;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -3204,35 +3205,38 @@ module ts {
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
-                if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
-                    var operand = (<TypeAssertion>node.expression).expression;
+                if (!node.parent || node.parent.kind !== SyntaxKind.ArrowFunction) {
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
+                        var operand = (<TypeAssertion>node.expression).expression;
 
-                    // Make sure we consider all nested cast expressions, e.g.:
-                    // (<any><number><any>-A).x;
-                    while (operand.kind == SyntaxKind.TypeAssertionExpression) {
-                        operand = (<TypeAssertion>operand).expression;
-                    }
+                        // Make sure we consider all nested cast expressions, e.g.:
+                        // (<any><number><any>-A).x;
+                        while (operand.kind == SyntaxKind.TypeAssertionExpression) {
+                            operand = (<TypeAssertion>operand).expression;
+                        }
 
-                    // We have an expression of the form: (<Type>SubExpr)
-                    // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
-                    // Omitting the parentheses, however, could cause change in the semantics of the generated
-                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
-                    //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
-                    //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
-                    //      new (<any>A()) should be emitted as new (A()) and not new A()
-                    //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                    if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
-                        operand.kind !== SyntaxKind.VoidExpression &&
-                        operand.kind !== SyntaxKind.TypeOfExpression &&
-                        operand.kind !== SyntaxKind.DeleteExpression &&
-                        operand.kind !== SyntaxKind.PostfixUnaryExpression &&
-                        operand.kind !== SyntaxKind.NewExpression &&
-                        !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                        !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
-                        emit(operand);
-                        return;
+                        // We have an expression of the form: (<Type>SubExpr)
+                        // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
+                        // Omitting the parentheses, however, could cause change in the semantics of the generated
+                        // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
+                        //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
+                        //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
+                        //      new (<any>A()) should be emitted as new (A()) and not new A()
+                        //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
+                        if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
+                            operand.kind !== SyntaxKind.VoidExpression &&
+                            operand.kind !== SyntaxKind.TypeOfExpression &&
+                            operand.kind !== SyntaxKind.DeleteExpression &&
+                            operand.kind !== SyntaxKind.PostfixUnaryExpression &&
+                            operand.kind !== SyntaxKind.NewExpression &&
+                            !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
+                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
+                            emit(operand);
+                            return;
+                        }
                     }
                 }
+
                 write("(");
                 emit(node.expression);
                 write(")");
@@ -3677,7 +3681,7 @@ module ts {
             }
 
             function emitExportMemberAssignments(name: Identifier) {
-                if (exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportDefault && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     forEach(exportSpecifiers[name.text], specifier => {
                         writeLine();
                         emitStart(specifier.name);
@@ -3957,7 +3961,7 @@ module ts {
             function getEnclosingBlockScopeContainer(node: Node): Node {
                 var current = node;
                 while (current) {
-                    if (isAnyFunction(current)) {
+                    if (isFunctionLike(current)) {
                         return current;
                     }
                     switch (current.kind) {
@@ -3972,7 +3976,7 @@ module ts {
                         case SyntaxKind.Block:
                             // function block is not considered block-scope container
                             // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                            if (!isAnyFunction(current.parent)) {
+                            if (!isFunctionLike(current.parent)) {
                                 return current;
                             }
                     }
@@ -4143,6 +4147,15 @@ module ts {
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
+            function emitDeclarationName(node: Declaration) {
+                if (node.name) {
+                    emitNode(node.name);
+                }
+                else {
+                    write(resolver.getGeneratedNameForNode(node));
+                }
+            }
+
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -4160,10 +4173,10 @@ module ts {
                 }
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
-                    emit(node.name);
+                    emitDeclarationName(node);
                 }
                 emitSignatureAndBody(node);
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -4232,12 +4245,12 @@ module ts {
                     emitExpressionFunctionBody(node, <Expression>node.body);
                 }
 
-                if (node.flags & NodeFlags.Export) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emit(node.name);
+                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -4262,9 +4275,19 @@ module ts {
                     return;
                 }
 
-                // For es6 and higher we can emit the expression as is.
+                // For es6 and higher we can emit the expression as is.  However, in the case 
+                // where the expression might end up looking like a block when emitted, we'll
+                // also wrap it in parentheses first.  For example if you have: a => <foo>{}
+                // then we need to generate: a => ({})
                 write(" ");
-                emit(body);
+
+                // Unwrap all type assertions.
+                var current = body;
+                while (current.kind === SyntaxKind.TypeAssertionExpression) {
+                    current = (<TypeAssertion>current).expression;
+                }
+
+                emitParenthesizedIf(body, current.kind === SyntaxKind.ObjectLiteralExpression);
             }
 
             function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
@@ -4410,7 +4433,7 @@ module ts {
                         emitStart(member);
                         emitStart((<PropertyDeclaration>member).name);
                         if (staticFlag) {
-                            emitNode(node.name);
+                            emitDeclarationName(node);
                         }
                         else {
                             write("this");
@@ -4437,7 +4460,7 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitNode(node.name); // TODO (shkamat,drosen): comment for why emitNode instead of emit.
+                        emitDeclarationName(node);
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
@@ -4459,7 +4482,7 @@ module ts {
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitNode(node.name);
+                            emitDeclarationName(node);
                             if (!(member.flags & NodeFlags.Static)) {
                                 write(".prototype");
                             }
@@ -4506,7 +4529,7 @@ module ts {
 
             function emitClassDeclaration(node: ClassDeclaration) {
                 write("var ");
-                emit(node.name);
+                emitDeclarationName(node);
                 write(" = (function (");
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
@@ -4519,7 +4542,7 @@ module ts {
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emit(node.name);
+                    emitDeclarationName(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -4528,11 +4551,10 @@ module ts {
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
-                function emitClassReturnStatement() {
+                emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
-                    emitNode(node.name);
-                }
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end, emitClassReturnStatement);
+                    emitDeclarationName(node);
+                });
                 write(";");
                 decreaseIndent();
                 writeLine();
@@ -4545,16 +4567,16 @@ module ts {
                 }
                 write(");");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emit(node.name);
+                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
 
@@ -4581,7 +4603,7 @@ module ts {
                     }
                     emitStart(<Node>ctor || node);
                     write("function ");
-                    emit(node.name);
+                    emitDeclarationName(node);
                     emitSignatureParameters(ctor);
                     write(" {");
                     scopeEmitStart(node, "constructor");
@@ -4861,7 +4883,7 @@ module ts {
                 // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                 // - current file is not external module
                 // - import declaration is top level and target is value imported by entity name
-                if (resolver.isReferencedImportDeclaration(node) ||
+                if (resolver.isReferencedAliasDeclaration(node) ||
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
@@ -4961,17 +4983,29 @@ module ts {
             function createExternalModuleInfo(sourceFile: SourceFile) {
                 externalImports = [];
                 exportSpecifiers = {};
+                exportDefault = undefined;
                 forEach(sourceFile.statements, node => {
                     if (node.kind === SyntaxKind.ExportDeclaration && !(<ExportDeclaration>node).moduleSpecifier) {
                         forEach((<ExportDeclaration>node).exportClause.elements, specifier => {
+                            if (specifier.name.text === "default") {
+                                exportDefault = exportDefault || specifier;
+                            }
                             var name = (specifier.propertyName || specifier.name).text;
                             (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                         });
                     }
+                    else if (node.kind === SyntaxKind.ExportAssignment) {
+                        exportDefault = exportDefault || <ExportAssignment>node;
+                    }
+                    else if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
+                        if (node.flags & NodeFlags.Export && node.flags & NodeFlags.Default) {
+                            exportDefault = exportDefault || <FunctionDeclaration | ClassDeclaration>node;
+                        }
+                    }
                     else {
                         var info = createExternalImportInfo(node);
                         if (info) {
-                            if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedImportDeclaration(node)) {
+                            if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedAliasDeclaration(node)) {
                                 externalImports.push(info);
                             }
                         }
@@ -5055,18 +5089,7 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                var exportName = resolver.getExportAssignmentName(node);
-                if (exportName) {
-                    writeLine();
-                    var exportAssignment = getFirstExportAssignment(node);
-                    emitStart(exportAssignment);
-                    write("return ");
-                    emitStart(exportAssignment.exportName);
-                    write(exportName);
-                    emitEnd(exportAssignment.exportName);
-                    write(";");
-                    emitEnd(exportAssignment);
-                }
+                emitExportDefault(node, /*emitAsReturn*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -5076,17 +5099,25 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                var exportName = resolver.getExportAssignmentName(node);
-                if (exportName) {
+                emitExportDefault(node, /*emitAsReturn*/ false);
+            }
+
+            function emitExportDefault(sourceFile: SourceFile, emitAsReturn: boolean) {
+                if (exportDefault && resolver.hasExportDefaultValue(sourceFile)) {
                     writeLine();
-                    var exportAssignment = getFirstExportAssignment(node);
-                    emitStart(exportAssignment);
-                    write("module.exports = ");
-                    emitStart(exportAssignment.exportName);
-                    write(exportName);
-                    emitEnd(exportAssignment.exportName);
+                    emitStart(exportDefault);
+                    write(emitAsReturn ? "return " : "module.exports = ");
+                    if (exportDefault.kind === SyntaxKind.ExportAssignment) {
+                        emit((<ExportAssignment>exportDefault).expression);
+                    }
+                    else if (exportDefault.kind === SyntaxKind.ExportSpecifier) {
+                        emit((<ExportSpecifier>exportDefault).propertyName);
+                    }
+                    else {
+                        emitDeclarationName(<Declaration>exportDefault);
+                    }
                     write(";");
-                    emitEnd(exportAssignment);
+                    emitEnd(exportDefault);
                 }
             }
 
@@ -5143,6 +5174,7 @@ module ts {
                 else {
                     externalImports = undefined;
                     exportSpecifiers = undefined;
+                    exportDefault = undefined;
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
                     emitTempDeclarations(/*newLine*/ true);

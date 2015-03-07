@@ -337,6 +337,7 @@ module ts {
         The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method: { code: 2489, category: DiagnosticCategory.Error, key: "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method." },
         The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property: { code: 2490, category: DiagnosticCategory.Error, key: "The type returned by the 'next()' method of an iterator must have a 'value' property." },
         The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern: { code: 2491, category: DiagnosticCategory.Error, key: "The left-hand side of a 'for...in' statement cannot be a destructuring pattern." },
+        Cannot_redeclare_identifier_0_in_catch_clause: { code: 2492, category: DiagnosticCategory.Error, key: "Cannot redeclare identifier '{0}' in catch clause" },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },

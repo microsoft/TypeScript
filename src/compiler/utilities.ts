@@ -395,7 +395,26 @@ module ts {
         }
     }
 
-    export function isAnyFunction(node: Node): boolean {
+    /* @internal */
+    export function isVariableLike(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -422,7 +441,7 @@ module ts {
     }
 
     export function isFunctionBlock(node: Node) {
-        return node && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
+        return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
     export function isObjectLiteralMethod(node: Node) {
@@ -432,7 +451,7 @@ module ts {
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
-            if (!node || isAnyFunction(node)) {
+            if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
             }
         }
@@ -933,6 +952,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;
@@ -1150,7 +1170,7 @@ module ts {
     }
 
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
-        return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+        return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
 
     export function nodeIsSynthesized(node: Node): boolean {

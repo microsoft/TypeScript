@@ -299,14 +299,15 @@ module ts {
         Private =           0x00000020,  // Property/Method
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
-        MultiLine =         0x00000100,  // Multi-line array or object literal
-        Synthetic =         0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00000400,  // Node is a .d.ts file
-        Let =               0x00000800,  // Variable declaration
-        Const =             0x00001000,  // Variable declaration
-        OctalLiteral =      0x00002000,
+        Default =           0x00000100,  // Function/Class (export default declaration)
+        MultiLine =         0x00000200,  // Multi-line array or object literal
+        Synthetic =         0x00000400,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00000800,  // Node is a .d.ts file
+        Let =               0x00001000,  // Variable declaration
+        Const =             0x00002000,  // Variable declaration
+        OctalLiteral =      0x00004000,
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -501,7 +502,7 @@ module ts {
     }
 
     export interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
-        name: Identifier;
+        name?: Identifier;
         body?: Block;
     }
 
@@ -828,7 +829,7 @@ module ts {
     }
 
     export interface ClassDeclaration extends Declaration, ModuleElement {
-        name: Identifier;
+        name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
@@ -867,11 +868,7 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ExportContainer {
-        exportStars?: ExportDeclaration[];  // List of 'export *' statements (initialized by binding)
-    }
-
-    export interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    export interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -916,7 +913,7 @@ module ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends Statement, ModuleElement {
+    export interface ExportDeclaration extends Declaration, ModuleElement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -936,8 +933,9 @@ module ts {
     export type ImportSpecifier = ImportOrExportSpecifier;
     export type ExportSpecifier = ImportOrExportSpecifier;
 
-    export interface ExportAssignment extends Statement, ModuleElement {
-        exportName: Identifier;
+    export interface ExportAssignment extends Declaration, ModuleElement {
+        isExportEquals?: boolean;
+        expression: Expression;
     }
 
     export interface FileReference extends TextRange {
@@ -949,7 +947,7 @@ module ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration, ExportContainer {
+    export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
@@ -1193,10 +1191,10 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+        getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: Node): boolean;
+        hasExportDefaultValue(node: SourceFile): boolean;
+        isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
@@ -1232,18 +1230,17 @@ module ts {
         Signature               = 0x00020000,  // Call, construct, or index signature
         TypeParameter           = 0x00040000,  // Type parameter
         TypeAlias               = 0x00080000,  // Type alias
-
-        // Export markers (see comment in declareModuleMember in binder)
-        ExportValue             = 0x00100000,  // Exported value marker
-        ExportType              = 0x00200000,  // Exported type marker
-        ExportNamespace         = 0x00400000,  // Exported namespace marker
-        Import                  = 0x00800000,  // Import
+        ExportValue             = 0x00100000,  // Exported value marker (see comment in declareModuleMember in binder)
+        ExportType              = 0x00200000,  // Exported type marker (see comment in declareModuleMember in binder)
+        ExportNamespace         = 0x00400000,  // Exported namespace marker (see comment in declareModuleMember in binder)
+        Alias                   = 0x00800000,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
         Instantiated            = 0x01000000,  // Instantiated symbol
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
+        ExportStar              = 0x40000000,  // Export * declaration
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -1276,9 +1273,9 @@ module ts {
         SetAccessorExcludes = Value & ~GetAccessor,
         TypeParameterExcludes = Type & ~TypeParameter,
         TypeAliasExcludes = Type,
-        ImportExcludes = Import,  // Imports collide with all other imports with the same name
+        AliasExcludes = Alias,
 
-        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Import,
+        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
@@ -1311,10 +1308,9 @@ module ts {
         declaredType?: Type;                // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        exportAssignmentChecked?: boolean;  // True if export assignment was checked
-        exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
         unionType?: UnionType;              // Containing union type for union property
         resolvedExports?: SymbolTable;      // Resolved exports of module
+        exportsChecked?: boolean;           // True if exports of external module have been checked
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }

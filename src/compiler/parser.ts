@@ -280,7 +280,7 @@ module ts {
                     visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).exportName);
+                    visitNode(cbNode, (<ExportAssignment>node).expression);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -360,6 +360,7 @@ module ts {
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
         }
         return 0;
     }
@@ -1505,7 +1506,13 @@ module ts {
             }
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
+                if (token === SyntaxKind.DefaultKeyword) {
+                    return lookAhead(nextTokenIsClassOrFunction);
+                }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+            }
+            if (token === SyntaxKind.DefaultKeyword) {
+                return nextTokenIsClassOrFunction();
             }
             nextToken();
             return canFollowModifier();
@@ -1516,6 +1523,11 @@ module ts {
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
                 || isLiteralPropertyName();
+        }
+
+        function nextTokenIsClassOrFunction(): boolean {
+            nextToken();
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -4332,7 +4344,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = parseIdentifier();
+            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
@@ -4508,7 +4520,7 @@ module ts {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseIdentifier();
+            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4841,10 +4853,17 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
+        function parseExportAssignment(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
             setModifiers(node, modifiers);
-            node.exportName = parseIdentifier();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.isExportEquals = true;
+            }
+            else {
+                parseExpected(SyntaxKind.DefaultKeyword);
+            }
+            //node.exportName = parseIdentifier();
+            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
@@ -4911,7 +4930,7 @@ module ts {
         function nextTokenCanFollowExportKeyword() {
             nextToken();
             return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4928,8 +4947,8 @@ module ts {
             var modifiers = parseModifiers();
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
-                if (parseOptional(SyntaxKind.EqualsToken)) {
-                    return parseExportAssignmentTail(fullStart, modifiers);
+                if (token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken) {
+                    return parseExportAssignment(fullStart, modifiers);
                 }
                 if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
                     return parseExportDeclaration(fullStart, modifiers);

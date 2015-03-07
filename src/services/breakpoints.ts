@@ -174,7 +174,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ExportAssignment:
                         // span on export = id
-                        return textSpan(node, (<ExportAssignment>node).exportName);
+                        return textSpan(node, (<ExportAssignment>node).expression);
 
                     case SyntaxKind.ImportEqualsDeclaration:
                         // import statement without including semicolon
@@ -259,7 +259,7 @@ module ts.BreakpointResolver {
                         }
 
                         // return type of function go to previous token
-                        if (isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).type === node) {
+                        if (isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).type === node) {
                             return spanInPreviousNode(node);
                         }
 
@@ -499,7 +499,7 @@ module ts.BreakpointResolver {
 
             function spanInColonToken(node: Node): TextSpan {
                 // Is this : specifying return annotation of the function declaration
-                if (isAnyFunction(node.parent) || node.parent.kind === SyntaxKind.PropertyAssignment) {
+                if (isFunctionLike(node.parent) || node.parent.kind === SyntaxKind.PropertyAssignment) {
                     return spanInPreviousNode(node);
                 }
 

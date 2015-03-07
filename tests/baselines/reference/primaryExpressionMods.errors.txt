@@ -16,6 +16,6 @@ tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2304: Cannot find n
     var x1 = M.a;           // Used as PrimaryExpression
     var x2 = m.a;           // Same as M.a
     var q: m.P;             // Error
-           ~~~
+           ~
 !!! error TS2304: Cannot find name 'm'.
     

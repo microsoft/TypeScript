@@ -1,7 +1,7 @@
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,1): error TS2304: Cannot find name 'V'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,1): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,1): error TS2304: Cannot find name 'E'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,1): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2304: Cannot find name 'V'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2304: Cannot find name 'C'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,12): error TS2304: Cannot find name 'E'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2304: Cannot find name 'I'.
 
 
 ==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (4 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     var V = 12;
     
     import v = V;
-    ~~~~~~~~~~~~~
+               ~
 !!! error TS2304: Cannot find name 'V'.
     
     class C {
@@ -18,7 +18,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     }
     
     import c = C;
-    ~~~~~~~~~~~~~
+               ~
 !!! error TS2304: Cannot find name 'C'.
     
     enum E {
@@ -26,7 +26,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     }
     
     import e = E;
-    ~~~~~~~~~~~~~
+               ~
 !!! error TS2304: Cannot find name 'E'.
     
     interface I {
@@ -34,6 +34,6 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     }
     
     import i = I;
-    ~~~~~~~~~~~~~
+               ~
 !!! error TS2304: Cannot find name 'I'.
     
