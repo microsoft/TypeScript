@@ -2034,7 +2034,8 @@ function transform(contents, compilerOptions) {
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
         getSourceFile: function (fileName, target) {
-            return files[fileName] !== undefined ? ts.createSourceFile(fileName, files[fileName], target) : undefined;
+            return files[fileName] !== undefined ?
+                ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: function (name, text, writeByteOrderMark) {
             outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });

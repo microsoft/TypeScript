@@ -3330,10 +3330,45 @@ module ts {
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
-                write(" ? ");
+                var indent1 = indentIfOnDifferentLines(node, node.condition, node.questionToken);
+                if (!indent1) {
+                    write(" ");
+                }
+
+                write("?");
+
+                if (!indent1) {
+                    var indent2 = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue);
+                }
+
+                if (!indent2) {
+                    write(" ");
+                }
+
                 emit(node.whenTrue);
-                write(" : ");
+
+                if (indent1 || indent2) {
+                    decreaseIndent();
+                }
+
+                var indent3 = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken);
+                if (!indent3) {
+                    write(" ");
+                }
+
+                write(":");
+                if (!indent3) {
+                    var indent4 = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse);
+                }
+                
+                if (!indent4) {
+                    write(" ");
+                }
+
                 emit(node.whenFalse);
+                if (indent3 || indent4) {
+                    decreaseIndent();
+                }
             }
 
             function isSingleLineEmptyBlock(node: Node) {
@@ -3706,10 +3741,16 @@ module ts {
                     equals.left = value;
                     equals.operatorToken = createSynthesizedNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
+                    return createConditionalExpression(equals, defaultValue, value);
+                }
+
+                function createConditionalExpression(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
                     var cond = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
-                    cond.condition = equals;
-                    cond.whenTrue = defaultValue;
-                    cond.whenFalse = value;
+                    cond.condition = condition;
+                    cond.questionToken = createSynthesizedNode(SyntaxKind.QuestionToken);
+                    cond.whenTrue = whenTrue;
+                    cond.colonToken = createSynthesizedNode(SyntaxKind.ColonToken);
+                    cond.whenFalse = whenFalse;
                     return cond;
                 }
 

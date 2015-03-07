@@ -499,7 +499,8 @@ var CLASS = (function () {
     CLASS.prototype.Foo = function () {
         var myEvent = function () { return 1; };
         if (myEvent() == 1)
-            return true ?  : ;
+            return true ?
+                : ;
         else
             return false;
     };

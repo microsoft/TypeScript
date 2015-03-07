@@ -86,8 +86,8 @@ function foo6(x) {
     // Mixing typeguard
     return typeof x === "string" // string | number | boolean
         || (typeof x !== "number" // number | boolean
-         ? x // boolean
-         : x === 10); // number 
+            ? x // boolean
+            : x === 10); // number 
 }
 function foo7(x) {
     var y;
@@ -96,14 +96,16 @@ function foo7(x) {
     // Assigning value to x deep inside another guard stops narrowing of type too
     return typeof x === "string"
         || ((z = x) // string | number | boolean - x changed deeper in conditional expression
-            || (typeof x === "number" ? (x = 10 && x.toString()) // number | boolean | string
-             : (y = x && x.toString()))); // number | boolean | string
+            || (typeof x === "number"
+                ? (x = 10 && x.toString()) // number | boolean | string
+                : (y = x && x.toString()))); // number | boolean | string
 }
 function foo8(x) {
     // Mixing typeguard 
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     return typeof x === "string"
         || (x = 10) // change x - number| string
-        || (typeof x === "number" ? x // number
-         : x.length); // string
+        || (typeof x === "number"
+            ? x // number
+            : x.length); // string
 }
