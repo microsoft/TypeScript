@@ -443,6 +443,10 @@ module ts.inference {
             return this === o;
         }
 
+        public hasType() {
+            return !!this.type;
+        }
+
         public clearType() {
             this.type = undefined;
             this.computingType = false;
@@ -484,8 +488,105 @@ module ts.inference {
         };
 
         function updateReferenceManagerAndProcessUpdates(program: Program): void {
-            var updates = referenceManager.updateReferences(program);
-            if (updates) {
+            // Tell the reference manager to update itself, and determine which references in the 
+            // program were changed.  This is our starting set of nodes to look at to cascade type
+            // information through our type information graph.
+            var fileNameToReferences = referenceManager.updateReferences(program);
+
+            // Keep track of which declarations we've handled.  We don't want to recurse infinitely
+            // as we cascade types through the graph.
+            var processedDeclarations = createNodeSet<Node>();
+            processUpdates(processedDeclarations, fileNameToReferences);
+
+            return;
+
+            function processUpdates(processedDeclarations: NodeSet<Node>, fileNameToAffectedReferences: Map<NodeSet<Identifier>>) {
+                if (fileNameToAffectedReferences) {
+                    for (var fileName in fileNameToAffectedReferences) {
+                        var affectedReferences = getProperty(fileNameToAffectedReferences, fileName);
+                        if (affectedReferences) {
+                            var bidirectionalReferences = referenceManager.getBidirectionalReferences(fileName);
+                            if (bidirectionalReferences) {
+                                processAffectedReferences(processedDeclarations, bidirectionalReferences, affectedReferences);
+                            }
+                        }
+                    }
+                }
+            }
+
+            function processAffectedReferences(processedDeclarations: NodeSet<Node>, bidirectionalReferences: BidirectionalReferences, affectedReferences: NodeSet<Identifier>) {
+                // Go through each reference.
+                nodeSet_forEach(affectedReferences,
+                    reference => processAffectedReference(processedDeclarations, bidirectionalReferences, reference));
+            }
+
+            function processAffectedReference(processedDeclarations: NodeSet<Node>, bidirectionalReferences: BidirectionalReferences, reference: Identifier) {
+                // For each reference we found, see if it affected any declaration.
+                var affectedDeclarations = determineAffectedDeclarations(processedDeclarations, bidirectionalReferences, reference);
+                if (affectedDeclarations) {
+                    processAffectedDeclarations(processedDeclarations, affectedDeclarations);
+                }
+            }
+
+            function determineAffectedDeclarations(processedDeclarations: NodeSet<Node>, bidirectionalReferences: BidirectionalReferences, reference: Identifier): NodeSet<Node> {
+                // For now, just walk up the up the expressions, seeing if this reference is ever 
+                // use in an assignment or initializer.
+                var affectedDeclarations: NodeSet<Node>;
+
+                for (var current = reference.parent; current; current = current.parent) {
+                    if (current.kind === SyntaxKind.BinaryExpression) {
+                        var binaryExpression = <BinaryExpression>current;
+
+                        var declaration: Node = undefined;
+                        if (isAssignmentOperator(binaryExpression.operatorToken.kind) &&
+                            isStandAloneIdentifier(binaryExpression.left)) {
+
+                            declaration = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, binaryExpression.left);
+                        }
+                        else if (isVariableLike(current)) {
+                            declaration = current.symbol && current.symbol.valueDeclaration;
+                        }
+
+                        if (declaration) {
+                            if (!nodeSet_contains(processedDeclarations, declaration)) {
+                                affectedDeclarations = affectedDeclarations || createNodeSet();
+                                nodeSet_add(affectedDeclarations, declaration);
+                            }
+                        }
+                    }
+                }
+
+                return affectedDeclarations;
+            }
+
+            function processAffectedDeclarations(processedDeclarations: NodeSet<Node>, affectedDeclarations: NodeSet<Node>) {
+                // Then go through each declaration (as long as we haven't already processed it).
+                nodeSet_forEach(affectedDeclarations, declaration => {
+                    if (nodeSet_add(processedDeclarations, declaration)) {
+                        processAffectedDeclaration(processedDeclarations, declaration);
+                    }
+                });
+            }
+
+            function processAffectedDeclaration(processedDeclarations: NodeSet<Node>, declaration: Node) {
+                var declarationId = getNodeId(declaration);
+                var symbolInformation = declarationIdToSymbolTypeInformation[declarationId];
+
+                // If we have some cached symbol information for this declaration, see if it was
+                // changed after the edit. 
+                if (symbolInformation && symbolInformation.hasType()) {
+                    // Get the type for this declaration.  Then clear it and recompute it.  If we get 
+                    // the same type back, then nothing changed and we don't want to cascade.  If 
+                    // things changed, we do want to cascade.
+                    var oldSymbolType = symbolInformation.getType();
+                    symbolInformation.clearType();
+                    var newSymbolType = symbolInformation.getType();
+
+                    if (!oldSymbolType.equals(newSymbolType)) {
+                        // Type changed after the edit, keep cascading.
+                        processUpdates(processedDeclarations, referenceManager.getReferencesToDeclarationNode(declaration));
+                    }
+                }
             }
         }
 
@@ -765,7 +866,7 @@ module ts.inference {
             // when necessary.  This will produce a TypeInformation object that represents the type
             // of the expression, but still has many type constraints that have not been evaluated 
             // yet.  For example "a + b" will be a PlusInformation along with two SymbolInformations.
-            var typeInformation = getTypeInformationWorker(program, _node);
+            var unevaluatedTypeInformation = computeTypeInformation();
 
             // So, what we want to go do is 'evaluate' all these unevaluated parts.  Now, outside
             // of symbols, the type information is entirely structural, without any recursion.  
@@ -773,396 +874,400 @@ module ts.inference {
             // keep track of the stack of symbols we're walking through so far to prevent recursing
             // infinitely.
             var symbolStack: SymbolTypeInformation[] = [];
-            return evaluateTypeInformation(typeInformation, symbolStack);
-        }
+            return evaluateTypeInformation(unevaluatedTypeInformation);
 
-        function evaluateTypeInformation(typeInformation: TypeInformation, symbolStack: SymbolTypeInformation[]): TypeInformation {
-            switch (typeInformation.kind()) {
-                case TypeInformationKind.Primitive:
-                    // Primitive types are already as processed as possible.
-                    return typeInformation;
-
-                case TypeInformationKind.Symbol: return evaluateSymbolTypeInformation(<SymbolTypeInformation>typeInformation, symbolStack);
-                case TypeInformationKind.Plus: return evaluatePlusTypeInformation(<PlusTypeInformation>typeInformation, symbolStack);
-                case TypeInformationKind.Union: return evaluateUnionTypeInformation(<UnionTypeInformation>typeInformation, symbolStack);
-            }
-
-            throw new Error("Unhandled case in evaluateTypeInformation.");
-        }
-
-        function evaluateUnionTypeInformation(typeInformation: UnionTypeInformation, symbolStack: SymbolTypeInformation[]) {
-            var types = typeInformation.types;
-            var evaluatedTypes: TypeInformation[];
-
-            for (var i = 0, n = types.length; i < n; i++) {
-                var type = types[i];
-                var evaluatedType = evaluateTypeInformation(type, symbolStack);
-
-                if (!evaluatedTypes && type !== evaluatedType) {
-                    evaluatedTypes = types.slice(0, i);
-                }
-
-                if (evaluatedTypes) {
-                    decomposePossibleUnionAndAddToSet(evaluatedType, evaluatedTypes);
-                }
-            }
-
-            if (!evaluatedTypes) {
-                // If no subtypes evaluated out to anything different, then just return this type.
-                return typeInformation;
-            }
-
-            return TypeInformation.createUnionTypeFromTypes(evaluatedTypes);
-        }
-
-        function evaluatePlusTypeInformation(typeInformation: PlusTypeInformation, symbolStack: SymbolTypeInformation[]) {
-            // Go through and evaluate all the components of the plus expression.
-            var allAreNumber = true;
-            var definitelyNotNumber = false;
-
-            var types = typeInformation.types;
-            for (var i = 0, n = types.length; i < n; i++) {
-                var type = evaluateTypeInformation(types[i], symbolStack);
-                if (type === stringPrimitiveTypeInformation) {
-                    // The moment we hit something we think is definitely a string, then we can
-                    // immediately assume this plus expression evaluates out to a string.
-                    return stringPrimitiveTypeInformation;
-                }
-
-                if (!type) {
-                    // We hit something unknown.  Record this as it means we should no longer 
-                    // evaluate out to the number type.
-                    allAreNumber = false;
-                }
-                else if (type !== numberPrimitiveTypeInformation) {
-                    // We got an actual type, but it wasn't a number (or a string).  There's no 
-                    // way to add something like that and get a number back.  So the only option
-                    // is that we are getting a string.
-                    return stringPrimitiveTypeInformation;
-                }
-            }
-
-            if (allAreNumber && typeInformation.types.length > 0) {
-                // If all we added were numbers, then we're a number.
-                return numberPrimitiveTypeInformation;
-            }
-
-            // Not enough information to be sure.  This could be a number or a string.
-            return stringOrNumberUnionType;
-        }
-
-        function evaluateSymbolTypeInformation(typeInformation: SymbolTypeInformation, symbolStack: SymbolTypeInformation[]) {
-            if (contains(symbolStack, typeInformation)) {
-                return undefined;
-            }
-
-            symbolStack.push(typeInformation);
-            var result = evaluateTypeInformation(typeInformation.getType(), symbolStack);
-            symbolStack.pop();
-            return result;
-        }
-
-        function getTypeInformationWorker(program: Program, _node: Node): TypeInformation {
-            if (_node) {
-                if (isExpression(_node)) {
-                    return getTypeInformationForExpression(ts.getSourceFileOfNode(_node), <Expression>_node,
-                        getContextualTypeInformation(<Expression>_node));
-                }
-            }
-
-            return undefined;
-
-            function getContextualTypeInformation(node: Expression): TypeInformation {
-                // TODO(cyrusn): add support for flowing contextual type information into an expression.
-                return undefined;
-            }
-
-            function getTypeInformationForExpression(sourceFile: SourceFile, node: Expression, contextualTypeInformation: TypeInformation): TypeInformation {
-                if (node) {
-                    switch (node.kind) {
-                        case SyntaxKind.NumericLiteral: return numberPrimitiveTypeInformation;
-                        case SyntaxKind.StringLiteral: return stringPrimitiveTypeInformation;
-                        case SyntaxKind.TrueKeyword: return booleanPrimitiveTypeInformation;
-                        case SyntaxKind.FalseKeyword: return booleanPrimitiveTypeInformation;
-                        case SyntaxKind.NullKeyword: return undefined;
-
-                        case SyntaxKind.BinaryExpression: return getTypeInformationForBinaryExpression(sourceFile, <BinaryExpression>node, contextualTypeInformation);
-                        case SyntaxKind.ConditionalExpression: return getTypeInformationForConditionalExpression(sourceFile, <ConditionalExpression>node, contextualTypeInformation);
-                        case SyntaxKind.DeleteExpression: return getTypeInformationForDeleteExpression(<DeleteExpression>node);
-                        case SyntaxKind.Identifier: return getTypeInformationForIdentifier(sourceFile, <Identifier>node);
-                        case SyntaxKind.ParenthesizedExpression: return getTypeInformationForParenthesizedExpression(sourceFile, <ParenthesizedExpression>node, contextualTypeInformation);
-                        case SyntaxKind.PostfixUnaryExpression: return getTypeInformationForPostfixUnaryExpression(<PostfixUnaryExpression>node);
-                        case SyntaxKind.PrefixUnaryExpression: return getTypeInformationForPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                        case SyntaxKind.TypeOfExpression: return getTypeInformationForTypeOfExpression(<TypeOfExpression>node);
-                        case SyntaxKind.VoidExpression: return getTypeInformationForVoidExpression(<VoidExpression>node);
-                    }
-
-                    throw new Error("Unhandled case in getTypeInformationForExpression");
-                }
-
-                return undefined;
-            }
-
-            function getTypeInformationForBinaryExpression(sourceFile: SourceFile, node: BinaryExpression, contextualTypeInformation: TypeInformation) {
-                switch (node.operatorToken.kind) {
-                    case SyntaxKind.AsteriskToken:
-                    case SyntaxKind.AsteriskEqualsToken:
-                    case SyntaxKind.SlashToken:
-                    case SyntaxKind.SlashEqualsToken:
-                    case SyntaxKind.PercentToken:
-                    case SyntaxKind.PercentEqualsToken:
-                    case SyntaxKind.MinusToken:
-                    case SyntaxKind.MinusEqualsToken:
-                    case SyntaxKind.LessThanLessThanToken:
-                    case SyntaxKind.LessThanLessThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.AmpersandToken:
-                    case SyntaxKind.AmpersandEqualsToken:
-                    case SyntaxKind.CaretToken:
-                    case SyntaxKind.CaretEqualsToken:
-                    case SyntaxKind.BarToken:
-                    case SyntaxKind.BarEqualsToken:
-                        return numberPrimitiveTypeInformation;
-
-                    case SyntaxKind.InKeyword:
-                    case SyntaxKind.InstanceOfKeyword:
-                    case SyntaxKind.LessThanToken:
-                    case SyntaxKind.GreaterThanToken:
-                    case SyntaxKind.LessThanEqualsToken:
-                    case SyntaxKind.GreaterThanEqualsToken:
-                    case SyntaxKind.EqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsToken:
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
-                        return booleanPrimitiveTypeInformation;
-
-                    case SyntaxKind.AmpersandAmpersandToken:
-                        // The && operator permits the operands to be of any type and produces a result of the same type as the second operand.
-                        return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
-
-                    case SyntaxKind.CommaToken:
-                        // The comma operator permits the operands to be of any type and produces a 
-                        // result that is of the same type as the second operand.
-                        return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
-
-                    case SyntaxKind.EqualsToken:
-                        // The result is a value with the type of expr.
-                        return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
-
-                    case SyntaxKind.BarBarToken:
-                        return getTypeInformationForBarBarBinaryExpression(sourceFile, node, contextualTypeInformation);
-
-                    case SyntaxKind.PlusToken:
-                    case SyntaxKind.PlusEqualsToken:
-                        return getTypeInformationForPlusOrPlusEqualsExpression(sourceFile, node);
-                }
-
-                throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
-            }
-
-            function getTypeInformationForBarBarBinaryExpression(sourceFile: SourceFile, node: BinaryExpression, contextualTypeInformation: TypeInformation) {
-                // If the || expression is contextually typed (section 4.19), the operands are 
-                // contextually typed by the same type. Otherwise, the left operand is not contextually
-                // typed and the right operand is contextually typed by the type of the left operand. 
-                //
-                // The type of the result is the union type of the two operand types.
-                if (contextualTypeInformation) {
-                    return TypeInformation.createUnionType(
-                        getTypeInformationForExpression(sourceFile, node.left, contextualTypeInformation),
-                        getTypeInformationForExpression(sourceFile, node.right, contextualTypeInformation));
-                }
-                else {
-                    var leftTypeInformation = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
-                    var rightTypeInformation = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ leftTypeInformation);
-                    return TypeInformation.createUnionType(leftTypeInformation, rightTypeInformation);
-                }
-            }
-
-            function getTypeInformationForPlusOrPlusEqualsExpression(sourceFile: SourceFile, node: BinaryExpression) {
-                var leftType = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
-                var rightType = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
-
-                // If one operand is the null or undefined value, it is treated as having the type of the other operand. 
-                leftType = leftType || rightType;
-                rightType = rightType || leftType;
-
-                // If both operands are of the Number primitive type, the result is of the Number primitive type.
-                if (leftType === numberPrimitiveTypeInformation && rightType === numberPrimitiveTypeInformation) {
-                    return numberPrimitiveTypeInformation;
-                }
-
-                // If one or both operands are of the String primitive type, the result is of the String primitive type.
-                if (leftType === stringPrimitiveTypeInformation || rightType === stringPrimitiveTypeInformation) {
-                    return stringPrimitiveTypeInformation;
-                }
-
-                if (!leftType && !rightType) {
-                    // If we literally know nothing about either side of the + expression, then treat
-                    // this as being either number or string.
-                    return stringOrNumberUnionType;
-                }
-
-                if (leftType === stringOrNumberUnionType && rightType === stringOrNumberUnionType) {
-                    return stringOrNumberUnionType;
-                }
-
-                return TypeInformation.createPlusType(leftType, rightType);
-            }
-
-            function getTypeInformationForConditionalExpression(sourceFile: SourceFile, node: ConditionalExpression, contextualTypeInformation: TypeInformation) {
-                // If the conditional expression is contextually typed (section 4.19), expr1 and expr2 
-                // are contextually typed by the same type.Otherwise, expr1 and expr2 are not 
-                // contextually typed. type of the result is the union type of the types of expr1 and 
-                // expr2.
-                return TypeInformation.createUnionType(
-                    getTypeInformationForExpression(sourceFile, node.whenTrue, contextualTypeInformation),
-                    getTypeInformationForExpression(sourceFile, node.whenFalse, contextualTypeInformation));
-            }
-
-            function getTypeInformationForDeleteExpression(node: DeleteExpression) {
-                // The 'delete' operator takes an operand of any type and produces a result of the Boolean primitive type.
-                return booleanPrimitiveTypeInformation;
-            }
-
-            function getTypeInformationForIdentifier(sourceFile: SourceFile, node: Identifier) {
-                // See if this identifier is a reference to some JS symbol.  If so, then it has whatever
-                // type the declaration has.
-                var bidirectionalReferences = referenceManager.getBidirectionalReferences(sourceFile.fileName);
-                if (bidirectionalReferences) {
-                    var declarationNode = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, node);
-                    if (declarationNode) {
-                        return getTypeInformationForDeclaration(declarationNode);
+            function computeTypeInformation(): TypeInformation {
+                if (_node) {
+                    if (isExpression(_node)) {
+                        return getTypeInformationForExpression(ts.getSourceFileOfNode(_node), <Expression>_node,
+                            getContextualTypeInformation(<Expression>_node));
                     }
                 }
-            }
 
-            function getTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
-                Debug.assert(!!declarationNode);
+                return undefined;
 
-                var declarationId = getNodeId(declarationNode);
-                var symbolTypeInformation = declarationIdToSymbolTypeInformation[declarationId];
-                if (!symbolTypeInformation) {
-                    // This is the first time we've been asked about this symbol. Create the information
-                    // object for it, and cache it so it is available for all subsequent requests. Then, 
-                    // find all the references to the symbol and flow in any type information we can
-                    // find at the reference point into it.
-                    
-                    symbolTypeInformation = new SymbolTypeInformation(declarationNode, node => computeTypeInformationForDeclaration(node));
-
-                    declarationIdToSymbolTypeInformation[declarationId] = symbolTypeInformation;
-                }
-
-                return symbolTypeInformation;
-            }
-
-            function computeTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
-                // This may get called after a declaration has been removed.  If so, then we simply
-                // return no type information.
-                var symbolInformation = declarationIdToSymbolTypeInformation[getNodeId(declarationNode)];
-                if (!symbolInformation) {
+                function getContextualTypeInformation(node: Expression): TypeInformation {
+                    // TODO(cyrusn): add support for flowing contextual type information into an expression.
                     return undefined;
                 }
 
-                // The declaration may have an initializer, use that to populate the initial 
-                // type of this symbol.
-                var type = computeTypeInformationForDeclarationWorker(declarationNode);
+                function getTypeInformationForExpression(sourceFile: SourceFile, node: Expression, contextualTypeInformation: TypeInformation): TypeInformation {
+                    if (node) {
+                        switch (node.kind) {
+                            case SyntaxKind.NumericLiteral: return numberPrimitiveTypeInformation;
+                            case SyntaxKind.StringLiteral: return stringPrimitiveTypeInformation;
+                            case SyntaxKind.TrueKeyword: return booleanPrimitiveTypeInformation;
+                            case SyntaxKind.FalseKeyword: return booleanPrimitiveTypeInformation;
+                            case SyntaxKind.NullKeyword: return undefined;
 
-                // Now check all the references, and flow their information into the symbol.
-                var referencesMap = referenceManager.getReferencesToDeclarationNode(declarationNode);
-                if (referencesMap) {
-                    for (var fileName in referencesMap) {
-                        var references = getProperty(referencesMap, fileName);
-                        if (references) {
-                            var sourceFile = program.getSourceFile(fileName);
-                            nodeSet_forEach(references, referenceNode => {
-                                type = TypeInformation.createUnionType(type, computeTypeInformationForReference(sourceFile, referenceNode));
-                            });
+                            case SyntaxKind.BinaryExpression: return getTypeInformationForBinaryExpression(sourceFile, <BinaryExpression>node, contextualTypeInformation);
+                            case SyntaxKind.ConditionalExpression: return getTypeInformationForConditionalExpression(sourceFile, <ConditionalExpression>node, contextualTypeInformation);
+                            case SyntaxKind.DeleteExpression: return getTypeInformationForDeleteExpression(<DeleteExpression>node);
+                            case SyntaxKind.Identifier: return getTypeInformationForIdentifier(sourceFile, <Identifier>node);
+                            case SyntaxKind.ParenthesizedExpression: return getTypeInformationForParenthesizedExpression(sourceFile, <ParenthesizedExpression>node, contextualTypeInformation);
+                            case SyntaxKind.PostfixUnaryExpression: return getTypeInformationForPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                            case SyntaxKind.PrefixUnaryExpression: return getTypeInformationForPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                            case SyntaxKind.TypeOfExpression: return getTypeInformationForTypeOfExpression(<TypeOfExpression>node);
+                            case SyntaxKind.VoidExpression: return getTypeInformationForVoidExpression(<VoidExpression>node);
+                        }
+
+                        throw new Error("Unhandled case in getTypeInformationForExpression");
+                    }
+
+                    return undefined;
+                }
+
+                function getTypeInformationForBinaryExpression(sourceFile: SourceFile, node: BinaryExpression, contextualTypeInformation: TypeInformation) {
+                    switch (node.operatorToken.kind) {
+                        case SyntaxKind.AsteriskToken:
+                        case SyntaxKind.AsteriskEqualsToken:
+                        case SyntaxKind.SlashToken:
+                        case SyntaxKind.SlashEqualsToken:
+                        case SyntaxKind.PercentToken:
+                        case SyntaxKind.PercentEqualsToken:
+                        case SyntaxKind.MinusToken:
+                        case SyntaxKind.MinusEqualsToken:
+                        case SyntaxKind.LessThanLessThanToken:
+                        case SyntaxKind.LessThanLessThanEqualsToken:
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                        case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                        case SyntaxKind.AmpersandToken:
+                        case SyntaxKind.AmpersandEqualsToken:
+                        case SyntaxKind.CaretToken:
+                        case SyntaxKind.CaretEqualsToken:
+                        case SyntaxKind.BarToken:
+                        case SyntaxKind.BarEqualsToken:
+                            return numberPrimitiveTypeInformation;
+
+                        case SyntaxKind.InKeyword:
+                        case SyntaxKind.InstanceOfKeyword:
+                        case SyntaxKind.LessThanToken:
+                        case SyntaxKind.GreaterThanToken:
+                        case SyntaxKind.LessThanEqualsToken:
+                        case SyntaxKind.GreaterThanEqualsToken:
+                        case SyntaxKind.EqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsToken:
+                        case SyntaxKind.EqualsEqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsEqualsToken:
+                            return booleanPrimitiveTypeInformation;
+
+                        case SyntaxKind.AmpersandAmpersandToken:
+                            // The && operator permits the operands to be of any type and produces a result of the same type as the second operand.
+                            return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
+
+                        case SyntaxKind.CommaToken:
+                            // The comma operator permits the operands to be of any type and produces a 
+                            // result that is of the same type as the second operand.
+                            return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
+
+                        case SyntaxKind.EqualsToken:
+                            // The result is a value with the type of expr.
+                            return getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
+
+                        case SyntaxKind.BarBarToken:
+                            return getTypeInformationForBarBarBinaryExpression(sourceFile, node, contextualTypeInformation);
+
+                        case SyntaxKind.PlusToken:
+                        case SyntaxKind.PlusEqualsToken:
+                            return getTypeInformationForPlusOrPlusEqualsExpression(sourceFile, node);
+                    }
+
+                    throw new Error("Unhandled case in getTypeInformationForBinaryExpression");
+                }
+
+                function getTypeInformationForBarBarBinaryExpression(sourceFile: SourceFile, node: BinaryExpression, contextualTypeInformation: TypeInformation) {
+                    // If the || expression is contextually typed (section 4.19), the operands are 
+                    // contextually typed by the same type. Otherwise, the left operand is not contextually
+                    // typed and the right operand is contextually typed by the type of the left operand. 
+                    //
+                    // The type of the result is the union type of the two operand types.
+                    if (contextualTypeInformation) {
+                        return TypeInformation.createUnionType(
+                            getTypeInformationForExpression(sourceFile, node.left, contextualTypeInformation),
+                            getTypeInformationForExpression(sourceFile, node.right, contextualTypeInformation));
+                    }
+                    else {
+                        var leftTypeInformation = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
+                        var rightTypeInformation = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ leftTypeInformation);
+                        return TypeInformation.createUnionType(leftTypeInformation, rightTypeInformation);
+                    }
+                }
+
+                function getTypeInformationForPlusOrPlusEqualsExpression(sourceFile: SourceFile, node: BinaryExpression) {
+                    var leftType = getTypeInformationForExpression(sourceFile, node.left, /*contextualTypeInformation:*/ undefined);
+                    var rightType = getTypeInformationForExpression(sourceFile, node.right, /*contextualTypeInformation:*/ undefined);
+
+                    // If one operand is the null or undefined value, it is treated as having the type of the other operand. 
+                    leftType = leftType || rightType;
+                    rightType = rightType || leftType;
+
+                    // If both operands are of the Number primitive type, the result is of the Number primitive type.
+                    if (leftType === numberPrimitiveTypeInformation && rightType === numberPrimitiveTypeInformation) {
+                        return numberPrimitiveTypeInformation;
+                    }
+
+                    // If one or both operands are of the String primitive type, the result is of the String primitive type.
+                    if (leftType === stringPrimitiveTypeInformation || rightType === stringPrimitiveTypeInformation) {
+                        return stringPrimitiveTypeInformation;
+                    }
+
+                    if (!leftType && !rightType) {
+                        // If we literally know nothing about either side of the + expression, then treat
+                        // this as being either number or string.
+                        return stringOrNumberUnionType;
+                    }
+
+                    if (leftType === stringOrNumberUnionType && rightType === stringOrNumberUnionType) {
+                        return stringOrNumberUnionType;
+                    }
+
+                    return TypeInformation.createPlusType(leftType, rightType);
+                }
+
+                function getTypeInformationForConditionalExpression(sourceFile: SourceFile, node: ConditionalExpression, contextualTypeInformation: TypeInformation) {
+                    // If the conditional expression is contextually typed (section 4.19), expr1 and expr2 
+                    // are contextually typed by the same type.Otherwise, expr1 and expr2 are not 
+                    // contextually typed. type of the result is the union type of the types of expr1 and 
+                    // expr2.
+                    return TypeInformation.createUnionType(
+                        getTypeInformationForExpression(sourceFile, node.whenTrue, contextualTypeInformation),
+                        getTypeInformationForExpression(sourceFile, node.whenFalse, contextualTypeInformation));
+                }
+
+                function getTypeInformationForDeleteExpression(node: DeleteExpression) {
+                    // The 'delete' operator takes an operand of any type and produces a result of the Boolean primitive type.
+                    return booleanPrimitiveTypeInformation;
+                }
+
+                function getTypeInformationForIdentifier(sourceFile: SourceFile, node: Identifier) {
+                    // See if this identifier is a reference to some JS symbol.  If so, then it has whatever
+                    // type the declaration has.
+                    var bidirectionalReferences = referenceManager.getBidirectionalReferences(sourceFile.fileName);
+                    if (bidirectionalReferences) {
+                        var declarationNode = referenceToDeclarationMap_get(bidirectionalReferences.referenceToDeclaration, node);
+                        if (declarationNode) {
+                            return getTypeInformationForDeclaration(declarationNode);
                         }
                     }
                 }
 
-                return type;
-            }
+                function getTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
+                    Debug.assert(!!declarationNode);
 
-            function computeTypeInformationForDeclarationWorker(node: Node) {
-                Debug.assert(!!node);
-                switch (node.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                        return computeTypeInformationForVariableDeclaration(<VariableDeclaration>node);
+                    var declarationId = getNodeId(declarationNode);
+                    var symbolTypeInformation = declarationIdToSymbolTypeInformation[declarationId];
+                    if (!symbolTypeInformation) {
+                        // This is the first time we've been asked about this symbol. Create the information
+                        // object for it, and cache it so it is available for all subsequent requests. Then, 
+                        // find all the references to the symbol and flow in any type information we can
+                        // find at the reference point into it.
+                    
+                        symbolTypeInformation = new SymbolTypeInformation(declarationNode, node => computeTypeInformationForDeclaration(node));
+
+                        declarationIdToSymbolTypeInformation[declarationId] = symbolTypeInformation;
+                    }
+
+                    return symbolTypeInformation;
                 }
 
-                throw new Error("Unhandled case in computeTypeInformationForDeclaration");
-            }
+                function computeTypeInformationForDeclaration(declarationNode: Node): TypeInformation {
+                    // This may get called after a declaration has been removed.  If so, then we simply
+                    // return no type information.
+                    var symbolInformation = declarationIdToSymbolTypeInformation[getNodeId(declarationNode)];
+                    if (!symbolInformation) {
+                        return undefined;
+                    }
 
-            function computeTypeInformationForVariableDeclaration(node: VariableDeclaration) {
-                return getTypeInformationForExpression(ts.getSourceFileOfNode(node), node.initializer, /*contextualTypeInformation:*/ undefined);
-            }
+                    // The declaration may have an initializer, use that to populate the initial 
+                    // type of this symbol.
+                    var type = computeTypeInformationForDeclarationWorker(declarationNode);
 
-            function computeTypeInformationForReference(sourceFile: SourceFile, node: Identifier) {
-                Debug.assert(node.kind === SyntaxKind.Identifier);
+                    // Now check all the references, and flow their information into the symbol.
+                    var referencesMap = referenceManager.getReferencesToDeclarationNode(declarationNode);
+                    if (referencesMap) {
+                        for (var fileName in referencesMap) {
+                            var references = getProperty(referencesMap, fileName);
+                            if (references) {
+                                var sourceFile = program.getSourceFile(fileName);
+                                nodeSet_forEach(references, referenceNode => {
+                                    type = TypeInformation.createUnionType(type, computeTypeInformationForReference(sourceFile, referenceNode));
+                                });
+                            }
+                        }
+                    }
 
-                // Walk out of all surrounding parentheses.
-                var current: Node = node;
-                while (current.parent && current.parent.kind === SyntaxKind.ParenthesizedExpression) {
-                    current = current.parent;
+                    return type;
                 }
 
-                if (current.parent && current.parent.kind === SyntaxKind.BinaryExpression) {
-                    var binaryExpression = <BinaryExpression>current.parent;
+                function computeTypeInformationForDeclarationWorker(node: Node) {
+                    Debug.assert(!!node);
+                    switch (node.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                            return computeTypeInformationForVariableDeclaration(<VariableDeclaration>node);
+                    }
 
-                    if (current === binaryExpression.left &&
-                        isAssignmentOperator(binaryExpression.operatorToken.kind)) {
+                    throw new Error("Unhandled case in computeTypeInformationForDeclaration");
+                }
 
-                        // If the reference is on the left of an assignment, then the type of the
-                        // assignment flows into the reference.
-                        return getTypeInformationForExpression(sourceFile, binaryExpression, /*contextualTypeInformation:*/ undefined);
+                function computeTypeInformationForVariableDeclaration(node: VariableDeclaration) {
+                    return getTypeInformationForExpression(ts.getSourceFileOfNode(node), node.initializer, /*contextualTypeInformation:*/ undefined);
+                }
+
+                function computeTypeInformationForReference(sourceFile: SourceFile, node: Identifier) {
+                    Debug.assert(node.kind === SyntaxKind.Identifier);
+
+                    // Walk out of all surrounding parentheses.
+                    var current: Node = node;
+                    while (current.parent && current.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                        current = current.parent;
+                    }
+
+                    if (current.parent && current.parent.kind === SyntaxKind.BinaryExpression) {
+                        var binaryExpression = <BinaryExpression>current.parent;
+
+                        if (current === binaryExpression.left &&
+                            isAssignmentOperator(binaryExpression.operatorToken.kind)) {
+
+                            // If the reference is on the left of an assignment, then the type of the
+                            // assignment flows into the reference.
+                            return getTypeInformationForExpression(sourceFile, binaryExpression, /*contextualTypeInformation:*/ undefined);
+                        }
+                    }
+
+                    // TODO(cyrusn): If necessary, add more cases where we a reference can be found 
+                    // where we can flow type information.
+                }
+
+                function getTypeInformationForParenthesizedExpression(sourceFile: SourceFile, node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {
+                    // The type of a parenthesized expression is whatever the type of its sub-expression is.
+                    // The sub-expression *is* contextually typed.
+                    return getTypeInformationForExpression(sourceFile, node.expression, contextualTypeInformation);
+                }
+
+                function getTypeInformationForPostfixUnaryExpression(node: PostfixUnaryExpression) {
+                    // a++ or b-- are always considered to be the number type.
+                    return numberPrimitiveTypeInformation;
+                }
+
+                function getTypeInformationForPrefixUnaryExpression(node: PrefixUnaryExpression) {
+                    switch (node.operator) {
+                        case SyntaxKind.PlusToken:
+                        case SyntaxKind.MinusToken:
+                        case SyntaxKind.TildeToken:
+                            return numberPrimitiveTypeInformation;
+
+                        case SyntaxKind.ExclamationToken:
+                            return booleanPrimitiveTypeInformation;
+                    }
+
+                    throw new Error("Unhandled case in getTypeInformationForPrefixUnaryExpression");
+                }
+
+                function getTypeInformationForTypeOfExpression(node: TypeOfExpression) {
+                    // The 'typeof' operator takes an operand of any type and produces a value of the String primitive type.
+                    return stringPrimitiveTypeInformation;
+                }
+
+                function getTypeInformationForVoidExpression(node: VoidExpression): TypeInformation {
+                    // The 'void' operator takes an operand of any type and produces the value 'undefined'.
+                    // The type of the result is the Undefined type
+                    //
+                    // We don't actually use something to represent the 'undefined type'.  We just model that
+                    // as the absence of any actual type information.
+                    return undefined;
+                }
+            }
+
+            function evaluateTypeInformation(typeInformation: TypeInformation): TypeInformation {
+                if (!typeInformation) {
+                    return undefined;
+                }
+
+                switch (typeInformation.kind()) {
+                    case TypeInformationKind.Primitive:
+                        // Primitive types are already as processed as possible.
+                        return typeInformation;
+
+                    case TypeInformationKind.Symbol: return evaluateSymbolTypeInformation(<SymbolTypeInformation>typeInformation);
+                    case TypeInformationKind.Plus: return evaluatePlusTypeInformation(<PlusTypeInformation>typeInformation);
+                    case TypeInformationKind.Union: return evaluateUnionTypeInformation(<UnionTypeInformation>typeInformation);
+                }
+
+                throw new Error("Unhandled case in evaluateTypeInformation.");
+            }
+
+            function evaluateUnionTypeInformation(typeInformation: UnionTypeInformation) {
+                var types = typeInformation.types;
+                var evaluatedTypes: TypeInformation[];
+
+                for (var i = 0, n = types.length; i < n; i++) {
+                    var type = types[i];
+                    var evaluatedType = evaluateTypeInformation(type);
+
+                    if (!evaluatedTypes && type !== evaluatedType) {
+                        evaluatedTypes = types.slice(0, i);
+                    }
+
+                    if (evaluatedTypes) {
+                        decomposePossibleUnionAndAddToSet(evaluatedType, evaluatedTypes);
                     }
                 }
 
-                // TODO(cyrusn): If necessary, add more cases where we a reference can be found 
-                // where we can flow type information.
-            }
-
-            function getTypeInformationForParenthesizedExpression(sourceFile: SourceFile, node: ParenthesizedExpression, contextualTypeInformation: TypeInformation) {
-                // The type of a parenthesized expression is whatever the type of its sub-expression is.
-                // The sub-expression *is* contextually typed.
-                return getTypeInformationForExpression(sourceFile, node.expression, contextualTypeInformation);
-            }
-
-            function getTypeInformationForPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                // a++ or b-- are always considered to be the number type.
-                return numberPrimitiveTypeInformation;
-            }
-
-            function getTypeInformationForPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                switch (node.operator) {
-                    case SyntaxKind.PlusToken:
-                    case SyntaxKind.MinusToken:
-                    case SyntaxKind.TildeToken:
-                        return numberPrimitiveTypeInformation;
-
-                    case SyntaxKind.ExclamationToken:
-                        return booleanPrimitiveTypeInformation;
+                if (!evaluatedTypes) {
+                    // If no subtypes evaluated out to anything different, then just return this type.
+                    return typeInformation;
                 }
 
-                throw new Error("Unhandled case in getTypeInformationForPrefixUnaryExpression");
+                return TypeInformation.createUnionTypeFromTypes(evaluatedTypes);
             }
 
-            function getTypeInformationForTypeOfExpression(node: TypeOfExpression) {
-                // The 'typeof' operator takes an operand of any type and produces a value of the String primitive type.
-                return stringPrimitiveTypeInformation;
+            function evaluatePlusTypeInformation(typeInformation: PlusTypeInformation) {
+                // Go through and evaluate all the components of the plus expression.
+                var allAreNumber = true;
+                var definitelyNotNumber = false;
+
+                var types = typeInformation.types;
+                for (var i = 0, n = types.length; i < n; i++) {
+                    var type = evaluateTypeInformation(types[i]);
+                    if (type === stringPrimitiveTypeInformation) {
+                        // The moment we hit something we think is definitely a string, then we can
+                        // immediately assume this plus expression evaluates out to a string.
+                        return stringPrimitiveTypeInformation;
+                    }
+
+                    if (!type) {
+                        // We hit something unknown.  Record this as it means we should no longer 
+                        // evaluate out to the number type.
+                        allAreNumber = false;
+                    }
+                    else if (type !== numberPrimitiveTypeInformation) {
+                        // We got an actual type, but it wasn't a number (or a string).  There's no 
+                        // way to add something like that and get a number back.  So the only option
+                        // is that we are getting a string.
+                        return stringPrimitiveTypeInformation;
+                    }
+                }
+
+                if (allAreNumber && typeInformation.types.length > 0) {
+                    // If all we added were numbers, then we're a number.
+                    return numberPrimitiveTypeInformation;
+                }
+
+                // Not enough information to be sure.  This could be a number or a string.
+                return stringOrNumberUnionType;
             }
 
-            function getTypeInformationForVoidExpression(node: VoidExpression): TypeInformation {
-                // The 'void' operator takes an operand of any type and produces the value 'undefined'.
-                // The type of the result is the Undefined type
-                //
-                // We don't actually use something to represent the 'undefined type'.  We just model that
-                // as the absence of any actual type information.
-                return undefined;
+            function evaluateSymbolTypeInformation(typeInformation: SymbolTypeInformation) {
+                if (contains(symbolStack, typeInformation)) {
+                    return undefined;
+                }
+
+                symbolStack.push(typeInformation);
+                var result = evaluateTypeInformation(typeInformation.getType());
+                symbolStack.pop();
+                return result;
             }
         }
     }

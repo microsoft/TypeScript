@@ -45,7 +45,8 @@ module ts.inference {
         }
     }
 
-    interface BidirectionalReferences {
+    /* @internal */
+    export interface BidirectionalReferences {
         // Maps from the node-id of the reference to the declaration node.
         referenceToDeclaration: ReferenceToDeclarationMap;
 
@@ -61,17 +62,38 @@ module ts.inference {
         };
     }
 
-    interface NodeSet<T extends Node> {
+    /* @internal */
+    export interface NodeSet<T extends Node> {
         _nodeSetBrand: any;
     }
 
-    function createNodeSet<T extends Node>(): NodeSet<T> {
+    /* @internal */
+    export function createNodeSet<T extends Node>(): NodeSet<T> {
         return <NodeSet<T>><any>[];
     }
+    
+    /* @internal */
+    export function nodeSet_add<T extends Node>(nodeSet: NodeSet<T>, node: T): boolean {
+        Debug.assert(!!node);
 
-    function nodeSet_add<T extends Node>(nodeSet: NodeSet<T>, node: T): void {
         var array = <T[]><any>nodeSet;
-        array[getNodeId(node)] = node;
+        var nodeId = getNodeId(node);
+        var result = !array[nodeId];
+
+        array[nodeId] = node;
+
+        return result;
+    }
+    
+    /* @internal */
+    export function nodeSet_contains<T extends Node>(nodeSet: NodeSet<T>, node: T): boolean {
+        if (!node) {
+            return false;
+        }
+
+        var array = <T[]><any>nodeSet;
+        var nodeId = getNodeId(node);
+        return !!array[nodeId];
     }
 
     function nodeSet_delete<T extends Node>(nodeSet: NodeSet<T>, node: T): void {
@@ -79,11 +101,15 @@ module ts.inference {
         delete array[getNodeId(node)];
     }
 
-    function nodeSet_isEmpty<T extends Node>(nodeSet: NodeSet<T>): boolean {
-        var array = <T[]><any>nodeSet;
-        for (var id in array) {
-            return false;
+    /* @internal */
+    export function nodeSet_isEmpty<T extends Node>(nodeSet: NodeSet<T>): boolean {
+        if (nodeSet) {
+            var array = <T[]><any>nodeSet;
+            for (var id in array) {
+                return false;
+            }
         }
+
         return true;
     }
 
