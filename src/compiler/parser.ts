@@ -157,7 +157,9 @@ module ts {
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
             case SyntaxKind.SpreadElementExpression:
                 return visitNode(cbNode, (<SpreadElementExpression>node).expression);
@@ -3177,7 +3179,8 @@ module ts {
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
-            if (!parseOptional(SyntaxKind.QuestionToken)) {
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (!questionToken) {
                 return leftOperand;
             }
 
@@ -3185,8 +3188,10 @@ module ts {
             // we do not that for the 'whenFalse' part.  
             var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
+            node.questionToken = questionToken;
             node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
-            parseExpected(SyntaxKind.ColonToken);
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition:*/ false,
+                Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }

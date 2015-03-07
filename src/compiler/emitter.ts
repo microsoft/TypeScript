@@ -2917,6 +2917,7 @@ module ts {
             function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
                 var result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                 result.expression = expression;
+                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
 
                 return result;
@@ -3032,6 +3033,20 @@ module ts {
                 return false;
             }
 
+            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node) {
+                var isSynthesized = nodeIsSynthesized(parent);
+
+                var realNodesAreOnDifferentLines = !isSynthesized && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
+                var synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
+                if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
+                    increaseIndent();
+                    writeLine();
+                    return true;
+                }
+
+                return false;
+            }
+
             function emitPropertyAccess(node: PropertyAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
@@ -3039,21 +3054,11 @@ module ts {
 
                 emit(node.expression);
 
-                var indented = false;
-                var isSynthesied = nodeIsSynthesized(node);
-                if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.expression, node.dotToken)) {
-                    indented = true;
-                    increaseIndent();
-                    writeLine();
-                }
+                var indented = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
                 write(".");
 
-                if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.dotToken, node.name) && !indented) {
-                    indented = true;
-                    increaseIndent();
-                    writeLine();
-                }
+                indented = indented || indentIfOnDifferentLines(node, node.dotToken, node.name);
 
                 emit(node.name);
 
@@ -3292,42 +3297,28 @@ module ts {
 
                     // If there was a newline between the left side of the binary expression and the
                     // operator, then try to preserve that.
-                    var indented = false;
-                    var isSynthesied = nodeIsSynthesized(node);
-                    if (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.left, node.operatorToken)) {
-                        indented = true;
-                        increaseIndent();
-                        writeLine();
-                    }
-                    else {
-                        // Otherwise just emit the operator right afterwards.  For everything but
-                        // comma, emit a space before the operator.
-                        if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
-                            write(" ");
-                        }
+                    var indented1 = indentIfOnDifferentLines(node, node.left, node.operatorToken);
+                    
+                    // Otherwise just emit the operator right afterwards.  For everything but
+                    // comma, emit a space before the operator.
+                    if (!indented1 && node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                        write(" ");
                     }
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    // If there was a newline after the operator (or this is a synthesized node that
-                    // wants to be on a new line), then put a newline in.  But only if we haven't 
-                    // already done this for the left side.
-                    var wantsIndent = (!isSynthesied && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right)) ||
-                        synthesizedNodeStartsOnNewLine(node.right);
+                    if (!indented1) {
+                        var indented2 = indentIfOnDifferentLines(node, node.operatorToken, node.right);
+                    }
 
-                    if (wantsIndent && !indented) {
-                        indented = true;
-                        increaseIndent();
-                        writeLine();
-                        emit(node.right);
-                    }
-                    else {
+                    if (!indented2) {
                         write(" ");
-                        emit(node.right);
                     }
+
+                    emit(node.right);
 
                     // If we indented the left or the right side, then dedent now.
-                    if (indented) {
+                    if (indented1 || indented2) {
                         decreaseIndent();
                     }
                 }
@@ -3741,10 +3732,7 @@ module ts {
                     if (propName.kind !== SyntaxKind.Identifier) {
                         return createElementAccess(object, propName);
                     }
-                    var node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                    node.expression = parenthesizeForAccess(object);
-                    node.name = propName;
-                    return node;
+                    return createPropertyAccessExpression(parenthesizeForAccess(object), propName);
                 }
 
                 function createElementAccess(object: Expression, index: Expression): Expression {
