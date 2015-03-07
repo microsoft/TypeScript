@@ -61,26 +61,26 @@ module ts.inference {
         };
     }
 
-    interface References {
-        _referencesBrand: any;
+    interface NodeSet<T extends Node> {
+        _nodeSetBrand: any;
     }
 
-    function createReferences(): References {
-        return <References><any>[];
+    function createNodeSet<T extends Node>(): NodeSet<T> {
+        return <NodeSet<T>><any>[];
     }
 
-    function references_add(references: References, referenceNode: Identifier): void {
-        var array = <Node[]><any>references;
-        array[getNodeId(referenceNode)] = referenceNode;
+    function nodeSet_add<T extends Node>(nodeSet: NodeSet<T>, node: T): void {
+        var array = <T[]><any>nodeSet;
+        array[getNodeId(node)] = node;
     }
 
-    function references_delete(references: References, referenceNode: Identifier): void {
-        var array = <Node[]><any>references;
-        delete array[getNodeId(referenceNode)];
+    function nodeSet_delete<T extends Node>(nodeSet: NodeSet<T>, node: T): void {
+        var array = <T[]><any>nodeSet;
+        delete array[getNodeId(node)];
     }
 
-    function references_isEmpty(references: References): boolean {
-        var array = <Node[]><any>references;
+    function nodeSet_isEmpty<T extends Node>(nodeSet: NodeSet<T>): boolean {
+        var array = <T[]><any>nodeSet;
         for (var id in array) {
             return false;
         }
@@ -88,8 +88,8 @@ module ts.inference {
     }
 
     /* @internal */
-    export function references_forEach(references: References, f: (referenceNode: Identifier) => void) {
-        var array = <Identifier[]><any>references;
+    export function nodeSet_forEach<T extends Node>(nodeSet: NodeSet<T>, f: (node: T) => void) {
+        var array = <T[]><any>nodeSet;
         array.forEach(f);
     }
 
@@ -127,28 +127,28 @@ module ts.inference {
         return <DeclarationToReferencesMap><any>[];
     }
 
-    function declarationToReferencesMap_get(map: DeclarationToReferencesMap, declarationNode: Node): References {
+    function declarationToReferencesMap_get(map: DeclarationToReferencesMap, declarationNode: Node): NodeSet<Identifier> {
         if (!declarationNode) {
             return undefined;
         }
 
-        var array = <References[]><any>map;
+        var array = <NodeSet<Identifier>[]><any>map;
         return array[getNodeId(declarationNode)];
     }
 
-    function declarationToReferencesMap_getOrCreate(map: DeclarationToReferencesMap, declarationNode: Node): References {
-        var array = <References[]><any>map;
+    function declarationToReferencesMap_getOrCreate(map: DeclarationToReferencesMap, declarationNode: Node): NodeSet<Identifier> {
+        var array = <NodeSet<Identifier>[]><any>map;
         var declarationId = getNodeId(declarationNode);
-        return array[declarationId] || (array[declarationId] = createReferences());
+        return array[declarationId] || (array[declarationId] = createNodeSet<Identifier>());
     }
 
     function declarationToReferences_delete(map: DeclarationToReferencesMap, declarationNode: Node): void {
-        var array = <References[]><any>map;
+        var array = <NodeSet<Identifier>[]><any>map;
         delete array[getNodeId(declarationNode)];
     }
 
-    function declarationToReferences_forEach(map: DeclarationToReferencesMap, f: (declarationNodeId: number, references: References) => void) {
-        var array = <References[]><any>map;
+    function declarationToReferences_forEach(map: DeclarationToReferencesMap, f: (declarationNodeId: number, references: NodeSet<Identifier>) => void) {
+        var array = <NodeSet<Identifier>[]><any>map;
         array.forEach((references, declarationNodeId) => {
             f(declarationNodeId, references);
         });
@@ -181,14 +181,14 @@ module ts.inference {
             removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
         
         // 
-        updateReferences(program: Program): ts.Map<References>;
+        updateReferences(program: Program): ts.Map<NodeSet<Identifier>>;
 
         // For testing purposes only
         toJSON(): any;
 
         // Returns a map, keyed by file names, to the references to this symbol.
-        getReferencesToSymbol(symbol: Symbol): Map<References>;
-        getReferencesToDeclarationNode(declarationNode: Node): Map<References>;
+        getReferencesToSymbol(symbol: Symbol): Map<NodeSet<Identifier>>;
+        getReferencesToDeclarationNode(declarationNode: Node): Map<NodeSet<Identifier>>;
 
         getBidirectionalReferences(fileName: string): BidirectionalReferences;
     }
@@ -228,15 +228,15 @@ module ts.inference {
             return fileNameToBidirectionalReferences[fileName];
         }
 
-        function getReferencesToSymbol(symbol: Symbol): Map<References> {
+        function getReferencesToSymbol(symbol: Symbol): Map<NodeSet<Identifier>> {
             return getReferencesToDeclarationNode(symbol && symbol.valueDeclaration);
         }
 
-        function getReferencesToDeclarationNode(declarationNode: Node): Map<References> {
+        function getReferencesToDeclarationNode(declarationNode: Node): Map<NodeSet<Identifier>> {
             if (declarationNode) {
                 var filesWithReferences = declarationToFilesWithReferences[getNodeId(declarationNode)];
                 if (filesWithReferences) {
-                    var result: Map<References> = {};
+                    var result: Map<NodeSet<Identifier>> = {};
 
                     stringSet_forEach(filesWithReferences, fileName => {
                         var bidirectionalReferences = getProperty(fileNameToBidirectionalReferences, fileName);
@@ -334,9 +334,9 @@ module ts.inference {
                 return result;
             }
 
-            function convertReferences(references: References): any {
+            function convertReferences(references: NodeSet<Identifier>): any {
                 var result: any[] = [];
-                references_forEach(references, referenceNode => {
+                nodeSet_forEach(references, referenceNode => {
                     result.push(getReferenceInfo(referenceNode));
                 });
                 return result;
@@ -374,7 +374,7 @@ module ts.inference {
             }
         }
 
-        function updateReferences(program: Program): Map<References> {
+        function updateReferences(program: Program): Map<NodeSet<Identifier>> {
             if (!filesToFullyResolve) {
                 return undefined;
             }
@@ -391,7 +391,7 @@ module ts.inference {
             });
 
             // Now go and resolve added/removed identifiers in the files we need to partially resolve.
-            var result: Map<References> = {};
+            var result: Map<NodeSet<Identifier>> = {};
 
             forEach(program.getSourceFiles(), f => {
                 if (stringSet_contains(filesToPartiallyResolve, f.fileName)) {
@@ -400,7 +400,7 @@ module ts.inference {
                     // Only process the file if it could be affected by the symbols that were added or
                     // removed.
                     if (keysIntersect(nameTable, addedOrRemovedSymbolNames)) {
-                        var changedReferences = createReferences();
+                        var changedReferences = createNodeSet<Identifier>();
                         result[f.fileName] = changedReferences;
 
                         resolveReferences(program, f, addedOrRemovedSymbolNames, changedReferences);
@@ -482,7 +482,7 @@ module ts.inference {
 
         // If 'identifierNamesToResolve' is undefined, then that means that all identifiers should 
         // be resolved.
-        function resolveReferences(program: Program, file: SourceFile, identifierNamesToResolve: StringSet, changedReferences: References): void {
+        function resolveReferences(program: Program, file: SourceFile, identifierNamesToResolve: StringSet, changedReferences: NodeSet<Identifier>): void {
             var typeChecker = program.getTypeChecker();
             var fileName = file.fileName;
             var bidirectionalReferences = fileNameToBidirectionalReferences[fileName] || (fileNameToBidirectionalReferences[fileName] = createBidirectionalReferences());
@@ -541,7 +541,7 @@ module ts.inference {
 
                     // Add a link from the symbol's declaration node to the reference node.
                     var referenceNodes = declarationToReferencesMap_getOrCreate(declarationToReferences, declarationNode);
-                    references_add(referenceNodes, referenceNode);
+                    nodeSet_add(referenceNodes, referenceNode);
 
                     // Mark that this file is referenced by this symbol.
                     var declarationNodeId = getNodeId(declarationNode);
@@ -554,16 +554,16 @@ module ts.inference {
                 var previousDeclarationNode = referenceToDeclarationMap_get(referenceToDeclaration, referenceNode);
 
                 if (previousDeclarationNode !== declarationNode) {
-                    references_add(changedReferences, referenceNode);
+                    nodeSet_add(changedReferences, referenceNode);
 
                     var references = declarationToReferencesMap_get(declarationToReferences, previousDeclarationNode);
 
                     if (references) {
-                        references_delete(references, referenceNode);
+                        nodeSet_delete(references, referenceNode);
 
                         // If there are no more references from the old declaration to this
                         // file, then mark that appropriately.
-                        if (references_isEmpty(references)) {
+                        if (nodeSet_isEmpty(references)) {
                             var fileWithReferences = declarationToFilesWithReferences[getNodeId(previousDeclarationNode)];
 
                             if (fileWithReferences) {

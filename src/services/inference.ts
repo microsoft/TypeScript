@@ -1077,7 +1077,7 @@ module ts.inference {
                         var references = getProperty(referencesMap, fileName);
                         if (references) {
                             var sourceFile = program.getSourceFile(fileName);
-                            references_forEach(references, referenceNode => {
+                            nodeSet_forEach(references, referenceNode => {
                                 type = TypeInformation.createUnionType(type, computeTypeInformationForReference(sourceFile, referenceNode));
                             });
                         }
