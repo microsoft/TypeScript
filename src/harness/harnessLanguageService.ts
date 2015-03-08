@@ -469,6 +469,7 @@ module Harness.LanguageService {
             this.writeMessage(message);
         }
 
+
         readFile(fileName: string): string {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) { 
                 fileName = Harness.Compiler.defaultLibFileName;
@@ -526,6 +527,15 @@ module Harness.LanguageService {
         msg(message: string) {
             return this.host.log(message);
         }
+        
+        enabled() {
+            return true;
+        }
+
+        verbose() {
+            return false;
+        }
+
 
         endGroup(): void {
         }
