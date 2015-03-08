@@ -55,7 +55,7 @@ module ts.server {
             return !!this.logFilename;
         }
 
-        verbose() {
+        isVerbose() {
             return this.enabled() && (this.level == "verbose");
         }
         
@@ -191,15 +191,15 @@ module ts.server {
         }
     }
 
-    interface LogEnv {
+    interface LogOptions {
         file?: string;
-        level?: string;
+        detailLevel?: string;
     }
 
-    function parseLogEnv(logEnvStr: string): LogEnv {
-        var logEnv: LogEnv = {};
+    function parseLogEnv(logEnvStr: string): LogOptions {
+        var logEnv: LogOptions = {};
         var args = logEnvStr.split(' ');
-        for (var i = 0, len = args.length; i < len; i++) {
+        for (var i = 0, len = args.length; i < (len - 1); i += 2) {
             var option = args[i];
             var value = args[i + 1];
             if (option && value) {
@@ -208,7 +208,7 @@ module ts.server {
                         logEnv.file = value;
                         break;
                     case "-level":
-                        logEnv.level = value;
+                        logEnv.detailLevel = value;
                         break;
                 }
             }
@@ -219,7 +219,7 @@ module ts.server {
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLoggerFromEnv() {
         var fileName: string = undefined;
-        var level = "normal";
+        var detailLevel = "normal";
         var logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             var logEnv = parseLogEnv(logEnvStr);
@@ -229,12 +229,11 @@ module ts.server {
             else {
                 fileName = __dirname + "/.log" + process.pid.toString();
             }
-            if (logEnv.level) {
-                level = logEnv.level;
+            if (logEnv.detailLevel) {
+                detailLevel = logEnv.detailLevel;
             }
         }
-        var logger = new Logger(fileName, level);
-        return logger;
+        return new Logger(fileName, detailLevel);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable

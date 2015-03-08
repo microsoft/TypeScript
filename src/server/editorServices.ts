@@ -5,7 +5,7 @@
 module ts.server {
     export interface Logger {
         close(): void;
-        verbose(): boolean;
+        isVerbose(): boolean;
         enabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;

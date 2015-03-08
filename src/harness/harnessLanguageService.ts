@@ -532,7 +532,7 @@ module Harness.LanguageService {
             return true;
         }
 
-        verbose() {
+        isVerbose() {
             return false;
         }
 
