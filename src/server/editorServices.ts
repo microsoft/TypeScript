@@ -5,6 +5,8 @@
 module ts.server {
     export interface Logger {
         close(): void;
+        verbose(): boolean;
+        enabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
         startGroup(): void;

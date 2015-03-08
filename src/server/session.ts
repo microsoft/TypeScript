@@ -145,6 +145,9 @@ module ts.server {
 
         send(msg: NodeJS._debugger.Message) {
             var json = JSON.stringify(msg);
+            if (this.logger.verbose()) {
+                this.logger.info(msg.type+": " + json);
+            }
             this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
@@ -717,6 +720,10 @@ module ts.server {
         }
 
         onMessage(message: string) {
+            if (this.logger.verbose()) {
+                this.logger.info("request: " + message);
+                var start = process.hrtime();                
+            }
             try {
                 var request = <protocol.Request>JSON.parse(message);
                 var response: any;
@@ -822,13 +829,21 @@ module ts.server {
                     }
                 }
 
+                if (this.logger.verbose()) {
+                    var elapsed = process.hrtime(start);
+                    var elapsedms = ((1e9 * elapsed[0]) + elapsed[1])/1000000.0;
+                    var leader = "Elapsed time (in milliseconds)";
+                    if (!responseRequired) {
+                        leader = "Async elapsed time (in milliseconds)";
+                    }
+                    this.logger.msg(leader+": " + elapsedms.toFixed(4).toString(), "Perf");
+                }
                 if (response) {
                     this.output(response, request.command, request.seq);
                 }
                 else if (responseRequired) {
                     this.output(undefined, request.command, request.seq, "No content available.");
                 }
-
             } catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions

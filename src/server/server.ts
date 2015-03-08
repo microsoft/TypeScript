@@ -19,7 +19,7 @@ module ts.server {
         inGroup = false;
         firstInGroup = true;
 
-        constructor(public logFilename: string) {
+        constructor(public logFilename: string, public level: string) {
         }
 
         static padStringRight(str: string, padding: string) {
@@ -51,9 +51,20 @@ module ts.server {
             this.firstInGroup = true;
         }
 
+        enabled() {
+            return !!this.logFilename;
+        }
+
+        verbose() {
+            return this.enabled() && (this.level == "verbose");
+        }
+        
+
         msg(s: string, type = "Err") {
             if (this.fd < 0) {
-                this.fd = fs.openSync(this.logFilename, "w");
+                if (this.logFilename) {
+                    this.fd = fs.openSync(this.logFilename, "w");
+                }
             }
             if (this.fd >= 0) {
                 s = s + "\n";
@@ -173,17 +184,62 @@ module ts.server {
             });
 
             rl.on('close',() => {
-                this.projectService.closeLog();
                 this.projectService.log("Exiting...");
+                this.projectService.closeLog();
                 process.exit(0);
             });
         }
     }
 
+    interface LogEnv {
+        file?: string;
+        level?: string;
+    }
+
+    function parseLogEnv(logEnvStr: string): LogEnv {
+        var logEnv: LogEnv = {};
+        var args = logEnvStr.split(' ');
+        for (var i = 0, len = args.length; i < len; i++) {
+            var option = args[i];
+            var value = args[i + 1];
+            if (option && value) {
+                switch (option) {
+                    case "-file":
+                        logEnv.file = value;
+                        break;
+                    case "-level":
+                        logEnv.level = value;
+                        break;
+                }
+            }
+        }
+        return logEnv;
+    }
+
+    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
+    function createLoggerFromEnv() {
+        var fileName: string = undefined;
+        var level = "normal";
+        var logEnvStr = process.env["TSS_LOG"];
+        if (logEnvStr) {
+            var logEnv = parseLogEnv(logEnvStr);
+            if (logEnv.file) {
+                fileName = logEnv.file;
+            }
+            else {
+                fileName = __dirname + "/.log" + process.pid.toString();
+            }
+            if (logEnv.level) {
+                level = logEnv.level;
+            }
+        }
+        var logger = new Logger(fileName, level);
+        return logger;
+    }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
-    var logger = new Logger(__dirname + "/.log" + process.pid.toString());
 
+    var logger = createLoggerFromEnv();
     
     // REVIEW: for now this implementation uses polling.
     // The advantage of polling is that it works reliably
