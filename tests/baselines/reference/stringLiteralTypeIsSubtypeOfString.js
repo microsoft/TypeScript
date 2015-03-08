@@ -61,6 +61,7 @@ class C implements String {
     trim(): string { return null; }
     length: number;
     substr(from: number, length?: number): string { return null; }
+    valueOf(): string { return null; }
     [index: number]: string;
 }
  
@@ -138,6 +139,7 @@ var C = (function () {
     C.prototype.toLocaleUpperCase = function () { return null; };
     C.prototype.trim = function () { return null; };
     C.prototype.substr = function (from, length) { return null; };
+    C.prototype.valueOf = function () { return null; };
     return C;
 })();
 function f10(x) { }
