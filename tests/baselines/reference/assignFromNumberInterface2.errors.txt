@@ -1,5 +1,5 @@
-tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(23,1): error TS2322: Type 'Number' is not assignable to type 'number'.
-tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(25,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts (2 errors) ====
@@ -12,6 +12,7 @@ tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24
         toFixed(fractionDigits?: number): string;
         toExponential(fractionDigits?: number): string;
         toPrecision(precision?: number): string;
+        valueOf(): number;
         doStuff(): string;
     }
     
