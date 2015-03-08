@@ -4721,6 +4721,10 @@ declare module "typescript" {
 >TypeChecker : TypeChecker
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
+    var version: string;
+>version : string
+
     function createCompilerHost(options: CompilerOptions): CompilerHost;
 >createCompilerHost : (options: CompilerOptions) => CompilerHost
 >options : CompilerOptions
@@ -4749,6 +4753,7 @@ declare module "typescript" {
 >Program : Program
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
 >servicesVersion : string
 
