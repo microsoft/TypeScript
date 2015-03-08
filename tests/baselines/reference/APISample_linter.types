@@ -4862,6 +4862,7 @@ declare module "typescript" {
 >TypeChecker : TypeChecker
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
     var version: string;
 >version : string
 
@@ -4893,6 +4894,7 @@ declare module "typescript" {
 >Program : Program
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
 >servicesVersion : string
 

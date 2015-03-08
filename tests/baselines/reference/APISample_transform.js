@@ -1504,6 +1504,7 @@ declare module "typescript" {
     function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
     var version: string;
     function createCompilerHost(options: CompilerOptions): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
@@ -1511,6 +1512,7 @@ declare module "typescript" {
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
     interface Node {
         getSourceFile(): SourceFile;

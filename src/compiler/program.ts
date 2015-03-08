@@ -5,6 +5,7 @@ module ts {
     /* @internal */ export var emitTime = 0;
     /* @internal */ export var ioReadTime = 0;
 
+    /** The version of the TypeScript compiler release */
     export var version = "1.5.0.0";
 
     export function createCompilerHost(options: CompilerOptions): CompilerHost {

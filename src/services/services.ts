@@ -11,6 +11,7 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
+    /** The version of the language service API */
     export var servicesVersion = "0.4"
 
     export interface Node {
