@@ -1531,7 +1531,6 @@ module ts {
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
-        var preserveNewLines = compilerOptions.preserveNewLines || false;
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -1572,6 +1571,7 @@ module ts {
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
             var decreaseIndent = writer.decreaseIndent;
+            var preserveNewLines = compilerOptions.preserveNewLines || false;
 
             var currentSourceFile: SourceFile;
 
@@ -3034,10 +3034,10 @@ module ts {
             }
 
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node) {
-                // Use a newline for existin code if the original had one, and we're preserving formatting.
+                // Use a newline for existing code if the original had one, and we're preserving formatting.
                 var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
-                // Always use a newline for synthesized code if hte generator asked for it.
+                // Always use a newline for synthesized code if the synthesizer desires it.
                 var synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
 
                 if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
