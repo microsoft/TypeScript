@@ -3033,7 +3033,7 @@ module ts {
                 return false;
             }
 
-            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node) {
+            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, insertIfNoIndentValue?: string) {
                 // Use a newline for existin code if the original had one, and we're preserving formatting.
                 var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
@@ -3045,8 +3045,12 @@ module ts {
                     writeLine();
                     return true;
                 }
-
-                return false;
+                else {
+                    if (insertIfNoIndentValue) {
+                        write(insertIfNoIndentValue);
+                    }
+                    return false;
+                }
             }
 
             function emitPropertyAccess(node: PropertyAccessExpression) {
@@ -3056,17 +3060,14 @@ module ts {
 
                 emit(node.expression);
 
-                var indented = indentIfOnDifferentLines(node, node.expression, node.dotToken);
-
+                var indentBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
 
-                indented = indented || indentIfOnDifferentLines(node, node.dotToken, node.name);
-
+                var indentAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
                 emit(node.name);
 
-                if (indented) {
-                    decreaseIndent();
-                }
+                decreaseIndentIf(indentBeforeDot);
+                decreaseIndentIf(indentAfterDot);
             }
 
             function emitQualifiedName(node: QualifiedName) {
@@ -3300,32 +3301,14 @@ module ts {
                 else {
                     emit(node.left);
 
-                    // If there was a newline between the left side of the binary expression and the
-                    // operator, then try to preserve that.
-                    var indented1 = indentIfOnDifferentLines(node, node.left, node.operatorToken);
-                    
-                    // Otherwise just emit the operator right afterwards.  For everything but
-                    // comma, emit a space before the operator.
-                    if (!indented1 && node.operatorToken.kind !== SyntaxKind.CommaToken) {
-                        write(" ");
-                    }
-
+                    var indentBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
                     write(tokenToString(node.operatorToken.kind));
 
-                    if (!indented1) {
-                        var indented2 = indentIfOnDifferentLines(node, node.operatorToken, node.right);
-                    }
-
-                    if (!indented2) {
-                        write(" ");
-                    }
-
+                    var indentAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
                     emit(node.right);
 
-                    // If we indented the left or the right side, then dedent now.
-                    if (indented1 || indented2) {
-                        decreaseIndent();
-                    }
+                    decreaseIndentIf(indentBeforeOperator);
+                    decreaseIndentIf(indentAfterOperator);
                 }
             }
 
@@ -3335,43 +3318,23 @@ module ts {
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
-                var indent1 = indentIfOnDifferentLines(node, node.condition, node.questionToken);
-                if (!indent1) {
-                    write(" ");
-                }
-
+                var indentBeforeQuestion = indentIfOnDifferentLines(node, node.condition, node.questionToken, " ");
                 write("?");
-
-                if (!indent1) {
-                    var indent2 = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue);
-                }
-
-                if (!indent2) {
-                    write(" ");
-                }
-
+                var indentAfterQuestion = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue, " ");
                 emit(node.whenTrue);
+                decreaseIndentIf(indentBeforeQuestion);
+                decreaseIndentIf(indentAfterQuestion);
 
-                if (indent1 || indent2) {
-                    decreaseIndent();
-                }
-
-                var indent3 = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken);
-                if (!indent3) {
-                    write(" ");
-                }
-
+                var indentBeforeColon = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken, " ");
                 write(":");
-                if (!indent3) {
-                    var indent4 = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse);
-                }
-                
-                if (!indent4) {
-                    write(" ");
-                }
-
+                var indentAfterColon = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse, " ");
                 emit(node.whenFalse);
-                if (indent3 || indent4) {
+                decreaseIndentIf(indentBeforeColon);
+                decreaseIndentIf(indentAfterColon);
+            }
+
+            function decreaseIndentIf(value: boolean) {
+                if (value) {
                     decreaseIndent();
                 }
             }
