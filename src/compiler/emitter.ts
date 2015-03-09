@@ -1600,16 +1600,16 @@ module ts {
             var emitLeadingCommentsOfPosition = compilerOptions.removeComments ? (pos: number) => { } : emitLeadingCommentsOfLocalPosition;
 
             var detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
+
             /** Emit detached comments of the node */
             var emitDetachedComments = compilerOptions.removeComments ? (node: TextRange) => { } : emitDetachedCommentsAtPosition;
-
-            /** Emits /// or pinned which is comment starting with /*! comments */
-            var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? (node: Node) => { } : emitPinnedOrTripleSlashCommentsOfNode;
 
             var writeComment = writeCommentRange;
 
             /** Emit a node */
+            var emitNodeWithoutSourceMap = compilerOptions.removeComments ? emitNodeWithoutSourceMapWithoutComments : emitNodeWithoutSourceMapWithComments;
             var emit = emitNodeWithoutSourceMap;
+            var emitWithoutComments = emitNodeWithoutSourceMapWithoutComments;
 
             /** Called just before starting emit of a node */
             var emitStart = function (node: Node) { };
@@ -2061,7 +2061,7 @@ module ts {
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithMap(node: Node) {
+                function emitNodeWithSourceMap(node: Node) {
                     if (node) {
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
@@ -2075,8 +2075,17 @@ module ts {
                     }
                 }
 
+                function emitNodeWithSourceMapWithoutComments(node: Node) {
+                    if (node) {
+                        recordEmitNodeStartSpan(node);
+                        emitNodeWithoutSourceMapWithoutComments(node);
+                        recordEmitNodeEndSpan(node);
+                    }
+                }
+
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithMap;
+                emit = emitNodeWithSourceMap;
+                emitWithoutComments = emitNodeWithSourceMapWithoutComments;
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -4273,7 +4282,7 @@ module ts {
 
                     // Don't emit comments on this body.  We'll have already taken care of it above 
                     // when we called emitDetachedComments.
-                    emitNodeWithoutSourceMap(body, /*disableComments:*/ true);
+                    emitWithoutComments(body);
                     emitEnd(body);
                     write(";");
                     emitTempDeclarations(/*newLine*/ false);
@@ -4284,7 +4293,10 @@ module ts {
                     writeLine();
                     emitLeadingComments(node.body);
                     write("return ");
-                    emit(node.body, /*disableComments:*/ true);
+
+                    // Don't emit comments on this body.  We'll have already taken care of it above 
+                    // when we called emitDetachedComments.
+                    emitWithoutComments(node.body);
                     write(";");
                     emitTrailingComments(node.body);
 
@@ -5146,7 +5158,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNodeWithoutSourceMap(node: Node, disableComments?:boolean): void {
+            function emitNodeWithoutSourceMapWithComments(node: Node): void {
                 if (!node) {
                     return;
                 }
@@ -5155,7 +5167,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                var emitComments = !disableComments && shouldEmitLeadingAndTrailingComments(node);
+                var emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
@@ -5165,6 +5177,18 @@ module ts {
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
+            }
+
+            function emitNodeWithoutSourceMapWithoutComments(node: Node): void {
+                if (!node) {
+                    return;
+                }
+
+                if (node.flags & NodeFlags.Ambient) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
+                emitJavaScriptWorker(node);
             }
 
             function shouldEmitLeadingAndTrailingComments(node: Node) {
@@ -5461,7 +5485,8 @@ module ts {
                 }
             }
 
-            function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
+            /** Emits /// or pinned which is comment starting with /*! comments */
+            function emitPinnedOrTripleSlashComments(node: Node) {
                 var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
 
                 function isPinnedOrTripleSlashComment(comment: CommentRange) {
