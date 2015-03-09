@@ -122,7 +122,9 @@ var Sample;
                 var StartFindAction = (function () {
                     function StartFindAction() {
                     }
-                    StartFindAction.prototype.getId = function () { return "yo"; };
+                    StartFindAction.prototype.getId = function () {
+                        return "yo";
+                    };
                     StartFindAction.prototype.run = function (Thing) {
                         return true;
                     };
@@ -146,9 +148,11 @@ var Sample;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                FindWidget.prototype.gar = function (runner) { if (true) {
-                    return runner(this);
-                } };
+                FindWidget.prototype.gar = function (runner) {
+                    if (true) {
+                        return runner(this);
+                    }
+                };
                 FindWidget.prototype.getDomNode = function () {
                     return domNode;
                 };
@@ -163,7 +167,9 @@ var Sample;
 var AbstractMode = (function () {
     function AbstractMode() {
     }
-    AbstractMode.prototype.getInitialState = function () { return null; };
+    AbstractMode.prototype.getInitialState = function () {
+        return null;
+    };
     return AbstractMode;
 })();
 var Sample;
@@ -184,7 +190,9 @@ var Sample;
                     State.prototype.equals = function (other) {
                         return this === other;
                     };
-                    State.prototype.getMode = function () { return mode; };
+                    State.prototype.getMode = function () {
+                        return mode;
+                    };
                     return State;
                 })();
                 PlainText.State = State;

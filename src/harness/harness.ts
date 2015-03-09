@@ -1007,6 +1007,10 @@ module Harness {
                             options.outDir = setting.value;
                             break;
 
+                        case 'preservenewlines':
+                            options.preserveNewLines = !!setting.value;
+                            break;
+
                         case 'sourceroot':
                             options.sourceRoot = setting.value;
                             break;

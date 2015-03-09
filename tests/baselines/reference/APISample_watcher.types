@@ -4208,6 +4208,9 @@ declare module "typescript" {
         stripInternal?: boolean;
 >stripInternal : boolean
 
+        preserveNewLines?: boolean;
+>preserveNewLines : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }

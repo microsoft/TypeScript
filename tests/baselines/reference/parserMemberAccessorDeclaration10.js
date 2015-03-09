@@ -8,7 +8,8 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {
-        get: function () { }
+        get: function () {
+        }
         exports.Foo = Foo;,
         enumerable: true,
         configurable: true

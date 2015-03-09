@@ -9,4 +9,6 @@ x.f({s: 1})
 
 //// [genericConstraintSatisfaction1.js]
 var x;
-x.f({ s: 1 });
+x.f({
+    s: 1
+});

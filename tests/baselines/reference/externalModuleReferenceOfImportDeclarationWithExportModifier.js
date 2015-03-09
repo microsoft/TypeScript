@@ -10,7 +10,8 @@ file1.foo();
 
 //// [externalModuleReferenceOfImportDeclarationWithExportModifier_0.js]
 define(["require", "exports"], function (require, exports) {
-    function foo() { }
+    function foo() {
+    }
     exports.foo = foo;
     ;
 });

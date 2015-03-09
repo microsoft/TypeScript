@@ -9,6 +9,8 @@ cobalt.pitch = function() {}
 
 //// [recur1.js]
 var salt = new salt.pepper();
-salt.pepper = function () { };
+salt.pepper = function () {
+};
 var cobalt = new cobalt.pitch();
-cobalt.pitch = function () { };
+cobalt.pitch = function () {
+};

@@ -6,6 +6,8 @@ var x = foo();
 
 
 //// [functionOverloads25.js]
-function foo(bar) { return ''; }
+function foo(bar) {
+    return '';
+}
 ;
 var x = foo();

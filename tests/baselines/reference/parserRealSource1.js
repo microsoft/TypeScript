@@ -189,11 +189,21 @@ var TypeScript;
     var NullLogger = (function () {
         function NullLogger() {
         }
-        NullLogger.prototype.information = function () { return false; };
-        NullLogger.prototype.debug = function () { return false; };
-        NullLogger.prototype.warning = function () { return false; };
-        NullLogger.prototype.error = function () { return false; };
-        NullLogger.prototype.fatal = function () { return false; };
+        NullLogger.prototype.information = function () {
+            return false;
+        };
+        NullLogger.prototype.debug = function () {
+            return false;
+        };
+        NullLogger.prototype.warning = function () {
+            return false;
+        };
+        NullLogger.prototype.error = function () {
+            return false;
+        };
+        NullLogger.prototype.fatal = function () {
+            return false;
+        };
         NullLogger.prototype.log = function (s) {
         };
         return NullLogger;
@@ -208,11 +218,21 @@ var TypeScript;
             this._error = this.logger.error();
             this._fatal = this.logger.fatal();
         }
-        LoggerAdapter.prototype.information = function () { return this._information; };
-        LoggerAdapter.prototype.debug = function () { return this._debug; };
-        LoggerAdapter.prototype.warning = function () { return this._warning; };
-        LoggerAdapter.prototype.error = function () { return this._error; };
-        LoggerAdapter.prototype.fatal = function () { return this._fatal; };
+        LoggerAdapter.prototype.information = function () {
+            return this._information;
+        };
+        LoggerAdapter.prototype.debug = function () {
+            return this._debug;
+        };
+        LoggerAdapter.prototype.warning = function () {
+            return this._warning;
+        };
+        LoggerAdapter.prototype.error = function () {
+            return this._error;
+        };
+        LoggerAdapter.prototype.fatal = function () {
+            return this._fatal;
+        };
         LoggerAdapter.prototype.log = function (s) {
             this.logger.log(s);
         };
@@ -223,11 +243,21 @@ var TypeScript;
         function BufferedLogger() {
             this.logContents = [];
         }
-        BufferedLogger.prototype.information = function () { return false; };
-        BufferedLogger.prototype.debug = function () { return false; };
-        BufferedLogger.prototype.warning = function () { return false; };
-        BufferedLogger.prototype.error = function () { return false; };
-        BufferedLogger.prototype.fatal = function () { return false; };
+        BufferedLogger.prototype.information = function () {
+            return false;
+        };
+        BufferedLogger.prototype.debug = function () {
+            return false;
+        };
+        BufferedLogger.prototype.warning = function () {
+            return false;
+        };
+        BufferedLogger.prototype.error = function () {
+            return false;
+        };
+        BufferedLogger.prototype.fatal = function () {
+            return false;
+        };
         BufferedLogger.prototype.log = function (s) {
             this.logContents.push(s);
         };

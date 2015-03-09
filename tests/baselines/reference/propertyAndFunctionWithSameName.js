@@ -23,6 +23,7 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.x = function (v) { }; // error
+    D.prototype.x = function (v) {
+    }; // error
     return D;
 })();

@@ -7,8 +7,12 @@ function f() {
 
 //// [catch.js]
 function f() {
-    try { }
-    catch (e) { }
-    try { }
-    catch (e) { }
+    try {
+    }
+    catch (e) {
+    }
+    try {
+    }
+    catch (e) {
+    }
 }

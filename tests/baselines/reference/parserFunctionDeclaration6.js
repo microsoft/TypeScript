@@ -6,5 +6,6 @@
 
 //// [parserFunctionDeclaration6.js]
 {
-    function bar() { }
+    function bar() {
+    }
 }

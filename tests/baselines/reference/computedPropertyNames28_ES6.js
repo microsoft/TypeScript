@@ -27,7 +27,8 @@ var C = (function (_super) {
     function C() {
         _super.call(this);
         var obj = {
-            [(_super.call(this), "prop")]() { }
+            [(_super.call(this), "prop")]() {
+            }
         };
     }
     return C;

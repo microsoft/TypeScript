@@ -34,7 +34,9 @@ var A = (function () {
     A.bar = function () {
         return "";
     };
-    A.prototype.foo = function () { return 1; };
+    A.prototype.foo = function () {
+        return 1;
+    };
     return A;
 })();
 var C = (function () {

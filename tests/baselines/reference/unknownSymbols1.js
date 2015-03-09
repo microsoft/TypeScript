@@ -41,7 +41,8 @@ var __extends = this.__extends || function (d, b) {
 };
 var x = asdf;
 var y;
-function foo(x, y) { }
+function foo(x, y) {
+}
 function foo2() {
     return asdf;
 }

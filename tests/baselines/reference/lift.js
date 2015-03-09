@@ -37,7 +37,11 @@ var C = (function (_super) {
         var x = 10 + w;
         var ll = x * w;
     }
-    C.prototype.liftxyz = function () { return x + z + this.y; };
-    C.prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };
+    C.prototype.liftxyz = function () {
+        return x + z + this.y;
+    };
+    C.prototype.liftxylocllz = function () {
+        return x + z + this.y + this.ll;
+    };
     return C;
 })(B);

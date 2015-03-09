@@ -20,7 +20,8 @@ var __extends = this.__extends || function (d, b) {
 var A = (function () {
     function A() {
     }
-    A.prototype.myMethod = function () { };
+    A.prototype.myMethod = function () {
+    };
     return A;
 })();
 var B = (function (_super) {
@@ -35,6 +36,7 @@ var C = (function (_super) {
     function C() {
         _super.apply(this, arguments);
     }
-    C.prototype.myMethod = function () { };
+    C.prototype.myMethod = function () {
+    };
     return C;
 })(B);

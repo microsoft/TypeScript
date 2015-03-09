@@ -1844,6 +1844,10 @@
         "category": "Message",
         "code": 6056
     },
+    "Preserve new-lines when emitting code.": {
+        "category": "Message",
+        "code": 6057
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

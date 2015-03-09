@@ -28,7 +28,9 @@ var Test;
         }
         Tester.prototype.willThrowError = function () {
             Mocked = Mocked || function () {
-                return { myProp: "test" };
+                return {
+                    myProp: "test"
+                };
             };
         };
         return Tester;

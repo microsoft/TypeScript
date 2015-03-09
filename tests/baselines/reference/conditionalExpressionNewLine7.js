@@ -4,6 +4,4 @@ var v = a ?
   c;
 
 //// [conditionalExpressionNewLine7.js]
-var v = a ?
-    b :
-    c;
+var v = a ? b : c;

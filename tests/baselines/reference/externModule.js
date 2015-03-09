@@ -42,7 +42,8 @@ n=XDate.UTC(1964,2,1);
 //// [externModule.js]
 declare;
 module;
-{ }
+{
+}
 var XDate = (function () {
     function XDate() {
     }

@@ -50,7 +50,8 @@ var rc1 = '' instanceof {};
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
+    C.prototype.foo = function () {
+    };
     return C;
 })();
 var x;

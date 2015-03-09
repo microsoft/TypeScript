@@ -47,5 +47,7 @@ var p_cast = ({
     add: function (dx, dy) {
         return new Point(this.x + dx, this.y + dy);
     },
-    mult: function (p) { return p; }
+    mult: function (p) {
+        return p;
+    }
 });
