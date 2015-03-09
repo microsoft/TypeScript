@@ -10911,9 +10911,11 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function isUnknownIdentifier(location: Node, name: string, sourceFile: SourceFile): boolean {
+        function isUnknownIdentifier(location: Node, name: string): boolean {
+            // Do not call resolveName on a synthesized node!
+            Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
             return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
-                !hasProperty(getGeneratedNamesForSourceFile(sourceFile), name);
+                !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 
         function getBlockScopedVariableId(n: Identifier): number {

@@ -1641,14 +1641,13 @@ module ts {
             }
 
             if (root) {
-                currentSourceFile = root;
-                emit(root);
+                // Do not call emit directly. It does not set the currentSourceFile.
+                emitSourceFile(root);
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
-                    currentSourceFile = sourceFile;
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
+                        emitSourceFile(sourceFile);
                     }
                 });
             }
@@ -1656,6 +1655,11 @@ module ts {
             writeLine();
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
             return;
+
+            function emitSourceFile(sourceFile: SourceFile): void {
+                currentSourceFile = sourceFile;
+                emit(sourceFile);
+            }
 
             // enters the new lexical environment
             // return value should be passed to matching call to exitNameScope.
@@ -1689,10 +1693,10 @@ module ts {
                     name = generateUniqueName(baseName, n => isExistingName(location, n));
                 }
                 
-                return putNameInCurrentScopeNames(name);
+                return recordNameInCurrentScope(name);
             }
             
-            function putNameInCurrentScopeNames(name: string): string {
+            function recordNameInCurrentScope(name: string): string {
                 if (!currentScopeNames) {
                     currentScopeNames = {};
                 }
@@ -1702,7 +1706,7 @@ module ts {
 
             function isExistingName(location: Node, name: string) {
                 // check if resolver is aware of this name (if name was seen during the typecheck)
-                if (!resolver.isUnknownIdentifier(location, name, currentSourceFile)) {
+                if (!resolver.isUnknownIdentifier(location, name)) {
                     return true;
                 }
 
@@ -2107,13 +2111,14 @@ module ts {
                         break;
                     }
                     // _a .. _h, _j ... _z, _0, _1, ...
+                    // Note that _i is skipped
                     name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
                 
                 // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
                 // we just generated.
-                putNameInCurrentScopeNames(name);
+                recordNameInCurrentScope(name);
                 
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
@@ -3315,7 +3320,7 @@ module ts {
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    emitDestructuring(node);
+                    emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
                     emit(node.left);
@@ -3595,7 +3600,7 @@ module ts {
                 
                 // Do not emit the LHS var declaration yet, because it might contain destructuring.
                 
-                // Do not call create recordTempDeclaration because we are declaring the temps
+                // Do not call recordTempDeclaration because we are declaring the temps
                 // right here. Recording means they will be declared later.
                 // In the case where the user wrote an identifier as the RHS, like this:
                 //
@@ -3655,12 +3660,12 @@ module ts {
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
                     var variableDeclarationList = <VariableDeclarationList>node.initializer;
-                    if (variableDeclarationList.declarations.length >= 1) {
+                    if (variableDeclarationList.declarations.length > 0) {
                         var declaration = variableDeclarationList.declarations[0];
                         if (isBindingPattern(declaration.name)) {
                             // This works whether the declaration is a var, let, or const.
                             // It will use rhsIterationValue _a[_i] as the initializer.
-                            emitDestructuring(declaration, rhsIterationValue);
+                            emitDestructuring(declaration, /*isAssignmentExpressionStatement*/ false, rhsIterationValue);
                         }
                         else {
                             // The following call does not include the initializer, so we have
@@ -3673,8 +3678,7 @@ module ts {
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (var of []) {}
-                        var emptyDeclarationListTemp = createTempVariable(node, /*forLoopVariable*/ false);
-                        emitNode(emptyDeclarationListTemp);
+                        emitNode(createTempVariable(node, /*forLoopVariable*/ false));
                         write(" = ");
                         emitNode(rhsIterationValue);
                     }
@@ -3683,11 +3687,10 @@ module ts {
                     // Initializer is an expression. Emit the expression in the body, so that it's
                     // evaluated on every iteration.
                     var assignmentExpression = createBinaryExpression(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue, /*startsOnNewLine*/ false);
-                    var assignmentExpressionStatement = createExpressionStatement(assignmentExpression);
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
-                        emitDestructuring(assignmentExpressionStatement);
+                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined, /*locationForCheckingExistingName*/ node);
                     }
                     else {
                         emitNode(assignmentExpression);
@@ -3864,16 +3867,25 @@ module ts {
                 }
             }
 
-            // Note that a destructuring assignment can be either an ExpressionStatement or a BinaryExpression.
-            function emitDestructuring(root: ExpressionStatement | BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
+            /**
+             * If the root has a chance of being a synthesized node, callers should also pass a value for
+             * lowestNonSynthesizedAncestor. This should be an ancestor of root, it should not be synthesized,
+             * and there should not be a lower ancestor that introduces a scope. This node will be used as the
+             * location for ensuring that temporary names are unique.
+             */
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration,
+                isAssignmentExpressionStatement: boolean,
+                value?: Expression,
+                lowestNonSynthesizedAncestor?: Node) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
                 var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
-                if (root.kind === SyntaxKind.ExpressionStatement || root.kind === SyntaxKind.BinaryExpression) {
-                    emitAssignmentExpression(<ExpressionStatement | BinaryExpression>root);
+                if (root.kind === SyntaxKind.BinaryExpression) {
+                    emitAssignmentExpression(<BinaryExpression>root);
                 }
                 else {
+                    Debug.assert(!isAssignmentExpressionStatement);
                     emitBindingElement(<BindingElement>root, value);
                 }
 
@@ -3895,7 +3907,10 @@ module ts {
 
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        var identifier = createTempVariable(root);
+                        // In case the root is a synthesized node, we need to pass lowestNonSynthesizedAncestor
+                        // as the location for determining uniqueness of the variable we are about to
+                        // generate.
+                        var identifier = createTempVariable(lowestNonSynthesizedAncestor || root);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
                         }
@@ -4013,14 +4028,13 @@ module ts {
                     }
                 }
 
-                function emitAssignmentExpression(root: ExpressionStatement | BinaryExpression) {
-                    // Synthesized nodes will not have parents, so the ExpressionStatements will have to be passed
-                    // in directly. Otherwise, it will crash when we access the parent of a synthesized binary expression.
-                    var emitParenthesized = root.kind !== SyntaxKind.ExpressionStatement && root.parent.kind !== SyntaxKind.ExpressionStatement;
-                    var expression = <BinaryExpression>(root.kind === SyntaxKind.ExpressionStatement ? (<ExpressionStatement>root).expression : <BinaryExpression>root);
-                    var target = expression.left;
-                    var value = expression.right;
-                    if (emitParenthesized) {
+                function emitAssignmentExpression(root: BinaryExpression) {
+                    var target = root.left;
+                    var value = root.right;
+                    if (isAssignmentExpressionStatement) {
+                        emitDestructuringAssignment(target, value);
+                    }
+                    else {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
@@ -4031,9 +4045,6 @@ module ts {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write(")");
                         }
-                    }
-                    else {
-                        emitDestructuringAssignment(target, value);
                     }
                 }
 
@@ -4085,7 +4096,7 @@ module ts {
             function emitVariableDeclaration(node: VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
                     if (languageVersion < ScriptTarget.ES6) {
-                        emitDestructuring(node);
+                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false);
                     }
                     else {
                         emit(node.name);
@@ -4248,7 +4259,7 @@ module ts {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
-                            emitDestructuring(p, tempParameters[tempIndex]);
+                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
                             write(";");
                             tempIndex++;
                         }
@@ -5310,7 +5321,7 @@ module ts {
                 return statements.length;
             }
 
-            function emitSourceFile(node: SourceFile) {
+            function emitSourceFileNode(node: SourceFile) {
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);
@@ -5553,7 +5564,7 @@ module ts {
                     case SyntaxKind.ExportDeclaration:
                         return emitExportDeclaration(<ExportDeclaration>node);
                     case SyntaxKind.SourceFile:
-                        return emitSourceFile(<SourceFile>node);
+                        return emitSourceFileNode(<SourceFile>node);
                 }
             }
 
