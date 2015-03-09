@@ -3033,7 +3033,7 @@ module ts {
                 return false;
             }
 
-            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, insertIfNoIndentValue?: string) {
+            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string) {
                 // Use a newline for existin code if the original had one, and we're preserving formatting.
                 var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
@@ -3046,8 +3046,8 @@ module ts {
                     return true;
                 }
                 else {
-                    if (insertIfNoIndentValue) {
-                        write(insertIfNoIndentValue);
+                    if (valueToWriteWhenNotIndenting) {
+                        write(valueToWriteWhenNotIndenting);
                     }
                     return false;
                 }
@@ -3059,15 +3059,11 @@ module ts {
                 }
 
                 emit(node.expression);
-
-                var indentBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
+                var indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
-
-                var indentAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
+                var indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
                 emit(node.name);
-
-                decreaseIndentIf(indentBeforeDot);
-                decreaseIndentIf(indentAfterDot);
+                decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
 
             function emitQualifiedName(node: QualifiedName) {
@@ -3300,15 +3296,11 @@ module ts {
                 }
                 else {
                     emit(node.left);
-
-                    var indentBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
+                    var indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
                     write(tokenToString(node.operatorToken.kind));
-
-                    var indentAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
+                    var indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
                     emit(node.right);
-
-                    decreaseIndentIf(indentBeforeOperator);
-                    decreaseIndentIf(indentAfterOperator);
+                    decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
                 }
             }
 
@@ -3318,23 +3310,23 @@ module ts {
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
-                var indentBeforeQuestion = indentIfOnDifferentLines(node, node.condition, node.questionToken, " ");
+                var indentedBeforeQuestion = indentIfOnDifferentLines(node, node.condition, node.questionToken, " ");
                 write("?");
-                var indentAfterQuestion = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue, " ");
+                var indentedAfterQuestion = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue, " ");
                 emit(node.whenTrue);
-                decreaseIndentIf(indentBeforeQuestion);
-                decreaseIndentIf(indentAfterQuestion);
-
-                var indentBeforeColon = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken, " ");
+                decreaseIndentIf(indentedBeforeQuestion, indentedAfterQuestion);
+                var indentedBeforeColon = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken, " ");
                 write(":");
-                var indentAfterColon = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse, " ");
+                var indentedAfterColon = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse, " ");
                 emit(node.whenFalse);
-                decreaseIndentIf(indentBeforeColon);
-                decreaseIndentIf(indentAfterColon);
+                decreaseIndentIf(indentedBeforeColon, indentedAfterColon);
             }
 
-            function decreaseIndentIf(value: boolean) {
-                if (value) {
+            function decreaseIndentIf(value1: boolean, value2?: boolean) {
+                if (value1) {
+                    decreaseIndent();
+                }
+                if (value2) {
                     decreaseIndent();
                 }
             }
