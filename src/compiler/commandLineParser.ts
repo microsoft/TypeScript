@@ -141,7 +141,7 @@ module ts {
             experimental: true
         },
         {
-            name: "preserveFormatting",
+            name: "preserveNewLines",
             type: "boolean",
             description: Diagnostics.Preserve_new_lines_when_emitting_code,
             experimental: true

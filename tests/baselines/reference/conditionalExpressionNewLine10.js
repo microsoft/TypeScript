@@ -8,4 +8,10 @@ var v = a
     : g;
 
 //// [conditionalExpressionNewLine10.js]
-var v = a ? b ? d : e : c ? f : g;
+var v = a
+    ? b
+        ? d
+        : e
+    : c
+        ? f
+        : g;

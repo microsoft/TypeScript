@@ -6,4 +6,8 @@ var v = a
     ? f : g;
 
 //// [conditionalExpressionNewLine9.js]
-var v = a ? b ? d : e : c ? f : g;
+var v = a
+    ? b
+        ? d : e
+    : c
+        ? f : g;
