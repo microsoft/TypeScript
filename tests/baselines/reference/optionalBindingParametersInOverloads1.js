@@ -16,5 +16,13 @@ function foo() {
         rest[_i - 0] = arguments[_i];
     }
 }
-foo(["", 0, false]);
-foo([false, 0, ""]);
+foo([
+    "",
+    0,
+    false
+]);
+foo([
+    false,
+    0,
+    ""
+]);

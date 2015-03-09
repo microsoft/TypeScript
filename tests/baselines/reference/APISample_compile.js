@@ -1234,6 +1234,7 @@ declare module "typescript" {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
+        preserveNewLines?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -2006,6 +2007,8 @@ function compile(fileNames, options) {
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {
-    noEmitOnError: true, noImplicitAny: true,
-    target: 1 /* ES5 */, module: 1 /* CommonJS */
+    noEmitOnError: true,
+    noImplicitAny: true,
+    target: 1 /* ES5 */,
+    module: 1 /* CommonJS */
 });

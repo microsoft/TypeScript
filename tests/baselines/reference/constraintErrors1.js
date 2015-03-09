@@ -2,4 +2,5 @@
 function foo5<T extends hm>(test: T) { }
 
 //// [constraintErrors1.js]
-function foo5(test) { }
+function foo5(test) {
+}

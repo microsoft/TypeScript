@@ -6,6 +6,8 @@ cla <ss {
 cla < ss;
 {
     _;
-    try { }
-    finally { }
+    try {
+    }
+    finally {
+    }
 }

@@ -7,6 +7,7 @@ salt.apply("hello", []);
 
 
 //// [functionType.js]
-function salt() { }
+function salt() {
+}
 salt.apply("hello", []);
 (new Function("return 5"))();

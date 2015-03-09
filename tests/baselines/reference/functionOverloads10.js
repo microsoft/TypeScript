@@ -5,4 +5,5 @@ function foo(foo:any){ }
 
 
 //// [functionOverloads10.js]
-function foo(foo) { }
+function foo(foo) {
+}

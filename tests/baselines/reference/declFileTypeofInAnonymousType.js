@@ -43,11 +43,19 @@ var b = {
     c: m1.c,
     m1: m1
 };
-var c = { m1: m1 };
+var c = {
+    m1: m1
+};
 var d = {
-    m: { mod: m1 },
-    mc: { cl: m1.c },
-    me: { en: m1.e },
+    m: {
+        mod: m1
+    },
+    mc: {
+        cl: m1.c
+    },
+    me: {
+        en: m1.e
+    },
     mh: 2 /* holiday */
 };
 

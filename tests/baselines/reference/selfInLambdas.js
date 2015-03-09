@@ -53,7 +53,9 @@ var o = {
         var _this = this;
         window.onmousemove = function () {
             _this.counter++;
-            var f = function () { return _this.counter; };
+            var f = function () {
+                return _this.counter;
+            };
         };
     }
 };

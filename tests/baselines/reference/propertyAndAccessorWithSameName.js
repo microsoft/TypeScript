@@ -36,7 +36,8 @@ var D = (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {
-        set: function (v) { } // error
+        set: function (v) {
+        } // error
         ,
         enumerable: true,
         configurable: true
@@ -50,7 +51,8 @@ var E = (function () {
         get: function () {
             return 1;
         },
-        set: function (v) { },
+        set: function (v) {
+        },
         enumerable: true,
         configurable: true
     });

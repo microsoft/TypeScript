@@ -1265,6 +1265,7 @@ declare module "typescript" {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
+        preserveNewLines?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -2040,8 +2041,7 @@ function delint(sourceFile) {
                 if (ifStatement.thenStatement.kind !== 174 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
-                if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 174 /* Block */ && ifStatement.elseStatement.kind !== 178 /* IfStatement */) {
+                if (ifStatement.elseStatement && ifStatement.elseStatement.kind !== 174 /* Block */ && ifStatement.elseStatement.kind !== 178 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;

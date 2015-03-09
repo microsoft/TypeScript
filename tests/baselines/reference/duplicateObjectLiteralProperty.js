@@ -30,7 +30,12 @@ var x = {
     }
 };
 var y = {
-    get a() { return 0; },
-    set a(v) { },
-    get a() { return 0; }
+    get a() {
+        return 0;
+    },
+    set a(v) {
+    },
+    get a() {
+        return 0;
+    }
 };

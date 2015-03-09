@@ -3,4 +3,6 @@ var foo:(a:{():number; (i:number):number; })=>number; foo = function(a:string){r
 
 //// [contextualTyping24.js]
 var foo;
-foo = function (a) { return 5; };
+foo = function (a) {
+    return 5;
+};

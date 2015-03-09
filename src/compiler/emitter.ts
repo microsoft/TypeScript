@@ -1531,6 +1531,7 @@ module ts {
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
+        var preserveNewLines = compilerOptions.preserveNewLines || false;
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -2172,7 +2173,7 @@ module ts {
 
                 increaseIndent();
 
-                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                if (preserveNewLines && nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -2183,7 +2184,7 @@ module ts {
 
                 for (var i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
-                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                        if (preserveNewLines && nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
                             write(", ");
                         }
                         else {
@@ -2195,15 +2196,13 @@ module ts {
                     emit(nodes[i]);
                 }
 
-                var closeTokenIsOnSameLineAsLastElement = nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes));
-
                 if (nodes.hasTrailingComma && allowTrailingComma) {
                     write(",");
                 }
 
                 decreaseIndent();
 
-                if (closeTokenIsOnSameLineAsLastElement) {
+                if (preserveNewLines && nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -3035,10 +3034,12 @@ module ts {
             }
 
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node) {
-                var isSynthesized = nodeIsSynthesized(parent);
+                // Use a newline for existin code if the original had one, and we're preserving formatting.
+                var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
-                var realNodesAreOnDifferentLines = !isSynthesized && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
+                // Always use a newline for synthesized code if hte generator asked for it.
                 var synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
+
                 if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
                     increaseIndent();
                     writeLine();
@@ -3383,7 +3384,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
-                if (isSingleLineEmptyBlock(node)) {
+                if (preserveNewLines && isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -3600,7 +3601,8 @@ module ts {
                 else {
                     write("default:");
                 }
-                if (node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
+
+                if (preserveNewLines && node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
                     write(" ");
                     emit(node.statements[0]);
                 }
@@ -4303,7 +4305,7 @@ module ts {
 
                 // If we didn't have to emit any preamble code, then attempt to keep the arrow
                 // function on one line.
-                if (!preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
+                if (preserveNewLines && !preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
                     write(" ");
                     emitStart(body);
                     write("return ");
@@ -4354,7 +4356,7 @@ module ts {
 
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
-                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (var i = 0, n = body.statements.length; i < n; i++) {
                         write(" ");
                         emit(body.statements[i]);

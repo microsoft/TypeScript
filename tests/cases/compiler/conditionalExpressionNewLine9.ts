@@ -1,3 +1,4 @@
+// @preserveNewLines: true
 var v = a 
   ? b
     ? d : e

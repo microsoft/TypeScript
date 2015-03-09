@@ -13,11 +13,14 @@ function noError2(x: number, y: string) { };
 
 //// [implicitAnyDeclareFunctionWithoutFormalType.js]
 // these should be errors
-function foo(x) { }
+function foo(x) {
+}
 ;
-function bar(x, y) { }
+function bar(x, y) {
+}
 ; // error at "y"; no error at "x"
-function func2(a, b, c) { }
+function func2(a, b, c) {
+}
 ; // error at "a,b,c"
 function func3() {
     var args = [];
@@ -37,5 +40,6 @@ function noError1(x, y) {
     if (y === void 0) { y = 2; }
 }
 ;
-function noError2(x, y) { }
+function noError2(x, y) {
+}
 ;

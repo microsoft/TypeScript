@@ -1554,6 +1554,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
+        preserveNewLines?: boolean;
         [option: string]: string | number | boolean;
     }
 

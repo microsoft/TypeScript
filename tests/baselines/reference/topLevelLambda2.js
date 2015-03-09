@@ -5,5 +5,8 @@ foo(()=>this.window);
 
 //// [topLevelLambda2.js]
 var _this = this;
-function foo(x) { }
-foo(function () { return _this.window; });
+function foo(x) {
+}
+foo(function () {
+    return _this.window;
+});

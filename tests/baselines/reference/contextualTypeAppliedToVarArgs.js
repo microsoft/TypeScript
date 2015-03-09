@@ -18,7 +18,8 @@ class Foo{
 
 //// [contextualTypeAppliedToVarArgs.js]
 function delegate(instance, method, data) {
-    return function () { };
+    return function () {
+    };
 }
 var Foo = (function () {
     function Foo() {

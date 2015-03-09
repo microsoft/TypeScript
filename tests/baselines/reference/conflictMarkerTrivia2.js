@@ -20,6 +20,7 @@ var C = (function () {
     C.prototype.foo = function () {
         a();
     };
-    C.prototype.bar = function () { };
+    C.prototype.bar = function () {
+    };
     return C;
 })();

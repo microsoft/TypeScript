@@ -10,7 +10,8 @@ class StringIterator {
 
 //// [for-of14.js]
 var v;
-for (v of new StringIterator) { } // Should fail because the iterator is not iterable
+for (v of new StringIterator) {
+} // Should fail because the iterator is not iterable
 var StringIterator = (function () {
     function StringIterator() {
     }

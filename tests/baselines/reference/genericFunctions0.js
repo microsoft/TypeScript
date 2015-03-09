@@ -4,7 +4,9 @@ function foo<T > (x: T) { return x; }
 var x = foo<number>(5); // 'x' should be number
 
 //// [genericFunctions0.js]
-function foo(x) { return x; }
+function foo(x) {
+    return x;
+}
 var x = foo(5); // 'x' should be number
 
 

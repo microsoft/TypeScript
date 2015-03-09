@@ -35,7 +35,8 @@ var C2 = (function () {
     }
     return C2;
 })();
-{ } // error
+{
+} // error
 var x;
 var C3 = (function (_super) {
     __extends(C3, _super);
@@ -55,7 +56,8 @@ var C4 = (function (_super) {
     }
     return C4;
 })(M); // error
-function foo() { }
+function foo() {
+}
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
@@ -69,4 +71,5 @@ var C6 = (function () {
     return C6;
 })();
 [];
-{ } // error
+{
+} // error

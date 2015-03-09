@@ -2,4 +2,5 @@
 for (var of; ;) { }
 
 //// [parserForOfStatement17.js]
-for (var of;;) { }
+for (var of;;) {
+}

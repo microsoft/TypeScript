@@ -14,7 +14,8 @@ y.m.foo();
 //// [chainedImportAlias_file0.js]
 var m;
 (function (m) {
-    function foo() { }
+    function foo() {
+    }
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
 //// [chainedImportAlias_file1.js]

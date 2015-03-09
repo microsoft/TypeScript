@@ -3,4 +3,5 @@ function foo(){　}
 
 
 //// [parserUnicodeWhitespaceCharacter1.js]
-function foo() { }
+function foo() {
+}

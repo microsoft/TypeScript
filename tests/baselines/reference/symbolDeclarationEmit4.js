@@ -9,8 +9,11 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, Symbol.isRegExp, {
-        get: function () { return ""; },
-        set: function (x) { },
+        get: function () {
+            return "";
+        },
+        set: function (x) {
+        },
         enumerable: true,
         configurable: true
     });

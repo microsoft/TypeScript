@@ -136,8 +136,12 @@ var OnlyDerived;
     var t2;
     var a;
     var b;
-    var a2 = { foo: new Derived() };
-    var b2 = { foo: new Derived2() };
+    var a2 = {
+        foo: new Derived()
+    };
+    var b2 = {
+        foo: new Derived2()
+    };
     s = t; // error
     t = s; // error
     s = s2; // ok
@@ -195,8 +199,12 @@ var WithBase;
     var t2;
     var a;
     var b;
-    var a2 = { foo: new Base() };
-    var b2 = { foo: new Derived2() };
+    var a2 = {
+        foo: new Base()
+    };
+    var b2 = {
+        foo: new Derived2()
+    };
     s = t; // ok
     t = s; // error
     s = s2; // ok

@@ -2,4 +2,6 @@
 var v = [1];
 
 //// [parserArrayLiteralExpression5.js]
-var v = [1];
+var v = [
+    1
+];

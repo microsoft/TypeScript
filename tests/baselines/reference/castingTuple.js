@@ -82,20 +82,39 @@ var E2;
     E2[E2["one"] = 0] = "one";
 })(E2 || (E2 = {}));
 // no error
-var numStrTuple = [5, "foo"];
+var numStrTuple = [
+    5,
+    "foo"
+];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
-var classCDTuple = [new C(), new D()];
+var classCDTuple = [
+    new C(),
+    new D()
+];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;
 var eleFromCDA1 = classCDATuple[2]; // A
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
-var t10 = [0 /* one */, 0 /* one */];
+var t10 = [
+    0 /* one */,
+    0 /* one */
+];
 var t11 = t10;
 var array1 = emptyObjTuple;
-var unionTuple = [new C(), "foo"];
-var unionTuple2 = [new C(), "foo", new D()];
-var unionTuple3 = [10, "foo"];
+var unionTuple = [
+    new C(),
+    "foo"
+];
+var unionTuple2 = [
+    new C(),
+    "foo",
+    new D()
+];
+var unionTuple3 = [
+    10,
+    "foo"
+];
 var unionTuple4 = unionTuple3;
 // error
 var t3 = numStrTuple;

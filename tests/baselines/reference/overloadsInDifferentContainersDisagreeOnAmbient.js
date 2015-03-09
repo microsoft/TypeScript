@@ -11,6 +11,7 @@ module M {
 //// [overloadsInDifferentContainersDisagreeOnAmbient.js]
 var M;
 (function (M) {
-    function f() { }
+    function f() {
+    }
     M.f = f;
 })(M || (M = {}));

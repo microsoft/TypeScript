@@ -14,6 +14,8 @@ class C1 implements i4 {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.name = function () { return ""; };
+    C1.prototype.name = function () {
+        return "";
+    };
     return C1;
 })();

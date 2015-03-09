@@ -16,7 +16,8 @@ class NumberIterator {
 
 //// [for-of17.js]
 var v;
-for (v of new NumberIterator) { } // Should succeed
+for (v of new NumberIterator) {
+} // Should succeed
 var NumberIterator = (function () {
     function NumberIterator() {
     }

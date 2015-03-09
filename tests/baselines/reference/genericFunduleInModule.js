@@ -12,7 +12,9 @@ A.B(1);
 //// [genericFunduleInModule.js]
 var A;
 (function (A) {
-    function B(x) { return x; }
+    function B(x) {
+        return x;
+    }
     A.B = B;
     var B;
     (function (B) {

@@ -43,14 +43,18 @@ var Bugs;
                 rest[_i - 1] = arguments[_i];
             }
             var index = rest[0];
-            return typeof args[index] !== 'undefined'
-                ? args[index]
-                : match;
+            return typeof args[index] !== 'undefined' ? args[index] : match;
         });
         return result;
     }
 })(Bugs || (Bugs = {}));
-function bug3(f) { return f("s"); }
-function fprime(x) { return x; }
+function bug3(f) {
+    return f("s");
+}
+function fprime(x) {
+    return x;
+}
 bug3(fprime);
-bug3(function (x) { return x; });
+bug3(function (x) {
+    return x;
+});

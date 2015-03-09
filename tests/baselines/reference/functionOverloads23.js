@@ -5,4 +5,6 @@ function foo(bar:(a?)=>void) { return 0 }
 
 
 //// [functionOverloads23.js]
-function foo(bar) { return 0; }
+function foo(bar) {
+    return 0;
+}
