@@ -37,7 +37,8 @@ var D = (function (_super) {
     function D() {
         _super.apply(this, arguments);
     }
-    D.prototype.foo = function () { };
+    D.prototype.foo = function () {
+    };
     return D;
 })(C);
 var x;

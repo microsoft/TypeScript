@@ -22,7 +22,9 @@ var TokenType;
 })(TokenType || (TokenType = {}));
 ;
 var list = {};
-function returnType() { return null; }
+function returnType() {
+    return null;
+}
 function foo() {
     var x = returnType();
     var x = list['one'];

@@ -1339,6 +1339,10 @@
         "category": "Error",
         "code": 2491
     },
+    "Cannot redeclare identifier '{0}' in catch clause": {
+        "category": "Error",
+        "code": 2492
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1839,6 +1843,10 @@
     "Do not emit declarations for code that has an '@internal' annotation.": {
         "category": "Message",
         "code": 6056
+    },
+    "Preserve new-lines when emitting code.": {
+        "category": "Message",
+        "code": 6057
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

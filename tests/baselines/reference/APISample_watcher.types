@@ -1223,31 +1223,34 @@ declare module "typescript" {
         Static = 128,
 >Static : NodeFlags
 
-        MultiLine = 256,
+        Default = 256,
+>Default : NodeFlags
+
+        MultiLine = 512,
 >MultiLine : NodeFlags
 
-        Synthetic = 512,
+        Synthetic = 1024,
 >Synthetic : NodeFlags
 
-        DeclarationFile = 1024,
+        DeclarationFile = 2048,
 >DeclarationFile : NodeFlags
 
-        Let = 2048,
+        Let = 4096,
 >Let : NodeFlags
 
-        Const = 4096,
+        Const = 8192,
 >Const : NodeFlags
 
-        OctalLiteral = 8192,
+        OctalLiteral = 16384,
 >OctalLiteral : NodeFlags
 
-        Modifier = 243,
+        Modifier = 499,
 >Modifier : NodeFlags
 
         AccessibilityModifier = 112,
 >AccessibilityModifier : NodeFlags
 
-        BlockScoped = 6144,
+        BlockScoped = 12288,
 >BlockScoped : NodeFlags
     }
     const enum ParserContextFlags {
@@ -1639,7 +1642,7 @@ declare module "typescript" {
 >FunctionLikeDeclaration : FunctionLikeDeclaration
 >Statement : Statement
 
-        name: Identifier;
+        name?: Identifier;
 >name : Identifier
 >Identifier : Identifier
 
@@ -1902,9 +1905,17 @@ declare module "typescript" {
 >condition : Expression
 >Expression : Expression
 
+        questionToken: Node;
+>questionToken : Node
+>Node : Node
+
         whenTrue: Expression;
 >whenTrue : Expression
 >Expression : Expression
+
+        colonToken: Node;
+>colonToken : Node
+>Node : Node
 
         whenFalse: Expression;
 >whenFalse : Expression
@@ -2011,6 +2022,10 @@ declare module "typescript" {
         expression: LeftHandSideExpression;
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
+
+        dotToken: Node;
+>dotToken : Node
+>Node : Node
 
         name: Identifier;
 >name : Identifier
@@ -2326,7 +2341,7 @@ declare module "typescript" {
 >Declaration : Declaration
 >ModuleElement : ModuleElement
 
-        name: Identifier;
+        name?: Identifier;
 >name : Identifier
 >Identifier : Identifier
 
@@ -2428,18 +2443,10 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >EnumMember : EnumMember
     }
-    interface ExportContainer {
->ExportContainer : ExportContainer
-
-        exportStars?: ExportDeclaration[];
->exportStars : ExportDeclaration[]
->ExportDeclaration : ExportDeclaration
-    }
-    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    interface ModuleDeclaration extends Declaration, ModuleElement {
 >ModuleDeclaration : ModuleDeclaration
 >Declaration : Declaration
 >ModuleElement : ModuleElement
->ExportContainer : ExportContainer
 
         name: Identifier | LiteralExpression;
 >name : Identifier | LiteralExpression
@@ -2517,9 +2524,9 @@ declare module "typescript" {
 >name : Identifier
 >Identifier : Identifier
     }
-    interface ExportDeclaration extends Statement, ModuleElement {
+    interface ExportDeclaration extends Declaration, ModuleElement {
 >ExportDeclaration : ExportDeclaration
->Statement : Statement
+>Declaration : Declaration
 >ModuleElement : ModuleElement
 
         exportClause?: NamedExports;
@@ -2567,14 +2574,17 @@ declare module "typescript" {
 >ExportSpecifier : ImportOrExportSpecifier
 >ImportOrExportSpecifier : ImportOrExportSpecifier
 
-    interface ExportAssignment extends Statement, ModuleElement {
+    interface ExportAssignment extends Declaration, ModuleElement {
 >ExportAssignment : ExportAssignment
->Statement : Statement
+>Declaration : Declaration
 >ModuleElement : ModuleElement
 
-        exportName: Identifier;
->exportName : Identifier
->Identifier : Identifier
+        isExportEquals?: boolean;
+>isExportEquals : boolean
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
     }
     interface FileReference extends TextRange {
 >FileReference : FileReference
@@ -2590,10 +2600,9 @@ declare module "typescript" {
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
     }
-    interface SourceFile extends Declaration, ExportContainer {
+    interface SourceFile extends Declaration {
 >SourceFile : SourceFile
 >Declaration : Declaration
->ExportContainer : ExportContainer
 
         statements: NodeArray<ModuleElement>;
 >statements : NodeArray<ModuleElement>
@@ -3234,26 +3243,23 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
->getGeneratedNameForNode : (node: EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration) => string
->node : EnumDeclaration | ExportDeclaration | ModuleDeclaration | ImportDeclaration
->ModuleDeclaration : ModuleDeclaration
->EnumDeclaration : EnumDeclaration
->ImportDeclaration : ImportDeclaration
->ExportDeclaration : ExportDeclaration
+        getGeneratedNameForNode(node: Node): string;
+>getGeneratedNameForNode : (node: Node) => string
+>node : Node
+>Node : Node
 
         getExpressionNameSubstitution(node: Identifier): string;
 >getExpressionNameSubstitution : (node: Identifier) => string
 >node : Identifier
 >Identifier : Identifier
 
-        getExportAssignmentName(node: SourceFile): string;
->getExportAssignmentName : (node: SourceFile) => string
+        hasExportDefaultValue(node: SourceFile): boolean;
+>hasExportDefaultValue : (node: SourceFile) => boolean
 >node : SourceFile
 >SourceFile : SourceFile
 
-        isReferencedImportDeclaration(node: Node): boolean;
->isReferencedImportDeclaration : (node: Node) => boolean
+        isReferencedAliasDeclaration(node: Node): boolean;
+>isReferencedAliasDeclaration : (node: Node) => boolean
 >node : Node
 >Node : Node
 
@@ -3411,8 +3417,8 @@ declare module "typescript" {
         ExportNamespace = 4194304,
 >ExportNamespace : SymbolFlags
 
-        Import = 8388608,
->Import : SymbolFlags
+        Alias = 8388608,
+>Alias : SymbolFlags
 
         Instantiated = 16777216,
 >Instantiated : SymbolFlags
@@ -3431,6 +3437,9 @@ declare module "typescript" {
 
         Optional = 536870912,
 >Optional : SymbolFlags
+
+        ExportStar = 1073741824,
+>ExportStar : SymbolFlags
 
         Enum = 384,
 >Enum : SymbolFlags
@@ -3504,8 +3513,8 @@ declare module "typescript" {
         TypeAliasExcludes = 793056,
 >TypeAliasExcludes : SymbolFlags
 
-        ImportExcludes = 8388608,
->ImportExcludes : SymbolFlags
+        AliasExcludes = 8388608,
+>AliasExcludes : SymbolFlags
 
         ModuleMember = 8914931,
 >ModuleMember : SymbolFlags
@@ -3596,13 +3605,6 @@ declare module "typescript" {
         referenced?: boolean;
 >referenced : boolean
 
-        exportAssignmentChecked?: boolean;
->exportAssignmentChecked : boolean
-
-        exportAssignmentSymbol?: Symbol;
->exportAssignmentSymbol : Symbol
->Symbol : Symbol
-
         unionType?: UnionType;
 >unionType : UnionType
 >UnionType : UnionType
@@ -3610,6 +3612,9 @@ declare module "typescript" {
         resolvedExports?: SymbolTable;
 >resolvedExports : SymbolTable
 >SymbolTable : SymbolTable
+
+        exportsChecked?: boolean;
+>exportsChecked : boolean
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol
@@ -4204,6 +4209,9 @@ declare module "typescript" {
 
         stripInternal?: boolean;
 >stripInternal : boolean
+
+        preserveNewLines?: boolean;
+>preserveNewLines : boolean
 
         [option: string]: string | number | boolean;
 >option : string
@@ -4987,6 +4995,10 @@ declare module "typescript" {
 >TypeChecker : TypeChecker
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
+    var version: string;
+>version : string
+
     function createCompilerHost(options: CompilerOptions): CompilerHost;
 >createCompilerHost : (options: CompilerOptions) => CompilerHost
 >options : CompilerOptions
@@ -5015,6 +5027,7 @@ declare module "typescript" {
 >Program : Program
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
 >servicesVersion : string
 

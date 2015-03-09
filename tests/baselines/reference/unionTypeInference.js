@@ -50,7 +50,10 @@ function g(value) {
     return value[1];
 }
 var b1;
-var b1 = g(["string", true]);
+var b1 = g([
+    "string",
+    true
+]);
 function h(x) {
     return typeof x === "string" || typeof x === "boolean" ? undefined : x;
 }

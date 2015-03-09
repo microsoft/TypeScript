@@ -430,7 +430,11 @@ module ts {
                     normalized.pop();
                 }
                 else {
-                    normalized.push(part);
+                    // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
+                    // e.g. "path//file.ts".  Drop these before re-joining the parts.
+                    if(part) {
+                        normalized.push(part);
+                    }
                 }
             }
         }

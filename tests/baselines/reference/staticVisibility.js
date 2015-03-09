@@ -58,9 +58,13 @@ var C2 = (function () {
         this.barback = "";
     }
     Object.defineProperty(C2, "Bar", {
-        get: function () { return "bar"; } // ok
+        get: function () {
+            return "bar";
+        } // ok
         ,
-        set: function (bar) { barback = bar; } // not ok
+        set: function (bar) {
+            barback = bar;
+        } // not ok
         ,
         enumerable: true,
         configurable: true

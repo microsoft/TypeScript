@@ -21,7 +21,9 @@ var C1 = (function (_super) {
         _super.apply(this, arguments);
     }
     C1.prototype[Symbol.toStringTag] = function () {
-        return { x: "" };
+        return {
+            x: ""
+        };
     };
     return C1;
 })(C2);

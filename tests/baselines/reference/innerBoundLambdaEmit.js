@@ -18,5 +18,6 @@ var M;
         return Foo;
     })();
     M.Foo = Foo;
-    var bar = function () { };
+    var bar = function () {
+    };
 })(M || (M = {}));

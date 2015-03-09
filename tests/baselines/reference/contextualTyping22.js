@@ -2,5 +2,9 @@
 var foo:(a:number)=>number = function(a){return a}; foo = function(b){return b};
 
 //// [contextualTyping22.js]
-var foo = function (a) { return a; };
-foo = function (b) { return b; };
+var foo = function (a) {
+    return a;
+};
+foo = function (b) {
+    return b;
+};

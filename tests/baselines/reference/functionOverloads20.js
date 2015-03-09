@@ -5,4 +5,6 @@ function foo(bar:{a:any;}): string {return ""}
 
 
 //// [functionOverloads20.js]
-function foo(bar) { return ""; }
+function foo(bar) {
+    return "";
+}

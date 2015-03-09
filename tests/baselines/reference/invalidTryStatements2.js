@@ -36,16 +36,20 @@ function fn() {
     }
     try {
     }
-    catch (x) { } // error missing try
-    finally { } // potential error; can be absorbed by the 'catch'
+    catch (x) {
+    } // error missing try
+    finally {
+    } // potential error; can be absorbed by the 'catch'
 }
 function fn2() {
     try {
     }
-    finally { } // error missing try
+    finally {
+    } // error missing try
     try {
     } // error missing try
-    catch (x) { } // error missing try
+    catch (x) {
+    } // error missing try
     // no error
     try {
     }

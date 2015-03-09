@@ -7,6 +7,8 @@ class C<T> {
 var C = (function () {
     function C() {
     }
-    C.s = function (p) { return p; };
+    C.s = function (p) {
+        return p;
+    };
     return C;
 })();

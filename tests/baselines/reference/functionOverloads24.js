@@ -5,4 +5,7 @@ function foo(bar:any):(a)=>void { return function(){} }
 
 
 //// [functionOverloads24.js]
-function foo(bar) { return function () { }; }
+function foo(bar) {
+    return function () {
+    };
+}

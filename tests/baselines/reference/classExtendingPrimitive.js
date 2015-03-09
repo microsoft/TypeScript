@@ -69,7 +69,8 @@ var C5a = (function () {
     return C5a;
 })();
 null;
-{ }
+{
+}
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {

@@ -15,7 +15,8 @@ class StringIterator {
 }
 
 //// [for-of35.js]
-for (var v of new StringIterator) { }
+for (var v of new StringIterator) {
+}
 var StringIterator = (function () {
     function StringIterator() {
     }

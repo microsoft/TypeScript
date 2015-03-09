@@ -24,7 +24,9 @@ var style: IBookStyle = {
 var style = {
     initialLeftPageTransforms: function (width) {
         return [
-            { 'ry': null }
+            {
+                'ry': null
+            }
         ];
     }
 };

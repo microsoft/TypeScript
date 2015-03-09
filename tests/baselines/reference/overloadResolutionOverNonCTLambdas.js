@@ -48,7 +48,13 @@ var Bugs;
         return result;
     }
 })(Bugs || (Bugs = {}));
-function bug3(f) { return f("s"); }
-function fprime(x) { return x; }
+function bug3(f) {
+    return f("s");
+}
+function fprime(x) {
+    return x;
+}
 bug3(fprime);
-bug3(function (x) { return x; });
+bug3(function (x) {
+    return x;
+});

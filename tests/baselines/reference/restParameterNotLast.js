@@ -2,4 +2,5 @@
 function f(...x, y) { }
 
 //// [restParameterNotLast.js]
-function f(x, y) { }
+function f(x, y) {
+}

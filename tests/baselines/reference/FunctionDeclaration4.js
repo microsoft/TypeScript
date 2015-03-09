@@ -3,4 +3,5 @@ function foo();
 function bar() { }
 
 //// [FunctionDeclaration4.js]
-function bar() { }
+function bar() {
+}

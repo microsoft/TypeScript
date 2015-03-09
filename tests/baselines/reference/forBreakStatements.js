@@ -61,6 +61,7 @@ SEVEN: for (;;)
         for (;;)
             break SEVEN;
 EIGHT: for (;;) {
-    var fn = function () { };
+    var fn = function () {
+    };
     break EIGHT;
 }

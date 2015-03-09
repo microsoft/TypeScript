@@ -24,7 +24,9 @@ define(["require", "exports"], function (require, exports) {
 //// [consumer.js]
 define(["require", "exports"], function (require, exports) {
     function w() {
-        return { name: 'value' };
+        return {
+            name: 'value'
+        };
     }
     exports.w = w;
 });

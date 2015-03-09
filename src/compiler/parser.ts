@@ -120,6 +120,7 @@ module ts {
                 return visitNodes(cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<PropertyAccessExpression>node).dotToken) ||
                     visitNode(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
@@ -156,7 +157,9 @@ module ts {
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
+                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
             case SyntaxKind.SpreadElementExpression:
                 return visitNode(cbNode, (<SpreadElementExpression>node).expression);
@@ -277,7 +280,7 @@ module ts {
                     visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).exportName);
+                    visitNode(cbNode, (<ExportAssignment>node).expression);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -357,6 +360,7 @@ module ts {
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
         }
         return 0;
     }
@@ -1326,11 +1330,14 @@ module ts {
 
         function parseOptionalToken(t: SyntaxKind): Node {
             if (token === t) {
-                var node = createNode(t);
-                nextToken();
-                return finishNode(node);
+                return parseTokenNode();
             }
             return undefined;
+        }
+
+        function parseExpectedToken(t: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+            return parseOptionalToken(t) ||
+                createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
         }
 
         function parseTokenNode<T extends Node>(): T {
@@ -1499,7 +1506,13 @@ module ts {
             }
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
+                if (token === SyntaxKind.DefaultKeyword) {
+                    return lookAhead(nextTokenIsClassOrFunction);
+                }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+            }
+            if (token === SyntaxKind.DefaultKeyword) {
+                return nextTokenIsClassOrFunction();
             }
             nextToken();
             return canFollowModifier();
@@ -1510,6 +1523,11 @@ module ts {
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
                 || isLiteralPropertyName();
+        }
+
+        function nextTokenIsClassOrFunction(): boolean {
+            nextToken();
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -2150,8 +2168,7 @@ module ts {
                 literal = parseLiteralNode();
             }
             else {
-                literal = <LiteralExpression>createMissingNode(
-                    SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -3174,7 +3191,8 @@ module ts {
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
-            if (!parseOptional(SyntaxKind.QuestionToken)) {
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (!questionToken) {
                 return leftOperand;
             }
 
@@ -3182,8 +3200,10 @@ module ts {
             // we do not that for the 'whenFalse' part.  
             var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
+            node.questionToken = questionToken;
             node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
-            parseExpected(SyntaxKind.ColonToken);
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition:*/ false,
+                Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
@@ -3446,7 +3466,7 @@ module ts {
             // If it wasn't then just try to parse out a '.' and report an error.
             var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition:*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
             return finishNode(node);
         }
@@ -3462,10 +3482,11 @@ module ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                var dotOrBracketStart = scanner.getTokenPos();
-                if (parseOptional(SyntaxKind.DotToken)) {
+                var dotToken = parseOptionalToken(SyntaxKind.DotToken);
+                if (dotToken) {
                     var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
+                    propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
@@ -4323,7 +4344,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = parseIdentifier();
+            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
@@ -4499,7 +4520,7 @@ module ts {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseIdentifier();
+            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4832,10 +4853,17 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
+        function parseExportAssignment(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
             setModifiers(node, modifiers);
-            node.exportName = parseIdentifier();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.isExportEquals = true;
+            }
+            else {
+                parseExpected(SyntaxKind.DefaultKeyword);
+            }
+            //node.exportName = parseIdentifier();
+            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
@@ -4902,7 +4930,7 @@ module ts {
         function nextTokenCanFollowExportKeyword() {
             nextToken();
             return token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4919,8 +4947,8 @@ module ts {
             var modifiers = parseModifiers();
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
-                if (parseOptional(SyntaxKind.EqualsToken)) {
-                    return parseExportAssignmentTail(fullStart, modifiers);
+                if (token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken) {
+                    return parseExportAssignment(fullStart, modifiers);
                 }
                 if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
                     return parseExportDeclaration(fullStart, modifiers);

@@ -1,5 +1,5 @@
-tests/cases/compiler/multipleExportAssignments.ts(13,1): error TS2308: A module cannot have more than one export assignment.
-tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2308: A module cannot have more than one export assignment.
+tests/cases/compiler/multipleExportAssignments.ts(13,1): error TS2300: Duplicate identifier 'default'.
+tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2300: Duplicate identifier 'default'.
 
 
 ==== tests/cases/compiler/multipleExportAssignments.ts (2 errors) ====
@@ -17,9 +17,9 @@ tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2308: A module 
     };
     export = server;
     ~~~~~~~~~~~~~~~~
-!!! error TS2308: A module cannot have more than one export assignment.
+!!! error TS2300: Duplicate identifier 'default'.
     export = connectExport;
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2308: A module cannot have more than one export assignment.
+!!! error TS2300: Duplicate identifier 'default'.
      
     

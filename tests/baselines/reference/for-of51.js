@@ -2,4 +2,5 @@
 for (let let of []) {}
 
 //// [for-of51.js]
-for (let let of []) { }
+for (let let of []) {
+}

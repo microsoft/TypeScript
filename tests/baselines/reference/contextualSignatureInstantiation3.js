@@ -31,9 +31,15 @@ function identity(x) {
     return x;
 }
 function singleton(x) {
-    return [x];
+    return [
+        x
+    ];
 }
-var xs = [1, 2, 3];
+var xs = [
+    1,
+    2,
+    3
+];
 // Have compiler check that we get the correct types
 var v1;
 var v1 = xs.map(identity); // Error if not number[]

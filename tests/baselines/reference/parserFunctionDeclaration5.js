@@ -3,4 +3,5 @@ function foo();
 function foo() { }
 
 //// [parserFunctionDeclaration5.js]
-function foo() { }
+function foo() {
+}

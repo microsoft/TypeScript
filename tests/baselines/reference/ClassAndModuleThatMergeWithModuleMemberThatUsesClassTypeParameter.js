@@ -58,7 +58,8 @@ var clodule1 = (function () {
 })();
 var clodule1;
 (function (clodule1) {
-    function f(x) { }
+    function f(x) {
+    }
 })(clodule1 || (clodule1 = {}));
 var clodule2 = (function () {
     function clodule2() {
@@ -81,7 +82,9 @@ var clodule3 = (function () {
 })();
 var clodule3;
 (function (clodule3) {
-    clodule3.y = { id: T };
+    clodule3.y = {
+        id: T
+    };
 })(clodule3 || (clodule3 = {}));
 var clodule4 = (function () {
     function clodule4() {

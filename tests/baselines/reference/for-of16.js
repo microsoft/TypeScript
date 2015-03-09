@@ -10,7 +10,8 @@ class StringIterator {
 
 //// [for-of16.js]
 var v;
-for (v of new StringIterator) { } // Should fail
+for (v of new StringIterator) {
+} // Should fail
 var StringIterator = (function () {
     function StringIterator() {
     }

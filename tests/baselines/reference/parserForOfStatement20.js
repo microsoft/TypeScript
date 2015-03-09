@@ -2,4 +2,5 @@
 for (var of = 0 in of) { }
 
 //// [parserForOfStatement20.js]
-for (var of = 0 in of) { }
+for (var of = 0 in of) {
+}

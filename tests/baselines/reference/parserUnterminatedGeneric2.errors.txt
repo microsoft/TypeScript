@@ -48,9 +48,9 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
     
         interface IQService {
             all(promises: IPromise < any > []): IPromise<
-                          ~~~~~~~~~~~~~~~~
+                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'IPromise'.
-                                                ~~~~~~~~~
+                                                ~~~~~~~~
 !!! error TS2304: Cannot find name 'IPromise'.
                                                          
 !!! error TS1005: '>' expected.

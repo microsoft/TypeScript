@@ -10,42 +10,29 @@ sourceFile:es6-declaration-amd.ts
 -------------------------------------------------------------------
 >>>var A = (function () {
 1 >
-2 >^^^^
-3 >    ^
-4 >     ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >class 
-3 >    A
 1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(2, 8) + SourceIndex(0)
 ---
 >>>    function A() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^
-1->
+2 >    ^^->
+1->class A
   >{
   >    
-2 >    
-3 >             A
 1->Emitted(2, 5) Source(4, 5) + SourceIndex(0) name (A)
-2 >Emitted(2, 14) Source(2, 7) + SourceIndex(0) name (A)
-3 >Emitted(2, 15) Source(2, 8) + SourceIndex(0) name (A)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >{
-  >    constructor ()
+1->constructor ()
   >    {
   >
   >    
 2 >    }
-1 >Emitted(3, 5) Source(7, 5) + SourceIndex(0) name (A.constructor)
+1->Emitted(3, 5) Source(7, 5) + SourceIndex(0) name (A.constructor)
 2 >Emitted(3, 6) Source(7, 6) + SourceIndex(0) name (A.constructor)
 ---
 >>>    A.prototype.B = function () {

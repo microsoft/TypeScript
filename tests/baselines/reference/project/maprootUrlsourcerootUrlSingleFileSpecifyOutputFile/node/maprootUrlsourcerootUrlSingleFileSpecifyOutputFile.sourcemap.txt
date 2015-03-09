@@ -31,37 +31,26 @@ sourceFile:test.ts
 ---
 >>>var c1 = (function () {
 1->
-2 >^^^^
-3 >    ^^
-4 >      ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >class 
-3 >    c1
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(2, 7) Source(2, 9) + SourceIndex(0)
 ---
 >>>    function c1() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             c1
 1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (c1)
-2 >Emitted(3, 14) Source(2, 7) + SourceIndex(0) name (c1)
-3 >Emitted(3, 16) Source(2, 9) + SourceIndex(0) name (c1)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^->
-1 > {
+1->class c1 {
   >    public p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (c1.constructor)
 2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (c1.constructor)
 ---
 >>>    return c1;
@@ -119,16 +108,10 @@ sourceFile:test.ts
 ---
 >>>function f1() {
 1 >
-2 >^^^^^^^^^
-3 >         ^^
-4 >           ^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >function 
-3 >         f1
 1 >Emitted(8, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(8, 10) Source(7, 10) + SourceIndex(0)
-3 >Emitted(8, 12) Source(7, 12) + SourceIndex(0)
 ---
 >>>    return instance1;
 1->^^^^
@@ -136,7 +119,7 @@ sourceFile:test.ts
 3 >          ^
 4 >           ^^^^^^^^^
 5 >                    ^
-1->() {
+1->function f1() {
   >    
 2 >    return
 3 >           

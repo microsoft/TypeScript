@@ -2,4 +2,6 @@
 var x = `abc${ function y() { return y; } }def`;
 
 //// [templateStringWithEmbeddedFunctionExpression.js]
-var x = "abc" + function y() { return y; } + "def";
+var x = "abc" + function y() {
+    return y;
+} + "def";

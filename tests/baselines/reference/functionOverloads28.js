@@ -6,6 +6,8 @@ var t:any; var x = foo(t);
 
 
 //// [functionOverloads28.js]
-function foo(bar) { return ''; }
+function foo(bar) {
+    return '';
+}
 var t;
 var x = foo(t);

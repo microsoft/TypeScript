@@ -76,7 +76,8 @@ var B = (function (_super) {
 var C = (function () {
     function C() {
     }
-    C.prototype.valueOf = function () { };
+    C.prototype.valueOf = function () {
+    };
     return C;
 })();
 var c;
@@ -90,7 +91,8 @@ var r2b = i.data;
 var r2c = r2b['hm']; // should be 'Object'
 var r2d = i['hm']; // should be 'any'
 var a = {
-    valueOf: function () { },
+    valueOf: function () {
+    },
     data: new B()
 };
 var r3 = a.valueOf();

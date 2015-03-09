@@ -63,7 +63,23 @@ var result1 = true ? a : b;
 var result2 = true ? a : b;
 var result3 = true ? a : b;
 var result31 = true ? a : b;
-var result4 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
-var result5 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
-var result6 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
-var result61 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
+var result4 = true ? function (m) {
+    return m.propertyX1;
+} : function (n) {
+    return n.propertyX2;
+};
+var result5 = true ? function (m) {
+    return m.propertyX1;
+} : function (n) {
+    return n.propertyX2;
+};
+var result6 = true ? function (m) {
+    return m.propertyX1;
+} : function (n) {
+    return n.propertyX2;
+};
+var result61 = true ? function (m) {
+    return m.propertyX1;
+} : function (n) {
+    return n.propertyX2;
+};

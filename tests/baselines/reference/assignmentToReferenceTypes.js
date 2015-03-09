@@ -36,7 +36,8 @@ var E;
 (function (E) {
 })(E || (E = {}));
 E = null;
-function f() { }
+function f() {
+}
 f = null;
 var x = 1;
 x = null;

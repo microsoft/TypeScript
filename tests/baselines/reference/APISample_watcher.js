@@ -382,15 +382,16 @@ declare module "typescript" {
         Private = 32,
         Protected = 64,
         Static = 128,
-        MultiLine = 256,
-        Synthetic = 512,
-        DeclarationFile = 1024,
-        Let = 2048,
-        Const = 4096,
-        OctalLiteral = 8192,
-        Modifier = 243,
+        Default = 256,
+        MultiLine = 512,
+        Synthetic = 1024,
+        DeclarationFile = 2048,
+        Let = 4096,
+        Const = 8192,
+        OctalLiteral = 16384,
+        Modifier = 499,
         AccessibilityModifier = 112,
-        BlockScoped = 6144,
+        BlockScoped = 12288,
     }
     const enum ParserContextFlags {
         StrictMode = 1,
@@ -518,7 +519,7 @@ declare module "typescript" {
         body?: Block | Expression;
     }
     interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
-        name: Identifier;
+        name?: Identifier;
         body?: Block;
     }
     interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
@@ -611,7 +612,9 @@ declare module "typescript" {
     }
     interface ConditionalExpression extends Expression {
         condition: Expression;
+        questionToken: Node;
         whenTrue: Expression;
+        colonToken: Node;
         whenFalse: Expression;
     }
     interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
@@ -648,6 +651,7 @@ declare module "typescript" {
     }
     interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
     interface ElementAccessExpression extends MemberExpression {
@@ -751,7 +755,7 @@ declare module "typescript" {
         _moduleElementBrand: any;
     }
     interface ClassDeclaration extends Declaration, ModuleElement {
-        name: Identifier;
+        name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
@@ -781,10 +785,7 @@ declare module "typescript" {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    interface ExportContainer {
-        exportStars?: ExportDeclaration[];
-    }
-    interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -809,7 +810,7 @@ declare module "typescript" {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface ExportDeclaration extends Statement, ModuleElement {
+    interface ExportDeclaration extends Declaration, ModuleElement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -824,8 +825,9 @@ declare module "typescript" {
     }
     type ImportSpecifier = ImportOrExportSpecifier;
     type ExportSpecifier = ImportOrExportSpecifier;
-    interface ExportAssignment extends Statement, ModuleElement {
-        exportName: Identifier;
+    interface ExportAssignment extends Declaration, ModuleElement {
+        isExportEquals?: boolean;
+        expression: Expression;
     }
     interface FileReference extends TextRange {
         fileName: string;
@@ -833,7 +835,7 @@ declare module "typescript" {
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
     }
-    interface SourceFile extends Declaration, ExportContainer {
+    interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
         fileName: string;
@@ -996,10 +998,10 @@ declare module "typescript" {
         errorModuleName?: string;
     }
     interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+        getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: Node): boolean;
+        hasExportDefaultValue(node: SourceFile): boolean;
+        isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
@@ -1036,13 +1038,14 @@ declare module "typescript" {
         ExportValue = 1048576,
         ExportType = 2097152,
         ExportNamespace = 4194304,
-        Import = 8388608,
+        Alias = 8388608,
         Instantiated = 16777216,
         Merged = 33554432,
         Transient = 67108864,
         Prototype = 134217728,
         UnionProperty = 268435456,
         Optional = 536870912,
+        ExportStar = 1073741824,
         Enum = 384,
         Variable = 3,
         Value = 107455,
@@ -1067,7 +1070,7 @@ declare module "typescript" {
         SetAccessorExcludes = 74687,
         TypeParameterExcludes = 530912,
         TypeAliasExcludes = 793056,
-        ImportExcludes = 8388608,
+        AliasExcludes = 8388608,
         ModuleMember = 8914931,
         ExportHasLocal = 944,
         HasLocals = 255504,
@@ -1096,10 +1099,9 @@ declare module "typescript" {
         declaredType?: Type;
         mapper?: TypeMapper;
         referenced?: boolean;
-        exportAssignmentChecked?: boolean;
-        exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
         resolvedExports?: SymbolTable;
+        exportsChecked?: boolean;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }
@@ -1301,6 +1303,7 @@ declare module "typescript" {
         version?: boolean;
         watch?: boolean;
         stripInternal?: boolean;
+        preserveNewLines?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1541,12 +1544,15 @@ declare module "typescript" {
     function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
+    var version: string;
     function createCompilerHost(options: CompilerOptions): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
     interface Node {
         getSourceFile(): SourceFile;
@@ -2060,21 +2066,33 @@ function watch(rootFileNames, options) {
     var files = {};
     // initialize the list of files
     rootFileNames.forEach(function (fileName) {
-        files[fileName] = { version: 0 };
+        files[fileName] = {
+            version: 0
+        };
     });
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost = {
-        getScriptFileNames: function () { return rootFileNames; },
-        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
+        getScriptFileNames: function () {
+            return rootFileNames;
+        },
+        getScriptVersion: function (fileName) {
+            return files[fileName] && files[fileName].version.toString();
+        },
         getScriptSnapshot: function (fileName) {
             if (!fs.existsSync(fileName)) {
                 return undefined;
             }
             return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
-        getCurrentDirectory: function () { return process.cwd(); },
-        getCompilationSettings: function () { return options; },
-        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); }
+        getCurrentDirectory: function () {
+            return process.cwd();
+        },
+        getCompilationSettings: function () {
+            return options;
+        },
+        getDefaultLibFileName: function (options) {
+            return ts.getDefaultLibFilePath(options);
+        }
     };
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
@@ -2083,7 +2101,10 @@ function watch(rootFileNames, options) {
         // First time around, emit all files
         emitFile(fileName);
         // Add a watch on the file to handle next change
-        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
+        fs.watchFile(fileName, {
+            persistent: true,
+            interval: 250
+        }, function (curr, prev) {
             // Check timestamp
             if (+curr.mtime <= +prev.mtime) {
                 return;
@@ -2121,6 +2142,10 @@ function watch(rootFileNames, options) {
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) {
+    return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts";
+});
 // Start the watcher
-watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });
+watch(currentDirectoryFiles, {
+    module: 1 /* CommonJS */
+});
