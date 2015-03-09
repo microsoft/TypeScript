@@ -3033,6 +3033,9 @@ module ts {
                 return false;
             }
 
+            // Returns 'true' if the code was actually indented, false otherwise. 
+            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be 
+            // emitted instead.
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string) {
                 var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
@@ -3321,6 +3324,10 @@ module ts {
                 decreaseIndentIf(indentedBeforeColon, indentedAfterColon);
             }
 
+            // Helper function to decrease the indent if we previously indented.  Allows multiple 
+            // previous indent values to be considered at a time.  This also allows caller to just
+            // call this once, passing in all their appropriate indent values, instead of needing
+            // to call this helper function multiple times.
             function decreaseIndentIf(value1: boolean, value2?: boolean) {
                 if (value1) {
                     decreaseIndent();
