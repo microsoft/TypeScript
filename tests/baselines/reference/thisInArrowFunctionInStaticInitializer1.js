@@ -9,7 +9,8 @@ class Vector {
 }
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
-function log(a) { }
+function log(a) {
+}
 var Vector = (function () {
     function Vector() {
         var _this = this;

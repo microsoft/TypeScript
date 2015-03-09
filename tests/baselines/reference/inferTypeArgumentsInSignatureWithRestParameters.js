@@ -30,8 +30,15 @@ function h(nonarray) {
         args[_i - 1] = arguments[_i];
     }
 }
-function i(array, opt) { }
-var a = [1, 2, 3, 4, 5];
+function i(array, opt) {
+}
+var a = [
+    1,
+    2,
+    3,
+    4,
+    5
+];
 f(a); // OK
 g(a); // OK
 h(a); // OK

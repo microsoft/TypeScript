@@ -7,6 +7,7 @@ interface NotNumber {
     toFixed(fractionDigits?: number): string;
     toExponential(fractionDigits?: number): string;
     toPrecision(precision?: number): string;
+    valueOf(): number;
     doStuff(): string;
 }
 

@@ -1571,6 +1571,7 @@ module ts {
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
             var decreaseIndent = writer.decreaseIndent;
+            var preserveNewLines = compilerOptions.preserveNewLines || false;
 
             var currentSourceFile: SourceFile;
 
@@ -2172,7 +2173,7 @@ module ts {
 
                 increaseIndent();
 
-                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                if (preserveNewLines && nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -2183,7 +2184,7 @@ module ts {
 
                 for (var i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
-                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                        if (preserveNewLines && nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
                             write(", ");
                         }
                         else {
@@ -2195,15 +2196,13 @@ module ts {
                     emit(nodes[i]);
                 }
 
-                var closeTokenIsOnSameLineAsLastElement = nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes));
-
                 if (nodes.hasTrailingComma && allowTrailingComma) {
                     write(",");
                 }
 
                 decreaseIndent();
 
-                if (closeTokenIsOnSameLineAsLastElement) {
+                if (preserveNewLines && nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -2918,6 +2917,7 @@ module ts {
             function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
                 var result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                 result.expression = expression;
+                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
 
                 return result;
@@ -3033,13 +3033,40 @@ module ts {
                 return false;
             }
 
+            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node) {
+                // Use a newline for existing code if the original had one, and we're preserving formatting.
+                var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
+
+                // Always use a newline for synthesized code if the synthesizer desires it.
+                var synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
+
+                if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
+                    increaseIndent();
+                    writeLine();
+                    return true;
+                }
+
+                return false;
+            }
+
             function emitPropertyAccess(node: PropertyAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
+
                 emit(node.expression);
+
+                var indented = indentIfOnDifferentLines(node, node.expression, node.dotToken);
+
                 write(".");
+
+                indented = indented || indentIfOnDifferentLines(node, node.dotToken, node.name);
+
                 emit(node.name);
+
+                if (indented) {
+                    decreaseIndent();
+                }
             }
 
             function emitQualifiedName(node: QualifiedName) {
@@ -3273,25 +3300,31 @@ module ts {
                 else {
                     emit(node.left);
 
-                    if (node.operatorToken.kind !== SyntaxKind.CommaToken) {
+                    // If there was a newline between the left side of the binary expression and the
+                    // operator, then try to preserve that.
+                    var indented1 = indentIfOnDifferentLines(node, node.left, node.operatorToken);
+                    
+                    // Otherwise just emit the operator right afterwards.  For everything but
+                    // comma, emit a space before the operator.
+                    if (!indented1 && node.operatorToken.kind !== SyntaxKind.CommaToken) {
                         write(" ");
                     }
 
                     write(tokenToString(node.operatorToken.kind));
 
-                    var shouldPlaceOnNewLine = !nodeIsSynthesized(node) && !nodeEndIsOnSameLineAsNodeStart(node.operatorToken, node.right);
-
-                    // Check if the right expression is on a different line versus the operator itself.  If so,
-                    // we'll emit newline.
-                    if (shouldPlaceOnNewLine || synthesizedNodeStartsOnNewLine(node.right)) {
-                        increaseIndent();
-                        writeLine();
-                        emit(node.right);
-                        decreaseIndent();
+                    if (!indented1) {
+                        var indented2 = indentIfOnDifferentLines(node, node.operatorToken, node.right);
                     }
-                    else {
+
+                    if (!indented2) {
                         write(" ");
-                        emit(node.right);
+                    }
+
+                    emit(node.right);
+
+                    // If we indented the left or the right side, then dedent now.
+                    if (indented1 || indented2) {
+                        decreaseIndent();
                     }
                 }
             }
@@ -3302,10 +3335,45 @@ module ts {
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
-                write(" ? ");
+                var indent1 = indentIfOnDifferentLines(node, node.condition, node.questionToken);
+                if (!indent1) {
+                    write(" ");
+                }
+
+                write("?");
+
+                if (!indent1) {
+                    var indent2 = indentIfOnDifferentLines(node, node.questionToken, node.whenTrue);
+                }
+
+                if (!indent2) {
+                    write(" ");
+                }
+
                 emit(node.whenTrue);
-                write(" : ");
+
+                if (indent1 || indent2) {
+                    decreaseIndent();
+                }
+
+                var indent3 = indentIfOnDifferentLines(node, node.whenTrue, node.colonToken);
+                if (!indent3) {
+                    write(" ");
+                }
+
+                write(":");
+                if (!indent3) {
+                    var indent4 = indentIfOnDifferentLines(node, node.colonToken, node.whenFalse);
+                }
+                
+                if (!indent4) {
+                    write(" ");
+                }
+
                 emit(node.whenFalse);
+                if (indent3 || indent4) {
+                    decreaseIndent();
+                }
             }
 
             function isSingleLineEmptyBlock(node: Node) {
@@ -3316,7 +3384,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
-                if (isSingleLineEmptyBlock(node)) {
+                if (preserveNewLines && isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -3533,7 +3601,8 @@ module ts {
                 else {
                     write("default:");
                 }
-                if (node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
+
+                if (preserveNewLines && node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
                     write(" ");
                     emit(node.statements[0]);
                 }
@@ -3678,10 +3747,16 @@ module ts {
                     equals.left = value;
                     equals.operatorToken = createSynthesizedNode(SyntaxKind.EqualsEqualsEqualsToken);
                     equals.right = createVoidZero();
+                    return createConditionalExpression(equals, defaultValue, value);
+                }
+
+                function createConditionalExpression(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
                     var cond = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
-                    cond.condition = equals;
-                    cond.whenTrue = defaultValue;
-                    cond.whenFalse = value;
+                    cond.condition = condition;
+                    cond.questionToken = createSynthesizedNode(SyntaxKind.QuestionToken);
+                    cond.whenTrue = whenTrue;
+                    cond.colonToken = createSynthesizedNode(SyntaxKind.ColonToken);
+                    cond.whenFalse = whenFalse;
                     return cond;
                 }
 
@@ -3704,10 +3779,7 @@ module ts {
                     if (propName.kind !== SyntaxKind.Identifier) {
                         return createElementAccess(object, propName);
                     }
-                    var node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                    node.expression = parenthesizeForAccess(object);
-                    node.name = propName;
-                    return node;
+                    return createPropertyAccessExpression(parenthesizeForAccess(object), propName);
                 }
 
                 function createElementAccess(object: Expression, index: Expression): Expression {
@@ -4233,7 +4305,7 @@ module ts {
 
                 // If we didn't have to emit any preamble code, then attempt to keep the arrow
                 // function on one line.
-                if (!preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
+                if (preserveNewLines && !preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
                     write(" ");
                     emitStart(body);
                     write("return ");
@@ -4284,7 +4356,7 @@ module ts {
 
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
-                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (var i = 0, n = body.statements.length; i < n; i++) {
                         write(" ");
                         emit(body.statements[i]);

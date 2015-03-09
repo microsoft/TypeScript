@@ -14,5 +14,7 @@ var greet = function (greeting) {
     return greetings;
 };
 greet("Hello");
-var incrGreetings = function () { return greetings++; };
+var incrGreetings = function () {
+    return greetings++;
+};
 //# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map

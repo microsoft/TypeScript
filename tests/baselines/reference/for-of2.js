@@ -4,4 +4,5 @@ for (v of []) { }
 
 //// [for-of2.js]
 const v;
-for (v of []) { }
+for (v of []) {
+}

@@ -198,6 +198,12 @@ var fn5 = (function () {
     }
     return fn5;
 })();
-new fn5(function (n) { return n.toFixed(); });
-new fn5(function (n) { return n.substr(0); });
-new fn5(function (n) { return n.blah; }); // Error
+new fn5(function (n) {
+    return n.toFixed();
+});
+new fn5(function (n) {
+    return n.substr(0);
+});
+new fn5(function (n) {
+    return n.blah;
+}); // Error

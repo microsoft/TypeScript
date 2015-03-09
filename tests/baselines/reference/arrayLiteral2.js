@@ -2,4 +2,7 @@
 var v30 = [1, 2], v31;
 
 //// [arrayLiteral2.js]
-var v30 = [1, 2], v31;
+var v30 = [
+    1,
+    2
+], v31;

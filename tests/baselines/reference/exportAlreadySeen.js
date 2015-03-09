@@ -23,7 +23,8 @@ declare module A {
 var M;
 (function (M) {
     M.x = 1;
-    function f() { }
+    function f() {
+    }
     M.f = f;
     var N;
     (function (N) {

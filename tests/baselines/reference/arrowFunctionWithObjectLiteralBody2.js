@@ -2,4 +2,6 @@
 var v = a => <any><any>{}
 
 //// [arrowFunctionWithObjectLiteralBody2.js]
-var v = function (a) { return {}; };
+var v = function (a) {
+    return {};
+};

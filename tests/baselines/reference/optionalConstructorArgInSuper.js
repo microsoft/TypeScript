@@ -20,7 +20,8 @@ var __extends = this.__extends || function (d, b) {
 var Base = (function () {
     function Base(opt) {
     }
-    Base.prototype.foo = function (other) { };
+    Base.prototype.foo = function (other) {
+    };
     return Base;
 })();
 var Derived = (function (_super) {

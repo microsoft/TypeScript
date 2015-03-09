@@ -192,8 +192,14 @@ value;
 }
 value;
 // array literals
-['', ''] *= value;
-['', ''] += value;
+[
+    '',
+    ''
+] *= value;
+[
+    '',
+    ''
+] += value;
 // super
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -213,13 +219,17 @@ var Derived = (function (_super) {
     return Derived;
 })(C);
 // function expression
-function bar1() { }
+function bar1() {
+}
 value;
-function bar2() { }
+function bar2() {
+}
 value;
-(function () { });
+(function () {
+});
 value;
-(function () { });
+(function () {
+});
 value;
 // function calls
 foo() *= value;
@@ -249,7 +259,9 @@ foo() += value;
 ({}) += value;
 ([]) *= value;
 ([]) += value;
-(function baz1() { }) *= value;
-(function baz2() { }) += value;
+(function baz1() {
+}) *= value;
+(function baz2() {
+}) += value;
 (foo()) *= value;
 (foo()) += value;

@@ -11,4 +11,6 @@ var C = (function () {
     }
     return C;
 })();
-var c = new C(function () { return asdf; }); // should error
+var c = new C(function () {
+    return asdf;
+}); // should error

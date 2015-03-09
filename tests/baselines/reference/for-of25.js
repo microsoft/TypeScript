@@ -10,7 +10,8 @@ class StringIterator {
 
 //// [for-of25.js]
 var x;
-for (var v of new StringIterator) { }
+for (var v of new StringIterator) {
+}
 var StringIterator = (function () {
     function StringIterator() {
     }

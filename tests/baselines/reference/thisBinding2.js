@@ -40,6 +40,8 @@ var messenger = {
     message: "Hello World",
     start: function () {
         var _this = this;
-        return setTimeout(function () { var x = _this.message; }, 3000);
+        return setTimeout(function () {
+            var x = _this.message;
+        }, 3000);
     }
 };

@@ -2,8 +2,6 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.5.0.0";
-
     export interface SourceFile {
         fileWatcher: FileWatcher;
     }
@@ -178,7 +176,7 @@ module ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -411,7 +409,7 @@ module ts {
             // The emitter emitted something, inform the caller if that happened in the presence
             // of diagnostics or not.
             if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
-                ExitStatus.DiagnosticsPresent_OutputsGenerated;
+                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
 
             return ExitStatus.Success;
@@ -419,7 +417,7 @@ module ts {
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
     function printHelp() {

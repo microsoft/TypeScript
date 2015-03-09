@@ -210,7 +210,9 @@ function fnArg1(x, y) {
     var x;
     fnArg1(fnArg1, 0);
 }
-function overload1() { return undefined; }
+function overload1() {
+    return undefined;
+}
 ;
 function fnArg2() {
     return overload1(fnArg2);

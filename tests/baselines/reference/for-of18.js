@@ -16,7 +16,8 @@ class StringIterator {
 
 //// [for-of18.js]
 var v;
-for (v of new StringIterator) { } // Should succeed
+for (v of new StringIterator) {
+} // Should succeed
 var StringIterator = (function () {
     function StringIterator() {
     }

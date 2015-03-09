@@ -23,7 +23,9 @@ var __extends = this.__extends || function (d, b) {
 var MyBase = (function () {
     function MyBase() {
         this.S2 = "test";
-        this.f = function () { return 5; };
+        this.f = function () {
+            return 5;
+        };
     }
     MyBase.S1 = 5;
     return MyBase;

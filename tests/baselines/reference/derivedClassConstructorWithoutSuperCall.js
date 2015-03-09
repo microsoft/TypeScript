@@ -59,14 +59,18 @@ var Base2 = (function () {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var r2 = function () { return _super.call(this); }; // error for misplaced super call (nested function)
+        var r2 = function () {
+            return _super.call(this);
+        }; // error for misplaced super call (nested function)
     }
     return Derived2;
 })(Base2);
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        var r = function () { _super.call(this); }; // error
+        var r = function () {
+            _super.call(this);
+        }; // error
     }
     return Derived3;
 })(Base2);

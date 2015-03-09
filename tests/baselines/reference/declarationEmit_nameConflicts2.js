@@ -22,7 +22,8 @@ var X;
     (function (Y) {
         var base;
         (function (base) {
-            function f() { }
+            function f() {
+            }
             base.f = f;
             var C = (function () {
                 function C() {

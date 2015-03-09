@@ -42,9 +42,11 @@ var x1 = 1;
 var x1 = 2;
 // var then function
 var x2 = 1; // error
-function x2() { } // error
+function x2() {
+} // error
 var x3 = 1;
-var x3 = function () { }; // error
+var x3 = function () {
+}; // error
 // var then class
 var x4 = 1; // error
 var x4 = (function () {
@@ -56,7 +58,8 @@ var x4a = 1; // error
 var x4a = (function () {
     function x4a() {
     }
-    x4a.prototype.foo = function () { };
+    x4a.prototype.foo = function () {
+    };
     return x4a;
 })(); // error
 // var then enum

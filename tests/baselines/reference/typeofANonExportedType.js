@@ -54,7 +54,9 @@ export var r13: typeof foo;
 //// [typeofANonExportedType.js]
 var x = 1;
 exports.r1;
-var y = { foo: '' };
+var y = {
+    foo: ''
+};
 exports.r2;
 var C = (function () {
     function C() {
@@ -91,7 +93,8 @@ var E;
 exports.r10;
 exports.r11;
 exports.r12;
-function foo() { }
+function foo() {
+}
 var foo;
 (function (foo) {
     foo.y = 1;

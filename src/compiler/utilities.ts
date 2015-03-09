@@ -1185,7 +1185,7 @@ module ts {
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1 && node.end === -1;
+        return node.pos === -1;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {

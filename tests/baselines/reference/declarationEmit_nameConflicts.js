@@ -64,7 +64,8 @@ module.exports = f;
 var im = require('declarationEmit_nameConflicts_1');
 var M;
 (function (M) {
-    function f() { }
+    function f() {
+    }
     M.f = f;
     var C = (function () {
         function C() {
@@ -74,7 +75,8 @@ var M;
     M.C = C;
     var N;
     (function (N) {
-        function g() { }
+        function g() {
+        }
         N.g = g;
         ;
     })(N = M.N || (M.N = {}));
@@ -87,7 +89,8 @@ var M;
 (function (M) {
     var P;
     (function (P) {
-        function f() { }
+        function f() {
+        }
         P.f = f;
         var C = (function () {
             function C() {
@@ -97,7 +100,8 @@ var M;
         P.C = C;
         var N;
         (function (N) {
-            function g() { }
+            function g() {
+            }
             N.g = g;
             ;
         })(N = P.N || (P.N = {}));
@@ -113,7 +117,8 @@ var M;
 (function (M) {
     var Q;
     (function (Q) {
-        function f() { }
+        function f() {
+        }
         Q.f = f;
         var C = (function () {
             function C() {
@@ -123,7 +128,8 @@ var M;
         Q.C = C;
         var N;
         (function (N) {
-            function g() { }
+            function g() {
+            }
             N.g = g;
             ;
         })(N = Q.N || (Q.N = {}));

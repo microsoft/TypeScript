@@ -12,7 +12,8 @@ enum c4 { One } // error
 var c1 = (function () {
     function c1() {
     }
-    c1.prototype.foo = function () { };
+    c1.prototype.foo = function () {
+    };
     return c1;
 })();
 var c1 = 1; // error
@@ -20,7 +21,8 @@ var c1 = 1; // error
 var c4 = (function () {
     function c4() {
     }
-    c4.prototype.foo = function () { };
+    c4.prototype.foo = function () {
+    };
     return c4;
 })();
 var c4;

@@ -145,6 +145,9 @@ module ts.server {
 
         send(msg: NodeJS._debugger.Message) {
             var json = JSON.stringify(msg);
+            if (this.logger.isVerbose()) {
+                this.logger.info(msg.type + ": " + json);
+            }
             this.sendLineToClient('Content-Length: ' + (1 + Buffer.byteLength(json, 'utf8')) +
                 '\r\n\r\n' + json);
         }
@@ -461,19 +464,49 @@ module ts.server {
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
-                compilerService.formatCodeOptions); 
+                compilerService.formatCodeOptions);
+            // Check whether we should auto-indent. This will be when
+            // the position is on a line containing only whitespace.
+            // This should leave the edits returned from
+            // getFormattingEditsAfterKeytroke either empty or pertaining
+            // only to the previous line.  If all this is true, then
+            // add edits necessary to properly indent the current line.
             if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
-                // TODO: get these options from host
-                var editorOptions: ts.EditorOptions = {
-                    IndentSize: 4,
-                    TabSize: 4,
-                    NewLineCharacter: "\n",
-                    ConvertTabsToSpaces: true,
-                };
-                var indentPosition = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
-                var spaces = generateSpaces(indentPosition);
-                if (indentPosition > 0) {
-                    edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                var scriptInfo = compilerService.host.getScriptInfo(file);
+                if (scriptInfo) {
+                    var lineInfo = scriptInfo.getLineInfo(line);
+                    if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
+                        var lineText = lineInfo.leaf.text;
+                        if (lineText.search("\\S") < 0) {
+                            // TODO: get these options from host
+                            var editorOptions: ts.EditorOptions = {
+                                IndentSize: 4,
+                                TabSize: 4,
+                                NewLineCharacter: "\n",
+                                ConvertTabsToSpaces: true,
+                            };
+                            var indentPosition =
+                                compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            for (var i = 0, len = lineText.length; i < len; i++) {
+                                if (lineText.charAt(i) == " ") {
+                                    indentPosition--;
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                            if (indentPosition > 0) {
+                                var spaces = generateSpaces(indentPosition);
+                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                            }
+                            else if (indentPosition < 0) {
+                                edits.push({
+                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
+                                    newText: ""
+                                });
+                            }
+                        }
+                    }
                 }
             }
 
@@ -491,7 +524,7 @@ module ts.server {
                 };
             });
         }
- 
+
         getCompletions(line: number, col: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
             if (!prefix) {
                 prefix = "";
@@ -693,6 +726,10 @@ module ts.server {
         }
 
         onMessage(message: string) {
+            if (this.logger.isVerbose()) {
+                this.logger.info("request: " + message);
+                var start = process.hrtime();                
+            }
             try {
                 var request = <protocol.Request>JSON.parse(message);
                 var response: any;
@@ -798,13 +835,23 @@ module ts.server {
                     }
                 }
 
+                if (this.logger.isVerbose()) {
+                    var elapsed = process.hrtime(start);
+                    var seconds = elapsed[0]
+                    var nanoseconds = elapsed[1];
+                    var elapsedMs = ((1e9 * seconds) + nanoseconds)/1000000.0;
+                    var leader = "Elapsed time (in milliseconds)";
+                    if (!responseRequired) {
+                        leader = "Async elapsed time (in milliseconds)";
+                    }
+                    this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
+                }
                 if (response) {
                     this.output(response, request.command, request.seq);
                 }
                 else if (responseRequired) {
                     this.output(undefined, request.command, request.seq, "No content available.");
                 }
-
             } catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions

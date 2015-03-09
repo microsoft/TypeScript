@@ -35,9 +35,15 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var r2 = function () { return _super.call(this); };
-        var r3 = function () { _super.call(this); };
-        var r4 = function () { _super.call(this); };
+        var r2 = function () {
+            return _super.call(this);
+        };
+        var r3 = function () {
+            _super.call(this);
+        };
+        var r4 = function () {
+            _super.call(this);
+        };
         var r5 = {
             get foo() {
                 _super.call(this);

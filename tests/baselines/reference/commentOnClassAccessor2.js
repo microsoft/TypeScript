@@ -19,11 +19,14 @@ var C = (function () {
         /**
          * Getter.
          */
-        get: function () { return 1; },
+        get: function () {
+            return 1;
+        },
         /**
          * Setter.
          */
-        set: function (v) { },
+        set: function (v) {
+        },
         enumerable: true,
         configurable: true
     });

@@ -46,6 +46,14 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInObjectLiteral_main.js]
 var moduleA = require("aliasUsageInObjectLiteral_moduleA");
-var a = { x: moduleA };
-var b = { x: moduleA };
-var c = { y: { z: moduleA } };
+var a = {
+    x: moduleA
+};
+var b = {
+    x: moduleA
+};
+var c = {
+    y: {
+        z: moduleA
+    }
+};

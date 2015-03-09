@@ -31,7 +31,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) { };
+    C.prototype.foo = function (x) {
+    };
     return C;
 })();
 var D = (function (_super) {
@@ -39,7 +40,8 @@ var D = (function (_super) {
     function D() {
         _super.apply(this, arguments);
     }
-    D.prototype.foo = function () { }; // ok to drop parameters
+    D.prototype.foo = function () {
+    }; // ok to drop parameters
     return D;
 })(C);
 var E = (function (_super) {
@@ -47,7 +49,8 @@ var E = (function (_super) {
     function E() {
         _super.apply(this, arguments);
     }
-    E.prototype.foo = function (x) { }; // ok to add optional parameters
+    E.prototype.foo = function (x) {
+    }; // ok to add optional parameters
     return E;
 })(D);
 var c;

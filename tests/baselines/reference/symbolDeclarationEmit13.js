@@ -9,12 +9,15 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, Symbol.isRegExp, {
-        get: function () { return ""; },
+        get: function () {
+            return "";
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C.prototype, Symbol.toStringTag, {
-        set: function (x) { },
+        set: function (x) {
+        },
         enumerable: true,
         configurable: true
     });

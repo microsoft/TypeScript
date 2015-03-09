@@ -1905,9 +1905,17 @@ declare module "typescript" {
 >condition : Expression
 >Expression : Expression
 
+        questionToken: Node;
+>questionToken : Node
+>Node : Node
+
         whenTrue: Expression;
 >whenTrue : Expression
 >Expression : Expression
+
+        colonToken: Node;
+>colonToken : Node
+>Node : Node
 
         whenFalse: Expression;
 >whenFalse : Expression
@@ -2014,6 +2022,10 @@ declare module "typescript" {
         expression: LeftHandSideExpression;
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
+
+        dotToken: Node;
+>dotToken : Node
+>Node : Node
 
         name: Identifier;
 >name : Identifier
@@ -4199,6 +4211,9 @@ declare module "typescript" {
         stripInternal?: boolean;
 >stripInternal : boolean
 
+        preserveNewLines?: boolean;
+>preserveNewLines : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -4981,6 +4996,10 @@ declare module "typescript" {
 >TypeChecker : TypeChecker
 }
 declare module "typescript" {
+    /** The version of the TypeScript compiler release */
+    var version: string;
+>version : string
+
     function createCompilerHost(options: CompilerOptions): CompilerHost;
 >createCompilerHost : (options: CompilerOptions) => CompilerHost
 >options : CompilerOptions
@@ -5009,6 +5028,7 @@ declare module "typescript" {
 >Program : Program
 }
 declare module "typescript" {
+    /** The version of the language service API */
     var servicesVersion: string;
 >servicesVersion : string
 

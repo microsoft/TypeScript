@@ -2,4 +2,5 @@
 for (var of of) { }
 
 //// [parserES5ForOfStatement21.js]
-for ( of of) { }
+for ( of of) {
+}

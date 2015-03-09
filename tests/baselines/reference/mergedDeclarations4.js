@@ -21,7 +21,8 @@ M.f.hello;
 //// [mergedDeclarations4.js]
 var M;
 (function (M) {
-    function f() { }
+    function f() {
+    }
     M.f = f;
     f();
     M.f();

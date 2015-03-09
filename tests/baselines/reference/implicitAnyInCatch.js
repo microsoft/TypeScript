@@ -16,11 +16,14 @@ class C {
 
 //// [implicitAnyInCatch.js]
 // this should not be an error
-try { }
-catch (error) {
-    if (error.number === -2147024809) { }
+try {
 }
-for (var key in this) { }
+catch (error) {
+    if (error.number === -2147024809) {
+    }
+}
+for (var key in this) {
+}
 var C = (function () {
     function C() {
     }

@@ -42,6 +42,8 @@ function fn2(t, u, v) {
 function fn3(t, u) {
     var r1 = t || u;
     var r2 = t || u;
-    var r3 = t || { a: '' };
+    var r3 = t || {
+        a: ''
+    };
     var r4 = t || u;
 }

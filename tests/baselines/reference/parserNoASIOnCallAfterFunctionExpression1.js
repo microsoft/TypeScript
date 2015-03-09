@@ -4,4 +4,5 @@ var x = function () { }
 
 
 //// [parserNoASIOnCallAfterFunctionExpression1.js]
-var x = function () { }(window).foo;
+var x = function () {
+}(window).foo;

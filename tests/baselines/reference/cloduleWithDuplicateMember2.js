@@ -16,12 +16,14 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
-        set: function (y) { },
+        set: function (y) {
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "y", {
-        set: function (z) { },
+        set: function (z) {
+        },
         enumerable: true,
         configurable: true
     });
@@ -33,6 +35,7 @@ var C;
 })(C || (C = {}));
 var C;
 (function (C) {
-    function x() { }
+    function x() {
+    }
     C.x = x;
 })(C || (C = {}));

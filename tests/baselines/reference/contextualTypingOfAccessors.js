@@ -18,7 +18,10 @@ x = {
 var x;
 x = {
     get foo() {
-        return function (n) { return n; };
+        return function (n) {
+            return n;
+        };
     },
-    set foo(x) { }
+    set foo(x) {
+    }
 };

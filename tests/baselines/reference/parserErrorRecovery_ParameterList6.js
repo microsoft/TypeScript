@@ -11,4 +11,5 @@ var Foo = (function () {
     return Foo;
 })();
 break ;
-{ }
+{
+}
