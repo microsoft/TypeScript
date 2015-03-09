@@ -528,7 +528,7 @@ module Harness.LanguageService {
             return this.host.log(message);
         }
         
-        enabled() {
+        loggingEnabled() {
             return true;
         }
 

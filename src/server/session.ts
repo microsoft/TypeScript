@@ -464,7 +464,13 @@ module ts.server {
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
-                compilerService.formatCodeOptions); 
+                compilerService.formatCodeOptions);
+            // Check whether we should auto-indent. This will be when
+            // the position is on a line containing only whitespace.
+            // This should leave the edits returned from
+            // getFormattingEditsAfterKeytroke either empty or pertaining
+            // only to the previous line.  If all this is true, then
+            // add edits necessary to properly indent the current line.
             if ((key == "\n") && ((!edits) || (edits.length == 0) || allEditsBeforePos(edits, position))) {
                 var scriptInfo = compilerService.host.getScriptInfo(file);
                 if (scriptInfo) {

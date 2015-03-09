@@ -51,12 +51,12 @@ module ts.server {
             this.firstInGroup = true;
         }
 
-        enabled() {
+        loggingEnabled() {
             return !!this.logFilename;
         }
 
         isVerbose() {
-            return this.enabled() && (this.level == "verbose");
+            return this.loggingEnabled() && (this.level == "verbose");
         }
         
 
@@ -196,7 +196,7 @@ module ts.server {
         detailLevel?: string;
     }
 
-    function parseLogEnv(logEnvStr: string): LogOptions {
+    function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
         var logEnv: LogOptions = {};
         var args = logEnvStr.split(' ');
         for (var i = 0, len = args.length; i < (len - 1); i += 2) {
@@ -222,7 +222,7 @@ module ts.server {
         var detailLevel = "normal";
         var logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
-            var logEnv = parseLogEnv(logEnvStr);
+            var logEnv = parseLoggingEnvironmentString(logEnvStr);
             if (logEnv.file) {
                 fileName = logEnv.file;
             }
