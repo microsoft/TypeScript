@@ -1609,7 +1609,7 @@ module ts {
             var writeComment = writeCommentRange;
 
             /** Emit a node */
-            var emit = emitNode;
+            var emit = emitNodeWithoutSourceMap;
 
             /** Called just before starting emit of a node */
             var emitStart = function (node: Node) { };
@@ -2065,12 +2065,12 @@ module ts {
                     if (node) {
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
-                            emitNode(node);
+                            emitNodeWithoutSourceMap(node);
                             recordEmitNodeEndSpan(node);
                         }
                         else {
                             recordNewSourceFileStart(<SourceFile>node);
-                            emitNode(node);
+                            emitNodeWithoutSourceMap(node);
                         }
                     }
                 }
@@ -3033,7 +3033,10 @@ module ts {
                 return false;
             }
 
-            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string) {
+            // Returns 'true' if the code was actually indented, false otherwise. 
+            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be 
+            // emitted instead.
+            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
                 var realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
                 // Always use a newline for synthesized code if the synthesizer desires it.
@@ -3321,6 +3324,10 @@ module ts {
                 decreaseIndentIf(indentedBeforeColon, indentedAfterColon);
             }
 
+            // Helper function to decrease the indent if we previously indented.  Allows multiple 
+            // previous indent values to be considered at a time.  This also allows caller to just
+            // call this once, passing in all their appropriate indent values, instead of needing
+            // to call this helper function multiple times.
             function decreaseIndentIf(value1: boolean, value2?: boolean) {
                 if (value1) {
                     decreaseIndent();
@@ -3624,7 +3631,7 @@ module ts {
                     emitContainingModuleName(node);
                     write(".");
                 }
-                emitNode(node.name);
+                emitNodeWithoutSourceMap(node.name);
                 emitEnd(node.name);
             }
             
@@ -3643,10 +3650,10 @@ module ts {
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
-                        emitNode(specifier.name);
+                        emitNodeWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
-                        emitNode(name);
+                        emitNodeWithoutSourceMap(name);
                         write(";");
                     });
                 }
@@ -4039,14 +4046,14 @@ module ts {
                             writeLine();
                             emitStart(p);
                             write("if (");
-                            emitNode(p.name);
+                            emitNodeWithoutSourceMap(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
                             emitStart(p);
-                            emitNode(p.name);
+                            emitNodeWithoutSourceMap(p.name);
                             write(" = ");
-                            emitNode(p.initializer);
+                            emitNodeWithoutSourceMap(p.initializer);
                             emitEnd(p);
                             write("; }");
                         }
@@ -4063,7 +4070,7 @@ module ts {
                     emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
-                    emitNode(restParam.name);
+                    emitNodeWithoutSourceMap(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -4084,7 +4091,7 @@ module ts {
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNode(restParam.name);
+                    emitNodeWithoutSourceMap(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -4105,7 +4112,7 @@ module ts {
 
             function emitDeclarationName(node: Declaration) {
                 if (node.name) {
-                    emitNode(node.name);
+                    emitNodeWithoutSourceMap(node.name);
                 }
                 else {
                     write(resolver.getGeneratedNameForNode(node));
@@ -4266,7 +4273,7 @@ module ts {
 
                     // Don't emit comments on this body.  We'll have already taken care of it above 
                     // when we called emitDetachedComments.
-                    emitNode(body, /*disableComments:*/ true);
+                    emitNodeWithoutSourceMap(body, /*disableComments:*/ true);
                     emitEnd(body);
                     write(";");
                     emitTempDeclarations(/*newLine*/ false);
@@ -4355,7 +4362,7 @@ module ts {
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNode(param.name);
+                        emitNodeWithoutSourceMap(param.name);
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -4369,7 +4376,7 @@ module ts {
                 // TODO: (jfreeman,drosen): comment on why this is emitNode instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
-                    emitNode(memberName);
+                    emitNodeWithoutSourceMap(memberName);
                     write("]");
                 }
                 else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
@@ -4377,7 +4384,7 @@ module ts {
                 }
                 else {
                     write(".");
-                    emitNode(memberName);
+                    emitNodeWithoutSourceMap(memberName);
                 }
             }
 
@@ -4870,11 +4877,11 @@ module ts {
                             emitStart(specifier);
                             emitContainingModuleName(specifier);
                             write(".");
-                            emitNode(specifier.name);
+                            emitNodeWithoutSourceMap(specifier.name);
                             write(" = ");
                             write(generatedName);
                             write(".");
-                            emitNode(specifier.propertyName || specifier.name);
+                            emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
                             write(";");
                             emitEnd(specifier);
                         });
@@ -5139,7 +5146,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNode(node: Node, disableComments?:boolean): void {
+            function emitNodeWithoutSourceMap(node: Node, disableComments?:boolean): void {
                 if (!node) {
                     return;
                 }
