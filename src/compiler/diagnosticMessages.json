@@ -1343,6 +1343,10 @@
         "category": "Error",
         "code": 2493
     },
+    "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 2494
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

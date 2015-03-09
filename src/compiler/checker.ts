@@ -1869,7 +1869,11 @@ module ts {
                 return anyType;
             }
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                return getTypeForVariableDeclarationInForOfStatement(<ForOfStatement>declaration.parent.parent);
+                // checkRightHandSideOfForOf will return undefined if the for-of expression type was
+                // missing properties/signatures required to get its iteratedType (like
+                // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
+                // or it may have led to an error inside getIteratedType.
+                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
@@ -8781,7 +8785,7 @@ module ts {
 
             // Check the LHS and RHS
             // If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
-            // via getTypeForVariableDeclarationInForOfStatement.
+            // via checkRightHandSideOfForOf.
             // If the LHS is an expression, check the LHS, as a destructuring assignment or as a reference.
             // Then check that the RHS is assignable to it.
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
@@ -8789,8 +8793,7 @@ module ts {
             }
             else {
                 var varExpr = <Expression>node.initializer;
-                var rightType = checkExpression(node.expression);
-                var iteratedType = checkIteratedType(rightType, node.expression);
+                var iteratedType = checkRightHandSideOfForOf(node.expression);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -8872,18 +8875,11 @@ module ts {
             }
         }
 
-        function getTypeForVariableDeclarationInForOfStatement(forOfStatement: ForOfStatement): Type {
-            // Temporarily return 'any' below ES6
-            if (languageVersion < ScriptTarget.ES6) {
-                return anyType;
-            }
-
-            // iteratedType will be undefined if the for-of expression type was missing properties/signatures
-            // required to get its iteratedType (like [Symbol.iterator] or next). This may be
-            // because we accessed properties from anyType, or it may have led to an error inside
-            // getIteratedType.
-            var expressionType = getTypeOfExpression(forOfStatement.expression);
-            return checkIteratedType(expressionType, forOfStatement.expression) || anyType;
+        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+            var expressionType = getTypeOfExpression(rhsExpression);
+            return languageVersion >= ScriptTarget.ES6
+                ? checkIteratedType(expressionType, rhsExpression)
+                : checkElementTypeOfArrayOrString(expressionType, rhsExpression);
         }
 
         /**
@@ -8980,6 +8976,45 @@ module ts {
 
                 return iteratorNextValue;
             }
+        }
+
+        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
+            Debug.assert(languageVersion < ScriptTarget.ES6);
+            var isJustString = allConstituentTypesHaveKind(arrayOrStringType, TypeFlags.StringLike);
+            
+            // Check isJustString because removeTypesFromUnionType will only remove types if it doesn't result
+            // in an emptyObjectType. In this case, we actually do want the emptyObjectType.
+            var arrayType = isJustString ? emptyObjectType : removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true);
+            var hasStringConstituent = arrayOrStringType !== emptyObjectType && arrayOrStringType !== arrayType;
+
+            var reportedError = false;
+            if (hasStringConstituent && languageVersion < ScriptTarget.ES5) {
+                error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                reportedError = true;
+            }
+
+            if (isJustString) {
+                return stringType;
+            }
+
+            if (!isArrayLikeType(arrayType)) {
+                if (!reportedError) {
+                    error(expressionForError, Diagnostics.Type_0_is_not_an_array_type, typeToString(arrayType));
+                }
+                return hasStringConstituent ? stringType : unknownType;
+            }
+
+            var arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number) || unknownType;
+            if (hasStringConstituent) {
+                // This is just an optimization for the case where arrayOrStringType is string | string[]
+                if (arrayElementType.flags & TypeFlags.StringLike) {
+                    return stringType;
+                }
+
+                return getUnionType([arrayElementType, stringType]);
+            }
+
+            return arrayElementType;
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
