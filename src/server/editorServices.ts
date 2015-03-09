@@ -1073,6 +1073,7 @@ module ts.server {
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
+        static maxVersions = 8;
 
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
@@ -1133,6 +1134,13 @@ module ts.server {
                 this.currentVersion = snap.version;
                 this.versions[snap.version] = snap;
                 this.changes = [];
+                if ((this.currentVersion - this.minVersion) >= ScriptVersionCache.maxVersions) {
+                    var oldMin = this.minVersion;
+                    this.minVersion = (this.currentVersion - ScriptVersionCache.maxVersions) + 1;
+                    for (var j = oldMin; j < this.minVersion; j++) {
+                        this.versions[j] = undefined;
+                    }
+                }
             }
             return snap;
         }
