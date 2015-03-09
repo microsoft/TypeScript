@@ -5327,7 +5327,7 @@ interface MSHTMLCollectionExtensions {
 
 interface Storage extends MSStorageExtensions {
     length: number;
-    getItem(key: string): any;
+    getItem(key: string): string;
     [key: string]: any;
     setItem(key: string, data: string): void;
     clear(): void;
