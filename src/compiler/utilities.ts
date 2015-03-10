@@ -1207,6 +1207,7 @@ module ts {
         }
     }
 
+    // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};
