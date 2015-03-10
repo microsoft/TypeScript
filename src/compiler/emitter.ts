@@ -4407,7 +4407,9 @@ module ts {
                     emitComputedPropertyName(<ComputedPropertyName>memberName);
                 }
                 else {
-                    write(".");
+                    if (languageVersion < ScriptTarget.ES6) {
+                        write(".");
+                    }
                     emitNodeWithoutSourceMap(memberName);
                 }
             }
@@ -4505,6 +4507,27 @@ module ts {
                             write("});");
                             emitEnd(member);
                         }
+                    }
+                });
+            }
+
+            function emitMemberFunctionsAboveES6(node: ClassDeclaration) {
+                forEach(node.members, member => {
+                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
+                        if (!(<MethodDeclaration>member).body) {
+                            return emitPinnedOrTripleSlashComments(member);
+                        }
+
+                        writeLine();
+                        emitLeadingComments(member);
+                        emitStart(member);
+                        if (member.flags & NodeFlags.Static) {
+                            write("static ");
+                        }
+                        emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                        emitSignatureAndBody(<MethodDeclaration>member);
+                        emitEnd(member);
+                        emitTrailingComments(member);
                     }
                 });
             }
@@ -4624,6 +4647,7 @@ module ts {
                 scopeEmitStart(node);
                 writeLine();
                 emitConstructorOfClass(node, baseTypeNode);
+                emitMemberFunctionsAboveES6(node);
                 writeLine();
                 scopeEmitEnd();
                 decreaseIndent();
