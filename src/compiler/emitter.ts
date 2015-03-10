@@ -3169,18 +3169,30 @@ module ts {
                 }
                 var superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    write("_super");
+                    if (languageVersion < ScriptTarget.ES6) {
+                        write("_super");
+                    }
+                    else {
+                        write("super");
+                    }
                     superCall = true;
                 }
                 else {
                     emit(node.expression);
                     superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
-                if (superCall) {
+                if (superCall && languageVersion < ScriptTarget.ES6) {
                     write(".call(");
                     emitThis(node.expression);
                     if (node.arguments.length) {
                         write(", ");
+                        emitCommaList(node.arguments);
+                    }
+                    write(")");
+                }
+                else if (superCall && languageVersion >= ScriptTarget.ES6) {
+                    write("(");
+                    if (node.arguments.length) {
                         emitCommaList(node.arguments);
                     }
                     write(")");
@@ -4502,7 +4514,128 @@ module ts {
                 });
             }
 
-            function emitClassDeclaration(node: ClassDeclaration) {
+            function emitConstructorOfClass(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+                var saveTempCount = tempCount;
+                var saveTempVariables = tempVariables;
+                var saveTempParameters = tempParameters;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+
+                var popFrame = enterNameScope();
+
+                // Emit the constructor overload pinned comments
+                forEach(node.members, member => {
+                    if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
+                    }
+                });
+
+                var ctor = getFirstConstructorWithBody(node);
+                if (ctor) {
+                    emitLeadingComments(ctor);
+                }
+                emitStart(<Node>ctor || node);
+
+                if (languageVersion < ScriptTarget.ES6) {
+                    write("function ");
+                    emitDeclarationName(node);
+                    emitSignatureParameters(ctor);
+                }
+                else {
+                    Debug.assert(languageVersion >= ScriptTarget.ES6, "Expected Script Target to be ES6 or above");
+                    write("constructor");
+                    if (ctor) {
+                        emitSignatureParameters(ctor);
+                    }
+                    else {
+                        // Based on EcmaScript6 section 14.15.14: Runtime Semantics: ClassDefinitionEvaluation.
+                        // If constructor is empty, then,
+                        //      If ClassHeritageopt is present, then
+                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
+                        //      Else,
+                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
+                        if (baseTypeNode) {
+                            write("(...args)");
+                        }
+                        else {
+                            write("()");
+                        }
+                    }
+                }
+                write(" {");
+                scopeEmitStart(node, "constructor");
+                increaseIndent();
+                if (ctor) {
+                    emitDetachedComments((<Block>ctor.body).statements);
+                }
+                emitCaptureThisForNodeIfNecessary(node);
+                if (ctor) {
+                    emitDefaultValueAssignments(ctor);
+                    emitRestParameter(ctor);
+                    if (baseTypeNode) {
+                        var superCall = findInitialSuperCall(ctor);
+                        if (superCall) {
+                            writeLine();
+                            emit(superCall);
+                        }
+                    }
+                    emitParameterPropertyAssignments(ctor);
+                }
+                else {
+                    if (baseTypeNode) {
+                        writeLine();
+                        emitStart(baseTypeNode);
+                        languageVersion < ScriptTarget.ES6 ? write("_super.apply(this, arguments);") : write("super(...args);");
+                        emitEnd(baseTypeNode);
+                    }
+                }
+                emitMemberAssignments(node, /*nonstatic*/0);
+                if (ctor) {
+                    var statements: Node[] = (<Block>ctor.body).statements;
+                    if (superCall) statements = statements.slice(1);
+                    emitLines(statements);
+                }
+                emitTempDeclarations(/*newLine*/ true);
+                writeLine();
+                if (ctor) {
+                    emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                }
+                decreaseIndent();
+                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                scopeEmitEnd();
+                emitEnd(<Node>ctor || node);
+                if (ctor) {
+                    emitTrailingComments(ctor);
+                }
+
+                exitNameScope(popFrame);
+
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitClassDeclarationAboveES6(node: ClassDeclaration) {
+                write("class ");
+                emitDeclarationName(node);
+                var baseTypeNode = getClassBaseTypeNode(node);
+                if (baseTypeNode) {
+                    write(" extends ");
+                    emitDeclarationName(node);
+                }
+                write(" {");
+                increaseIndent();
+                scopeEmitStart(node);
+                writeLine();
+                emitConstructorOfClass(node, baseTypeNode);
+                writeLine();
+                scopeEmitEnd();
+                decreaseIndent();
+                write("}");
+            }
+
+            function emitClassDeclarationBelowES6(node: ClassDeclaration) {
                 write("var ");
                 emitDeclarationName(node);
                 write(" = (function (");
@@ -4522,7 +4655,7 @@ module ts {
                     emitEnd(baseTypeNode);
                 }
                 writeLine();
-                emitConstructorOfClass();
+                emitConstructorOfClass(node, baseTypeNode);
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
@@ -4555,7 +4688,7 @@ module ts {
                     emitExportMemberAssignments(node.name);
                 }
 
-                function emitConstructorOfClass() {
+                function emitConstructorOfClassOLD() {
                     var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
                     var saveTempParameters = tempParameters;
@@ -5352,7 +5485,7 @@ module ts {
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(<ClassDeclaration>node);
+                        return languageVersion < ScriptTarget.ES6 ? emitClassDeclarationBelowES6(<ClassDeclaration>node) : emitClassDeclarationAboveES6(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:

@@ -9273,7 +9273,9 @@ module ts {
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             var baseTypeNode = getClassBaseTypeNode(node);
             if (baseTypeNode) {
-                emitExtends = emitExtends || !isInAmbientContext(node);
+                if (languageVersion < ScriptTarget.ES6) {
+                    emitExtends = emitExtends || !isInAmbientContext(node);
+                }
                 checkTypeReference(baseTypeNode);
             }
             if (type.baseTypes.length) {
