@@ -4338,9 +4338,11 @@ module ts {
             return !!getPropertyOfType(type, "0");
         }
 
+        /**
+         * Check if a Type was written as a tuple type literal. 
+         * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
+         */
         function isTupleType(type: Type) : boolean {
-            // Check if a Type exactly implements interface TupleType. Typical typechecking code should rely on
-            // isTupleLikeType() instead.
             return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
         }
 
