@@ -4436,7 +4436,7 @@ module ts {
                 });
             }
 
-            function emitMemberFunctions(node: ClassDeclaration) {
+            function emitMemberFunctionsBelowES6(node: ClassDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -4446,18 +4446,13 @@ module ts {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
-                        emitStart((<MethodDeclaration>member).name);
                         emitDeclarationName(node);
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
-                        emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
-                        // TODO (drosen): Should we performing emitStart twice on emitStart(member)?
-                        emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
-                        emitEnd(member);
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
@@ -4656,7 +4651,7 @@ module ts {
                 }
                 writeLine();
                 emitConstructorOfClass(node, baseTypeNode);
-                emitMemberFunctions(node);
+                emitMemberFunctionsBelowES6(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
