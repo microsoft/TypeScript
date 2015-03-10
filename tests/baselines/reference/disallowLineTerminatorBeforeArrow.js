@@ -22,6 +22,25 @@ foo(()
 foo(()
     => { return false; });
 
+module m {
+    class City {
+        constructor(x: number, thing = ()
+            => 100) {
+        }
+
+        public m = ()
+            => 2 * 2 * 2
+    }
+
+    export enum Enum {
+        claw = (()
+            => 10)()
+    }
+
+    export var v = x
+        => new City(Enum.claw);
+}
+
 
 //// [disallowLineTerminatorBeforeArrow.js]
 var f1 = function () {
@@ -66,3 +85,26 @@ foo(function () {
 foo(function () {
     return false;
 });
+var m;
+(function (m) {
+    var City = (function () {
+        function City(x, thing) {
+            if (thing === void 0) { thing = function () {
+                return 100;
+            }; }
+            this.m = function () {
+                return 2 * 2 * 2;
+            };
+        }
+        return City;
+    })();
+    (function (Enum) {
+        Enum[Enum["claw"] = (function () {
+            return 10;
+        })()] = "claw";
+    })(m.Enum || (m.Enum = {}));
+    var Enum = m.Enum;
+    m.v = function (x) {
+        return new City(Enum.claw);
+    };
+})(m || (m = {}));

@@ -8,9 +8,13 @@ tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(1
 tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(15,10): error TS1200: Line terminator not permitted before arrow.
 tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(19,5): error TS1200: Line terminator not permitted before arrow.
 tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(21,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(26,40): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(30,20): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(35,17): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(39,20): error TS1200: Line terminator not permitted before arrow.
 
 
-==== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts (10 errors) ====
+==== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts (14 errors) ====
     var f1 = ()
              ~~
         => { }
@@ -63,4 +67,35 @@ tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(2
         => { return false; });
     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1200: Line terminator not permitted before arrow.
+    
+    module m {
+        class City {
+            constructor(x: number, thing = ()
+                                           ~~
+                => 100) {
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
+            }
+    
+            public m = ()
+                       ~~
+                => 2 * 2 * 2
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
+        }
+    
+        export enum Enum {
+            claw = (()
+                    ~~
+                => 10)()
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
+        }
+    
+        export var v = x
+                       ~
+            => new City(Enum.claw);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
+    }
     

@@ -20,3 +20,22 @@ foo(()
     => true);
 foo(()
     => { return false; });
+
+module m {
+    class City {
+        constructor(x: number, thing = ()
+            => 100) {
+        }
+
+        public m = ()
+            => 2 * 2 * 2
+    }
+
+    export enum Enum {
+        claw = (()
+            => 10)()
+    }
+
+    export var v = x
+        => new City(Enum.claw);
+}
