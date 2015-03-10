@@ -10912,6 +10912,8 @@ module ts {
         }
 
         function isUnknownIdentifier(location: Node, name: string): boolean {
+            // Do not call resolveName on a synthesized node!
+            Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
             return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }

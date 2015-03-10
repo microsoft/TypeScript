@@ -1641,12 +1641,13 @@ module ts {
             }
 
             if (root) {
-                emit(root);
+                // Do not call emit directly. It does not set the currentSourceFile.
+                emitSourceFile(root);
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emit(sourceFile);
+                        emitSourceFile(sourceFile);
                     }
                 });
             }
@@ -1654,6 +1655,11 @@ module ts {
             writeLine();
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
             return;
+
+            function emitSourceFile(sourceFile: SourceFile): void {
+                currentSourceFile = sourceFile;
+                emit(sourceFile);
+            }
 
             // enters the new lexical environment
             // return value should be passed to matching call to exitNameScope.
@@ -1686,7 +1692,11 @@ module ts {
                 else {
                     name = generateUniqueName(baseName, n => isExistingName(location, n));
                 }
-
+                
+                return recordNameInCurrentScope(name);
+            }
+            
+            function recordNameInCurrentScope(name: string): string {
                 if (!currentScopeNames) {
                     currentScopeNames = {};
                 }
@@ -2063,6 +2073,9 @@ module ts {
 
                 function emitNodeWithSourceMap(node: Node) {
                     if (node) {
+                        if (nodeIsSynthesized(node)) {
+                            return emitNodeWithoutSourceMap(node);
+                        }
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
                             emitNodeWithoutSourceMap(node);
@@ -2107,9 +2120,15 @@ module ts {
                         break;
                     }
                     // _a .. _h, _j ... _z, _0, _1, ...
+                    // Note that _i is skipped
                     name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
+                
+                // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
+                // we just generated.
+                recordNameInCurrentScope(name);
+                
                 var result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;
@@ -2891,6 +2910,12 @@ module ts {
 
                 return result;
             }
+            
+            function createExpressionStatement(expression: Expression): ExpressionStatement {
+                var result = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+                result.expression = expression;
+                return result;
+            }
 
             function createMemberAccessForPropertyName(expression: LeftHandSideExpression, memberName: DeclarationName): PropertyAccessExpression | ElementAccessExpression {
                 if (memberName.kind === SyntaxKind.Identifier) {
@@ -3303,7 +3328,7 @@ module ts {
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    emitDestructuring(node);
+                    emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
                     emit(node.left);
@@ -3486,6 +3511,10 @@ module ts {
             }
 
             function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.ForOfStatement) {
+                    return emitDownLevelForOfStatement(node);
+                }
+                
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -3511,6 +3540,146 @@ module ts {
                 emit(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
+            }
+            
+            function emitDownLevelForOfStatement(node: ForOfStatement) {
+                // The following ES6 code:
+                //
+                //    for (var v of expr) { }
+                //
+                // should be emitted as
+                //
+                //    for (var _i = 0, _a = expr; _i < _a.length; _i++) {
+                //        var v = _a[_i];
+                //    }
+                //
+                // where _a and _i are temps emitted to capture the RHS and the counter,
+                // respectively.
+                // When the left hand side is an expression instead of a var declaration,
+                // the "var v" is not emitted.
+                // When the left hand side is a let/const, the v is renamed if there is
+                // another v in scope.
+                // Note that all assignments to the LHS are emitted in the body, including
+                // all destructuring.
+                // Note also that because an extra statement is needed to assign to the LHS,
+                // for-of bodies are always emitted as blocks.
+                
+                var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
+                
+                // Do not emit the LHS var declaration yet, because it might contain destructuring.
+                
+                // Do not call recordTempDeclaration because we are declaring the temps
+                // right here. Recording means they will be declared later.
+                // In the case where the user wrote an identifier as the RHS, like this:
+                //
+                //     for (var v of arr) { }
+                //
+                // we don't want to emit a temporary variable for the RHS, just use it directly.
+                var rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
+                var counter = createTempVariable(node, /*forLoopVariable*/ true);
+                var rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
+
+                // This is the var keyword for the counter and rhsReference. The var keyword for
+                // the LHS will be emitted inside the body.
+                emitStart(node.expression);
+                write("var ");
+                
+                // _i = 0
+                emitNodeWithoutSourceMap(counter);
+                write(" = 0");
+                emitEnd(node.expression);
+                
+                if (!rhsIsIdentifier) {
+                    // , _a = expr
+                    write(", ");
+                    emitStart(node.expression);
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(" = ");
+                    emitNodeWithoutSourceMap(node.expression);
+                    emitEnd(node.expression);
+                }
+                write("; ");
+                
+                // _i < _a.length;
+                emitStart(node.initializer);
+                emitNodeWithoutSourceMap(counter);
+                write(" < ");
+                emitNodeWithoutSourceMap(rhsReference);
+                write(".length");
+                emitEnd(node.initializer);
+                write("; ");
+                
+                // _i++)
+                emitStart(node.initializer);
+                emitNodeWithoutSourceMap(counter);
+                write("++");
+                emitEnd(node.initializer);
+                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                
+                // Body
+                write(" {");
+                writeLine();
+                increaseIndent();
+                
+                // Initialize LHS
+                // var v = _a[_i];
+                var rhsIterationValue = createElementAccessExpression(rhsReference, counter);
+                emitStart(node.initializer);
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    write("var ");
+                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                    if (variableDeclarationList.declarations.length > 0) {
+                        var declaration = variableDeclarationList.declarations[0];
+                        if (isBindingPattern(declaration.name)) {
+                            // This works whether the declaration is a var, let, or const.
+                            // It will use rhsIterationValue _a[_i] as the initializer.
+                            emitDestructuring(declaration, /*isAssignmentExpressionStatement*/ false, rhsIterationValue);
+                        }
+                        else {
+                            // The following call does not include the initializer, so we have
+                            // to emit it separately.
+                            emitNodeWithoutSourceMap(declaration);
+                            write(" = ");
+                            emitNodeWithoutSourceMap(rhsIterationValue);
+                        }
+                    }
+                    else {
+                        // It's an empty declaration list. This can only happen in an error case, if the user wrote
+                        //     for (var of []) {}
+                        emitNodeWithoutSourceMap(createTempVariable(node, /*forLoopVariable*/ false));
+                        write(" = ");
+                        emitNodeWithoutSourceMap(rhsIterationValue);
+                    }
+                }
+                else {
+                    // Initializer is an expression. Emit the expression in the body, so that it's
+                    // evaluated on every iteration.
+                    var assignmentExpression = createBinaryExpression(<Expression>node.initializer, SyntaxKind.EqualsToken, rhsIterationValue, /*startsOnNewLine*/ false);
+                    if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
+                        // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
+                        // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
+                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined, /*locationForCheckingExistingName*/ node);
+                    }
+                    else {
+                        emitNodeWithoutSourceMap(assignmentExpression);
+                    }
+                }
+                emitEnd(node.initializer);
+                write(";");
+                
+                if (node.statement.kind === SyntaxKind.Block) {
+                    emitLines((<Block>node.statement).statements);
+                }
+                else {
+                    writeLine();
+                    emit(node.statement);
+                }
+                
+                writeLine();
+                decreaseIndent();
+                write("}");
             }
 
             function emitBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -3668,7 +3837,16 @@ module ts {
                 }
             }
 
-            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
+            /**
+             * If the root has a chance of being a synthesized node, callers should also pass a value for
+             * lowestNonSynthesizedAncestor. This should be an ancestor of root, it should not be synthesized,
+             * and there should not be a lower ancestor that introduces a scope. This node will be used as the
+             * location for ensuring that temporary names are unique.
+             */
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration,
+                isAssignmentExpressionStatement: boolean,
+                value?: Expression,
+                lowestNonSynthesizedAncestor?: Node) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
@@ -3677,6 +3855,7 @@ module ts {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }
                 else {
+                    Debug.assert(!isAssignmentExpressionStatement);
                     emitBindingElement(<BindingElement>root, value);
                 }
 
@@ -3698,7 +3877,10 @@ module ts {
 
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        var identifier = createTempVariable(root);
+                        // In case the root is a synthesized node, we need to pass lowestNonSynthesizedAncestor
+                        // as the location for determining uniqueness of the variable we are about to
+                        // generate.
+                        var identifier = createTempVariable(lowestNonSynthesizedAncestor || root);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
                         }
@@ -3819,7 +4001,7 @@ module ts {
                 function emitAssignmentExpression(root: BinaryExpression) {
                     var target = root.left;
                     var value = root.right;
-                    if (root.parent.kind === SyntaxKind.ExpressionStatement) {
+                    if (isAssignmentExpressionStatement) {
                         emitDestructuringAssignment(target, value);
                     }
                     else {
@@ -3884,7 +4066,7 @@ module ts {
             function emitVariableDeclaration(node: VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
                     if (languageVersion < ScriptTarget.ES6) {
-                        emitDestructuring(node);
+                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false);
                     }
                     else {
                         emit(node.name);
@@ -3892,7 +4074,7 @@ module ts {
                     }
                 }
                 else {
-                    var isLet = renameNonTopLevelLetAndConst(<Identifier>node.name);
+                    renameNonTopLevelLetAndConst(<Identifier>node.name);
                     emitModuleMemberName(node);
 
                     var initializer = node.initializer;
@@ -4047,7 +4229,7 @@ module ts {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
-                            emitDestructuring(p, tempParameters[tempIndex]);
+                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
                             write(";");
                             tempIndex++;
                         }
@@ -4385,7 +4567,7 @@ module ts {
             }
 
             function emitMemberAccessForPropertyName(memberName: DeclarationName) {
-                // TODO: (jfreeman,drosen): comment on why this is emitNode instead of emit here.
+                // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNodeWithoutSourceMap(memberName);
@@ -5112,8 +5294,7 @@ module ts {
                 return statements.length;
             }
 
-            function emitSourceFile(node: SourceFile) {
-                currentSourceFile = node;
+            function emitSourceFileNode(node: SourceFile) {
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);
@@ -5368,7 +5549,7 @@ module ts {
                     case SyntaxKind.ExportDeclaration:
                         return emitExportDeclaration(<ExportDeclaration>node);
                     case SyntaxKind.SourceFile:
-                        return emitSourceFile(<SourceFile>node);
+                        return emitSourceFileNode(<SourceFile>node);
                 }
             }
 

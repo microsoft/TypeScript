@@ -63,7 +63,6 @@ for (const x in []) {
     use(x);
 }
 
-// TODO: update once for-of statements are supported downlevel
 for (const x of []) {
     use(x);
 }
