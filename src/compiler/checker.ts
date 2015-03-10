@@ -4339,6 +4339,8 @@ module ts {
         }
 
         function isTupleType(type: Type) : boolean {
+            // Check if a Type exactly implements interface TupleType. Typical typechecking code should rely on
+            // isTupleLikeType() instead.
             return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
         }
 
