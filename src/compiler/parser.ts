@@ -2918,7 +2918,7 @@ module ts {
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
             // identifier and the current token is an arrow.
-            if (expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken && !scanner.hasPrecedingLineBreak()) {
+            if (expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken) {
                 return parseSimpleArrowFunctionExpression(<Identifier>expr);
             }
 
@@ -3016,6 +3016,7 @@ module ts {
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
 
+            node.lineTerminatorBeforeArrow = scanner.hasPrecedingLineBreak();
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody();
 
@@ -3140,7 +3141,7 @@ module ts {
         }
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
-            let node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction);
+            let node = <ArrowFunctionExpression>createNode(SyntaxKind.ArrowFunction);
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
@@ -3168,10 +3169,7 @@ module ts {
                 return undefined;
             }
 
-            // Must be no line terminator before token `=>`.
-            if (scanner.hasPrecedingLineBreak()) {
-                return undefined;
-            }
+            node.lineTerminatorBeforeArrow = scanner.hasPrecedingLineBreak();
 
             return node;
         }

@@ -1,70 +1,66 @@
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(2,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(4,7): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(6,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(8,7): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(10,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(12,7): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(14,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(16,7): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(19,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(20,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(21,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(22,5): error TS1109: Expression expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(22,17): error TS1005: ':' expected.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(22,22): error TS1005: ',' expected.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(1,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(3,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(5,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(7,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(9,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(11,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(13,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(15,10): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(19,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(21,5): error TS1200: Line terminator not permitted before arrow.
 
 
-==== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts (14 errors) ====
+==== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts (10 errors) ====
     var f1 = ()
+             ~~
         => { }
-        ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f2 = (x: string, y: string) /*
+             ~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-          ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f3 = (x: string, y: number, ...rest)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         => { }
-        ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f4 = (x: string, y: number, ...rest) /*
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-          ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f5 = (...rest)
+             ~~~~~~~~~
         => { }
-        ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f6 = (...rest) /*
+             ~~~~~~~~~~~~
       */  => { }
-          ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f7 = (x: string, y: number, z = 10)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         => { }
-        ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     var f8 = (x: string, y: number, z = 10) /*
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-          ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     
     function foo(func: () => boolean) { }
     foo(()
-    ~~~~~~
+        ~~
         => true);
-    ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
-        ~~
-!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     foo(()
-    ~~~~~~
-        => { return false; });
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
         ~~
-!!! error TS1109: Expression expected.
-                    ~~~~~
-!!! error TS1005: ':' expected.
-                         ~
-!!! error TS1005: ',' expected.
+        => { return false; });
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1200: Line terminator not permitted before arrow.
     

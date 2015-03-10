@@ -622,6 +622,9 @@ declare module "typescript" {
         name?: Identifier;
         body: Block | Expression;
     }
+    interface ArrowFunctionExpression extends FunctionExpression {
+        lineTerminatorBeforeArrow: boolean;
+    }
     interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;

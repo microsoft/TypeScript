@@ -11377,7 +11377,17 @@ module ts {
 
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
-            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
+            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node);
+        }
+
+        function checkGrammarArrowFunction(node: FunctionLikeDeclaration): boolean {
+            if (node.kind === SyntaxKind.ArrowFunction) {
+              if ((<ArrowFunctionExpression>node).lineTerminatorBeforeArrow) {
+                grammarErrorOnNode(node, Diagnostics.Line_terminator_not_permitted_before_arrow);
+                return true;
+              }
+            }
+            return false;
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {

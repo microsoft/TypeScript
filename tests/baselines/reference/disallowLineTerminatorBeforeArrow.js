@@ -24,37 +24,45 @@ foo(()
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
-var f1 = ;
-{
-}
-var f2 = ; /*
-  */
-{
-}
-var f3 = ;
-{
-}
-var f4 = ; /*
-  */
-{
-}
-var f5 = ;
-{
-}
-var f6 = ; /*
-  */
-{
-}
-var f7 = ;
-{
-}
-var f8 = ; /*
-  */
-{
-}
+var f1 = function () {
+};
+var f2 = function (x, y) {
+};
+var f3 = function (x, y) {
+    var rest = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        rest[_i - 2] = arguments[_i];
+    }
+};
+var f4 = function (x, y) {
+    var rest = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        rest[_i - 2] = arguments[_i];
+    }
+};
+var f5 = function () {
+    var rest = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        rest[_i - 0] = arguments[_i];
+    }
+};
+var f6 = function () {
+    var rest = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        rest[_i - 0] = arguments[_i];
+    }
+};
+var f7 = function (x, y, z) {
+    if (z === void 0) { z = 10; }
+};
+var f8 = function (x, y, z) {
+    if (z === void 0) { z = 10; }
+};
 function foo(func) {
 }
-foo(, true);
-foo(, {
-    return: false
+foo(function () {
+    return true;
+});
+foo(function () {
+    return false;
 });
