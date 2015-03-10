@@ -338,10 +338,10 @@ module ts {
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
                         // TypeScript 1.0 spec (April 2014): 8.4.1
-                        // Initializer expressions for instance member variables are evaluated in the scope 
-                        // of the class constructor body but are not permitted to reference parameters or 
-                        // local variables of the constructor. This effectively means that entities from outer scopes 
-                        // by the same name as a constructor parameter or local variable are inaccessible 
+                        // Initializer expressions for instance member variables are evaluated in the scope
+                        // of the class constructor body but are not permitted to reference parameters or
+                        // local variables of the constructor. This effectively means that entities from outer scopes
+                        // by the same name as a constructor parameter or local variable are inaccessible
                         // in initializer expressions for instance member variables.
                         if (location.parent.kind === SyntaxKind.ClassDeclaration && !(location.flags & NodeFlags.Static)) {
                             var ctor = findConstructorDeclaration(<ClassDeclaration>location.parent);
@@ -921,7 +921,7 @@ module ts {
                 function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
                     if (symbol === (resolvedAliasSymbol || symbolFromSymbolTable)) {
                         // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
-                        // and if symbolfrom symbolTable or alias resolution matches the symbol, 
+                        // and if symbolfrom symbolTable or alias resolution matches the symbol,
                         // check the symbol can be qualified, it is only then this symbol is accessible
                         return !forEach(symbolFromSymbolTable.declarations, hasExternalModuleSymbol) &&
                             canQualifySymbol(symbolFromSymbolTable, meaning);
@@ -1018,14 +1018,14 @@ module ts {
                     // }
                     // var x: typeof m.c
                     // In the above example when we start with checking if typeof m.c symbol is accessible,
-                    // we are going to see if c can be accessed in scope directly. 
+                    // we are going to see if c can be accessed in scope directly.
                     // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
                     symbol = getParentOfSymbol(symbol);
                 }
 
-                // This could be a symbol that is not exported in the external module 
+                // This could be a symbol that is not exported in the external module
                 // or it could be a symbol from different external module that is not aliased and hence cannot be named
                 var symbolExternalModule = forEach(initialSymbol.declarations, getExternalModuleContainer);
                 if (symbolExternalModule) {
@@ -1072,7 +1072,7 @@ module ts {
 
             function getIsDeclarationVisible(declaration: Declaration) {
                 if (!isDeclarationVisible(declaration)) {
-                    // Mark the unexported alias as visible if its parent is visible 
+                    // Mark the unexported alias as visible if its parent is visible
                     // because these kind of aliases can be used to name types in declaration file
                     if (declaration.kind === SyntaxKind.ImportEqualsDeclaration &&
                         !(declaration.flags & NodeFlags.Export) &&
@@ -1107,7 +1107,7 @@ module ts {
             else if (entityName.kind === SyntaxKind.QualifiedName ||
                 entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
                 // Left identifier from type reference or TypeAlias
-                // Entity name of the import declaration 
+                // Entity name of the import declaration
                 meaning = SymbolFlags.Namespace;
             }
             else {
@@ -1219,8 +1219,8 @@ module ts {
                     appendSymbolNameOnly(symbol, writer);
                 }
 
-                // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses 
-                // this to determine if an import it has previously seen (and not written out) needs 
+                // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses
+                // this to determine if an import it has previously seen (and not written out) needs
                 // to be written to the file once the walk of the tree is complete.
                 //
                 // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
@@ -1473,7 +1473,7 @@ module ts {
                         writer.writeLine();
                     }
                     if (resolved.stringIndexType) {
-                        // [x: string]: 
+                        // [x: string]:
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writer.writeParameter(getIndexerParameterName(resolved, IndexKind.String, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
@@ -1487,7 +1487,7 @@ module ts {
                         writer.writeLine();
                     }
                     if (resolved.numberIndexType) {
-                        // [x: number]: 
+                        // [x: number]:
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writer.writeParameter(getIndexerParameterName(resolved, IndexKind.Number, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
@@ -1753,7 +1753,7 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
-                    
+
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
                     // Source file is always visible
@@ -1784,14 +1784,14 @@ module ts {
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
 
-            // Parent chain: 
+            // Parent chain:
             // VaribleDeclaration -> VariableDeclarationList -> VariableStatement -> 'Declaration Container'
             return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent.parent : node.parent;
         }
 
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
             // TypeScript 1.0 spec (April 2014): 8.4
-            // Every class automatically contains a static property member named 'prototype', 
+            // Every class automatically contains a static property member named 'prototype',
             // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
             // It is an error to explicitly declare a static property member with the name 'prototype'.
             var classType = <InterfaceType>getDeclaredTypeOfSymbol(prototype.parent);
@@ -1845,7 +1845,12 @@ module ts {
                     var propName = "" + indexOf(pattern.elements, declaration);
                     var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
                     if (!type) {
-                        error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                        if (isTupleType(parentType)) {
+                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), (<TupleType>parentType).elementTypes.length, pattern.elements.length);
+                        }
+                        else {
+                            error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                        }
                         return unknownType;
                     }
                 }
@@ -3046,11 +3051,11 @@ module ts {
                         var symbol = resolveName(typeParameter, (<Identifier>(<TypeReferenceNode>n).typeName).text, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                         if (symbol && (symbol.flags & SymbolFlags.TypeParameter)) {
                             // TypeScript 1.0 spec (April 2014): 3.4.1
-                            // Type parameters declared in a particular type parameter list 
+                            // Type parameters declared in a particular type parameter list
                             // may not be referenced in constraints in that type parameter list
-                            
+
                             // symbol.declaration.parent === typeParameter.parent
-                            // -> typeParameter and symbol.declaration originate from the same type parameter list 
+                            // -> typeParameter and symbol.declaration originate from the same type parameter list
                             // -> illegal for all declarations in symbol
                             // forEach === exists
                             links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d.parent == typeParameter.parent);
@@ -3077,7 +3082,7 @@ module ts {
                     var type: Type;
                     if ((symbol.flags & SymbolFlags.TypeParameter) && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
                         // TypeScript 1.0 spec (April 2014): 3.4.1
-                        // Type parameters declared in a particular type parameter list 
+                        // Type parameters declared in a particular type parameter list
                         // may not be referenced in constraints in that type parameter list
                         // Implementation: such type references are resolved to 'unknown' type that usually denotes error
                         type = unknownType;
@@ -3113,7 +3118,7 @@ module ts {
                 // TypeScript 1.0 spec (April 2014): 3.6.3
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
-                // the widened type(section 3.9) of which becomes the result. 
+                // the widened type(section 3.9) of which becomes the result.
                 links.resolvedType = getWidenedType(checkExpressionOrQualifiedName(node.exprName));
             }
             return links.resolvedType;
@@ -3478,7 +3483,7 @@ module ts {
                 mapper = combineTypeMappers(links.mapper, mapper);
             }
 
-            // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and 
+            // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
             var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient | symbol.flags, symbol.name);
             result.declarations = symbol.declarations;
@@ -3986,7 +3991,7 @@ module ts {
                                 // S is a subtype of a type T, and T is a supertype of S if ...
                                 // S' and T are object types and, for each member M in T..
                                 // M is a property and S' contains a property N where
-                                // if M is a required property, N is also a required property 
+                                // if M is a required property, N is also a required property
                                 // (M - property in T)
                                 // (N - property in S)
                                 if (reportErrors) {
@@ -4331,6 +4336,14 @@ module ts {
 
         function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0");
+        }
+
+        /**
+         * Check if a Type was written as a tuple type literal. 
+         * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
+         */
+        function isTupleType(type: Type) : boolean {
+            return (type.flags & TypeFlags.Tuple) && !!(<TupleType>type).elementTypes;
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -4823,9 +4836,9 @@ module ts {
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
             resolveLocation(node);
-            // Get the narrowed type of symbol at given location instead of just getting 
+            // Get the narrowed type of symbol at given location instead of just getting
             // the type of the symbol.
-            // eg. 
+            // eg.
             // function foo(a: string | number) {
             //     if (typeof a === "string") {
             //         a/**/
@@ -5077,7 +5090,7 @@ module ts {
                 // if parent is variable statement - get its parent
                 container = container.parent;
             }
-            
+
             var inFunction = isInsideFunction(node.parent, container);
 
             var current = container;
@@ -5546,8 +5559,8 @@ module ts {
 
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
-        // If the contextual type is a union type, get the signature from each type possible and if they are 
-        // all identical ignoring their return type, the result is same signature but with return type as 
+        // If the contextual type is a union type, get the signature from each type possible and if they are
+        // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
@@ -5750,9 +5763,9 @@ module ts {
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014)
-                    // A get accessor declaration is processed in the same manner as 
+                    // A get accessor declaration is processed in the same manner as
                     // an ordinary function declaration(section 6.1) with no parameters.
-                    // A set accessor declaration is processed in the same manner 
+                    // A set accessor declaration is processed in the same manner
                     // as an ordinary function declaration with a single parameter and a Void return type.
                     Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
@@ -5869,11 +5882,11 @@ module ts {
                 getNodeLinks(node).resolvedSymbol = prop;
                 if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
                     // TS 1.0 spec (April 2014): 4.8.2
-                    // - In a constructor, instance member function, instance member accessor, or 
-                    //   instance member variable initializer where this references a derived class instance, 
+                    // - In a constructor, instance member function, instance member accessor, or
+                    //   instance member variable initializer where this references a derived class instance,
                     //   a super property access is permitted and must specify a public instance member function of the base class.
-                    // - In a static member function or static member accessor 
-                    //   where this references the constructor function object of a derived class, 
+                    // - In a static member function or static member accessor
+                    //   where this references the constructor function object of a derived class,
                     //   a super property access is permitted and must specify a public static member function of the base class.
                     if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
                         error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
@@ -5941,11 +5954,11 @@ module ts {
             }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
-            // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name 
+            // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name
             //    given by that literal(converted to its string representation in the case of a numeric literal), the property access is of the type of that property.
-            // - Otherwise, if ObjExpr's apparent type has a numeric index signature and IndexExpr is of type Any, the Number primitive type, or an enum type, 
+            // - Otherwise, if ObjExpr's apparent type has a numeric index signature and IndexExpr is of type Any, the Number primitive type, or an enum type,
             //    the property access is of the type of that index signature.
-            // - Otherwise, if ObjExpr's apparent type has a string index signature and IndexExpr is of type Any, the String or Number primitive type, or an enum type, 
+            // - Otherwise, if ObjExpr's apparent type has a string index signature and IndexExpr is of type Any, the String or Number primitive type, or an enum type,
             //    the property access is of the type of that index signature.
             // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 
@@ -6182,7 +6195,7 @@ module ts {
 
                     return signature.minArgumentCount === 0;
                 }
-                
+
                 // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
                 adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
 
@@ -6402,7 +6415,7 @@ module ts {
             }
 
             var args = getEffectiveCallArguments(node);
-            
+
             // The following applies to any value of 'excludeArgument[i]':
             //    - true:      the argument at 'i' is susceptible to a one-time permanent contextual typing.
             //    - undefined: the argument at 'i' is *not* susceptible to permanent contextual typing.
@@ -6990,16 +7003,16 @@ module ts {
 
             function isReferenceOrErrorExpression(n: Node): boolean {
                 // TypeScript 1.0 spec (April 2014):
-                // Expressions are classified as values or references. 
+                // Expressions are classified as values or references.
                 // References are the subset of expressions that are permitted as the target of an assignment.
-                // Specifically, references are combinations of identifiers(section 4.3), parentheses(section 4.7), 
+                // Specifically, references are combinations of identifiers(section 4.3), parentheses(section 4.7),
                 // and property accesses(section 4.10).
                 // All other expression constructs described in this chapter are classified as values.
                 switch (n.kind) {
                     case SyntaxKind.Identifier:
                         var symbol = findSymbol(n);
                         // TypeScript 1.0 spec (April 2014): 4.3
-                        // An identifier expression that references a variable or parameter is classified as a reference. 
+                        // An identifier expression that references a variable or parameter is classified as a reference.
                         // An identifier expression that references any other kind of entity is classified as a value(and therefore cannot be the target of an assignment).
                         return !symbol || symbol === unknownSymbol || symbol === argumentsSymbol || (symbol.flags & SymbolFlags.Variable) !== 0;
                     case SyntaxKind.PropertyAccessExpression:
@@ -7172,7 +7185,7 @@ module ts {
         function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
-            // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
+            // and the right operand to be of type Any or a subtype of the 'Function' interface type.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
             if (allConstituentTypesHaveKind(leftType, TypeFlags.Primitive)) {
@@ -7243,7 +7256,12 @@ module ts {
                             checkDestructuringAssignment(e, type, contextualMapper);
                         }
                         else {
-                            error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                            if (isTupleType(sourceType)) {
+                                error(e, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), (<TupleType>sourceType).elementTypes.length, elements.length);
+                            }
+                            else {
+                                error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                            }
                         }
                     }
                     else {
@@ -7318,7 +7336,7 @@ module ts {
                 case SyntaxKind.AmpersandEqualsToken:
                     // TypeScript 1.0 spec (April 2014): 4.15.1
                     // These operators require their operands to be of type Any, the Number primitive type,
-                    // or an enum type. Operands of an enum type are treated 
+                    // or an enum type. Operands of an enum type are treated
                     // as having the primitive type Number. If one operand is the null or undefined value,
                     // it is treated as having the type of the other operand.
                     // The result is always of the Number primitive type.
@@ -7326,7 +7344,7 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var suggestedOperator: SyntaxKind;
-                    // if a user tries to apply a bitwise operator to 2 boolean operands 
+                    // if a user tries to apply a bitwise operator to 2 boolean operands
                     // try and return them a helpful suggestion
                     if ((leftType.flags & TypeFlags.Boolean) &&
                         (rightType.flags & TypeFlags.Boolean) &&
@@ -7334,7 +7352,7 @@ module ts {
                         error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operatorToken.kind), tokenToString(suggestedOperator));
                     }
                     else {
-                        // otherwise just check each operand separately and report errors as normal 
+                        // otherwise just check each operand separately and report errors as normal
                         var leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         if (leftOk && rightOk) {
@@ -7452,7 +7470,7 @@ module ts {
                     // An assignment of the form
                     //    VarExpr = ValueExpr
                     // requires VarExpr to be classified as a reference
-                    // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1) 
+                    // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
                     var ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
@@ -7580,7 +7598,7 @@ module ts {
 
             if (isConstEnumObjectType(type)) {
                 // enum object type for const enums are only permitted in:
-                // - 'left' in property access 
+                // - 'left' in property access
                 // - 'object' in indexed access
                 // - target in rhs of import statement
                 var ok =
@@ -7865,14 +7883,14 @@ module ts {
             }
 
             // TS 1.0 spec (April 2014): 8.3.2
-            // Constructors of classes with no extends clause may not contain super calls, whereas 
+            // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             if (getClassBaseTypeNode(<ClassDeclaration>node.parent)) {
 
                 if (containsSuperCall(node.body)) {
                     // The first statement in the body of a constructor must be a super call if both of the following are true:
                     // - The containing class is a derived class.
-                    // - The constructor declares parameter properties 
+                    // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
                     var superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
@@ -8230,8 +8248,8 @@ module ts {
                     // checkSpecializedSignatureDeclaration
                     if (!bodySignature.hasStringLiterals) {
                         // TypeScript 1.0 spec (April 2014): 6.1
-                        // If a function declaration includes overloads, the overloads determine the call 
-                        // signatures of the type given to the function object 
+                        // If a function declaration includes overloads, the overloads determine the call
+                        // signatures of the type given to the function object
                         // and the function implementation signature must be assignable to that type
                         //
                         // TypeScript 1.0 spec (April 2014): 3.8.4
@@ -8281,7 +8299,7 @@ module ts {
                 return;
             }
 
-            // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace 
+            // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace
             // to denote disjoint declarationSpaces (without making new enum type).
             var exportedDeclarationSpaces: SymbolFlags = 0;
             var nonExportedDeclarationSpaces: SymbolFlags = 0;
@@ -8509,11 +8527,11 @@ module ts {
 
         function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
             // - ScriptBody : StatementList
-            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList
             // also occurs in the VarDeclaredNames of StatementList.
 
             // - Block : { StatementList }
-            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList 
+            // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList
             // also occurs in the VarDeclaredNames of StatementList.
 
             // Variable declarations are hoisted to the top of their function scope. They can shadow
@@ -8522,11 +8540,11 @@ module ts {
             // A non-initialized declaration is a no-op as the block declaration will resolve before the var
             // declaration. the problem is if the declaration has an initializer. this will act as a write to the
             // block declared value. this is fine for let, but not const.
-            // Only consider declarations with initializers, uninitialized var declarations will not 
+            // Only consider declarations with initializers, uninitialized var declarations will not
             // step on a let/const variable.
-            // Do not consider let and const declarations, as duplicate block-scoped declarations 
+            // Do not consider let and const declarations, as duplicate block-scoped declarations
             // are handled by the binder.
-            // We are only looking for var declarations that step on let\const declarations from a 
+            // We are only looking for var declarations that step on let\const declarations from a
             // different scope. e.g.:
             //      {
             //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
@@ -8545,8 +8563,8 @@ module ts {
                             var container =
                                 varDeclList.parent.kind === SyntaxKind.VariableStatement &&
                                 varDeclList.parent.parent;
-                            
-                            // names of block-scoped and function scoped variables can collide only 
+
+                            // names of block-scoped and function scoped variables can collide only
                             // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                             var namesShareScope =
                                 container &&
@@ -8556,7 +8574,7 @@ module ts {
 
                             // here we know that function scoped variable is shadowed by block scoped one
                             // if they are defined in the same scope - binder has already reported redeclaration error
-                            // otherwise if variable has an initializer - show error that initialization will fail 
+                            // otherwise if variable has an initializer - show error that initialization will fail
                             // since LHS will be block scoped name instead of function scoped
                             if (!namesShareScope) {
                                 var name = symbolToString(localDeclarationSymbol);
@@ -8584,7 +8602,7 @@ module ts {
             function visit(n: Node) {
                 if (n.kind === SyntaxKind.Identifier) {
                     var referencedSymbol = getNodeLinks(n).resolvedSymbol;
-                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable) 
+                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
                     // if it contains entry with a specified name and if this entry matches the resolved symbol
                     if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
                         if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
@@ -8729,7 +8747,7 @@ module ts {
         }
 
         function checkWhileStatement(node: WhileStatement) {
-            // Grammar checking 
+            // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
             checkExpression(node.expression);
@@ -8763,7 +8781,7 @@ module ts {
                 grammarErrorOnFirstToken(node, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
                 return;
             }
-            
+
             checkGrammarForInOrForOfStatement(node)
 
             // Check the LHS and RHS
@@ -8778,7 +8796,7 @@ module ts {
                 var varExpr = <Expression>node.initializer;
                 var rightType = checkExpression(node.expression);
                 var iteratedType = checkIteratedType(rightType, node.expression);
-                
+
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                     // iteratedType may be undefined. In this case, we still want to check the structure of
@@ -8790,7 +8808,7 @@ module ts {
                     var leftType = checkExpression(varExpr);
                     checkReferenceExpression(varExpr, /*invalidReferenceMessage*/ Diagnostics.Invalid_left_hand_side_in_for_of_statement,
                         /*constantVariableMessage*/ Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_previously_defined_constant);
-                
+
                     // iteratedType will be undefined if the rightType was missing properties/signatures
                     // required to get its iteratedType (like [Symbol.iterator] or next). This may be
                     // because we accessed properties from anyType, or it may have led to an error inside
@@ -8805,20 +8823,20 @@ module ts {
         }
 
         function checkForInStatement(node: ForInStatement) {
-            // Grammar checking 
+            // Grammar checking
             checkGrammarForInOrForOfStatement(node);
 
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (var VarDecl in Expr) Statement
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
-            //   and Expr must be an expression of type Any, an object type, or a type parameter type.                        
+            //   and Expr must be an expression of type Any, an object type, or a type parameter type.
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                 var variable = (<VariableDeclarationList>node.initializer).declarations[0];
                 if (variable && isBindingPattern(variable.name)) {
                     error(variable.name, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                
+
                 checkForInOrForOfVariableDeclaration(node);
             }
             else {
@@ -8889,7 +8907,7 @@ module ts {
             }
 
             return iteratedType;
-            
+
             function getIteratedType(iterable: Type, expressionForError: Expression) {
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
                 // must have the following structure (annotated with the names of the variables below):
@@ -8916,7 +8934,7 @@ module ts {
                 // caller requested it. Then the caller can decide what to do in the case where there is no iterated
                 // type. This is different from returning anyType, because that would signify that we have matched the
                 // whole pattern and that T (above) is 'any'.
-                
+
                 if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
                     return undefined;
                 }
@@ -8964,7 +8982,7 @@ module ts {
                     }
                     return undefined;
                 }
-                
+
                 return iteratorNextValue;
             }
         }
@@ -9160,7 +9178,7 @@ module ts {
                         if (!(member.flags & NodeFlags.Static) && hasDynamicName(member)) {
                             var propType = getTypeOfSymbol(member.symbol);
                             checkIndexConstraintForProperty(member.symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
-                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number); 
+                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
                         }
                     }
                 }
@@ -9176,7 +9194,7 @@ module ts {
                 }
             }
 
-            if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {                
+            if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
                     typeToString(numberIndexType), typeToString(stringIndexType));
             }
@@ -9289,7 +9307,7 @@ module ts {
 
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
-                
+
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.typeName);
             }
@@ -9333,13 +9351,13 @@ module ts {
             // Inheritance means that a derived class implicitly contains all non - overridden members of the base class.
             // Both public and private property members are inherited, but only public property members can be overridden.
             // A property member in a derived class is said to override a property member in a base class
-            // when the derived class property member has the same name and kind(instance or static) 
+            // when the derived class property member has the same name and kind(instance or static)
             // as the base class property member.
             // The type of an overriding property member must be assignable(section 3.8.4)
             // to the type of the overridden property member, or otherwise a compile - time error occurs.
             // Base class instance member functions can be overridden by derived class instance member functions,
             // but not by other kinds of members.
-            // Base class instance member variables and accessors can be overridden by 
+            // Base class instance member variables and accessors can be overridden by
             // derived class instance member variables and accessors, but not by other kinds of members.
 
             // NOTE: assignability is checked in checkClassDeclaration
@@ -9505,7 +9523,7 @@ module ts {
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
             checkGrammarModifiers(node);
-            
+
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
         }
@@ -9533,7 +9551,7 @@ module ts {
                             }
                             else if (!ambient) {
                                 // Only here do we need to check that the initializer is assignable to the enum type.
-                                // If it is a constant value (not undefined), it is syntactically constrained to be a number. 
+                                // If it is a constant value (not undefined), it is syntactically constrained to be a number.
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
                             checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
@@ -9802,7 +9820,7 @@ module ts {
             }
             if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {
                 // TypeScript 1.0 spec (April 2013): 12.1.6
-                // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
+                // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference
                 // other external modules only through top - level external module names.
                 // Relative external module names are not permitted.
                 error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
@@ -10943,7 +10961,7 @@ module ts {
             var symbol = declarationSymbol ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-            
+
             var isLetOrConst =
                 symbol &&
                 (symbol.flags & SymbolFlags.BlockScopedVariable) &&
@@ -11424,7 +11442,7 @@ module ts {
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
                 var name = prop.name;
-                if (prop.kind === SyntaxKind.OmittedExpression || 
+                if (prop.kind === SyntaxKind.OmittedExpression ||
                     name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
@@ -11687,8 +11705,8 @@ module ts {
                     return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
                 }
             }
-            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
-            // and its Identifier is eval or arguments 
+            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
+            // and its Identifier is eval or arguments
             return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
         }
 
@@ -11722,8 +11740,8 @@ module ts {
             // 2. ForDeclaration: ForDeclaration : LetOrConst ForBinding
             // It is a Syntax Error if the BoundNames of ForDeclaration contains "let".
 
-            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
-            // and its Identifier is eval or arguments 
+            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
+            // and its Identifier is eval or arguments
             return (checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name)) ||
                 checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
         }
@@ -11959,7 +11977,7 @@ module ts {
                 if (!links.hasReportedStatementInAmbientContext && isFunctionLike(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
                 }
-                
+
                 // We are either parented by another statement, or some sort of block.
                 // If we're in a block, we only want to really report an error once
                 // to prevent noisyness.  So use a bit on the block to indicate if

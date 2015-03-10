@@ -1343,6 +1343,10 @@
         "category": "Error",
         "code": 2492
     },
+    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+        "category": "Error",
+        "code": 2493
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
