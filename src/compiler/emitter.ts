@@ -2074,7 +2074,7 @@ module ts {
                 function emitNodeWithSourceMap(node: Node) {
                     if (node) {
                         if (nodeIsSynthesized(node)) {
-                            return emitNode(node);
+                            return emitNodeWithoutSourceMap(node);
                         }
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
@@ -3587,7 +3587,7 @@ module ts {
                 write("var ");
                 
                 // _i = 0
-                emitNode(counter);
+                emitNodeWithoutSourceMap(counter);
                 write(" = 0");
                 emitEnd(node.expression);
                 
@@ -3595,25 +3595,25 @@ module ts {
                     // , _a = expr
                     write(", ");
                     emitStart(node.expression);
-                    emitNode(rhsReference);
+                    emitNodeWithoutSourceMap(rhsReference);
                     write(" = ");
-                    emitNode(node.expression);
+                    emitNodeWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
                 write("; ");
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
-                emitNode(counter);
+                emitNodeWithoutSourceMap(counter);
                 write(" < ");
-                emitNode(rhsReference);
+                emitNodeWithoutSourceMap(rhsReference);
                 write(".length");
                 emitEnd(node.initializer);
                 write("; ");
                 
                 // _i++)
                 emitStart(node.initializer);
-                emitNode(counter);
+                emitNodeWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
@@ -3640,17 +3640,17 @@ module ts {
                         else {
                             // The following call does not include the initializer, so we have
                             // to emit it separately.
-                            emitNode(declaration);
+                            emitNodeWithoutSourceMap(declaration);
                             write(" = ");
-                            emitNode(rhsIterationValue);
+                            emitNodeWithoutSourceMap(rhsIterationValue);
                         }
                     }
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (var of []) {}
-                        emitNode(createTempVariable(node, /*forLoopVariable*/ false));
+                        emitNodeWithoutSourceMap(createTempVariable(node, /*forLoopVariable*/ false));
                         write(" = ");
-                        emitNode(rhsIterationValue);
+                        emitNodeWithoutSourceMap(rhsIterationValue);
                     }
                 }
                 else {
@@ -3663,7 +3663,7 @@ module ts {
                         emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined, /*locationForCheckingExistingName*/ node);
                     }
                     else {
-                        emitNode(assignmentExpression);
+                        emitNodeWithoutSourceMap(assignmentExpression);
                     }
                 }
                 emitEnd(node.initializer);
@@ -4567,7 +4567,7 @@ module ts {
             }
 
             function emitMemberAccessForPropertyName(memberName: DeclarationName) {
-                // TODO: (jfreeman,drosen): comment on why this is emitNode instead of emit here.
+                // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNodeWithoutSourceMap(memberName);
