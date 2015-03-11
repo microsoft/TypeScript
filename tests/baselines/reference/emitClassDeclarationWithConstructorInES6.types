@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts ===
+class C {
+>C : C
+
+    y: number;
+>y : number
+
+    constructor(x: number) {
+>x : number
+    }
+}
+
+class D {
+>D : D
+
+    y: number;
+>y : number
+
+    x: string = "hello";
+>x : string
+
+    constructor(x: number, z = "hello") {
+>x : number
+>z : string
+
+        this.y = 10;
+>this.y = 10 : number
+>this.y : number
+>this : D
+>y : number
+    }
+}

@@ -4407,7 +4407,9 @@ module ts {
                     emitComputedPropertyName(<ComputedPropertyName>memberName);
                 }
                 else {
-                    if (languageVersion < ScriptTarget.ES6) {
+                    // For script-target that is ES6 or above, we want to emit memberName by itself without prefix "." if the memberName is a name of method.
+                    // If the memberName is the name of property, we need to emit it with prefix ".".
+                    if (languageVersion < ScriptTarget.ES6 || memberName.parent.kind === SyntaxKind.PropertyDeclaration) {
                         write(".");
                     }
                     emitNodeWithoutSourceMap(memberName);
@@ -4667,7 +4669,7 @@ module ts {
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write(" extends ");
-                    emitDeclarationName(node);
+                    emitNodeWithoutSourceMap(baseTypeNode.typeName);
                 }
                 write(" {");
                 increaseIndent();
