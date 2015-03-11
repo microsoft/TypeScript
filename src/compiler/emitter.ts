@@ -3539,12 +3539,16 @@ module ts {
                 emit(node.expression);
                 endPos = emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 write(" ");
-                emitToken(SyntaxKind.OpenBraceToken, endPos);
+                emitCaseBlock(node.caseBlock, endPos)
+            }
+
+            function emitCaseBlock(node: CaseBlock, startPos: number): void {
+                emitToken(SyntaxKind.OpenBraceToken, startPos);
                 increaseIndent();
-                emitLines(node.caseBlock.clauses);
+                emitLines(node.clauses);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.caseBlock.clauses.end);
+                emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
             function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
