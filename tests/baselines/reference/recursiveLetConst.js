@@ -1,0 +1,28 @@
+//// [recursiveLetConst.ts]
+'use strict'
+let x = x + 1;
+let [x1] = x1 + 1;
+const y = y + 2;
+const [y1] = y1 + 1;
+for (let v = v; ; ) { }
+for (let [v] = v; ;) { }
+for (let v in v) { }
+for (let v of v) { }
+for (let [v] of v) { }
+
+//// [recursiveLetConst.js]
+'use strict';
+let x = x + 1;
+let [x1] = x1 + 1;
+const y = y + 2;
+const [y1] = y1 + 1;
+for (let v = v;;) {
+}
+for (let [v] = v;;) {
+}
+for (let v in v) {
+}
+for (let v of v) {
+}
+for (let [v] of v) {
+}
