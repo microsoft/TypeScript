@@ -1,11 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
 ////function Foo() {
-////    for (var i = 0; i < 10; i++) {
+////    for (var i of [])
+////    {
 ////        /*insideStatement*/
 ////    }
 ////    /*afterStatement*/
-////    for (var i = 0;;) 
+////    for (var i of [])
 ////        /*insideStatement2*/
 ////}
 
