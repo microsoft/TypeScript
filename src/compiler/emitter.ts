@@ -4664,6 +4664,13 @@ module ts {
             }
 
             function emitClassDeclarationAboveES6(node: ClassDeclaration) {
+                if (node.flags & NodeFlags.Export) {
+                    write("export ");
+
+                    if (node.flags & NodeFlags.Default) {
+                        write("default ");
+                    }
+                }
                 write("class ");
                 emitDeclarationName(node);
                 var baseTypeNode = getClassBaseTypeNode(node);
