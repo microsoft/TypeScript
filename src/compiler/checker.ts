@@ -11384,7 +11384,8 @@ module ts {
             if (node.kind === SyntaxKind.ArrowFunction && (<ArrowFunction>node).arrow) {
                 var arrowFunction = <ArrowFunction>node;
                 var sourceFile = getSourceFileOfNode(node);
-                if (getLineAndCharacterOfPosition(sourceFile, getTokenPosOfNode(arrowFunction.arrow, sourceFile)).line !== getLineAndCharacterOfPosition(sourceFile, arrowFunction.parameters.end).line) {
+                if (getLineAndCharacterOfPosition(sourceFile, getTokenPosOfNode(arrowFunction.arrow, sourceFile)).line !==
+                        getLineAndCharacterOfPosition(sourceFile, arrowFunction.parameters.end).line) {
                     return grammarErrorOnNode(arrowFunction.arrow, Diagnostics.Line_terminator_not_permitted_before_arrow);
                 }
             }
