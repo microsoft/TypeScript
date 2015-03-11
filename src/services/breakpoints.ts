@@ -416,8 +416,8 @@ module ts.BreakpointResolver {
                         var classDeclaration = <ClassDeclaration>node.parent;
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
-                    case SyntaxKind.SwitchStatement:
-                        return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);
+                    case SyntaxKind.CaseBlock:
+                        return spanInNodeIfStartsOnSameLine(node.parent.parent, (<CaseBlock>node.parent).clauses[0]);
                 }
 
                 // Default to parent node
@@ -447,10 +447,10 @@ module ts.BreakpointResolver {
                     case SyntaxKind.CatchClause:
                         return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
 
-                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
                         // breakpoint in last statement of the last clause
-                        var switchStatement = <SwitchStatement>node.parent;
-                        var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
+                        var caseBlock = <CaseBlock>node.parent;
+                        var lastClause = caseBlock.clauses[caseBlock.clauses.length - 1];
                         if (lastClause) {
                             return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
                         }

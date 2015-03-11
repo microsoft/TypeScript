@@ -3708,7 +3708,11 @@ module ts {
                 emit(node.expression);
                 endPos = emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 write(" ");
-                emitToken(SyntaxKind.OpenBraceToken, endPos);
+                emitCaseBlock(node.caseBlock, endPos)
+            }
+
+            function emitCaseBlock(node: CaseBlock, startPos: number): void {
+                emitToken(SyntaxKind.OpenBraceToken, startPos);
                 increaseIndent();
                 emitLines(node.clauses);
                 decreaseIndent();
@@ -4120,7 +4124,7 @@ module ts {
                     }
                     switch (current.kind) {
                         case SyntaxKind.SourceFile:
-                        case SyntaxKind.SwitchKeyword:
+                        case SyntaxKind.CaseBlock:
                         case SyntaxKind.CatchClause:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ForStatement:

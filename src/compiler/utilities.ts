@@ -376,6 +376,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
                     return visitor(<ReturnStatement>node);
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.Block:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
