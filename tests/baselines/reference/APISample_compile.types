@@ -1674,8 +1674,8 @@ declare module "typescript" {
 >Expression : Expression
 >FunctionLikeDeclaration : FunctionLikeDeclaration
 
-        arrow: Node;
->arrow : Node
+        equalsGreaterThanToken: Node;
+>equalsGreaterThanToken : Node
 >Node : Node
     }
     interface LiteralExpression extends PrimaryExpression {

@@ -554,7 +554,7 @@ declare module "typescript" {
         body: Block | Expression;
     }
     interface ArrowFunction extends Expression, FunctionLikeDeclaration {
-        arrow: Node;
+        equalsGreaterThanToken: Node;
     }
     interface LiteralExpression extends PrimaryExpression {
         text: string;

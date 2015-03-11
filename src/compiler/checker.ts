@@ -11381,12 +11381,13 @@ module ts {
         }
 
         function checkGrammarArrowFunction(node: FunctionLikeDeclaration): boolean {
-            if (node.kind === SyntaxKind.ArrowFunction && (<ArrowFunction>node).arrow) {
+            if (node.kind === SyntaxKind.ArrowFunction) {
                 var arrowFunction = <ArrowFunction>node;
                 var sourceFile = getSourceFileOfNode(node);
-                if (getLineAndCharacterOfPosition(sourceFile, getTokenPosOfNode(arrowFunction.arrow, sourceFile)).line !==
-                        getLineAndCharacterOfPosition(sourceFile, arrowFunction.parameters.end).line) {
-                    return grammarErrorOnNode(arrowFunction.arrow, Diagnostics.Line_terminator_not_permitted_before_arrow);
+                var equalsGreaterThanLine = getLineAndCharacterOfPosition(sourceFile, getTokenPosOfNode(arrowFunction.equalsGreaterThanToken, sourceFile)).line;
+                var parametersLine = getLineAndCharacterOfPosition(sourceFile, arrowFunction.parameters.end).line;
+                if (equalsGreaterThanLine !== parametersLine) {
+                    return grammarErrorOnNode(arrowFunction.equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
                 }
             }
             return false;

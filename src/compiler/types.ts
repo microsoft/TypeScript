@@ -654,7 +654,7 @@ module ts {
     }
 
     export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
-        arrow: Node;
+        equalsGreaterThanToken: Node;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,

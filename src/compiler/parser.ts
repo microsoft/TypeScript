@@ -95,7 +95,7 @@ module ts {
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<ArrowFunction>node).arrow) ||
+                    visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
@@ -3017,9 +3017,7 @@ module ts {
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
 
-            if ((node.arrow = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>"))) {
-                node.arrow.parent = node;
-            }
+            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody();
 
             return finishNode(node);
@@ -3048,8 +3046,7 @@ module ts {
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            if ((arrowFunction.arrow = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>")) || token === SyntaxKind.OpenBraceToken) {
-                arrowFunction.arrow.parent = arrowFunction;
+            if ((arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>")) || token === SyntaxKind.OpenBraceToken) {
                 arrowFunction.body = parseArrowFunctionExpressionBody();
             }
             else {
