@@ -238,7 +238,7 @@ module ts.SignatureHelp {
                         invocation: callExpression,
                         argumentsSpan: getApplicableSpanForArguments(list),
                         argumentIndex: 0,
-                        argumentCount: getCommaBasedArgCount(list)
+                        argumentCount: getArgumentCount(list)
                     };
                 }
 
@@ -253,20 +253,11 @@ module ts.SignatureHelp {
                     var list = listItemInfo.list;
                     var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
 
-                    // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
-                    // item (not including commas). Here are some examples:
-                    //    1. foo(a, b, c #) -> the listItemIndex is 4, we want to return 2
-                    //    2. foo(a, b, # c) -> listItemIndex is 3, we want to return 2
-                    //    3. foo(#a) -> listItemIndex is 0, we want to return 0
-                    //
-                    // In general, we want to subtract the number of commas before the current index.
-                    // But if we are on a comma, we also want to pretend we are on the argument *following*
-                    // the comma. That amounts to taking the ceiling of half the index.
-                    var argumentIndex = (listItemInfo.listItemIndex + 1) >> 1;
+                    var argumentIndex = getArgumentIndex(list, node);
+                    var argumentCount = getArgumentCount(list);
 
-                    var argumentCount = getCommaBasedArgCount(list);
-
-                    Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
+                    Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount,
+                        `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
 
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
@@ -313,12 +304,42 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        function getCommaBasedArgCount(argumentsList: Node) {
-            // The number of arguments is the number of commas plus one, unless the list
-            // is completely empty, in which case there are 0 arguments.
-            return argumentsList.getChildCount() === 0
-                ? 0
-                : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+        function getArgumentIndex(argumentsList: Node, node: Node) {
+            // The list we got back can include commas.  In the presence of errors it may 
+            // also just have nodes without commas.  For example "Foo(a b c)" will have 3 
+            // args without commas.   We want to find what index we're at.  So we count
+            // forward until we hit ourselves, only incrementing the index if it isn't a
+            // comma.
+            var argumentIndex = 0;
+            var listChildren = argumentsList.getChildren();
+            for (var i = 0, n = listChildren.length; i < n; i++) {
+                var child = listChildren[i];
+                if (child === node) {
+                    break;
+                }
+                if (child.kind !== SyntaxKind.CommaToken) {
+                    argumentIndex++;
+                }
+            }
+
+            return argumentIndex;
+        }
+
+        function getArgumentCount(argumentsList: Node) {
+            // The argument count for a list is normally the number of non-comma children it has.
+            // For example, if you have "Foo(a,b)" then there will be three children of the arg
+            // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
+            // is a small subtlety.  If you have  "Foo(a,)", then the child list will just have
+            // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
+            // arg count by one to compensate.
+            var listChildren = argumentsList.getChildren();
+
+            var argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
+            if (listChildren.length > 0 && lastOrUndefined(listChildren).kind === SyntaxKind.CommaToken) {
+                argumentCount++;
+            }
+
+            return argumentCount;
         }
 
         // spanIndex is either the index for a given template span.

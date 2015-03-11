@@ -207,6 +207,10 @@ module ts {
             if (pos < nodes.end) {
                 this.addSyntheticNodes(list._children, pos, nodes.end);
             }
+
+            if (nodes.hasTrailingComma) {
+
+            }
             return list;
         }
 
