@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithStaticMethodInES6.ts ===
+class E {
+>E : E
+
+    normalMethod() { }
+>normalMethod : () => void
+
+    static ["computedname"]() { }
+    static ["computedname"](a:string) { }
+>a : string
+
+    static ["computedname"](a: string): boolean { return true; }
+>a : string
+
+    static staticMethod() {
+>staticMethod : () => number
+
+        var x = 1 + 2;
+>x : number
+>1 + 2 : number
+
+        return x
+>x : number
+    }
+    static foo(a: string) { }
+>foo : (a: string) => void
+>a : string
+
+    static bar(a: string): number { return 1; }
+>bar : (a: string) => number
+>a : string
+}

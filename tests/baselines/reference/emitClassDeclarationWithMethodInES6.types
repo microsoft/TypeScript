@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts ===
+class D {
+>D : D
+
+    foo() { }
+>foo : () => void
+
+    ["computedName"]() { }
+    ["computedName"](a: string) { }
+>a : string
+
+    ["computedName"](a: string): number { return 1; }
+>a : string
+
+    bar(): string {
+>bar : () => string
+
+        return "HI";
+    } 
+    baz(a: any, x: string): string {
+>baz : (a: any, x: string) => string
+>a : any
+>x : string
+
+        return "HELLO";
+    }
+}
