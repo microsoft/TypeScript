@@ -461,6 +461,12 @@ module ts.formatting {
                 case SyntaxKind.DefaultClause:
                     // there is no such thing as terminator token for CaseClause\DefaultClause so for simplicitly always consider them non-completed
                     return false;
+                case SyntaxKind.ForStatement:
+                    return isCompletedNode((<ForStatement>n).statement, sourceFile);
+                case SyntaxKind.ForInStatement:
+                    return isCompletedNode((<ForInStatement>n).statement, sourceFile);
+                case SyntaxKind.ForOfStatement:
+                    return isCompletedNode((<ForOfStatement>n).statement, sourceFile);
                 case SyntaxKind.WhileStatement:
                     return isCompletedNode((<WhileStatement>n).statement, sourceFile);
                 case SyntaxKind.DoStatement:
