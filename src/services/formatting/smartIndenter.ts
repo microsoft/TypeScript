@@ -357,7 +357,7 @@ module ts.formatting {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
-                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.ParenthesizedExpression:
@@ -431,7 +431,7 @@ module ts.formatting {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
-                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
                 case SyntaxKind.CatchClause:
                     return isCompletedNode((<CatchClause>n).block, sourceFile);

@@ -9031,7 +9031,7 @@ module ts {
             var hasDuplicateDefaultClause = false;
 
             var expressionType = checkExpression(node.expression);
-            forEach(node.clauses, clause => {
+            forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
                     if (firstDefaultClause === undefined) {
@@ -10147,6 +10147,7 @@ module ts {
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.LabeledStatement:

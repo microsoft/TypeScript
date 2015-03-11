@@ -3541,10 +3541,10 @@ module ts {
                 write(" ");
                 emitToken(SyntaxKind.OpenBraceToken, endPos);
                 increaseIndent();
-                emitLines(node.clauses);
+                emitLines(node.caseBlock.clauses);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
+                emitToken(SyntaxKind.CloseBraceToken, node.caseBlock.clauses.end);
             }
 
             function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
@@ -3938,7 +3938,7 @@ module ts {
                     }
                     switch (current.kind) {
                         case SyntaxKind.SourceFile:
-                        case SyntaxKind.SwitchKeyword:
+                        case SyntaxKind.CaseBlock:
                         case SyntaxKind.CatchClause:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ForStatement:

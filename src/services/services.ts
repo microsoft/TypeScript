@@ -3619,8 +3619,8 @@ module ts {
                     break;
                 case SyntaxKind.CaseKeyword:
                 case SyntaxKind.DefaultKeyword:
-                    if (hasKind(parent(parent(node)), SyntaxKind.SwitchStatement)) {
-                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent);
+                    if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent);
                     }
                     break;
                 case SyntaxKind.BreakKeyword:
@@ -3887,7 +3887,7 @@ module ts {
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
-                forEach(switchStatement.clauses, clause => {
+                forEach(switchStatement.caseBlock.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
                     var breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);

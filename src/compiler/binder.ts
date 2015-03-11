@@ -534,7 +534,7 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
                 default:

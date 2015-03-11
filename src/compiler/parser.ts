@@ -209,7 +209,9 @@ module ts {
                     visitNode(cbNode, (<WithStatement>node).statement);
             case SyntaxKind.SwitchStatement:
                 return visitNode(cbNode, (<SwitchStatement>node).expression) ||
-                    visitNodes(cbNodes, (<SwitchStatement>node).clauses);
+                    visitNode(cbNode, (<SwitchStatement>node).caseBlock);
+            case SyntaxKind.CaseBlock:
+                return visitNodes(cbNodes, (<CaseBlock>node).clauses);
             case SyntaxKind.CaseClause:
                 return visitNode(cbNode, (<CaseClause>node).expression) ||
                     visitNodes(cbNodes, (<CaseClause>node).statements);
@@ -3954,9 +3956,11 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
+            var caseBlock = <CaseBlock>createNode(SyntaxKind.CaseBlock, scanner.getStartPos());
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
+            caseBlock.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
+            node.caseBlock = finishNode(caseBlock);
             return finishNode(node);
         }
 
