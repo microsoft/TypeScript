@@ -1,4 +1,4 @@
-//// [emitClassDeclarationWithConstructorPropertyAssignmentInES6.ts]
+//// [emitClassDeclarationWithPropertyAssignmentInES6.ts]
 class C {
     x: string = "Hello world";
 }
@@ -24,7 +24,7 @@ class F extends D{
     }
 }
 
-//// [emitClassDeclarationWithConstructorPropertyAssignmentInES6.js]
+//// [emitClassDeclarationWithPropertyAssignmentInES6.js]
 class C {
     constructor() {
         this.x = "Hello world";

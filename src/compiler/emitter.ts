@@ -4677,10 +4677,17 @@ module ts {
                 writeLine();
                 emitConstructorOfClass(node, baseTypeNode);
                 emitMemberFunctionsAboveES6(node);
-                writeLine();
-                scopeEmitEnd();
                 decreaseIndent();
-                write("}");
+                writeLine();
+                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                scopeEmitEnd();
+
+                // Emit static property assignment. Because classDeclaration is lexically evaluated, it is safe to emit static property assignment after classDeclaration
+                // From ES6 specification:
+                //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
+                //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
+                writeLine();
+                emitMemberAssignments(node, NodeFlags.Static);
             }
 
             function emitClassDeclarationBelowES6(node: ClassDeclaration) {
