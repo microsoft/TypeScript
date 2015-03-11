@@ -3046,7 +3046,8 @@ module ts {
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            if ((arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>")) || token === SyntaxKind.OpenBraceToken) {
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
+            if (arrowFunction.equalsGreaterThanToken.kind === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
                 arrowFunction.body = parseArrowFunctionExpressionBody();
             }
             else {
