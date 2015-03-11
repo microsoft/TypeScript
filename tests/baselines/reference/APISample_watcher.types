@@ -1938,12 +1938,14 @@ declare module "typescript" {
 >Block : Block
 >Expression : Expression
     }
-    interface ArrowFunctionExpression extends FunctionExpression {
->ArrowFunctionExpression : ArrowFunctionExpression
->FunctionExpression : FunctionExpression
+    interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+>ArrowFunction : ArrowFunction
+>Expression : Expression
+>FunctionLikeDeclaration : FunctionLikeDeclaration
 
-        lineTerminatorBeforeArrow: boolean;
->lineTerminatorBeforeArrow : boolean
+        arrow: Node;
+>arrow : Node
+>Node : Node
     }
     interface LiteralExpression extends PrimaryExpression {
 >LiteralExpression : LiteralExpression

@@ -1,101 +1,87 @@
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(1,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(3,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(5,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(7,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(9,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(11,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(13,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(15,10): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(19,5): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(21,5): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(26,40): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(30,20): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(35,17): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(39,20): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(2,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(4,7): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(6,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(8,7): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(10,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(12,7): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(14,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(16,7): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(20,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(22,5): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(27,13): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(31,13): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(36,13): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts(40,9): error TS1200: Line terminator not permitted before arrow.
 
 
 ==== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts (14 errors) ====
     var f1 = ()
-             ~~
         => { }
-    ~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f2 = (x: string, y: string) /*
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-    ~~~~~~~~~~~~
+          ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f3 = (x: string, y: number, ...rest)
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         => { }
-    ~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f4 = (x: string, y: number, ...rest) /*
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-    ~~~~~~~~~~~~
+          ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f5 = (...rest)
-             ~~~~~~~~~
         => { }
-    ~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f6 = (...rest) /*
-             ~~~~~~~~~~~~
       */  => { }
-    ~~~~~~~~~~~~
+          ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f7 = (x: string, y: number, z = 10)
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         => { }
-    ~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     var f8 = (x: string, y: number, z = 10) /*
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       */  => { }
-    ~~~~~~~~~~~~
+          ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     
     function foo(func: () => boolean) { }
     foo(()
-        ~~
         => true);
-    ~~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     foo(()
-        ~~
         => { return false; });
-    ~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     
     module m {
         class City {
             constructor(x: number, thing = ()
-                                           ~~
                 => 100) {
-    ~~~~~~~~~~~~~~~~~~
+                ~~
 !!! error TS1200: Line terminator not permitted before arrow.
             }
     
             public m = ()
-                       ~~
                 => 2 * 2 * 2
-    ~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~
 !!! error TS1200: Line terminator not permitted before arrow.
         }
     
         export enum Enum {
             claw = (()
-                    ~~
                 => 10)()
-    ~~~~~~~~~~~~~~~~~
+                ~~
 !!! error TS1200: Line terminator not permitted before arrow.
         }
     
         export var v = x
-                       ~
             => new City(Enum.claw);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     }
     

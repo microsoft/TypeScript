@@ -95,6 +95,7 @@ module ts {
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
+                    visitNode(cbNode, (<ArrowFunction>node).arrow) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
@@ -3006,7 +3007,7 @@ module ts {
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            let node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
 
             let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
@@ -3016,8 +3017,9 @@ module ts {
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
 
-            node.lineTerminatorBeforeArrow = scanner.hasPrecedingLineBreak();
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
+            if ((node.arrow = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>"))) {
+                node.arrow.parent = node;
+            }
             node.body = parseArrowFunctionExpressionBody();
 
             return finishNode(node);
@@ -3046,7 +3048,8 @@ module ts {
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
-            if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
+            if ((arrowFunction.arrow = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>")) || token === SyntaxKind.OpenBraceToken) {
+                arrowFunction.arrow.parent = arrowFunction;
                 arrowFunction.body = parseArrowFunctionExpressionBody();
             }
             else {
@@ -3141,7 +3144,7 @@ module ts {
         }
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
-            let node = <ArrowFunctionExpression>createNode(SyntaxKind.ArrowFunction);
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
@@ -3168,8 +3171,6 @@ module ts {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
-
-            node.lineTerminatorBeforeArrow = scanner.hasPrecedingLineBreak();
 
             return node;
         }

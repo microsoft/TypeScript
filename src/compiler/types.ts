@@ -653,8 +653,8 @@ module ts {
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface ArrowFunctionExpression extends FunctionExpression {
-        lineTerminatorBeforeArrow: boolean;
+    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+        arrow: Node;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
