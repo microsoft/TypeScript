@@ -310,6 +310,12 @@ module ts.SignatureHelp {
             // args without commas.   We want to find what index we're at.  So we count
             // forward until we hit ourselves, only incrementing the index if it isn't a
             // comma.
+            //
+            // Note: the subtlety around trailing commas (in getArgumentCount) does not apply
+            // here.  That's because we're only walking forward until we hit the node we're
+            // on.  In that case, even if we're after the trailing comma, we'll still see
+            // that trailing comma in the list, and we'll have generated the appropriate
+            // arg index.
             var argumentIndex = 0;
             var listChildren = argumentsList.getChildren();
             for (var i = 0, n = listChildren.length; i < n; i++) {
@@ -332,6 +338,11 @@ module ts.SignatureHelp {
             // is a small subtlety.  If you have  "Foo(a,)", then the child list will just have
             // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
             // arg count by one to compensate.
+            //
+            // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then 
+            // we'll have:  'a' '<comma>' '<missing>' 
+            // That will give us 2 non-commas.  We then add one for the last comma, givin us an
+            // arg count of 3.
             var listChildren = argumentsList.getChildren();
 
             var argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
