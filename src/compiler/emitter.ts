@@ -4465,15 +4465,12 @@ module ts {
                             writeLine();
                             emitStart(member);
                             write("Object.defineProperty(");
-                            emitStart((<AccessorDeclaration>member).name);
                             emitDeclarationName(node);
                             if (!(member.flags & NodeFlags.Static)) {
                                 write(".prototype");
                             }
                             write(", ");
-                            // TODO: Shouldn't emitStart on name occur *here*?
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
-                            emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
                             increaseIndent();
                             if (accessors.getAccessor) {
@@ -4529,6 +4526,36 @@ module ts {
                         emitEnd(member);
                         emitTrailingComments(member);
                     }
+                    else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                        var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        if (member === accessors.firstAccessor) {
+                            writeLine();
+                            if (accessors.getAccessor) {
+                                emitLeadingComments(accessors.getAccessor);
+                                emitStart(accessors.getAccessor);
+                                if (member.flags & NodeFlags.Static) {
+                                    write("static ");
+                                }
+                                write("get ");
+                                emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                                emitSignatureAndBody(accessors.getAccessor);
+                                emitEnd(accessors.getAccessor);
+                                emitTrailingComments(accessors.getAccessor);
+                            }
+                            else if (accessors.setAccessor) {
+                                emitLeadingComments(accessors.setAccessor);
+                                emitStart(accessors.setAccessor);
+                                if (member.flags & NodeFlags.Static) {
+                                    write("static ");
+                                }
+                                write("set ");
+                                emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                                emitSignatureAndBody(accessors.setAccessor);
+                                emitEnd(accessors.setAccessor);
+                                emitTrailingComments(accessors.setAccessor);;
+                            }
+                        }
+                    }
                 });
             }
 
@@ -4567,7 +4594,7 @@ module ts {
                         emitSignatureParameters(ctor);
                     }
                     else {
-                        // Based on EcmaScript6 section 14.15.14: Runtime Semantics: ClassDefinitionEvaluation.
+                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
                         // If constructor is empty, then,
                         //      If ClassHeritageopt is present, then
                         //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
