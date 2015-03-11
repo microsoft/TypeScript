@@ -1561,6 +1561,9 @@ module ts {
         // Valid targets for an ES3 non-ambient decorator
         ES3ValidTargetMask = ClassDeclaration | ParameterDeclaration,
 
+        // Targets that need the __decorate helper
+        NeedsDecorateHelperTargetsMask = PropertyDeclaration | MethodDeclaration | AccessorDeclaration,
+
         // Valid targets for a non-ambient decorator
         NonAmbientValidTargetMask = ClassDeclaration | PropertyDeclaration | MethodDeclaration | AccessorDeclaration | ParameterDeclaration,
 

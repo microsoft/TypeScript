@@ -8927,6 +8927,10 @@ module ts {
                 return;
             }
 
+            if (validFlags & DecoratorFlags.NeedsDecorateHelperTargetsMask) {
+                emitDecorate = true;
+            }
+
             // If we are decorating a class member, we need to check the type is compatible
             if (validFlags & DecoratorFlags.MemberDecoratorFunctionValidTargetsMask) {
                 checkDecoratorSignature(node, exprType, globalMemberDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
@@ -8999,19 +9003,6 @@ module ts {
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
                 return;
-            }
-
-            checkGrammarDecorators(node);
-
-            switch (node.kind) {
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    if (languageVersion >= ScriptTarget.ES5 && node.parent.kind === SyntaxKind.ClassDeclaration) {
-                        emitDecorate = true;
-                    }
-                    break;
             }
 
             forEach(node.decorators, checkDecorator);
@@ -12028,34 +12019,6 @@ module ts {
         function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
             return checkGrammarForDisallowedTrailingComma(arguments) ||
                 checkGrammarForOmittedArgument(node, arguments);
-        }
-
-        function checkGrammarDecorators(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.InterfaceDeclaration:
-                    // these are only supported for ambient decorators, which are checked in the typecheck pass
-                    return;
-
-                case SyntaxKind.ClassDeclaration:
-                    // decorators are always allowed on a class
-                    return;
-
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // we allow decorators on these kinds of members, but disallow non-ambient decorators on class members in ES3 or non-class members in the typecheck pass
-                    return;
-
-                case SyntaxKind.Parameter:
-                    // we allow decorators on parameters, but disallow non-ambient decorators using the above rules in the typecheck pass
-                    return;
-            }
-
-            return grammarErrorOnNode(node, Diagnostics.Decorators_cannot_appear_here);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {

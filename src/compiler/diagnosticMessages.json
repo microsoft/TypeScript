@@ -607,10 +607,6 @@
         "category": "Error",
         "code": 1194
     },
-    "Decorators cannot appear here.": {
-        "category": "Error",
-        "code": 1195
-    },
     "Non-ambient decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
         "category": "Error",
         "code": 1196

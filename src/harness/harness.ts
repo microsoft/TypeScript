@@ -1069,6 +1069,11 @@ module Harness {
                             inputFiles.push({ unitName: setting.value, content: normalizeLineEndings(IO.readFile(libFolder + setting.value), newLine) });
                             break;
 
+                        case 'define':
+                            options.define = (options.define || []);
+                            options.define.push(setting.value);
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }

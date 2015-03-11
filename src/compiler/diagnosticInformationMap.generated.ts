@@ -154,7 +154,6 @@ module ts {
         External_module_0_has_no_default_export_or_export_assignment: { code: 1192, category: DiagnosticCategory.Error, key: "External module '{0}' has no default export or export assignment." },
         An_export_declaration_cannot_have_modifiers: { code: 1193, category: DiagnosticCategory.Error, key: "An export declaration cannot have modifiers." },
         Export_declarations_are_not_permitted_in_an_internal_module: { code: 1194, category: DiagnosticCategory.Error, key: "Export declarations are not permitted in an internal module." },
-        Decorators_cannot_appear_here: { code: 1195, category: DiagnosticCategory.Error, key: "Decorators cannot appear here." },
         Non_ambient_decorators_are_only_supported_on_class_members_when_targeting_ECMAScript_5_or_higher: { code: 1196, category: DiagnosticCategory.Error, key: "Non-ambient decorators are only supported on class members when targeting ECMAScript 5 or higher." },
         Decorator_0_is_not_valid_on_this_declaration_type_It_is_only_valid_on_1_declarations: { code: 1197, category: DiagnosticCategory.Error, key: "Decorator '{0}' is not valid on this declaration type. It is only valid on '{1}' declarations." },
         Decorator_is_not_valid_on_this_declaration_type: { code: 1199, category: DiagnosticCategory.Error, key: "Decorator is not valid on this declaration type." },
