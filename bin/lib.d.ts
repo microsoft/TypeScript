@@ -9336,9 +9336,13 @@ interface Event {
     AT_TARGET: number;
     BUBBLING_PHASE: number;
 }
+interface EventInit {
+    bubbles: boolean;
+    cancelable: boolean;
+}
 declare var Event: {
     prototype: Event;
-    new(): Event;
+    new(type: string, eventInit?: EventInit): Event;
     CAPTURING_PHASE: number;
     AT_TARGET: number;
     BUBBLING_PHASE: number;
