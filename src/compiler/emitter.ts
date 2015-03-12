@@ -4344,6 +4344,9 @@ module ts {
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
+                    if (isES6ModuleMemberDeclaration(node)) {
+                        write("export ");
+                    }
                     write("function ");
                 }
 
@@ -4420,7 +4423,7 @@ module ts {
                     emitExpressionFunctionBody(node, <Expression>node.body);
                 }
 
-                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default) && !isES6ModuleMemberDeclaration(node)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
