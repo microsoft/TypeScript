@@ -1,5 +1,4 @@
 tests/cases/compiler/client.ts(1,1): error TS1200: Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * from "mod"', 'import {a} from "mod"' or 'import d from "mod"' instead.
-tests/cases/compiler/server.ts(3,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
 tests/cases/compiler/server.ts(3,1): error TS1201: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
 
 
@@ -7,12 +6,10 @@ tests/cases/compiler/server.ts(3,1): error TS1201: Export assignment cannot be u
     import a = require("server");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1200: Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * from "mod"', 'import {a} from "mod"' or 'import d from "mod"' instead.
-==== tests/cases/compiler/server.ts (2 errors) ====
+==== tests/cases/compiler/server.ts (1 errors) ====
     
     var a = 10;
     export = a;
-    ~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     ~~~~~~~~~~~
 !!! error TS1201: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
     
