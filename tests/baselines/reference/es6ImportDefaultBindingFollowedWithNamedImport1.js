@@ -23,11 +23,17 @@ var x1: number = defaultBinding6;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_0.js]
 var a = 10;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_1.js]
+import defaultBinding1 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding1;
+import defaultBinding2 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding2;
+import defaultBinding3 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding3;
+import defaultBinding4 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding4;
+import defaultBinding5 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding5;
+import defaultBinding6 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding6;
 
 

@@ -24,4 +24,5 @@ from;
 }
 from;
 "es6ImportNamedImportParsingError_0";
+import { a } from , from;
 "es6ImportNamedImportParsingError_0";

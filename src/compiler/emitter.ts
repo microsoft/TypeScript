@@ -4996,7 +4996,86 @@ module ts {
                 }
             }
 
-            function emitImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
+            function emitImportDeclaration(node: ImportDeclaration) {
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    return emitExternalImportDeclaration(node);
+                }
+
+                // ES6 import
+                if (node.importClause) {
+                    var shouldEmitDefaultBindings = node.importClause.name && resolver.isReferencedAliasDeclaration(node.importClause);
+                    var shouldEmitNamedBindings = hasReferencedNamedBindings();
+                    if (shouldEmitDefaultBindings || shouldEmitNamedBindings) {
+                        write("import ");
+                        emitStart(node.importClause);
+                        if (shouldEmitDefaultBindings) {
+                            emit(node.importClause.name);
+                            if (shouldEmitNamedBindings) {
+                                write(", ");
+                            }
+                        }
+                        if (shouldEmitNamedBindings) {
+                            emitLeadingComments(node.importClause.namedBindings);
+                            emitStart(node.importClause.namedBindings);
+                            if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                write("* as ");
+                                emit((<NamespaceImport>node.importClause.namedBindings).name);
+                            }
+                            else {
+                                write("{ ");
+                                var importSpecifiers = (<NamedImports>node.importClause.namedBindings).elements;
+                                var currentTextPos = writer.getTextPos();
+                                var needsComma = false;
+                                for (var i = 0, n = importSpecifiers.length; i < n; i++) {
+                                    if (resolver.isReferencedAliasDeclaration(importSpecifiers[i])) {
+                                        if (needsComma) {
+                                            write(", ");
+                                        }
+                                        needsComma = true;
+                                        emit(importSpecifiers[i]);
+                                    }
+                                }
+                                write(" }");
+                            }
+                            emitEnd(node.importClause.namedBindings);
+                            emitTrailingComments(node.importClause.namedBindings);
+                        }
+
+                        emitEnd(node.importClause);
+                        write(" from ");
+                        emit(node.moduleSpecifier);
+                        write(";");
+                    }
+                }
+                else {
+                    write("import ");
+                    emit(node.moduleSpecifier);
+                    write(";");
+                }
+
+                function hasReferencedNamedBindings() {
+                    if (node.importClause.namedBindings) {
+                        if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                            return resolver.isReferencedAliasDeclaration(node.importClause.namedBindings);
+                        }
+                        else {
+                            return forEach((<NamedImports>node.importClause.namedBindings).elements,
+                                namedImport => resolver.isReferencedAliasDeclaration(namedImport));
+                        }
+                    }
+                }
+            }
+
+            function emitImportSpecifier(node: ImportSpecifier) {
+                Debug.assert(compilerOptions.target >= ScriptTarget.ES6);
+                if (node.propertyName) {
+                    emit(node.propertyName);
+                    write(" as ");
+                }
+                emit(node.name);
+            }
+
+            function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 var info = getExternalImportInfo(node);
                 if (info) {
                     var declarationNode = info.declarationNode;
@@ -5038,7 +5117,7 @@ module ts {
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
                 if (isExternalModuleImportEqualsDeclaration(node)) {
-                    emitImportDeclaration(node);
+                    emitExternalImportDeclaration(node);
                     return;
                 }
                 // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
@@ -5561,6 +5640,8 @@ module ts {
                         return emitModuleDeclaration(<ModuleDeclaration>node);
                     case SyntaxKind.ImportDeclaration:
                         return emitImportDeclaration(<ImportDeclaration>node);
+                    case SyntaxKind.ImportSpecifier:
+                        return emitImportSpecifier(<ImportSpecifier>node);
                     case SyntaxKind.ImportEqualsDeclaration:
                         return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                     case SyntaxKind.ExportDeclaration:
