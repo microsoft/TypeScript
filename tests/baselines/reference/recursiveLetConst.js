@@ -9,6 +9,10 @@ for (let [v] = v; ;) { }
 for (let v in v) { }
 for (let v of v) { }
 for (let [v] of v) { }
+let [x2 = x2] = []
+let z0 = () => z0;
+let z1 = function () { return z1; }
+let z2 = { f() { return z2;}}
 
 //// [recursiveLetConst.js]
 'use strict';
@@ -26,3 +30,13 @@ for (let v of v) {
 }
 for (let [v] of v) {
 }
+let [x2 = x2] = [];
+let z0 = () => z0;
+let z1 = function () {
+    return z1;
+};
+let z2 = {
+    f() {
+        return z2;
+    }
+};
