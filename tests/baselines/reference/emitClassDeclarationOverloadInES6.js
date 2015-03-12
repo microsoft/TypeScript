@@ -1,4 +1,4 @@
-//// [emitClassDeclarationWithConstructorOverloadInES6.ts]
+//// [emitClassDeclarationOverloadInES6.ts]
 class C {
     constructor(y: any)
     constructor(x: number) {
@@ -10,7 +10,7 @@ class D {
     constructor(x: number, z="hello") {}
 }
 
-//// [emitClassDeclarationWithConstructorOverloadInES6.js]
+//// [emitClassDeclarationOverloadInES6.js]
 class C {
     constructor(x) {
     }

@@ -1,8 +1,8 @@
 ﻿// @target: es6
 export class C {
-    foo() { }
+    foo(y: string, ...args: any) { }
 }
 
 export default class D {
-    bar() { }
+    bar(k = 10) {}
 }
