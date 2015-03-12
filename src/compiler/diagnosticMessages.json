@@ -623,6 +623,10 @@
         "category": "Error",
         "code": 1200
     },
+    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+        "category": "Error",
+        "code": 1201
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
