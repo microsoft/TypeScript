@@ -5696,6 +5696,29 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
+                // Disallow using static property in computedPropertyName because classDeclaration is binded lexically in ES6
+                // and its static property assignment will be emitted after classDeclaration.
+                // Therefore, using static property inside computedPropertyName will cause use-before-definition
+                // Example:
+                //  * TypeScript
+                //      class C {
+                //          static p = 10;
+                //          [C.p]() {}
+                //      }
+                //  * JavaScript
+                //      class C {
+                //          [C.p]() {}  // Use before definition error
+                //      }
+                //      C.p = 10;
+                if (languageVersion >= ScriptTarget.ES6 && links.resolvedSymbol) {
+                    var declarations = links.resolvedSymbol.declarations;
+                    forEach(declarations, (declaration) => {
+                        if (declaration.flags & NodeFlags.Static) {
+                            error(node, Diagnostics.A_computed_property_name_cannot_reference_a_static_property);
+                        }
+                    });
+                }
+
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
                 if (!allConstituentTypesHaveKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {

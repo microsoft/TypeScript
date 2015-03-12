@@ -1,0 +1,22 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts(3,9): error TS1200: A computed property name cannot reference a static property
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts(6,9): error TS1200: A computed property name cannot reference a static property
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts(9,5): error TS1200: A computed property name cannot reference a static property
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts (3 errors) ====
+    class C {
+        static staticProp = 10;
+        get [C.staticProp]() {
+            ~~~~~~~~~~~~~~
+!!! error TS1200: A computed property name cannot reference a static property
+            return "hello";
+        }
+        set [C.staticProp](x: string) {
+            ~~~~~~~~~~~~~~
+!!! error TS1200: A computed property name cannot reference a static property
+            var y = x;
+        }
+        [C.staticProp]() { }
+        ~~~~~~~~~~~~~~
+!!! error TS1200: A computed property name cannot reference a static property
+    }

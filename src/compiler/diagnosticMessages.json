@@ -619,6 +619,10 @@
         "category": "Error",
         "code":  1199
     },
+    "A computed property name cannot reference a static property": {
+        "category": "Error",
+        "code": 1200
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
