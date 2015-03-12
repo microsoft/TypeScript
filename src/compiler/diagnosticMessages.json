@@ -619,6 +619,11 @@
         "category": "Error",
         "code":  1199
     },
+    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+        "category": "Error",
+        "code": 1200
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

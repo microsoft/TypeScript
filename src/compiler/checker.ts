@@ -9896,6 +9896,12 @@ module ts {
                         }
                     }
                 }
+                else {
+                    if (compilerOptions.target >= ScriptTarget.ES6) {
+                        // Import equals declaration is deprecated in es6 or above
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                    }
+                }
             }
         }
 
