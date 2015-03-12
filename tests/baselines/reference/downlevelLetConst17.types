@@ -1,0 +1,154 @@
+=== tests/cases/compiler/downlevelLetConst17.ts ===
+'use strict'
+
+declare function use(a: any);
+>use : (a: any) => any
+>a : any
+
+var x;
+>x : any
+
+for (let x = 10; ;) {
+>x : number
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : number
+}
+use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+for (const x = 10; ;) {
+>x : number
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : number
+}
+
+for (; ;) {
+    let x = 10;
+>x : number
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : number
+
+    x = 1;
+>x = 1 : number
+>x : number
+}
+
+for (; ;) {
+    const x = 10;
+>x : number
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : number
+}
+
+for (let x; ;) {
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+    x = 1;
+>x = 1 : number
+>x : any
+}
+
+for (; ;) {
+    let x;
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+    x = 1;
+>x = 1 : number
+>x : any
+}
+
+while (true) {
+    let x;
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+}
+
+while (true) {
+    const x = true;
+>x : boolean
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : boolean
+}
+
+do {
+    let x;
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+} while (true);
+
+do {
+    let x;
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+} while (true);
+
+for (let x in []) {
+>x : any
+>[] : undefined[]
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+}
+
+for (const x in []) {
+>x : any
+>[] : undefined[]
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+}
+
+for (const x of []) {
+>x : any
+>[] : undefined[]
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+}

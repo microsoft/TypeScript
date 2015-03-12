@@ -1918,7 +1918,11 @@ module ts {
                 return anyType;
             }
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                return getTypeForVariableDeclarationInForOfStatement(<ForOfStatement>declaration.parent.parent);
+                // checkRightHandSideOfForOf will return undefined if the for-of expression type was
+                // missing properties/signatures required to get its iteratedType (like
+                // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
+                // or it may have led to an error inside getIteratedType.
+                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
@@ -4759,16 +4763,21 @@ module ts {
 
         // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
         // or not of the given type kind (when isOfTypeKind is false)
-        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
+        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean, allowEmptyUnionResult: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
                 if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
                     // Above we checked if we have anything to remove, now use the opposite test to do the removal
                     var narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
-                    if (narrowedType !== emptyObjectType) {
+                    if (allowEmptyUnionResult || narrowedType !== emptyObjectType) {
                         return narrowedType;
                     }
                 }
+            }
+            else if (allowEmptyUnionResult && !!(type.flags & typeKind) === isOfTypeKind) {
+                // Use getUnionType(emptyArray) instead of emptyObjectType in case the way empty union types
+                // are represented ever changes.
+                return getUnionType(emptyArray);
             }
             return type;
         }
@@ -4972,7 +4981,8 @@ module ts {
                 if (assumeTrue) {
                     // Assumed result is true. If check was not for a primitive type, remove all primitive types
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol,
+                            /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
                     }
                     // Check was for a primitive type, return that primitive type if it is a subtype
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
@@ -4980,12 +4990,12 @@ module ts {
                     }
                     // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
                     // union of enum types and other types.
-                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false);
+                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false, /*allowEmptyUnionResult*/ false);
                 }
                 else {
                     // Assumed result is false. If check was for a primitive type, remove that primitive type
                     if (typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
                     }
                     // Otherwise we don't have enough information to do anything.
                     return type;
@@ -8826,16 +8836,11 @@ module ts {
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
-            if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node, Diagnostics.for_of_statements_are_only_available_when_targeting_ECMAScript_6_or_higher);
-                return;
-            }
-
             checkGrammarForInOrForOfStatement(node)
 
             // Check the LHS and RHS
             // If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
-            // via getTypeForVariableDeclarationInForOfStatement.
+            // via checkRightHandSideOfForOf.
             // If the LHS is an expression, check the LHS, as a destructuring assignment or as a reference.
             // Then check that the RHS is assignable to it.
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
@@ -8843,8 +8848,7 @@ module ts {
             }
             else {
                 var varExpr = <Expression>node.initializer;
-                var rightType = checkExpression(node.expression);
-                var iteratedType = checkIteratedType(rightType, node.expression);
+                var iteratedType = checkRightHandSideOfForOf(node.expression);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -8926,18 +8930,11 @@ module ts {
             }
         }
 
-        function getTypeForVariableDeclarationInForOfStatement(forOfStatement: ForOfStatement): Type {
-            // Temporarily return 'any' below ES6
-            if (languageVersion < ScriptTarget.ES6) {
-                return anyType;
-            }
-
-            // iteratedType will be undefined if the for-of expression type was missing properties/signatures
-            // required to get its iteratedType (like [Symbol.iterator] or next). This may be
-            // because we accessed properties from anyType, or it may have led to an error inside
-            // getIteratedType.
-            var expressionType = getTypeOfExpression(forOfStatement.expression);
-            return checkIteratedType(expressionType, forOfStatement.expression) || anyType;
+        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+            var expressionType = getTypeOfExpression(rhsExpression);
+            return languageVersion >= ScriptTarget.ES6
+                ? checkIteratedType(expressionType, rhsExpression)
+                : checkElementTypeOfArrayOrString(expressionType, rhsExpression);
         }
 
         /**
@@ -9034,6 +9031,72 @@ module ts {
 
                 return iteratorNextValue;
             }
+        }
+
+        /**
+         * This function does the following steps:
+         *   1. Break up arrayOrStringType (possibly a union) into its string constituents and array constituents.
+         *   2. Take the element types of the array constituents.
+         *   3. Return the union of the element types, and string if there was a string constitutent.
+         *
+         * For example:
+         *     string -> string
+         *     number[] -> number
+         *     string[] | number[] -> string | number
+         *     string | number[] -> string | number
+         *     string | string[] | number[] -> string | number
+         *
+         * It also errors if:
+         *   1. Some constituent is neither a string nor an array.
+         *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
+         */
+        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
+            Debug.assert(languageVersion < ScriptTarget.ES6);
+            
+            // After we remove all types that are StringLike, we will know if there was a string constituent
+            // based on whether the remaining type is the same as the initial type.
+            var arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
+            var hasStringConstituent = arrayOrStringType !== arrayType;
+
+            var reportedError = false;
+            if (hasStringConstituent) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                    reportedError = true;
+                }
+
+                // Now that we've removed all the StringLike types, if no constituents remain, then the entire
+                // arrayOrStringType was a string.
+                if (arrayType === emptyObjectType) {
+                    return stringType;
+                }
+            }
+
+            if (!isArrayLikeType(arrayType)) {
+                if (!reportedError) {
+                    // Which error we report depends on whether there was a string constituent. For example,
+                    // if the input type is number | string, we want to say that number is not an array type.
+                    // But if the input was just number, we want to say that number is not an array type
+                    // or a string type.
+                    var diagnostic = hasStringConstituent
+                        ? Diagnostics.Type_0_is_not_an_array_type
+                        : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
+                    error(expressionForError, diagnostic, typeToString(arrayType));
+                }
+                return hasStringConstituent ? stringType : unknownType;
+            }
+
+            var arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number) || unknownType;
+            if (hasStringConstituent) {
+                // This is just an optimization for the case where arrayOrStringType is string | string[]
+                if (arrayElementType.flags & TypeFlags.StringLike) {
+                    return stringType;
+                }
+
+                return getUnionType([arrayElementType, stringType]);
+            }
+
+            return arrayElementType;
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -10980,7 +11043,6 @@ module ts {
         }
 
         function isUnknownIdentifier(location: Node, name: string): boolean {
-            // Do not call resolveName on a synthesized node!
             Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
             return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
