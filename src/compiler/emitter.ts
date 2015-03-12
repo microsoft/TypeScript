@@ -4198,6 +4198,12 @@ module ts {
                 generatedBlockScopeNames[variableId] = generatedName;
             }
 
+            function isES6ModuleMemberDeclaration(node: Node) {
+                return !!(node.flags & NodeFlags.Export) &&
+                    languageVersion >= ScriptTarget.ES6 &&
+                    node.parent.kind === SyntaxKind.SourceFile;
+            }
+
             function emitVariableStatement(node: VariableStatement) {
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStartOfVariableDeclarationList(node.declarationList);
@@ -4979,7 +4985,8 @@ module ts {
                     scopeEmitEnd();
                 }
                 write(")(");
-                if (node.flags & NodeFlags.Export) {
+                // write moduleDecl = containingModule.m only if it is not exported es6 module member
+                if ((node.flags & NodeFlags.Export) && !isES6ModuleMemberDeclaration(node)) {
                     emit(node.name);
                     write(" = ");
                 }
@@ -4988,7 +4995,15 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                if (isES6ModuleMemberDeclaration(node)) {
+                    writeLine();
+                    emitStart(node);
+                    write("export { ");
+                    emit(node.name);
+                    write(" };");
+                    emitEnd(node);
+                }
+                else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
