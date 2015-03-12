@@ -1,0 +1,61 @@
+tests/cases/compiler/client.ts(1,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(2,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(3,12): error TS4025: Exported variable 'x1' has or is using private name 'a'.
+tests/cases/compiler/client.ts(4,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(5,12): error TS4025: Exported variable 'x2' has or is using private name 'b'.
+tests/cases/compiler/client.ts(6,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(7,12): error TS4025: Exported variable 'x4' has or is using private name 'x'.
+tests/cases/compiler/client.ts(8,12): error TS4025: Exported variable 'x5' has or is using private name 'y'.
+tests/cases/compiler/client.ts(9,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(10,12): error TS4025: Exported variable 'x3' has or is using private name 'z'.
+tests/cases/compiler/client.ts(11,8): error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+tests/cases/compiler/client.ts(12,12): error TS4025: Exported variable 'x6' has or is using private name 'm'.
+
+
+==== tests/cases/compiler/server.ts (0 errors) ====
+    
+    export class a { }
+    export class x { }
+    export class m { }
+    export class a11 { }
+    export class a12 { }
+    export class x11 { }
+    
+==== tests/cases/compiler/client.ts (12 errors) ====
+    import defaultBinding1, { } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    import defaultBinding2, { a } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x1 = new a();
+               ~~
+!!! error TS4025: Exported variable 'x1' has or is using private name 'a'.
+    import defaultBinding3, { a11 as b } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x2 = new b();
+               ~~
+!!! error TS4025: Exported variable 'x2' has or is using private name 'b'.
+    import defaultBinding4, { x, a12 as y } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x4 = new x();
+               ~~
+!!! error TS4025: Exported variable 'x4' has or is using private name 'x'.
+    export var x5 = new y();
+               ~~
+!!! error TS4025: Exported variable 'x5' has or is using private name 'y'.
+    import defaultBinding5, { x11 as z,  } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x3 = new z();
+               ~~
+!!! error TS4025: Exported variable 'x3' has or is using private name 'z'.
+    import defaultBinding6, { m,  } from "server";
+           ~~~~~~~~~~~~~~~
+!!! error TS1192: External module '"tests/cases/compiler/server"' has no default export or export assignment.
+    export var x6 = new m();
+               ~~
+!!! error TS4025: Exported variable 'x6' has or is using private name 'm'.
+    
