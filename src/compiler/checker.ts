@@ -466,13 +466,13 @@ module ts {
                     variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
                     // variable statement/for statement case, 
                     // use site should not be inside variable declaration (initializer of declaration or binding element)
-                    isUsedBeforeDeclaration = isDescendentOf(errorLocation, variableDeclaration, container);
+                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
                 }
                 else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
                     variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                     // ForIn/ForOf case - use site should not be used in expression part
-                    var expression = (<ForInStatement>variableDeclaration.parent.parent).expression;
-                    isUsedBeforeDeclaration = isDescendentOf(errorLocation, expression, container);
+                    var expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
+                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
                 }
             }
             if (isUsedBeforeDeclaration) {
@@ -484,7 +484,7 @@ module ts {
          * If at any point current node is equal to 'parent' node - return true.
          * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
          */
-        function isDescendentOf(initial: Node, parent: Node, stopAt: Node): boolean {
+        function isSameScopeDescendentOf(initial: Node, parent: Node, stopAt: Node): boolean {
             if (!parent) {
                 return false;
             }
