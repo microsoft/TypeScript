@@ -1347,6 +1347,10 @@
         "category": "Error",
         "code": 2494
     },
+    "Type '{0}' is not an array type or a string type.": {
+        "category": "Error",
+        "code": 2461
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -4763,16 +4763,21 @@ module ts {
 
         // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
         // or not of the given type kind (when isOfTypeKind is false)
-        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
+        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean, allowEmptyUnionResult: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
                 if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
                     // Above we checked if we have anything to remove, now use the opposite test to do the removal
                     var narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
-                    if (narrowedType !== emptyObjectType) {
+                    if (allowEmptyUnionResult || narrowedType !== emptyObjectType) {
                         return narrowedType;
                     }
                 }
+            }
+            else if (allowEmptyUnionResult && !!(type.flags & typeKind) === isOfTypeKind) {
+                // Use getUnionType(emptyArray) instead of emptyObjectType in case the way empty union types
+                // are represented ever changes.
+                return getUnionType(emptyArray);
             }
             return type;
         }
@@ -4976,7 +4981,8 @@ module ts {
                 if (assumeTrue) {
                     // Assumed result is true. If check was not for a primitive type, remove all primitive types
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol,
+                            /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
                     }
                     // Check was for a primitive type, return that primitive type if it is a subtype
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
@@ -4984,12 +4990,12 @@ module ts {
                     }
                     // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
                     // union of enum types and other types.
-                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false);
+                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false, /*allowEmptyUnionResult*/ false);
                 }
                 else {
                     // Assumed result is false. If check was for a primitive type, remove that primitive type
                     if (typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
                     }
                     // Otherwise we don't have enough information to do anything.
                     return type;
@@ -9027,28 +9033,55 @@ module ts {
             }
         }
 
+        /**
+         * This function does the following steps:
+         *   1. Break up arrayOrStringType (possibly a union) into its string constituents and array constituents.
+         *   2. Take the element types of the array constituents.
+         *   3. Return the union of the element types, and string if there was a string constitutent.
+         *
+         * For example:
+         *     string -> string
+         *     number[] -> number
+         *     string[] | number[] -> string | number
+         *     string | number[] -> string | number
+         *     string | string[] | number[] -> string | number
+         *
+         * It also errors if:
+         *   1. Some constituent is neither a string nor an array.
+         *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
+         */
         function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion < ScriptTarget.ES6);
-            var isJustString = allConstituentTypesHaveKind(arrayOrStringType, TypeFlags.StringLike);
             
-            // Check isJustString because removeTypesFromUnionType will only remove types if it doesn't result
-            // in an emptyObjectType. In this case, we actually do want the emptyObjectType.
-            var arrayType = isJustString ? emptyObjectType : removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true);
-            var hasStringConstituent = arrayOrStringType !== emptyObjectType && arrayOrStringType !== arrayType;
+            // After we remove all types that are StringLike, we will know if there was a string constituent
+            // based on whether the remaining type is the same as the initial type.
+            var arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
+            var hasStringConstituent = arrayOrStringType !== arrayType;
 
             var reportedError = false;
-            if (hasStringConstituent && languageVersion < ScriptTarget.ES5) {
-                error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
-                reportedError = true;
-            }
+            if (hasStringConstituent) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                    reportedError = true;
+                }
 
-            if (isJustString) {
-                return stringType;
+                // Now that we've removed all the StringLike types, if no constituents remain, then the entire
+                // arrayOrStringType was a string.
+                if (arrayType === emptyObjectType) {
+                    return stringType;
+                }
             }
 
             if (!isArrayLikeType(arrayType)) {
                 if (!reportedError) {
-                    error(expressionForError, Diagnostics.Type_0_is_not_an_array_type, typeToString(arrayType));
+                    // Which error we report depends on whether there was a string constituent. For example,
+                    // if the input type is number | string, we want to say that number is not an array type.
+                    // But if the input was just number, we want to say that number is not an array type
+                    // or a string type.
+                    var diagnostic = hasStringConstituent
+                        ? Diagnostics.Type_0_is_not_an_array_type
+                        : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
+                    error(expressionForError, diagnostic, typeToString(arrayType));
                 }
                 return hasStringConstituent ? stringType : unknownType;
             }
