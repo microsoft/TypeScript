@@ -22,19 +22,12 @@ var x1: number = defaultBinding6;
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_0.js]
 var a = 10;
-module.exports = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_1.js]
-var defaultBinding1 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding1;
-var defaultBinding2 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding2;
-var defaultBinding3 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding3;
-var defaultBinding4 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding4;
-var defaultBinding5 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding5;
-var defaultBinding6 = require("es6ImportDefaultBindingFollowedWithNamedImport1_0");
 var x1 = defaultBinding6;
 
 

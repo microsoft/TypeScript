@@ -5207,6 +5207,7 @@ module ts {
             }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
+                createExternalModuleInfo(node);
                 writeLine();
                 write("define(");
                 sortAMDModules(node.amdDependencies);
@@ -5257,6 +5258,16 @@ module ts {
             }
 
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
+                createExternalModuleInfo(node);
+                emitCaptureThisForNodeIfNecessary(node);
+                emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(/*newLine*/ true);
+                emitExportDefault(node, /*emitAsReturn*/ false);
+            }
+
+            function emitES6Module(node: SourceFile, startIndex: number) {
+                externalImports = undefined;
+                exportSpecifiers = undefined;
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
@@ -5323,12 +5334,14 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (isExternalModule(node)) {
-                    createExternalModuleInfo(node);
                     if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
-                    else {
+                    else if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.target < ScriptTarget.ES6) {
                         emitCommonJSModule(node, startIndex);
+                    }
+                    else {
+                        emitES6Module(node, startIndex);
                     }
                 }
                 else {

@@ -24,5 +24,4 @@ from;
 }
 from;
 "es6ImportNamedImportParsingError_0";
-var _module_1 = require();
 "es6ImportNamedImportParsingError_0";

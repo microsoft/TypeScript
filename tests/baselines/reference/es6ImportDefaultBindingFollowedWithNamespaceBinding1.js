@@ -11,9 +11,7 @@ var x: number = defaultBinding;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.js]
 var a = 10;
-module.exports = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.js]
-var defaultBinding = require("es6ImportDefaultBindingFollowedWithNamespaceBinding_0");
 var x = defaultBinding;
 
 
