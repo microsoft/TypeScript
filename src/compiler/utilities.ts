@@ -203,6 +203,33 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    export function getEnclosingBlockScopeContainer(node: Node): Node {
+        var current = node;
+        while (current) {
+            if (isFunctionLike(current)) {
+                return current;
+            }
+            switch (current.kind) {
+                case SyntaxKind.SourceFile:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CatchClause:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return current;
+                case SyntaxKind.Block:
+                    // function block is not considered block-scope container
+                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                    if (!isFunctionLike(current.parent)) {
+                        return current;
+                    }
+            }
+
+            current = current.parent;
+        }
+    }
+
     export function isCatchClauseVariableDeclaration(declaration: Declaration) {
         return declaration &&
             declaration.kind === SyntaxKind.VariableDeclaration &&

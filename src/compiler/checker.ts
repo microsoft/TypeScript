@@ -435,16 +435,65 @@ module ts {
                     return undefined;
                 }
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    // Block-scoped variables cannot be used before their definition
-                    var declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
-
-                    Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
-                    if (!isDefinedBefore(declaration, errorLocation)) {
-                        error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
-                    }
+                    checkResolvedBlockScopedVariable(result, errorLocation);
                 }
             }
             return result;
+        }
+
+        function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
+            Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0)
+            // Block-scoped variables cannot be used before their definition
+            var declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
+
+            Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
+                    
+            // first check if usage is lexically located after the declaration
+            var isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
+            if (!isUsedBeforeDeclaration) {
+                // lexical check succeeded however code still can be illegal.
+                // - block scoped variables cannot be used in its initializers
+                //   let x = x; // illegal but usage is lexically after definition
+                // - in ForIn/ForOf statements variable cannot be contained in expression part
+                //   for (let x in x)
+                //   for (let x of x)
+
+                // climb up to the variable declaration skipping binding patterns
+                var variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
+                var container = getEnclosingBlockScopeContainer(variableDeclaration);
+
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
+                    variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
+                    // variable statement/for statement case, 
+                    // use site should not be inside variable declaration (initializer of declaration or binding element)
+                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
+                }
+                else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
+                    variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                    // ForIn/ForOf case - use site should not be used in expression part
+                    var expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
+                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
+                }
+            }
+            if (isUsedBeforeDeclaration) {
+                error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+            }
+        }
+
+        /* Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
+         * If at any point current node is equal to 'parent' node - return true.
+         * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
+         */
+        function isSameScopeDescendentOf(initial: Node, parent: Node, stopAt: Node): boolean {
+            if (!parent) {
+                return false;
+            }
+            for (var current = initial; current && current !== stopAt && !isFunctionLike(current); current = current.parent) {
+                if (current === parent) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // An alias symbol is created by one of the following declarations:
