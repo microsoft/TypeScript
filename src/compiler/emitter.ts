@@ -5169,7 +5169,13 @@ module ts {
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (!(node.flags & NodeFlags.Export)) write("var ");
+                    if (isES6ModuleMemberDeclaration(node)) {
+                        write("export ");
+                        write("var ");
+                    }
+                    else if (!(node.flags & NodeFlags.Export)) {
+                        write("var ");
+                    }
                     emitModuleMemberName(node);
                     write(" = ");
                     emit(node.moduleReference);
