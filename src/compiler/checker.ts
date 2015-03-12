@@ -11891,7 +11891,11 @@ module ts {
                 var identifier = <Identifier>name;
                 if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
                     var nameText = declarationNameToString(identifier);
-                    return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+
+                    // Always report 'eval' and 'arguments' invalid usage in strict mode code regardless of parser diagnostics
+                    var sourceFile = getSourceFileOfNode(identifier);
+                    diagnostics.add(createDiagnosticForNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText));
+                    return true;
                 }
             }
         }
