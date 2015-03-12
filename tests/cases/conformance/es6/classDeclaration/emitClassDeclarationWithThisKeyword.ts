@@ -4,8 +4,9 @@ class B {
     constructor() {
         this.x = 10;
     }
+    static log(a: number) { }
     foo() {
-        console.log(this.x);
+        B.log(this.x);
     }
 
     get X() {

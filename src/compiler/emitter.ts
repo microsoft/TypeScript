@@ -2630,15 +2630,21 @@ module ts {
             }
 
             function emitSuper(node: Node) {
-                var flags = resolver.getNodeCheckFlags(node);
-                if (flags & NodeCheckFlags.SuperInstance) {
-                    write("_super.prototype");
-                }
-                else if (flags & NodeCheckFlags.SuperStatic) {
-                    write("_super");
+                if (languageVersion >= ScriptTarget.ES6) {
+                    write("super");
                 }
                 else {
-                    write("super");
+                    Debug.assert(languageVersion < ScriptTarget.ES6)
+                    var flags = resolver.getNodeCheckFlags(node);
+                    if (flags & NodeCheckFlags.SuperInstance) {
+                        write("_super.prototype");
+                    }
+                    else if (flags & NodeCheckFlags.SuperStatic) {
+                        write("_super");
+                    }
+                    else {
+                        write("super");
+                    }
                 }
             }
 
@@ -4544,7 +4550,8 @@ module ts {
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
                             }
-                            else if (accessors.setAccessor) {
+                            if (accessors.setAccessor) {
+                                // We will only write new line if we just emit getAccessor
                                 emitLeadingComments(accessors.setAccessor);
                                 emitStart(accessors.setAccessor);
                                 if (member.flags & NodeFlags.Static) {
