@@ -4748,7 +4748,12 @@ module ts {
                 }
                 write(");");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
+
+                if (isES6ModuleMemberDeclaration(node)) {
+                    // TODO update this to emit "export class " when ES67 class emit is available
+                    emitES6NamedExportForDeclaration(node);
+                }
+                else if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -4757,6 +4762,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
