@@ -1,4 +1,5 @@
 /// <reference path="sys.ts" />
+/// <reference path="declarationEmitter.ts" />
 /// <reference path="emitter.ts" />
 
 module ts {
