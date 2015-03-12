@@ -12,14 +12,12 @@ export class A
 }
 
 //// [es6ModuleWithModuleGenTargetAmd.js]
-define(["require", "exports"], function (require, exports) {
-    var A = (function () {
-        function A() {
-        }
-        A.prototype.B = function () {
-            return 42;
-        };
-        return A;
-    })();
-    exports.A = A;
-});
+var A = (function () {
+    function A() {
+    }
+    A.prototype.B = function () {
+        return 42;
+    };
+    return A;
+})();
+exports.A = A;

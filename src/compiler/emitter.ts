@@ -5413,14 +5413,14 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (isExternalModule(node)) {
-                    if (compilerOptions.module === ModuleKind.AMD) {
+                    if (compilerOptions.target >= ScriptTarget.ES6) {
+                        emitES6Module(node, startIndex);
+                    }
+                    else if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
-                    else if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.target < ScriptTarget.ES6) {
-                        emitCommonJSModule(node, startIndex);
-                    }
                     else {
-                        emitES6Module(node, startIndex);
+                        emitCommonJSModule(node, startIndex);
                     }
                 }
                 else {
