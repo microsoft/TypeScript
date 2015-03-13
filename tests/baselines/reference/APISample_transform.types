@@ -4043,15 +4043,6 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
-        stripInternal?: boolean;
->stripInternal : boolean
-
-        preserveNewLines?: boolean;
->preserveNewLines : boolean
-
-        cacheDownlevelForOfLength?: boolean;
->cacheDownlevelForOfLength : boolean
-
         [option: string]: string | number | boolean;
 >option : string
     }

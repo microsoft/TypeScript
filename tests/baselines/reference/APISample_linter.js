@@ -1268,9 +1268,6 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        stripInternal?: boolean;
-        preserveNewLines?: boolean;
-        cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
