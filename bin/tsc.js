@@ -44,7 +44,7 @@ var ts;
     ts.forEach = forEach;
     function contains(array, value) {
         if (array) {
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var v = array[_i];
                 if (v === value) {
                     return true;
@@ -68,7 +68,7 @@ var ts;
     function countWhere(array, predicate) {
         var count = 0;
         if (array) {
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var v = array[_i];
                 if (predicate(v)) {
                     count++;
@@ -82,7 +82,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var _item = array[_i];
                 if (f(_item)) {
                     result.push(_item);
@@ -96,7 +96,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var v = array[_i];
                 result.push(f(v));
             }
@@ -116,7 +116,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var _item = array[_i];
                 if (!contains(result, _item)) {
                     result.push(_item);
@@ -128,7 +128,7 @@ var ts;
     ts.deduplicate = deduplicate;
     function sum(array, prop) {
         var result = 0;
-        for (var _i = 0; _i < array.length; _i++) {
+        for (var _i = 0, _a = array.length; _i < _a; _i++) {
             var v = array[_i];
             result += v[prop];
         }
@@ -136,7 +136,7 @@ var ts;
     }
     ts.sum = sum;
     function addRange(to, from) {
-        for (var _i = 0; _i < from.length; _i++) {
+        for (var _i = 0, _a = from.length; _i < _a; _i++) {
             var v = from[_i];
             to.push(v);
         }
@@ -400,7 +400,7 @@ var ts;
     function getNormalizedParts(normalizedSlashedPath, rootLength) {
         var parts = normalizedSlashedPath.substr(rootLength).split(ts.directorySeparator);
         var normalized = [];
-        for (var _i = 0; _i < parts.length; _i++) {
+        for (var _i = 0, _a = parts.length; _i < _a; _i++) {
             var part = parts[_i];
             if (part !== ".") {
                 if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
@@ -552,7 +552,7 @@ var ts;
         ".js"
     ];
     function removeFileExtension(path) {
-        for (var _i = 0; _i < supportedExtensions.length; _i++) {
+        for (var _i = 0, _a = supportedExtensions.length; _i < _a; _i++) {
             var ext = supportedExtensions[_i];
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
@@ -710,15 +710,15 @@ var ts;
                 function visitDirectory(path) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (var _i = 0; _i < files.length; _i++) {
+                    for (var _i = 0, _a = files.length; _i < _a; _i++) {
                         var _name = files[_i];
                         if (!extension || ts.fileExtensionIs(_name, extension)) {
                             result.push(ts.combinePaths(path, _name));
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
-                    for (var _a = 0; _a < subfolders.length; _a++) {
-                        var current = subfolders[_a];
+                    for (var _b = 0, _c = subfolders.length; _b < _c; _b++) {
+                        var current = subfolders[_b];
                         visitDirectory(ts.combinePaths(path, current));
                     }
                 }
@@ -804,7 +804,7 @@ var ts;
                 function visitDirectory(path) {
                     var files = _fs.readdirSync(path || ".").sort();
                     var directories = [];
-                    for (var _i = 0; _i < files.length; _i++) {
+                    for (var _i = 0, _a = files.length; _i < _a; _i++) {
                         var current = files[_i];
                         var name = ts.combinePaths(path, current);
                         var stat = _fs.lstatSync(name);
@@ -817,8 +817,8 @@ var ts;
                             directories.push(name);
                         }
                     }
-                    for (var _a = 0; _a < directories.length; _a++) {
-                        var _current = directories[_a];
+                    for (var _b = 0, _c = directories.length; _b < _c; _b++) {
+                        var _current = directories[_b];
                         visitDirectory(_current);
                     }
                 }
@@ -7333,7 +7333,7 @@ var ts;
 (function (ts) {
     function getDeclarationOfKind(symbol, kind) {
         var declarations = symbol.declarations;
-        for (var _i = 0; _i < declarations.length; _i++) {
+        for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
             var declaration = declarations[_i];
             if (declaration.kind === kind) {
                 return declaration;
@@ -8040,7 +8040,7 @@ var ts;
     ts.getInterfaceBaseTypeNodes = getInterfaceBaseTypeNodes;
     function getHeritageClause(clauses, kind) {
         if (clauses) {
-            for (var _i = 0; _i < clauses.length; _i++) {
+            for (var _i = 0, _a = clauses.length; _i < _a; _i++) {
                 var clause = clauses[_i];
                 if (clause.token === kind) {
                     return clause;
@@ -8431,7 +8431,7 @@ var ts;
     }
     function visitEachNode(cbNode, nodes) {
         if (nodes) {
-            for (var _i = 0; _i < nodes.length; _i++) {
+            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
                 var node = nodes[_i];
                 var result = cbNode(node);
                 if (result) {
@@ -8732,7 +8732,7 @@ var ts;
             array._children = undefined;
             array.pos += delta;
             array.end += delta;
-            for (var _i = 0; _i < array.length; _i++) {
+            for (var _i = 0, _a = array.length; _i < _a; _i++) {
                 var node = array[_i];
                 visitNode(node);
             }
@@ -8796,7 +8796,7 @@ var ts;
                 array.intersectsChange = true;
                 array._children = undefined;
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                for (var _i = 0; _i < array.length; _i++) {
+                for (var _i = 0, _a = array.length; _i < _a; _i++) {
                     var node = array[_i];
                     visitNode(node);
                 }
@@ -12953,7 +12953,7 @@ var ts;
         }
         function findConstructorDeclaration(node) {
             var members = node.members;
-            for (var _i = 0; _i < members.length; _i++) {
+            for (var _i = 0, _a = members.length; _i < _a; _i++) {
                 var member = members[_i];
                 if (member.kind === 133 && ts.nodeIsPresent(member.body)) {
                     return member;
@@ -13277,7 +13277,7 @@ var ts;
                             walkSymbol(getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol), getQualifiedLeftMeaning(meaning));
                         }
                         if (accessibleSymbolChain) {
-                            for (var _i = 0; _i < accessibleSymbolChain.length; _i++) {
+                            for (var _i = 0, _a = accessibleSymbolChain.length; _i < _a; _i++) {
                                 var accessibleSymbol = accessibleSymbolChain[_i];
                                 appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
                             }
@@ -13458,14 +13458,14 @@ var ts;
                     writePunctuation(writer, 14);
                     writer.writeLine();
                     writer.increaseIndent();
-                    for (var _i = 0, _a = resolved.callSignatures; _i < _a.length; _i++) {
+                    for (var _i = 0, _a = resolved.callSignatures, _b = _a.length; _i < _b; _i++) {
                         var signature = _a[_i];
                         buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
-                    for (var _b = 0, _c = resolved.constructSignatures; _b < _c.length; _b++) {
-                        var _signature = _c[_b];
+                    for (var _c = 0, _d = resolved.constructSignatures, _e = _d.length; _c < _e; _c++) {
+                        var _signature = _d[_c];
                         writeKeyword(writer, 87);
                         writeSpace(writer);
                         buildSignatureDisplay(_signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
@@ -13498,13 +13498,13 @@ var ts;
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
-                    for (var _d = 0, _e = resolved.properties; _d < _e.length; _d++) {
-                        var p = _e[_d];
+                    for (var _f = 0, _g = resolved.properties, _h = _g.length; _f < _h; _f++) {
+                        var p = _g[_f];
                         var t = getTypeOfSymbol(p);
                         if (p.flags & (16 | 8192) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, 0);
-                            for (var _f = 0; _f < signatures.length; _f++) {
-                                var _signature_1 = signatures[_f];
+                            for (var _j = 0, _k = signatures.length; _j < _k; _j++) {
+                                var _signature_1 = signatures[_j];
                                 buildSymbolDisplay(p, writer);
                                 if (p.flags & 536870912) {
                                     writePunctuation(writer, 50);
@@ -14208,7 +14208,7 @@ var ts;
         }
         function createSymbolTable(symbols) {
             var result = {};
-            for (var _i = 0; _i < symbols.length; _i++) {
+            for (var _i = 0, _a = symbols.length; _i < _a; _i++) {
                 var symbol = symbols[_i];
                 result[symbol.name] = symbol;
             }
@@ -14216,14 +14216,14 @@ var ts;
         }
         function createInstantiatedSymbolTable(symbols, mapper) {
             var result = {};
-            for (var _i = 0; _i < symbols.length; _i++) {
+            for (var _i = 0, _a = symbols.length; _i < _a; _i++) {
                 var symbol = symbols[_i];
                 result[symbol.name] = instantiateSymbol(symbol, mapper);
             }
             return result;
         }
         function addInheritedMembers(symbols, baseSymbols) {
-            for (var _i = 0; _i < baseSymbols.length; _i++) {
+            for (var _i = 0, _a = baseSymbols.length; _i < _a; _i++) {
                 var s = baseSymbols[_i];
                 if (!ts.hasProperty(symbols, s.name)) {
                     symbols[s.name] = s;
@@ -14232,7 +14232,7 @@ var ts;
         }
         function addInheritedSignatures(signatures, baseSignatures) {
             if (baseSignatures) {
-                for (var _i = 0; _i < baseSignatures.length; _i++) {
+                for (var _i = 0, _a = baseSignatures.length; _i < _a; _i++) {
                     var signature = baseSignatures[_i];
                     signatures.push(signature);
                 }
@@ -14334,7 +14334,7 @@ var ts;
                 return getSignaturesOfType(t, kind);
             });
             var signatures = signatureLists[0];
-            for (var _i = 0; _i < signatures.length; _i++) {
+            for (var _i = 0, _a = signatures.length; _i < _a; _i++) {
                 var signature = signatures[_i];
                 if (signature.typeParameters) {
                     return emptyArray;
@@ -14357,7 +14357,7 @@ var ts;
         }
         function getUnionIndexType(types, kind) {
             var indexTypes = [];
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 var indexType = getIndexTypeOfType(type, kind);
                 if (!indexType) {
@@ -14493,7 +14493,7 @@ var ts;
         function createUnionProperty(unionType, name) {
             var types = unionType.types;
             var props;
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var current = types[_i];
                 var type = getApparentType(current);
                 if (type !== unknownType) {
@@ -14513,8 +14513,8 @@ var ts;
             }
             var propTypes = [];
             var declarations = [];
-            for (var _a = 0; _a < props.length; _a++) {
-                var _prop = props[_a];
+            for (var _b = 0, _c = props.length; _b < _c; _b++) {
+                var _prop = props[_b];
                 if (_prop.declarations) {
                     declarations.push.apply(declarations, _prop.declarations);
                 }
@@ -14754,7 +14754,7 @@ var ts;
             var indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 var len = indexSymbol.declarations.length;
-                for (var _i = 0, _a = indexSymbol.declarations; _i < _a.length; _i++) {
+                for (var _i = 0, _a = indexSymbol.declarations, _b = _a.length; _i < _b; _i++) {
                     var decl = _a[_i];
                     var node = decl;
                     if (node.parameters.length === 1) {
@@ -14802,7 +14802,7 @@ var ts;
         }
         function getWideningFlagsOfTypes(types) {
             var result = 0;
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 result |= type.flags;
             }
@@ -14900,7 +14900,7 @@ var ts;
         function getTypeOfGlobalSymbol(symbol, arity) {
             function getTypeDeclaration(symbol) {
                 var declarations = symbol.declarations;
-                for (var _i = 0; _i < declarations.length; _i++) {
+                for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
                     var declaration = declarations[_i];
                     switch (declaration.kind) {
                         case 196:
@@ -14985,13 +14985,13 @@ var ts;
             }
         }
         function addTypesToSortedSet(sortedTypes, types) {
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 addTypeToSortedSet(sortedTypes, type);
             }
         }
         function isSubtypeOfAny(candidate, types) {
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
                     return true;
@@ -15009,7 +15009,7 @@ var ts;
             }
         }
         function containsAnyType(types) {
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 if (type.flags & 1) {
                     return true;
@@ -15125,7 +15125,7 @@ var ts;
         function instantiateList(items, mapper, instantiator) {
             if (items && items.length) {
                 var result = [];
-                for (var _i = 0; _i < items.length; _i++) {
+                for (var _i = 0, _a = items.length; _i < _a; _i++) {
                     var v = items[_i];
                     result.push(instantiator(v, mapper));
                 }
@@ -15177,7 +15177,7 @@ var ts;
                     return createBinaryTypeEraser(sources[0], sources[1]);
             }
             return function (t) {
-                for (var _i = 0; _i < sources.length; _i++) {
+                for (var _i = 0, _a = sources.length; _i < _a; _i++) {
                     var source = sources[_i];
                     if (t === source) {
                         return anyType;
@@ -15463,7 +15463,7 @@ var ts;
             function unionTypeRelatedToUnionType(source, target) {
                 var _result = -1;
                 var sourceTypes = source.types;
-                for (var _i = 0; _i < sourceTypes.length; _i++) {
+                for (var _i = 0, _a = sourceTypes.length; _i < _a; _i++) {
                     var sourceType = sourceTypes[_i];
                     var related = typeRelatedToUnionType(sourceType, target, false);
                     if (!related) {
@@ -15486,7 +15486,7 @@ var ts;
             function unionTypeRelatedToType(source, target, reportErrors) {
                 var _result = -1;
                 var sourceTypes = source.types;
-                for (var _i = 0; _i < sourceTypes.length; _i++) {
+                for (var _i = 0, _a = sourceTypes.length; _i < _a; _i++) {
                     var sourceType = sourceTypes[_i];
                     var related = isRelatedTo(sourceType, target, reportErrors);
                     if (!related) {
@@ -15624,7 +15624,7 @@ var ts;
                 var _result = -1;
                 var properties = getPropertiesOfObjectType(target);
                 var requireOptionalProperties = relation === subtypeRelation && !(source.flags & 131072);
-                for (var _i = 0; _i < properties.length; _i++) {
+                for (var _i = 0, _a = properties.length; _i < _a; _i++) {
                     var targetProp = properties[_i];
                     var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
@@ -15695,7 +15695,7 @@ var ts;
                     return 0;
                 }
                 var _result = -1;
-                for (var _i = 0; _i < sourceProperties.length; _i++) {
+                for (var _i = 0, _a = sourceProperties.length; _i < _a; _i++) {
                     var sourceProp = sourceProperties[_i];
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
                     if (!targetProp) {
@@ -15720,12 +15720,12 @@ var ts;
                 var targetSignatures = getSignaturesOfType(target, kind);
                 var _result = -1;
                 var saveErrorInfo = errorInfo;
-                outer: for (var _i = 0; _i < targetSignatures.length; _i++) {
+                outer: for (var _i = 0, _a = targetSignatures.length; _i < _a; _i++) {
                     var t = targetSignatures[_i];
                     if (!t.hasStringLiterals || target.flags & 65536) {
                         var localErrors = reportErrors;
-                        for (var _a = 0; _a < sourceSignatures.length; _a++) {
-                            var s = sourceSignatures[_a];
+                        for (var _b = 0, _c = sourceSignatures.length; _b < _c; _b++) {
+                            var s = sourceSignatures[_b];
                             if (!s.hasStringLiterals || source.flags & 65536) {
                                 var related = signatureRelatedTo(s, t, localErrors);
                                 if (related) {
@@ -15940,7 +15940,7 @@ var ts;
             return result;
         }
         function isSupertypeOfEach(candidate, types) {
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var type = types[_i];
                 if (candidate !== type && !isTypeSubtypeOf(type, candidate))
                     return false;
@@ -16125,7 +16125,7 @@ var ts;
         }
         function createInferenceContext(typeParameters, inferUnionTypes) {
             var inferences = [];
-            for (var _i = 0; _i < typeParameters.length; _i++) {
+            for (var _i = 0, _a = typeParameters.length; _i < _a; _i++) {
                 var unused = typeParameters[_i];
                 inferences.push({
                     primary: undefined,
@@ -16195,7 +16195,7 @@ var ts;
                     var _targetTypes = target.types;
                     var typeParameterCount = 0;
                     var typeParameter;
-                    for (var _a = 0; _a < _targetTypes.length; _a++) {
+                    for (var _a = 0, _b = _targetTypes.length; _a < _b; _a++) {
                         var t = _targetTypes[_a];
                         if (t.flags & 512 && ts.contains(context.typeParameters, t)) {
                             typeParameter = t;
@@ -16213,8 +16213,8 @@ var ts;
                 }
                 else if (source.flags & 16384) {
                     var _sourceTypes = source.types;
-                    for (var _b = 0; _b < _sourceTypes.length; _b++) {
-                        var sourceType = _sourceTypes[_b];
+                    for (var _c = 0, _d = _sourceTypes.length; _c < _d; _c++) {
+                        var sourceType = _sourceTypes[_c];
                         inferFromTypes(sourceType, target);
                     }
                 }
@@ -16239,7 +16239,7 @@ var ts;
             }
             function inferFromProperties(source, target) {
                 var properties = getPropertiesOfObjectType(target);
-                for (var _i = 0; _i < properties.length; _i++) {
+                for (var _i = 0, _a = properties.length; _i < _a; _i++) {
                     var targetProp = properties[_i];
                     var sourceProp = getPropertyOfObjectType(source, targetProp.name);
                     if (sourceProp) {
@@ -16856,7 +16856,7 @@ var ts;
             var types = type.types;
             var mappedType;
             var mappedTypes;
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var current = types[_i];
                 var t = mapper(current);
                 if (t) {
@@ -16995,7 +16995,7 @@ var ts;
             }
             var signatureList;
             var types = type.types;
-            for (var _i = 0; _i < types.length; _i++) {
+            for (var _i = 0, _a = types.length; _i < _a; _i++) {
                 var current = types[_i];
                 if (signatureList && getSignaturesOfObjectOrUnionType(current, 0).length > 1) {
                     return undefined;
@@ -17100,7 +17100,7 @@ var ts;
             var propertiesArray = [];
             var contextualType = getContextualType(node);
             var typeFlags;
-            for (var _i = 0, _a = node.properties; _i < _a.length; _i++) {
+            for (var _i = 0, _a = node.properties, _b = _a.length; _i < _b; _i++) {
                 var memberDecl = _a[_i];
                 var member = memberDecl.symbol;
                 if (memberDecl.kind === 218 || memberDecl.kind === 219 || ts.isObjectLiteralMethod(memberDecl)) {
@@ -17366,7 +17366,7 @@ var ts;
             var specializedIndex = -1;
             var spliceIndex;
             ts.Debug.assert(!result.length);
-            for (var _i = 0; _i < signatures.length; _i++) {
+            for (var _i = 0, _a = signatures.length; _i < _a; _i++) {
                 var signature = signatures[_i];
                 var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
                 var _parent = signature.declaration && signature.declaration.parent;
@@ -17617,7 +17617,7 @@ var ts;
                 error(node, ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
             }
             if (!produceDiagnostics) {
-                for (var _i = 0; _i < candidates.length; _i++) {
+                for (var _i = 0, _a = candidates.length; _i < _a; _i++) {
                     var candidate = candidates[_i];
                     if (hasCorrectArity(node, args, candidate)) {
                         return candidate;
@@ -17626,8 +17626,8 @@ var ts;
             }
             return resolveErrorCall(node);
             function chooseOverload(candidates, relation) {
-                for (var _a = 0; _a < candidates.length; _a++) {
-                    var current = candidates[_a];
+                for (var _b = 0, _c = candidates.length; _b < _c; _b++) {
+                    var current = candidates[_b];
                     if (!hasCorrectArity(node, args, current)) {
                         continue;
                     }
@@ -18074,7 +18074,7 @@ var ts;
             }
             if (type.flags & 16384) {
                 var types = type.types;
-                for (var _i = 0; _i < types.length; _i++) {
+                for (var _i = 0, _a = types.length; _i < _a; _i++) {
                     var current = types[_i];
                     if (current.flags & kind) {
                         return true;
@@ -18090,7 +18090,7 @@ var ts;
             }
             if (type.flags & 16384) {
                 var types = type.types;
-                for (var _i = 0; _i < types.length; _i++) {
+                for (var _i = 0, _a = types.length; _i < _a; _i++) {
                     var current = types[_i];
                     if (!(current.flags & kind)) {
                         return false;
@@ -18126,7 +18126,7 @@ var ts;
         }
         function checkObjectLiteralAssignment(node, sourceType, contextualMapper) {
             var properties = node.properties;
-            for (var _i = 0; _i < properties.length; _i++) {
+            for (var _i = 0, _a = properties.length; _i < _a; _i++) {
                 var p = properties[_i];
                 if (p.kind === 218 || p.kind === 219) {
                     var _name = p.name;
@@ -18566,7 +18566,7 @@ var ts;
             if (indexSymbol) {
                 var seenNumericIndexer = false;
                 var seenStringIndexer = false;
-                for (var _i = 0, _a = indexSymbol.declarations; _i < _a.length; _i++) {
+                for (var _i = 0, _a = indexSymbol.declarations, _b = _a.length; _i < _b; _i++) {
                     var decl = _a[_i];
                     var declaration = decl;
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
@@ -18756,7 +18756,7 @@ var ts;
             else {
                 signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
             }
-            for (var _i = 0; _i < signaturesToCheck.length; _i++) {
+            for (var _i = 0, _a = signaturesToCheck.length; _i < _a; _i++) {
                 var otherSignature = signaturesToCheck[_i];
                 if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature)) {
                     return;
@@ -18862,7 +18862,7 @@ var ts;
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & 1536;
             var duplicateFunctionDeclaration = false;
             var multipleConstructorImplementation = false;
-            for (var _i = 0; _i < declarations.length; _i++) {
+            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
                 var current = declarations[_i];
                 var node = current;
                 var inAmbientContext = ts.isInAmbientContext(node);
@@ -18921,8 +18921,8 @@ var ts;
                     var signatures = getSignaturesOfSymbol(symbol);
                     var bodySignature = getSignatureFromDeclaration(bodyDeclaration);
                     if (!bodySignature.hasStringLiterals) {
-                        for (var _a = 0; _a < signatures.length; _a++) {
-                            var signature = signatures[_a];
+                        for (var _b = 0, _c = signatures.length; _b < _c; _b++) {
+                            var signature = signatures[_b];
                             if (!signature.hasStringLiterals && !isSignatureAssignableTo(bodySignature, signature)) {
                                 error(signature.declaration, ts.Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
                                 break;
@@ -19565,7 +19565,7 @@ var ts;
                 });
                 if (type.flags & 1024 && type.symbol.valueDeclaration.kind === 196) {
                     var classDeclaration = type.symbol.valueDeclaration;
-                    for (var _i = 0, _a = classDeclaration.members; _i < _a.length; _i++) {
+                    for (var _i = 0, _a = classDeclaration.members, _b = _a.length; _i < _b; _i++) {
                         var member = _a[_i];
                         if (!(member.flags & 128) && ts.hasDynamicName(member)) {
                             var propType = getTypeOfSymbol(member.symbol);
@@ -19699,7 +19699,7 @@ var ts;
         }
         function checkKindsOfPropertyMemberOverrides(type, baseType) {
             var baseProperties = getPropertiesOfObjectType(baseType);
-            for (var _i = 0; _i < baseProperties.length; _i++) {
+            for (var _i = 0, _a = baseProperties.length; _i < _a; _i++) {
                 var baseProperty = baseProperties[_i];
                 var base = getTargetSymbol(baseProperty);
                 if (base.flags & 134217728) {
@@ -19781,11 +19781,11 @@ var ts;
                 };
             });
             var ok = true;
-            for (var _i = 0, _a = type.baseTypes; _i < _a.length; _i++) {
+            for (var _i = 0, _a = type.baseTypes, _b = _a.length; _i < _b; _i++) {
                 var base = _a[_i];
                 var properties = getPropertiesOfObjectType(base);
-                for (var _b = 0; _b < properties.length; _b++) {
-                    var prop = properties[_b];
+                for (var _c = 0, _d = properties.length; _c < _d; _c++) {
+                    var prop = properties[_c];
                     if (!ts.hasProperty(seen, prop.name)) {
                         seen[prop.name] = {
                             prop: prop,
@@ -20035,7 +20035,7 @@ var ts;
         }
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol) {
             var declarations = symbol.declarations;
-            for (var _i = 0; _i < declarations.length; _i++) {
+            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
                 var declaration = declarations[_i];
                 if ((declaration.kind === 196 || (declaration.kind === 195 && ts.nodeIsPresent(declaration.body))) && !ts.isInAmbientContext(declaration)) {
                     return declaration;
@@ -20203,19 +20203,19 @@ var ts;
         }
         function hasExportedMembers(moduleSymbol) {
             var declarations = moduleSymbol.declarations;
-            for (var _i = 0; _i < declarations.length; _i++) {
+            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
                 var current = declarations[_i];
                 var statements = getModuleStatements(current);
-                for (var _a = 0; _a < statements.length; _a++) {
-                    var node = statements[_a];
+                for (var _b = 0, _c = statements.length; _b < _c; _b++) {
+                    var node = statements[_b];
                     if (node.kind === 210) {
                         var exportClause = node.exportClause;
                         if (!exportClause) {
                             return true;
                         }
                         var specifiers = exportClause.elements;
-                        for (var _b = 0; _b < specifiers.length; _b++) {
-                            var specifier = specifiers[_b];
+                        for (var _d = 0, _e = specifiers.length; _d < _e; _d++) {
+                            var specifier = specifiers[_d];
                             if (!(specifier.propertyName && specifier.name && specifier.name.text === "default")) {
                                 return true;
                             }
@@ -21119,7 +21119,7 @@ var ts;
             }
             var lastStatic, lastPrivate, lastProtected, lastDeclare;
             var flags = 0;
-            for (var _i = 0, _a = node.modifiers; _i < _a.length; _i++) {
+            for (var _i = 0, _a = node.modifiers, _b = _a.length; _i < _b; _i++) {
                 var modifier = _a[_i];
                 switch (modifier.kind) {
                     case 108:
@@ -21323,7 +21323,7 @@ var ts;
         function checkGrammarForOmittedArgument(node, arguments) {
             if (arguments) {
                 var sourceFile = ts.getSourceFileOfNode(node);
-                for (var _i = 0; _i < arguments.length; _i++) {
+                for (var _i = 0, _a = arguments.length; _i < _a; _i++) {
                     var arg = arguments[_i];
                     if (arg.kind === 172) {
                         return grammarErrorAtPos(sourceFile, arg.pos, 0, ts.Diagnostics.Argument_expression_expected);
@@ -21349,7 +21349,7 @@ var ts;
             var seenExtendsClause = false;
             var seenImplementsClause = false;
             if (!checkGrammarModifiers(node) && node.heritageClauses) {
-                for (var _i = 0, _a = node.heritageClauses; _i < _a.length; _i++) {
+                for (var _i = 0, _a = node.heritageClauses, _b = _a.length; _i < _b; _i++) {
                     var heritageClause = _a[_i];
                     if (heritageClause.token === 78) {
                         if (seenExtendsClause) {
@@ -21377,7 +21377,7 @@ var ts;
         function checkGrammarInterfaceDeclaration(node) {
             var seenExtendsClause = false;
             if (node.heritageClauses) {
-                for (var _i = 0, _a = node.heritageClauses; _i < _a.length; _i++) {
+                for (var _i = 0, _a = node.heritageClauses, _b = _a.length; _i < _b; _i++) {
                     var heritageClause = _a[_i];
                     if (heritageClause.token === 78) {
                         if (seenExtendsClause) {
@@ -21423,7 +21423,7 @@ var ts;
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             var inStrictMode = (node.parserContextFlags & 1) !== 0;
-            for (var _i = 0, _a = node.properties; _i < _a.length; _i++) {
+            for (var _i = 0, _a = node.properties, _b = _a.length; _i < _b; _i++) {
                 var prop = _a[_i];
                 var _name = prop.name;
                 if (prop.kind === 172 || _name.kind === 126) {
@@ -21668,7 +21668,7 @@ var ts;
             }
             else {
                 var elements = name.elements;
-                for (var _i = 0; _i < elements.length; _i++) {
+                for (var _i = 0, _a = elements.length; _i < _a; _i++) {
                     var element = elements[_i];
                     checkGrammarNameInLetOrConstDeclarations(element.name);
                 }
@@ -21726,7 +21726,7 @@ var ts;
             if (!enumIsConst) {
                 var inConstantEnumMemberSection = true;
                 var inAmbientContext = ts.isInAmbientContext(enumDecl);
-                for (var _i = 0, _a = enumDecl.members; _i < _a.length; _i++) {
+                for (var _i = 0, _a = enumDecl.members, _b = _a.length; _i < _b; _i++) {
                     var node = _a[_i];
                     if (node.name.kind === 126) {
                         hasError = grammarErrorOnNode(node.name, ts.Diagnostics.Computed_property_names_are_not_allowed_in_enums);
@@ -21816,7 +21816,7 @@ var ts;
             return grammarErrorOnFirstToken(node, ts.Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
         function checkGrammarTopLevelElementsForRequiredDeclareModifier(file) {
-            for (var _i = 0, _a = file.statements; _i < _a.length; _i++) {
+            for (var _i = 0, _a = file.statements, _b = _a.length; _i < _b; _i++) {
                 var decl = _a[_i];
                 if (ts.isDeclaration(decl) || decl.kind === 175) {
                     if (checkGrammarTopLevelElementForRequiredDeclareModifier(decl)) {
@@ -22279,14 +22279,14 @@ var ts;
             }
         }
         function emitLines(nodes) {
-            for (var _i = 0; _i < nodes.length; _i++) {
+            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
                 var node = nodes[_i];
                 emit(node);
             }
         }
         function emitSeparatedList(nodes, separator, eachNodeEmitFn) {
             var currentWriterPos = writer.getTextPos();
-            for (var _i = 0; _i < nodes.length; _i++) {
+            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
                 var node = nodes[_i];
                 if (currentWriterPos !== writer.getTextPos()) {
                     write(separator);
@@ -24846,7 +24846,7 @@ var ts;
                     if (properties.length !== 1) {
                         value = ensureIdentifier(value);
                     }
-                    for (var _i = 0; _i < properties.length; _i++) {
+                    for (var _i = 0, _a = properties.length; _i < _a; _i++) {
                         var p = properties[_i];
                         if (p.kind === 218 || p.kind === 219) {
                             var propName = (p.name);
@@ -25270,7 +25270,7 @@ var ts;
                 decreaseIndent();
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
                 if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
-                    for (var _i = 0, _a = body.statements; _i < _a.length; _i++) {
+                    for (var _i = 0, _a = body.statements, _b = _a.length; _i < _b; _i++) {
                         var statement = _a[_i];
                         write(" ");
                         emit(statement);
@@ -25887,7 +25887,7 @@ var ts;
             }
             function getExternalImportInfo(node) {
                 if (externalImports) {
-                    for (var _i = 0; _i < externalImports.length; _i++) {
+                    for (var _i = 0, _a = externalImports.length; _i < _a; _i++) {
                         var info = externalImports[_i];
                         if (info.rootNode === node) {
                             return info;

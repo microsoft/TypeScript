@@ -252,7 +252,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --stripInternal"
         }
 
-        // options += " --cacheDownlevelForOfLength";
+        options += " --cacheDownlevelForOfLength";
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");
