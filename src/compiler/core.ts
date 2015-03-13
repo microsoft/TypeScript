@@ -112,8 +112,8 @@ module ts {
 
     export function sum(array: any[], prop: string): number {
         var result = 0;
-        for (var i = 0; i < array.length; i++) {
-            result += array[i][prop];
+        for (let v of array) {
+            result += v[prop];
         }
         return result;
     }

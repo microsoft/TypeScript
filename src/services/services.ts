@@ -5674,8 +5674,8 @@ module ts {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
                         var defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
                         if (defaultLibFileName) {
-                            for (var i = 0; i < declarations.length; i++) {
-                                var sourceFile = declarations[i].getSourceFile();
+                            for (let current of declarations) {
+                                var sourceFile = current.getSourceFile();
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
                                 }

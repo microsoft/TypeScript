@@ -4624,8 +4624,8 @@ module ts {
                 else if (source.flags & TypeFlags.Union) {
                     // Source is a union type, infer from each consituent type
                     var sourceTypes = (<UnionType>source).types;
-                    for (var i = 0; i < sourceTypes.length; i++) {
-                        inferFromTypes(sourceTypes[i], target);
+                    for (let sourceType of sourceTypes) {
+                        inferFromTypes(sourceType, target);
                     }
                 }
                 else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
@@ -5451,8 +5451,8 @@ module ts {
             var types = (<UnionType>type).types;
             var mappedType: Type;
             var mappedTypes: Type[];
-            for (var i = 0; i < types.length; i++) {
-                var t = mapper(types[i]);
+            for (let current of types) {
+                var t = mapper(current);
                 if (t) {
                     if (!mappedType) {
                         mappedType = t;
@@ -5628,15 +5628,15 @@ module ts {
             }
             var signatureList: Signature[];
             var types = (<UnionType>type).types;
-            for (var i = 0; i < types.length; i++) {
+            for (let current of types) {
                 // The signature set of all constituent type with call signatures should match
                 // So number of signatures allowed is either 0 or 1
                 if (signatureList &&
-                    getSignaturesOfObjectOrUnionType(types[i], SignatureKind.Call).length > 1) {
+                    getSignaturesOfObjectOrUnionType(current, SignatureKind.Call).length > 1) {
                     return undefined;
                 }
 
-                var signature = getNonGenericSignature(types[i]);
+                var signature = getNonGenericSignature(current);
                 if (signature) {
                     if (!signatureList) {
                         // This signature will contribute to contextual union signature
@@ -6586,12 +6586,12 @@ module ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
-                for (var i = 0; i < candidates.length; i++) {
-                    if (!hasCorrectArity(node, args, candidates[i])) {
+                for (let current of candidates) {
+                    if (!hasCorrectArity(node, args, current)) {
                         continue;
                     }
 
-                    var originalCandidate = candidates[i];
+                    var originalCandidate = current;
                     var inferenceResult: InferenceContext;
 
                     while (true) {
@@ -7198,8 +7198,8 @@ module ts {
             }
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                for (var i = 0; i < types.length; i++) {
-                    if (types[i].flags & kind) {
+                for (let current of types) {
+                    if (current.flags & kind) {
                         return true;
                     }
                 }
@@ -7215,8 +7215,8 @@ module ts {
             }
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                for (var i = 0; i < types.length; i++) {
-                    if (!(types[i].flags & kind)) {
+                for (let current of types) {
+                    if (!(current.flags & kind)) {
                         return false;
                     }
                 }
@@ -8219,8 +8219,8 @@ module ts {
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             var duplicateFunctionDeclaration = false;
             var multipleConstructorImplementation = false;
-            for (var i = 0; i < declarations.length; i++) {
-                var node = <FunctionLikeDeclaration>declarations[i];
+            for (let current of declarations) {
+                var node = <FunctionLikeDeclaration>current;
                 var inAmbientContext = isInAmbientContext(node);
                 var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
@@ -10046,8 +10046,8 @@ module ts {
 
         function hasExportedMembers(moduleSymbol: Symbol) {
             var declarations = moduleSymbol.declarations;
-            for (var i = 0; i < declarations.length; i++) {
-                var statements = getModuleStatements(declarations[i]);
+            for (let current of declarations) {
+                var statements = getModuleStatements(current);
                 for (let node of statements) {
                     if (node.kind === SyntaxKind.ExportDeclaration) {
                         var exportClause = (<ExportDeclaration>node).exportClause;
@@ -11840,8 +11840,8 @@ module ts {
             }
             else {
                 var elements = (<BindingPattern>name).elements;
-                for (var i = 0; i < elements.length; ++i) {
-                    checkGrammarNameInLetOrConstDeclarations(elements[i].name);
+                for (let element of elements) {
+                    checkGrammarNameInLetOrConstDeclarations(element.name);
                 }
             }
         }
