@@ -4086,8 +4086,7 @@ module ts {
                 outer: for (let t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
                         var localErrors = reportErrors;
-                        for (var j = 0; j < sourceSignatures.length; j++) {
-                            var s = sourceSignatures[j];
+                        for (let s of sourceSignatures) {
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
                                 var related = signatureRelatedTo(s, t, localErrors);
                                 if (related) {
@@ -10042,16 +10041,14 @@ module ts {
             var declarations = moduleSymbol.declarations;
             for (var i = 0; i < declarations.length; i++) {
                 var statements = getModuleStatements(declarations[i]);
-                for (var j = 0; j < statements.length; j++) {
-                    var node = statements[j];
+                for (let node of statements) {
                     if (node.kind === SyntaxKind.ExportDeclaration) {
                         var exportClause = (<ExportDeclaration>node).exportClause;
                         if (!exportClause) {
                             return true;
                         }
                         var specifiers = exportClause.elements;
-                        for (var k = 0; k < specifiers.length; k++) {
-                            var specifier = specifiers[k];
+                        for (let specifier of specifiers) {
                             if (!(specifier.propertyName && specifier.name && specifier.name.text === "default")) {
                                 return true;
                             }
