@@ -23436,14 +23436,19 @@ var ts;
             function writeJavaScriptFile(emitOutput, writeByteOrderMark) {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
-            function createTempVariable(location, forLoopVariable) {
-                var _name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (_name && !isExistingName(location, _name)) {
-                        break;
+            function createTempVariable(location, preferredName) {
+                var _name = preferredName;
+                for (; !_name || isExistingName(location, _name); tempCount++) {
+                    var char = 97 + tempCount;
+                    if (char === 105 || char === 110) {
+                        continue;
                     }
-                    _name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + 97) : tempCount - 25);
-                    tempCount++;
+                    if (tempCount < 26) {
+                        _name = "_" + String.fromCharCode(char);
+                    }
+                    else {
+                        _name = "_" + (tempCount - 26);
+                    }
                 }
                 recordNameInCurrentScope(_name);
                 var result = ts.createSynthesizedNode(64);
@@ -23456,8 +23461,8 @@ var ts;
                 }
                 tempVariables.push(name);
             }
-            function createAndRecordTempVariable(location) {
-                var temp = createTempVariable(location, false);
+            function createAndRecordTempVariable(location, preferredName) {
+                var temp = createTempVariable(location, preferredName);
                 recordTempDeclaration(temp);
                 return temp;
             }
@@ -24540,9 +24545,9 @@ var ts;
                 write(" ");
                 endPos = emitToken(16, endPos);
                 var rhsIsIdentifier = node.expression.kind === 64;
-                var counter = createTempVariable(node, true);
-                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node, false);
-                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, false) : undefined;
+                var counter = createTempVariable(node, "_i");
+                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node);
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, "_n") : undefined;
                 emitStart(node.expression);
                 write("var ");
                 emitNodeWithoutSourceMap(counter);
@@ -24601,7 +24606,7 @@ var ts;
                         }
                     }
                     else {
-                        emitNodeWithoutSourceMap(createTempVariable(node, false));
+                        emitNodeWithoutSourceMap(createTempVariable(node));
                         write(" = ");
                         emitNodeWithoutSourceMap(rhsIterationValue);
                     }
@@ -25071,7 +25076,7 @@ var ts;
                 if (languageVersion < 2 && ts.hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = createTempVariable(node, true).text;
+                    var tempName = createTempVariable(node, "_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);

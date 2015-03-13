@@ -44,7 +44,7 @@ var ts;
     ts.forEach = forEach;
     function contains(array, value) {
         if (array) {
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var v = array[_i];
                 if (v === value) {
                     return true;
@@ -68,7 +68,7 @@ var ts;
     function countWhere(array, predicate) {
         var count = 0;
         if (array) {
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var v = array[_i];
                 if (predicate(v)) {
                     count++;
@@ -82,7 +82,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var _item = array[_i];
                 if (f(_item)) {
                     result.push(_item);
@@ -96,7 +96,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var v = array[_i];
                 result.push(f(v));
             }
@@ -116,7 +116,7 @@ var ts;
         var result;
         if (array) {
             result = [];
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var _item = array[_i];
                 if (!contains(result, _item)) {
                     result.push(_item);
@@ -128,7 +128,7 @@ var ts;
     ts.deduplicate = deduplicate;
     function sum(array, prop) {
         var result = 0;
-        for (var _i = 0, _a = array.length; _i < _a; _i++) {
+        for (var _i = 0, _n = array.length; _i < _n; _i++) {
             var v = array[_i];
             result += v[prop];
         }
@@ -136,7 +136,7 @@ var ts;
     }
     ts.sum = sum;
     function addRange(to, from) {
-        for (var _i = 0, _a = from.length; _i < _a; _i++) {
+        for (var _i = 0, _n = from.length; _i < _n; _i++) {
             var v = from[_i];
             to.push(v);
         }
@@ -400,7 +400,7 @@ var ts;
     function getNormalizedParts(normalizedSlashedPath, rootLength) {
         var parts = normalizedSlashedPath.substr(rootLength).split(ts.directorySeparator);
         var normalized = [];
-        for (var _i = 0, _a = parts.length; _i < _a; _i++) {
+        for (var _i = 0, _n = parts.length; _i < _n; _i++) {
             var part = parts[_i];
             if (part !== ".") {
                 if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
@@ -552,7 +552,7 @@ var ts;
         ".js"
     ];
     function removeFileExtension(path) {
-        for (var _i = 0, _a = supportedExtensions.length; _i < _a; _i++) {
+        for (var _i = 0, _n = supportedExtensions.length; _i < _n; _i++) {
             var ext = supportedExtensions[_i];
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
@@ -710,15 +710,15 @@ var ts;
                 function visitDirectory(path) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (var _i = 0, _a = files.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = files.length; _i < _n; _i++) {
                         var _name = files[_i];
                         if (!extension || ts.fileExtensionIs(_name, extension)) {
                             result.push(ts.combinePaths(path, _name));
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
-                    for (var _b = 0, _c = subfolders.length; _b < _c; _b++) {
-                        var current = subfolders[_b];
+                    for (var _a = 0, _b = subfolders.length; _a < _b; _a++) {
+                        var current = subfolders[_a];
                         visitDirectory(ts.combinePaths(path, current));
                     }
                 }
@@ -804,7 +804,7 @@ var ts;
                 function visitDirectory(path) {
                     var files = _fs.readdirSync(path || ".").sort();
                     var directories = [];
-                    for (var _i = 0, _a = files.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = files.length; _i < _n; _i++) {
                         var current = files[_i];
                         var name = ts.combinePaths(path, current);
                         var stat = _fs.lstatSync(name);
@@ -817,8 +817,8 @@ var ts;
                             directories.push(name);
                         }
                     }
-                    for (var _b = 0, _c = directories.length; _b < _c; _b++) {
-                        var _current = directories[_b];
+                    for (var _a = 0, _b = directories.length; _a < _b; _a++) {
+                        var _current = directories[_a];
                         visitDirectory(_current);
                     }
                 }
@@ -7689,7 +7689,7 @@ var ts;
 (function (ts) {
     function getDeclarationOfKind(symbol, kind) {
         var declarations = symbol.declarations;
-        for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+        for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
             var declaration = declarations[_i];
             if (declaration.kind === kind) {
                 return declaration;
@@ -8396,7 +8396,7 @@ var ts;
     ts.getInterfaceBaseTypeNodes = getInterfaceBaseTypeNodes;
     function getHeritageClause(clauses, kind) {
         if (clauses) {
-            for (var _i = 0, _a = clauses.length; _i < _a; _i++) {
+            for (var _i = 0, _n = clauses.length; _i < _n; _i++) {
                 var clause = clauses[_i];
                 if (clause.token === kind) {
                     return clause;
@@ -8787,7 +8787,7 @@ var ts;
     }
     function visitEachNode(cbNode, nodes) {
         if (nodes) {
-            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+            for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                 var node = nodes[_i];
                 var result = cbNode(node);
                 if (result) {
@@ -9088,7 +9088,7 @@ var ts;
             array._children = undefined;
             array.pos += delta;
             array.end += delta;
-            for (var _i = 0, _a = array.length; _i < _a; _i++) {
+            for (var _i = 0, _n = array.length; _i < _n; _i++) {
                 var node = array[_i];
                 visitNode(node);
             }
@@ -9152,7 +9152,7 @@ var ts;
                 array.intersectsChange = true;
                 array._children = undefined;
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                for (var _i = 0, _a = array.length; _i < _a; _i++) {
+                for (var _i = 0, _n = array.length; _i < _n; _i++) {
                     var node = array[_i];
                     visitNode(node);
                 }
@@ -13309,7 +13309,7 @@ var ts;
         }
         function findConstructorDeclaration(node) {
             var members = node.members;
-            for (var _i = 0, _a = members.length; _i < _a; _i++) {
+            for (var _i = 0, _n = members.length; _i < _n; _i++) {
                 var member = members[_i];
                 if (member.kind === 133 && ts.nodeIsPresent(member.body)) {
                     return member;
@@ -13633,7 +13633,7 @@ var ts;
                             walkSymbol(getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol), getQualifiedLeftMeaning(meaning));
                         }
                         if (accessibleSymbolChain) {
-                            for (var _i = 0, _a = accessibleSymbolChain.length; _i < _a; _i++) {
+                            for (var _i = 0, _n = accessibleSymbolChain.length; _i < _n; _i++) {
                                 var accessibleSymbol = accessibleSymbolChain[_i];
                                 appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
                             }
@@ -13814,14 +13814,14 @@ var ts;
                     writePunctuation(writer, 14);
                     writer.writeLine();
                     writer.increaseIndent();
-                    for (var _i = 0, _a = resolved.callSignatures, _b = _a.length; _i < _b; _i++) {
+                    for (var _i = 0, _a = resolved.callSignatures, _n = _a.length; _i < _n; _i++) {
                         var signature = _a[_i];
                         buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
-                    for (var _c = 0, _d = resolved.constructSignatures, _e = _d.length; _c < _e; _c++) {
-                        var _signature = _d[_c];
+                    for (var _b = 0, _c = resolved.constructSignatures, _d = _c.length; _b < _d; _b++) {
+                        var _signature = _c[_b];
                         writeKeyword(writer, 87);
                         writeSpace(writer);
                         buildSignatureDisplay(_signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
@@ -13854,13 +13854,13 @@ var ts;
                         writePunctuation(writer, 22);
                         writer.writeLine();
                     }
-                    for (var _f = 0, _g = resolved.properties, _h = _g.length; _f < _h; _f++) {
-                        var p = _g[_f];
+                    for (var _e = 0, _f = resolved.properties, _g = _f.length; _e < _g; _e++) {
+                        var p = _f[_e];
                         var t = getTypeOfSymbol(p);
                         if (p.flags & (16 | 8192) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, 0);
-                            for (var _j = 0, _k = signatures.length; _j < _k; _j++) {
-                                var _signature_1 = signatures[_j];
+                            for (var _h = 0, _j = signatures.length; _h < _j; _h++) {
+                                var _signature_1 = signatures[_h];
                                 buildSymbolDisplay(p, writer);
                                 if (p.flags & 536870912) {
                                     writePunctuation(writer, 50);
@@ -14564,7 +14564,7 @@ var ts;
         }
         function createSymbolTable(symbols) {
             var result = {};
-            for (var _i = 0, _a = symbols.length; _i < _a; _i++) {
+            for (var _i = 0, _n = symbols.length; _i < _n; _i++) {
                 var symbol = symbols[_i];
                 result[symbol.name] = symbol;
             }
@@ -14572,14 +14572,14 @@ var ts;
         }
         function createInstantiatedSymbolTable(symbols, mapper) {
             var result = {};
-            for (var _i = 0, _a = symbols.length; _i < _a; _i++) {
+            for (var _i = 0, _n = symbols.length; _i < _n; _i++) {
                 var symbol = symbols[_i];
                 result[symbol.name] = instantiateSymbol(symbol, mapper);
             }
             return result;
         }
         function addInheritedMembers(symbols, baseSymbols) {
-            for (var _i = 0, _a = baseSymbols.length; _i < _a; _i++) {
+            for (var _i = 0, _n = baseSymbols.length; _i < _n; _i++) {
                 var s = baseSymbols[_i];
                 if (!ts.hasProperty(symbols, s.name)) {
                     symbols[s.name] = s;
@@ -14588,7 +14588,7 @@ var ts;
         }
         function addInheritedSignatures(signatures, baseSignatures) {
             if (baseSignatures) {
-                for (var _i = 0, _a = baseSignatures.length; _i < _a; _i++) {
+                for (var _i = 0, _n = baseSignatures.length; _i < _n; _i++) {
                     var signature = baseSignatures[_i];
                     signatures.push(signature);
                 }
@@ -14690,7 +14690,7 @@ var ts;
                 return getSignaturesOfType(t, kind);
             });
             var signatures = signatureLists[0];
-            for (var _i = 0, _a = signatures.length; _i < _a; _i++) {
+            for (var _i = 0, _n = signatures.length; _i < _n; _i++) {
                 var signature = signatures[_i];
                 if (signature.typeParameters) {
                     return emptyArray;
@@ -14713,7 +14713,7 @@ var ts;
         }
         function getUnionIndexType(types, kind) {
             var indexTypes = [];
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 var indexType = getIndexTypeOfType(type, kind);
                 if (!indexType) {
@@ -14849,7 +14849,7 @@ var ts;
         function createUnionProperty(unionType, name) {
             var types = unionType.types;
             var props;
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var current = types[_i];
                 var type = getApparentType(current);
                 if (type !== unknownType) {
@@ -14869,8 +14869,8 @@ var ts;
             }
             var propTypes = [];
             var declarations = [];
-            for (var _b = 0, _c = props.length; _b < _c; _b++) {
-                var _prop = props[_b];
+            for (var _a = 0, _b = props.length; _a < _b; _a++) {
+                var _prop = props[_a];
                 if (_prop.declarations) {
                     declarations.push.apply(declarations, _prop.declarations);
                 }
@@ -15110,7 +15110,7 @@ var ts;
             var indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 var len = indexSymbol.declarations.length;
-                for (var _i = 0, _a = indexSymbol.declarations, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = indexSymbol.declarations, _n = _a.length; _i < _n; _i++) {
                     var decl = _a[_i];
                     var node = decl;
                     if (node.parameters.length === 1) {
@@ -15158,7 +15158,7 @@ var ts;
         }
         function getWideningFlagsOfTypes(types) {
             var result = 0;
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 result |= type.flags;
             }
@@ -15256,7 +15256,7 @@ var ts;
         function getTypeOfGlobalSymbol(symbol, arity) {
             function getTypeDeclaration(symbol) {
                 var declarations = symbol.declarations;
-                for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+                for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                     var declaration = declarations[_i];
                     switch (declaration.kind) {
                         case 196:
@@ -15341,13 +15341,13 @@ var ts;
             }
         }
         function addTypesToSortedSet(sortedTypes, types) {
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 addTypeToSortedSet(sortedTypes, type);
             }
         }
         function isSubtypeOfAny(candidate, types) {
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
                     return true;
@@ -15365,7 +15365,7 @@ var ts;
             }
         }
         function containsAnyType(types) {
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 if (type.flags & 1) {
                     return true;
@@ -15481,7 +15481,7 @@ var ts;
         function instantiateList(items, mapper, instantiator) {
             if (items && items.length) {
                 var result = [];
-                for (var _i = 0, _a = items.length; _i < _a; _i++) {
+                for (var _i = 0, _n = items.length; _i < _n; _i++) {
                     var v = items[_i];
                     result.push(instantiator(v, mapper));
                 }
@@ -15533,7 +15533,7 @@ var ts;
                     return createBinaryTypeEraser(sources[0], sources[1]);
             }
             return function (t) {
-                for (var _i = 0, _a = sources.length; _i < _a; _i++) {
+                for (var _i = 0, _n = sources.length; _i < _n; _i++) {
                     var source = sources[_i];
                     if (t === source) {
                         return anyType;
@@ -15819,7 +15819,7 @@ var ts;
             function unionTypeRelatedToUnionType(source, target) {
                 var _result = -1;
                 var sourceTypes = source.types;
-                for (var _i = 0, _a = sourceTypes.length; _i < _a; _i++) {
+                for (var _i = 0, _n = sourceTypes.length; _i < _n; _i++) {
                     var sourceType = sourceTypes[_i];
                     var related = typeRelatedToUnionType(sourceType, target, false);
                     if (!related) {
@@ -15842,7 +15842,7 @@ var ts;
             function unionTypeRelatedToType(source, target, reportErrors) {
                 var _result = -1;
                 var sourceTypes = source.types;
-                for (var _i = 0, _a = sourceTypes.length; _i < _a; _i++) {
+                for (var _i = 0, _n = sourceTypes.length; _i < _n; _i++) {
                     var sourceType = sourceTypes[_i];
                     var related = isRelatedTo(sourceType, target, reportErrors);
                     if (!related) {
@@ -15980,7 +15980,7 @@ var ts;
                 var _result = -1;
                 var properties = getPropertiesOfObjectType(target);
                 var requireOptionalProperties = relation === subtypeRelation && !(source.flags & 131072);
-                for (var _i = 0, _a = properties.length; _i < _a; _i++) {
+                for (var _i = 0, _n = properties.length; _i < _n; _i++) {
                     var targetProp = properties[_i];
                     var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
@@ -16051,7 +16051,7 @@ var ts;
                     return 0;
                 }
                 var _result = -1;
-                for (var _i = 0, _a = sourceProperties.length; _i < _a; _i++) {
+                for (var _i = 0, _n = sourceProperties.length; _i < _n; _i++) {
                     var sourceProp = sourceProperties[_i];
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
                     if (!targetProp) {
@@ -16076,12 +16076,12 @@ var ts;
                 var targetSignatures = getSignaturesOfType(target, kind);
                 var _result = -1;
                 var saveErrorInfo = errorInfo;
-                outer: for (var _i = 0, _a = targetSignatures.length; _i < _a; _i++) {
+                outer: for (var _i = 0, _n = targetSignatures.length; _i < _n; _i++) {
                     var t = targetSignatures[_i];
                     if (!t.hasStringLiterals || target.flags & 65536) {
                         var localErrors = reportErrors;
-                        for (var _b = 0, _c = sourceSignatures.length; _b < _c; _b++) {
-                            var s = sourceSignatures[_b];
+                        for (var _a = 0, _b = sourceSignatures.length; _a < _b; _a++) {
+                            var s = sourceSignatures[_a];
                             if (!s.hasStringLiterals || source.flags & 65536) {
                                 var related = signatureRelatedTo(s, t, localErrors);
                                 if (related) {
@@ -16296,7 +16296,7 @@ var ts;
             return result;
         }
         function isSupertypeOfEach(candidate, types) {
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var type = types[_i];
                 if (candidate !== type && !isTypeSubtypeOf(type, candidate))
                     return false;
@@ -16481,7 +16481,7 @@ var ts;
         }
         function createInferenceContext(typeParameters, inferUnionTypes) {
             var inferences = [];
-            for (var _i = 0, _a = typeParameters.length; _i < _a; _i++) {
+            for (var _i = 0, _n = typeParameters.length; _i < _n; _i++) {
                 var unused = typeParameters[_i];
                 inferences.push({
                     primary: undefined,
@@ -16551,7 +16551,7 @@ var ts;
                     var _targetTypes = target.types;
                     var typeParameterCount = 0;
                     var typeParameter;
-                    for (var _a = 0, _b = _targetTypes.length; _a < _b; _a++) {
+                    for (var _a = 0, _n = _targetTypes.length; _a < _n; _a++) {
                         var t = _targetTypes[_a];
                         if (t.flags & 512 && ts.contains(context.typeParameters, t)) {
                             typeParameter = t;
@@ -16569,8 +16569,8 @@ var ts;
                 }
                 else if (source.flags & 16384) {
                     var _sourceTypes = source.types;
-                    for (var _c = 0, _d = _sourceTypes.length; _c < _d; _c++) {
-                        var sourceType = _sourceTypes[_c];
+                    for (var _b = 0, _c = _sourceTypes.length; _b < _c; _b++) {
+                        var sourceType = _sourceTypes[_b];
                         inferFromTypes(sourceType, target);
                     }
                 }
@@ -16595,7 +16595,7 @@ var ts;
             }
             function inferFromProperties(source, target) {
                 var properties = getPropertiesOfObjectType(target);
-                for (var _i = 0, _a = properties.length; _i < _a; _i++) {
+                for (var _i = 0, _n = properties.length; _i < _n; _i++) {
                     var targetProp = properties[_i];
                     var sourceProp = getPropertyOfObjectType(source, targetProp.name);
                     if (sourceProp) {
@@ -17212,7 +17212,7 @@ var ts;
             var types = type.types;
             var mappedType;
             var mappedTypes;
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var current = types[_i];
                 var t = mapper(current);
                 if (t) {
@@ -17351,7 +17351,7 @@ var ts;
             }
             var signatureList;
             var types = type.types;
-            for (var _i = 0, _a = types.length; _i < _a; _i++) {
+            for (var _i = 0, _n = types.length; _i < _n; _i++) {
                 var current = types[_i];
                 if (signatureList && getSignaturesOfObjectOrUnionType(current, 0).length > 1) {
                     return undefined;
@@ -17456,7 +17456,7 @@ var ts;
             var propertiesArray = [];
             var contextualType = getContextualType(node);
             var typeFlags;
-            for (var _i = 0, _a = node.properties, _b = _a.length; _i < _b; _i++) {
+            for (var _i = 0, _a = node.properties, _n = _a.length; _i < _n; _i++) {
                 var memberDecl = _a[_i];
                 var member = memberDecl.symbol;
                 if (memberDecl.kind === 218 || memberDecl.kind === 219 || ts.isObjectLiteralMethod(memberDecl)) {
@@ -17722,7 +17722,7 @@ var ts;
             var specializedIndex = -1;
             var spliceIndex;
             ts.Debug.assert(!result.length);
-            for (var _i = 0, _a = signatures.length; _i < _a; _i++) {
+            for (var _i = 0, _n = signatures.length; _i < _n; _i++) {
                 var signature = signatures[_i];
                 var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
                 var _parent = signature.declaration && signature.declaration.parent;
@@ -17973,7 +17973,7 @@ var ts;
                 error(node, ts.Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
             }
             if (!produceDiagnostics) {
-                for (var _i = 0, _a = candidates.length; _i < _a; _i++) {
+                for (var _i = 0, _n = candidates.length; _i < _n; _i++) {
                     var candidate = candidates[_i];
                     if (hasCorrectArity(node, args, candidate)) {
                         return candidate;
@@ -17982,8 +17982,8 @@ var ts;
             }
             return resolveErrorCall(node);
             function chooseOverload(candidates, relation) {
-                for (var _b = 0, _c = candidates.length; _b < _c; _b++) {
-                    var current = candidates[_b];
+                for (var _a = 0, _b = candidates.length; _a < _b; _a++) {
+                    var current = candidates[_a];
                     if (!hasCorrectArity(node, args, current)) {
                         continue;
                     }
@@ -18430,7 +18430,7 @@ var ts;
             }
             if (type.flags & 16384) {
                 var types = type.types;
-                for (var _i = 0, _a = types.length; _i < _a; _i++) {
+                for (var _i = 0, _n = types.length; _i < _n; _i++) {
                     var current = types[_i];
                     if (current.flags & kind) {
                         return true;
@@ -18446,7 +18446,7 @@ var ts;
             }
             if (type.flags & 16384) {
                 var types = type.types;
-                for (var _i = 0, _a = types.length; _i < _a; _i++) {
+                for (var _i = 0, _n = types.length; _i < _n; _i++) {
                     var current = types[_i];
                     if (!(current.flags & kind)) {
                         return false;
@@ -18482,7 +18482,7 @@ var ts;
         }
         function checkObjectLiteralAssignment(node, sourceType, contextualMapper) {
             var properties = node.properties;
-            for (var _i = 0, _a = properties.length; _i < _a; _i++) {
+            for (var _i = 0, _n = properties.length; _i < _n; _i++) {
                 var p = properties[_i];
                 if (p.kind === 218 || p.kind === 219) {
                     var _name = p.name;
@@ -18922,7 +18922,7 @@ var ts;
             if (indexSymbol) {
                 var seenNumericIndexer = false;
                 var seenStringIndexer = false;
-                for (var _i = 0, _a = indexSymbol.declarations, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = indexSymbol.declarations, _n = _a.length; _i < _n; _i++) {
                     var decl = _a[_i];
                     var declaration = decl;
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
@@ -19112,7 +19112,7 @@ var ts;
             else {
                 signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
             }
-            for (var _i = 0, _a = signaturesToCheck.length; _i < _a; _i++) {
+            for (var _i = 0, _n = signaturesToCheck.length; _i < _n; _i++) {
                 var otherSignature = signaturesToCheck[_i];
                 if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature)) {
                     return;
@@ -19218,7 +19218,7 @@ var ts;
             var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & 1536;
             var duplicateFunctionDeclaration = false;
             var multipleConstructorImplementation = false;
-            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+            for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                 var current = declarations[_i];
                 var node = current;
                 var inAmbientContext = ts.isInAmbientContext(node);
@@ -19277,8 +19277,8 @@ var ts;
                     var signatures = getSignaturesOfSymbol(symbol);
                     var bodySignature = getSignatureFromDeclaration(bodyDeclaration);
                     if (!bodySignature.hasStringLiterals) {
-                        for (var _b = 0, _c = signatures.length; _b < _c; _b++) {
-                            var signature = signatures[_b];
+                        for (var _a = 0, _b = signatures.length; _a < _b; _a++) {
+                            var signature = signatures[_a];
                             if (!signature.hasStringLiterals && !isSignatureAssignableTo(bodySignature, signature)) {
                                 error(signature.declaration, ts.Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
                                 break;
@@ -19921,7 +19921,7 @@ var ts;
                 });
                 if (type.flags & 1024 && type.symbol.valueDeclaration.kind === 196) {
                     var classDeclaration = type.symbol.valueDeclaration;
-                    for (var _i = 0, _a = classDeclaration.members, _b = _a.length; _i < _b; _i++) {
+                    for (var _i = 0, _a = classDeclaration.members, _n = _a.length; _i < _n; _i++) {
                         var member = _a[_i];
                         if (!(member.flags & 128) && ts.hasDynamicName(member)) {
                             var propType = getTypeOfSymbol(member.symbol);
@@ -20055,7 +20055,7 @@ var ts;
         }
         function checkKindsOfPropertyMemberOverrides(type, baseType) {
             var baseProperties = getPropertiesOfObjectType(baseType);
-            for (var _i = 0, _a = baseProperties.length; _i < _a; _i++) {
+            for (var _i = 0, _n = baseProperties.length; _i < _n; _i++) {
                 var baseProperty = baseProperties[_i];
                 var base = getTargetSymbol(baseProperty);
                 if (base.flags & 134217728) {
@@ -20137,11 +20137,11 @@ var ts;
                 };
             });
             var ok = true;
-            for (var _i = 0, _a = type.baseTypes, _b = _a.length; _i < _b; _i++) {
+            for (var _i = 0, _a = type.baseTypes, _n = _a.length; _i < _n; _i++) {
                 var base = _a[_i];
                 var properties = getPropertiesOfObjectType(base);
-                for (var _c = 0, _d = properties.length; _c < _d; _c++) {
-                    var prop = properties[_c];
+                for (var _b = 0, _c = properties.length; _b < _c; _b++) {
+                    var prop = properties[_b];
                     if (!ts.hasProperty(seen, prop.name)) {
                         seen[prop.name] = {
                             prop: prop,
@@ -20391,7 +20391,7 @@ var ts;
         }
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol) {
             var declarations = symbol.declarations;
-            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+            for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                 var declaration = declarations[_i];
                 if ((declaration.kind === 196 || (declaration.kind === 195 && ts.nodeIsPresent(declaration.body))) && !ts.isInAmbientContext(declaration)) {
                     return declaration;
@@ -20559,19 +20559,19 @@ var ts;
         }
         function hasExportedMembers(moduleSymbol) {
             var declarations = moduleSymbol.declarations;
-            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+            for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                 var current = declarations[_i];
                 var statements = getModuleStatements(current);
-                for (var _b = 0, _c = statements.length; _b < _c; _b++) {
-                    var node = statements[_b];
+                for (var _a = 0, _b = statements.length; _a < _b; _a++) {
+                    var node = statements[_a];
                     if (node.kind === 210) {
                         var exportClause = node.exportClause;
                         if (!exportClause) {
                             return true;
                         }
                         var specifiers = exportClause.elements;
-                        for (var _d = 0, _e = specifiers.length; _d < _e; _d++) {
-                            var specifier = specifiers[_d];
+                        for (var _c = 0, _d = specifiers.length; _c < _d; _c++) {
+                            var specifier = specifiers[_c];
                             if (!(specifier.propertyName && specifier.name && specifier.name.text === "default")) {
                                 return true;
                             }
@@ -21475,7 +21475,7 @@ var ts;
             }
             var lastStatic, lastPrivate, lastProtected, lastDeclare;
             var flags = 0;
-            for (var _i = 0, _a = node.modifiers, _b = _a.length; _i < _b; _i++) {
+            for (var _i = 0, _a = node.modifiers, _n = _a.length; _i < _n; _i++) {
                 var modifier = _a[_i];
                 switch (modifier.kind) {
                     case 108:
@@ -21679,7 +21679,7 @@ var ts;
         function checkGrammarForOmittedArgument(node, arguments) {
             if (arguments) {
                 var sourceFile = ts.getSourceFileOfNode(node);
-                for (var _i = 0, _a = arguments.length; _i < _a; _i++) {
+                for (var _i = 0, _n = arguments.length; _i < _n; _i++) {
                     var arg = arguments[_i];
                     if (arg.kind === 172) {
                         return grammarErrorAtPos(sourceFile, arg.pos, 0, ts.Diagnostics.Argument_expression_expected);
@@ -21705,7 +21705,7 @@ var ts;
             var seenExtendsClause = false;
             var seenImplementsClause = false;
             if (!checkGrammarModifiers(node) && node.heritageClauses) {
-                for (var _i = 0, _a = node.heritageClauses, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = node.heritageClauses, _n = _a.length; _i < _n; _i++) {
                     var heritageClause = _a[_i];
                     if (heritageClause.token === 78) {
                         if (seenExtendsClause) {
@@ -21733,7 +21733,7 @@ var ts;
         function checkGrammarInterfaceDeclaration(node) {
             var seenExtendsClause = false;
             if (node.heritageClauses) {
-                for (var _i = 0, _a = node.heritageClauses, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = node.heritageClauses, _n = _a.length; _i < _n; _i++) {
                     var heritageClause = _a[_i];
                     if (heritageClause.token === 78) {
                         if (seenExtendsClause) {
@@ -21779,7 +21779,7 @@ var ts;
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             var inStrictMode = (node.parserContextFlags & 1) !== 0;
-            for (var _i = 0, _a = node.properties, _b = _a.length; _i < _b; _i++) {
+            for (var _i = 0, _a = node.properties, _n = _a.length; _i < _n; _i++) {
                 var prop = _a[_i];
                 var _name = prop.name;
                 if (prop.kind === 172 || _name.kind === 126) {
@@ -22024,7 +22024,7 @@ var ts;
             }
             else {
                 var elements = name.elements;
-                for (var _i = 0, _a = elements.length; _i < _a; _i++) {
+                for (var _i = 0, _n = elements.length; _i < _n; _i++) {
                     var element = elements[_i];
                     checkGrammarNameInLetOrConstDeclarations(element.name);
                 }
@@ -22082,7 +22082,7 @@ var ts;
             if (!enumIsConst) {
                 var inConstantEnumMemberSection = true;
                 var inAmbientContext = ts.isInAmbientContext(enumDecl);
-                for (var _i = 0, _a = enumDecl.members, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = enumDecl.members, _n = _a.length; _i < _n; _i++) {
                     var node = _a[_i];
                     if (node.name.kind === 126) {
                         hasError = grammarErrorOnNode(node.name, ts.Diagnostics.Computed_property_names_are_not_allowed_in_enums);
@@ -22172,7 +22172,7 @@ var ts;
             return grammarErrorOnFirstToken(node, ts.Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
         function checkGrammarTopLevelElementsForRequiredDeclareModifier(file) {
-            for (var _i = 0, _a = file.statements, _b = _a.length; _i < _b; _i++) {
+            for (var _i = 0, _a = file.statements, _n = _a.length; _i < _n; _i++) {
                 var decl = _a[_i];
                 if (ts.isDeclaration(decl) || decl.kind === 175) {
                     if (checkGrammarTopLevelElementForRequiredDeclareModifier(decl)) {
@@ -22635,14 +22635,14 @@ var ts;
             }
         }
         function emitLines(nodes) {
-            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+            for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                 var node = nodes[_i];
                 emit(node);
             }
         }
         function emitSeparatedList(nodes, separator, eachNodeEmitFn) {
             var currentWriterPos = writer.getTextPos();
-            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+            for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                 var node = nodes[_i];
                 if (currentWriterPos !== writer.getTextPos()) {
                     write(separator);
@@ -23792,14 +23792,19 @@ var ts;
             function writeJavaScriptFile(emitOutput, writeByteOrderMark) {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
-            function createTempVariable(location, forLoopVariable) {
-                var _name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (_name && !isExistingName(location, _name)) {
-                        break;
+            function createTempVariable(location, preferredName) {
+                var _name = preferredName;
+                for (; !_name || isExistingName(location, _name); tempCount++) {
+                    var char = 97 + tempCount;
+                    if (char === 105 || char === 110) {
+                        continue;
                     }
-                    _name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + 97) : tempCount - 25);
-                    tempCount++;
+                    if (tempCount < 26) {
+                        _name = "_" + String.fromCharCode(char);
+                    }
+                    else {
+                        _name = "_" + (tempCount - 26);
+                    }
                 }
                 recordNameInCurrentScope(_name);
                 var result = ts.createSynthesizedNode(64);
@@ -23812,8 +23817,8 @@ var ts;
                 }
                 tempVariables.push(name);
             }
-            function createAndRecordTempVariable(location) {
-                var temp = createTempVariable(location, false);
+            function createAndRecordTempVariable(location, preferredName) {
+                var temp = createTempVariable(location, preferredName);
                 recordTempDeclaration(temp);
                 return temp;
             }
@@ -24896,9 +24901,9 @@ var ts;
                 write(" ");
                 endPos = emitToken(16, endPos);
                 var rhsIsIdentifier = node.expression.kind === 64;
-                var counter = createTempVariable(node, true);
-                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node, false);
-                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, false) : undefined;
+                var counter = createTempVariable(node, "_i");
+                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node);
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, "_n") : undefined;
                 emitStart(node.expression);
                 write("var ");
                 emitNodeWithoutSourceMap(counter);
@@ -24957,7 +24962,7 @@ var ts;
                         }
                     }
                     else {
-                        emitNodeWithoutSourceMap(createTempVariable(node, false));
+                        emitNodeWithoutSourceMap(createTempVariable(node));
                         write(" = ");
                         emitNodeWithoutSourceMap(rhsIterationValue);
                     }
@@ -25202,7 +25207,7 @@ var ts;
                     if (properties.length !== 1) {
                         value = ensureIdentifier(value);
                     }
-                    for (var _i = 0, _a = properties.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = properties.length; _i < _n; _i++) {
                         var p = properties[_i];
                         if (p.kind === 218 || p.kind === 219) {
                             var propName = (p.name);
@@ -25427,7 +25432,7 @@ var ts;
                 if (languageVersion < 2 && ts.hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = createTempVariable(node, true).text;
+                    var tempName = createTempVariable(node, "_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -25626,7 +25631,7 @@ var ts;
                 decreaseIndent();
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
                 if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
-                    for (var _i = 0, _a = body.statements, _b = _a.length; _i < _b; _i++) {
+                    for (var _i = 0, _a = body.statements, _n = _a.length; _i < _n; _i++) {
                         var statement = _a[_i];
                         write(" ");
                         emit(statement);
@@ -26243,7 +26248,7 @@ var ts;
             }
             function getExternalImportInfo(node) {
                 if (externalImports) {
-                    for (var _i = 0, _a = externalImports.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = externalImports.length; _i < _n; _i++) {
                         var info = externalImports[_i];
                         if (info.rootNode === node) {
                             return info;
@@ -27604,7 +27609,7 @@ var ts;
             ts.forEach(program.getSourceFiles(), function (sourceFile) {
                 cancellationToken.throwIfCancellationRequested();
                 var declarations = sourceFile.getNamedDeclarations();
-                for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+                for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                     var declaration = declarations[_i];
                     var name = getDeclarationName(declaration);
                     if (name !== undefined) {
@@ -27642,7 +27647,7 @@ var ts;
             return items;
             function allMatchesAreCaseSensitive(matches) {
                 ts.Debug.assert(matches.length > 0);
-                for (var _i = 0, _a = matches.length; _i < _a; _i++) {
+                for (var _i = 0, _n = matches.length; _i < _n; _i++) {
                     var match = matches[_i];
                     if (!match.isCaseSensitive) {
                         return false;
@@ -27721,7 +27726,7 @@ var ts;
             function bestMatchKind(matches) {
                 ts.Debug.assert(matches.length > 0);
                 var _bestMatchKind = 3;
-                for (var _i = 0, _a = matches.length; _i < _a; _i++) {
+                for (var _i = 0, _n = matches.length; _i < _n; _i++) {
                     var match = matches[_i];
                     var kind = match.kind;
                     if (kind < _bestMatchKind) {
@@ -27858,7 +27863,7 @@ var ts;
             }
             function addTopLevelNodes(nodes, topLevelNodes) {
                 nodes = sortNodes(nodes);
-                for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+                for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                     var node = nodes[_i];
                     switch (node.kind) {
                         case 196:
@@ -27899,7 +27904,7 @@ var ts;
             function getItemsWorker(nodes, createItem) {
                 var items = [];
                 var keyToItem = {};
-                for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+                for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                     var child = nodes[_i];
                     var _item = createItem(child);
                     if (_item !== undefined) {
@@ -27924,10 +27929,10 @@ var ts;
                     if (!target.childItems) {
                         target.childItems = [];
                     }
-                    outer: for (var _i = 0, _a = source.childItems, _b = _a.length; _i < _b; _i++) {
+                    outer: for (var _i = 0, _a = source.childItems, _n = _a.length; _i < _n; _i++) {
                         var sourceChild = _a[_i];
-                        for (var _c = 0, _d = target.childItems, _e = _d.length; _c < _e; _c++) {
-                            var targetChild = _d[_c];
+                        for (var _b = 0, _c = target.childItems, _d = _c.length; _b < _d; _b++) {
+                            var targetChild = _c[_b];
                             if (targetChild.text === sourceChild.text && targetChild.kind === sourceChild.kind) {
                                 merge(targetChild, sourceChild);
                                 continue outer;
@@ -28227,7 +28232,7 @@ var ts;
             if (isLowercase) {
                 if (index > 0) {
                     var wordSpans = getWordSpans(candidate);
-                    for (var _i = 0, _a = wordSpans.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = wordSpans.length; _i < _n; _i++) {
                         var span = wordSpans[_i];
                         if (partStartsWith(candidate, span, chunk.text, true)) {
                             return createPatternMatch(2, punctuationStripped, partStartsWith(candidate, span, chunk.text, false));
@@ -28282,7 +28287,7 @@ var ts;
             }
             var subWordTextChunks = segment.subWordTextChunks;
             var matches = undefined;
-            for (var _i = 0, _a = subWordTextChunks.length; _i < _a; _i++) {
+            for (var _i = 0, _n = subWordTextChunks.length; _i < _n; _i++) {
                 var subWordTextChunk = subWordTextChunks[_i];
                 var result = matchTextChunk(candidate, subWordTextChunk, true);
                 if (!result) {
@@ -28671,7 +28676,7 @@ var ts;
             function getArgumentIndex(argumentsList, node) {
                 var argumentIndex = 0;
                 var listChildren = argumentsList.getChildren();
-                for (var _i = 0, _a = listChildren.length; _i < _a; _i++) {
+                for (var _i = 0, _n = listChildren.length; _i < _n; _i++) {
                     var child = listChildren[_i];
                     if (child === node) {
                         break;
@@ -28996,7 +29001,7 @@ var ts;
                 return n;
             }
             var children = n.getChildren();
-            for (var _i = 0, _a = children.length; _i < _a; _i++) {
+            for (var _i = 0, _n = children.length; _i < _n; _i++) {
                 var child = children[_i];
                 var shouldDiveInChildNode = (child.pos <= previousToken.pos && child.end > previousToken.end) || (child.pos === previousToken.end);
                 if (shouldDiveInChildNode && nodeHasTokens(child)) {
@@ -29645,7 +29650,7 @@ var ts;
                 if (this.IsAny()) {
                     return true;
                 }
-                for (var _i = 0, _a = this.customContextChecks, _b = _a.length; _i < _b; _i++) {
+                for (var _i = 0, _a = this.customContextChecks, _n = _a.length; _i < _n; _i++) {
                     var check = _a[_i];
                     if (!check(context)) {
                         return false;
@@ -30133,7 +30138,7 @@ var ts;
                 var bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
                 var bucket = this.map[bucketIndex];
                 if (bucket != null) {
-                    for (var _i = 0, _a = bucket.Rules(), _b = _a.length; _i < _b; _i++) {
+                    for (var _i = 0, _a = bucket.Rules(), _n = _a.length; _i < _n; _i++) {
                         var rule = _a[_i];
                         if (rule.Operation.Context.InContext(context)) {
                             return rule;
@@ -30811,7 +30816,7 @@ var ts;
                         }
                     }
                     var inheritedIndentation = -1;
-                    for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                         var child = nodes[_i];
                         inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, _startLine, true);
                     }
@@ -30856,7 +30861,7 @@ var ts;
                     if (indentToken) {
                         var indentNextTokenOrTrivia = true;
                         if (currentTokenInfo.leadingTrivia) {
-                            for (var _i = 0, _a = currentTokenInfo.leadingTrivia, _b = _a.length; _i < _b; _i++) {
+                            for (var _i = 0, _a = currentTokenInfo.leadingTrivia, _n = _a.length; _i < _n; _i++) {
                                 var triviaItem = _a[_i];
                                 if (!ts.rangeContainsRange(originalRange, triviaItem)) {
                                     continue;
@@ -30891,7 +30896,7 @@ var ts;
                 }
             }
             function processTrivia(trivia, parent, contextNode, dynamicIndentation) {
-                for (var _i = 0, _a = trivia.length; _i < _a; _i++) {
+                for (var _i = 0, _n = trivia.length; _i < _n; _i++) {
                     var triviaItem = trivia[_i];
                     if (ts.isComment(triviaItem.kind) && ts.rangeContainsRange(originalRange, triviaItem)) {
                         var triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
@@ -31618,7 +31623,7 @@ var ts;
             var list = createNode(222, nodes.pos, nodes.end, 1024, this);
             list._children = [];
             var pos = nodes.pos;
-            for (var _i = 0, _a = nodes.length; _i < _a; _i++) {
+            for (var _i = 0, _n = nodes.length; _i < _n; _i++) {
                 var node = nodes[_i];
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
@@ -31677,7 +31682,7 @@ var ts;
         };
         NodeObject.prototype.getFirstToken = function (sourceFile) {
             var children = this.getChildren();
-            for (var _i = 0, _a = children.length; _i < _a; _i++) {
+            for (var _i = 0, _n = children.length; _i < _n; _i++) {
                 var child = children[_i];
                 if (child.kind < 125) {
                     return child;
@@ -32295,7 +32300,7 @@ var ts;
             this.host = host;
             this.fileNameToEntry = {};
             var rootFileNames = host.getScriptFileNames();
-            for (var _i = 0, _a = rootFileNames.length; _i < _a; _i++) {
+            for (var _i = 0, _n = rootFileNames.length; _i < _n; _i++) {
                 var fileName = rootFileNames[_i];
                 this.createEntry(fileName);
             }
@@ -32874,7 +32879,7 @@ var ts;
             });
             if (program) {
                 var oldSourceFiles = program.getSourceFiles();
-                for (var _i = 0, _a = oldSourceFiles.length; _i < _a; _i++) {
+                for (var _i = 0, _n = oldSourceFiles.length; _i < _n; _i++) {
                     var oldSourceFile = oldSourceFiles[_i];
                     var fileName = oldSourceFile.fileName;
                     if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
@@ -32909,8 +32914,8 @@ var ts;
                 if (program.getSourceFiles().length !== rootFileNames.length) {
                     return false;
                 }
-                for (var _b = 0, _c = rootFileNames.length; _b < _c; _b++) {
-                    var _fileName = rootFileNames[_b];
+                for (var _a = 0, _b = rootFileNames.length; _a < _b; _a++) {
+                    var _fileName = rootFileNames[_a];
                     if (!sourceFileUpToDate(program.getSourceFile(_fileName))) {
                         return false;
                     }
@@ -34431,7 +34436,7 @@ var ts;
                 var _scope = undefined;
                 var _declarations = symbol.getDeclarations();
                 if (_declarations) {
-                    for (var _i = 0, _a = _declarations.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = _declarations.length; _i < _n; _i++) {
                         var declaration = _declarations[_i];
                         var container = getContainerNode(declaration);
                         if (!container) {
@@ -34793,7 +34798,7 @@ var ts;
                     var lastIterationMeaning;
                     do {
                         lastIterationMeaning = meaning;
-                        for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+                        for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                             var declaration = declarations[_i];
                             var declarationMeaning = getMeaningFromDeclaration(declaration);
                             if (declarationMeaning & meaning) {
@@ -35224,7 +35229,7 @@ var ts;
             function processElement(element) {
                 if (ts.textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
                     var children = element.getChildren();
-                    for (var _i = 0, _a = children.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = children.length; _i < _n; _i++) {
                         var child = children[_i];
                         if (ts.isToken(child)) {
                             classifyToken(child);
@@ -35249,7 +35254,7 @@ var ts;
                 if (matchKind) {
                     var parentElement = token.parent;
                     var childNodes = parentElement.getChildren(sourceFile);
-                    for (var _i = 0, _a = childNodes.length; _i < _a; _i++) {
+                    for (var _i = 0, _n = childNodes.length; _i < _n; _i++) {
                         var current = childNodes[_i];
                         if (current.kind === matchKind) {
                             var range1 = ts.createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
@@ -35388,7 +35393,7 @@ var ts;
                     if (declarations && declarations.length > 0) {
                         var defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
                         if (defaultLibFileName) {
-                            for (var _i = 0, _a = declarations.length; _i < _a; _i++) {
+                            for (var _i = 0, _n = declarations.length; _i < _n; _i++) {
                                 var current = declarations[_i];
                                 var _sourceFile = current.getSourceFile();
                                 if (_sourceFile && getCanonicalFileName(ts.normalizePath(_sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {

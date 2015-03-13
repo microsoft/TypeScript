@@ -2117,8 +2117,7 @@ module ts {
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
             // name should be one that is appropriate for a for loop variable.
             function createTempVariable(location: Node, preferredName?: string): Identifier {
-                let name = preferredName;
-                for ( ; !name || isExistingName(location, name); tempCount++) {
+                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
                     // _a .. _h, _j ... _z, _0, _1, ...
 
                     // Note: we avoid generating _i and _n as those are common names we want in other places.
@@ -2126,7 +2125,7 @@ module ts {
                     if (char === CharacterCodes.i || char === CharacterCodes.n) {
                         continue;
                     }
-                    
+
                     if (tempCount < 26) {
                         name = "_" + String.fromCharCode(char);
                     }
