@@ -23793,22 +23793,21 @@ var ts;
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
             function createTempVariable(location, preferredName) {
-                var _name = preferredName;
-                for (; !_name || isExistingName(location, _name); tempCount++) {
+                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
                     var char = 97 + tempCount;
                     if (char === 105 || char === 110) {
                         continue;
                     }
                     if (tempCount < 26) {
-                        _name = "_" + String.fromCharCode(char);
+                        name = "_" + String.fromCharCode(char);
                     }
                     else {
-                        _name = "_" + (tempCount - 26);
+                        name = "_" + (tempCount - 26);
                     }
                 }
-                recordNameInCurrentScope(_name);
+                recordNameInCurrentScope(name);
                 var result = ts.createSynthesizedNode(64);
-                result.text = _name;
+                result.text = name;
                 return result;
             }
             function recordTempDeclaration(name) {
