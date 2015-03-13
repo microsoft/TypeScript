@@ -2975,9 +2975,10 @@ module ts {
             return !scanner.hasPrecedingLineBreak() && isIdentifier()
         }
 
-        function netTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
+        function nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken)
+            return !scanner.hasPrecedingLineBreak() &&
+                (isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken);
         }
 
         function parseYieldExpression(): YieldExpression {
@@ -4878,9 +4879,9 @@ module ts {
         }
 
         function isLetDeclaration() {
-            // It is let declaration if in strict mode or next token is identifier\open brace\open curly on same line.
+            // It is let declaration if in strict mode or next token is identifier\open bracket\open curly on same line.
             // otherwise it needs to be treated like identifier
-            return inStrictModeContext() || lookAhead(netTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
+            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
         }
 
         function isDeclarationStart(): boolean {
