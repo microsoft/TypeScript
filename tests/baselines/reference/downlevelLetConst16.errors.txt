@@ -1,12 +1,10 @@
-tests/cases/compiler/downlevelLetConst16.ts(189,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(196,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(203,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(210,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(217,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
+tests/cases/compiler/downlevelLetConst16.ts(202,15): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+tests/cases/compiler/downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array type.
+tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
 
 
-==== tests/cases/compiler/downlevelLetConst16.ts (6 errors) ====
+==== tests/cases/compiler/downlevelLetConst16.ts (4 errors) ====
     'use strict'
     
     declare function use(a: any);
@@ -193,11 +191,8 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
         use(x);
     }
     
-    // TODO: once for-of is supported downlevel
     function foo7() {
         for (let x of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
             use(x);
         }
         use(x);
@@ -205,8 +200,8 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
     
     function foo8() {
         for (let [x] of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+                 ~~~
+!!! error TS2461: Type 'undefined' is not an array type.
             use(x);
         }
         use(x);
@@ -214,8 +209,8 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
     
     function foo9() {
         for (let {a: x} of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+                  ~
+!!! error TS2459: Type 'undefined' has no property 'a' and no string index signature.
             use(x);
         }
         use(x);
@@ -223,8 +218,6 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
     
     function foo10() {
         for (const x of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
             use(x);
         }
         use(x);
@@ -232,8 +225,8 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
     
     function foo11() {
         for (const [x] of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+                   ~~~
+!!! error TS2461: Type 'undefined' is not an array type.
             use(x);
         }
         use(x);
@@ -241,8 +234,8 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
     
     function foo12() {
         for (const {a: x} of []) {
-        ~~~
-!!! error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+                    ~
+!!! error TS2459: Type 'undefined' has no property 'a' and no string index signature.
             use(x);
         }
         use(x);

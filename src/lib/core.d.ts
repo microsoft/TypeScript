@@ -164,19 +164,19 @@ interface ObjectConstructor {
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes. 
       */
-    seal(o: any): any;
+    seal<T>(o: T): T;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze(o: any): any;
+    freeze<T>(o: T): T;
 
     /**
       * Prevents the addition of new properties to an object.
       * @param o Object to make non-extensible. 
       */
-    preventExtensions(o: any): any;
+    preventExtensions<T>(o: T): T;
 
     /**
       * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.

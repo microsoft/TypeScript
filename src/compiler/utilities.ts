@@ -15,8 +15,7 @@ module ts {
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         var declarations = symbol.declarations;
-        for (var i = 0; i < declarations.length; i++) {
-            var declaration = declarations[i];
+        for (let declaration of declarations) {
             if (declaration.kind === kind) {
                 return declaration;
             }
@@ -203,6 +202,33 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    export function getEnclosingBlockScopeContainer(node: Node): Node {
+        var current = node;
+        while (current) {
+            if (isFunctionLike(current)) {
+                return current;
+            }
+            switch (current.kind) {
+                case SyntaxKind.SourceFile:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CatchClause:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return current;
+                case SyntaxKind.Block:
+                    // function block is not considered block-scope container
+                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                    if (!isFunctionLike(current.parent)) {
+                        return current;
+                    }
+            }
+
+            current = current.parent;
+        }
+    }
+
     export function isCatchClauseVariableDeclaration(declaration: Declaration) {
         return declaration &&
             declaration.kind === SyntaxKind.VariableDeclaration &&
@@ -376,6 +402,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
                     return visitor(<ReturnStatement>node);
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.Block:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
@@ -824,9 +851,9 @@ module ts {
 
     export function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind) {
         if (clauses) {
-            for (var i = 0, n = clauses.length; i < n; i++) {
-                if (clauses[i].token === kind) {
-                    return clauses[i];
+            for (let clause of clauses) {
+                if (clause.token === kind) {
+                    return clause;
                 }
             }
         }
@@ -1207,6 +1234,7 @@ module ts {
         }
     }
 
+    // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};

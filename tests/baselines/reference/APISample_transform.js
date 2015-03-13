@@ -293,27 +293,28 @@ declare module "typescript" {
         EnumDeclaration = 199,
         ModuleDeclaration = 200,
         ModuleBlock = 201,
-        ImportEqualsDeclaration = 202,
-        ImportDeclaration = 203,
-        ImportClause = 204,
-        NamespaceImport = 205,
-        NamedImports = 206,
-        ImportSpecifier = 207,
-        ExportAssignment = 208,
-        ExportDeclaration = 209,
-        NamedExports = 210,
-        ExportSpecifier = 211,
-        ExternalModuleReference = 212,
-        CaseClause = 213,
-        DefaultClause = 214,
-        HeritageClause = 215,
-        CatchClause = 216,
-        PropertyAssignment = 217,
-        ShorthandPropertyAssignment = 218,
-        EnumMember = 219,
-        SourceFile = 220,
-        SyntaxList = 221,
-        Count = 222,
+        CaseBlock = 202,
+        ImportEqualsDeclaration = 203,
+        ImportDeclaration = 204,
+        ImportClause = 205,
+        NamespaceImport = 206,
+        NamedImports = 207,
+        ImportSpecifier = 208,
+        ExportAssignment = 209,
+        ExportDeclaration = 210,
+        NamedExports = 211,
+        ExportSpecifier = 212,
+        ExternalModuleReference = 213,
+        CaseClause = 214,
+        DefaultClause = 215,
+        HeritageClause = 216,
+        CatchClause = 217,
+        PropertyAssignment = 218,
+        ShorthandPropertyAssignment = 219,
+        EnumMember = 220,
+        SourceFile = 221,
+        SyntaxList = 222,
+        Count = 223,
         FirstAssignment = 52,
         LastAssignment = 63,
         FirstReservedWord = 65,
@@ -688,6 +689,9 @@ declare module "typescript" {
     }
     interface SwitchStatement extends Statement {
         expression: Expression;
+        caseBlock: CaseBlock;
+    }
+    interface CaseBlock extends Node {
         clauses: NodeArray<CaseOrDefaultClause>;
     }
     interface CaseClause extends Node {
@@ -1516,7 +1520,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the language service API */
-    var servicesVersion: string;
+    let servicesVersion: string;
     interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -2003,7 +2007,7 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
     }
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
-    var disableIncrementalParsing: boolean;
+    let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
