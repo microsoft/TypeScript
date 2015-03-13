@@ -1485,6 +1485,8 @@ module ts {
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
+        isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
+                            // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
     export interface InferenceContext {

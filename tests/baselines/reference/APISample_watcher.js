@@ -1244,6 +1244,7 @@ declare module "typescript" {
     interface TypeInferences {
         primary: Type[];
         secondary: Type[];
+        isFixed: boolean;
     }
     interface InferenceContext {
         typeParameters: TypeParameter[];

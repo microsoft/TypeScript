@@ -3913,6 +3913,9 @@ declare module "typescript" {
         secondary: Type[];
 >secondary : Type[]
 >Type : Type
+
+        isFixed: boolean;
+>isFixed : boolean
     }
     interface InferenceContext {
 >InferenceContext : InferenceContext

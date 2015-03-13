@@ -3505,6 +3505,7 @@ module ts {
             return t => {
                 for (let i = 0; i < context.typeParameters.length; i++) {
                     if (t === context.typeParameters[i]) {
+                        context.inferences[i].isFixed = true;
                         return getInferredType(context, i);
                     }
                 }
@@ -4563,12 +4564,11 @@ module ts {
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             let inferences: TypeInferences[] = [];
             for (let unused of typeParameters) {
-                inferences.push({ primary: undefined, secondary: undefined });
+                inferences.push({ primary: undefined, secondary: undefined, isFixed: false });
             }
             return {
                 typeParameters: typeParameters,
                 inferUnionTypes: inferUnionTypes,
-                inferenceCount: 0,
                 inferences: inferences,
                 inferredTypes: new Array(typeParameters.length),
             };
@@ -4615,11 +4615,13 @@ module ts {
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
                             let inferences = context.inferences[i];
-                            let candidates = inferiority ?
-                                inferences.secondary || (inferences.secondary = []) :
-                                inferences.primary || (inferences.primary = []);
-                            if (!contains(candidates, source)) candidates.push(source);
-                            break;
+                            if (!inferences.isFixed) {
+                                let candidates = inferiority ?
+                                    inferences.secondary || (inferences.secondary = []) :
+                                    inferences.primary || (inferences.primary = []);
+                                if (!contains(candidates, source)) candidates.push(source);
+                            }
+                            return;
                         }
                     }
                 }
@@ -6336,10 +6338,14 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
             let typeParameters = signature.typeParameters;
-            let context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             let inferenceMapper = createInferenceMapper(context);
+
+            // Clear out all the inference results from the last time inferTypeArguments was called on this context
+            for (let i = 0; i < typeParameters.length; i++) {
+                context.inferredTypes[i] = undefined;
+            }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
@@ -6385,8 +6391,6 @@ module ts {
                     inferredTypes[i] = unknownType;
                 }
             }
-
-            return context;
         }
 
         function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
@@ -6620,15 +6624,17 @@ module ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
-                for (let current of candidates) {
-                    if (!hasCorrectArity(node, args, current)) {
+                for (let originalCandidate of candidates) {
+                    if (!hasCorrectArity(node, args, originalCandidate)) {
                         continue;
                     }
-
-                    let originalCandidate = current;
-                    let inferenceResult: InferenceContext;
+                    
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
+                    let inferenceContext = originalCandidate.typeParameters
+                        ? createInferenceContext(originalCandidate.typeParameters, /*inferUnionTypes*/ false)
+                        : undefined;
+
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
@@ -6638,9 +6644,9 @@ module ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
-                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
-                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
-                                typeArgumentTypes = inferenceResult.inferredTypes;
+                                inferTypeArguments(candidate, args, excludeArgument, inferenceContext);
+                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex < 0;
+                                typeArgumentTypes = inferenceContext.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
@@ -6670,7 +6676,7 @@ module ts {
                         else {
                             candidateForTypeArgumentError = originalCandidate;
                             if (!typeArguments) {
-                                resultOfFailedInference = inferenceResult;
+                                resultOfFailedInference = inferenceContext;
                             }
                         }
                     }
