@@ -318,8 +318,7 @@ module ts.SignatureHelp {
             // arg index.
             var argumentIndex = 0;
             var listChildren = argumentsList.getChildren();
-            for (var i = 0, n = listChildren.length; i < n; i++) {
-                var child = listChildren[i];
+            for (let child of listChildren) {
                 if (child === node) {
                     break;
                 }

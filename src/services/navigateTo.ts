@@ -10,8 +10,7 @@ module ts.NavigateTo {
             cancellationToken.throwIfCancellationRequested();
 
             var declarations = sourceFile.getNamedDeclarations();
-            for (var i = 0, n = declarations.length; i < n; i++) {
-                var declaration = declarations[i];
+            for (let declaration of declarations) {
                 var name = getDeclarationName(declaration);
                 if (name !== undefined) {
 
@@ -58,8 +57,8 @@ module ts.NavigateTo {
             Debug.assert(matches.length > 0);
 
             // This is a case sensitive match, only if all the submatches were case sensitive.
-            for (var i = 0, n = matches.length; i < n; i++) {
-                if (!matches[i].isCaseSensitive) {
+            for (let match of matches) {
+                if (!match.isCaseSensitive) {
                     return false;
                 }
             }
@@ -167,8 +166,8 @@ module ts.NavigateTo {
             Debug.assert(matches.length > 0);
             var bestMatchKind = PatternMatchKind.camelCase;
 
-            for (var i = 0, n = matches.length; i < n; i++) {
-                var kind = matches[i].kind;
+            for (let match of matches) {
+                var kind = match.kind;
                 if (kind < bestMatchKind) {
                     bestMatchKind = kind;
                 }

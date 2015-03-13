@@ -196,8 +196,7 @@ module ts {
             var list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
             list._children = [];
             var pos = nodes.pos;
-            for (var i = 0, len = nodes.length; i < len; i++) {
-                var node = nodes[i];
+            for (let node of nodes) {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
                 }
@@ -255,8 +254,7 @@ module ts {
 
         public getFirstToken(sourceFile?: SourceFile): Node {
             var children = this.getChildren();
-            for (var i = 0; i < children.length; i++) {
-                var child = children[i];
+            for (let child of children) {
                 if (child.kind < SyntaxKind.FirstNode) {
                     return child;
                 }
@@ -1523,8 +1521,8 @@ module ts {
 
             // Initialize the list with the root file names
             var rootFileNames = host.getScriptFileNames();
-            for (var i = 0, n = rootFileNames.length; i < n; i++) {
-                this.createEntry(rootFileNames[i]);
+            for (let fileName of rootFileNames) {
+                this.createEntry(fileName);
             }
 
             // store the compilation settings
@@ -2252,8 +2250,8 @@ module ts {
             // not part of the new program.
             if (program) {
                 var oldSourceFiles = program.getSourceFiles();
-                for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
-                    var fileName = oldSourceFiles[i].fileName;
+                for (let oldSourceFile of oldSourceFiles) {
+                    var fileName = oldSourceFile.fileName;
                     if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(fileName, oldSettings);
                     }
@@ -2329,8 +2327,8 @@ module ts {
                 }
 
                 // If any file is not up-to-date, then the whole program is not up-to-date
-                for (var i = 0, n = rootFileNames.length; i < n; i++) {
-                    if (!sourceFileUpToDate(program.getSourceFile(rootFileNames[i]))) {
+                for (let fileName of rootFileNames) {
+                    if (!sourceFileUpToDate(program.getSourceFile(fileName))) {
                         return false;
                     }
                 }
@@ -4314,8 +4312,8 @@ module ts {
 
                 var declarations = symbol.getDeclarations();
                 if (declarations) {
-                    for (var i = 0, n = declarations.length; i < n; i++) {
-                        var container = getContainerNode(declarations[i]);
+                    for (let declaration of declarations) {
+                        var container = getContainerNode(declaration);
 
                         if (!container) {
                             return undefined;
@@ -4831,8 +4829,8 @@ module ts {
                         // Remember the last meaning
                         var lastIterationMeaning = meaning;
 
-                        for (var i = 0, n = declarations.length; i < n; i++) {
-                            var declarationMeaning = getMeaningFromDeclaration(declarations[i]);
+                        for (let declaration of declarations) {
+                            var declarationMeaning = getMeaningFromDeclaration(declaration);
 
                             if (declarationMeaning & meaning) {
                                 meaning |= declarationMeaning;
@@ -5401,8 +5399,7 @@ module ts {
                 // Ignore nodes that don't intersect the original span to classify.
                 if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
                     var children = element.getChildren();
-                    for (var i = 0, n = children.length; i < n; i++) {
-                        var child = children[i];
+                    for (let child of children) {
                         if (isToken(child)) {
                             classifyToken(child);
                         }
@@ -5435,9 +5432,7 @@ module ts {
                     var parentElement = token.parent;
 
                     var childNodes = parentElement.getChildren(sourceFile);
-                    for (var i = 0, n = childNodes.length; i < n; i++) {
-                        var current = childNodes[i];
-
+                    for (let current of childNodes) {
                         if (current.kind === matchKind) {
                             var range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
                             var range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));

@@ -221,8 +221,7 @@ module ts {
                     //    word part. That way we don't match something like 'Class' when the user types 'a'.
                     //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
                     var wordSpans = getWordSpans(candidate);
-                    for (var i = 0, n = wordSpans.length; i < n; i++) {
-                        var span = wordSpans[i]
+                    for (let span of wordSpans) {
                         if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
                             return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
                                 /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
@@ -339,9 +338,7 @@ module ts {
             var subWordTextChunks = segment.subWordTextChunks;
             var matches: PatternMatch[] = undefined;
 
-            for (var i = 0, n = subWordTextChunks.length; i < n; i++) {
-                var subWordTextChunk = subWordTextChunks[i];
-
+            for (let subWordTextChunk of subWordTextChunks) {
                 // Try to match the candidate with this word
                 var result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true);
                 if (!result) {

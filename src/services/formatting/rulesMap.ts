@@ -76,10 +76,10 @@ module ts.formatting {
             var bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
             var bucket = this.map[bucketIndex];
             if (bucket != null) {
-                for (var i = 0, len = bucket.Rules().length; i < len; i++) {
-                    var rule = bucket.Rules()[i];
-                    if (rule.Operation.Context.InContext(context))
+                for (let rule of bucket.Rules()) {
+                    if (rule.Operation.Context.InContext(context)) {
                         return rule;
+                    }
                 }
             }
             return null;

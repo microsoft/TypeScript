@@ -184,8 +184,7 @@ module ts {
             }
 
             var children = n.getChildren();
-            for (var i = 0, len = children.length; i < len; ++i) {
-                var child = children[i];
+            for (let child of children) {
                 var shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
@@ -221,8 +220,8 @@ module ts {
             }
 
             var children = n.getChildren();
-            for (var i = 0, len = children.length; i < len; ++i) {
-                var child = children[i];
+            for (var i = 0, len = children.length; i < len; i++) {
+                let child = children[i];
                 if (nodeHasTokens(child)) {
                     if (position <= child.end) {
                         if (child.getStart(sourceFile) >= position) {
