@@ -852,9 +852,9 @@ module ts {
 
     export function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind) {
         if (clauses) {
-            for (var i = 0, n = clauses.length; i < n; i++) {
-                if (clauses[i].token === kind) {
-                    return clauses[i];
+            for (let clause of clauses) {
+                if (clause.token === kind) {
+                    return clause;
                 }
             }
         }

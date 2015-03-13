@@ -1290,8 +1290,8 @@ module ts {
                         }
 
                         if (accessibleSymbolChain) {
-                            for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
-                                appendParentTypeArgumentsAndSymbolName(accessibleSymbolChain[i]);
+                            for (let accessibleSymbol of accessibleSymbolChain) {
+                                appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
                             }
                         }
                         else {
@@ -3278,14 +3278,14 @@ module ts {
         }
 
         function addTypesToSortedSet(sortedTypes: Type[], types: Type[]) {
-            for (var i = 0, len = types.length; i < len; i++) {
-                addTypeToSortedSet(sortedTypes, types[i]);
+            for (let type of types) {
+                addTypeToSortedSet(sortedTypes, type);
             }
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
-            for (var i = 0, len = types.length; i < len; i++) {
-                if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) {
+            for (let type of types) {
+                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
                     return true;
                 }
             }
@@ -3805,8 +3805,8 @@ module ts {
             function unionTypeRelatedToUnionType(source: UnionType, target: UnionType): Ternary {
                 var result = Ternary.True;
                 var sourceTypes = source.types;
-                for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    var related = typeRelatedToUnionType(sourceTypes[i], target, false);
+                for (let sourceType of sourceTypes) {
+                    var related = typeRelatedToUnionType(sourceType, target, false);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -3829,8 +3829,8 @@ module ts {
             function unionTypeRelatedToType(source: UnionType, target: Type, reportErrors: boolean): Ternary {
                 var result = Ternary.True;
                 var sourceTypes = source.types;
-                for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    var related = isRelatedTo(sourceTypes[i], target, reportErrors);
+                for (let sourceType of sourceTypes) {
+                    var related = isRelatedTo(sourceType, target, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -4066,8 +4066,7 @@ module ts {
                     return Ternary.False;
                 }
                 var result = Ternary.True;
-                for (var i = 0, len = sourceProperties.length; i < len; ++i) {
-                    var sourceProp = sourceProperties[i];
+                for (let sourceProp of sourceProperties) {
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
                     if (!targetProp) {
                         return Ternary.False;
@@ -4332,8 +4331,8 @@ module ts {
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
-            for (var i = 0, len = types.length; i < len; i++) {
-                if (candidate !== types[i] && !isTypeSubtypeOf(types[i], candidate)) return false;
+            for (let type of types) {
+                if (candidate !== type && !isTypeSubtypeOf(type, candidate)) return false;
             }
             return true;
         }
