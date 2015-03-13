@@ -2999,8 +2999,8 @@ module ts {
             var indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 var len = indexSymbol.declarations.length;
-                for (var i = 0; i < len; i++) {
-                    var node = <SignatureDeclaration>indexSymbol.declarations[i];
+                for (let decl of indexSymbol.declarations) {
+                    var node = <SignatureDeclaration>decl;
                     if (node.parameters.length === 1) {
                         var parameter = node.parameters[0];
                         if (parameter && parameter.type && parameter.type.kind === syntaxKind) {
@@ -4556,7 +4556,9 @@ module ts {
 
             function isInProcess(source: Type, target: Type) {
                 for (var i = 0; i < depth; i++) {
-                    if (source === sourceStack[i] && target === targetStack[i]) return true;
+                    if (source === sourceStack[i] && target === targetStack[i]) {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -4567,7 +4569,9 @@ module ts {
                     var count = 0;
                     for (var i = 0; i < depth; i++) {
                         var t = stack[i];
-                        if (t.flags & TypeFlags.Reference && (<TypeReference>t).target === target) count++;
+                        if (t.flags & TypeFlags.Reference && (<TypeReference>t).target === target) {
+                            count++;
+                        }
                     }
                     return count < 5;
                 }
