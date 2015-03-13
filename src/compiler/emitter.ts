@@ -4331,6 +4331,19 @@ module ts {
                 }
             }
 
+            function shouldEmitFunctionName(node: Declaration): boolean {
+                // Emit a declaration name for the function iff:
+                //    it is a function expression with a name provided
+                //    it is a function declaration with a name provided
+                //    it is a function declaration is not the default export, and is missing a name (emit a generated name for it)
+                if (node.kind === SyntaxKind.FunctionExpression) {
+                    return !!node.name;
+                }
+                else if (node.kind === SyntaxKind.FunctionDeclaration) {
+                    return !!node.name || (languageVersion >= ScriptTarget.ES6 && !(node.flags & NodeFlags.Default));
+                }
+            }
+
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -4346,13 +4359,17 @@ module ts {
                 if (!shouldEmitAsArrowFunction(node)) {
                     if (isES6ModuleMemberDeclaration(node)) {
                         write("export ");
+                        if (node.flags & NodeFlags.Default) {
+                            write("default ");
+                        }
                     }
                     write("function ");
                 }
 
-                if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
+                if (shouldEmitFunctionName(node)) {
                     emitDeclarationName(node);
                 }
+
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
@@ -5412,6 +5429,7 @@ module ts {
             }
 
             function emitES6Module(node: SourceFile, startIndex: number) {
+                createExternalModuleInfo(node);
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 emitCaptureThisForNodeIfNecessary(node);
@@ -5422,20 +5440,37 @@ module ts {
 
             function emitExportDefault(sourceFile: SourceFile, emitAsReturn: boolean) {
                 if (exportDefault && resolver.hasExportDefaultValue(sourceFile)) {
-                    writeLine();
-                    emitStart(exportDefault);
-                    write(emitAsReturn ? "return " : "module.exports = ");
-                    if (exportDefault.kind === SyntaxKind.ExportAssignment) {
-                        emit((<ExportAssignment>exportDefault).expression);
-                    }
-                    else if (exportDefault.kind === SyntaxKind.ExportSpecifier) {
-                        emit((<ExportSpecifier>exportDefault).propertyName);
+                    if (languageVersion >= ScriptTarget.ES6) {
+                        Debug.assert(!emitAsReturn);
+                        if (exportDefault.kind === SyntaxKind.ExportAssignment) {
+                            writeLine();
+                            emitStart(exportDefault);
+                            write("export default ");
+                            var expression = (<ExportAssignment>exportDefault).expression;
+                            emit(expression);
+                            if (expression.kind !== SyntaxKind.FunctionDeclaration &&
+                                expression.kind !== SyntaxKind.ClassDeclaration) {
+                                write(";");
+                            }
+                            emitEnd(exportDefault);
+                        }
                     }
                     else {
-                        emitDeclarationName(<Declaration>exportDefault);
+                        writeLine();
+                        emitStart(exportDefault);
+                        write(emitAsReturn ? "return " : "module.exports = ");
+                        if (exportDefault.kind === SyntaxKind.ExportAssignment) {
+                            emit((<ExportAssignment>exportDefault).expression);
+                        }
+                        else if (exportDefault.kind === SyntaxKind.ExportSpecifier) {
+                            emit((<ExportSpecifier>exportDefault).propertyName);
+                        }
+                        else {
+                            emitDeclarationName(<Declaration>exportDefault);
+                        }
+                        write(";");
+                        emitEnd(exportDefault);
                     }
-                    write(";");
-                    emitEnd(exportDefault);
                 }
             }
 

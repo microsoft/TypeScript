@@ -9946,7 +9946,7 @@ module ts {
             }
             checkExternalModuleExports(container);
 
-            if (languageVersion >= ScriptTarget.ES6) {
+            if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
                 // export assignment is deprecated in es6 or above
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
             }
@@ -9994,7 +9994,7 @@ module ts {
             if (!links.exportsChecked) {
                 var defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
-                    if (hasExportedMembers(moduleSymbol)) {
+                    if (languageVersion < ScriptTarget.ES6 && hasExportedMembers(moduleSymbol)) {
                         var declaration = getDeclarationOfAliasSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
