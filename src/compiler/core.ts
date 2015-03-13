@@ -25,7 +25,7 @@ module ts {
 
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
+            for (let i = 0, len = array.length; i < len; i++) {
                 var result = callback(array[i], i);
                 if (result) {
                     return result;
@@ -37,8 +37,8 @@ module ts {
 
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                if (array[i] === value) {
+            for (let v of array) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -60,8 +60,8 @@ module ts {
     export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
         var count = 0;
         if (array) {
-            for (var i = 0, len = array.length; i < len; i++) {
-                if (predicate(array[i])) {
+            for (let v of array) {
+                if (predicate(v)) {
                     count++;
                 }
             }
@@ -72,8 +72,7 @@ module ts {
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             var result: T[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                var item = array[i];
+            for (let item of array) {
                 if (f(item)) {
                     result.push(item);
                 }
@@ -85,8 +84,8 @@ module ts {
     export function map<T, U>(array: T[], f: (x: T) => U): U[] {
         if (array) {
             var result: U[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                result.push(f(array[i]));
+            for (let v of array) {
+                result.push(f(v));
             }
         }
         return result;
@@ -102,9 +101,10 @@ module ts {
     export function deduplicate<T>(array: T[]): T[] {
         if (array) {
             var result: T[] = [];
-            for (var i = 0, len = array.length; i < len; i++) {
-                var item = array[i];
-                if (!contains(result, item)) result.push(item);
+            for (let item of array) {
+                if (!contains(result, item)) {
+                    result.push(item);
+                }
             }
         }
         return result;
@@ -119,8 +119,8 @@ module ts {
     }
 
     export function addRange<T>(to: T[], from: T[]): void {
-        for (var i = 0, n = from.length; i < n; i++) {
-            to.push(from[i]);
+        for (let v of from) {
+            to.push(v);
         }
     } 
 
