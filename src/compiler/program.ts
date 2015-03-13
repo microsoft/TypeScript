@@ -2,8 +2,10 @@
 /// <reference path="emitter.ts" />
 
 module ts {
+    /* @internal */ export var programTime = 0;
     /* @internal */ export var emitTime = 0;
     /* @internal */ export var ioReadTime = 0;
+    /* @internal */ export var ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
     export var version = "1.5.0.0";
@@ -35,33 +37,34 @@ module ts {
                 }
                 text = "";
             }
-
             return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
         }
 
+        function directoryExists(directoryPath: string): boolean {
+            if (hasProperty(existingDirectories, directoryPath)) {
+                return true;
+            }
+            if (sys.directoryExists(directoryPath)) {
+                existingDirectories[directoryPath] = true;
+                return true;
+            }
+            return false;
+        }
+
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                var parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                sys.createDirectory(directoryPath);
+            }
+        }
+
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-            function directoryExists(directoryPath: string): boolean {
-                if (hasProperty(existingDirectories, directoryPath)) {
-                    return true;
-                }
-                if (sys.directoryExists(directoryPath)) {
-                    existingDirectories[directoryPath] = true;
-                    return true;
-                }
-                return false;
-            }
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                    var parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    sys.createDirectory(directoryPath);
-                }
-            }
-
             try {
+                var start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
                 sys.writeFile(fileName, data, writeByteOrderMark);
+                ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -119,16 +122,19 @@ module ts {
         var diagnostics = createDiagnosticCollection();
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory: string;
+        var diagnosticsProducingTypeChecker: TypeChecker;
+        var noDiagnosticsTypeChecker: TypeChecker;
+
         host = host || createCompilerHost(options);
 
+        var start = new Date().getTime();
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
-        verifyCompilerOptions();
+        programTime += new Date().getTime() - start;
 
-        var diagnosticsProducingTypeChecker: TypeChecker;
-        var noDiagnosticsTypeChecker: TypeChecker;
+        verifyCompilerOptions();
 
         program = {
             getSourceFile: getSourceFile,
