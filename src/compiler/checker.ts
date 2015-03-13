@@ -4412,7 +4412,7 @@ module ts {
         }
 
         /**
-         * Check if a Type was written as a tuple type literal. 
+         * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
         function isTupleType(type: Type) : boolean {
@@ -11384,9 +11384,9 @@ module ts {
             if (node.kind === SyntaxKind.ArrowFunction) {
                 var arrowFunction = <ArrowFunction>node;
                 var sourceFile = getSourceFileOfNode(node);
-                var equalsGreaterThanLine = getLineAndCharacterOfPosition(sourceFile, getTokenPosOfNode(arrowFunction.equalsGreaterThanToken, sourceFile)).line;
-                var parametersLine = getLineAndCharacterOfPosition(sourceFile, arrowFunction.parameters.end).line;
-                if (equalsGreaterThanLine !== parametersLine) {
+                var startLine = getLineAndCharacterOfPosition(sourceFile, arrowFunction.equalsGreaterThanToken.pos).line;
+                var endLine = getLineAndCharacterOfPosition(sourceFile, arrowFunction.equalsGreaterThanToken.end).line;
+                if (startLine !== endLine) {
                     return grammarErrorOnNode(arrowFunction.equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
                 }
             }

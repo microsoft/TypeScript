@@ -14,6 +14,38 @@ var f7 = (x: string, y: number, z = 10)
     => { }
 var f8 = (x: string, y: number, z = 10) /*
   */  => { }
+var f9 = (a: number): number
+    => a;
+var f10 = (a: number) :
+  number
+    => a
+var f11 = (a: number): number /*
+    */ => a;
+var f12 = (a: number) :
+  number /*
+    */ => a
+
+// Should be valid.
+var f11 = (a: number
+    ) => a;
+
+// Should be valid.
+var f12 = (a: number)
+    : number => a;
+
+// Should be valid.
+var f13 = (a: number):
+    number => a;
+
+// Should be valid.
+var f14 = () /* */ => {}
+
+// Should be valid.
+var f15 = (a: number): number /* */ => a
+
+// Should be valid.
+var f16 = (a: number, b = 10):
+  number /* */ => a + b;
 
 function foo(func: () => boolean) { }
 foo(()
