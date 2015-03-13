@@ -18,7 +18,9 @@ var TestFile = (function () {
         /// <param name="message" type="String" />
         /// <returns type="Function" />
         var _this = this;
-        return function () { return message + _this.name; };
+        return function () {
+            return message + _this.name;
+        };
     };
     return TestFile;
 })();

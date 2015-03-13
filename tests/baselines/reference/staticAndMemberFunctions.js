@@ -8,7 +8,9 @@ class T {
 var T = (function () {
     function T() {
     }
-    T.x = function () { };
-    T.prototype.y = function () { };
+    T.x = function () {
+    };
+    T.prototype.y = function () {
+    };
     return T;
 })();

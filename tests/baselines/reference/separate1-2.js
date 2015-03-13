@@ -6,6 +6,7 @@ module X {
 //// [separate1-2.js]
 var X;
 (function (X) {
-    function f() { }
+    function f() {
+    }
     X.f = f;
 })(X || (X = {}));

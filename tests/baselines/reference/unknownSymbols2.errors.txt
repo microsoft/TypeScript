@@ -7,7 +7,7 @@ tests/cases/compiler/unknownSymbols2.ts(15,13): error TS2304: Cannot find name '
 tests/cases/compiler/unknownSymbols2.ts(16,14): error TS2304: Cannot find name 'qwerty'.
 tests/cases/compiler/unknownSymbols2.ts(22,19): error TS2304: Cannot find name 'asdf'.
 tests/cases/compiler/unknownSymbols2.ts(23,32): error TS2304: Cannot find name 'qwerty'.
-tests/cases/compiler/unknownSymbols2.ts(29,5): error TS2304: Cannot find name 'asdf'.
+tests/cases/compiler/unknownSymbols2.ts(29,16): error TS2304: Cannot find name 'asdf'.
 
 
 ==== tests/cases/compiler/unknownSymbols2.ts (10 errors) ====
@@ -58,6 +58,6 @@ tests/cases/compiler/unknownSymbols2.ts(29,5): error TS2304: Cannot find name 'a
         }
         import c = N;
         import d = asdf;
-        ~~~~~~~~~~~~~~~~
+                   ~~~~
 !!! error TS2304: Cannot find name 'asdf'.
     }

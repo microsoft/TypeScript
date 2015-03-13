@@ -4,5 +4,9 @@ fn("a" in { "a": true });
 
 
 //// [inOperatorWithFunction.js]
-var fn = function (val) { return val; };
-fn("a" in { "a": true });
+var fn = function (val) {
+    return val;
+};
+fn("a" in {
+    "a": true
+});

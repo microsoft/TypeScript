@@ -39,7 +39,9 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = { y: '' };
+var b = {
+    y: ''
+};
 var C2 = (function () {
     function C2() {
     }

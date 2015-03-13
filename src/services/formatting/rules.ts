@@ -541,7 +541,7 @@ module ts.formatting {
 
             switch (node.kind) {
                 case SyntaxKind.Block:
-                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ModuleBlock:
                     return true;

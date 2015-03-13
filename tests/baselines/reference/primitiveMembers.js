@@ -48,7 +48,9 @@ var N;
 n = N; // should not work, as 'number' has a different brand
 N = n; // should work
 var o = {};
-var f = function (x) { return x.length; };
+var f = function (x) {
+    return x.length;
+};
 var r2 = /./g;
 var n2 = 34;
 var s = "yo";
@@ -57,7 +59,8 @@ var n3 = 5 || {};
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.bar = function () { };
+    baz.prototype.bar = function () {
+    };
     return baz;
 })();
 var foo = (function (_super) {
@@ -65,6 +68,8 @@ var foo = (function (_super) {
     function foo() {
         _super.apply(this, arguments);
     }
-    foo.prototype.bar = function () { return undefined; };
+    foo.prototype.bar = function () {
+        return undefined;
+    };
     return foo;
 })(baz);

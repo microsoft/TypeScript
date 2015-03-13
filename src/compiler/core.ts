@@ -269,8 +269,12 @@ module ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+        var end = start + length;
+
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
+        Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
+        Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
 
         var text = getLocaleSpecificMessage(message.key);
         
@@ -430,7 +434,11 @@ module ts {
                     normalized.pop();
                 }
                 else {
-                    normalized.push(part);
+                    // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
+                    // e.g. "path//file.ts".  Drop these before re-joining the parts.
+                    if(part) {
+                        normalized.push(part);
+                    }
                 }
             }
         }
@@ -622,29 +630,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    /**
-     * Based heavily on the abstract 'Quote'/ 'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters.
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    export function escapeString(s: string): string {
-        // Prioritize '"' and '\'
-        s = backslashOrDoubleQuote.test(s) ? s.replace(backslashOrDoubleQuote, getReplacement) : s;
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
-
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || unicodeEscape(c);
-        }
-
-        function unicodeEscape(c: string): string {
-            var hexCharCode = c.charCodeAt(0).toString(16);
-            var paddedHexCode = ("0000" + hexCharCode).slice(-4);
-            return "\\u" + paddedHexCode;
-        }
-    }
 
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";

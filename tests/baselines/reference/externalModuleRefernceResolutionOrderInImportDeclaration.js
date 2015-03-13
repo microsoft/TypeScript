@@ -19,7 +19,8 @@ file1.bar();
 
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file2.js]
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file1.js]
-function foo() { }
+function foo() {
+}
 exports.foo = foo;
 ;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]

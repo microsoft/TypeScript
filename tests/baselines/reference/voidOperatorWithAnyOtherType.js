@@ -64,9 +64,15 @@ void M.n;
 // void  operator on any type
 var ANY;
 var ANY1;
-var ANY2 = ["", ""];
+var ANY2 = [
+    "",
+    ""
+];
 var obj;
-var obj1 = { x: "", y: 1 };
+var obj1 = {
+    x: "",
+    y: 1
+};
 function foo() {
     var a;
     return a;

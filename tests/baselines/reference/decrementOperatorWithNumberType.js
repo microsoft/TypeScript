@@ -42,7 +42,10 @@ objA.a--, M.n--;
 //// [decrementOperatorWithNumberType.js]
 // -- operator on number type
 var NUMBER;
-var NUMBER1 = [1, 2];
+var NUMBER1 = [
+    1,
+    2
+];
 var A = (function () {
     function A() {
     }

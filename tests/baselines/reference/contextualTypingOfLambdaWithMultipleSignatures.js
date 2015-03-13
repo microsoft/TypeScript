@@ -9,4 +9,5 @@ foo.getFoo = bar => { };
 
 //// [contextualTypingOfLambdaWithMultipleSignatures.js]
 var foo;
-foo.getFoo = function (bar) { };
+foo.getFoo = function (bar) {
+};

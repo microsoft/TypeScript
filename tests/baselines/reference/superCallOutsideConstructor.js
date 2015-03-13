@@ -32,7 +32,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
+    C.prototype.foo = function () {
+    };
     return C;
 })();
 var D = (function (_super) {

@@ -176,15 +176,28 @@ var Compass;
     Compass[Compass["East"] = 2] = "East";
     Compass[Compass["West"] = 3] = "West";
 })(Compass || (Compass = {}));
-var numIndex = { 3: 'three', 'three': 'three' };
-var strIndex = { 'N': 0 /* North */, 'E': 2 /* East */ };
+var numIndex = {
+    3: 'three',
+    'three': 'three'
+};
+var strIndex = {
+    'N': 0 /* North */,
+    'E': 2 /* East */
+};
 var bothIndex;
-function noIndex() { }
+function noIndex() {
+}
 var obj = {
     10: 'ten',
     x: 'hello',
     y: 32,
-    z: { n: 'world', m: 15, o: function () { return false; } },
+    z: {
+        n: 'world',
+        m: 15,
+        o: function () {
+            return false;
+        }
+    },
     'literal property': 100
 };
 var anyVar = {};

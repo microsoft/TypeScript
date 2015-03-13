@@ -22,6 +22,7 @@ var C = (function (_super) {
     function C() {
         _super.apply(this, arguments);
     }
-    C.prototype[(_super.call(this), "prop")] = function () { };
+    C.prototype[(_super.call(this), "prop")] = function () {
+    };
     return C;
 })(Base);

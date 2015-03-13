@@ -45,11 +45,13 @@ module E {
 //// [mixingFunctionAndAmbientModule1.js]
 var A;
 (function (A) {
-    function My(s) { }
+    function My(s) {
+    }
 })(A || (A = {}));
 var B;
 (function (B) {
-    function My(s) { }
+    function My(s) {
+    }
 })(B || (B = {}));
 var C;
 (function (C) {

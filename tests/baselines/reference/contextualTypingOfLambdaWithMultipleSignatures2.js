@@ -8,4 +8,6 @@ f = (a) => { return a.asdf }
 
 //// [contextualTypingOfLambdaWithMultipleSignatures2.js]
 var f;
-f = function (a) { return a.asdf; };
+f = function (a) {
+    return a.asdf;
+};

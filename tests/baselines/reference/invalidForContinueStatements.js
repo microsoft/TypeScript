@@ -58,7 +58,8 @@ THREE: for (;;) {
 // continue forward
 for (;;) {
     continue FIVE;
-    FIVE: for (;;) { }
+    FIVE: for (;;) {
+    }
 }
 // label on non-loop statement
 NINE: var y = 12;

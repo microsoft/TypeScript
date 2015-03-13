@@ -29,7 +29,9 @@ var B = (function (_super) {
     __extends(B, _super);
     // Ensure 'value' is of type 'number (and not '{}') by using its 'toExponential()' method.
     function B() {
-        _super.call(this, function (value) { return String(value.toExponential()); });
+        _super.call(this, function (value) {
+            return String(value.toExponential());
+        });
     }
     return B;
 })(A);

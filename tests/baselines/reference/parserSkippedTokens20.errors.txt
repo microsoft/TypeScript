@@ -5,7 +5,7 @@ tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.t
 
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts (3 errors) ====
     var v: X<T \
-           ~~~~~
+           ~
 !!! error TS2304: Cannot find name 'X'.
                
 !!! error TS1127: Invalid character.

@@ -12,7 +12,7 @@ export = a;
 exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 var _es6ImportNamedImportInExportAssignment_0 = require("es6ImportNamedImportInExportAssignment_0");
-module.exports = a;
+module.exports = _es6ImportNamedImportInExportAssignment_0.a;
 
 
 //// [es6ImportNamedImportInExportAssignment_0.d.ts]

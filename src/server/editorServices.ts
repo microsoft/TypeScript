@@ -5,6 +5,8 @@
 module ts.server {
     export interface Logger {
         close(): void;
+        isVerbose(): boolean;
+        loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
         startGroup(): void;
@@ -1063,7 +1065,7 @@ module ts.server {
         }
     }
 
-    class ScriptVersionCache {
+    export class ScriptVersionCache {
         changes: TextChange[] = [];
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
@@ -1071,6 +1073,7 @@ module ts.server {
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
+        static maxVersions = 8;
 
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
@@ -1131,6 +1134,13 @@ module ts.server {
                 this.currentVersion = snap.version;
                 this.versions[snap.version] = snap;
                 this.changes = [];
+                if ((this.currentVersion - this.minVersion) >= ScriptVersionCache.maxVersions) {
+                    var oldMin = this.minVersion;
+                    this.minVersion = (this.currentVersion - ScriptVersionCache.maxVersions) + 1;
+                    for (var j = oldMin; j < this.minVersion; j++) {
+                        this.versions[j] = undefined;
+                    }
+                }
             }
             return snap;
         }
@@ -1216,7 +1226,7 @@ module ts.server {
         }
     }
 
-    class LineIndex {
+    export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
@@ -1259,7 +1269,7 @@ module ts.server {
 
         getText(rangeStart: number, rangeLength: number) {
             var accum = "";
-            if (rangeLength > 0) {
+            if ((rangeLength > 0) && (rangeStart < this.root.charCount())) {
                 this.walk(rangeStart, rangeLength, {
                     goSubtree: true,
                     done: false,
@@ -1304,7 +1314,20 @@ module ts.server {
                     var checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
                 var walker = new EditWalker();
-                if (deleteLength > 0) {
+                if (pos >= this.root.charCount()) {
+                    // insert at end
+                    pos = this.root.charCount() - 1;
+                    var endString = this.getText(pos, 1);
+                    if (newText) {
+                        newText = endString + newText;
+                    }
+                    else {
+                        newText = endString;
+                    }
+                    deleteLength = 0;
+                    walker.suppressTrailingText = true;
+                }
+                else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
@@ -1320,21 +1343,10 @@ module ts.server {
                         }
                     }
                 }
-                else if (pos >= this.root.charCount()) {
-                    // insert at end
-                    var endString = this.getText(pos - 1, 1);
-                    if (newText) {
-                        newText = endString + newText;
-                    }
-                    else {
-                        newText = endString;
-                    }
-                    pos = pos - 1;
-                    deleteLength = 0;
-                    walker.suppressTrailingText = true;
+                if (pos < this.root.charCount()) {
+                    this.root.walk(pos, deleteLength, walker);
+                    walker.insertLines(newText);
                 }
-                this.root.walk(pos, deleteLength, walker);
-                walker.insertLines(newText);
                 if (this.checkEdits) {
                     var updatedText = this.getText(0, this.root.charCount());
                     Debug.assert(checkText == updatedText, "buffer edit mismatch");

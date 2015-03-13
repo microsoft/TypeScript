@@ -281,8 +281,6 @@ if ((browser && browser === 'chrome')) {
 console.log('Using browser: ' + browserPath);
 
 var queryString = grep ? "?grep=" + grep : '';
-child_process.spawn(browserPath, ['http://localhost:' + port + '/tests/webTestResults.html' + queryString], (err: Error, stdout: any, stderr: any) => {
-    console.log("ERR: " + err.message);
-    console.log("STDOUT: " + stdout.toString());
-    console.log("STDERR: " + stderr.toString());
+child_process.spawn(browserPath, ['http://localhost:' + port + '/tests/webTestResults.html' + queryString], {
+    stdio: 'inherit'
 });

@@ -95,6 +95,8 @@ module ts {
             }
         });
 
+        // Either we didn't find an appropriate list, or the list must contain us.
+        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node)); 
         return syntaxList;
     }
 
@@ -283,7 +285,7 @@ module ts {
             return (<CallExpression>node).typeArguments;
         }
 
-        if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+        if (isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
             return (<FunctionLikeDeclaration>node).typeParameters;
         }
 
@@ -414,7 +416,7 @@ module ts {
             else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
-            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
 
             return SymbolDisplayPartKind.text;

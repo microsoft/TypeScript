@@ -458,6 +458,11 @@ module ts.NavigationBar {
             }
 
             function createClassItem(node: ClassDeclaration): ts.NavigationBarItem {
+                if (!node.name) {
+                    // An export default class may be nameless
+                    return undefined;
+                }
+
                 var childItems: NavigationBarItem[];
 
                 if (node.members) {

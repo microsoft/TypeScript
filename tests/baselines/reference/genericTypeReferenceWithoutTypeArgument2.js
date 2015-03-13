@@ -50,9 +50,18 @@ var c;
 var a;
 var b;
 var d;
-var e = function (x) { var y; return y; };
-function f(x) { var y; return y; }
-var g = function f(x) { var y; return y; };
+var e = function (x) {
+    var y;
+    return y;
+};
+function f(x) {
+    var y;
+    return y;
+}
+var g = function f(x) {
+    var y;
+    return y;
+};
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -67,7 +76,9 @@ var D2 = (function (_super) {
     }
     return D2;
 })(M.C);
-function h(x) { }
-function i(x) { }
+function h(x) {
+}
+function i(x) {
+}
 var j = null;
 var k = null;

@@ -203,6 +203,33 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    export function getEnclosingBlockScopeContainer(node: Node): Node {
+        var current = node;
+        while (current) {
+            if (isFunctionLike(current)) {
+                return current;
+            }
+            switch (current.kind) {
+                case SyntaxKind.SourceFile:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CatchClause:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return current;
+                case SyntaxKind.Block:
+                    // function block is not considered block-scope container
+                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                    if (!isFunctionLike(current.parent)) {
+                        return current;
+                    }
+            }
+
+            current = current.parent;
+        }
+    }
+
     export function isCatchClauseVariableDeclaration(declaration: Declaration) {
         return declaration &&
             declaration.kind === SyntaxKind.VariableDeclaration &&
@@ -218,32 +245,35 @@ module ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-
-        var start = getTokenPosOfNode(node, file);
-        var length = node.end - start;
-
-        return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
+        return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
-        node = getErrorSpanForNode(node);
-        var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
-        var length = node.end - start;
+        var sourceFile = getSourceFileOfNode(node);
+        var span = getErrorSpanForNode(sourceFile, node);
         return {
-            file,
-            start,
-            length,
+            file: sourceFile,
+            start: span.start,
+            length: span.length,
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText
         };
     }
 
-    export function getErrorSpanForNode(node: Node): Node {
-        var errorSpan: Node;
+    /* @internal */
+    export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
+        var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
+        scanner.setTextPos(pos);
+        scanner.scan();
+        var start = scanner.getTokenPos();
+        return createTextSpanFromBounds(start, scanner.getTextPos());
+    }
+
+    export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        var errorNode = node;
         switch (node.kind) {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
@@ -254,16 +284,23 @@ module ts {
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
-                errorSpan = (<Declaration>node).name;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                errorNode = (<Declaration>node).name;
                 break;
         }
+        
+        if (errorNode === undefined) {
+            // If we don't have a better node, then just set the error on the first token of 
+            // construct.
+            return getSpanOfTokenAtPosition(sourceFile, node.pos);
+        }
 
-        // We now have the ideal error span, but it may be a node that is optional and absent
-        // (e.g. the name of a function expression), in which case errorSpan will be undefined.
-        // Alternatively, it might be required and missing (e.g. the name of a module), in which
-        // case its pos will equal its end (length 0). In either of these cases, we should fall
-        // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
+        var pos = nodeIsMissing(errorNode)
+            ? errorNode.pos
+            : skipTrivia(sourceFile.text, errorNode.pos);
+
+        return createTextSpanFromBounds(pos, errorNode.end);
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -366,6 +403,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
                     return visitor(<ReturnStatement>node);
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.Block:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
@@ -385,7 +423,26 @@ module ts {
         }
     }
 
-    export function isAnyFunction(node: Node): boolean {
+    /* @internal */
+    export function isVariableLike(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -412,7 +469,7 @@ module ts {
     }
 
     export function isFunctionBlock(node: Node) {
-        return node && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
+        return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
     export function isObjectLiteralMethod(node: Node) {
@@ -422,7 +479,7 @@ module ts {
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
-            if (!node || isAnyFunction(node)) {
+            if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
             }
         }
@@ -683,7 +740,7 @@ module ts {
     }
 
     export function isBindingPattern(node: Node) {
-        return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+        return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
     export function isInAmbientContext(node: Node): boolean {
@@ -923,6 +980,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DefaultKeyword:
                 return true;
         }
         return false;
@@ -1136,15 +1194,15 @@ module ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
     }
 
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
-        return isAnyFunction(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+        return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1 && node.end === -1;
+        return node.pos === -1;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
@@ -1177,6 +1235,7 @@ module ts {
         }
     }
 
+    // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};
@@ -1254,5 +1313,56 @@ module ts {
                 }
             }
         }
+    }
+    
+    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
+    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
+    // the language service. These characters should be escaped when printing, and if any characters are added,
+    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
+    // There is no reason for this other than that JSON.stringify does not handle it either.
+    var escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    var escapedCharsMap: Map<string> = {
+        "\0": "\\0",
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\\": "\\\\",
+        "\"": "\\\"",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
+    /**
+     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
+    export function escapeString(s: string): string {
+        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+
+        return s;
+
+        function getReplacement(c: string) {
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+        }
+    }
+    
+    function get16BitUnicodeEscapeSequence(charCode: number): string {
+        var hexCharCode = charCode.toString(16).toUpperCase();
+        var paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        return "\\u" + paddedHexCode;
+    }
+    
+    var nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    export function escapeNonAsciiCharacters(s: string): string {
+        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
+        // Otherwise just return the original string.
+        return nonAsciiCharacters.test(s) ?
+            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
+            s;
     }
 }

@@ -25,7 +25,11 @@ function f2() {
 
 //// [arrayLiteralSpread.js]
 function f0() {
-    var a = [1, 2, 3];
+    var a = [
+        1,
+        2,
+        3
+    ];
     var a1 = a;
     var a2 = [1].concat(a);
     var a3 = [1, 2].concat(a);
@@ -36,11 +40,17 @@ function f0() {
     var a8 = a.concat(a, a);
 }
 function f1() {
-    var a = [1, 2, 3];
+    var a = [
+        1,
+        2,
+        3
+    ];
     var b = ["hello"].concat(a, [true]);
     var b;
 }
 function f2() {
     var a = [];
-    var b = [5];
+    var b = [
+        5
+    ];
 }

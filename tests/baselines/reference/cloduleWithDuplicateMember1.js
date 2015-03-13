@@ -20,7 +20,9 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
-        get: function () { return 1; },
+        get: function () {
+            return 1;
+        },
         enumerable: true,
         configurable: true
     });
@@ -31,7 +33,8 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.foo = function () { };
+    C.foo = function () {
+    };
     return C;
 })();
 var C;
@@ -40,8 +43,10 @@ var C;
 })(C || (C = {}));
 var C;
 (function (C) {
-    function foo() { }
+    function foo() {
+    }
     C.foo = foo;
-    function x() { }
+    function x() {
+    }
     C.x = x;
 })(C || (C = {}));

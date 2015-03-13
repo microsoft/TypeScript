@@ -1,4 +1,4 @@
-﻿////function f[|<T>|][|(x: T)|][|{
+////function f[|<T>|][|(x: T)|][|{
 ////    return x;
 ////}|]
 

@@ -1,4 +1,4 @@
-tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: Overload signature is not compatible with function implementation.
 
 
 ==== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,1): error TS2394: Overl
     
 ==== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts (1 errors) ====
     export function mkdirSync(path: string, mode?: number): void;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
     export function mkdirSync(path: string, mode?: string): void {}
     

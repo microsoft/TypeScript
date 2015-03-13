@@ -44,7 +44,9 @@ define(["require", "exports"], function (require, exports) {
     })();
     var Test = (function () {
         function Test() {
-            this.pt = { item: 1 };
+            this.pt = {
+                item: 1
+            };
         }
         return Test;
     })();

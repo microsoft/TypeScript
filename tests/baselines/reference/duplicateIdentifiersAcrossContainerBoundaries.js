@@ -64,7 +64,8 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
-    function f() { }
+    function f() {
+    }
     M.f = f;
 })(M || (M = {}));
 var M;
@@ -78,7 +79,8 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
-    function g() { }
+    function g() {
+    }
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -100,7 +102,8 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
-    function C() { } // no error
+    function C() {
+    } // no error
 })(M || (M = {}));
 var M;
 (function (M) {

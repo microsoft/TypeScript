@@ -36,7 +36,8 @@ var C = (function (_super) {
     // use of super in static properties initializers.
     C.prototype[(_a = {},
         _a[super.bar.call(this)] = 1,
-        _a)[0]] = function () { };
+        _a)[0]] = function () {
+    };
     return C;
 })(Base);
 var _a;

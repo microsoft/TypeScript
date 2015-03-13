@@ -10,34 +10,21 @@ sourceFile:sourceMapValidationClass.ts
 -------------------------------------------------------------------
 >>>var Greeter = (function () {
 1 >
-2 >^^^^
-3 >    ^^^^^^^
-4 >           ^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class 
-3 >    Greeter
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 12) Source(1, 14) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^
-4 >                    ^
-5 >                     ^^^^^^^^
-1-> {
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^^^^^^^
+1->class Greeter {
   >    
-2 >    
-3 >             Greeter
-4 >                     {
-  >                        constructor(public 
-5 >                     greeting: string
+2 >    constructor(public 
+3 >                     greeting: string
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (Greeter)
-3 >Emitted(2, 21) Source(1, 14) + SourceIndex(0) name (Greeter)
-4 >Emitted(2, 22) Source(2, 24) + SourceIndex(0) name (Greeter)
-5 >Emitted(2, 30) Source(2, 40) + SourceIndex(0) name (Greeter)
+2 >Emitted(2, 22) Source(2, 24) + SourceIndex(0) name (Greeter)
+3 >Emitted(2, 30) Source(2, 40) + SourceIndex(0) name (Greeter)
 ---
 >>>        var b = [];
 1 >^^^^^^^^

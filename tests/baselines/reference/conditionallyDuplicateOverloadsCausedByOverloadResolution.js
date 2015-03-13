@@ -22,7 +22,8 @@ var out2 = foo2((x, y) => {
 
 //// [conditionallyDuplicateOverloadsCausedByOverloadResolution.js]
 var out = foo(function (x, y) {
-    function bar() { }
+    function bar() {
+    }
     return bar;
 });
 var out2 = foo2(function (x, y) {

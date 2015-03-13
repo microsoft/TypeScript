@@ -37,7 +37,10 @@ var A;
 (function (A) {
     var B;
     (function (B) {
-        var Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
+        var Point = {
+            x: 0,
+            y: 0
+        }; // bug 832088: could not find module 'C'
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var M2;

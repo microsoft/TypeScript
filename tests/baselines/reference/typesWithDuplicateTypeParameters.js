@@ -19,5 +19,7 @@ var C2 = (function () {
     }
     return C2;
 })();
-function f() { }
-function f2() { }
+function f() {
+}
+function f2() {
+}
