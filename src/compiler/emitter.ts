@@ -2853,7 +2853,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        var { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                         // Only emit the first accessor.
                         if (firstAccessor !== property) {
