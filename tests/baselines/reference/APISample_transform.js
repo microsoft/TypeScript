@@ -979,7 +979,7 @@ declare module "typescript" {
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
-        getBlockScopedVariableId(node: Identifier): number;
+        getBlockScopedVariableId(n: Identifier, isValueOfShorthandPropertyAssignment: boolean): number;
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,

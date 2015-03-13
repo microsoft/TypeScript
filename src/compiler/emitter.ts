@@ -2617,20 +2617,22 @@ module ts {
                 }
             }
 
-            function getBlockScopedVariableId(node: Identifier): number {
-                // return undefined for synthesized nodes
-                return !nodeIsSynthesized(node) && resolver.getBlockScopedVariableId(node);
+            function getGeneratedNameForIdentifier(node: Identifier, isValueOfShorthandPropertyAssignment: boolean): string {
+                if (!generatedBlockScopeNames || nodeIsSynthesized(node)) {
+                    return undefined;
+                }
+
+                let variableId = resolver.getBlockScopedVariableId(node, isValueOfShorthandPropertyAssignment);
+                return variableId !== undefined && generatedBlockScopeNames[variableId];
             }
 
             function emitIdentifier(node: Identifier) {
-                let variableId = getBlockScopedVariableId(node);
-                if (variableId !== undefined && generatedBlockScopeNames) {
-                    let text = generatedBlockScopeNames[variableId];
-                    if (text) {
-                        write(text);
-                        return;
-                    }
+                let generatedName = getGeneratedNameForIdentifier(node, /*isValueOfShorthandPropertyAssignment*/ false);
+                if (generatedName) {
+                    write(generatedName);
+                    return;
                 }
+
                 if (!node.parent) {
                     write(node.text);
                 }
@@ -3052,6 +3054,17 @@ module ts {
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
                     // Short-hand, { x }, is equivalent of normal form { x: x }
+
+                    if (languageVersion < ScriptTarget.ES6) {
+                    // short-hand property can be initialized with renamed let binding
+                    // in this case use proper name
+                        var generatedName = getGeneratedNameForIdentifier(node.name, /*isValueOfShorthandPropertyAssignment*/ true);
+                        if (generatedName) {
+                            write(generatedName);
+                            return;
+                        }
+                    }
+
                     emitExpressionIdentifier(node.name);
                 }
             }
@@ -4158,7 +4171,7 @@ module ts {
                     : blockScopeContainer.parent;
 
                 let generatedName = generateUniqueNameForLocation(parent, (<Identifier>node).text);
-                let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
+                let variableId = resolver.getBlockScopedVariableId(<Identifier>node, /*isValueOfShorthandPropertyAssignment*/ false);
                 if (!generatedBlockScopeNames) {
                     generatedBlockScopeNames = [];
                 }

@@ -1211,7 +1211,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
-        getBlockScopedVariableId(node: Identifier): number;
+        getBlockScopedVariableId(n: Identifier, isValueOfShorthandPropertyAssignment: boolean): number;
     }
 
     export const enum SymbolFlags {

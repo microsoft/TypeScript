@@ -11038,31 +11038,60 @@ module ts {
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 
-        function getBlockScopedVariableId(n: Identifier): number {
+        function getBlockScopedVariableId(n: Identifier, isValueOfShorthandPropertyAssignment: boolean): number {
             Debug.assert(!nodeIsSynthesized(n));
+            Debug.assert(
+                !isValueOfShorthandPropertyAssignment ||
+                (isValueOfShorthandPropertyAssignment && n.parent.kind === SyntaxKind.ShorthandPropertyAssignment)
+                );
 
-            // ignore name parts of property access expressions
-            if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
-                (<PropertyAccessExpression>n.parent).name === n) {
-                return undefined;
+            var symbol: Symbol;
+            // if isValueOfShorthandPropertyAssignment is true 
+            // this means that getBlockScopedVariableId was called to find variable id for the variable
+            // that initialized short-hand property. I.e.
+            // let x;
+            // let y = { x };
+            // In this case we should proceed directly to name resolution step to resolve x as value.
+            if (!isValueOfShorthandPropertyAssignment) {
+                switch (n.parent.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        // ignore name parts of property access expressions
+                        if ((<PropertyAccessExpression>n.parent).name === n) {
+                            return undefined;
+                        }
+                        break;
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        // ignore property names in shorthand property assignments 
+                        if ((<ShorthandPropertyAssignment>n.parent).name === n) {
+                            return undefined;
+                        }
+                        break;
+                    case SyntaxKind.PropertyAssignment:
+                        // ignore property names in property assignments
+                        if ((<PropertyAssignment>n.parent).name === n) {
+                            return undefined;
+                        }
+                        break;
+                    case SyntaxKind.BindingElement:
+                        // ignore property names in object binding patterns
+                        if ((<BindingElement>n.parent).propertyName === n) {
+                            return undefined;
+                        }
+                        break;
+                }
+            
+                // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
+                let declarationSymbol: Symbol =
+                    (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
+                        n.parent.kind === SyntaxKind.BindingElement
+                        ? getSymbolOfNode(n.parent)
+                        : undefined;
+                symbol = declarationSymbol || getNodeLinks(n).resolvedSymbol;
             }
 
-            // ignore property names in object binding patterns
-            if (n.parent.kind === SyntaxKind.BindingElement &&
-                (<BindingElement>n.parent).propertyName === n) {
-                return undefined;
+            if (!symbol) {
+                symbol = resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             }
-
-            // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
-            let declarationSymbol: Symbol =
-                (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
-                 n.parent.kind === SyntaxKind.BindingElement
-                    ? getSymbolOfNode(n.parent)
-                    : undefined;
-
-            let symbol = declarationSymbol ||
-                getNodeLinks(n).resolvedSymbol ||
-                resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
             let isLetOrConst =
                 symbol &&
