@@ -5005,7 +5005,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
 >version : string
 
     function createCompilerHost(options: CompilerOptions): CompilerHost;

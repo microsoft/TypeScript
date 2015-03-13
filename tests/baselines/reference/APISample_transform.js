@@ -1512,7 +1512,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
     function createCompilerHost(options: CompilerOptions): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
