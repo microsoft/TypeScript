@@ -394,14 +394,13 @@ module ts.inference {
         }
     };
 
+    var nextTypeInformationId = 1;
     class PrimitiveTypeInformation extends TypeInformation {
-        private static nextPrimitiveId = 1;
-
         private id: number;
 
         constructor(private name: string) {
             super();
-            this.id = PrimitiveTypeInformation.nextPrimitiveId++;
+            this.id = nextTypeInformationId++;
         }
 
         public kind() {
@@ -425,9 +424,11 @@ module ts.inference {
     class SymbolTypeInformation extends TypeInformation {
         private type: TypeInformation;
         private computingType = false;
+        private id: number;
 
-        constructor(private declarationNode: Node, private computeType: (declarationNode: Node) => TypeInformation) {
+        constructor(public declarationNode: Node, private computeType: (declarationNode: Node) => TypeInformation) {
             super();
+            this.id = nextTypeInformationId++;
         }
 
         public kind() {
@@ -435,7 +436,7 @@ module ts.inference {
         }
 
         public getHashCode() {
-            return hashCombine(TypeInformationKind.Symbol, getNodeId(this.declarationNode));
+            return this.id;
         }
 
         public equals(o: TypeInformation): boolean {
@@ -465,7 +466,7 @@ module ts.inference {
         }
 
         public toString() {
-            return "Symbol(" + getNodeId(this.declarationNode) + ")";
+            return "Symbol(" + this.id + "," + getNodeId(this.declarationNode) + ")";
         }
     }
    
@@ -595,11 +596,11 @@ module ts.inference {
 
             var addedFiles: SourceFile[] = [];
             var removedFiles: SourceFile[] = [];
-            var oldUpdatedFiles: SourceFile[] = [];
-            var newUpdatedFiles: SourceFile[] = [];
+            var updatedFiles: [SourceFile,SourceFile][] = [];
 
             var addedValueSymbols: Symbol[] = [];
             var removedValueSymbols: Symbol[] = [];
+            var updatedValueSymbols: [Symbol, Symbol][] = [];
 
             return {
                 onSourceFileAdded,
@@ -612,8 +613,13 @@ module ts.inference {
             function assertOnlyOperationOnThisFile(sourceFile: SourceFile) {
                 Debug.assert(!contains(addedFiles, sourceFile), "Trying to process a file that was already added.");
                 Debug.assert(!contains(removedFiles, sourceFile), "Trying to process a file that was already removed.");
-                Debug.assert(!contains(oldUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");
-                Debug.assert(!contains(newUpdatedFiles, sourceFile), "Trying to process a file that was already updated.");
+
+                for (var i = 0, n = updatedFiles.length; i < n; i++) {
+                    var update = updatedFiles[i];
+                    if (update[0] === sourceFile || update[1] === sourceFile) {
+                        Debug.fail("Trying to process a file that was already updated.");
+                    }
+                }
             }
 
             function isJavascriptFile(sourceFile: SourceFile) {
@@ -802,8 +808,7 @@ module ts.inference {
                     return;
                 }
 
-                oldUpdatedFiles.push(oldFile);
-                newUpdatedFiles.push(newFile);
+                updatedFiles.push([oldFile, newFile]);
 
                 Debug.assert(!!oldFile.nodeToSymbol, "We should have a node map for the old file!");
                 Debug.assert(!newFile.locals, "The new file should not have been bound!");
@@ -815,18 +820,276 @@ module ts.inference {
                 var oldNodeMap = oldFile.nodeToSymbol;
                 var newNodeMap = newFile.nodeToSymbol;
 
+                var removedSymbolsByKind: Symbol[][] = [];
+                var addedSymbolsByKind: Symbol[][] = [];
+
                 // Walk both node tables determining which symbols were added and which were removed.
                 oldNodeMap.forEach((symbol, nodeId) => {
-                    if (!newNodeMap[nodeId]) {
-                        removedValueSymbols.push(symbol);
+                    if (symbol.valueDeclaration && !newNodeMap[nodeId]) {
+                        var kind = symbol.valueDeclaration.kind;
+                        var symbols = removedSymbolsByKind[kind] || (removedSymbolsByKind[kind] = []);
+                        symbols.push(symbol);
                     }
                 });
 
                 newNodeMap.forEach((symbol, nodeId) => {
-                    if (!oldNodeMap[nodeId]) {
-                        addedValueSymbols.push(symbol);
+                    if (symbol.valueDeclaration && !oldNodeMap[nodeId]) {
+                        var kind = symbol.valueDeclaration.kind;
+                        var symbols = addedSymbolsByKind[kind] || (addedSymbolsByKind[kind] = []);
+                        symbols.push(symbol);
                     }
                 });
+
+                // Now for all removed symbols, see if this was actually an update and we should 
+                // map the old symbol to a new symbol.  This happens very regularly.  For example,
+                // say there is an edit inside a function 'foo'.  The node for 'foo' will get 
+                // removed/added (since it contains the edit).  However, since 'foo' didn't really
+                // change, we want to consider this a symbol update where the same symbol simply
+                // points at a new node.
+                removedSymbolsByKind.forEach((removedSymbols, kind) => {
+                    var addedSymbols = addedSymbolsByKind[kind];
+                    if (addedSymbols) {
+                        findUpdates(removedSymbols, addedSymbols);
+                    }
+                });
+
+                // Now that we've figured out what removes/adds were actually updated, go and 
+                // populate the final removed/added symbol collections.
+                removedSymbolsByKind.forEach(symbols => {
+                    addRange(removedValueSymbols, symbols);
+                });
+
+                addedSymbolsByKind.forEach(symbols => {
+                    addRange(addedValueSymbols, symbols);
+                });
+
+                return;
+
+                function findUpdates(removedSymbols: Symbol[], addedSymbols: Symbol[]) {
+                    for (var i = 0, n = removedSymbols.length; i < n; i++) {
+                        var removedSymbol = removedSymbols[i];
+                        var matchIndex = findMatchingSymbolIndex(removedSymbol, addedSymbols);
+
+                        if (matchIndex >= 0) {
+                            updatedValueSymbols.push([removedSymbol, addedSymbols[matchIndex]]);
+
+                            delete removedSymbols[i];
+                            delete addedSymbols[matchIndex];
+                        }
+                    }
+                }
+
+                function findMatchingSymbolIndex(removedSymbol: Symbol, addedSymbols: Symbol[]): number {
+                    for (var i = 0, n = addedSymbols.length; i < n; i++) {
+                        if (symbolsMatch(removedSymbol, addedSymbols[i])) {
+                            return i;
+                        }
+                    }
+
+                    return -1;
+                }
+
+                function symbolsMatch(removedSymbol: Symbol, addedSymbol: Symbol): boolean {
+                    // To determine if two symbols shoud be considered the same, we check and see
+                    // if the nodes look close enough.  To be close enough, the nodes must have 
+                    // the same kind (and the same name if they're declaration nodes).  Also, their
+                    // parents must also match.  (This definition works transitively, so we'll end 
+                    // up comparing the entire parent chain to determine if two nodes are close enough
+                    // to be considered the same.
+                    return nodesMatch(removedSymbol.valueDeclaration, addedSymbol.valueDeclaration);
+                }
+
+                function nodesMatch(node1: Node, node2: Node): boolean {
+                    if (node1.kind === SyntaxKind.SourceFile && node2.kind === SyntaxKind.SourceFile) {
+                        // Hit the top of the file at the same time for both nodes.  The nodes match.
+                        return true;
+                    }
+
+                    if (node1.kind === SyntaxKind.SourceFile || node2.kind === SyntaxKind.SourceFile) {
+                        // Hit the top of th file for one node first.  These nodes don't match.
+                        return false;
+                    }
+
+                    if (node1.kind !== node2.kind) {
+                        // Different kinds of nodes.  Definitely not a match.
+                        return false;
+                    }
+
+                    if (!namesMatch((<Declaration>node1).name, (<Declaration>node2).name)) {
+                            // The names weren't the same, these nodes don't match.
+                        return false;
+                    }
+
+                    // Everything matched so far.  Recurse up the parent chain to see if they match
+                    // as well.
+                    return nodesMatch(node1.parent, node2.parent);
+                }
+
+                function identifiersOrLiteralsMatch(node1: Identifier | LiteralExpression, node2: Identifier | LiteralExpression): boolean {
+                    return node1.text === node2.text;
+                }
+
+                function namesMatch(name1: DeclarationName, name2: DeclarationName): boolean {
+                    if (name1 === name2) {
+                        // Same node?  Definitely a match.  (This also handles the case where neither
+                        // nodes have a name.
+                        return true;
+                    }
+
+                    if (!name1 || !name2) {
+                        // One is missing?  Not a match.
+                        return false;
+                    }
+
+                    if (name1.kind !== name2.kind) {
+                        // Different kind of name?  Not a match.
+                        return false;
+                    }
+
+                    switch (name1.kind) {
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NumericLiteral:
+                            return identifiersOrLiteralsMatch(<Identifier  | LiteralExpression> name1, <Identifier  | LiteralExpression>name2);
+                        case SyntaxKind.ArrayBindingPattern:
+                        case SyntaxKind.ObjectBindingPattern:
+                            return bindingPatternsMatch(<BindingPattern>name1, <BindingPattern>name2);
+                        case SyntaxKind.ComputedPropertyName:
+                            return computedPropertyNamesMatch(<ComputedPropertyName>name1, <ComputedPropertyName>name2);
+                    }
+
+                    Debug.fail("Unreachable");
+                }
+
+                function computedPropertyNamesMatch(name1: ComputedPropertyName, name2: ComputedPropertyName) {
+                    return expressionsMatch(name1.expression, name2.expression);
+                }
+
+                function expressionsMatch(expr1: Expression, expr2: Expression) {
+                    if (expr1.kind !== expr2.kind) {
+                        return false;
+                    }
+
+                    switch (expr1.kind) {
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.NumericLiteral:
+                        case SyntaxKind.StringLiteral:
+                            return identifiersOrLiteralsMatch(<Identifier | LiteralExpression>expr1, <Identifier | LiteralExpression>expr2);
+
+                        // For these expressions, make sure they're structurally equivalent *and*
+                        // they have the same operator.
+                        case SyntaxKind.PrefixUnaryExpression:
+                            return (<PrefixUnaryExpression>expr1).operator === (<PrefixUnaryExpression>expr2).operator &&
+                                structuralEquals(expr1, expr2);
+                        case SyntaxKind.PostfixUnaryExpression:
+                            return (<PostfixUnaryExpression>expr1).operator === (<PostfixUnaryExpression>expr2).operator &&
+                                structuralEquals(expr1, expr2);
+                        case SyntaxKind.BinaryExpression:
+                            return (<BinaryExpression>expr1).operatorToken.kind === (<BinaryExpression>expr2).operatorToken.kind &&
+                                structuralEquals(expr1, expr2);
+
+                        default:
+                            return structuralEquals(expr1, expr2);
+                    }
+                }
+
+                function structuralEquals(node1: Node, node2: Node): boolean {
+                    if (node1 === node2) {
+                        return true;
+                    }
+
+                    if (!node1 || !node2) {
+                        return false;
+                    }
+
+                    if (node1.kind !== node2.kind) {
+                        return false;
+                    }
+
+                    var notEquals = forEachChild(node1,
+                        child1 => {
+                            var childName = findChildName(node1, child1);
+                            var child2 = (<any>node2)[childName];
+                            return !structuralEquals(child1, child2);
+                        },
+                        child1 => {
+                            var childName = findChildName(node1, child1);
+                            var child2 = (<any>node2)[childName];
+                            return !arrayStructuralEquals(child1, child2);
+                        });
+
+                    return !notEquals;
+                }
+
+                function arrayStructuralEquals(array1: Node[], array2: Node[]) {
+                    if (array1 === array2) {
+                        return true;
+                    }
+
+                    if (!array1 || !array2) {
+                        return false;
+                    }
+
+                    if (array1.length !== array2.length) {
+                        return false;
+                    }
+
+                    for (var i = 0, n = array1.length; i < n; i++) {
+                        if (!structuralEquals(array1[i], array2[i])) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                function findChildName(parent: any, child: any) {
+                    for (var name in parent) {
+                        if (getProperty(parent, name) === child) {
+                            return name;
+                        }
+                    }
+
+                    throw new Error("Could not find child in parent");
+                }
+
+                function bindingPatternsMatch(pattern1: BindingPattern, pattern2: BindingPattern) {
+                    Debug.assert(pattern1.kind === pattern2.kind);
+                    var elements1 = pattern1.elements;
+                    var elements2 = pattern2.elements;
+
+                    if (elements1.length !== elements2.length) {
+                        return false;
+                    }
+
+                    for (var i = 0, n = elements1.length; i < n; i++) {
+                        if (!bindingElementsMatch(elements1[i], elements2[i])) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                function bindingElementsMatch(element1: BindingElement, element2: BindingElement) {
+                    // For the purposes of checking if two symbols are the same, we consider 
+                    // binding elements the same if they have the same declaration name.
+                    var name1 = element1.name;
+                    var name2 = element2.name;
+                    if (name1.kind !== name2.kind) {
+                        return false;
+                    }
+
+                    switch (name1.kind) {
+                        case SyntaxKind.Identifier:
+                            return identifiersOrLiteralsMatch(<Identifier>name1, <Identifier>name2);
+                        case SyntaxKind.ArrayBindingPattern:
+                        case SyntaxKind.ObjectBindingPattern:
+                            return bindingPatternsMatch(<BindingPattern>name1, <BindingPattern>name2);
+                    }
+
+                    Debug.fail("Unreachable");
+                }
             }
 
             function finishUpdate(program: Program) {
@@ -854,8 +1117,34 @@ module ts.inference {
                     }
                 }
 
+                // For updated symbols, inform the symbol information of the new value declaration 
+                // it has.  Place it in its new bucket, and clear any type information associated 
+                // with it.
+                for (var i = 0, n = updatedValueSymbols.length; i < n; i++) {
+                    var updatedSymbol = updatedValueSymbols[i];
+                    var oldSymbol = updatedSymbol[0];
+                    var newSymbol = updatedSymbol[1];
+
+                    var oldDeclarationNode = oldSymbol.valueDeclaration;
+                    var oldDeclarationId = getNodeId(oldDeclarationNode);
+                    var symbolInformation = declarationIdToSymbolTypeInformation[oldDeclarationId];
+
+                    if (symbolInformation) {
+                        // Point the symbol information at the new node.
+                        var newDeclarationNode = newSymbol.valueDeclaration;
+                        symbolInformation.declarationNode = newDeclarationNode;
+
+                        // Clear any cached information for this node.
+                        symbolInformation.clearType();
+
+                        // Move the symbol information into the right location.
+                        delete declarationIdToSymbolTypeInformation[oldDeclarationId];
+                        declarationIdToSymbolTypeInformation[getNodeId(newDeclarationNode)] = symbolInformation;
+                    }
+                }
+
                 // Now, notify the reference manager of the updates.
-                referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, newUpdatedFiles, removedValueSymbols, addedValueSymbols);
+                referenceManager.onAfterProgramCreated(program, removedFiles, addedFiles, updatedFiles, removedValueSymbols, addedValueSymbols);
             }
         }
 

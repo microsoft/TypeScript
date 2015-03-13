@@ -203,7 +203,7 @@ module ts.inference {
         // at most one.  The union of the file lists is not the same as the list of files in the 
         // program.  There will still be files in the program that were not touched at all and 
         // are the same from the last version of the program to this one.
-        onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[],
+        onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: [SourceFile,SourceFile][],
             removedSymbols: Symbol[], addedSymbols: Symbol[]): void;
         
         // 
@@ -457,10 +457,11 @@ module ts.inference {
             return false;
         }
 
-        function onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], updatedFiles: SourceFile[], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
+        function onAfterProgramCreated(program: Program, removedFiles: SourceFile[], addedFiles: SourceFile[], oldAndNewupdatedFiles: [SourceFile,SourceFile][], removedSymbols: Symbol[], addedSymbols: Symbol[]): void {
             filesToFullyResolve = filesToFullyResolve || createStringSet();
             filesToPartiallyResolve = filesToPartiallyResolve || createStringSet();
             addedOrRemovedSymbolNames = addedOrRemovedSymbolNames || createStringSet();
+            var updatedFiles = map(oldAndNewupdatedFiles, f => f[1]);
 
             // First purge all data that has been removed.  First, remove all the data for files that
             // were removed *as well as* files that were updated.  We don't need any of the data about
@@ -471,7 +472,8 @@ module ts.inference {
             // For all the symbols that have been removed, delete all the mappings from the 
             // declaration of the symbol to all its references.  Note: there will still be
             // mappings from the references in some files to the declaration.  However,
-            // these will get 'fixed' when we go and update all references later.
+            // these will get 'fixed' when we go and update all references later.  Do the
+            // same for updated symbols as well.
             removeSymbols(removedSymbols);
 
             // Now, mark all files that were added or updated as files that will need full 
