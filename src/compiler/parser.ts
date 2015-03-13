@@ -27,8 +27,8 @@ module ts {
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
         if (nodes) {
-            for (var i = 0, len = nodes.length; i < len; i++) {
-                var result = cbNode(nodes[i]);
+            for (let node of nodes) {
+                var result = cbNode(node);
                 if (result) {
                     return result;
                 }
@@ -436,8 +436,8 @@ module ts {
             array.pos += delta;
             array.end += delta;
 
-            for (var i = 0, n = array.length; i < n; i++) {
-                visitNode(array[i]);
+            for (let node of array) {
+                visitNode(node);
             }
         }
     }
@@ -589,8 +589,8 @@ module ts {
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                for (var i = 0, n = array.length; i < n; i++) {
-                    visitNode(array[i]);
+                for (let node of array) {
+                    visitNode(node);
                 }
                 return;
             }
@@ -948,7 +948,7 @@ module ts {
                 if (position >= array.pos && position < array.end) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
-                    for (var i = 0, n = array.length; i < n; i++) {
+                    for (let i = 0, n = array.length; i < n; i++) {
                         var child = array[i];
                         if (child) {
                             if (child.pos === position) {
