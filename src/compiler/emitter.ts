@@ -3583,6 +3583,8 @@ module ts {
                 let counter = createTempVariable(node, /*forLoopVariable*/ true);
                 let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
 
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, /*forLoopVariable:*/ false) : undefined;
+
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
                 emitStart(node.expression);
@@ -3602,14 +3604,30 @@ module ts {
                     emitNodeWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
+
+                if (cachedLength) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(cachedLength);
+                    write(" = ");
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 write("; ");
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
-                write(".length");
+
+                if (cachedLength) {
+                    emitNodeWithoutSourceMap(cachedLength);
+                }
+                else {
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 emitEnd(node.initializer);
                 write("; ");
                 

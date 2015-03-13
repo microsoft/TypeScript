@@ -1239,6 +1239,7 @@ declare module "typescript" {
         watch?: boolean;
         stripInternal?: boolean;
         preserveNewLines?: boolean;
+        cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {

@@ -4222,6 +4222,9 @@ declare module "typescript" {
         preserveNewLines?: boolean;
 >preserveNewLines : boolean
 
+        cacheDownlevelForOfLength?: boolean;
+>cacheDownlevelForOfLength : boolean
+
         [option: string]: string | number | boolean;
 >option : string
     }

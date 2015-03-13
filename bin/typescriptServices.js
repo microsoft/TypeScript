@@ -12444,7 +12444,7 @@ var ts;
     }
     ts.bindSourceFile = bindSourceFile;
     function bindSourceFileWorker(file) {
-        var parent;
+        var _parent;
         var container;
         var blockScopeContainer;
         var lastContainer;
@@ -12585,10 +12585,10 @@ var ts;
             if (symbolKind & 255504) {
                 node.locals = {};
             }
-            var saveParent = parent;
+            var saveParent = _parent;
             var saveContainer = container;
             var savedBlockScopeContainer = blockScopeContainer;
-            parent = node;
+            _parent = node;
             if (symbolKind & 262128) {
                 container = node;
                 if (lastContainer) {
@@ -12601,7 +12601,7 @@ var ts;
             }
             ts.forEachChild(node, bind);
             container = saveContainer;
-            parent = saveParent;
+            _parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
         }
         function bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer) {
@@ -12704,7 +12704,7 @@ var ts;
             return "__" + ts.indexOf(node.parent.parameters, node);
         }
         function bind(node) {
-            node.parent = parent;
+            node.parent = _parent;
             switch (node.kind) {
                 case 127:
                     bindDeclaration(node, 262144, 530912, false);
@@ -12838,10 +12838,10 @@ var ts;
                     bindChildren(node, 0, true);
                     break;
                 default:
-                    var saveParent = parent;
-                    parent = node;
+                    var saveParent = _parent;
+                    _parent = node;
                     ts.forEachChild(node, bind);
-                    parent = saveParent;
+                    _parent = saveParent;
             }
         }
         function bindParameter(node) {
@@ -25171,6 +25171,7 @@ var ts;
                 var rhsIsIdentifier = node.expression.kind === 64;
                 var counter = createTempVariable(node, true);
                 var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node, false);
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, false) : undefined;
                 emitStart(node.expression);
                 write("var ");
                 emitNodeWithoutSourceMap(counter);
@@ -25184,12 +25185,24 @@ var ts;
                     emitNodeWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
+                if (cachedLength) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(cachedLength);
+                    write(" = ");
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
                 write("; ");
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
-                write(".length");
+                if (cachedLength) {
+                    emitNodeWithoutSourceMap(cachedLength);
+                }
+                else {
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
                 emitEnd(node.initializer);
                 write("; ");
                 emitStart(node.initializer);
@@ -27548,6 +27561,12 @@ var ts;
             name: "preserveNewLines",
             type: "boolean",
             description: ts.Diagnostics.Preserve_new_lines_when_emitting_code,
+            experimental: true
+        },
+        {
+            name: "cacheDownlevelForOfLength",
+            type: "boolean",
+            description: "Cache length access when downlevel emitting for-of statements",
             experimental: true
         },
         {

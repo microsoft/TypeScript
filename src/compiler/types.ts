@@ -1560,6 +1560,7 @@ module ts {
         watch?: boolean;
         stripInternal?: boolean;
         preserveNewLines?: boolean;
+        cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
 
