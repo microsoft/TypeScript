@@ -4379,6 +4379,8 @@ module ts {
                     }
                 }
 
+                Debug.assert(!!downfallType, "If there is no common supertype, each type should have a downfallType");
+
                 if (score > bestSupertypeScore) {
                     bestSupertype = types[i];
                     bestSupertypeDownfallType = downfallType;
