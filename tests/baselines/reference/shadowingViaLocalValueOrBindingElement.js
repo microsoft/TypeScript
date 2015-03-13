@@ -5,8 +5,8 @@ if (true) {
         var x = 0; // Error
         var { x = 0 } = { x: 0 }; // Error
         var { x: x = 0 } = { x: 0 }; // Error
-        var { x } = { x: 0 }; // No error, even though the let x is being initialized
-        var { x: x } = { x: 0 }; // No error, even though the let x is being initialized
+        var { x } = { x: 0 }; // Error
+        var { x: x } = { x: 0 }; // Error
     }
 }
 
@@ -23,9 +23,9 @@ if (true) {
         }).x, x = _b === void 0 ? 0 : _b; // Error
         var x = ({
             _x: 0
-        }).x; // No error, even though the let x is being initialized
+        }).x; // Error
         var x = ({
             _x: 0
-        }).x; // No error, even though the let x is being initialized
+        }).x; // Error
     }
 }
