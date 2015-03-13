@@ -15,7 +15,7 @@ tests/cases/compiler/recursiveTypeComparison2.ts(13,80): error TS2304: Cannot fi
             log(): Observable<T>;
             combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
             withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
-                                                                                   ~~~~~~~~~~~~~~~~
+                                                                                   ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'StateValue'.
             decode(mapping: Object): Property<any>;
             awaiting<U>(other: Observable<U>): Property<boolean>;

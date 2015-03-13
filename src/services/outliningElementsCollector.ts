@@ -104,7 +104,7 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
                         var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                         var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));

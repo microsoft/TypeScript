@@ -2,4 +2,6 @@
 ++[0];
 
 //// [parserUnaryExpression3.js]
-++[0];
+++[
+    0
+];

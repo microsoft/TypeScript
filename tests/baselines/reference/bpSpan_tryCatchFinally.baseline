@@ -24,7 +24,15 @@
     >:=> (line 3, col 4) to (line 3, col 13)
 4  >} catch (e) {
 
-     ~~~~~~~~~~~~~                                => Pos: (34 to 46)  SpanInfo: {"start":51,"length":9}
+     ~~~~~~~~                                     => Pos: (34 to 41)  SpanInfo: {"start":51,"length":9}
+    >x = x - 1
+    >:=> (line 5, col 4) to (line 5, col 13)
+4  >} catch (e) {
+
+             ~                                    => Pos: (42 to 42)  SpanInfo: undefined
+4  >} catch (e) {
+
+              ~~~~                                => Pos: (43 to 46)  SpanInfo: {"start":51,"length":9}
     >x = x - 1
     >:=> (line 5, col 4) to (line 5, col 13)
 --------------------------------
@@ -94,7 +102,15 @@
 --------------------------------
 14 >catch (e)
 
-    ~~~~~~~~~~                                    => Pos: (138 to 147)  SpanInfo: {"start":154,"length":9}
+    ~~~~~~~                                       => Pos: (138 to 144)  SpanInfo: {"start":154,"length":9}
+    >x = x - 1
+    >:=> (line 16, col 4) to (line 16, col 13)
+14 >catch (e)
+
+           ~                                      => Pos: (145 to 145)  SpanInfo: undefined
+14 >catch (e)
+
+            ~~                                    => Pos: (146 to 147)  SpanInfo: {"start":154,"length":9}
     >x = x - 1
     >:=> (line 16, col 4) to (line 16, col 13)
 --------------------------------

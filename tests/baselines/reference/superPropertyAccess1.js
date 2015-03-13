@@ -37,7 +37,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
+    C.prototype.foo = function () {
+    };
     Object.defineProperty(C.prototype, "x", {
         get: function () {
             return 1;
@@ -45,7 +46,8 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.prototype.bar = function () { };
+    C.prototype.bar = function () {
+    };
     return C;
 })();
 var D = (function (_super) {

@@ -5,5 +5,4 @@
 2;
 
 //// [parserGreaterThanTokenAmbiguity15.js]
-1 >>=
-2;
+1 >>= 2;

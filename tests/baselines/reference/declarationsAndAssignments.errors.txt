@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2460: Type '[number, string]' has no property '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' with length '2' cannot be assigned to tuple with length '3'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(56,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2460: Type '[number]' has no property '1'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2460: Type '[number]' has no property '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2459: Type '{}' has no property 'a' and no string index signature.
@@ -25,7 +25,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
         var [x, y] = [1, "hello"];
         var [x, y, z] = [1, "hello"];  // Error
                    ~
-!!! error TS2460: Type '[number, string]' has no property '2'.
+!!! error TS2493: Tuple type '[number, string]' with length '2' cannot be assigned to tuple with length '3'.
         var [,, z] = [0, 1, 2];
         var x: number;
         var y: string;
@@ -87,9 +87,9 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
         var [a, b, c] = [];   // Ok, [] is an array
         var [d, e, f] = [1];  // Error, [1] is a tuple
                 ~
-!!! error TS2460: Type '[number]' has no property '1'.
+!!! error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
                    ~
-!!! error TS2460: Type '[number]' has no property '2'.
+!!! error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
     }
     
     function f9() {

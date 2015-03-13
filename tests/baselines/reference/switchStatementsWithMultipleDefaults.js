@@ -56,7 +56,8 @@ switch (x) {
             default: // Error, third 'default' clause
             default: // Error, fourth 'default' clause.
             // Errors on fifth-seventh
-            default: return;
+            default:
+                return;
             default:
             default:
         }

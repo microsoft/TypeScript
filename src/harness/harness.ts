@@ -834,7 +834,7 @@ module Harness {
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
-                    var fileName = ts.normalizeSlashes(file.unitName);
+                    var fileName = ts.normalizePath(file.unitName);
                     filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                 }
             };
@@ -843,6 +843,7 @@ module Harness {
             return {
                 getCurrentDirectory,
                 getSourceFile: (fn, languageVersion) => {
+                    fn = ts.normalizePath(fn);
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
                     }
@@ -1006,6 +1007,10 @@ module Harness {
                             options.outDir = setting.value;
                             break;
 
+                        case 'preservenewlines':
+                            options.preserveNewLines = !!setting.value;
+                            break;
+
                         case 'sourceroot':
                             options.sourceRoot = setting.value;
                             break;
@@ -1072,16 +1077,6 @@ module Harness {
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
                 });
-
-                var filemap: { [name: string]: ts.SourceFile; } = {};
-                var register = (file: { unitName: string; content: string; }) => {
-                    if (file.content !== undefined) {
-                        var fileName = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target, assertInvariants);
-                    }
-                };
-                inputFiles.forEach(register);
-                otherFiles.forEach(register);
 
                 var fileOutputs: GeneratedFile[] = [];
                 
@@ -1469,7 +1464,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "preservenewlines", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

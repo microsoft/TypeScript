@@ -51,7 +51,9 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 // none of these function calls should be allowed
-var x = function () { return; };
+var x = function () {
+    return;
+};
 var r1 = x();
 var y = x;
 var r2 = y();
@@ -62,7 +64,8 @@ var C = (function () {
         this.prototype = null;
         this.length = 1;
         this.arguments = null;
-        this.caller = function () { };
+        this.caller = function () {
+        };
     }
     return C;
 })();

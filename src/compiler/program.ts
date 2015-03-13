@@ -3,6 +3,10 @@
 
 module ts {
     /* @internal */ export var emitTime = 0;
+    /* @internal */ export var ioReadTime = 0;
+
+    /** The version of the TypeScript compiler release */
+    export var version = "1.5.0.0";
 
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
@@ -19,7 +23,9 @@ module ts {
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
+                var start = new Date().getTime();
                 var text = sys.readFile(fileName, options.charset);
+                ioReadTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -177,10 +183,15 @@ module ts {
                 return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
             }
 
+            // Create the emit resolver outside of the "emitTime" tracking code below.  That way
+            // any cost associated with it (like type checking) are appropriate associated with
+            // the type-checking counter.
+            var emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+
             var start = new Date().getTime();
 
             var emitResult = emitFiles(
-                getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile),
+                emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
@@ -415,13 +426,11 @@ module ts {
                 return;
             }
 
-            var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModule && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
-                var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.start);
-                var errorLength = spanEnd(externalModuleErrorSpan) - errorStart;
-                diagnostics.add(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+            var firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
+            if (firstExternalModuleSourceFile && !options.module) {
+                // We cannot use createDiagnosticFromNode because nodes do not have parents yet       
+                var span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot
@@ -429,7 +438,7 @@ module ts {
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 (options.mapRoot &&  // there is --mapRoot Specified and there would be multiple js files generated
-                    (!options.out || firstExternalModule !== undefined))) {
+                    (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
                 var commonPathComponents: string[];
                 forEach(files, sourceFile => {

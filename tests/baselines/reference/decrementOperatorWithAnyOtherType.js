@@ -52,8 +52,14 @@ M.n--;
 // -- operator on any type
 var ANY;
 var ANY1;
-var ANY2 = ["", ""];
-var obj = { x: 1, y: null };
+var ANY2 = [
+    "",
+    ""
+];
+var obj = {
+    x: 1,
+    y: null
+};
 var A = (function () {
     function A() {
     }

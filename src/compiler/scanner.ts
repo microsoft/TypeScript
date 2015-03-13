@@ -14,6 +14,7 @@ module ts {
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
+        hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
@@ -556,6 +557,7 @@ module ts {
         var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
+        var hasExtendedUnicodeEscape: boolean;
         var tokenIsUnterminated: boolean;
 
         function error(message: DiagnosticMessage, length?: number): void {
@@ -606,11 +608,27 @@ module ts {
             }
             return +(text.substring(start, pos));
         }
+        
+        /**
+         * Scans the given number of hexadecimal digits in the text,
+         * returning -1 if the given number is unavailable.
+         */
+        function scanExactNumberOfHexDigits(count: number): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false);
+        }
+        
+        /**
+         * Scans as many hexadecimal digits as are available in the text,
+         * returning -1 if the given number of digits was unavailable.
+         */
+        function scanMinimumNumberOfHexDigits(count: number): number {
+            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true);
+        }
 
-        function scanHexDigits(count: number, mustMatchCount?: boolean): number {
+        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean): number {
             var digits = 0;
             var value = 0;
-            while (digits < count || !mustMatchCount) {
+            while (digits < minCount || scanAsManyAsPossible) {
                 var ch = text.charCodeAt(pos);
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
@@ -627,7 +645,7 @@ module ts {
                 pos++;
                 digits++;
             }
-            if (digits < count) {
+            if (digits < minCount) {
                 value = -1;
             }
             return value;
@@ -764,16 +782,20 @@ module ts {
                     return "\'";
                 case CharacterCodes.doubleQuote:
                     return "\"";
-                case CharacterCodes.x:
                 case CharacterCodes.u:
-                    var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, /*mustMatchCount*/ true);
-                    if (ch >= 0) {
-                        return String.fromCharCode(ch);
+                    // '\u{DDDDDDDD}'
+                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                        hasExtendedUnicodeEscape = true;
+                        pos++;
+                        return scanExtendedUnicodeEscape();
                     }
-                    else {
-                        error(Diagnostics.Hexadecimal_digit_expected);
-                        return ""
-                    }
+                    
+                    // '\uDDDD'
+                    return scanHexadecimalEscape(/*numDigits*/ 4)
+                    
+                case CharacterCodes.x:
+                    // '\xDD'
+                    return scanHexadecimalEscape(/*numDigits*/ 2)
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
@@ -790,6 +812,66 @@ module ts {
                     return String.fromCharCode(ch);
             }
         }
+        
+        function scanHexadecimalEscape(numDigits: number): string {
+            var escapedValue = scanExactNumberOfHexDigits(numDigits);
+            
+            if (escapedValue >= 0) {
+                return String.fromCharCode(escapedValue);
+            }
+            else {
+                error(Diagnostics.Hexadecimal_digit_expected);
+                return ""
+            }
+        }
+        
+        function scanExtendedUnicodeEscape(): string {
+            var escapedValue = scanMinimumNumberOfHexDigits(1);
+            var isInvalidExtendedEscape = false;
+
+            // Validate the value of the digit
+            if (escapedValue < 0) {
+                error(Diagnostics.Hexadecimal_digit_expected)
+                isInvalidExtendedEscape = true;
+            }
+            else if (escapedValue > 0x10FFFF) {
+                error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                isInvalidExtendedEscape = true;
+            }
+
+            if (pos >= len) {
+                error(Diagnostics.Unexpected_end_of_text);
+                isInvalidExtendedEscape = true;
+            }
+            else if (text.charCodeAt(pos) == CharacterCodes.closeBrace) {
+                // Only swallow the following character up if it's a '}'.
+                pos++;
+            }
+            else {
+                error(Diagnostics.Unterminated_Unicode_escape_sequence);
+                isInvalidExtendedEscape = true;
+            }
+
+            if (isInvalidExtendedEscape) {
+                return "";
+            }
+
+            return utf16EncodeAsString(escapedValue);
+        }
+        
+        // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+        function utf16EncodeAsString(codePoint: number): string {
+            Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+            
+            if (codePoint <= 65535) {
+                return String.fromCharCode(codePoint);
+            }
+            
+            var codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
+            var codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+            
+            return String.fromCharCode(codeUnit1, codeUnit2);
+        }
 
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
         // and return code point value if valid Unicode escape is found. Otherwise return -1.
@@ -797,7 +879,7 @@ module ts {
             if (pos + 5 < len && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 var start = pos;
                 pos += 2;
-                var value = scanHexDigits(4, /*mustMatchCount*/ true);
+                var value = scanExactNumberOfHexDigits(4);
                 pos = start;
                 return value;
             }
@@ -869,6 +951,7 @@ module ts {
 
         function scan(): SyntaxKind {
             startPos = pos;
+            hasExtendedUnicodeEscape = false;
             precedingLineBreak = false;
             tokenIsUnterminated = false;
             while (true) {
@@ -1034,7 +1117,7 @@ module ts {
                     case CharacterCodes._0:
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            var value = scanHexDigits(1, /*mustMatchCount*/ false);
+                            var value = scanMinimumNumberOfHexDigits(1);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;
@@ -1336,6 +1419,7 @@ module ts {
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
             getTokenValue: () => tokenValue,
+            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,

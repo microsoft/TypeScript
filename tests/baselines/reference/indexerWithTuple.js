@@ -33,10 +33,25 @@ var eleUnion25 = unionTuple2["0"]; // boolean
 var eleUnion26 = unionTuple2["1"]; // string | number
 
 //// [indexerWithTuple.js]
-var strNumTuple = ["foo", 10];
-var numTupleTuple = [10, ["bar", 20]];
-var unionTuple1 = [10, "foo"];
-var unionTuple2 = [true, "foo"];
+var strNumTuple = [
+    "foo",
+    10
+];
+var numTupleTuple = [
+    10,
+    [
+        "bar",
+        20
+    ]
+];
+var unionTuple1 = [
+    10,
+    "foo"
+];
+var unionTuple2 = [
+    true,
+    "foo"
+];
 // no error
 var idx0 = 0;
 var idx1 = 1;

@@ -22,17 +22,23 @@ var C = (function () {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed
     }
     Object.defineProperty(C.prototype, "Foo", {
-        get: function () { return "foo"; } // ok
+        get: function () {
+            return "foo";
+        } // ok
         ,
-        set: function (foo) { } // ok
+        set: function (foo) {
+        } // ok
         ,
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C.prototype, "Goo", {
-        get: function (v) { return null; } // error - getters must not have a parameter
+        get: function (v) {
+            return null;
+        } // error - getters must not have a parameter
         ,
-        set: function (v) { } // error - setters must not specify a return type
+        set: function (v) {
+        } // error - setters must not specify a return type
         ,
         enumerable: true,
         configurable: true
@@ -43,8 +49,11 @@ var E = (function () {
     function E() {
     }
     Object.defineProperty(E.prototype, "Baz", {
-        get: function () { return 0; },
-        set: function (n) { } // error - accessors do not agree in visibility
+        get: function () {
+            return 0;
+        },
+        set: function (n) {
+        } // error - accessors do not agree in visibility
         ,
         enumerable: true,
         configurable: true

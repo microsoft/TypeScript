@@ -1,4 +1,4 @@
-﻿
+
 ////{| "itemName": "\"X.Y.Z\"", "kind": "module" |}
 ////declare module "X.Y.Z" {
 ////}

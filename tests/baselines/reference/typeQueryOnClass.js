@@ -62,10 +62,14 @@ var C = (function () {
         var _this = this;
         this.x = x;
         this.ia = 1;
-        this.ib = function () { return _this.ia; };
+        this.ib = function () {
+            return _this.ia;
+        };
     }
-    C.foo = function (x) { };
-    C.bar = function (x) { };
+    C.foo = function (x) {
+    };
+    C.bar = function (x) {
+    };
     Object.defineProperty(C, "sc", {
         get: function () {
             return 1;
@@ -82,7 +86,9 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.prototype.baz = function (x) { return ''; };
+    C.prototype.baz = function (x) {
+        return '';
+    };
     Object.defineProperty(C.prototype, "ic", {
         get: function () {
             return 1;
@@ -100,7 +106,9 @@ var C = (function () {
         configurable: true
     });
     C.sa = 1;
-    C.sb = function () { return 1; };
+    C.sb = function () {
+        return 1;
+    };
     return C;
 })();
 var c;
@@ -111,7 +119,8 @@ var D = (function () {
     function D(y) {
         this.y = y;
     }
-    D.prototype.foo = function () { };
+    D.prototype.foo = function () {
+    };
     return D;
 })();
 var d;

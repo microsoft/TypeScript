@@ -2,4 +2,6 @@
 () => 0;
 
 //// [arrowFunctionInExpressionStatement1.js]
-(function () { return 0; });
+(function () {
+    return 0;
+});

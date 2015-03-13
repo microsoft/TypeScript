@@ -28,15 +28,21 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 // all the following should be error
-function fn1() { }
-function fn2() { }
-function fn3() { }
-function fn4() { }
-function fn7() { } // should be valid: any includes void
+function fn1() {
+}
+function fn2() {
+}
+function fn3() {
+}
+function fn4() {
+}
+function fn7() {
+} // should be valid: any includes void
 var C = (function () {
     function C() {
     }
-    C.prototype.dispose = function () { };
+    C.prototype.dispose = function () {
+    };
     return C;
 })();
 var D = (function (_super) {
@@ -46,5 +52,11 @@ var D = (function (_super) {
     }
     return D;
 })(C);
-function fn10() { return { id: 12 }; }
-function fn11() { return new C(); }
+function fn10() {
+    return {
+        id: 12
+    };
+}
+function fn11() {
+    return new C();
+}

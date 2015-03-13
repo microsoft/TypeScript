@@ -11,6 +11,7 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
+    /** The version of the language service API */
     export var servicesVersion = "0.4"
 
     export interface Node {
@@ -58,9 +59,10 @@ module ts {
     }
 
     export interface SourceFile {
-        version: string;
-        scriptSnapshot: IScriptSnapshot;
-        nameTable: Map<string>;
+        /* @internal */ version: string;
+        /* @internal */ scriptSnapshot: IScriptSnapshot;
+        /* @internal */ nameTable: Map<string>;
+
         getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
@@ -803,6 +805,11 @@ module ts {
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ExportSpecifier:
+                        case SyntaxKind.ImportSpecifier:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ImportClause:
+                        case SyntaxKind.NamespaceImport:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -841,6 +848,37 @@ module ts {
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
                             namedDeclarations.push(<Declaration>node);
+                            break;
+                        
+                        case SyntaxKind.ExportDeclaration:
+                            // Handle named exports case e.g.:
+                            //    export {a, b as B} from "mod";
+                            if ((<ExportDeclaration>node).exportClause) {
+                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                            }
+                            break;
+
+                        case SyntaxKind.ImportDeclaration:
+                            var importClause = (<ImportDeclaration>node).importClause;
+                            if (importClause) {
+                                // Handle default import case e.g.:
+                                //    import d from "mod";
+                                if (importClause.name) {
+                                    namedDeclarations.push(importClause);
+                                }
+
+                                // Handle named bindings in imports e.g.:
+                                //    import * as NS from "mod";
+                                //    import {a, b as B} from "mod";
+                                if (importClause.namedBindings) {
+                                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                        namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                    }
+                                    else {
+                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                    }
+                                }
+                            }
                             break;
                     }
                 });
@@ -1235,31 +1273,21 @@ module ts {
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
-          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
           * to get an updated SourceFile.
           *
-          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
-          * registry originally.
-          *
-          * @param sourceFile The original sourceFile object to update
           * @param fileName The name of the file requested
           * @param compilationSettings Some compilation settings like target affects the 
           * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
           * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file 
-          * was not found in the registry and a new one was created.
+          * @param scriptSnapshot Text of the file. 
+          * @param version Current version of the file.
           */
         updateDocument(
-            sourceFile: SourceFile,
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            textChangeRange: TextChangeRange): SourceFile;
+            version: string): SourceFile;
 
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
@@ -1407,7 +1435,11 @@ module ts {
 
     interface DocumentRegistryEntry {
         sourceFile: SourceFile;
-        refCount: number;
+
+        // The number of language services that this source file is referenced in.   When no more
+        // language services are referencing the file, then the file can be removed from the 
+        // registry.
+        languageServiceRefCount: number;
         owners: string[];
     }
 
@@ -1636,6 +1668,8 @@ module ts {
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
+        // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
+        // for those settings.
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
@@ -1659,7 +1693,7 @@ module ts {
                     var entry = entries[i];
                     sourceFiles.push({
                         name: i,
-                        refCount: entry.refCount,
+                        refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
                 }
@@ -1672,43 +1706,54 @@ module ts {
             return JSON.stringify(bucketInfoArray, null, 2);
         }
 
-        function acquireDocument(
-            fileName: string,
-            compilationSettings: CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile {
-
-            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            var entry = lookUp(bucket, fileName);
-            if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
-
-                bucket[fileName] = entry = {
-                    sourceFile: sourceFile,
-                    refCount: 0,
-                    owners: []
-                };
-            }
-            entry.refCount++;
-
-            return entry.sourceFile;
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true);
         }
 
-        function updateDocument(
-            sourceFile: SourceFile,
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false);
+        }
+
+        function acquireOrUpdateDocument(
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            textChangeRange: TextChangeRange
-            ): SourceFile {
+            acquiring: boolean): SourceFile {
 
-            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
-            Debug.assert(bucket !== undefined);
+            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, fileName);
-            Debug.assert(entry !== undefined);
+            if (!entry) {
+                Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
-            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
+                // Have never seen this file with these settings.  Create a new source file for it.
+                var sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
+
+                bucket[fileName] = entry = {
+                    sourceFile: sourceFile,
+                    languageServiceRefCount: 0,
+                    owners: []
+                };
+            }
+            else {
+                // We have an entry for this file.  However, it may be for a different version of 
+                // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
+                // return it as is.
+                if (entry.sourceFile.version !== version) {
+                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                }
+            }
+
+            // If we're acquiring, then this is the first time this LS is asking for this document.
+            // Increase our ref count so we know there's another LS using the document.  If we're
+            // not acquiring, then that means the LS is 'updating' the file instead, and that means
+            // it has already acquired the document previously.  As such, we do not need to increase
+            // the ref count.
+            if (acquiring) {
+                entry.languageServiceRefCount++;
+            }
+
             return entry.sourceFile;
         }
 
@@ -1717,10 +1762,10 @@ module ts {
             Debug.assert(bucket !== undefined);
 
             var entry = lookUp(bucket, fileName);
-            entry.refCount--;
+            entry.languageServiceRefCount--;
 
-            Debug.assert(entry.refCount >= 0);
-            if (entry.refCount === 0) {
+            Debug.assert(entry.languageServiceRefCount >= 0);
+            if (entry.languageServiceRefCount === 0) {
                 delete bucket[fileName];
             }
         }
@@ -1753,32 +1798,139 @@ module ts {
             });
         }
 
+        function recordModuleName() {
+            var importPath = scanner.getTokenValue();
+            var pos = scanner.getTokenPos();
+            importedFiles.push({
+                fileName: importPath,
+                start: pos,
+                length: importPath.length
+            });
+        }
+
         function processImport(): void {
             scanner.setText(sourceText);
             var token = scanner.scan();
             // Look for:
-            // import foo = module("foo");
+            //    import "mod";
+            //    import d from "mod"
+            //    import {a as A } from "mod";
+            //    import * as NS  from "mod"
+            //    import d, {a, b as B} from "mod"
+            //    import i = require("mod");
+            //
+            //    export * from "mod"
+            //    export {a as b} from "mod"
+
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.ImportKeyword) {
                     token = scanner.scan();
-                    if (token === SyntaxKind.Identifier) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.EqualsToken) {
+                    if (token === SyntaxKind.StringLiteral) {
+                        // import "mod";
+                        recordModuleName();
+                        continue;
+                    }
+                    else {
+                        if (token === SyntaxKind.Identifier) {
                             token = scanner.scan();
-                            if (token === SyntaxKind.RequireKeyword) {
+                            if (token === SyntaxKind.FromKeyword) {
                                 token = scanner.scan();
-                                if (token === SyntaxKind.OpenParenToken) {
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // import d from "mod";
+                                    recordModuleName();
+                                    continue
+                                }
+                            }
+                            else if (token === SyntaxKind.EqualsToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.RequireKeyword) {
                                     token = scanner.scan();
-                                    if (token === SyntaxKind.StringLiteral) {
-                                        var importPath = scanner.getTokenValue();
-                                        var pos = scanner.getTokenPos();
-                                        importedFiles.push({
-                                            fileName: importPath,
-                                            start: pos,
-                                            length: importPath.length
-                                        });
+                                    if (token === SyntaxKind.OpenParenToken) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            //  import i = require("mod");
+                                            recordModuleName();
+                                            continue;
+                                        }
                                     }
                                 }
+                            }
+                            else if (token === SyntaxKind.CommaToken) {
+                                // consume comma and keep going
+                                token = scanner.scan();
+                            }
+                            else {
+                                // unknown syntax
+                                continue;
+                            }
+                        }
+
+                        if (token === SyntaxKind.OpenBraceToken) {
+                            token = scanner.scan();
+                            // consume "{ a as B, c, d as D}" clauses
+                            while (token !== SyntaxKind.CloseBraceToken) {
+                                token = scanner.scan();
+                            }
+
+                            if (token === SyntaxKind.CloseBraceToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.FromKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.StringLiteral) {
+                                        // import {a as A} from "mod";
+                                        // import d, {a, b as B} from "mod"
+                                        recordModuleName();
+                                    }
+                                }
+                            }
+                        }
+                        else if (token === SyntaxKind.AsteriskToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.AsKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.Identifier) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.FromKeyword) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            // import * as NS from "mod"
+                                            // import d, * as NS from "mod"
+                                            recordModuleName();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.ExportKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        token = scanner.scan();
+                        // consume "{ a as B, c, d as D}" clauses
+                        while (token !== SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                        }
+
+                        if (token === SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.FromKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // export {a as A} from "mod";
+                                    // export {a, b as B} from "mod"
+                                    recordModuleName();
+                                }
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.AsteriskToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // export * from "mod"
+                                recordModuleName();
                             }
                         }
                     }
@@ -1864,7 +2016,7 @@ module ts {
 
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isAnyFunction(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
+            isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
@@ -2011,6 +2163,12 @@ module ts {
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
             case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.NamespaceImport:
+                return ScriptElementKind.alias;
         }
         return ScriptElementKind.unknown;
     }
@@ -2121,19 +2279,34 @@ module ts {
                 // it is safe to reuse the souceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
-
                     // Check if the old program had this file already
                     var oldSourceFile = program && program.getSourceFile(fileName);
                     if (oldSourceFile) {
-                        // This SourceFile is safe to reuse, return it
-                        if (sourceFileUpToDate(oldSourceFile)) {
-                            return oldSourceFile;
-                        }
-
-                        // We have an older version of the sourceFile, incrementally parse the changes
-                        var textChangeRange = hostFileInformation.scriptSnapshot.getChangeRange(oldSourceFile.scriptSnapshot);
-                        return documentRegistry.updateDocument(oldSourceFile, fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                        // We already had a source file for this file name.  Go to the registry to 
+                        // ensure that we get the right up to date version of it.  We need this to
+                        // address the following 'race'.  Specifically, say we have the following:
+                        //
+                        //      LS1
+                        //          \
+                        //           DocumentRegistry
+                        //          /
+                        //      LS2
+                        //
+                        // Each LS has a reference to file 'foo.ts' at version 1.  LS2 then updates
+                        // it's version of 'foo.ts' to version 2.  This will cause LS2 and the 
+                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will 
+                        // have version 1.  And *importantly* this source file will be *corrupt*.
+                        // The act of creating version 2 of the file irrevocably damages the version
+                        // 1 file.
+                        //
+                        // So, later when we call into LS1, we need to make sure that it doesn't use
+                        // it's source file any more, and instead defers to DocumentRegistry to get
+                        // either version 1, version 2 (or some other version) depending on what the 
+                        // host says should be used.
+                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
                     }
+
+                    // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
@@ -2187,8 +2360,8 @@ module ts {
 
         function dispose(): void {
             if (program) {
-                forEach(program.getSourceFiles(),
-                    (f) => { documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()); });
+                forEach(program.getSourceFiles(), f =>
+                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
             }
         }
 
@@ -2359,7 +2532,7 @@ module ts {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                     // This is an alias, follow what it aliases
-                    if (symbol && symbol.flags & SymbolFlags.Import) {
+                    if (symbol && symbol.flags & SymbolFlags.Alias) {
                         symbol = typeInfoResolver.getAliasedSymbol(symbol);
                     }
 
@@ -2404,13 +2577,26 @@ module ts {
                         getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
                     }
                 }
+                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                    // cursor is in import clause
+                    // try to show exported member for imported module
+                    isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
+                    if (showCompletionsInImportsClause(previousToken)) {
+                        var importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                        Debug.assert(importDeclaration !== undefined);
+                        var exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
+                        var filteredExports = filterModuleExports(exports, importDeclaration);
+                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                    }
+                }
                 else {
                     // Get scope members
                     isMemberCompletion = false;
                     isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     var symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -2452,6 +2638,18 @@ module ts {
                     isRightOfIllegalDot(previousToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function showCompletionsInImportsClause(node: Node): boolean {
+                if (node) {
+                    // import {| 
+                    // import {a,|
+                    if (node.kind === SyntaxKind.OpenBraceToken || node.kind === SyntaxKind.CommaToken) {
+                        return node.parent.kind === SyntaxKind.NamedImports;
+                    }
+                }
+
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -2665,6 +2863,28 @@ module ts {
                 return false;
             }
 
+            function filterModuleExports(exports: Symbol[], importDeclaration: ImportDeclaration): Symbol[] {
+                var exisingImports: Map<boolean> = {};
+
+                if (!importDeclaration.importClause) {
+                    return exports;
+                }
+
+                if (importDeclaration.importClause.namedBindings &&
+                    importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+
+                    forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                        var name = el.propertyName || el.name;
+                        exisingImports[name.text] = true;
+                    });
+                }
+
+                if (isEmpty(exisingImports)) {
+                    return exports;
+                }
+                return filter(exports, e => !lookUp(exisingImports, e.name));
+            }
+
             function filterContextualMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
                 if (!existingMembers || existingMembers.length === 0) {
                     return contextualMemberSymbols;
@@ -2753,7 +2973,7 @@ module ts {
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
-                if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+                if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
                 if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             }
 
@@ -2841,7 +3061,7 @@ module ts {
             var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
-            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Import) {
+            if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
                 // If it is accessor they are allowed only if location is at name of the accessor
                 if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                     symbolKind = ScriptElementKind.memberVariableElement;
@@ -2888,7 +3108,7 @@ module ts {
                                 symbolKind = ScriptElementKind.constructorImplementationElement;
                                 addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                             }
-                            else if (symbolFlags & SymbolFlags.Import) {
+                            else if (symbolFlags & SymbolFlags.Alias) {
                                 symbolKind = ScriptElementKind.alias;
                                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                                 displayParts.push(textPart(symbolKind));
@@ -3041,7 +3261,7 @@ module ts {
                     }
                 }
             }
-            if (symbolFlags & SymbolFlags.Import) {
+            if (symbolFlags & SymbolFlags.Alias) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
@@ -3246,6 +3466,17 @@ module ts {
                 return undefined;
             }
 
+            // If this is an alias, and the request came at the declaration location
+            // get the aliased symbol instead. This allows for goto def on an import e.g.
+            //   import {A, B} from "mod";
+            // to jump to the implementation directelly.
+            if (symbol.flags & SymbolFlags.Alias) {
+                var declaration = symbol.declarations[0];
+                if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
+                    symbol = typeInfoResolver.getAliasedSymbol(symbol);
+                }
+            }
+
             var result: DefinitionInfo[] = [];
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
@@ -3389,8 +3620,8 @@ module ts {
                     break;
                 case SyntaxKind.CaseKeyword:
                 case SyntaxKind.DefaultKeyword:
-                    if (hasKind(parent(parent(node)), SyntaxKind.SwitchStatement)) {
-                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent);
+                    if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent);
                     }
                     break;
                 case SyntaxKind.BreakKeyword:
@@ -3570,7 +3801,7 @@ module ts {
                         }
                     }
                     // Do not cross function boundaries.
-                    else if (!isAnyFunction(node)) {
+                    else if (!isFunctionLike(node)) {
                         forEachChild(node, aggregate);
                     }
                 };
@@ -3657,7 +3888,7 @@ module ts {
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
-                forEach(switchStatement.clauses, clause => {
+                forEach(switchStatement.caseBlock.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
                     var breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
@@ -3702,7 +3933,7 @@ module ts {
                         statementAccumulator.push(<BreakOrContinueStatement>node);
                     }
                     // Do not cross function boundaries.
-                    else if (!isAnyFunction(node)) {
+                    else if (!isFunctionLike(node)) {
                         forEachChild(node, aggregate);
                     }
                 };
@@ -3733,7 +3964,7 @@ module ts {
                             break;
                         default:
                             // Don't cross function boundaries.
-                            if (isAnyFunction(node)) {
+                            if (isFunctionLike(node)) {
                                 return undefined;
                             }
                             break;
@@ -3910,27 +4141,6 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function initializeNameTable(sourceFile: SourceFile): void {
-            var nameTable: Map<string> = {};
-
-            walk(sourceFile);
-            sourceFile.nameTable = nameTable;
-
-            function walk(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        nameTable[(<Identifier>node).text] = (<Identifier>node).text;
-                        break;
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NumericLiteral:
-                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
-                        break;
-                    default:
-                        forEachChild(node, walk);
-                }
-            } 
-        }
-
         function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
@@ -3976,7 +4186,7 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var declaredName = getDeclaredName(symbol);
+            var declaredName = getDeclaredName(symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -3993,17 +4203,13 @@ module ts {
                     getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                 }
                 else {
-                    var internedName = getInternedName(symbol, declarations)
+                    var internedName = getInternedName(symbol, node, declarations)
                     forEach(sourceFiles, sourceFile => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        if (!sourceFile.nameTable) {
-                            initializeNameTable(sourceFile)
-                        }
+                        var nameTable = getNameTable(sourceFile);
 
-                        Debug.assert(sourceFile.nameTable !== undefined);
-
-                        if (lookUp(sourceFile.nameTable, internedName)) {
+                        if (lookUp(nameTable, internedName)) {
                             result = result || [];
                             getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                         }
@@ -4013,13 +4219,51 @@ module ts {
 
             return result;
 
-            function getDeclaredName(symbol: Symbol) {
+            function isImportOrExportSpecifierName(location: Node): boolean {
+                return location.parent &&
+                    (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+                    (<ImportOrExportSpecifier>location.parent).propertyName === location;
+            }
+
+            function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
+                return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
+                    return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
+                });
+            }
+
+            function getDeclaredName(symbol: Symbol, location: Node) {
+                // Special case for function expressions, whose names are solely local to their bodies.
+                var functionExpression = forEach(symbol.declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
+
+                // When a name gets interned into a SourceFile's 'identifiers' Map,
+                // its name is escaped and stored in the same way its symbol name/identifier
+                // name should be stored. Function expressions, however, are a special case,
+                // because despite sometimes having a name, the binder unconditionally binds them
+                // to a symbol with the name "__function".
+                if (functionExpression && functionExpression.name) {
+                    var name = functionExpression.name.text;
+                }
+
+                // If this is an export or import specifier it could have been renamed using the as syntax.
+                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
+                // so check for the propertyName.
+                if (isImportOrExportSpecifierName(location)) {
+                    return location.getText();
+                }
+
                 var name = typeInfoResolver.symbolToString(symbol);
 
                 return stripQuotes(name);
             }
 
-            function getInternedName(symbol: Symbol, declarations: Declaration[]): string {
+            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
+                // If this is an export or import specifier it could have been renamed using the as syntax.
+                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
+                // so check for the propertyName.
+                if (isImportOrExportSpecifierName(location)) {
+                    return location.getText();
+                }
+
                 // Special case for function expressions, whose names are solely local to their bodies.
                 var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
@@ -4048,16 +4292,22 @@ module ts {
 
             function getSymbolScope(symbol: Symbol): Node {
                 // If this is private property or method, the scope is the containing class
-                if (symbol.getFlags() && (SymbolFlags.Property | SymbolFlags.Method)) {
+                if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
                     var privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
                     if (privateDeclaration) {
                         return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                     }
                 }
 
+                // If the symbol is an import we would like to find it if we are looking for what it imports.
+                // So consider it visibile outside its declaration scope.
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return undefined;
+                }
+
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
                 // if symbol correspond to the union property - bail out
-                if (symbol.parent || (symbol.getFlags() & SymbolFlags.UnionProperty)) {
+                if (symbol.parent || (symbol.flags & SymbolFlags.UnionProperty)) {
                     return undefined;
                 }
 
@@ -4412,6 +4662,11 @@ module ts {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
+                // If the symbol is an alias, add what it alaises to the list
+                if (isImportOrExportSpecifierImportSymbol(symbol)) {
+                    result.push(typeInfoResolver.getAliasedSymbol(symbol));
+                }
+
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
@@ -4485,6 +4740,13 @@ module ts {
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
                 if (searchSymbols.indexOf(referenceSymbol) >= 0) {
+                    return true;
+                }
+
+                // If the reference symbol is an alias, check if what it is aliasing is one of the search
+                // symbols.
+                if (isImportOrExportSpecifierImportSymbol(referenceSymbol) &&
+                    searchSymbols.indexOf(typeInfoResolver.getAliasedSymbol(referenceSymbol)) >= 0) {
                     return true;
                 }
 
@@ -4601,7 +4863,7 @@ module ts {
 
         /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
         function isWriteAccess(node: Node): boolean {
-            if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            if (node.kind === SyntaxKind.Identifier && isDeclarationName(node)) {
                 return true;
             }
 
@@ -4695,13 +4957,21 @@ module ts {
                         return SemanticMeaning.Namespace;
                     }
 
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
                 // An external module can be a Value
                 case SyntaxKind.SourceFile:
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
+
+            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+
             Debug.fail("Unknown declaration type");
         }
 
@@ -4755,7 +5025,7 @@ module ts {
             else if (isInRightSideOfImport(node)) {
                 return getMeaningFromRightHandSideOfImportEquals(node);
             }
-            else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+            else if (isDeclarationName(node)) {
                 return getMeaningFromDeclaration(node.parent);
             }
             else if (isTypeReference(node)) {
@@ -5481,6 +5751,52 @@ module ts {
             getSourceFile,
             getProgram
         };
+    }
+
+    /* @internal */
+    export function getNameTable(sourceFile: SourceFile): Map<string> {
+        if (!sourceFile.nameTable) {
+            initializeNameTable(sourceFile)
+        }
+
+        return sourceFile.nameTable;
+    }
+
+    function initializeNameTable(sourceFile: SourceFile): void {
+        var nameTable: Map<string> = {};
+
+        walk(sourceFile);
+        sourceFile.nameTable = nameTable;
+
+        function walk(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    nameTable[(<Identifier>node).text] = (<Identifier>node).text;
+                    break;
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    // We want to store any numbers/strings if they were a name that could be
+                    // related to a declaration.  So, if we have 'import x = require("something")'
+                    // then we want 'something' to be in the name table.  Similarly, if we have
+                    // "a['propname']" then we want to store "propname" in the name table.
+                    if (isDeclarationName(node) ||
+                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
+                        isArgumentOfElementAccessExpression(node)) {
+
+                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                    }
+                    break;
+                default:
+                    forEachChild(node, walk);
+            }
+        }
+    }
+
+    function isArgumentOfElementAccessExpression(node: Node) {
+        return node &&
+            node.parent &&
+            node.parent.kind === SyntaxKind.ElementAccessExpression &&
+            (<ElementAccessExpression>node.parent).argumentExpression === node;
     }
 
     /// Classifier

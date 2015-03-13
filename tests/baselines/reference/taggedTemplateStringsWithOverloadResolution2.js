@@ -26,7 +26,7 @@ function foo1() {
     }
     return undefined;
 }
-var a = foo1 "" + 1; // string
+var a = (_a = ["", ""], _a.raw = ["", ""], foo1(_a, 1)); // string
 var b = foo1([], 1); // number
 function foo2() {
     var stuff = [];
@@ -35,5 +35,6 @@ function foo2() {
     }
     return undefined;
 }
-var c = foo2 "" + 1; // number
+var c = (_b = ["", ""], _b.raw = ["", ""], foo2(_b, 1)); // number
 var d = foo2([], 1); // number
+var _a, _b;

@@ -21,7 +21,11 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var x = true ? function (a) { return a.toExponential(); } : function (b) { return b.toFixed(); };
+var x = true ? function (a) {
+    return a.toExponential();
+} : function (b) {
+    return b.toFixed();
+};
 var A = (function () {
     function A() {
     }
@@ -41,4 +45,8 @@ var C = (function (_super) {
     }
     return C;
 })(A);
-var x2 = true ? function (a) { return a.foo; } : function (b) { return b.foo; };
+var x2 = true ? function (a) {
+    return a.foo;
+} : function (b) {
+    return b.foo;
+};

@@ -38,7 +38,9 @@ var GetterOnly = (function () {
     Object.defineProperty(GetterOnly.prototype, "Value", {
         get: function () {
             var _this = this;
-            var fn = function () { return _this; };
+            var fn = function () {
+                return _this;
+            };
             return '';
         },
         set: function (val) {
@@ -58,7 +60,9 @@ var SetterOnly = (function () {
         },
         set: function (val) {
             var _this = this;
-            var fn = function () { return _this; };
+            var fn = function () {
+                return _this;
+            };
         },
         enumerable: true,
         configurable: true
@@ -72,12 +76,16 @@ var GetterAndSetter = (function () {
     Object.defineProperty(GetterAndSetter.prototype, "Value", {
         get: function () {
             var _this = this;
-            var fn = function () { return _this; };
+            var fn = function () {
+                return _this;
+            };
             return '';
         },
         set: function (val) {
             var _this = this;
-            var fn = function () { return _this; };
+            var fn = function () {
+                return _this;
+            };
         },
         enumerable: true,
         configurable: true

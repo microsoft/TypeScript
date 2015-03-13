@@ -8,7 +8,9 @@
 (arg1 = 1, arg2) => 1; 
 
 //// [fatarrowfunctionsOptionalArgsErrors1.js]
-(function (arg1, arg2) { return 101; });
+(function (arg1, arg2) {
+    return 101;
+});
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {

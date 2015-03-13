@@ -70,7 +70,9 @@ var Other = (function (_super) {
         var _this = this;
         _super.call(this);
         this.propertyInitializer = _super.prototype.instanceMethod.call(this);
-        this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
+        this.functionProperty = function () {
+            _super.prototype.instanceMethod.call(_this);
+        };
         _super.prototype.instanceMethod.call(this);
     }
     // in instance method

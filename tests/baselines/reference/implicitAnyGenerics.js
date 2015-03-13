@@ -46,7 +46,9 @@ var d2 = new D(1);
 var d3 = new D(1);
 var d4 = new D(1);
 var d5 = new D(null);
-function foo() { return null; }
+function foo() {
+    return null;
+}
 ;
 foo();
 foo();

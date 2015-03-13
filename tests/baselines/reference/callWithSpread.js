@@ -61,6 +61,10 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 function foo(x, y) {
+    var z = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        z[_i - 2] = arguments[_i];
+    }
 }
 var a;
 var z;
@@ -78,7 +82,11 @@ obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
 xa[1].foo(1, 2, "abc");
 (_a = xa[1]).foo.apply(_a, [1, 2].concat(a));
 (_b = xa[1]).foo.apply(_b, [1, 2].concat(a, ["abc"]));
-(_c = xa[1]).foo.apply(_c, [1, 2, "abc"]);
+(_c = xa[1]).foo.apply(_c, [
+    1,
+    2,
+    "abc"
+]);
 var C = (function () {
     function C(x, y) {
         var z = [];
@@ -89,6 +97,10 @@ var C = (function () {
         this.foo.apply(this, [x, y].concat(z));
     }
     C.prototype.foo = function (x, y) {
+        var z = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            z[_i - 2] = arguments[_i];
+        }
     };
     return C;
 })();

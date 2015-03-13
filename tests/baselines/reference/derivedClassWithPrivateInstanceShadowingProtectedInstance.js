@@ -36,8 +36,11 @@ var Base = (function () {
         return '';
     };
     Object.defineProperty(Base.prototype, "a", {
-        get: function () { return 1; },
-        set: function (v) { },
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
         enumerable: true,
         configurable: true
     });
@@ -53,8 +56,11 @@ var Derived = (function (_super) {
         return '';
     };
     Object.defineProperty(Derived.prototype, "a", {
-        get: function () { return 1; },
-        set: function (v) { },
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
         enumerable: true,
         configurable: true
     });

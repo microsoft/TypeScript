@@ -11,4 +11,5 @@ f `abcdef${ 1234 }${ 5678 }ghijkl`;
 function f(x, y, z) {
 }
 f({}, 10, 10);
-f "abcdef" + 1234 + 5678 + "ghijkl";
+(_a = ["abcdef", "", "ghijkl"], _a.raw = ["abcdef", "", "ghijkl"], f(_a, 1234, 5678));
+var _a;

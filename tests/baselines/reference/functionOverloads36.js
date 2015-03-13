@@ -6,5 +6,9 @@ var x = foo({a:'foo'});
 
 
 //// [functionOverloads36.js]
-function foo(bar) { return bar; }
-var x = foo({ a: 'foo' });
+function foo(bar) {
+    return bar;
+}
+var x = foo({
+    a: 'foo'
+});

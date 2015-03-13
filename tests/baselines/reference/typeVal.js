@@ -9,5 +9,7 @@ I.I=4;
 
 
 //// [typeVal.js]
-var I = { I: 3 };
+var I = {
+    I: 3
+};
 I.I = 4;

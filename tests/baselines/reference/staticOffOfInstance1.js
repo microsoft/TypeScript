@@ -13,6 +13,7 @@ var List = (function () {
     List.prototype.Blah = function () {
         this.Foo();
     };
-    List.Foo = function () { };
+    List.Foo = function () {
+    };
     return List;
 })();

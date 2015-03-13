@@ -57,7 +57,9 @@ var Test;
 var C = (function () {
     function C() {
     }
-    C.prototype.getX = function () { return this.x; };
+    C.prototype.getX = function () {
+        return this.x;
+    };
     C.prototype.clone = function (other) {
         this.x = other.x;
     };

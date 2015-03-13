@@ -62,7 +62,10 @@ var M2;
     var Point;
     (function (Point) {
         function Origin() {
-            return { x: 0, y: 0 };
+            return {
+                x: 0,
+                y: 0
+            };
         }
         Point.Origin = Origin;
     })(Point = M2.Point || (M2.Point = {}));

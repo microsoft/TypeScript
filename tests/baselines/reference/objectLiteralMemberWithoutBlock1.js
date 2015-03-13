@@ -2,4 +2,6 @@
 var v = { foo(); }
 
 //// [objectLiteralMemberWithoutBlock1.js]
-var v = { foo: function () { } };
+var v = {
+    foo: function () { }
+};

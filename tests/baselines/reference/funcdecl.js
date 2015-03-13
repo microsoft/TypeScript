@@ -115,7 +115,8 @@ function overload1(ns) {
     return ns.toString();
 }
 var withOverloadSignature = overload1;
-function f(n) { }
+function f(n) {
+}
 var m2;
 (function (m2) {
     function foo(n) {

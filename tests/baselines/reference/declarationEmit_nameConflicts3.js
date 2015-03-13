@@ -37,17 +37,20 @@ var M;
 (function (M) {
     var D;
     (function (D) {
-        function f() { }
+        function f() {
+        }
         D.f = f;
     })(D = M.D || (M.D = {}));
     var C;
     (function (C) {
-        function f() { }
+        function f() {
+        }
         C.f = f;
     })(C = M.C || (M.C = {}));
     var E;
     (function (E) {
-        function f() { }
+        function f() {
+        }
         E.f = f;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
@@ -58,7 +61,8 @@ var M;
         var C = (function () {
             function C() {
             }
-            C.f = function () { };
+            C.f = function () {
+            };
             return C;
         })();
         P.C = C;

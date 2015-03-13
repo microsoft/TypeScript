@@ -31,6 +31,7 @@ interface NotString {
     trim(): string;
     length: number;
     substr(from: number, length?: number): string;
+    valueOf(): string;
     [index: number]: string;
 }
 

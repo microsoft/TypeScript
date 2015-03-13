@@ -30,10 +30,18 @@ var b = {
 }
 
 //// [parametersWithNoAnnotationAreAny.js]
-function foo(x) { return x; }
-var f = function foo(x) { return x; };
-var f2 = function (x) { return x; };
-var f3 = function (x) { return x; };
+function foo(x) {
+    return x;
+}
+var f = function foo(x) {
+    return x;
+};
+var f2 = function (x) {
+    return x;
+};
+var f3 = function (x) {
+    return x;
+};
 var C = (function () {
     function C() {
     }
@@ -50,5 +58,7 @@ var b = {
     a: function foo(x) {
         return x;
     },
-    b: function (x) { return x; }
+    b: function (x) {
+        return x;
+    }
 };

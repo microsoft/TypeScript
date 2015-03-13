@@ -2,4 +2,9 @@
 var foo = <{ id: number; }[]>[{ foo: "s" }, {  }];
 
 //// [contextualTyping37.js]
-var foo = [{ foo: "s" }, {}];
+var foo = [
+    {
+        foo: "s"
+    },
+    {}
+];

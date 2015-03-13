@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(58,1): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(67,1): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(58,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(67,10): error TS2354: No best common type exists among return expressions.
 
 
 ==== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts (2 errors) ====
@@ -61,37 +61,25 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
     var b: { x: number; z?: number };
     // returns typeof a
     function f9() {
-    ~~~~~~~~~~~~~~~
-        if (true) {
-    ~~~~~~~~~~~~~~~
-            return a;
-    ~~~~~~~~~~~~~~~~~
-        } else {
-    ~~~~~~~~~~~~
-            return b;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-    }
-    ~
+             ~~
 !!! error TS2354: No best common type exists among return expressions.
+        if (true) {
+            return a;
+        } else {
+            return b;
+        }
+    }
     
     // returns typeof b
     function f10() {
-    ~~~~~~~~~~~~~~~~
-        if (true) {
-    ~~~~~~~~~~~~~~~
-            return b;
-    ~~~~~~~~~~~~~~~~~
-        } else {
-    ~~~~~~~~~~~~
-            return a;
-    ~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-    }
-    ~
+             ~~~
 !!! error TS2354: No best common type exists among return expressions.
+        if (true) {
+            return b;
+        } else {
+            return a;
+        }
+    }
     
     // returns number => void
     function f11() {

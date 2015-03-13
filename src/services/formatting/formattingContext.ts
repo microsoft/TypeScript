@@ -29,7 +29,7 @@ module ts.formatting {
         private contextNodeBlockIsOnOneLine: boolean;
         private nextNodeBlockIsOnOneLine: boolean;
 
-        constructor(private sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
+        constructor(public sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
 
         public updateContext(currentSpan: SpanWithKind, currentTokenParent: Node, nextSpan: SpanWithKind, nextTokenParent: Node, commonParent: Node) {

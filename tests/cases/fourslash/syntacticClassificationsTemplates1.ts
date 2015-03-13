@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts"/>
+/// <reference path="fourslash.ts"/>
 
 ////var v = 10e0;
 ////var x = {

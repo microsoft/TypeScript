@@ -2,4 +2,6 @@
 var v = { [e] };
 
 //// [parserComputedPropertyName1.js]
-var v = { [e]:  };
+var v = {
+    [e]: 
+};

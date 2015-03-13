@@ -67,7 +67,8 @@ module ts {
 
         if (!file.locals) {
             file.locals = {};
-            container = blockScopeContainer = file;
+            container = file;
+            setBlockScopeContainer(file, /*cleanLocals*/ false);
             bind(file);
             file.symbolCount = symbolCount;
         }
@@ -75,6 +76,13 @@ module ts {
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
             return new Symbol(flags, name);
+        }
+
+        function setBlockScopeContainer(node: Node, cleanLocals: boolean) {
+            blockScopeContainer = node;
+            if (cleanLocals) {
+                blockScopeContainer.locals = undefined;
+            }
         }
 
         function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
@@ -112,6 +120,13 @@ module ts {
                     return "__new";
                 case SyntaxKind.IndexSignature:
                     return "__index";
+                case SyntaxKind.ExportDeclaration:
+                    return "__export";
+                case SyntaxKind.ExportAssignment:
+                    return "default";
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    return node.flags & NodeFlags.Default ? "default" : undefined;
             }
         }
 
@@ -122,7 +137,9 @@ module ts {
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            var name = getDeclarationName(node);
+            // The exported symbol for an export default function/class node is always named "default"
+            var name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 if (symbol.flags & excludes) {
@@ -137,9 +154,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -180,7 +197,7 @@ module ts {
 
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             var hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
-            if (symbolKind & SymbolFlags.Import) {
+            if (symbolKind & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                 }
@@ -236,7 +253,13 @@ module ts {
             }
 
             if (isBlockScopeContainer) {
-                blockScopeContainer = node;
+                // in incremental scenarios we might reuse nodes that already have locals being allocated
+                // during the bind step these locals should be dropped to prevent using stale data.
+                // locals should always be dropped unless they were previously initialized by the binder
+                // these cases are:
+                // - node has locals (symbolKind & HasLocals) !== 0
+                // - node is a source file
+                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
@@ -310,13 +333,6 @@ module ts {
             }
         }
 
-        function bindExportDeclaration(node: ExportDeclaration) {
-            if (!node.exportClause) {
-                ((<ExportContainer>container).exportStars || ((<ExportContainer>container).exportStars = [])).push(node);
-            }
-            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
-        }
-
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
@@ -342,14 +358,7 @@ module ts {
         }
 
         function bindCatchVariableDeclaration(node: CatchClause) {
-            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.name.text || "__missing");
-            addDeclarationToSymbol(symbol, node, SymbolFlags.FunctionScopedVariable);
-            var saveParent = parent;
-            var savedBlockScopeContainer = blockScopeContainer;
-            parent = blockScopeContainer = node;
-            forEachChild(node, bind);
-            parent = saveParent;
-            blockScopeContainer = savedBlockScopeContainer;
+            bindChildren(node, /*symbolKind:*/ 0, /*isBlockScopeContainer:*/ true);
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
@@ -377,6 +386,7 @@ module ts {
 
         function bind(node: Node) {
             node.parent = parent;
+            
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
@@ -389,7 +399,7 @@ module ts {
                     if (isBindingPattern((<Declaration>node).name)) {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
-                    else if (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) {
+                    else if (isBlockOrCatchScoped(<Declaration>node)) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {
@@ -476,18 +486,33 @@ module ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
-                    break;
-                case SyntaxKind.ExportDeclaration:
-                    bindExportDeclaration(<ExportDeclaration>node);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ImportClause:
                     if ((<ImportClause>node).name) {
-                        bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
+                        bindDeclaration(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes, /*isBlockScopeContainer*/ false);
                     }
                     else {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    if (!(<ExportDeclaration>node).exportClause) {
+                        // All export * declarations are collected in an __export symbol
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.ExportStar, 0);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                        // An export default clause with an identifier exports all meanings of that identifier
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    }
+                    else {
+                        // An export default clause with an expression exports a value
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    }
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
@@ -503,13 +528,13 @@ module ts {
                     //  var x;
                     // }
                     // 'var x' will be placed into the function locals and 'let x' - into the locals of the block
-                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isAnyFunction(node.parent));
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ !isFunctionLike(node.parent));
                     break;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
                 default:

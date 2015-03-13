@@ -664,7 +664,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 7);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Class to interface',() => {

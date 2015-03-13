@@ -15,4 +15,5 @@ var b = (() => { })[0]; // Should be Bar
 
 //// [augmentedTypeBracketAccessIndexSignature.js]
 var a = {}[0]; // Should be Foo
-var b = (function () { })[0]; // Should be Bar
+var b = (function () {
+})[0]; // Should be Bar

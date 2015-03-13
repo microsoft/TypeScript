@@ -26,7 +26,7 @@ describe('PreProcessFile:', function () {
             var expectedImportedFile = expectedImportedFiles[i];
 
             assert.equal(resultImportedFile.fileName, expectedImportedFile.fileName, "Imported file path does not match expected. Expected: " + expectedImportedFile.fileName + ". Actual: " + resultImportedFile.fileName + ".");
-            
+
             assert.equal(resultImportedFile.start, expectedImportedFile.start, "Imported file position does not match expected. Expected: " + expectedImportedFile.start + ". Actual: " + resultImportedFile.start + ".");
 
             assert.equal(resultImportedFile.length, expectedImportedFile.length, "Imported file length does not match expected. Expected: " + expectedImportedFile.length + ". Actual: " + resultImportedFile.length + ".");
@@ -37,7 +37,7 @@ describe('PreProcessFile:', function () {
             var expectedReferencedFile = expectedReferencedFiles[i];
 
             assert.equal(resultReferencedFile.fileName, expectedReferencedFile.fileName, "Referenced file path does not match expected. Expected: " + expectedReferencedFile.fileName + ". Actual: " + resultReferencedFile.fileName + ".");
-            
+
             assert.equal(resultReferencedFile.start, expectedReferencedFile.start, "Referenced file position does not match expected. Expected: " + expectedReferencedFile.start + ". Actual: " + resultReferencedFile.start + ".");
 
             assert.equal(resultReferencedFile.length, expectedReferencedFile.length, "Referenced file length does not match expected. Expected: " + expectedReferencedFile.length + ". Actual: " + resultReferencedFile.length + ".");
@@ -105,6 +105,48 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", start: 0, length: 35 }],
                     importedFiles: [{ fileName: "r1.ts", start: 91, length: 5 }, { fileName: "r3.ts", start: 148, length: 5 }],
+                    isLibFile: false
+                })
+        });
+
+        it("Correctly return ES6 imports", function () {
+            test("import * as ns from \"m1\";" + "\n" +
+                "import def, * as ns from \"m2\";" + "\n" +
+                "import def from \"m3\";" + "\n" +
+                "import {a} from \"m4\";" + "\n" +
+                "import {a as A} from \"m5\";" + "\n" +
+                "import {a as A, b, c as C} from \"m6\";" + "\n" +
+                "import def , {a, b, c as C} from \"m7\";" + "\n",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", start: 20,  length: 2 },
+                        { fileName: "m2", start: 51,  length: 2 },
+                        { fileName: "m3", start: 73,  length: 2 },
+                        { fileName: "m4", start: 95,  length: 2 },
+                        { fileName: "m5", start: 122, length: 2 },
+                        { fileName: "m6", start: 160, length: 2 },
+                        { fileName: "m7", start: 199, length: 2 }
+                    ],
+                    isLibFile: false
+                })
+        });
+
+        it("Correctly return ES6 exports", function () {
+            test("export * from \"m1\";" + "\n" +
+                "export {a} from \"m2\";" + "\n" +
+                "export {a as A} from \"m3\";" + "\n" +
+                "export {a as A, b, c as C} from \"m4\";" + "\n",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", start: 14,  length: 2 },
+                        { fileName: "m2", start: 36,  length: 2 },
+                        { fileName: "m3", start: 63,  length: 2 },
+                        { fileName: "m4", start: 101, length: 2 },
+                    ],
                     isLibFile: false
                 })
         });

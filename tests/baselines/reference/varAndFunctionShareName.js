@@ -4,4 +4,5 @@ function myFn(): any { }
 
 //// [varAndFunctionShareName.js]
 var myFn;
-function myFn() { }
+function myFn() {
+}

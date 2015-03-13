@@ -2151,7 +2151,9 @@ var Harness;
         function bugs(content) {
             var bugs = content.match(/\bbug (\d+)/i);
             if (bugs) {
-                bugs.forEach(function (bug) { return assert.bug(bug); });
+                bugs.forEach(function (bug) {
+                    return assert.bug(bug);
+                });
             }
         }
         Assert.bugs = bugs;
@@ -2164,7 +2166,9 @@ var Harness;
         function arrayLengthIs(arr, length) {
             if (arr.length != length) {
                 var actual = '';
-                arr.forEach(function (n) { return actual = actual + '\n      ' + n.toString(); });
+                arr.forEach(function (n) {
+                    return actual = actual + '\n      ' + n.toString();
+                });
                 Assert.throwAssertError(new Error('Expected array to have ' + length + ' elements. Actual elements were:' + actual));
             }
         }
@@ -2271,17 +2275,28 @@ var Harness;
     var Logger = (function () {
         function Logger() {
         }
-        Logger.prototype.start = function (fileName, priority) { };
-        Logger.prototype.end = function (fileName) { };
-        Logger.prototype.scenarioStart = function (scenario) { };
-        Logger.prototype.scenarioEnd = function (scenario, error) { };
-        Logger.prototype.testStart = function (test) { };
-        Logger.prototype.pass = function (test) { };
-        Logger.prototype.bug = function (test) { };
-        Logger.prototype.fail = function (test) { };
-        Logger.prototype.error = function (test, error) { };
-        Logger.prototype.comment = function (comment) { };
-        Logger.prototype.verify = function (test, passed, actual, expected, message) { };
+        Logger.prototype.start = function (fileName, priority) {
+        };
+        Logger.prototype.end = function (fileName) {
+        };
+        Logger.prototype.scenarioStart = function (scenario) {
+        };
+        Logger.prototype.scenarioEnd = function (scenario, error) {
+        };
+        Logger.prototype.testStart = function (test) {
+        };
+        Logger.prototype.pass = function (test) {
+        };
+        Logger.prototype.bug = function (test) {
+        };
+        Logger.prototype.fail = function (test) {
+        };
+        Logger.prototype.error = function (test, error) {
+        };
+        Logger.prototype.comment = function (comment) {
+        };
+        Logger.prototype.verify = function (test, passed, actual, expected, message) {
+        };
         return Logger;
     })();
     Harness.Logger = Logger;
@@ -2348,13 +2363,16 @@ var Harness;
                 return false;
             }
         };
-        Runnable.prototype.run = function (done) { };
+        Runnable.prototype.run = function (done) {
+        };
         Runnable.prototype.runBlock = function (done) {
             return this.call(this.block, done);
         };
         Runnable.prototype.runChild = function (index, done) {
             var _this = this;
-            return this.call((function (done) { return _this.children[index].run(done); }), done);
+            return this.call((function (done) {
+                return _this.children[index].run(done);
+            }), done);
         };
         Runnable.pushGlobalErrorHandler = function (done) {
             errorHandlerStack.push(function (e) {
@@ -2392,17 +2410,25 @@ var Harness;
         TestCase.prototype.run = function (done) {
             var that = this;
             Runnable.currentStack.push(this);
-            emitLog('testStart', { desc: this.description });
+            emitLog('testStart', {
+                desc: this.description
+            });
             if (this.block) {
                 var async = this.runBlock(function (e) {
                     if (e) {
                         that.passed = false;
                         that.error = e;
-                        emitLog('error', { desc: this.description, pass: false }, e);
+                        emitLog('error', {
+                            desc: this.description,
+                            pass: false
+                        }, e);
                     }
                     else {
                         that.passed = true;
-                        emitLog('pass', { desc: this.description, pass: true });
+                        emitLog('pass', {
+                            desc: this.description,
+                            pass: true
+                        });
                     }
                     Runnable.currentStack.pop();
                     done();
@@ -2423,15 +2449,24 @@ var Harness;
         Scenario.prototype.run = function (done) {
             var that = this;
             Runnable.currentStack.push(this);
-            emitLog('scenarioStart', { desc: this.description });
+            emitLog('scenarioStart', {
+                desc: this.description
+            });
             var async = this.runBlock(function (e) {
                 Runnable.currentStack.pop();
                 if (e) {
                     that.passed = false;
                     that.error = e;
-                    var metadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
+                    var metadata = {
+                        id: undefined,
+                        desc: this.description,
+                        pass: false,
+                        bugs: assert.bugIds
+                    };
                     // Report all bugs affecting this scenario
-                    assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
+                    assert.bugIds.forEach(function (desc) {
+                        return emitLog('bug', metadata, desc);
+                    });
                     emitLog('scenarioEnd', metadata, e);
                     done();
                 }
@@ -2458,9 +2493,16 @@ var Harness;
                 if (async)
                     return;
             }
-            var metadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
+            var metadata = {
+                id: undefined,
+                desc: this.description,
+                pass: this.passed,
+                bugs: assert.bugIds
+            };
             // Report all bugs affecting this scenario
-            assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
+            assert.bugIds.forEach(function (desc) {
+                return emitLog('bug', metadata, desc);
+            });
             emitLog('scenarioEnd', metadata);
             done();
         };
@@ -2585,11 +2627,16 @@ var Harness;
                 this.description = "";
                 this.results = {};
             }
-            Benchmark.prototype.bench = function (subBench) { };
-            Benchmark.prototype.before = function () { };
-            Benchmark.prototype.beforeEach = function () { };
-            Benchmark.prototype.after = function () { };
-            Benchmark.prototype.afterEach = function () { };
+            Benchmark.prototype.bench = function (subBench) {
+            };
+            Benchmark.prototype.before = function () {
+            };
+            Benchmark.prototype.beforeEach = function () {
+            };
+            Benchmark.prototype.after = function () {
+            };
+            Benchmark.prototype.afterEach = function () {
+            };
             Benchmark.prototype.addTimingFor = function (name, timing) {
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
@@ -2625,9 +2672,13 @@ var Harness;
                 b.after();
                 for (var prop in b.results) {
                     var description = b.description + (prop ? ": " + prop : '');
-                    emitLog('testStart', { desc: description });
+                    emitLog('testStart', {
+                        desc: description
+                    });
                     emitLog('pass', {
-                        desc: description, pass: true, perfResults: {
+                        desc: description,
+                        pass: true,
+                        perfResults: {
                             mean: b.results[prop].mean(),
                             min: b.results[prop].min(),
                             max: b.results[prop].max(),
@@ -2692,10 +2743,18 @@ var Harness;
                 this.fileCollection[s] = writer;
                 return writer;
             };
-            EmitterIOHost.prototype.directoryExists = function (s) { return false; };
-            EmitterIOHost.prototype.fileExists = function (s) { return typeof this.fileCollection[s] !== 'undefined'; };
-            EmitterIOHost.prototype.resolvePath = function (s) { return s; };
-            EmitterIOHost.prototype.reset = function () { this.fileCollection = {}; };
+            EmitterIOHost.prototype.directoryExists = function (s) {
+                return false;
+            };
+            EmitterIOHost.prototype.fileExists = function (s) {
+                return typeof this.fileCollection[s] !== 'undefined';
+            };
+            EmitterIOHost.prototype.resolvePath = function (s) {
+                return s;
+            };
+            EmitterIOHost.prototype.reset = function () {
+                this.fileCollection = {};
+            };
             EmitterIOHost.prototype.toArray = function () {
                 var result = [];
                 for (var p in this.fileCollection) {
@@ -2705,7 +2764,10 @@ var Harness;
                             if (p !== '0.js') {
                                 current.lines.unshift('////[' + p + ']');
                             }
-                            result.push({ filename: p, file: this.fileCollection[p] });
+                            result.push({
+                                filename: p,
+                                file: this.fileCollection[p]
+                            });
                         }
                     }
                 }
@@ -2769,7 +2831,9 @@ var Harness;
             Type.prototype.normalizeToArray = function (arg) {
                 if ((Array.isArray && Array.isArray(arg)) || arg instanceof Array)
                     return arg;
-                return [arg];
+                return [
+                    arg
+                ];
             };
             Type.prototype.compilesOk = function (testCode) {
                 var errors = null;
@@ -2927,7 +2991,9 @@ var Harness;
                                 var tyInfo = compiler.pullGetTypeInfoAtPosition(targetPosition, script2);
                                 var name = this.getTypeInfoName(tyInfo.ast);
                                 var foundValue = new Type(tyInfo.typeInfo, code, name);
-                                if (!matchingIdentifiers.some(function (value) { return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type); })) {
+                                if (!matchingIdentifiers.some(function (value) {
+                                    return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type);
+                                })) {
                                     matchingIdentifiers.push(foundValue);
                                 }
                             }
@@ -2937,7 +3003,9 @@ var Harness;
                                     var name = this.getTypeInfoName(tyInfo.ast);
                                     if (name === targetIdentifier) {
                                         var foundValue = new Type(tyInfo.typeInfo, code, targetIdentifier);
-                                        if (!matchingIdentifiers.some(function (value) { return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type); })) {
+                                        if (!matchingIdentifiers.some(function (value) {
+                                            return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type);
+                                        })) {
                                             matchingIdentifiers.push(foundValue);
                                         }
                                     }
@@ -3043,9 +3111,15 @@ var Harness;
                         outputs[fn] = new Harness.Compiler.WriterAggregator();
                         return outputs[fn];
                     },
-                    directoryExists: function (path) { return true; },
-                    fileExists: function (path) { return true; },
-                    resolvePath: function (path) { return path; }
+                    directoryExists: function (path) {
+                        return true;
+                    },
+                    fileExists: function (path) {
+                        return true;
+                    },
+                    resolvePath: function (path) {
+                        return path;
+                    }
                 });
                 compiler.emitDeclarations();
                 var results = null;
@@ -3086,7 +3160,9 @@ var Harness;
                 this.fileResults = fileResults;
                 this.scripts = scripts;
                 var lines = [];
-                fileResults.forEach(function (v) { return lines = lines.concat(v.file.lines); });
+                fileResults.forEach(function (v) {
+                    return lines = lines.concat(v.file.lines);
+                });
                 this.code = lines.join("\n");
                 this.errors = [];
                 for (var i = 0; i < errorLines.length; i++) {
@@ -3143,7 +3219,9 @@ var Harness;
         function reset() {
             stdout.reset();
             stderr.reset();
-            var files = compiler.units.map(function (value) { return value.filename; });
+            var files = compiler.units.map(function (value) {
+                return value.filename;
+            });
             for (var i = 0; i < files.length; i++) {
                 var fname = files[i];
                 if (fname !== 'lib.d.ts') {
@@ -3304,12 +3382,24 @@ var Harness;
     (function (TestCaseParser) {
         optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];
+        var fileMetadataNames = [
+            "filename",
+            "comments",
+            "declaration",
+            "module",
+            "nolib",
+            "sourcemap",
+            "target",
+            "out"
+        ];
         function extractCompilerSettings(content) {
             var opts = [];
             var match;
             while ((match = optionRegex.exec(content)) != null) {
-                opts.push({ flag: match[1], value: match[2] });
+                opts.push({
+                    flag: match[1],
+                    value: match[2]
+                });
             }
             return opts;
         }
@@ -3402,7 +3492,10 @@ var Harness;
                 references: refs
             };
             files.push(newTestFile);
-            return { settings: settings, testUnitData: files };
+            return {
+                settings: settings,
+                testUnitData: files
+            };
         }
         TestCaseParser.makeUnitsFromTest = makeUnitsFromTest;
     })(TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {}));
@@ -3449,9 +3542,21 @@ var Harness;
                 return TypeScript.ScriptEditRange.unknown();
             }
             var entries = this.editRanges.slice(initialEditRangeIndex);
-            var minDistFromStart = entries.map(function (x) { return x.editRange.minChar; }).reduce(function (prev, current) { return Math.min(prev, current); });
-            var minDistFromEnd = entries.map(function (x) { return x.length - x.editRange.limChar; }).reduce(function (prev, current) { return Math.min(prev, current); });
-            var aggDelta = entries.map(function (x) { return x.editRange.delta; }).reduce(function (prev, current) { return prev + current; });
+            var minDistFromStart = entries.map(function (x) {
+                return x.editRange.minChar;
+            }).reduce(function (prev, current) {
+                return Math.min(prev, current);
+            });
+            var minDistFromEnd = entries.map(function (x) {
+                return x.length - x.editRange.limChar;
+            }).reduce(function (prev, current) {
+                return Math.min(prev, current);
+            });
+            var aggDelta = entries.map(function (x) {
+                return x.editRange.delta;
+            }).reduce(function (prev, current) {
+                return prev + current;
+            });
             return new TypeScript.ScriptEditRange(minDistFromStart, entries[0].length - minDistFromEnd, aggDelta);
         };
         return ScriptInfo;
@@ -3501,11 +3606,21 @@ var Harness;
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //
-        TypeScriptLS.prototype.information = function () { return false; };
-        TypeScriptLS.prototype.debug = function () { return true; };
-        TypeScriptLS.prototype.warning = function () { return true; };
-        TypeScriptLS.prototype.error = function () { return true; };
-        TypeScriptLS.prototype.fatal = function () { return true; };
+        TypeScriptLS.prototype.information = function () {
+            return false;
+        };
+        TypeScriptLS.prototype.debug = function () {
+            return true;
+        };
+        TypeScriptLS.prototype.warning = function () {
+            return true;
+        };
+        TypeScriptLS.prototype.error = function () {
+            return true;
+        };
+        TypeScriptLS.prototype.fatal = function () {
+            return true;
+        };
         TypeScriptLS.prototype.log = function (s) {
             // For debugging...
             //IO.printLine("TypeScriptLS:" + s);
@@ -3552,7 +3667,8 @@ var Harness;
         TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
             var parser = new TypeScript.Parser();
             parser.setErrorRecovery(null);
-            parser.errorCallback = function (a, b, c, d) { };
+            parser.errorCallback = function (a, b, c, d) {
+            };
             var script = parser.parse(sourceText, fileName, 0);
             return script;
         };
@@ -3612,7 +3728,10 @@ var Harness;
             function mapEdits(edits) {
                 var result = [];
                 for (var i = 0; i < edits.length; i++) {
-                    result.push({ edit: edits[i], index: i });
+                    result.push({
+                        edit: edits[i],
+                        index: i
+                    });
                 }
                 return result;
             }
@@ -3654,7 +3773,9 @@ var Harness;
             return result;
         };
         TypeScriptLS.prototype.getHostSettings = function () {
-            return JSON.stringify({ usePullLanguageService: Harness.usePull });
+            return JSON.stringify({
+                usePullLanguageService: Harness.usePull
+            });
         };
         return TypeScriptLS;
     })();
@@ -3691,7 +3812,9 @@ var Harness;
         Runner.runCollateral = runCollateral;
         function runJSString(code, callback) {
             // List of names that get overriden by various test code we eval
-            var dangerNames = ['Array'];
+            var dangerNames = [
+                'Array'
+            ];
             var globalBackup = {};
             var n = null;
             for (n in dangerNames) {
@@ -3809,7 +3932,10 @@ var Harness;
                 expected = expected.replace(/\r\n?/g, '\n');
                 actual = actual.replace(/\r\n?/g, '\n');
             }
-            return { expected: expected, actual: actual };
+            return {
+                expected: expected,
+                actual: actual
+            };
         }
         function writeComparison(expected, actual, relativeFilename, actualFilename, descriptionForDescribe) {
             if (expected != actual) {

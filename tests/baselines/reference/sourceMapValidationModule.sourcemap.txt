@@ -230,17 +230,11 @@ sourceFile:sourceMapValidationModule.ts
 ---
 >>>    function foo() {
 1 >^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^
-4 >                ^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^->
 1 >
   >
   >    
-2 >    export function 
-3 >             foo
 1 >Emitted(12, 5) Source(10, 5) + SourceIndex(0) name (m3)
-2 >Emitted(12, 14) Source(10, 21) + SourceIndex(0) name (m3)
-3 >Emitted(12, 17) Source(10, 24) + SourceIndex(0) name (m3)
 ---
 >>>        return m4.x;
 1->^^^^^^^^
@@ -250,7 +244,7 @@ sourceFile:sourceMapValidationModule.ts
 5 >                 ^
 6 >                  ^
 7 >                   ^
-1->() {
+1->export function foo() {
   >        
 2 >        return
 3 >               
@@ -279,22 +273,19 @@ sourceFile:sourceMapValidationModule.ts
 >>>    m3.foo = foo;
 1->^^^^
 2 >    ^^^^^^
-3 >          ^^^
-4 >             ^^^
-5 >                ^
-6 >                 ^^^^->
+3 >          ^^^^^^
+4 >                ^
+5 >                 ^^^^->
 1->
 2 >    foo
-3 >          
-4 >             foo() {
-  >                     return m4.x;
-  >                 }
-5 >                
+3 >          () {
+  >                  return m4.x;
+  >              }
+4 >                
 1->Emitted(15, 5) Source(10, 21) + SourceIndex(0) name (m3)
 2 >Emitted(15, 11) Source(10, 24) + SourceIndex(0) name (m3)
-3 >Emitted(15, 14) Source(10, 21) + SourceIndex(0) name (m3)
-4 >Emitted(15, 17) Source(12, 6) + SourceIndex(0) name (m3)
-5 >Emitted(15, 18) Source(12, 6) + SourceIndex(0) name (m3)
+3 >Emitted(15, 17) Source(12, 6) + SourceIndex(0) name (m3)
+4 >Emitted(15, 18) Source(12, 6) + SourceIndex(0) name (m3)
 ---
 >>>})(m3 || (m3 = {}));
 1->
