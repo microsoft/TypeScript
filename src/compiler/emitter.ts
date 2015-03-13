@@ -555,19 +555,19 @@ module ts {
         }
 
         function emitLines(nodes: Node[]) {
-            for (var i = 0, n = nodes.length; i < n; i++) {
-                emit(nodes[i]);
+            for (let node of nodes) {
+                emit(node);
             }
         }
 
         function emitSeparatedList(nodes: Node[], separator: string, eachNodeEmitFn: (node: Node) => void) {
             var currentWriterPos = writer.getTextPos();
-            for (var i = 0, n = nodes.length; i < n; i++) {
+            for (let node of nodes) {
                 if (currentWriterPos !== writer.getTextPos()) {
                     write(separator);
                 }
                 currentWriterPos = writer.getTextPos();
-                eachNodeEmitFn(nodes[i]);
+                eachNodeEmitFn(node);
             }
         }
 
@@ -4488,9 +4488,9 @@ module ts {
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
 
                 if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
-                    for (var i = 0, n = body.statements.length; i < n; i++) {
+                    for (let statement of body.statements) {
                         write(" ");
-                        emit(body.statements[i]);
+                        emit(statement);
                     }
                     emitTempDeclarations(/*newLine*/ false);
                     write(" ");
