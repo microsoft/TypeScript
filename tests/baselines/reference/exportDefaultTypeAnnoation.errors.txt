@@ -1,0 +1,8 @@
+tests/cases/compiler/exportDefaultTypeAnnoation.ts(2,18): error TS1200: Type annotation on export statements are only allowed in ambient module declarations.
+
+
+==== tests/cases/compiler/exportDefaultTypeAnnoation.ts (1 errors) ====
+    
+    export default : number;
+                     ~~~~~~
+!!! error TS1200: Type annotation on export statements are only allowed in ambient module declarations.

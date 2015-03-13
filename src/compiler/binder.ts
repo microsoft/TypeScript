@@ -504,7 +504,7 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                    if ((<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                     }

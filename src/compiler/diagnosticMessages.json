@@ -617,8 +617,13 @@
     },
     "Unterminated Unicode escape sequence.": {
         "category": "Error",
-        "code":  1199
+        "code": 1199
     },
+    "Type annotation on export statements are only allowed in ambient module declarations.": {
+        "category": "Error",
+        "code": 1200
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
