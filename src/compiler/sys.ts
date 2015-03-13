@@ -124,8 +124,7 @@ module ts {
                 function visitDirectory(path: string) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (var i = 0; i < files.length; i++) {
-                        var name = files[i];
+                    for (let name of files) {
                         if (!extension || fileExtensionIs(name, extension)) {
                             result.push(combinePaths(path, name));
                         }

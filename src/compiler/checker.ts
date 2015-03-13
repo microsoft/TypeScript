@@ -850,8 +850,7 @@ module ts {
 
         function findConstructorDeclaration(node: ClassDeclaration): ConstructorDeclaration {
             var members = node.members;
-            for (var i = 0; i < members.length; i++) {
-                var member = members[i];
+            for (let member of members) {
                 if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                     return <ConstructorDeclaration>member;
                 }
@@ -1549,8 +1548,7 @@ module ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    for (var i = 0; i < resolved.properties.length; i++) {
-                        var p = resolved.properties[i];
+                    for (let p of resolved.properties) {
                         var t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, SignatureKind.Call);
@@ -2402,8 +2400,7 @@ module ts {
 
         function createSymbolTable(symbols: Symbol[]): SymbolTable {
             var result: SymbolTable = {};
-            for (var i = 0; i < symbols.length; i++) {
-                var symbol = symbols[i];
+            for (let symbol of symbols) {
                 result[symbol.name] = symbol;
             }
             return result;
@@ -2411,16 +2408,14 @@ module ts {
 
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper): SymbolTable {
             var result: SymbolTable = {};
-            for (var i = 0; i < symbols.length; i++) {
-                var symbol = symbols[i];
+            for (let symbol of symbols) {
                 result[symbol.name] = instantiateSymbol(symbol, mapper);
             }
             return result;
         }
 
         function addInheritedMembers(symbols: SymbolTable, baseSymbols: Symbol[]) {
-            for (var i = 0; i < baseSymbols.length; i++) {
-                var s = baseSymbols[i];
+            for (let s of baseSymbols) {
                 if (!hasProperty(symbols, s.name)) {
                     symbols[s.name] = s;
                 }
@@ -2728,8 +2723,7 @@ module ts {
             }
             var propTypes: Type[] = [];
             var declarations: Declaration[] = [];
-            for (var i = 0; i < props.length; i++) {
-                var prop = props[i];
+            for (let prop of props) {
                 if (prop.declarations) {
                     declarations.push.apply(declarations, prop.declarations);
                 }
@@ -3181,8 +3175,7 @@ module ts {
 
             function getTypeDeclaration(symbol: Symbol): Declaration {
                 var declarations = symbol.declarations;
-                for (var i = 0; i < declarations.length; i++) {
-                    var declaration = declarations[i];
+                for (let declaration of declarations) {
                     switch (declaration.kind) {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
@@ -3982,8 +3975,7 @@ module ts {
                 var result = Ternary.True;
                 var properties = getPropertiesOfObjectType(target);
                 var requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
-                for (var i = 0; i < properties.length; i++) {
-                    var targetProp = properties[i];
+                for (let targetProp of properties) {
                     var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
@@ -4091,8 +4083,7 @@ module ts {
                 var targetSignatures = getSignaturesOfType(target, kind);
                 var result = Ternary.True;
                 var saveErrorInfo = errorInfo;
-                outer: for (var i = 0; i < targetSignatures.length; i++) {
-                    var t = targetSignatures[i];
+                outer: for (let t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
                         var localErrors = reportErrors;
                         for (var j = 0; j < sourceSignatures.length; j++) {
@@ -4608,8 +4599,7 @@ module ts {
                     var typeParameterCount = 0;
                     var typeParameter: TypeParameter;
                     // First infer to each type in union that isn't a type parameter
-                    for (var i = 0; i < targetTypes.length; i++) {
-                        var t = targetTypes[i];
+                    for (let t of targetTypes) {
                         if (t.flags & TypeFlags.TypeParameter && contains(context.typeParameters, t)) {
                             typeParameter = <TypeParameter>t;
                             typeParameterCount++;
@@ -4656,8 +4646,7 @@ module ts {
 
             function inferFromProperties(source: Type, target: Type) {
                 var properties = getPropertiesOfObjectType(target);
-                for (var i = 0; i < properties.length; i++) {
-                    var targetProp = properties[i];
+                for (let targetProp of properties) {
                     var sourceProp = getPropertyOfObjectType(source, targetProp.name);
                     if (sourceProp) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
@@ -5789,8 +5778,7 @@ module ts {
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
 
-            for (var i = 0; i < node.properties.length; i++) {
-                var memberDecl = node.properties[i];
+            for (let memberDecl of node.properties) {
                 var member = memberDecl.symbol;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
@@ -6167,8 +6155,7 @@ module ts {
             var specializedIndex: number = -1;
             var spliceIndex: number;
             Debug.assert(!result.length);
-            for (var i = 0; i < signatures.length; i++) {
-                var signature = signatures[i];
+            for (let signature of signatures) {
                 var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
                 var parent = signature.declaration && signature.declaration.parent;
                 if (!lastSymbol || symbol === lastSymbol) {
@@ -7272,8 +7259,7 @@ module ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             var properties = node.properties;
-            for (var i = 0; i < properties.length; i++) {
-                var p = properties[i];
+            for (let p of properties) {
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // TODO(andersh): Computed property support
                     var name = <Identifier>(<PropertyAssignment>p).name;
@@ -8097,8 +8083,7 @@ module ts {
                 signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
             }
 
-            for (var i = 0; i < signaturesToCheck.length; i++) {
-                var otherSignature = signaturesToCheck[i];
+            for (let otherSignature of signaturesToCheck) {
                 if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature)) {
                     return;
                 }
@@ -9281,8 +9266,7 @@ module ts {
 
                 if (type.flags & TypeFlags.Class && type.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
                     var classDeclaration = <ClassDeclaration>type.symbol.valueDeclaration;
-                    for (var i = 0; i < classDeclaration.members.length; i++) {
-                        var member = classDeclaration.members[i];
+                    for (let member of classDeclaration.members) {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
                         // and properties with literal names were already checked.
@@ -9371,12 +9355,12 @@ module ts {
         // Check each type parameter and check that list has no duplicate type parameter declarations
         function checkTypeParameters(typeParameterDeclarations: TypeParameterDeclaration[]) {
             if (typeParameterDeclarations) {
-                for (var i = 0; i < typeParameterDeclarations.length; i++) {
+                for (let i = 0, n = typeParameterDeclarations.length; i < n; i++) {
                     var node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
 
                     if (produceDiagnostics) {
-                        for (var j = 0; j < i; j++) {
+                        for (let j = 0; j < i; j++) {
                             if (typeParameterDeclarations[j].symbol === node.symbol) {
                                 error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
                             }
@@ -9855,8 +9839,7 @@ module ts {
 
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
             var declarations = symbol.declarations;
-            for (var i = 0; i < declarations.length; i++) {
-                var declaration = declarations[i];
+            for (let declaration of declarations) {
                 if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) && !isInAmbientContext(declaration)) {
                     return declaration;
                 }

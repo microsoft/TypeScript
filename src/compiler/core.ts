@@ -427,8 +427,7 @@ module ts {
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
         var parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         var normalized: string[] = [];
-        for (var i = 0; i < parts.length; i++) {
-            var part = parts[i];
+        for (let part of parts) {
             if (part !== ".") {
                 if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
                     normalized.pop();
@@ -603,8 +602,7 @@ module ts {
     var supportedExtensions = [".d.ts", ".ts", ".js"];
 
     export function removeFileExtension(path: string): string {
-        for (var i = 0; i < supportedExtensions.length; i++) {
-            var ext = supportedExtensions[i];
+        for (let ext of supportedExtensions) {
 
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);

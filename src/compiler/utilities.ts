@@ -15,8 +15,7 @@ module ts {
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         var declarations = symbol.declarations;
-        for (var i = 0; i < declarations.length; i++) {
-            var declaration = declarations[i];
+        for (let declaration of declarations) {
             if (declaration.kind === kind) {
                 return declaration;
             }
