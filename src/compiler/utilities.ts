@@ -387,6 +387,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
                     return visitor(<ReturnStatement>node);
+                case SyntaxKind.CaseBlock:
                 case SyntaxKind.Block:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
@@ -1218,6 +1219,7 @@ module ts {
         }
     }
 
+    // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         var nonFileDiagnostics: Diagnostic[] = [];
         var fileDiagnostics: Map<Diagnostic[]> = {};

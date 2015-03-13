@@ -1,9 +1,9 @@
-tests/cases/compiler/downlevelLetConst16.ts(189,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(196,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(203,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(210,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(217,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
-tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(188,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(195,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(202,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(209,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(216,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
+tests/cases/compiler/downlevelLetConst16.ts(223,5): error TS2482: 'for...of' statements are only available when targeting ECMAScript 6 or higher.
 
 
 ==== tests/cases/compiler/downlevelLetConst16.ts (6 errors) ====
@@ -193,7 +193,6 @@ tests/cases/compiler/downlevelLetConst16.ts(224,5): error TS2482: 'for...of' sta
         use(x);
     }
     
-    // TODO: once for-of is supported downlevel
     function foo7() {
         for (let x of []) {
         ~~~

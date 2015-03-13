@@ -801,67 +801,70 @@ declare module "typescript" {
         ModuleBlock = 201,
 >ModuleBlock : SyntaxKind
 
-        ImportEqualsDeclaration = 202,
+        CaseBlock = 202,
+>CaseBlock : SyntaxKind
+
+        ImportEqualsDeclaration = 203,
 >ImportEqualsDeclaration : SyntaxKind
 
-        ImportDeclaration = 203,
+        ImportDeclaration = 204,
 >ImportDeclaration : SyntaxKind
 
-        ImportClause = 204,
+        ImportClause = 205,
 >ImportClause : SyntaxKind
 
-        NamespaceImport = 205,
+        NamespaceImport = 206,
 >NamespaceImport : SyntaxKind
 
-        NamedImports = 206,
+        NamedImports = 207,
 >NamedImports : SyntaxKind
 
-        ImportSpecifier = 207,
+        ImportSpecifier = 208,
 >ImportSpecifier : SyntaxKind
 
-        ExportAssignment = 208,
+        ExportAssignment = 209,
 >ExportAssignment : SyntaxKind
 
-        ExportDeclaration = 209,
+        ExportDeclaration = 210,
 >ExportDeclaration : SyntaxKind
 
-        NamedExports = 210,
+        NamedExports = 211,
 >NamedExports : SyntaxKind
 
-        ExportSpecifier = 211,
+        ExportSpecifier = 212,
 >ExportSpecifier : SyntaxKind
 
-        ExternalModuleReference = 212,
+        ExternalModuleReference = 213,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 213,
+        CaseClause = 214,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 214,
+        DefaultClause = 215,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 215,
+        HeritageClause = 216,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 216,
+        CatchClause = 217,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 217,
+        PropertyAssignment = 218,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 218,
+        ShorthandPropertyAssignment = 219,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 219,
+        EnumMember = 220,
 >EnumMember : SyntaxKind
 
-        SourceFile = 220,
+        SourceFile = 221,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 221,
+        SyntaxList = 222,
 >SyntaxList : SyntaxKind
 
-        Count = 222,
+        Count = 223,
 >Count : SyntaxKind
 
         FirstAssignment = 52,
@@ -1979,6 +1982,14 @@ declare module "typescript" {
         expression: Expression;
 >expression : Expression
 >Expression : Expression
+
+        caseBlock: CaseBlock;
+>caseBlock : CaseBlock
+>CaseBlock : CaseBlock
+    }
+    interface CaseBlock extends Node {
+>CaseBlock : CaseBlock
+>Node : Node
 
         clauses: NodeArray<CaseOrDefaultClause>;
 >clauses : NodeArray<CaseClause | DefaultClause>

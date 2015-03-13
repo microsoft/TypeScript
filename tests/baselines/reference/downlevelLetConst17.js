@@ -63,7 +63,6 @@ for (const x in []) {
     use(x);
 }
 
-// TODO: update once for-of statements are supported downlevel
 for (const x of []) {
     use(x);
 }
@@ -118,7 +117,7 @@ for (var _x_10 in []) {
 for (var _x_11 in []) {
     use(_x_11);
 }
-// TODO: update once for-of statements are supported downlevel
-for (var _x_12 of []) {
+for (var _i = 0, _a = []; _i < _a.length; _i++) {
+    var _x_12 = _a[_i];
     use(_x_12);
 }

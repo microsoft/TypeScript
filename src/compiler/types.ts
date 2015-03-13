@@ -233,6 +233,7 @@ module ts {
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
+        CaseBlock,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -790,6 +791,10 @@ module ts {
 
     export interface SwitchStatement extends Statement {
         expression: Expression;
+        caseBlock: CaseBlock;
+    }
+
+    export interface CaseBlock extends Node {
         clauses: NodeArray<CaseOrDefaultClause>;
     }
 

@@ -95,6 +95,8 @@ module ts {
             }
         });
 
+        // Either we didn't find an appropriate list, or the list must contain us.
+        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node)); 
         return syntaxList;
     }
 
