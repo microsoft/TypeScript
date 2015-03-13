@@ -1507,16 +1507,16 @@ module ts {
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
                     writer.writeLine();
                     writer.increaseIndent();
-                    for (var i = 0; i < resolved.callSignatures.length; i++) {
-                        buildSignatureDisplay(resolved.callSignatures[i], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                    for (let signature of resolved.callSignatures) {
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    for (var i = 0; i < resolved.constructSignatures.length; i++) {
+                    for (let signature of resolved.constructSignatures) {
                         writeKeyword(writer, SyntaxKind.NewKeyword);
                         writeSpace(writer);
 
-                        buildSignatureDisplay(resolved.constructSignatures[i], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1552,12 +1552,12 @@ module ts {
                         var t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, SignatureKind.Call);
-                            for (var j = 0; j < signatures.length; j++) {
+                            for (let signature of signatures) {
                                 buildSymbolDisplay(p, writer);
                                 if (p.flags & SymbolFlags.Optional) {
                                     writePunctuation(writer, SyntaxKind.QuestionToken);
                                 }
-                                buildSignatureDisplay(signatures[j], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
                                 writePunctuation(writer, SyntaxKind.SemicolonToken);
                                 writer.writeLine();
                             }
@@ -2424,8 +2424,8 @@ module ts {
 
         function addInheritedSignatures(signatures: Signature[], baseSignatures: Signature[]) {
             if (baseSignatures) {
-                for (var i = 0; i < baseSignatures.length; i++) {
-                    signatures.push(baseSignatures[i]);
+                for (let signature of baseSignatures) {
+                    signatures.push(signature);
                 }
             }
         }
@@ -2536,8 +2536,8 @@ module ts {
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             var signatureLists = map(types, t => getSignaturesOfType(t, kind));
             var signatures = signatureLists[0];
-            for (var i = 0; i < signatures.length; i++) {
-                if (signatures[i].typeParameters) {
+            for (let signature of signatures) {
+                if (signature.typeParameters) {
                     return emptyArray;
                 }
             }
@@ -2558,8 +2558,8 @@ module ts {
 
         function getUnionIndexType(types: Type[], kind: IndexKind): Type {
             var indexTypes: Type[] = [];
-            for (var i = 0; i < types.length; i++) {
-                var indexType = getIndexTypeOfType(types[i], kind);
+            for (let type of types) {
+                var indexType = getIndexTypeOfType(type, kind);
                 if (!indexType) {
                     return undefined;
                 }
@@ -2706,8 +2706,8 @@ module ts {
         function createUnionProperty(unionType: UnionType, name: string): Symbol {
             var types = unionType.types;
             var props: Symbol[];
-            for (var i = 0; i < types.length; i++) {
-                var type = getApparentType(types[i]);
+            for (let current of types) {
+                var type = getApparentType(current);
                 if (type !== unknownType) {
                     var prop = getPropertyOfType(type, name);
                     if (!prop) {
@@ -3042,7 +3042,10 @@ module ts {
                 default:
                     var result = "";
                     for (var i = 0; i < types.length; i++) {
-                        if (i > 0) result += ",";
+                        if (i > 0) {
+                            result += ",";
+                        }
+
                         result += types[i].id;
                     }
                     return result;
@@ -3054,8 +3057,8 @@ module ts {
         // of an object literal (since those types have widening related information we need to track).
         function getWideningFlagsOfTypes(types: Type[]): TypeFlags {
             var result: TypeFlags = 0;
-            for (var i = 0; i < types.length; i++) {
-                result |= types[i].flags;
+            for (let type of types) {
+                result |= type.flags;
             }
             return result & TypeFlags.RequiresWidening;
         }
@@ -3296,8 +3299,8 @@ module ts {
         }
 
         function containsAnyType(types: Type[]) {
-            for (var i = 0; i < types.length; i++) {
-                if (types[i].flags & TypeFlags.Any) {
+            for (let type of types) {
+                if (type.flags & TypeFlags.Any) {
                     return true;
                 }
             }
@@ -3423,8 +3426,8 @@ module ts {
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {
                 var result: T[] = [];
-                for (var i = 0; i < items.length; i++) {
-                    result.push(instantiator(items[i], mapper));
+                for (let v of items) {
+                    result.push(instantiator(v, mapper));
                 }
                 return result;
             }
@@ -3446,7 +3449,9 @@ module ts {
             }
             return t => {
                 for (var i = 0; i < sources.length; i++) {
-                    if (t === sources[i]) return targets[i];
+                    if (t === sources[i]) {
+                        return targets[i];
+                    }
                 }
                 return t;
             };
@@ -3466,8 +3471,10 @@ module ts {
                 case 2: return createBinaryTypeEraser(sources[0], sources[1]);
             }
             return t => {
-                for (var i = 0; i < sources.length; i++) {
-                    if (t === sources[i]) return anyType;
+                for (let source of sources) {
+                    if (t === source) {
+                        return anyType;
+                    }
                 }
                 return t;
             };
@@ -4528,7 +4535,7 @@ module ts {
 
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             var inferences: TypeInferences[] = [];
-            for (var i = 0; i < typeParameters.length; i++) {
+            for (let unused of typeParameters) {
                 inferences.push({ primary: undefined, secondary: undefined });
             }
             return {
