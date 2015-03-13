@@ -11072,7 +11072,7 @@ module ts {
 
             var symbol = declarationSymbol ||
                 getNodeLinks(n).resolvedSymbol ||
-                resolveName(n, n.text, SymbolFlags.BlockScopedVariable | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
             var isLetOrConst =
                 symbol &&
