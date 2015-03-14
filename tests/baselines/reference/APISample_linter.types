@@ -3234,27 +3234,6 @@ declare module "typescript" {
 >node : CallExpression | NewExpression | TaggedTemplateExpression
 >CallLikeExpression : CallExpression | NewExpression | TaggedTemplateExpression
 >Signature : Signature
-
-        serializeTypeOfNode(node: Node): string;
->serializeTypeOfNode : (node: Node) => string
->node : Node
->Node : Node
-
-        serializeParameterTypesOfNode(node: Node): string[];
->serializeParameterTypesOfNode : (node: Node) => string[]
->node : Node
->Node : Node
-
-        serializeReturnTypeOfNode(node: Node): string;
->serializeReturnTypeOfNode : (node: Node) => string
->node : Node
->Node : Node
-
-        getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[];
->getMetadataForSymbol : (symbol: Symbol) => DecoratorMetadata[]
->symbol : Symbol
->Symbol : Symbol
->DecoratorMetadata : DecoratorMetadata
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
@@ -3527,24 +3506,6 @@ declare module "typescript" {
         resolvedExports?: SymbolTable;
 >resolvedExports : SymbolTable
 >SymbolTable : SymbolTable
-
-        decoratorMetadata?: DecoratorMetadata[];
->decoratorMetadata : DecoratorMetadata[]
->DecoratorMetadata : DecoratorMetadata
-
-        decoratorUsage?: DecoratorUsageMetadata;
->decoratorUsage : DecoratorUsageMetadata
->DecoratorUsageMetadata : DecoratorUsageMetadata
-
-        obsolete?: ObsoleteMetadata;
->obsolete : ObsoleteMetadata
->ObsoleteMetadata : ObsoleteMetadata
-
-        conditionalSymbols?: string[];
->conditionalSymbols : string[]
-
-        conditionallyRemoved?: boolean;
->conditionallyRemoved : boolean
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
 >TransientSymbol : TransientSymbol
@@ -3587,21 +3548,6 @@ declare module "typescript" {
 
         EmitDecorate = 256,
 >EmitDecorate : NodeCheckFlags
-
-        EmitDecoratedType = 512,
->EmitDecoratedType : NodeCheckFlags
-
-        EmitDecoratedParamTypes = 1024,
->EmitDecoratedParamTypes : NodeCheckFlags
-
-        EmitDecoratedReturnType = 2048,
->EmitDecoratedReturnType : NodeCheckFlags
-
-        AmbientDecorator = 4096,
->AmbientDecorator : NodeCheckFlags
-
-        ConditionallyRemoved = 8192,
->ConditionallyRemoved : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks
@@ -3617,10 +3563,6 @@ declare module "typescript" {
         resolvedSymbol?: Symbol;
 >resolvedSymbol : Symbol
 >Symbol : Symbol
-
-        resolvedDecoratorMetadata?: DecoratorMetadata;
->resolvedDecoratorMetadata : DecoratorMetadata
->DecoratorMetadata : DecoratorMetadata
 
         flags?: NodeCheckFlags;
 >flags : NodeCheckFlags
@@ -3998,34 +3940,6 @@ declare module "typescript" {
         failedTypeParameterIndex?: number;
 >failedTypeParameterIndex : number
     }
-    interface DecoratorUsageMetadata {
->DecoratorUsageMetadata : DecoratorUsageMetadata
-
-        ambient?: boolean;
->ambient : boolean
-
-        targets?: number;
->targets : number
-    }
-    interface ObsoleteMetadata {
->ObsoleteMetadata : ObsoleteMetadata
-
-        obsolete?: boolean;
->obsolete : boolean
-
-        message?: string;
->message : string
-    }
-    interface DecoratorMetadata {
->DecoratorMetadata : DecoratorMetadata
-
-        symbol: Symbol;
->symbol : Symbol
->Symbol : Symbol
-
-        arguments: any[];
->arguments : any[]
-    }
     const enum DecoratorFlags {
 >DecoratorFlags : DecoratorFlags
 
@@ -4097,6 +4011,18 @@ declare module "typescript" {
 
         ParameterDecoratorFunctionValidTargetsMask = 2048,
 >ParameterDecoratorFunctionValidTargetsMask : DecoratorFlags
+    }
+    const enum DecoratorTargetKind {
+>DecoratorTargetKind : DecoratorTargetKind
+
+        target = 0,
+>target : DecoratorTargetKind
+
+        property = 1,
+>property : DecoratorTargetKind
+
+        parameter = 2,
+>parameter : DecoratorTargetKind
     }
     interface DiagnosticMessage {
 >DiagnosticMessage : DiagnosticMessage

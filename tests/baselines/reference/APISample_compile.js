@@ -949,10 +949,6 @@ declare module "typescript" {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
         getResolvedSignature(node: CallLikeExpression): Signature;
-        serializeTypeOfNode(node: Node): string;
-        serializeParameterTypesOfNode(node: Node): string[];
-        serializeReturnTypeOfNode(node: Node): string;
-        getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[];
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,
@@ -1042,11 +1038,6 @@ declare module "typescript" {
         exportAssignmentSymbol?: Symbol;
         unionType?: UnionType;
         resolvedExports?: SymbolTable;
-        decoratorMetadata?: DecoratorMetadata[];
-        decoratorUsage?: DecoratorUsageMetadata;
-        obsolete?: ObsoleteMetadata;
-        conditionalSymbols?: string[];
-        conditionallyRemoved?: boolean;
     }
     interface TransientSymbol extends Symbol, SymbolLinks {
     }
@@ -1063,17 +1054,11 @@ declare module "typescript" {
         ContextChecked = 64,
         EnumValuesComputed = 128,
         EmitDecorate = 256,
-        EmitDecoratedType = 512,
-        EmitDecoratedParamTypes = 1024,
-        EmitDecoratedReturnType = 2048,
-        AmbientDecorator = 4096,
-        ConditionallyRemoved = 8192,
     }
     interface NodeLinks {
         resolvedType?: Type;
         resolvedSignature?: Signature;
         resolvedSymbol?: Symbol;
-        resolvedDecoratorMetadata?: DecoratorMetadata;
         flags?: NodeCheckFlags;
         enumMemberValue?: number;
         isIllegalTypeReferenceInConstraint?: boolean;
@@ -1199,18 +1184,6 @@ declare module "typescript" {
         inferredTypes: Type[];
         failedTypeParameterIndex?: number;
     }
-    interface DecoratorUsageMetadata {
-        ambient?: boolean;
-        targets?: number;
-    }
-    interface ObsoleteMetadata {
-        obsolete?: boolean;
-        message?: string;
-    }
-    interface DecoratorMetadata {
-        symbol: Symbol;
-        arguments: any[];
-    }
     const enum DecoratorFlags {
         ModuleDeclaration = 1,
         ImportDeclaration = 2,
@@ -1235,6 +1208,11 @@ declare module "typescript" {
         DecoratorFunctionValidTargetMask = 4,
         MemberDecoratorFunctionValidTargetsMask = 1792,
         ParameterDecoratorFunctionValidTargetsMask = 2048,
+    }
+    const enum DecoratorTargetKind {
+        target = 0,
+        property = 1,
+        parameter = 2,
     }
     interface DiagnosticMessage {
         key: string;

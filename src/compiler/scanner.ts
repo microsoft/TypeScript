@@ -315,6 +315,20 @@ module ts {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
+    export function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean {
+        var lineStarts = getLineStarts(sourceFile);
+        var firstLine = binarySearch(lineStarts, firstPos);
+        var secondLine = binarySearch(lineStarts, secondPos);
+        if (firstLine < 0) {
+            firstLine = ~firstLine - 1;
+        }
+        if (secondLine < 0) {
+            secondLine = ~secondLine - 1;
+        }
+        return firstLine !== secondLine;
+    }
+
+
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {

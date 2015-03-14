@@ -23,10 +23,6 @@ module ts {
 
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
-        var emptyMetadata = <DecoratorMetadata>{};
-        var emptyDecoratorUsageMetadata = <DecoratorUsageMetadata>{};
-        var emptyObsoleteMetadata = <ObsoleteMetadata>{};
-        var sharedObsoleteMetadata = <ObsoleteMetadata>{ obsolete: true };
 
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -97,12 +93,6 @@ module ts {
         var globals: SymbolTable = {};
 
         var globalArraySymbol: Symbol;
-        var globalDecoratorSymbol: Symbol;
-        var globalTypeDecoratorSymbol: Symbol;
-        var globalParamTypesDecoratorSymbol: Symbol;
-        var globalReturnTypeDecoratorSymbol: Symbol;
-        var globalObsoleteDecoratorSymbol: Symbol;
-        var globalConditionalDecoratorSymbol: Symbol;
         var globalESSymbolConstructorSymbol: Symbol;
 
         var globalObjectType: ObjectType;
@@ -119,7 +109,6 @@ module ts {
         var globalDecoratorFunctionType: ObjectType;
         var globalParameterDecoratorFunctionType: ObjectType;
         var globalMemberDecoratorFunctionType: ObjectType;
-        var resolvingMetadata = <DecoratorMetadata>{};
         
         var anyArrayType: Type;
 
@@ -5157,8 +5146,6 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
-            checkUsageOfObsoleteSymbol(node, symbol);
-            checkConditionallyRemovedExpression(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
@@ -5948,10 +5935,6 @@ module ts {
                     else {
                         checkClassPropertyAccess(node, left, type, prop);
                     }
-                }
-                if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                    checkUsageOfObsoleteSymbol(<PropertyAccessExpression>node, prop);
-                    checkConditionallyRemovedExpression(<PropertyAccessExpression>node, prop);
                 }
                 return getTypeOfSymbol(prop);
             }
@@ -6816,42 +6799,6 @@ module ts {
             return links.resolvedSignature;
         }
 
-        function isConditionalSymbolDefined(condition: string) {
-            if (!conditionalSymbols) {
-                conditionalSymbols = {};
-                if (compilerOptions.define) {
-                    for (var i = 0; i < compilerOptions.define.length; i++) {
-                        conditionalSymbols[compilerOptions.define[i].toUpperCase()] = true;
-                    }
-                }
-            }
-            return hasProperty(conditionalSymbols, condition.toUpperCase());
-        }
-
-        function checkConditionallyRemovedExpression(node: Expression, symbol: Symbol) {
-            var links = getNodeLinks(node);
-            if (links.flags & NodeCheckFlags.ConditionallyRemoved) {
-                return;
-            }
-            if (symbol && symbolIsConditionallyRemoved(symbol)) {
-                links.flags |= NodeCheckFlags.ConditionallyRemoved;                
-            }
-        }
-
-        function checkUsageOfObsoleteSymbol(node: Expression, symbol: Symbol) {
-            if (symbol) {
-                var metadata = getObsoleteMetadataForSymbol(symbol);
-                if (metadata.obsolete) {
-                    if (metadata.message) {
-                        error(node, Diagnostics._0_is_obsolete_Colon_1, symbolToString(symbol), metadata.message);
-                    }
-                    else {
-                        error(node, Diagnostics._0_is_obsolete, symbolToString(symbol));
-                    }
-                }
-            }
-        }
-
         function checkCallExpression(node: CallExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
@@ -6874,9 +6821,6 @@ module ts {
                     return anyType;
                 }
             }
-            if (getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
-                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
-            }
             return getReturnTypeOfSignature(signature);
         }
 
@@ -6887,9 +6831,6 @@ module ts {
             }
 
             var signature = getResolvedSignature(node);
-            if (getNodeCheckFlags(node.tag) & NodeCheckFlags.ConditionallyRemoved) {
-                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
-            }
             return getReturnTypeOfSignature(signature);
         }
 
@@ -7812,7 +7753,7 @@ module ts {
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
 
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
 
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
@@ -7843,8 +7784,7 @@ module ts {
                       node.kind === SyntaxKind.ConstructSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
-
-            checkDecorators(node);
+            
             checkTypeParameters(node.typeParameters);
 
             forEach(node.parameters, checkParameter);
@@ -7915,7 +7855,7 @@ module ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
         }
@@ -8052,6 +7992,10 @@ module ts {
             }
 
             checkFunctionLikeDeclaration(node);
+        }
+
+        function checkIncompleteDeclaration(node: Declaration) {
+            error(node, Diagnostics.Declaration_expected);
         }
 
         function checkTypeReference(node: TypeReferenceNode) {
@@ -8447,533 +8391,43 @@ module ts {
                 }
             }
         }
-
-        /** Resolves the symbol of the declaration for a decorator. */
-        function getResolvedSymbolOfDecorator(decorator: Decorator): Symbol {            
-            var links = getNodeLinks(decorator);
-            if (!links.resolvedSymbol) {
-                var expression: Expression = decorator.expression;
-
-                // unwrap a parenthesized expression
-                while (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                    expression = (<ParenthesizedExpression>expression).expression;
-                }
-
-                // if this is a decorator factory, get the expression of the CallExpression
-                if (expression.kind === SyntaxKind.CallExpression) {
-                    expression = (<CallExpression>expression).expression;
-                }
-
-                // unwrap an remaining parenthesized expression
-                while (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                    expression = (<ParenthesizedExpression>expression).expression;
-                }
-
-                if (expression.kind === SyntaxKind.PropertyAccessExpression) {
-                    links.resolvedSymbol = resolveEntityNameOrPropertyAccessExpression(decorator, <PropertyAccessExpression>expression, SymbolFlags.Value | SymbolFlags.ExportValue);
-                }
-                else if (expression.kind === SyntaxKind.Identifier) {
-                    links.resolvedSymbol = resolveEntityName(decorator, <Identifier>expression, SymbolFlags.Value | SymbolFlags.ExportValue);
-                }
-                else {
-                    links.resolvedSymbol = unknownSymbol;
-                }
-            }
-            else if (links.resolvedSymbol === unknownSymbol) {
-                return undefined;
-            }
-            return links.resolvedSymbol;                
-        }
-
-        /** Gets the argument list of the expression of a Decorator, if it is a decorator factory. */
-        function getArgumentsOfDecoratorExpression(expression: Expression): Expression[] {
-            // unwrap a parenthesized expression
-            while (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                expression = (<ParenthesizedExpression>expression).expression;
-            }
-
-            // if this is a decorator factory, get the expression of the CallExpression
-            if (expression.kind === SyntaxKind.CallExpression) {
-                return (<CallExpression>expression).arguments;
-            }
-
-            return undefined;
-        }
-
-        /** Evaluates and returns the constant values of the arguments to a decorator factory. */
-        function evalDecoratorArguments(node: Decorator, argumentList: Expression[]): any[]{
-            var result: any[];
-            if (argumentList) {
-                var argumentCount = argumentList.length;
-                for (var i = 0; i < argumentCount; i++) {
-                    var value = evalConstant(argumentList[i], EvalConstantFlags.Constant);
-                    if (value === undefined) {
-                        error(node, Diagnostics.Argument_to_ambient_decorator_must_be_constant_expression);
-                        return undefined;
-                    }
-                    if (!result) {
-                        result = new Array<any>(argumentCount);
-                    }
-                    result[i] = value;
-                }
-            }
-            if (!result) {
-                return emptyArray;
-            }
-            return result;
-        }
-
-        /** Reports an error if the decorator expression resolves to a type that has an invalid signature for the declaration */
-        function reportInvalidDecoratorExpression(node: Decorator, exprType: Type): void {
-            switch (node.parent.kind) {
+        
+        function isValidDecoratorTarget(node: Node): boolean {
+            switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
-                    checkTypeAssignableTo(exprType, globalDecoratorFunctionType, node);
-                    return;
+                    return true;
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    checkTypeAssignableTo(exprType, globalMemberDecoratorFunctionType, node);
-                    return;
+                    if (node.parent.kind === SyntaxKind.ClassDeclaration && (<FunctionLikeDeclaration>node).body) {
+                        return true;
+                    }
+                    break;
 
                 case SyntaxKind.Parameter:
-                    checkTypeAssignableTo(exprType, globalParameterDecoratorFunctionType, node);
-                    return;
+                    return isValidDecoratorTarget(node.parent);
             }
-        }
 
-        /** Tests whether the specified symbol is an ambient decorator */
-        function decoratorIsAmbient(decoratorSymbol: Symbol) {
-            if (!decoratorSymbol) {
-                return false;
-            }
-            if (decoratorIsBuiltIn(decoratorSymbol)) {
-                return true;
-            }
-            var usage = getDecoratorUsageForSymbol(decoratorSymbol);
-            if (usage) {
-                return usage.ambient;
-            }
             return false;
         }
 
-        /** Tests whether the specified symbol is a built-in decorator */
-        function decoratorIsBuiltIn(decoratorSymbol: Symbol) {
-            switch (decoratorSymbol) {
-                case globalDecoratorSymbol:
-                case globalTypeDecoratorSymbol:
-                case globalParamTypesDecoratorSymbol:
-                case globalReturnTypeDecoratorSymbol:
-                case globalConditionalDecoratorSymbol:
-                case globalObsoleteDecoratorSymbol:
-                    return true;
-            }
-            return false;
-        }
-
-        /** Resolves the constant decorator metadata for an ambient decorator */
-        function resolveMetadataForDecorator(decorator: Decorator): DecoratorMetadata {
-            var symbol = getResolvedSymbolOfDecorator(decorator);
-            if (decoratorIsAmbient(symbol)) {
-                var arguments = getArgumentsOfDecoratorExpression(decorator.expression);
-                var argumentList = evalDecoratorArguments(decorator, arguments);
-                if (argumentList) {
-                    var metadata: DecoratorMetadata = {
-                        symbol,
-                        arguments: argumentList
-                    };
-                    return metadata;
-                }
-            }
-            return emptyMetadata;
-        }
-
-        /** Resolves an array of constant decorator metadata that is applied to the value declaration for the symbol */
-        function resolveMetadataForSymbol(symbol: Symbol): DecoratorMetadata[] {
-            if (symbol.valueDeclaration) {
-                var decorators = symbol.valueDeclaration.decorators;
-                if (decorators) {
-                    var metadataArray: DecoratorMetadata[];
-                    for (var i = 0; i < decorators.length; i++) {
-                        var metadata = getMetadataForDecorator(decorators[i]);
-                        if (metadata !== emptyMetadata) {
-                            if (!metadataArray) {
-                                metadataArray = [];
-                            }
-                            metadataArray.push(metadata);
-                        }
-                    }
-                    if (metadataArray) {
-                        return metadataArray;
-                    }
-                }
-            }
-            return emptyArray;
-        }
-
-        function filterMetadata(metadataArray: DecoratorMetadata[], decoratorSymbol: Symbol): DecoratorMetadata[] {
-            if (metadataArray && decoratorSymbol) {
-                var results: DecoratorMetadata[];
-                for (var i = 0; i < metadataArray.length; i++) {
-                    var metadata = metadataArray[i];
-                    if (metadata.symbol === decoratorSymbol) {
-                        if (!results) {
-                            results = [];
-                        }
-                        results.push(metadata);
-                    }
-                }
-            }
-            if (results) {
-                return results;
-            }
-            return emptyArray;
-        }
-
-        /** Gets the decorator metadata for a Decorator node */
-        function getMetadataForDecorator(node: Decorator): DecoratorMetadata {
-            var links = getNodeLinks(node);
-            if (!links.resolvedDecoratorMetadata) {
-                links.resolvedDecoratorMetadata = resolvingMetadata;
-                var metadata = resolveMetadataForDecorator(node);
-                if (links.resolvedDecoratorMetadata === resolvingMetadata) {
-                    links.resolvedDecoratorMetadata = metadata;
-                }
-            }
-            else if (links.resolvedDecoratorMetadata === resolvingMetadata) {
-                // TODO: report an error?
-                links.resolvedDecoratorMetadata = emptyMetadata;
-            }
-            return links.resolvedDecoratorMetadata;
-        }
-
-        /** Gets the decorator metadata for a symbol */
-        function getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[] {
-            if (!symbol.valueDeclaration) {
-                return emptyArray;
-            }
-            var links = getSymbolLinks(symbol);
-            if (!links.decoratorMetadata) {
-                links.decoratorMetadata = resolveMetadataForSymbol(symbol);
-            }
-            return links.decoratorMetadata;
-        }
-
-        function getDecoratorUsageForSymbol(symbol: Symbol): DecoratorUsageMetadata {
-            var links = getSymbolLinks(symbol);
-            if (!links.decoratorUsage) {
-                links.decoratorUsage = emptyDecoratorUsageMetadata;
-                var metadataArray = getMetadataForSymbol(symbol);
-                var metadata = findMetadata(metadataArray, globalDecoratorSymbol);
-                if (metadata && metadata.arguments.length > 0) {
-                    links.decoratorUsage = <DecoratorUsageMetadata>metadata.arguments[0];
-                }
-            }
-            return links.decoratorUsage;
-        }
-
-        function getObsoleteMetadataForSymbol(symbol: Symbol): ObsoleteMetadata {
-            var links = getSymbolLinks(symbol);
-            if (!links.obsolete) {
-                links.obsolete = emptyObsoleteMetadata;
-                var metadataArray = getMetadataForSymbol(symbol);
-                var metadata = findMetadata(metadataArray, globalObsoleteDecoratorSymbol);
-                if (metadata) {
-                    if (metadata.arguments.length > 0) {
-                        links.obsolete = { obsolete: true, message: metadata.arguments[0] };
-                    }
-                    else {
-                        links.obsolete = sharedObsoleteMetadata;
-                    }
-                }
-            }
-            return links.obsolete;
-        }
-
-        function getConditionalMetadataForSymbol(symbol: Symbol): string[] {
-            var links = getSymbolLinks(symbol);
-            if (!links.conditionalSymbols) {
-                links.conditionalSymbols = emptyArray;
-                var metadataArray = getMetadataForSymbol(symbol);
-                var filteredMetadataArray = filterMetadata(metadataArray, globalConditionalDecoratorSymbol);
-                var metadataCount = filteredMetadataArray.length;
-                var conditions: string[];
-                for (var i = 0; i < metadataCount; i++) {
-                    var metadata = filteredMetadataArray[i];
-                    if (metadata.arguments.length > 0) {
-                        if (!conditions) {
-                            conditions = [];
-                        }
-                        conditions.push(metadata.arguments[0]);
-                    }
-                }
-                links.conditionalSymbols = conditions || emptyArray;
-            }
-            return links.conditionalSymbols;
-        }
-
-        function symbolIsConditionallyRemoved(symbol: Symbol): boolean {
-            var links = getSymbolLinks(symbol);
-            if (links.conditionallyRemoved === undefined) {
-                links.conditionallyRemoved = false;
-                var conditionalSymbols = getConditionalMetadataForSymbol(symbol);
-                if (conditionalSymbols !== emptyArray) {
-                    var symbolCount = conditionalSymbols.length;
-                    for (var i = 0; i < symbolCount; i++) {
-                        if (!isConditionalSymbolDefined(conditionalSymbols[i])) {
-                            links.conditionallyRemoved = true;
-                            break;
-                        }
-                    }
-                }
-                if (!links.conditionallyRemoved && symbol.parent) {
-                    links.conditionallyRemoved = symbolIsConditionallyRemoved(symbol.parent);
-                }
-            }
-            return links.conditionallyRemoved;
-        }
-
-        /**
-          * For a node, gets a DecoratorFlags value that represents the decorator target for that node.
-          */
-        function getValidDecoratorTarget(node: Node): DecoratorFlags {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.ModuleDeclaration:      return DecoratorFlags.ModuleDeclaration;
-                    case SyntaxKind.ImportDeclaration:      return DecoratorFlags.ImportDeclaration;
-                    case SyntaxKind.ClassDeclaration:       return DecoratorFlags.ClassDeclaration;
-                    case SyntaxKind.InterfaceDeclaration:   return DecoratorFlags.InterfaceDeclaration;
-                    case SyntaxKind.FunctionDeclaration:    return DecoratorFlags.FunctionDeclaration;
-                    case SyntaxKind.EnumDeclaration:        return DecoratorFlags.EnumDeclaration;
-                    case SyntaxKind.EnumMember:             return DecoratorFlags.EnumMember;
-                    case SyntaxKind.Constructor:            return DecoratorFlags.Constructor;                        
-                    case SyntaxKind.PropertyDeclaration:    return DecoratorFlags.PropertyDeclaration;
-                    case SyntaxKind.MethodDeclaration:      return DecoratorFlags.MethodDeclaration;
-                    case SyntaxKind.GetAccessor:            return DecoratorFlags.AccessorDeclaration;
-                    case SyntaxKind.SetAccessor:            return DecoratorFlags.AccessorDeclaration;
-                    case SyntaxKind.Parameter:              return DecoratorFlags.ParameterDeclaration;
-                    case SyntaxKind.VariableDeclaration:    return DecoratorFlags.VariableDeclaration;
-                }
-            }
-            return undefined;
-        }
-
-        /**
-          * Computes the DecoratorFlags for a decorator.
-          * @node The decorator
-          * @decoratorSymbol The symbol for the decorator function or factory
-          * @exprType The type of the decorator expression
-          */
-        function getDecoratorFlagsForDecorator(node: Decorator, decoratorSymbol: Symbol, exprType: Type): DecoratorFlags {            
-            var flags: DecoratorFlags;
-            if (decoratorSymbol) {
-                // get the valid targets from this decorator's @decorator
-                var usage = getDecoratorUsageForSymbol(decoratorSymbol);
-                if (usage) {
-                    flags |= usage.targets & DecoratorFlags.DecoratorTargetsMask;
-                }
-                if (!flags) {
-                    flags = DecoratorFlags.AllTargets;
-                }
-                if (decoratorIsBuiltIn(decoratorSymbol)) {
-                    flags |= DecoratorFlags.BuiltIn;
-                }
-                else if (decoratorIsAmbient(decoratorSymbol)) {
-                    flags |= DecoratorFlags.UserDefinedAmbient;
-                }
-                else {
-                    flags &= DecoratorFlags.NonAmbientValidTargetMask;
-                }
-            }
-            else {
-                flags = DecoratorFlags.NonAmbientValidTargetMask;
-            }
-            if ((flags & DecoratorFlags.Ambient) === 0) {
-                // infer the valid targets from the type of the decorator's expression
-                var widenedType = getWidenedType(exprType);
-                if (!isTypeAssignableTo(globalDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalDecoratorFunctionType)) {
-                    flags &= ~DecoratorFlags.DecoratorFunctionValidTargetMask;
-                }
-                if (!isTypeAssignableTo(globalMemberDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalMemberDecoratorFunctionType)) {
-                    flags &= ~DecoratorFlags.MemberDecoratorFunctionValidTargetsMask;
-                }
-                if (!isTypeAssignableTo(globalParameterDecoratorFunctionType, widenedType) && !isTypeAssignableTo(exprType, globalParameterDecoratorFunctionType)) {
-                    flags &= ~DecoratorFlags.ParameterDecoratorFunctionValidTargetsMask;
-                }
-            }
-            return flags;
-        }
-
-        /** Checks a type reference node as an expression. */
-        function checkTypeNodeAsExpression(node: TypeNode | LiteralExpression) {
-            if (node && node.kind === SyntaxKind.TypeReference) {
-                var type = getTypeFromTypeNode(node);
-                if (!type || type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike)) {
-                    return;
-                }
-                if (type.symbol.valueDeclaration) {
-                    checkExpressionOrQualifiedName((<TypeReferenceNode>node).typeName);
-                }
-            }
-        }
-
-        /**
-          * Checks the type annotation of an accessor declaration or property declaration as 
-          * an expression if it is a type reference to a type with a value declaration.
-          */
-        function checkTypeAnnotationAsExpression(node: AccessorDeclaration | PropertyDeclaration | ParameterDeclaration) {
-            switch (node.kind) {
-                case SyntaxKind.PropertyDeclaration:    return checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
-                case SyntaxKind.Parameter:              return checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
-                case SyntaxKind.GetAccessor:            return checkTypeNodeAsExpression((<AccessorDeclaration>node).type);
-                case SyntaxKind.SetAccessor:            return checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
-            }
-        }
-        
-        /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
-        function checkParameterTypeAnnotationsAsExpressions(node: FunctionLikeDeclaration) {
-            // ensure all type annotations with a value declaration are checked as an expression
-            if (node) {
-                forEach(node.parameters, checkTypeAnnotationAsExpression);
-            }
-        }
-
-        /** Checks the usage of a built-in parameter decorator (@type, @paramtypes, @returntype). */
-        function checkBuiltInParameterDecorator(node: Decorator, symbol: Symbol, flags: NodeCheckFlags) {
-            var links = getNodeLinks(node.parent);
-            if (links.flags & flags) {
-                error(node, Diagnostics._0_decorator_already_specified, "@" + symbol.name);
-            }
-            else if (links.flags & NodeCheckFlags.EmitDecoratedType) {
-                error(node, Diagnostics._0_decorator_cannot_be_used_when_1_is_already_specified, "@" + symbol.name, "@" + globalTypeDecoratorSymbol.name);
-            }
-            else if (links.flags & NodeCheckFlags.EmitDecoratedParamTypes) {
-                error(node, Diagnostics._0_decorator_cannot_be_used_when_1_is_already_specified, "@" + symbol.name, "@" + globalParamTypesDecoratorSymbol.name);
-            }
-            else if (links.flags & NodeCheckFlags.EmitDecoratedReturnType) {
-                error(node, Diagnostics._0_decorator_cannot_be_used_when_1_is_already_specified, "@" + symbol.name, "@" + globalReturnTypeDecoratorSymbol.name);
-            }
-            else {
-                links.flags |= flags;
-            }
-        }
-
-        /** Check the usage of a built-in decorator. */
-        function checkBuiltInDecorator(node: Decorator, symbol: Symbol, metadata: DecoratorMetadata) {
-            switch (symbol) {
-                case globalDecoratorSymbol:
-                    if (metadata && metadata.arguments.length > 0) {
-                        var usage = <DecoratorUsageMetadata>metadata.arguments[0];
-                        if (usage.ambient) {
-                            getNodeLinks(node.parent).flags |= NodeCheckFlags.AmbientDecorator;
-                        }
-                    }
-                    break;
-                case globalTypeDecoratorSymbol:
-                    checkBuiltInParameterDecorator(node, symbol, NodeCheckFlags.EmitDecoratedType);
-                    break;
-                case globalParamTypesDecoratorSymbol:
-                    checkBuiltInParameterDecorator(node, symbol, NodeCheckFlags.EmitDecoratedParamTypes);
-                    break;
-                case globalReturnTypeDecoratorSymbol:
-                    checkBuiltInParameterDecorator(node, symbol, NodeCheckFlags.EmitDecoratedReturnType);
-                    break;
-            }            
-        }
-        
-        /** Check the usage of an ambient decorator. */
-        function checkAmbientDecorator(node: Decorator, symbol: Symbol, flags: DecoratorFlags) {
-            getNodeLinks(node).flags |= NodeCheckFlags.AmbientDecorator;
-
-            // read and check arguments for decorator
-            var metadata = getMetadataForDecorator(node);
-            if (!metadata) {
-                // if we received 'undefined' here, that means there was an error evaluating the metadata.
-                return;
-            }
-
-            if (flags & DecoratorFlags.BuiltIn) {
-                checkBuiltInDecorator(node, symbol, metadata);
-            }
-        }
-
-        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message: DiagnosticMessage) {
-            var parentSymbol = getSymbolOfNode(node.parent);
-            var parentType = getTypeOfSymbol(parentSymbol);
+        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message?: DiagnosticMessage) {
+            var parentType = getTypeOfNode(node.parent);
             var signature = getSingleCallSignature(expectedDecoratorType);
             if (!signature) {
                 // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
                 // and we have already reported an error in initializeTypeChecker.
                 return;
             }
-            var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
-            var signatureType = getOrCreateTypeFromSignature(instantiatedSignature);
-            checkTypeAssignableTo(exprType, signatureType, node, message);
-        }
 
-        /** Check the usage of a non-ambient decorator. */
-        function checkNonAmbientDecorator(node: Decorator, symbol: Symbol, exprType: Type, flags: DecoratorFlags) {
-            // report error for invalid target for decorator
-            var validFlags = getValidDecoratorTarget(node.parent);
-            if ((flags & validFlags) === 0) {
-                error(node, Diagnostics.Decorator_is_not_valid_on_this_declaration_type);
-                return;
-            }
-
-            // report error for non-ambient decorator on member in ES3
-            if (languageVersion < ScriptTarget.ES5 && (validFlags & DecoratorFlags.ES3ValidTargetMask) === 0) {
-                error(node, Diagnostics.Non_ambient_decorators_are_only_supported_on_class_members_when_targeting_ECMAScript_5_or_higher);
-                return;
-            }
-
-            if (validFlags & DecoratorFlags.NeedsDecorateHelperTargetsMask) {
-                emitDecorate = true;
-            }
-
-            // If we are decorating a class member, we need to check the type is compatible
-            if (validFlags & DecoratorFlags.MemberDecoratorFunctionValidTargetsMask) {
-                checkDecoratorSignature(node, exprType, globalMemberDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
-            }
-            else if (validFlags & DecoratorFlags.DecoratorFunctionValidTargetMask) {
-                checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
-            }
-
-            if (symbol) {
-                var valueDeclaration = symbol.valueDeclaration;
-                if (valueDeclaration && isAnyFunction(valueDeclaration)) {
-                    var hasTypeDecorator = false;
-                    var hasParamTypesDecorator = false;
-                    var hasReturnTypeDecorator = false;
-                    var signature = getSignatureFromDeclaration(<SignatureDeclaration>valueDeclaration);
-                    var parameters = signature.parameters;
-                    var parameterCount = parameters.length;
-                    for (var i = 0; i < parameterCount; i++) {
-                        var parameter = parameters[i];
-                        var metadataArray = getMetadataForSymbol(parameter);
-                        if (findMetadata(metadataArray, globalTypeDecoratorSymbol)) {
-                            hasTypeDecorator = true;
-                        }
-                        if (findMetadata(metadataArray, globalParamTypesDecoratorSymbol)) {
-                            hasParamTypesDecorator = true;
-                        }
-                        if (findMetadata(metadataArray, globalReturnTypeDecoratorSymbol)) {
-                            hasReturnTypeDecorator = true;
-                        }
-                    }
-                    if (hasTypeDecorator && (isAccessor(node.parent.kind) || node.kind === SyntaxKind.PropertyDeclaration)) {
-                        checkTypeAnnotationAsExpression(<AccessorDeclaration | PropertyDeclaration>node.parent);
-                    }
-                    else if (hasParamTypesDecorator && node.parent.kind === SyntaxKind.ClassDeclaration) {
-                        checkParameterTypeAnnotationsAsExpressions(getFirstConstructorWithBody(<ClassDeclaration>node.parent));
-                    }
-                    else if (hasParamTypesDecorator && isAnyFunction(node.parent)) {
-                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node.parent);
-                    }
-                    else if (hasReturnTypeDecorator && isAnyFunction(node.parent)) {
-                        checkTypeNodeAsExpression((<FunctionLikeDeclaration>node.parent).type);
-                    }
-                }
+            var erasedSignature = getErasedSignature(signature);
+            var erasedSignatureType = getOrCreateTypeFromSignature(erasedSignature);            
+            if (checkTypeAssignableTo(exprType, erasedSignatureType, node) && message) {
+                var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
+                var instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
+                checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);
             }
         }
 
@@ -8981,21 +8435,22 @@ module ts {
         function checkDecorator(node: Decorator): void {
             var expression: Expression = node.expression;
             var exprType = checkExpression(expression);
-            var symbol = getResolvedSymbolOfDecorator(node);
-            
-            // determine what targets the decorator can be applied to
-            var flags = getDecoratorFlagsForDecorator(node, symbol, exprType);
-            if (!flags) {
-                // report error if the type of the expression is not one of the valid decorator function types
-                reportInvalidDecoratorExpression(node, exprType);
-                return;
-            }
 
-            if (flags & DecoratorFlags.Ambient) {
-                checkAmbientDecorator(node, symbol, flags);
-            }
-            else {
-                checkNonAmbientDecorator(node, symbol, exprType, flags);
+            switch (node.parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
+                    break;
+
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    checkDecoratorSignature(node, exprType, globalMemberDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
+                    break;
+
+                case SyntaxKind.Parameter:
+                    checkDecoratorSignature(node, exprType, globalParameterDecoratorFunctionType);
+                    break;
             }
         }
 
@@ -9004,6 +8459,8 @@ module ts {
             if (!node.decorators) {
                 return;
             }
+
+            emitDecorate = true;
 
             forEach(node.decorators, checkDecorator);
         }
@@ -9022,6 +8479,7 @@ module ts {
         }
 
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
+            checkDecorators(node);
             checkSignatureDeclaration(node);
 
             // Do not use hasDynamicName here, because that returns false for well known symbols.
@@ -9362,7 +8820,7 @@ module ts {
 
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
-            checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
+            checkGrammarDecorators(node) || checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
 
             forEach(node.declarationList.declarations, checkSourceElement);
         }
@@ -9390,9 +8848,6 @@ module ts {
             checkGrammarStatementInAmbientContext(node)
 
             checkExpression(node.expression);
-            if (getNodeCheckFlags(node.expression) & NodeCheckFlags.ConditionallyRemoved) {
-                getNodeLinks(node).flags |= NodeCheckFlags.ConditionallyRemoved;
-            }
         }
 
         function checkIfStatement(node: IfStatement) {
@@ -9965,7 +9420,7 @@ module ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
@@ -10002,7 +9457,7 @@ module ts {
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
             
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
@@ -10281,7 +9736,7 @@ module ts {
             }
 
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -10348,7 +9803,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking
-                if (!checkGrammarModifiers(node)) {
+                if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
                     if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -10456,7 +9911,7 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
@@ -10478,7 +9933,7 @@ module ts {
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            checkGrammarModifiers(node);
+            checkGrammarDecorators(node) && checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 checkImportBinding(node);
                 var symbol = getSymbolOfNode(node);
@@ -10508,7 +9963,7 @@ module ts {
         }
 
         function checkExportDeclaration(node: ExportDeclaration) {
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
@@ -10520,7 +9975,7 @@ module ts {
 
         function checkExportAssignment(node: ExportAssignment) {
             // Grammar checking
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
 
@@ -10557,6 +10012,8 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return checkAccessorDeclaration(<AccessorDeclaration>node);
+                case SyntaxKind.IncompleteDeclaration:
+                    return checkIncompleteDeclaration(<Declaration>node);
                 case SyntaxKind.TypeReference:
                     return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypeQuery:
@@ -11272,7 +10729,7 @@ module ts {
             }
 
             function isExistingName(name: string) {
-                return hasProperty(globals, name) ||  hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
+                return hasProperty(globals, name) || hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
             }
 
             function makeUniqueName(baseName: string): string {
@@ -11289,7 +10746,7 @@ module ts {
                 }
                 var i = 1;
                 while (true) {
-                    name = baseName + i;
+                    var name = baseName + i;
                     if (!isExistingName(name)) {
                         return generatedNames[name] = name;
                     }
@@ -11475,172 +10932,6 @@ module ts {
             return undefined;
         }
 
-        /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
-        function serializeEntityName(node: EntityName): string {
-            if (node.kind === SyntaxKind.Identifier) {
-                var substitution = getExpressionNameSubstitution(<Identifier>node);
-                if (substitution) {
-                    return substitution;
-                }
-                return (<Identifier>node).text;
-            }
-            else {
-                return serializeEntityName((<QualifiedName>node).left) + "." + serializeEntityName((<QualifiedName>node).right);
-            }
-        }
-
-        /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
-        function serializeTypeReferenceNode(node: TypeReferenceNode): string {
-            // serialization of a TypeReferenceNode uses the following rules:
-            //
-            // * The serialized type of a TypeReference that is `void` is "void 0".
-            // * The serialized type of a TypeReference that is a `boolean` is "Boolean".
-            // * The serialized type of a TypeReference that is an enum or `number` is "Number".
-            // * The serialized type of a TypeReference that is a string literal or `string` is "String".
-            // * The serialized type of a TypeReference that is a tuple is "Array".
-            // * The serialized type of a TypeReference that is a `symbol` is "Symbol".
-            // * The serialized type of a TypeReference with a value declaration is its entity name.
-            // * The serialized type of a TypeReference with a call or construct signature is "Function".
-            // * The serialized type of any other type is "Object".
-            var type = getTypeFromTypeReferenceNode(node);
-            if (type.flags & TypeFlags.Void) {
-                return "void 0";
-            }
-            else if (type.flags & TypeFlags.Boolean) {
-                return "Boolean";
-            }
-            else if (type.flags & TypeFlags.NumberLike) {
-                return "Number";
-            }
-            else if (type.flags & TypeFlags.StringLike) {
-                return "String";
-            }
-            else if (type.flags & TypeFlags.Tuple) {
-                return "Array";
-            }
-            else if (type.flags & TypeFlags.ESSymbol) {
-                return "Symbol";
-            }
-            else if (type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName);
-            }
-            else if (typeHasCallOrConstructSignatures(type)) {
-                return "Function"; 
-            }
-
-            return "Object";
-        }
-
-        /** Serializes a TypeNode to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
-        function serializeTypeNode(node: TypeNode | LiteralExpression): string {
-            // serialization of a TypeNode uses the following rules:
-            //
-            // * The serialized type of `void` is "void 0" (undefined).
-            // * The serialized type of a parenthesized type is the serialized type of its nested type.
-            // * The serialized type of a Function or Constructor type is "Function".
-            // * The serialized type of an Array or Tuple type is "Array".
-            // * The serialized type of `boolean` is "Boolean".
-            // * The serialized type of `string` or a string-literal type is "String".
-            // * The serialized type of a type reference is handled by `serializeTypeReferenceNode`.
-            // * The serialized type of any other type node is "Object".
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.VoidKeyword:
-                        return "void 0";
-                    case SyntaxKind.ParenthesizedType:
-                        return serializeTypeNode((<ParenthesizedTypeNode>node).type);
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        return "Function";
-                    case SyntaxKind.ArrayType:
-                    case SyntaxKind.TupleType:
-                        return "Array";
-                    case SyntaxKind.BooleanKeyword:
-                        return "Boolean";
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.StringLiteral:
-                        return "String";
-                    case SyntaxKind.NumberKeyword:
-                        return "Number";
-                    case SyntaxKind.TypeReference:
-                        return serializeTypeReferenceNode(<TypeReferenceNode>node);
-                    case SyntaxKind.TypeQuery:
-                    case SyntaxKind.TypeLiteral:
-                    case SyntaxKind.UnionType:
-                    case SyntaxKind.AnyKeyword:
-                    default:
-                        break;
-                }
-            }
-             
-            return "Object";
-        }
-
-        /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the `@type` and `@paramtypes` decorators. */
-        function serializeTypeOfNode(node: Node): string {
-            // serialization of the type of a declaration uses the following rules:
-            //
-            // * The serialized type of a ClassDeclaration is the class name (see serializeEntityName).
-            // * The serialized type of a ParameterDeclaration is the serialized type of its type annotation.
-            // * The serialized type of a PropertyDeclaration is the serialized type of its type annotation.
-            // * The serialized type of an AccessorDeclaration is the serialized type of the return type annotation of its getter or parameter type annotation of its setter.
-            // * The serialized type of any other FunctionLikeDeclaration is "Function".
-            // * The serialized type of any other node is "void 0".
-            // 
-            // For rules on serializing type annotations, see `serializeTypeNode`.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:       return serializeEntityName((<ClassDeclaration>node).name);
-                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type);
-                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type);
-                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type);
-                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
-            }
-            if (isAnyFunction(node)) {
-                return "Function";
-            }
-            return "void 0";
-        }
-        
-        /** Serializes the parameter types of a function or the constructor of a class. Used by the `@paramtypes` decorator. */
-        function serializeParameterTypesOfNode(node: Node): string[] {
-            // serialization of parameter types uses the following rules:
-            //
-            // * If the declaration is a class, the parameters of the first constructor with a body are used.
-            // * If the declaration is function-like and has a body, the parameters of the function are used.
-            // 
-            // For the rules on serializing the type of each parameter declaration, see `serializeTypeOfDeclaration`.
-            if (node) {
-                var valueDeclaration: FunctionLikeDeclaration;
-                if (node.kind === SyntaxKind.ClassDeclaration) {
-                    valueDeclaration = getFirstConstructorWithBody(<ClassDeclaration>node);
-                }
-                else if (isAnyFunction(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                    valueDeclaration = <FunctionLikeDeclaration>node;
-                }
-                if (valueDeclaration) {
-                    var result: string[];
-                    var parameters = valueDeclaration.parameters;
-                    var parameterCount = parameters.length;
-                    if (parameterCount > 0) {
-                        result = new Array<string>(parameterCount);
-                        for (var i = 0; i < parameterCount; i++) {
-                            result[i] = serializeTypeOfNode(parameters[i]);
-                        }
-                        return result;
-                    }
-                }
-            }
-            return emptyArray;
-        }
-
-        /** Serializes the return type of function. Used by the `@returntype` decorator. */
-        function serializeReturnTypeOfNode(node: Node): string {
-            if (node && isAnyFunction(node)) {
-                return serializeTypeNode((<FunctionLikeDeclaration>node).type);
-            }
-            return "void 0";
-        }
-
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(declaration);
@@ -11677,11 +10968,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
-                getResolvedSignature,
-                serializeTypeOfNode,
-                serializeParameterTypesOfNode,
-                serializeReturnTypeOfNode,
-                getMetadataForSymbol
+                getResolvedSignature
             };
         }
 
@@ -11716,12 +11003,6 @@ module ts {
             globalDecoratorFunctionType = getGlobalType("DecoratorFunction");
             globalParameterDecoratorFunctionType = getGlobalType("ParameterDecoratorFunction");
             globalMemberDecoratorFunctionType = getGlobalType("MemberDecoratorFunction");
-            globalDecoratorSymbol = getGlobalValueSymbol("decorator");
-            globalTypeDecoratorSymbol = getGlobalValueSymbol("type");
-            globalParamTypesDecoratorSymbol = getGlobalValueSymbol("paramtypes");
-            globalReturnTypeDecoratorSymbol = getGlobalValueSymbol("returntype");
-            globalObsoleteDecoratorSymbol = getGlobalValueSymbol("obsolete");
-            globalConditionalDecoratorSymbol = getGlobalValueSymbol("conditional");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
@@ -11745,6 +11026,36 @@ module ts {
 
 
         // GRAMMAR CHECKING
+        function checkGrammarDecorators(node: Node): boolean {
+            if (!node.decorators) {
+                return false;
+            }
+
+            var target = node;
+            while (target) {
+                switch (target.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        return false;
+
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.Parameter:
+                        target = target.parent;
+                        continue;
+                        
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        if ((<FunctionLikeDeclaration>target).body) {
+                            target = target.parent;
+                            continue;
+                        }
+                        break;
+                }
+                break;
+            }
+            return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_on_this_declaration_type);
+        }
+
         function checkGrammarModifiers(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
@@ -11943,7 +11254,7 @@ module ts {
 
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
-            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
+            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
@@ -11987,7 +11298,7 @@ module ts {
 
         function checkGrammarIndexSignature(node: SignatureDeclaration) {
             // Prevent cascading error by short-circuit
-            checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node) || checkGrammarForIndexSignatureModifier(node);
+            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node) || checkGrammarForIndexSignatureModifier(node);
         }
 
         function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
@@ -12037,7 +11348,7 @@ module ts {
             var seenExtendsClause = false;
             var seenImplementsClause = false;
 
-            if (!checkGrammarModifiers(node) && node.heritageClauses) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && node.heritageClauses) {
                 for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
                     Debug.assert(i <= 2);
                     var heritageClause = node.heritageClauses[i];

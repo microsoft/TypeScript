@@ -615,6 +615,10 @@
         "category": "Error",
         "code": 1197
     },
+    "Decorators are not valid on this declaration type.": {
+        "category": "Error",
+        "code": 1198
+    },
     "Decorator is not valid on this declaration type.": {
         "category": "Error",
         "code": 1199

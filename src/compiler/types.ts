@@ -402,6 +402,7 @@ module ts {
     }
 
     export interface Decorator extends Node {
+        atToken: Node;
         expression: LeftHandSideExpression;
     }
 
@@ -688,7 +689,9 @@ module ts {
     }
 
     export interface ArrayLiteralExpression extends PrimaryExpression {
+        openBracketToken: Node;
         elements: NodeArray<Expression>;
+        closeBracketToken: Node;
     }
 
     export interface SpreadElementExpression extends Expression {
@@ -702,11 +705,14 @@ module ts {
 
     export interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
 
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        openBracketToken: Node;
+        closeBracketToken: Node;
         argumentExpression?: Expression;
     }
 
@@ -1215,10 +1221,6 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
         getResolvedSignature(node: CallLikeExpression): Signature;
-        serializeTypeOfNode(node: Node): string;
-        serializeParameterTypesOfNode(node: Node): string[];
-        serializeReturnTypeOfNode(node: Node): string;
-        getMetadataForSymbol(symbol: Symbol): DecoratorMetadata[];        
     }
 
     export const enum SymbolFlags {
@@ -1325,11 +1327,6 @@ module ts {
         exportAssignmentSymbol?: Symbol;            // Symbol exported from external module
         unionType?: UnionType;                      // Containing union type for union property
         resolvedExports?: SymbolTable;              // Resolved exports of module
-        decoratorMetadata?: DecoratorMetadata[];    // Resolved ambient decorator metadata        
-        decoratorUsage?: DecoratorUsageMetadata;
-        obsolete?: ObsoleteMetadata;
-        conditionalSymbols?: string[];
-        conditionallyRemoved?: boolean;
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1350,18 +1347,12 @@ module ts {
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed      = 0x00000080,
         EmitDecorate            = 0x00000100,  // Emit __decorate
-        EmitDecoratedType       = 0x00000200,  // Emit the type of the decorator target as an argument in this parameter position
-        EmitDecoratedParamTypes = 0x00000400,  // Emit the parameter types of the decorator target as an argument in this parameter position
-        EmitDecoratedReturnType = 0x00000800,  // Emit the return type of the decorator target as an argument in this parameter position
-        AmbientDecorator        = 0x00001000,  // Decorator was marked ambient, do not emit to output
-        ConditionallyRemoved    = 0x00002000,  // Call should be ignored due to @conditional
     }
 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
-        resolvedDecoratorMetadata?: DecoratorMetadata; // Resolved metadata for a decorator
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
@@ -1516,22 +1507,6 @@ module ts {
         // It is optional because in contextual signature instantiation, nothing fails
     }
 
-    export interface DecoratorUsageMetadata {
-        ambient?: boolean;
-        targets?: number;
-    }
-
-    export interface ObsoleteMetadata {
-        obsolete?: boolean;
-        message?: string;
-    }
-
-    // DecoratorMetadata consists of the state information about an ambient decorator
-    export interface DecoratorMetadata {
-        symbol: Symbol;     // The symbol of the ambient decorator
-        arguments: any[];   // The arguments to the ambient decorator
-    }
-
     export const enum DecoratorFlags {
         // Flags from DecoratorTargets enum
         ModuleDeclaration       = 0x00000001, // decorator can target a lexical module declaration (from DecoratorTargets enum)
@@ -1561,9 +1536,6 @@ module ts {
         // Valid targets for an ES3 non-ambient decorator
         ES3ValidTargetMask = ClassDeclaration | ParameterDeclaration,
 
-        // Targets that need the __decorate helper
-        NeedsDecorateHelperTargetsMask = PropertyDeclaration | MethodDeclaration | AccessorDeclaration,
-
         // Valid targets for a non-ambient decorator
         NonAmbientValidTargetMask = ClassDeclaration | PropertyDeclaration | MethodDeclaration | AccessorDeclaration | ParameterDeclaration,
 
@@ -1576,6 +1548,12 @@ module ts {
         // Valid targets for a non-ambient decorator that resolves to a type compatible with ParameterDecoratorFunction
         ParameterDecoratorFunctionValidTargetsMask = ParameterDeclaration,
     }
+
+    export const enum DecoratorTargetIndex {
+        parameter = -1,
+        target = 0,
+        descriptor = 2,
+    }    
 
     export interface DiagnosticMessage {
         key: string;

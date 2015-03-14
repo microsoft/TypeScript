@@ -118,15 +118,20 @@ module ts {
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNodes, (<BindingPattern>node).elements);
             case SyntaxKind.ArrayLiteralExpression:
-                return visitNodes(cbNodes, (<ArrayLiteralExpression>node).elements);
+                return visitNode(cbNode, (<ArrayLiteralExpression>node).openBracketToken) ||
+                    visitNodes(cbNodes, (<ArrayLiteralExpression>node).elements) ||
+                    visitNode(cbNode, (<ArrayLiteralExpression>node).closeBracketToken);
             case SyntaxKind.ObjectLiteralExpression:
                 return visitNodes(cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<PropertyAccessExpression>node).dotToken) ||
                     visitNode(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+                    visitNode(cbNode, (<ElementAccessExpression>node).openBracketToken) ||
+                    visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression) ||
+                    visitNode(cbNode, (<ElementAccessExpression>node).closeBracketToken);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
@@ -230,7 +235,8 @@ module ts {
                     visitNode(cbNode, (<CatchClause>node).type) ||
                     visitNode(cbNode, (<CatchClause>node).block);
             case SyntaxKind.Decorator:
-                return visitNode(cbNode, (<Decorator>node).expression);
+                return visitNode(cbNode, (<Decorator>node).atToken) ||
+                    visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
@@ -1371,6 +1377,19 @@ module ts {
             return false;
         }
 
+        function parseExpectedToken(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): Node {
+            if (token === kind) {
+                return parseTokenNode();
+            }
+
+            if (diagnosticMessage) {
+                return createMissingNode(kind, /*reportAtCurrentPosition*/ false, diagnosticMessage);
+            }
+            else {
+                return createMissingNode(kind, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(kind));
+            }
+        }
+
         function parseOptional(t: SyntaxKind): boolean {
             if (token === t) {
                 nextToken();
@@ -1381,9 +1400,7 @@ module ts {
 
         function parseOptionalToken(t: SyntaxKind): Node {
             if (token === t) {
-                var node = createNode(t);
-                nextToken();
-                return finishNode(node);
+                return parseTokenNode();
             }
             return undefined;
         }
@@ -3540,18 +3557,21 @@ module ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                var dotOrBracketStart = scanner.getTokenPos();
-                if (parseOptional(SyntaxKind.DotToken)) {
+                var dotToken = parseOptionalToken(SyntaxKind.DotToken);
+                if (dotToken) {
                     var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
+                    propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
                 }
 
-                if (parseOptional(SyntaxKind.OpenBracketToken)) {
+                var openBracketToken = parseOptionalToken(SyntaxKind.OpenBracketToken);
+                if (openBracketToken) {
                     var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
                     indexedAccess.expression = expression;
+                    indexedAccess.openBracketToken = openBracketToken;
 
                     // It's not uncommon for a user to write: "new Type[]".
                     // Check for that common pattern and report a better error message.
@@ -3563,7 +3583,7 @@ module ts {
                         }
                     }
 
-                    parseExpected(SyntaxKind.CloseBracketToken);
+                    indexedAccess.closeBracketToken = parseExpectedToken(SyntaxKind.CloseBracketToken);
                     expression = finishNode(indexedAccess);
                     continue;
                 }
@@ -3768,10 +3788,10 @@ module ts {
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             var node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
-            parseExpected(SyntaxKind.OpenBracketToken);
+            node.openBracketToken = parseExpectedToken(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
-            parseExpected(SyntaxKind.CloseBracketToken);
+            node.closeBracketToken = parseExpectedToken(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
@@ -4583,14 +4603,13 @@ module ts {
                     break;
                 }
 
-                nextToken();
-
                 if (!decorators) {
                     decorators = <NodeArray<Decorator>>[];
                     decorators.pos = scanner.getStartPos();
                 }
 
                 var decorator = <Decorator>createNode(SyntaxKind.Decorator);
+                decorator.atToken = parseTokenNode();
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
                 decorators.push(finishNode(decorator));
             }
@@ -4636,7 +4655,7 @@ module ts {
             return undefined;
         }
 
-        function extractDeclarationNameFromDecoratorTail(decorator: Decorator): DeclarationName {
+        function extractDeclarationNameFromDecoratorTail(decorator: Decorator): DeclarationName {            
             var expression = decorator.expression;
             var name: DeclarationName;
             switch (expression.kind) {
@@ -4645,23 +4664,14 @@ module ts {
                     // we extract it from the decorator for a better editor experience:
                     //      @
                     //      id() {}
-                    //
-                    decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
-                    name = <Identifier>expression;
-                    break;
+                    //                    
+                    var end = Math.min(getTokenPosOfNode(decorator.atToken, sourceFile) + 1, decorator.atToken.end);
+                    if (lineBreakBetween(sourceFile, end, getTokenPosOfNode(expression, sourceFile))) {
+                        decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(end, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+                        decorator.end = decorator.atToken.end;
+                        return <Identifier>expression;
+                    }
 
-                case SyntaxKind.PropertyAccessExpression:
-                    // We could have greedily parsed a property name as a property access, so we extract it from the decorator
-                    // for a better editor experience.
-                    var propExpr = <PropertyAccessExpression>expression;
-                    if (nodeIsMissing(propExpr.name)) {
-                        name = <Identifier>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
-                    }
-                    else {
-                        name = propExpr.name;
-                        propExpr.name = <Identifier>createMissingNodeAtPosition(name.pos, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
-                        propExpr.end = propExpr.name.end;
-                    }
                     break;
 
                 case SyntaxKind.ArrayLiteralExpression:
@@ -4670,42 +4680,68 @@ module ts {
                     //      @
                     //      ["computed"]() {}
                     //
-                    var arrayExpr = <ArrayLiteralExpression>expression;
-                    decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(decorator.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+                    var end = Math.min(getTokenPosOfNode(decorator.atToken, sourceFile) + 1, decorator.atToken.end);
+                    if (lineBreakBetween(sourceFile, end, getTokenPosOfNode(expression, sourceFile))) {
+                        var arrayExpr = <ArrayLiteralExpression>expression;
+                        decorator.expression = <LeftHandSideExpression>createMissingNodeAtPosition(end, SyntaxKind.Identifier, Diagnostics.Expression_expected);
+                        decorator.end = decorator.atToken.end;
 
-                    var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, arrayExpr.pos);
-                    if (arrayExpr.elements.length === 0) {
-                        computedPropertyName.expression = <Expression>createMissingNodeAtPosition(arrayExpr.pos + 1, SyntaxKind.Identifier, Diagnostics.Expression_expected);
-                    }
-                    else {
-                        computedPropertyName.expression = arrayExpr.elements[0];
-                        for (var i = 1; i < arrayExpr.elements.length; i++) {
-                            var commaExpr = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, computedPropertyName.expression.pos);
-                            commaExpr.operatorToken = finishNode(createNode(SyntaxKind.CommaToken, 0), 0);
-                            commaExpr.left = computedPropertyName.expression;
-                            commaExpr.right = arrayExpr.elements[i];
-                            computedPropertyName.expression = finishNode(commaExpr, commaExpr.right.end);
+                        var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, arrayExpr.pos);
+                        if (arrayExpr.elements.length === 0) {
+                            end = Math.min(getTokenPosOfNode(arrayExpr.openBracketToken, sourceFile) + 1, arrayExpr.openBracketToken.end);
+                            computedPropertyName.expression = <Expression>createMissingNodeAtPosition(end, SyntaxKind.Identifier, Diagnostics.Expression_expected);
                         }
+                        else {
+                            var i = arrayExpr.elements.length - 1;
+                            var expr = arrayExpr.elements[i--];
+                            while (i >= 0) {
+                                var element = arrayExpr.elements[i--];
+                                var commaExpr = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, element.pos);
+                                commaExpr.operatorToken = finishNode(createNode(SyntaxKind.CommaToken, 0), 0);
+                                commaExpr.left = element;
+                                commaExpr.right = expr;
+                                expr = finishNode(commaExpr, expr.end);
+                            }
+                            computedPropertyName.expression = expr;
+                        }
+
+                        return finishNode(computedPropertyName, arrayExpr.end);
                     }
-                    name = finishNode(computedPropertyName, arrayExpr.end);
+
+                    break;
+
+                case SyntaxKind.PropertyAccessExpression:
+                    // We could have greedily parsed a property name as a property access, so we extract it from the decorator
+                    // for a better editor experience.
+                    //      @expr.
+                    //      id() {}
+                    //
+                    var propExpr = <PropertyAccessExpression>expression;
+                    var end = Math.min(getTokenPosOfNode(propExpr.dotToken, sourceFile) + 1, propExpr.dotToken.end);
+                    if (lineBreakBetween(sourceFile, end, getTokenPosOfNode(propExpr.name, sourceFile))) {
+                        name = propExpr.name;
+                        propExpr.name = <Identifier>createMissingNodeAtPosition(end, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
+                        propExpr.end = propExpr.dotToken.end;
+                        decorator.end = propExpr.dotToken.end;
+                        return name;
+                    }
                     break;
 
                 case SyntaxKind.ElementAccessExpression:
                     // We could have greedily parsed a computed property name as an element access, so we extract it from the decorator.
+                    //      @expr
+                    //      ["expr"]()
+                    //
                     var elementExpr = <ElementAccessExpression>expression;
                     decorator.expression = elementExpr.expression;
+                    decorator.end = elementExpr.expression.end;
 
-                    var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, elementExpr.argumentExpression.pos);
+                    var computedPropertyName = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, getTokenPosOfNode(elementExpr.argumentExpression, sourceFile));
                     computedPropertyName.expression = elementExpr.argumentExpression;
-                    name = finishNode(computedPropertyName, elementExpr.end);
-                    break;
-
-                default:
-                    return undefined;
+                    return finishNode(computedPropertyName, elementExpr.end);
             }
 
-            decorator.end = decorator.expression.end;
-            return name;
+            return <Identifier>createMissingNodeAtPosition(expression.end, SyntaxKind.Identifier, Diagnostics.Identifier_expected);
         }
 
         function reparseTypeArgumentsAsTypeParameters(typeArguments: NodeArray<TypeNode>): NodeArray<TypeParameterDeclaration> {
@@ -4782,41 +4818,33 @@ module ts {
 
             // Extract the declaration name from the decorator
             var name = extractDeclarationNameFromDecoratorTail(lastDecorator);
-            if (name) {
-                var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
-                if (callExpression) {
-                    // Reparse as a computed property method
-                    var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
-                    method.decorators = decorators;
-                    setModifiers(method, modifiers);
-                    method.name = name;
-                    method.questionToken = questionToken;
-                    reparseCallExpressionAsSignature(callExpression, method);
-                    method.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
-                    return finishNode(method);
-                }
-                else {
-                    if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                        return parseMethodDeclaration(fullStart, decorators, modifiers, /*asteriskToken*/ undefined, name, questionToken, Diagnostics.or_expected);
-                    }
-
-                    // Reparse as a computed property declaration
-                    var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
-                    property.decorators = decorators;
-                    setModifiers(property, modifiers);
-                    property.name = name;
-                    property.type = parseTypeAnnotation();
-                    property.initializer = allowInAnd(parseNonParameterInitializer);
-                    parseSemicolon();
-                    return finishNode(property);
-                }
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (callExpression) {
+                // Reparse as method
+                var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
+                method.decorators = decorators;
+                setModifiers(method, modifiers);
+                method.name = name;
+                method.questionToken = questionToken;
+                reparseCallExpressionAsSignature(callExpression, method);
+                method.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
+                return finishNode(method);
             }
+            else {
+                if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                    return parseMethodDeclaration(fullStart, decorators, modifiers, /*asteriskToken*/ undefined, name, questionToken, Diagnostics.or_expected);
+                }
 
-            // We couldn't reparse this node, so attach the decorators to an incomplete declaration
-            var incomplete = <ClassElement>createNode(SyntaxKind.IncompleteDeclaration, fullStart);
-            incomplete.decorators = decorators;
-            setModifiers(incomplete, modifiers);
-            return incomplete;
+                // Reparse as property declaration with a missing name.
+                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
+                property.decorators = decorators;
+                setModifiers(property, modifiers);
+                property.name = name;
+                property.type = parseTypeAnnotation();
+                property.initializer = allowInAnd(parseNonParameterInitializer);
+                parseSemicolon();
+                return finishNode(property);
+            }
         }
 
         function parseClassElement(): ClassElement {
