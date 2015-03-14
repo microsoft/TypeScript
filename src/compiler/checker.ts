@@ -79,8 +79,7 @@ module ts {
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        let inferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-
+        
         let anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
 
@@ -4727,20 +4726,31 @@ module ts {
 
         function getInferredType(context: InferenceContext, index: number): Type {
             let inferredType = context.inferredTypes[index];
+            let inferenceSucceeded: boolean;
             if (!inferredType) {
                 let inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
                     // Infer widened union or supertype, or the undefined type for no common supertype
                     let unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : inferenceFailureType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
+                    inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
                     // Infer the empty object type when no inferences were made
                     inferredType = emptyObjectType;
+                    inferenceSucceeded = true;
                 }
-                if (inferredType !== inferenceFailureType) {
+
+                // Only do the constraint check if inference succeeded (to prevent cascading errors)
+                if (inferenceSucceeded) {
                     let constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                }
+                // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
+                // It might be that inference has already failed on a later type parameter on a previous call to inferTypeArguments.
+                // So if this failure is on preceding type parameter, this type parameter is the new failure index.
+                else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
+                    context.failedTypeParameterIndex = index;
                 }
                 context.inferredTypes[index] = inferredType;
             }
@@ -6350,6 +6360,9 @@ module ts {
                     context.inferredTypes[i] = undefined;
                 }
             }
+            if (context.failedTypeParameterIndex >= 0 && !context.inferences[context.failedTypeParameterIndex].isFixed) {
+                context.failedTypeParameterIndex = undefined;
+            }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
@@ -6385,16 +6398,7 @@ module ts {
                 }
             }
 
-            let inferredTypes = getInferredTypes(context);
-            // Inference has failed if the inferenceFailureType type is in list of inferences
-            context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
-
-            // Wipe out the inferenceFailureType from the array so that error recovery can work properly
-            for (let i = 0; i < inferredTypes.length; i++) {
-                if (inferredTypes[i] === inferenceFailureType) {
-                    inferredTypes[i] = unknownType;
-                }
-            }
+            getInferredTypes(context);
         }
 
         function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
@@ -6649,7 +6653,7 @@ module ts {
                             }
                             else {
                                 inferTypeArguments(candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex < 0;
+                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
