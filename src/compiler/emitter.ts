@@ -2116,16 +2116,22 @@ module ts {
 
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
             // name should be one that is appropriate for a for loop variable.
-            function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
-                let name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (name && !isExistingName(location, name)) {
-                        break;
-                    }
+            function createTempVariable(location: Node, preferredName?: string): Identifier {
+                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
                     // _a .. _h, _j ... _z, _0, _1, ...
-                    // Note that _i is skipped
-                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
-                    tempCount++;
+
+                    // Note: we avoid generating _i and _n as those are common names we want in other places.
+                    var char = CharacterCodes.a + tempCount;
+                    if (char === CharacterCodes.i || char === CharacterCodes.n) {
+                        continue;
+                    }
+
+                    if (tempCount < 26) {
+                        name = "_" + String.fromCharCode(char);
+                    }
+                    else {
+                        name = "_" + (tempCount - 26);
+                    }
                 }
                 
                 // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
@@ -2144,8 +2150,8 @@ module ts {
                 tempVariables.push(name);
             }
 
-            function createAndRecordTempVariable(location: Node): Identifier {
-                let temp = createTempVariable(location, /*forLoopVariable*/ false);
+            function createAndRecordTempVariable(location: Node, preferredName?: string): Identifier {
+                let temp = createTempVariable(location, preferredName);
                 recordTempDeclaration(temp);
 
                 return temp;
@@ -2853,7 +2859,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        var { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                         // Only emit the first accessor.
                         if (firstAccessor !== property) {
@@ -3580,8 +3586,10 @@ module ts {
                 //
                 // we don't want to emit a temporary variable for the RHS, just use it directly.
                 let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
-                let counter = createTempVariable(node, /*forLoopVariable*/ true);
-                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
+                let counter = createTempVariable(node, /*preferredName*/ "_i");
+                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node);
+
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, /*preferredName:*/ "_n") : undefined;
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -3602,14 +3610,30 @@ module ts {
                     emitNodeWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
+
+                if (cachedLength) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(cachedLength);
+                    write(" = ");
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 write("; ");
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
-                write(".length");
+
+                if (cachedLength) {
+                    emitNodeWithoutSourceMap(cachedLength);
+                }
+                else {
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 emitEnd(node.initializer);
                 write("; ");
                 
@@ -3650,7 +3674,7 @@ module ts {
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (let of []) {}
-                        emitNodeWithoutSourceMap(createTempVariable(node, /*forLoopVariable*/ false));
+                        emitNodeWithoutSourceMap(createTempVariable(node));
                         write(" = ");
                         emitNodeWithoutSourceMap(rhsIterationValue);
                     }
@@ -4233,7 +4257,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
-                    let tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
+                    let tempName = createTempVariable(node, /*preferredName:*/ "_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);

@@ -4093,12 +4093,6 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
-        stripInternal?: boolean;
->stripInternal : boolean
-
-        preserveNewLines?: boolean;
->preserveNewLines : boolean
-
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -4882,7 +4876,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
 >version : string
 
     function createCompilerHost(options: CompilerOptions): CompilerHost;
