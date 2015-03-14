@@ -6344,7 +6344,11 @@ module ts {
 
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (let i = 0; i < typeParameters.length; i++) {
-                context.inferredTypes[i] = undefined;
+                // As an optimization, we don't have to clear (and later recompute) inferred types
+                // for type parameters that have already been fixed on the previous call to inferTypeArguments
+                if (!context.inferences[i].isFixed) {
+                    context.inferredTypes[i] = undefined;
+                }
             }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
