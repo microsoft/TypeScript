@@ -4372,12 +4372,6 @@ module ts {
 
         function parsePropertyOrMethodDeclaration(fullStart: number, modifiers: ModifiersArray): ClassElement {
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-
-            // From ES6 Specification, "implements", "interface", "let", "package", "private", "protected", "public", "static", and "yield" are reserved words within strict mode code
-            if (inStrictModeContext() && (token > SyntaxKind.LastReservedWord)) {
-                parseErrorAtCurrentToken(Diagnostics.Invalid_use_of_0_in_strict_mode, tokenToString(token));
-            }
-
             var name = parsePropertyName();
 
             // Note: this is not legal as per the grammar.  But we allow it in the parser and

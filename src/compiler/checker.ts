@@ -5696,9 +5696,9 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
-                // Disallow using static property in computedPropertyName because classDeclaration is binded lexically in ES6
+                // Disallow using a static property in computedPropertyName because classDeclaration is bound lexically in ES6
                 // and its static property assignment will be emitted after classDeclaration.
-                // Therefore, using static property inside computedPropertyName will cause use-before-definition
+                // Therefore, using static property inside computedPropertyName will cause an use-before-definition error
                 // Example:
                 //  * TypeScript
                 //      class C {
@@ -5710,9 +5710,9 @@ module ts {
                 //          [C.p]() {}  // Use before definition error
                 //      }
                 //      C.p = 10;
-                if (languageVersion >= ScriptTarget.ES6 && links.resolvedSymbol) {
+                if (links.resolvedSymbol) {
                     var declarations = links.resolvedSymbol.declarations;
-                    forEach(declarations, (declaration) => {
+                    forEach(declarations, declaration => {
                         if (declaration.flags & NodeFlags.Static) {
                             error(node, Diagnostics.A_computed_property_name_cannot_reference_a_static_property);
                         }
@@ -9296,9 +9296,7 @@ module ts {
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             var baseTypeNode = getClassBaseTypeNode(node);
             if (baseTypeNode) {
-                if (languageVersion < ScriptTarget.ES6) {
-                    emitExtends = emitExtends || !isInAmbientContext(node);
-                }
+                emitExtends = emitExtends || !isInAmbientContext(node);
                 checkTypeReference(baseTypeNode);
             }
             if (type.baseTypes.length) {
