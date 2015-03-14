@@ -4779,7 +4779,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the language service API */
-    var servicesVersion: string;
+    let servicesVersion: string;
 >servicesVersion : string
 
     interface Node {
@@ -6129,7 +6129,7 @@ declare module "typescript" {
 >setNodeParents : boolean
 >SourceFile : SourceFile
 
-    var disableIncrementalParsing: boolean;
+    let disableIncrementalParsing: boolean;
 >disableIncrementalParsing : boolean
 
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
