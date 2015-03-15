@@ -62,7 +62,7 @@ declare module "typescript" {
      * index in the array will be the one associated with the produced key.
      */
     function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
-    var localizedDiagnosticMessages: Map<string>;
+    let localizedDiagnosticMessages: Map<string>;
     function getLocaleSpecificMessage(message: string): string;
     function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -74,7 +74,7 @@ declare module "typescript" {
     function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function normalizeSlashes(path: string): string;
     function getRootLength(path: string): number;
-    var directorySeparator: string;
+    let directorySeparator: string;
     function normalizePath(path: string): string;
     function getDirectoryPath(path: string): string;
     function isUrl(path: string): boolean;
@@ -94,7 +94,7 @@ declare module "typescript" {
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
-    var objectAllocator: ObjectAllocator;
+    let objectAllocator: ObjectAllocator;
     const enum AssertionLevel {
         None = 0,
         Normal = 1,
@@ -186,7 +186,7 @@ declare module "typescript" {
     function isPrologueDirective(node: Node): boolean;
     function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile): CommentRange[];
     function getJsDocComments(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
-    var fullTripleSlashReferencePathRegEx: RegExp;
+    let fullTripleSlashReferencePathRegEx: RegExp;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
     function isFunctionLike(node: Node): boolean;
     function isFunctionBlock(node: Node): boolean;
@@ -257,7 +257,7 @@ declare module "typescript" {
     function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
     function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
     function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
-    var unchangedTextChangeRange: TextChangeRange;
+    let unchangedTextChangeRange: TextChangeRange;
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
