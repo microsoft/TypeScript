@@ -20,12 +20,11 @@ class C {
 var s;
 var n;
 var a;
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[n] = n;
         this[s + n] = 2;
         this[`hello bye`] = 0;
     }
-    C[`hello ${a} bye`] = 0;
-    return C;
-})();
+}
+C[`hello ${a} bye`] = 0;

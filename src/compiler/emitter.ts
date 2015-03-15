@@ -2630,6 +2630,7 @@ module ts {
             }
 
             function emitSuper(node: Node) {
+                debugger;
                 if (languageVersion >= ScriptTarget.ES6) {
                     write("super");
                 }
@@ -2638,11 +2639,11 @@ module ts {
                     if (flags & NodeCheckFlags.SuperInstance) {
                         write("_super.prototype");
                     }
-                    else if (flags & NodeCheckFlags.SuperStatic) {
+                    else if ((flags & NodeCheckFlags.SuperStatic) || (node.parent.kind === SyntaxKind.Constructor)) {
                         write("_super");
                     }
                     else {
-                        write("super");
+                        write("_super");
                     }
                 }
             }
@@ -4538,8 +4539,8 @@ module ts {
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            writeLine();
                             if (accessors.getAccessor) {
+                                writeLine();
                                 emitLeadingComments(accessors.getAccessor);
                                 emitStart(accessors.getAccessor);
                                 if (member.flags & NodeFlags.Static) {
@@ -4553,6 +4554,7 @@ module ts {
                             }
                             if (accessors.setAccessor) {
                                 // We will only write new line if we just emit getAccessor
+                                writeLine();
                                 emitLeadingComments(accessors.setAccessor);
                                 emitStart(accessors.setAccessor);
                                 if (member.flags & NodeFlags.Static) {
@@ -4570,6 +4572,7 @@ module ts {
             }
 
             function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+                debugger;
                 var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
