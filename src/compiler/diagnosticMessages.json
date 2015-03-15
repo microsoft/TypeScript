@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1199
     },
-    "Type annotation on export statements are only allowed in ambient module declarations.": {
+    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
         "category": "Error",
         "code": 1200
     },

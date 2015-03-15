@@ -2073,7 +2073,7 @@ module ts {
                 }
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
-                    var exportAssignment = (<ExportAssignment>declaration);
+                    var exportAssignment = <ExportAssignment>declaration;
                     if (exportAssignment.expression) {
                         return links.type = checkExpression(exportAssignment.expression);
                     }
@@ -10095,7 +10095,7 @@ module ts {
             if (node.type) {
                 checkSourceElement(node.type);
                 if (!isInAmbientContext(node)) {
-                    grammarErrorOnFirstToken(node.type, Diagnostics.Type_annotation_on_export_statements_are_only_allowed_in_ambient_module_declarations);
+                    grammarErrorOnFirstToken(node.type, Diagnostics.A_type_annotation_on_an_export_statement_is_only_allowed_in_an_ambient_external_module_declaration);
                 }
             }
 

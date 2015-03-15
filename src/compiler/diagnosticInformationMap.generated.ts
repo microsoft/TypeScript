@@ -157,7 +157,7 @@ module ts {
         Catch_clause_variable_cannot_have_an_initializer: { code: 1197, category: DiagnosticCategory.Error, key: "Catch clause variable cannot have an initializer." },
         An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive: { code: 1198, category: DiagnosticCategory.Error, key: "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive." },
         Unterminated_Unicode_escape_sequence: { code: 1199, category: DiagnosticCategory.Error, key: "Unterminated Unicode escape sequence." },
-        Type_annotation_on_export_statements_are_only_allowed_in_ambient_module_declarations: { code: 1200, category: DiagnosticCategory.Error, key: "Type annotation on export statements are only allowed in ambient module declarations." },
+        A_type_annotation_on_an_export_statement_is_only_allowed_in_an_ambient_external_module_declaration: { code: 1200, category: DiagnosticCategory.Error, key: "A type annotation on an export statement is only allowed in an ambient external module declaration." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
