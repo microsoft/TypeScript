@@ -3134,11 +3134,11 @@ module ts {
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpressionHead() {
+        function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ false);
         }
 
-        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
+        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             // Arrow functions are never generators.
             //
