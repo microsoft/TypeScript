@@ -4578,15 +4578,29 @@ module ts {
                 tempParameters = undefined;
 
                 var popFrame = enterNameScope();
+                // Check if we have property assignment inside class declaration.
+                // If there is property assignment, we need to emit constructor whether users define it or not
+                // If there is no property assignment, we can omit constructor if users do not define it
+                var hasPropertyAssignment = false;
 
                 // Emit the constructor overload pinned comments
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
                         emitPinnedOrTripleSlashComments(member);
                     }
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer) {
+                        hasPropertyAssignment = true;
+                    }
                 });
 
                 var ctor = getFirstConstructorWithBody(node);
+
+                // For target ES6 and above, if there is no user-defined constructor and there is no property assignment
+                // do not emit constructor in class declaration.
+                if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasPropertyAssignment) {
+                    return;
+                }
+
                 if (ctor) {
                     emitLeadingComments(ctor);
                 }
@@ -4617,6 +4631,7 @@ module ts {
                         }
                     }
                 }
+
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
