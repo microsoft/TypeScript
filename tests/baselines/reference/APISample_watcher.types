@@ -4216,12 +4216,6 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
-        stripInternal?: boolean;
->stripInternal : boolean
-
-        preserveNewLines?: boolean;
->preserveNewLines : boolean
-
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -5005,7 +4999,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
 >version : string
 
     function createCompilerHost(options: CompilerOptions): CompilerHost;
@@ -5037,7 +5031,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the language service API */
-    var servicesVersion: string;
+    let servicesVersion: string;
 >servicesVersion : string
 
     interface Node {
@@ -6387,7 +6381,7 @@ declare module "typescript" {
 >setNodeParents : boolean
 >SourceFile : SourceFile
 
-    var disableIncrementalParsing: boolean;
+    let disableIncrementalParsing: boolean;
 >disableIncrementalParsing : boolean
 
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;

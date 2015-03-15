@@ -124,15 +124,14 @@ module ts {
                 function visitDirectory(path: string) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (var i = 0; i < files.length; i++) {
-                        var name = files[i];
+                    for (let name of files) {
                         if (!extension || fileExtensionIs(name, extension)) {
                             result.push(combinePaths(path, name));
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
-                    for (var i = 0; i < subfolders.length; i++) {
-                        visitDirectory(combinePaths(path, subfolders[i]));
+                    for (let current of subfolders) {
+                        visitDirectory(combinePaths(path, current));
                     }
                 }
             }
@@ -230,8 +229,8 @@ module ts {
                 function visitDirectory(path: string) {
                     var files = _fs.readdirSync(path || ".").sort();
                     var directories: string[] = [];
-                    for (var i = 0; i < files.length; i++) {
-                        var name = combinePaths(path, files[i]);
+                    for (let current of files) {
+                        var name = combinePaths(path, current);
                         var stat = _fs.lstatSync(name);
                         if (stat.isFile()) {
                             if (!extension || fileExtensionIs(name, extension)) {
@@ -242,8 +241,8 @@ module ts {
                             directories.push(name);
                         }
                     }
-                    for (var i = 0; i < directories.length; i++) {
-                        visitDirectory(directories[i]);
+                    for (let current of directories) {
+                        visitDirectory(current);
                     }
                 }
             }

@@ -8,15 +8,15 @@ module ts.SignatureHelp {
     // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through 
     // looking up the type. The method will also keep track of the parameter index inside the expression.
     //public static isInPartiallyWrittenTypeArgumentList(syntaxTree: TypeScript.SyntaxTree, position: number): any {
-    //    var token = Syntax.findTokenOnLeft(syntaxTree.sourceUnit(), position, /*includeSkippedTokens*/ true);
+    //    let token = Syntax.findTokenOnLeft(syntaxTree.sourceUnit(), position, /*includeSkippedTokens*/ true);
 
     //    if (token && TypeScript.Syntax.hasAncestorOfKind(token, TypeScript.SyntaxKind.TypeParameterList)) {
     //        // We are in the wrong generic list. bail out
     //        return null;
     //    }
 
-    //    var stack = 0;
-    //    var argumentIndex = 0;
+    //    let stack = 0;
+    //    let argumentIndex = 0;
 
     //    whileLoop:
     //    while (token) {
@@ -24,7 +24,7 @@ module ts.SignatureHelp {
     //            case TypeScript.SyntaxKind.LessThanToken:
     //                if (stack === 0) {
     //                    // Found the beginning of the generic argument expression
-    //                    var lessThanToken = token;
+    //                    let lessThanToken = token;
     //                    token = previousToken(token, /*includeSkippedTokens*/ true);
     //                    if (!token || token.kind() !== TypeScript.SyntaxKind.IdentifierName) {
     //                        break whileLoop;
@@ -64,7 +64,7 @@ module ts.SignatureHelp {
 
     //            case TypeScript.SyntaxKind.CloseBraceToken:
     //                // This can be object type, skip untill we find the matching open brace token
-    //                var unmatchedOpenBraceTokens = 0;
+    //                let unmatchedOpenBraceTokens = 0;
 
     //                // Skip untill the matching open brace token
     //                token = SignatureInfoHelpers.moveBackUpTillMatchingTokenKind(token, TypeScript.SyntaxKind.CloseBraceToken, TypeScript.SyntaxKind.OpenBraceToken);
@@ -135,7 +135,7 @@ module ts.SignatureHelp {
     //    // Skip the current token
     //    token = previousToken(token, /*includeSkippedTokens*/ true);
 
-    //    var stack = 0;
+    //    let stack = 0;
 
     //    while (token) {
     //        if (token.kind() === matchingTokenKind) {
@@ -162,7 +162,7 @@ module ts.SignatureHelp {
     //    // Did not find matching token
     //    return null;
     //}
-    var emptyArray: any[] = [];
+    let emptyArray: any[] = [];
 
     const enum ArgumentListKind {
         TypeArguments,
@@ -180,13 +180,13 @@ module ts.SignatureHelp {
 
     export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
         // Decide whether to show signature help
-        var startingToken = findTokenOnLeftOfPosition(sourceFile, position);
+        let startingToken = findTokenOnLeftOfPosition(sourceFile, position);
         if (!startingToken) {
             // We are at the beginning of the file
             return undefined;
         }
 
-        var argumentInfo = getContainingArgumentInfo(startingToken);
+        let argumentInfo = getContainingArgumentInfo(startingToken);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
@@ -194,9 +194,9 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var call = argumentInfo.invocation;
-        var candidates = <Signature[]>[];
-        var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+        let call = argumentInfo.invocation;
+        let candidates = <Signature[]>[];
+        let resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
@@ -211,7 +211,7 @@ module ts.SignatureHelp {
          */
         function getImmediatelyContainingArgumentInfo(node: Node): ArgumentListInfo {
             if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
-                var callExpression = <CallExpression>node.parent;
+                let callExpression = <CallExpression>node.parent;
                 // There are 3 cases to handle:
                 //   1. The token introduces a list, and should begin a sig help session
                 //   2. The token is either not associated with a list, or ends a list, so the session should end
@@ -230,8 +230,8 @@ module ts.SignatureHelp {
                     node.kind === SyntaxKind.OpenParenToken) {
                     // Find the list that starts right *after* the < or ( token.
                     // If the user has just opened a list, consider this item 0.
-                    var list = getChildListThatStartsWithOpenerToken(callExpression, node, sourceFile);
-                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    let list = getChildListThatStartsWithOpenerToken(callExpression, node, sourceFile);
+                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
                     Debug.assert(list !== undefined);
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
@@ -248,13 +248,13 @@ module ts.SignatureHelp {
                 //   - Between the type arguments and the arguments (greater than token)
                 //   - On the target of the call (parent.func)
                 //   - On the 'new' keyword in a 'new' expression
-                var listItemInfo = findListItemInfo(node);
+                let listItemInfo = findListItemInfo(node);
                 if (listItemInfo) {
-                    var list = listItemInfo.list;
-                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    let list = listItemInfo.list;
+                    let isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
 
-                    var argumentIndex = getArgumentIndex(list, node);
-                    var argumentCount = getArgumentCount(list);
+                    let argumentIndex = getArgumentIndex(list, node);
+                    let argumentCount = getArgumentCount(list);
 
                     Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount,
                         `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`); 
@@ -276,18 +276,18 @@ module ts.SignatureHelp {
                 }
             }
             else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                var templateExpression = <TemplateExpression>node.parent;
-                var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+                let templateExpression = <TemplateExpression>node.parent;
+                let tagExpression = <TaggedTemplateExpression>templateExpression.parent;
                 Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
-                var argumentIndex = isInsideTemplateLiteral(<LiteralExpression>node, position) ? 0 : 1;
+                let argumentIndex = isInsideTemplateLiteral(<LiteralExpression>node, position) ? 0 : 1;
 
                 return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
             else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                var templateSpan = <TemplateSpan>node.parent;
-                var templateExpression = <TemplateExpression>templateSpan.parent;
-                var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+                let templateSpan = <TemplateSpan>node.parent;
+                let templateExpression = <TemplateExpression>templateSpan.parent;
+                let tagExpression = <TaggedTemplateExpression>templateExpression.parent;
                 Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
                 // If we're just after a template tail, don't show signature help.
@@ -295,8 +295,8 @@ module ts.SignatureHelp {
                     return undefined;
                 }
 
-                var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
-                var argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node);
+                let spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
+                let argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node);
 
                 return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
@@ -316,10 +316,9 @@ module ts.SignatureHelp {
             // on.  In that case, even if we're after the trailing comma, we'll still see
             // that trailing comma in the list, and we'll have generated the appropriate
             // arg index.
-            var argumentIndex = 0;
-            var listChildren = argumentsList.getChildren();
-            for (var i = 0, n = listChildren.length; i < n; i++) {
-                var child = listChildren[i];
+            let argumentIndex = 0;
+            let listChildren = argumentsList.getChildren();
+            for (let child of listChildren) {
                 if (child === node) {
                     break;
                 }
@@ -343,9 +342,9 @@ module ts.SignatureHelp {
             // we'll have:  'a' '<comma>' '<missing>' 
             // That will give us 2 non-commas.  We then add one for the last comma, givin us an
             // arg count of 3.
-            var listChildren = argumentsList.getChildren();
+            let listChildren = argumentsList.getChildren();
 
-            var argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
+            let argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
             if (listChildren.length > 0 && lastOrUndefined(listChildren).kind === SyntaxKind.CommaToken) {
                 argumentCount++;
             }
@@ -379,7 +378,7 @@ module ts.SignatureHelp {
 
         function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
             // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
-            var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+            let argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? 1
                 : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
@@ -403,15 +402,15 @@ module ts.SignatureHelp {
             //
             // The applicable span is from the first bar to the second bar (inclusive,
             // but not including parentheses)
-            var applicableSpanStart = argumentsList.getFullStart();
-            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
+            let applicableSpanStart = argumentsList.getFullStart();
+            let applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
             return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
-            var template = taggedTemplate.template;
-            var applicableSpanStart = template.getStart();
-            var applicableSpanEnd = template.getEnd();
+            let template = taggedTemplate.template;
+            let applicableSpanStart = template.getStart();
+            let applicableSpanEnd = template.getEnd();
 
             // We need to adjust the end position for the case where the template does not have a tail.
             // Otherwise, we will not show signature help past the expression.
@@ -423,7 +422,7 @@ module ts.SignatureHelp {
             // This is because a Missing node has no width. However, what we actually want is to include trivia
             // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
             if (template.kind === SyntaxKind.TemplateExpression) {
-                var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
+                let lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
                 if (lastSpan.literal.getFullWidth() === 0) {
                     applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
                 }
@@ -433,7 +432,7 @@ module ts.SignatureHelp {
         }
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {
-            for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
+            for (let n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (isFunctionBlock(n)) {
                     return undefined;
                 }
@@ -444,7 +443,7 @@ module ts.SignatureHelp {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 
-                var argumentInfo = getImmediatelyContainingArgumentInfo(n);
+                let argumentInfo = getImmediatelyContainingArgumentInfo(n);
                 if (argumentInfo) {
                     return argumentInfo;
                 }
@@ -456,8 +455,8 @@ module ts.SignatureHelp {
         }
 
         function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
-            var children = parent.getChildren(sourceFile);
-            var indexOfOpenerToken = children.indexOf(openerToken);
+            let children = parent.getChildren(sourceFile);
+            let indexOfOpenerToken = children.indexOf(openerToken);
             Debug.assert(indexOfOpenerToken >= 0 && children.length > indexOfOpenerToken + 1);
             return children[indexOfOpenerToken + 1];
         }
@@ -471,10 +470,10 @@ module ts.SignatureHelp {
          * or the one with the most parameters.
          */
         function selectBestInvalidOverloadIndex(candidates: Signature[], argumentCount: number): number {
-            var maxParamsSignatureIndex = -1;
-            var maxParams = -1;
-            for (var i = 0; i < candidates.length; i++) {
-                var candidate = candidates[i];
+            let maxParamsSignatureIndex = -1;
+            let maxParams = -1;
+            for (let i = 0; i < candidates.length; i++) {
+                let candidate = candidates[i];
 
                 if (candidate.hasRestParameter || candidate.parameters.length >= argumentCount) {
                     return i;
@@ -490,17 +489,17 @@ module ts.SignatureHelp {
         }
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListInfo: ArgumentListInfo): SignatureHelpItems {
-            var applicableSpan = argumentListInfo.argumentsSpan;
-            var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
+            let applicableSpan = argumentListInfo.argumentsSpan;
+            let isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
-            var invocation = argumentListInfo.invocation;
-            var callTarget = getInvokedExpression(invocation)
-            var callTargetSymbol = typeInfoResolver.getSymbolAtLocation(callTarget);
-            var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
-            var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
-                var signatureHelpParameters: SignatureHelpParameter[];
-                var prefixDisplayParts: SymbolDisplayPart[] = [];
-                var suffixDisplayParts: SymbolDisplayPart[] = [];
+            let invocation = argumentListInfo.invocation;
+            let callTarget = getInvokedExpression(invocation)
+            let callTargetSymbol = typeInfoResolver.getSymbolAtLocation(callTarget);
+            let callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+            let items: SignatureHelpItem[] = map(candidates, candidateSignature => {
+                let signatureHelpParameters: SignatureHelpParameter[];
+                let prefixDisplayParts: SymbolDisplayPart[] = [];
+                let suffixDisplayParts: SymbolDisplayPart[] = [];
 
                 if (callTargetDisplayParts) {
                     prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
@@ -508,25 +507,25 @@ module ts.SignatureHelp {
 
                 if (isTypeParameterList) {
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
-                    var typeParameters = candidateSignature.typeParameters;
+                    let typeParameters = candidateSignature.typeParameters;
                     signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
-                    var parameterParts = mapToDisplayParts(writer =>
+                    let parameterParts = mapToDisplayParts(writer =>
                         typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
                     suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
                 }
                 else {
-                    var typeParameterParts = mapToDisplayParts(writer =>
+                    let typeParameterParts = mapToDisplayParts(writer =>
                         typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
                     prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
-                    var parameters = candidateSignature.parameters;
+                    let parameters = candidateSignature.parameters;
                     signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
 
-                var returnTypeParts = mapToDisplayParts(writer =>
+                let returnTypeParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
                 suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                 
@@ -540,12 +539,12 @@ module ts.SignatureHelp {
                 };
             });
 
-            var argumentIndex = argumentListInfo.argumentIndex;
+            let argumentIndex = argumentListInfo.argumentIndex;
 
             // argumentCount is the *apparent* number of arguments.
-            var argumentCount = argumentListInfo.argumentCount;
+            let argumentCount = argumentListInfo.argumentCount;
 
-            var selectedItemIndex = candidates.indexOf(bestSignature);
+            let selectedItemIndex = candidates.indexOf(bestSignature);
             if (selectedItemIndex < 0) {
                 selectedItemIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
             }
@@ -561,10 +560,10 @@ module ts.SignatureHelp {
             };
 
             function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
-                var displayParts = mapToDisplayParts(writer =>
+                let displayParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                var isOptional = hasQuestionToken(parameter.valueDeclaration);
+                let isOptional = hasQuestionToken(parameter.valueDeclaration);
 
                 return {
                     name: parameter.name,
@@ -575,7 +574,7 @@ module ts.SignatureHelp {
             }
 
             function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
-                var displayParts = mapToDisplayParts(writer =>
+                let displayParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
                 return {
