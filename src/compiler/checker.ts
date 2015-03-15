@@ -8625,18 +8625,19 @@ module ts {
                     localDeclarationSymbol !== symbol &&
                     localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
                     if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
-
                         let varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
                         let container =
-                            varDeclList.parent.kind === SyntaxKind.VariableStatement &&
-                            varDeclList.parent.parent;
+                            varDeclList.parent.kind === SyntaxKind.VariableStatement && varDeclList.parent.parent
+                                ? varDeclList.parent.parent
+                                : undefined;
 
                         // names of block-scoped and function scoped variables can collide only
                         // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                         let namesShareScope =
                             container &&
                             (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
-                                (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
+                                container.kind === SyntaxKind.ModuleBlock ||
+                                container.kind === SyntaxKind.ModuleDeclaration ||
                                 container.kind === SyntaxKind.SourceFile);
 
                         // here we know that function scoped variable is shadowed by block scoped one
