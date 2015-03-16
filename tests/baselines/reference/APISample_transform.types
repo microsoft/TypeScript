@@ -2429,9 +2429,13 @@ declare module "typescript" {
         isExportEquals?: boolean;
 >isExportEquals : boolean
 
-        expression: Expression;
+        expression?: Expression;
 >expression : Expression
 >Expression : Expression
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
     }
     interface FileReference extends TextRange {
 >FileReference : FileReference

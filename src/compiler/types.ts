@@ -944,7 +944,8 @@ module ts {
 
     export interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression: Expression;
+        expression?: Expression;
+        type?: TypeNode;
     }
 
     export interface FileReference extends TextRange {

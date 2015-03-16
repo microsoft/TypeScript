@@ -283,7 +283,8 @@ module ts {
                     visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression);
+                    visitNode(cbNode, (<ExportAssignment>node).expression) ||
+                    visitNode(cbNode, (<ExportAssignment>node).type);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -4867,12 +4868,17 @@ module ts {
             setModifiers(node, modifiers);
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 node.isExportEquals = true;
+                node.expression = parseAssignmentExpressionOrHigher();
             }
             else {
                 parseExpected(SyntaxKind.DefaultKeyword);
+                if (parseOptional(SyntaxKind.ColonToken)) {
+                    node.type = parseType();
+                }
+                else {
+                    node.expression = parseAssignmentExpressionOrHigher();
+                }
             }
-            //node.exportName = parseIdentifier();
-            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
