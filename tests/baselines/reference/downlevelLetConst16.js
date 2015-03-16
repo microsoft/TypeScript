@@ -185,7 +185,6 @@ function foo6() {
     use(x);
 }
 
-// TODO: once for-of is supported downlevel
 function foo7() {
     for (let x of []) {
         use(x);
@@ -454,39 +453,44 @@ function foo6() {
     }
     use(x);
 }
-// TODO: once for-of is supported downlevel
 function foo7() {
-    for (var _x of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i];
         use(_x);
     }
     use(x);
 }
 function foo8() {
-    for (var _x = (void 0)[0] of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i][0];
         use(_x);
     }
     use(x);
 }
 function foo9() {
-    for (var _x = (void 0).a of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i].a;
         use(_x);
     }
     use(x);
 }
 function foo10() {
-    for (var _x of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i];
         use(_x);
     }
     use(x);
 }
 function foo11() {
-    for (var _x = (void 0)[0] of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i][0];
         use(_x);
     }
     use(x);
 }
 function foo12() {
-    for (var _x = (void 0).a of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i].a;
         use(_x);
     }
     use(x);

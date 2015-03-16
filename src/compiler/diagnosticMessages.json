@@ -619,7 +619,7 @@
         "category": "Error",
         "code":  1199
     },
-    "A computed property name cannot reference a static property": {
+    "Line terminator not permitted before arrow.": {
         "category": "Error",
         "code": 1200
     },
@@ -1303,10 +1303,6 @@
         "category": "Error",
         "code": 2481
     },
-    "'for...of' statements are only available when targeting ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 2482
-    },
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2483
@@ -1346,6 +1342,18 @@
     "Cannot redeclare identifier '{0}' in catch clause": {
         "category": "Error",
         "code": 2492
+    },
+    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+        "category": "Error",
+        "code": 2493
+    },
+    "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 2494
+    },
+    "Type '{0}' is not an array type or a string type.": {
+        "category": "Error",
+        "code": 2461
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
