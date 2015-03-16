@@ -5061,7 +5061,7 @@ module ts {
                 // ES6 import
                 if (node.importClause) {
                     let shouldEmitDefaultBindings = node.importClause.name && resolver.isReferencedAliasDeclaration(node.importClause);
-                    let shouldEmitNamedBindings = hasReferencedNamedBindings();
+                    let shouldEmitNamedBindings = hasReferencedNamedBindings(node.importClause);
                     if (shouldEmitDefaultBindings || shouldEmitNamedBindings) {
                         write("import ");
                         emitStart(node.importClause);
@@ -5109,16 +5109,16 @@ module ts {
                     emit(node.moduleSpecifier);
                     write(";");
                 }
+            }
 
-                function hasReferencedNamedBindings() {
-                    if (node.importClause.namedBindings) {
-                        if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            return resolver.isReferencedAliasDeclaration(node.importClause.namedBindings);
-                        }
-                        else {
-                            return forEach((<NamedImports>node.importClause.namedBindings).elements,
-                                namedImport => resolver.isReferencedAliasDeclaration(namedImport));
-                        }
+            function hasReferencedNamedBindings(importClause: ImportClause) {
+                if (importClause && importClause.namedBindings) {
+                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        return resolver.isReferencedAliasDeclaration(importClause.namedBindings);
+                    }
+                    else {
+                        return forEach((<NamedImports>importClause.namedBindings).elements,
+                            namedImport => resolver.isReferencedAliasDeclaration(namedImport));
                     }
                 }
             }
@@ -5262,35 +5262,43 @@ module ts {
             function createExternalImportInfo(node: Node): ExternalImportInfo {
                 if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        return {
-                            rootNode: <ImportEqualsDeclaration>node,
-                            declarationNode: <ImportEqualsDeclaration>node
-                        };
+                        if (resolver.isReferencedAliasDeclaration(node)) {
+                            return {
+                                rootNode: <ImportEqualsDeclaration>node,
+                                declarationNode: <ImportEqualsDeclaration>node
+                            };
+                        }
                     }
                 }
                 else if (node.kind === SyntaxKind.ImportDeclaration) {
                     let importClause = (<ImportDeclaration>node).importClause;
                     if (importClause) {
-                        if (importClause.name) {
+                        if (importClause.name && resolver.isReferencedAliasDeclaration(importClause)) {
                             return {
                                 rootNode: <ImportDeclaration>node,
                                 declarationNode: importClause
                             };
                         }
-                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            return {
-                                rootNode: <ImportDeclaration>node,
-                                declarationNode: <NamespaceImport>importClause.namedBindings
-                            };
+                        if (hasReferencedNamedBindings(importClause)) {
+                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                return {
+                                    rootNode: <ImportDeclaration>node,
+                                    declarationNode: <NamespaceImport>importClause.namedBindings
+                                };
+                            }
+                            else {
+                                return {
+                                    rootNode: <ImportDeclaration>node,
+                                    namedImports: <NamedImports>importClause.namedBindings,
+                                    localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
+                                };
+                            }
                         }
-                        return {
-                            rootNode: <ImportDeclaration>node,
-                            namedImports: <NamedImports>importClause.namedBindings,
-                            localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
-                        };
                     }
-                    return {
-                        rootNode: <ImportDeclaration>node
+                    else {
+                        return {
+                            rootNode: <ImportDeclaration>node
+                        };
                     }
                 }
                 else if (node.kind === SyntaxKind.ExportDeclaration) {
@@ -5327,9 +5335,7 @@ module ts {
                     else {
                         let info = createExternalImportInfo(node);
                         if (info) {
-                            if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedAliasDeclaration(node)) {
-                                externalImports.push(info);
-                            }
+                            externalImports.push(info);
                         }
                     }
                 });
