@@ -686,7 +686,6 @@ module m3 { }\
         });
 
         it('Surrounding function declarations with block',() => {
-            debugger;
             var source = "declare function F1() { } export function F2() { } declare export function F3() { }"
 
             var oldText = ScriptSnapshot.fromString(source);
@@ -723,7 +722,6 @@ module m3 { }\
         });
 
         it('Moving methods from object literal to class in strict mode', () => {
-            debugger;
             var source = "\"use strict\"; var v = { public A() { } public B() { } public C() { } }"
 
             var oldText = ScriptSnapshot.fromString(source);

@@ -3189,9 +3189,7 @@ module ts {
                 }
                 else {
                     write("(");
-                    if (node.arguments.length) {
-                        emitCommaList(node.arguments);
-                    }
+                    emitCommaList(node.arguments);
                     write(")");
                 }
             }
