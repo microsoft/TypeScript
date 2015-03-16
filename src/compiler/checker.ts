@@ -11106,26 +11106,11 @@ module ts {
         function getBlockScopedVariableId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
-            // ignore name parts of property access expressions
-            if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
-                (<PropertyAccessExpression>n.parent).name === n) {
-                return undefined;
-            }
+            let isVariableDeclarationOrBindingElement =
+                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
 
-            // ignore property names in object binding patterns
-            if (n.parent.kind === SyntaxKind.BindingElement &&
-                (<BindingElement>n.parent).propertyName === n) {
-                return undefined;
-            }
-
-            // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
-            let declarationSymbol: Symbol =
-                (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
-                 n.parent.kind === SyntaxKind.BindingElement
-                    ? getSymbolOfNode(n.parent)
-                    : undefined;
-
-            let symbol = declarationSymbol ||
+            let symbol = 
+                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 

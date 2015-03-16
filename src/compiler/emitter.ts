@@ -2074,19 +2074,19 @@ module ts {
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithSourceMap(node: Node) {
+                function emitNodeWithSourceMap(node: Node, allowGeneratedIdentifiers?: boolean) {
                     if (node) {
                         if (nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node);
+                            return emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
                         }
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node);
+                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
                             recordEmitNodeEndSpan(node);
                         }
                         else {
                             recordNewSourceFileStart(<SourceFile>node);
-                            emitNodeWithoutSourceMap(node);
+                            emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
                         }
                     }
                 }
@@ -2623,17 +2623,24 @@ module ts {
                 }
             }
 
-            function getBlockScopedVariableId(node: Identifier): number {
-                // return undefined for synthesized nodes
-                return !nodeIsSynthesized(node) && resolver.getBlockScopedVariableId(node);
+            function getGeneratedNameForIdentifier(node: Identifier): string {
+                if (nodeIsSynthesized(node) || !generatedBlockScopeNames) {
+                    return undefined;
+                }
+
+                var variableId = resolver.getBlockScopedVariableId(node)
+                if (variableId === undefined) {
+                    return undefined;
+                }
+
+                return generatedBlockScopeNames[variableId];
             }
 
-            function emitIdentifier(node: Identifier) {
-                let variableId = getBlockScopedVariableId(node);
-                if (variableId !== undefined && generatedBlockScopeNames) {
-                    let text = generatedBlockScopeNames[variableId];
-                    if (text) {
-                        write(text);
+            function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
+                if (allowGeneratedIdentifiers) {
+                    let generatedName = getGeneratedNameForIdentifier(node);
+                    if (generatedName) {
+                        write(generatedName);
                         return;
                     }
                 }
@@ -2686,7 +2693,7 @@ module ts {
 
             function emitBindingElement(node: BindingElement) {
                 if (node.propertyName) {
-                    emit(node.propertyName);
+                    emit(node.propertyName, /*allowGeneratedIdentifiers*/ false);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -3030,7 +3037,7 @@ module ts {
             }
 
             function emitMethod(node: MethodDeclaration) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
@@ -3038,13 +3045,13 @@ module ts {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 write(": ");
                 emit(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export let y;
@@ -3053,7 +3060,20 @@ module ts {
                 //      export let obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNameSubstitution(node.name)) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    // Emit identifier as an identifier
+                    write(": ");
+                    var generatedName = getGeneratedNameForIdentifier(node.name);
+                    if (generatedName) {
+                        write(generatedName);
+                    }
+                    else {
+                        // Even though this is stored as identifier treat it as an expression
+                        // Short-hand, { x }, is equivalent of normal form { x: x }
+                        emitExpressionIdentifier(node.name);
+                    }
+                }
+                else if (resolver.getExpressionNameSubstitution(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -3106,7 +3126,7 @@ module ts {
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
 
@@ -4311,7 +4331,7 @@ module ts {
 
             function emitAccessor(node: AccessorDeclaration) {
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 emitSignatureAndBody(node);
             }
 
@@ -5540,7 +5560,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNodeWithoutSourceMapWithComments(node: Node): void {
+            function emitNodeWithoutSourceMapWithComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -5554,14 +5574,14 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
 
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
             }
 
-            function emitNodeWithoutSourceMapWithoutComments(node: Node): void {
+            function emitNodeWithoutSourceMapWithoutComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -5570,7 +5590,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                emitJavaScriptWorker(node);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
             }
 
             function shouldEmitLeadingAndTrailingComments(node: Node) {
@@ -5600,11 +5620,11 @@ module ts {
                 return true;
             }
 
-            function emitJavaScriptWorker(node: Node) {
+            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean = true) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node);
+                        return emitIdentifier(<Identifier>node, allowGeneratedIdentifiers);
                     case SyntaxKind.Parameter:
                         return emitParameter(<ParameterDeclaration>node);
                     case SyntaxKind.MethodDeclaration:
