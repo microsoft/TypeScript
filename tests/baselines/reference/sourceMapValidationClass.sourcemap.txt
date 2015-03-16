@@ -223,12 +223,15 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>    Object.defineProperty(Greeter.prototype, "greetings", {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-  >    get 
-2 >    greetings
-1->Emitted(16, 5) Source(12, 9) + SourceIndex(0) name (Greeter)
-2 >Emitted(16, 57) Source(12, 18) + SourceIndex(0) name (Greeter)
+  >    
+2 >    get 
+3 >                          greetings
+1->Emitted(16, 5) Source(12, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(16, 27) Source(12, 9) + SourceIndex(0) name (Greeter)
+3 >Emitted(16, 57) Source(12, 18) + SourceIndex(0) name (Greeter)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^

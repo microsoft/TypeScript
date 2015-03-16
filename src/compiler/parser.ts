@@ -4518,8 +4518,8 @@ module ts {
 
         function parseClassDeclaration(fullStart: number, modifiers: ModifiersArray): ClassDeclaration {
             // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
+            let savedStrictModeContext = inStrictModeContext();
             if (languageVersion >= ScriptTarget.ES6) {
-                var savedStrictModeContext = inStrictModeContext();
                 setStrictModeContext(true);
             }
 
@@ -4545,13 +4545,8 @@ module ts {
             }
 
             var finishedNode = finishNode(node);
-            if (languageVersion >= ScriptTarget.ES6) {
-                setStrictModeContext(savedStrictModeContext);
-                return finishedNode;
-            }
-            else {
-                return finishedNode;
-            }
+            setStrictModeContext(savedStrictModeContext);
+            return finishedNode;
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {

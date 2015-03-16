@@ -43,11 +43,14 @@ sourceFile:properties.ts
 ---
 >>>    Object.defineProperty(MyClass.prototype, "Count", {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    Count
-1->Emitted(4, 5) Source(4, 16) + SourceIndex(0) name (MyClass)
-2 >Emitted(4, 53) Source(4, 21) + SourceIndex(0) name (MyClass)
+2 >    public get 
+3 >                          Count
+1->Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (MyClass)
+2 >Emitted(4, 27) Source(4, 16) + SourceIndex(0) name (MyClass)
+3 >Emitted(4, 53) Source(4, 21) + SourceIndex(0) name (MyClass)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^

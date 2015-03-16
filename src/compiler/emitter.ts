@@ -2630,7 +2630,6 @@ module ts {
             }
 
             function emitSuper(node: Node) {
-                debugger;
                 if (languageVersion >= ScriptTarget.ES6) {
                     write("super");
                 }
@@ -2638,9 +2637,6 @@ module ts {
                     var flags = resolver.getNodeCheckFlags(node);
                     if (flags & NodeCheckFlags.SuperInstance) {
                         write("_super.prototype");
-                    }
-                    else if ((flags & NodeCheckFlags.SuperStatic) || (node.parent.kind === SyntaxKind.Constructor)) {
-                        write("_super");
                     }
                     else {
                         write("_super");
@@ -4403,23 +4399,7 @@ module ts {
                     emitComputedPropertyName(<ComputedPropertyName>memberName);
                 }
                 else {
-                    // For ES6 and above, we want to emit memberName by itself without prefix ".",
-                    // For ES5 and below, we want to prefix memberName with ".". For example,
-                    // Typescript:
-                    //      class C {
-                    //          x = 10;
-                    //          foo () {}
-                    //      }
-                    // Javascript:
-                    //      var C = (function () {
-                    //          function C() {
-                    //              this.x = 10;  // Property "x" need to be prefixed with "."
-                    //          }
-                    //          C.prototype.foo = function() {};  // Similarly property "foo" need to be prefixed with "."
-                    //      }
-                    if (languageVersion < ScriptTarget.ES6 || memberName.parent.kind === SyntaxKind.PropertyDeclaration) {
-                        write(".");
-                    }
+                    write(".");
                     emitNodeWithoutSourceMap(memberName);
                 }
             }
@@ -4458,13 +4438,17 @@ module ts {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
+                        emitStart((<MethodDeclaration>member).name);
                         emitDeclarationName(node);
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                        emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
+                        emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
+                        emitEnd(member);
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
@@ -4475,12 +4459,14 @@ module ts {
                             writeLine();
                             emitStart(member);
                             write("Object.defineProperty(");
+                            emitStart((<AccessorDeclaration>member).name);
                             emitDeclarationName(node);
                             if (!(member.flags & NodeFlags.Static)) {
                                 write(".prototype");
                             }
                             write(", ");
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
+                            emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
                             increaseIndent();
                             if (accessors.getAccessor) {
@@ -4531,7 +4517,7 @@ module ts {
                         if (member.flags & NodeFlags.Static) {
                             write("static ");
                         }
-                        emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                        emit((<MethodDeclaration>member).name);
                         emitSignatureAndBody(<MethodDeclaration>member);
                         emitEnd(member);
                         emitTrailingComments(member);
@@ -4539,6 +4525,7 @@ module ts {
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
+                            writeLine();
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
@@ -4547,7 +4534,7 @@ module ts {
                                     write("static ");
                                 }
                                 write("get ");
-                                emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                                emit((<MethodDeclaration>member).name);
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
@@ -4561,7 +4548,7 @@ module ts {
                                     write("static ");
                                 }
                                 write("set ");
-                                emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
+                                emit((<MethodDeclaration>member).name);
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);;
@@ -4572,42 +4559,42 @@ module ts {
             }
 
             function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
-                debugger;
-                var saveTempCount = tempCount;
-                var saveTempVariables = tempVariables;
-                var saveTempParameters = tempParameters;
+                let saveTempCount = tempCount;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
 
-                var popFrame = enterNameScope();
+                let popFrame = enterNameScope();
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
-                var hasPropertyAssignment = false;
+                let hasInstancePropertyWithInitializer = false;
 
                 // Emit the constructor overload pinned comments
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
                         emitPinnedOrTripleSlashComments(member);
                     }
-                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer) {
-                        hasPropertyAssignment = true;
+                    // Check if there is any non-static property assignment
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
+                        hasInstancePropertyWithInitializer = true;
                     }
                 });
 
-                var ctor = getFirstConstructorWithBody(node);
+                let ctor = getFirstConstructorWithBody(node);
 
                 // For target ES6 and above, if there is no user-defined constructor and there is no property assignment
                 // do not emit constructor in class declaration.
-                if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasPropertyAssignment) {
+                if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasInstancePropertyWithInitializer) {
                     return;
                 }
 
                 if (ctor) {
                     emitLeadingComments(ctor);
                 }
-                emitStart(<Node>ctor || node);
+                emitStart(ctor || node);
 
                 if (languageVersion < ScriptTarget.ES6) {
                     write("function ");
@@ -4639,7 +4626,7 @@ module ts {
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
-                    emitDetachedComments((<Block>ctor.body).statements);
+                    emitDetachedComments(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
                 if (ctor) {
@@ -4662,10 +4649,12 @@ module ts {
                         emitEnd(baseTypeNode);
                     }
                 }
-                emitMemberAssignments(node, /*nonstatic*/0);
+                emitMemberAssignments(node, /*staticFlag*/0);
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;
-                    if (superCall) statements = statements.slice(1);
+                    if (superCall) {
+                        statements = statements.slice(1);
+                    }
                     emitLines(statements);
                 }
                 emitTempDeclarations(/*newLine*/ true);
@@ -4696,6 +4685,7 @@ module ts {
                         write("default ");
                     }
                 }
+
                 write("class ");
                 emitDeclarationName(node);
                 var baseTypeNode = getClassBaseTypeNode(node);
