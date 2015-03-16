@@ -3917,7 +3917,8 @@ module ts {
                     renameNonTopLevelLetAndConst(name);
                     if (name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement)) {
                         emitModuleMemberName(<Declaration>name.parent);
-                    } else {
+                    }
+                    else {
                         emit(name);
                     }
                     write(" = ");
@@ -5373,7 +5374,7 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node, (allowGeneratedIdentifiers === undefined) || allowGeneratedIdentifiers);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
 
                 if (emitComments) {
                     emitTrailingComments(node);
@@ -5389,7 +5390,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                emitJavaScriptWorker(node, (allowGeneratedIdentifiers === undefined) || allowGeneratedIdentifiers);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
             }
 
             function shouldEmitLeadingAndTrailingComments(node: Node) {
@@ -5419,7 +5420,7 @@ module ts {
                 return true;
             }
 
-            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean) {
+            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean = true) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
