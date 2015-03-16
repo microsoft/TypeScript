@@ -448,7 +448,7 @@ module ts {
             let declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
-                    
+
             // first check if usage is lexically located after the declaration
             let isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
             if (!isUsedBeforeDeclaration) {
@@ -465,7 +465,7 @@ module ts {
 
                 if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
                     variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case, 
+                    // variable statement/for statement case,
                     // use site should not be inside variable declaration (initializer of declaration or binding element)
                     isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
                 }
@@ -4417,7 +4417,7 @@ module ts {
         }
 
         /**
-         * Check if a Type was written as a tuple type literal. 
+         * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
         function isTupleType(type: Type) : boolean {
@@ -9097,7 +9097,7 @@ module ts {
          */
         function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion < ScriptTarget.ES6);
-            
+
             // After we remove all types that are StringLike, we will know if there was a string constituent
             // based on whether the remaining type is the same as the initial type.
             let arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
@@ -11357,16 +11357,15 @@ module ts {
             }
         }
 
-        function checkGrammarTypeParameterList(node: FunctionLikeDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+        function checkGrammarTypeParameterList(node: FunctionLikeDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>, file: SourceFile): boolean {
             if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
 
             if (typeParameters && typeParameters.length === 0) {
                 let start = typeParameters.pos - "<".length;
-                let sourceFile = getSourceFileOfNode(node);
-                let end = skipTrivia(sourceFile.text, typeParameters.end) + ">".length;
-                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
+                let end = skipTrivia(file.text, typeParameters.end) + ">".length;
+                return grammarErrorAtPos(file, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
             }
         }
 
@@ -11410,7 +11409,21 @@ module ts {
 
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
-            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
+            let file = getSourceFileOfNode(node);
+            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters, file) ||
+                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
+        }
+
+        function checkGrammarArrowFunction(node: FunctionLikeDeclaration, file: SourceFile): boolean {
+            if (node.kind === SyntaxKind.ArrowFunction) {
+                let arrowFunction = <ArrowFunction>node;
+                let startLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.pos).line;
+                let endLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.end).line;
+                if (startLine !== endLine) {
+                    return grammarErrorOnNode(arrowFunction.equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
+                }
+            }
+            return false;
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
