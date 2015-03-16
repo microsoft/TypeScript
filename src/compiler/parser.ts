@@ -4819,6 +4819,8 @@ module ts {
             // Extract the declaration name from the decorator
             var name = extractDeclarationNameFromDecoratorTail(lastDecorator);
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            decorators.end = lastDecorator.end;
+
             if (callExpression) {
                 // Reparse as method
                 var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);

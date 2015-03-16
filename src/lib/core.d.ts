@@ -1161,4 +1161,4 @@ interface TypedPropertyDescriptor<T> {
 
 interface DecoratorFunction { <TFunction extends Function>(target: TFunction): TFunction | void; }
 interface ParameterDecoratorFunction { (target: Function, parameterIndex: number): void; }
-interface MemberDecoratorFunction { <T>(target: Function | Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }
+interface MemberDecoratorFunction { <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }

@@ -6,20 +6,20 @@ export class C {
 }
 
 //// [decoratorOnClass2.js]
-var __decorate = this.__decorate || function (decorators, kind, target, key, descriptor) {
-    var value = descriptor || target;
-    if (kind === 1 && !value && typeof Object.getOwnPropertyDescriptor === 'function') value = Object.getOwnPropertyDescriptor(target, key);
-    for (var i = decorators.length - 1; i >= 0; i--) {
+var __decorate = this.__decorate || function (decorators, target, key) {
+    var kind = key == null ? 0 : typeof key == "number" ? 1 : 2, result = target;
+    if (kind == 2) result = Object.getOwnPropertyDescriptor(target, typeof key == "symbol" ? key : key = String(key));
+    for (var i = decorators.length - 1; i >= 0; --i) {
         var decorator = decorators[i];
-        value = (kind === 0 ? decorator(value) : kind === 1 ? decorator(target, key, value) : decorator(target, key)) || value;
+        result = (kind == 0 ? decorator(result) : kind == 1 ? decorator(target, key) : decorator(target, key, result)) || result;
     }
-    if (kind === 1 && value && typeof Object.defineProperty === 'function') Object.defineProperty(target, key, value);
-    return value;
+    if (kind == 2 && result) Object.defineProperty(target, key, result);
+    if (kind == 0) return result;
 };
 var C = (function () {
     function C() {
     }
-    C = __decorate([dec], 0, C);
+    C = __decorate([dec], C);
     return C;
 })();
 exports.C = C;

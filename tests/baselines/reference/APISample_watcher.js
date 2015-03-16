@@ -447,6 +447,7 @@ declare module "typescript" {
         expression: Expression;
     }
     interface Decorator extends Node {
+        atToken: Node;
         expression: LeftHandSideExpression;
     }
     interface TypeParameterDeclaration extends Declaration {
@@ -645,7 +646,9 @@ declare module "typescript" {
         expression: Expression;
     }
     interface ArrayLiteralExpression extends PrimaryExpression {
+        openBracketToken: Node;
         elements: NodeArray<Expression>;
+        closeBracketToken: Node;
     }
     interface SpreadElementExpression extends Expression {
         expression: Expression;
@@ -655,10 +658,13 @@ declare module "typescript" {
     }
     interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
     interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        openBracketToken: Node;
+        closeBracketToken: Node;
         argumentExpression?: Expression;
     }
     interface CallExpression extends LeftHandSideExpression {
@@ -1278,10 +1284,10 @@ declare module "typescript" {
         MemberDecoratorFunctionValidTargetsMask = 1792,
         ParameterDecoratorFunctionValidTargetsMask = 2048,
     }
-    const enum DecoratorTargetKind {
+    const enum DecoratorTargetIndex {
+        parameter = -1,
         target = 0,
-        property = 1,
-        parameter = 2,
+        descriptor = 2,
     }
     interface DiagnosticMessage {
         key: string;
@@ -1554,6 +1560,7 @@ declare module "typescript" {
         character: number;
     };
     function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;

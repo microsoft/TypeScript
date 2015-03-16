@@ -1421,6 +1421,10 @@ declare module "typescript" {
 >Decorator : Decorator
 >Node : Node
 
+        atToken: Node;
+>atToken : Node
+>Node : Node
+
         expression: LeftHandSideExpression;
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
@@ -2003,10 +2007,18 @@ declare module "typescript" {
 >ArrayLiteralExpression : ArrayLiteralExpression
 >PrimaryExpression : PrimaryExpression
 
+        openBracketToken: Node;
+>openBracketToken : Node
+>Node : Node
+
         elements: NodeArray<Expression>;
 >elements : NodeArray<Expression>
 >NodeArray : NodeArray<T>
 >Expression : Expression
+
+        closeBracketToken: Node;
+>closeBracketToken : Node
+>Node : Node
     }
     interface SpreadElementExpression extends Expression {
 >SpreadElementExpression : SpreadElementExpression
@@ -2034,6 +2046,10 @@ declare module "typescript" {
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
 
+        dotToken: Node;
+>dotToken : Node
+>Node : Node
+
         name: Identifier;
 >name : Identifier
 >Identifier : Identifier
@@ -2045,6 +2061,14 @@ declare module "typescript" {
         expression: LeftHandSideExpression;
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
+
+        openBracketToken: Node;
+>openBracketToken : Node
+>Node : Node
+
+        closeBracketToken: Node;
+>closeBracketToken : Node
+>Node : Node
 
         argumentExpression?: Expression;
 >argumentExpression : Expression
@@ -4135,17 +4159,18 @@ declare module "typescript" {
         ParameterDecoratorFunctionValidTargetsMask = 2048,
 >ParameterDecoratorFunctionValidTargetsMask : DecoratorFlags
     }
-    const enum DecoratorTargetKind {
->DecoratorTargetKind : DecoratorTargetKind
+    const enum DecoratorTargetIndex {
+>DecoratorTargetIndex : DecoratorTargetIndex
+
+        parameter = -1,
+>parameter : DecoratorTargetIndex
+>-1 : number
 
         target = 0,
->target : DecoratorTargetKind
+>target : DecoratorTargetIndex
 
-        property = 1,
->property : DecoratorTargetKind
-
-        parameter = 2,
->parameter : DecoratorTargetKind
+        descriptor = 2,
+>descriptor : DecoratorTargetIndex
     }
     interface DiagnosticMessage {
 >DiagnosticMessage : DiagnosticMessage
@@ -4963,6 +4988,13 @@ declare module "typescript" {
 >SourceFile : SourceFile
 >position : number
 >LineAndCharacter : LineAndCharacter
+
+    function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean;
+>lineBreakBetween : (sourceFile: SourceFile, firstPos: number, secondPos: number) => boolean
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>firstPos : number
+>secondPos : number
 
     function isWhiteSpace(ch: number): boolean;
 >isWhiteSpace : (ch: number) => boolean

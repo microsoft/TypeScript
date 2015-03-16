@@ -8391,29 +8391,8 @@ module ts {
                 }
             }
         }
-        
-        function isValidDecoratorTarget(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    return true;
 
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    if (node.parent.kind === SyntaxKind.ClassDeclaration && (<FunctionLikeDeclaration>node).body) {
-                        return true;
-                    }
-                    break;
-
-                case SyntaxKind.Parameter:
-                    return isValidDecoratorTarget(node.parent);
-            }
-
-            return false;
-        }
-
-        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message?: DiagnosticMessage) {
+        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message?: DiagnosticMessage, fallbackType?: Type) {
             var parentType = getTypeOfNode(node.parent);
             var signature = getSingleCallSignature(expectedDecoratorType);
             if (!signature) {
@@ -8421,10 +8400,10 @@ module ts {
                 // and we have already reported an error in initializeTypeChecker.
                 return;
             }
-
-            var erasedSignature = getErasedSignature(signature);
-            var erasedSignatureType = getOrCreateTypeFromSignature(erasedSignature);            
-            if (checkTypeAssignableTo(exprType, erasedSignatureType, node) && message) {
+            
+            var erasedSignature = signature.typeParameters && fallbackType ? getSignatureInstantiation(signature, [fallbackType]) : signature;
+            var erasedSignatureType = getOrCreateTypeFromSignature(erasedSignature);
+            if (checkTypeAssignableTo(exprType, erasedSignatureType, node) && signature.typeParameters && message) {
                 var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
                 var instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
                 checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);
@@ -8438,7 +8417,7 @@ module ts {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
-                    checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
+                    checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class, globalFunctionType);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
@@ -8460,7 +8439,19 @@ module ts {
                 return;
             }
 
-            emitDecorate = true;
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.Parameter:
+                    emitDecorate = true;
+                    break;
+
+                default:
+                    return;
+            }
 
             forEach(node.decorators, checkDecorator);
         }

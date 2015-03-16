@@ -1,0 +1,14 @@
+tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_1.ts(1,1): error TS1198: Decorators are not valid on this declaration type.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_1.ts (1 errors) ====
+    @dec
+    ~~~~
+    import lib = require('./decoratorOnImportEquals2_0');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1198: Decorators are not valid on this declaration type.
+    
+    declare function dec<T>(target: T): T;
+==== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_0.ts (0 errors) ====
+    export var X;
+    
