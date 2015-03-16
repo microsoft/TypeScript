@@ -447,7 +447,7 @@ module ts {
             let declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
-                    
+
             // first check if usage is lexically located after the declaration
             let isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
             if (!isUsedBeforeDeclaration) {
@@ -464,7 +464,7 @@ module ts {
 
                 if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
                     variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case, 
+                    // variable statement/for statement case,
                     // use site should not be inside variable declaration (initializer of declaration or binding element)
                     isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
                 }
@@ -4414,7 +4414,7 @@ module ts {
         }
 
         /**
-         * Check if a Type was written as a tuple type literal. 
+         * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
         function isTupleType(type: Type) : boolean {
@@ -8653,36 +8653,48 @@ module ts {
             //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
             //          let x = 0; // symbol for this declaration will be 'symbol'
             //      }
-            if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
-                let symbol = getSymbolOfNode(node);
-                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
-                    let localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                    if (localDeclarationSymbol &&
-                        localDeclarationSymbol !== symbol &&
-                        localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
 
-                            let varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                            let container =
-                                varDeclList.parent.kind === SyntaxKind.VariableStatement &&
-                                varDeclList.parent.parent;
+            // skip block-scoped variables and parameters
+            if ((getCombinedNodeFlags(node) & NodeFlags.BlockScoped) !== 0 || isParameterDeclaration(node)) {
+                return;
+            }
 
-                            // names of block-scoped and function scoped variables can collide only
-                            // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
-                            let namesShareScope =
-                                container &&
-                                (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
-                                    (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
-                                    container.kind === SyntaxKind.SourceFile);
+            // skip variable declarations that don't have initializers
+            // NOTE: in ES6 spec initializer is required in variable declarations where name is binding pattern
+            // so we'll always treat binding elements as initialized
+            if (node.kind === SyntaxKind.VariableDeclaration && !node.initializer) {
+                return;
+            }
 
-                            // here we know that function scoped variable is shadowed by block scoped one
-                            // if they are defined in the same scope - binder has already reported redeclaration error
-                            // otherwise if variable has an initializer - show error that initialization will fail
-                            // since LHS will be block scoped name instead of function scoped
-                            if (!namesShareScope) {
-                                let name = symbolToString(localDeclarationSymbol);
-                                error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
-                            }
+            var symbol = getSymbolOfNode(node);
+            if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
+                let localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                if (localDeclarationSymbol &&
+                    localDeclarationSymbol !== symbol &&
+                    localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                    if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
+                        let varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                        let container =
+                            varDeclList.parent.kind === SyntaxKind.VariableStatement && varDeclList.parent.parent
+                                ? varDeclList.parent.parent
+                                : undefined;
+
+                        // names of block-scoped and function scoped variables can collide only
+                        // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                        let namesShareScope =
+                            container &&
+                            (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
+                                container.kind === SyntaxKind.ModuleBlock ||
+                                container.kind === SyntaxKind.ModuleDeclaration ||
+                                container.kind === SyntaxKind.SourceFile);
+
+                        // here we know that function scoped variable is shadowed by block scoped one
+                        // if they are defined in the same scope - binder has already reported redeclaration error
+                        // otherwise if variable has an initializer - show error that initialization will fail
+                        // since LHS will be block scoped name instead of function scoped
+                        if (!namesShareScope) {
+                            let name = symbolToString(localDeclarationSymbol);
+                            error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
                         }
                     }
                 }
@@ -9099,7 +9111,7 @@ module ts {
          */
         function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
             Debug.assert(languageVersion < ScriptTarget.ES6);
-            
+
             // After we remove all types that are StringLike, we will know if there was a string constituent
             // based on whether the remaining type is the same as the initial type.
             let arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
@@ -11343,16 +11355,15 @@ module ts {
             }
         }
 
-        function checkGrammarTypeParameterList(node: FunctionLikeDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+        function checkGrammarTypeParameterList(node: FunctionLikeDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>, file: SourceFile): boolean {
             if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
 
             if (typeParameters && typeParameters.length === 0) {
                 let start = typeParameters.pos - "<".length;
-                let sourceFile = getSourceFileOfNode(node);
-                let end = skipTrivia(sourceFile.text, typeParameters.end) + ">".length;
-                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
+                let end = skipTrivia(file.text, typeParameters.end) + ">".length;
+                return grammarErrorAtPos(file, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
             }
         }
 
@@ -11396,7 +11407,21 @@ module ts {
 
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
-            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
+            let file = getSourceFileOfNode(node);
+            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters, file) ||
+                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
+        }
+
+        function checkGrammarArrowFunction(node: FunctionLikeDeclaration, file: SourceFile): boolean {
+            if (node.kind === SyntaxKind.ArrowFunction) {
+                let arrowFunction = <ArrowFunction>node;
+                let startLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.pos).line;
+                let endLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.end).line;
+                if (startLine !== endLine) {
+                    return grammarErrorOnNode(arrowFunction.equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
+                }
+            }
+            return false;
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {

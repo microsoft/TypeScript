@@ -619,6 +619,10 @@
         "category": "Error",
         "code":  1199
     },
+    "Line terminator not permitted before arrow.": {
+        "category": "Error",
+        "code": 1200
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
