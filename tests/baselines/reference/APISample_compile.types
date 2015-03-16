@@ -1669,6 +1669,15 @@ declare module "typescript" {
 >Block : Block
 >Expression : Expression
     }
+    interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+>ArrowFunction : ArrowFunction
+>Expression : Expression
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+
+        equalsGreaterThanToken: Node;
+>equalsGreaterThanToken : Node
+>Node : Node
+    }
     interface LiteralExpression extends PrimaryExpression {
 >LiteralExpression : LiteralExpression
 >PrimaryExpression : PrimaryExpression

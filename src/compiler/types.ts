@@ -329,7 +329,7 @@ module ts {
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
-        // error.  
+        // error.
         ThisNodeHasError = 1 << 4,
 
         // Context flags set directly by the parser.
@@ -337,7 +337,7 @@ module ts {
 
         // Context flags computed by aggregating child flags upwards.
 
-        // Used during incremental parsing to determine if this node or any of its children had an 
+        // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
         ThisNodeOrAnySubNodesHasError = 1 << 5,
 
@@ -354,7 +354,7 @@ module ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        // Specific context the parser was in when this node was created.  Normally undefined. 
+        // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
         modifiers?: ModifiersArray;   // Array of modifiers
@@ -524,7 +524,7 @@ module ts {
         body?: Block;
     }
 
-    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a 
+    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
@@ -575,12 +575,12 @@ module ts {
 
     export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
 
-    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
+    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
     // (structurally) than 'Node'.  Because of this you can pass any Node to a function that
     // takes an Expression without any error.  By using the 'brands' we ensure that the type
-    // checker actually thinks you have something of the right type.  Note: the brands are 
-    // never actually given values.  At runtime they have zero cost. 
+    // checker actually thinks you have something of the right type.  Note: the brands are
+    // never actually given values.  At runtime they have zero cost.
 
     export interface Expression extends Node {
         _expressionBrand: any;
@@ -651,6 +651,10 @@ module ts {
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
+    }
+
+    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+        equalsGreaterThanToken: Node;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -735,7 +739,7 @@ module ts {
     }
 
     export interface VariableStatement extends Statement {
-        declarationList: VariableDeclarationList; 
+        declarationList: VariableDeclarationList;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -903,7 +907,7 @@ module ts {
         moduleSpecifier: Expression;
     }
 
-    // In case of: 
+    // In case of:
     // import d from "mod" => name = d, namedBinding = undefined
     // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
@@ -969,7 +973,7 @@ module ts {
         externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
-        
+
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -977,10 +981,10 @@ module ts {
         // File level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
-        
+
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
-        
+
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
@@ -1000,10 +1004,10 @@ module ts {
         getSourceFiles(): SourceFile[];
 
         /**
-         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then 
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
          * the javascript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the javascript and declaration for that
-         * specific file will be generated.  
+         * specific file will be generated.
          *
          * If writeFile is not specified then the writeFile callback from the compiler host will be
          * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
@@ -1021,7 +1025,7 @@ module ts {
 
         getCommonSourceDirectory(): string;
 
-        // For testing purposes only.  Should not be used by any other consumers (including the 
+        // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
@@ -1058,7 +1062,7 @@ module ts {
         // when -version or -help was provided, or this was a normal compilation, no diagnostics
         // were produced, and all outputs were generated successfully.
         Success = 0,
-        
+
         // Diagnostics were produced and because of them no code was generated.
         DiagnosticsPresent_OutputsSkipped = 1,
 
@@ -1168,12 +1172,12 @@ module ts {
 
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-        //     var a: C<number>; 
+        //     var a: C<number>;
         //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001, 
+        WriteTypeParametersOrArguments = 0x00000001,
 
         // Use only external alias information to get the symbol name in the given context
-        // eg.  module m { export class c { } } import x = m.c; 
+        // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
     }
@@ -1778,7 +1782,7 @@ module ts {
         // Gets a count of how many times this collection has been modified.  This value changes
         // each time 'add' is called (regardless of whether or not an equivalent diagnostic was
         // already in the collection).  As such, it can be used as a simple way to tell if any
-        // operation caused diagnostics to be returned by storing and comparing the return value 
+        // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
     }
