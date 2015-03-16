@@ -11,7 +11,7 @@ module ts.server {
         stack?: string;
     }
 
-    function generateSpaces(n: number): string {
+    export function generateSpaces(n: number): string {
         if (!spaceCache[n]) {
             var strBuilder = "";
             for (var i = 0; i < n; i++) {
@@ -80,6 +80,7 @@ module ts.server {
         export var Close = "close";
         export var Completions = "completions";
         export var CompletionDetails = "completionEntryDetails";
+        export var Configure = "configure";
         export var Definition = "definition";
         export var Format = "format";
         export var Formatonkey = "formatonkey";
@@ -439,7 +440,8 @@ module ts.server {
             var endPosition = compilerService.host.lineColToPosition(file, endLine, endCol);
             
             // TODO: avoid duplicate code (with formatonkey)
-            var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition, compilerService.formatCodeOptions);
+            var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
+             this.projectService.getFormatCodeOptions());
             if (!edits) {
                 return undefined;
             }
@@ -464,7 +466,7 @@ module ts.server {
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
-                compilerService.formatCodeOptions);
+                this.projectService.getFormatCodeOptions());
             // Check whether we should auto-indent. This will be when
             // the position is on a line containing only whitespace.
             // This should leave the edits returned from
@@ -608,7 +610,8 @@ module ts.server {
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                project.compilerService.host.reloadScript(file, tmpfile,() => {
+                project.compilerService.host.reloadScript(file, tmpfile, 
+                    this.projectService.getFormatCodeOptions().TabSize, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
             }
@@ -796,9 +799,17 @@ module ts.server {
                         responseRequired = false;
                         break;
                     }
+                    case CommandNames.Configure: {
+                        var configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
+                        this.projectService.setHostConfiguration(configureArgs);
+                        this.output(undefined, CommandNames.Configure, request.seq);
+                        responseRequired = false;
+                        break;
+                    }
                     case CommandNames.Reload: {
                         var reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
                         this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
+                        responseRequired = false;
                         break;
                     }
                     case CommandNames.Saveto: {

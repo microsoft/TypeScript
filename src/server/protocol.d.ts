@@ -300,6 +300,36 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Information found in a configure request.
+      */
+    export interface ConfigureRequestArguments {
+        /** Number of spaces for each tab */
+        tabSize: number;
+        /** Number of spaces to indent during formatting */
+        indentSize: number;
+        /** 
+          * Information about the host, for example 'Emacs 24.4' or
+          * 'Sublime Text version 3075'
+          */
+        hostInfo: string;
+    }
+
+    /**
+      *  Configure request; value of command field is "configure".  Specifies 
+      *  host information, such as host type, tab size, and indent size.
+      */
+    export interface ConfigureRequest extends Request {
+        arguments: ConfigureRequestArguments;
+    }
+
+    /**
+      * Response to "configure" request.  This is just an acknowledgement, so
+      * no body field is required.
+      */
+    export interface ConfigureResponse extends Response {
+    }
+
+    /**
       * Open request; value of command field is "open". Notify the
       * server that the client has file open.  The server will not
       * monitor the filesystem for changes in this file and will assume

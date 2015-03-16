@@ -153,10 +153,10 @@ module ts.server {
             }
         }
 
-        reloadScript(filename: string, tmpfilename: string, cb: () => any) {
+        reloadScript(filename: string, tmpfilename: string, tabSize: number, cb: () => any) {
             var script = this.getScriptInfo(filename);
             if (script) {
-                script.svc.reloadFromFile(tmpfilename, cb);
+                script.svc.reloadFromFile(tmpfilename, tabSize, cb);
             }
         }
 
@@ -259,7 +259,6 @@ module ts.server {
     interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        formatCodeOptions?: ts.FormatCodeOptions;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -338,7 +337,6 @@ module ts.server {
             if (projectOptions.compilerOptions) {
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
-            // TODO: format code options
         }
     }
 
@@ -362,6 +360,11 @@ module ts.server {
         (eventName: string, project: Project, fileName: string): void;
     }
 
+    interface HostConfiguration {
+        formatCodeOptions: ts.FormatCodeOptions;
+        hostInfo: string;
+    }
+
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
         // open, non-configured files in two lists
@@ -369,9 +372,22 @@ module ts.server {
         openFilesReferenced: ScriptInfo[] = [];
         // projects covering open files
         inferredProjects: Project[] = [];
+        hostConfiguration: HostConfiguration;
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
+            this.addDefaultHostConfiguration();
+        }
+
+        addDefaultHostConfiguration() {
+            this.hostConfiguration = {
+                formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
+                hostInfo: "Unknown host"
+            }
+        }
+        
+        getFormatCodeOptions() {
+            return this.hostConfiguration.formatCodeOptions;
         }
 
         watchedFileChanged(fileName: string) {
@@ -386,13 +402,25 @@ module ts.server {
             }
             else {
                 if (info && (!info.isOpen)) {
-                    info.svc.reloadFromFile(info.fileName);
+                    info.svc.reloadFromFile(info.fileName, this.hostConfiguration.formatCodeOptions.TabSize);
                 }
             }
         }
         
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
+        }
+
+        setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
+            this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
+            this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
+            this.hostConfiguration.hostInfo = args.hostInfo;
+            this.log("Host information " + args.hostInfo, "Info");
+        }
+
+        expandTabs(text: string) {
+            var spaces = generateSpaces(this.hostConfiguration.formatCodeOptions.TabSize);
+            return text.replace(/\t/g, spaces);
         }
 
         closeLog() {
@@ -609,6 +637,7 @@ module ts.server {
                     }
                 }
                 if (content !== undefined) {
+                    content = this.expandTabs(content);
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
@@ -742,9 +771,6 @@ module ts.server {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
-                    if (rawConfig.formatCodeOptions) {
-                        projectOptions.formatCodeOptions = rawConfig.formatCodeOptions;
-                    }
                     proj.setProjectOptions(projectOptions);
                     return { success: true, project: proj };
                 }
@@ -768,7 +794,6 @@ module ts.server {
         classifier: ts.Classifier;
         settings = ts.getDefaultCompilerOptions();
         documentRegistry = ts.createDocumentRegistry();
-        formatCodeOptions: ts.FormatCodeOptions = CompilerService.defaultFormatCodeOptions;
 
         constructor(public project: Project) {
             this.host = new LSHost(project.projectService.host, project);
@@ -1096,7 +1121,7 @@ module ts.server {
             return this.currentVersion;
         }
 
-        reloadFromFile(filename: string, cb?: () => any) {
+        reloadFromFile(filename: string, tabSize: number, cb?: () => any) {
             var content = ts.sys.readFile(filename);
             this.reload(content);
             if (cb)
