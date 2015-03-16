@@ -465,8 +465,9 @@ module ts.server {
 
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
+            var formatOptions = this.projectService.getFormatCodeOptions();
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
-                this.projectService.getFormatCodeOptions());
+                formatOptions);
             // Check whether we should auto-indent. This will be when
             // the position is on a line containing only whitespace.
             // This should leave the edits returned from
@@ -482,8 +483,8 @@ module ts.server {
                         if (lineText.search("\\S") < 0) {
                             // TODO: get these options from host
                             var editorOptions: ts.EditorOptions = {
-                                IndentSize: 4,
-                                TabSize: 4,
+                                IndentSize: formatOptions.IndentSize,
+                                TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: true,
                             };
