@@ -4730,13 +4730,16 @@ module ts {
             if (!inferredType) {
                 let inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
-                    // Infer widened union or supertype, or the undefined type for no common supertype
+                    // Infer widened union or supertype, or the unknown type for no common supertype
                     let unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
-                    // Infer the empty object type when no inferences were made
+                    // Infer the empty object type when no inferences were made. It is important to remember that
+                    // in this case, inference still succeeds, meaning there is no error for not having inference
+                    // candidates. An inference error only occurs when there are *conflicting* candidates, i.e.
+                    // candidates with no common supertype.
                     inferredType = emptyObjectType;
                     inferenceSucceeded = true;
                 }
@@ -4746,10 +4749,10 @@ module ts {
                     let constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
                 }
-                // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
-                // It might be that inference has already failed on a later type parameter on a previous call to inferTypeArguments.
-                // So if this failure is on preceding type parameter, this type parameter is the new failure index.
                 else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
+                    // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
+                    // It might be that inference has already failed on a later type parameter on a previous call to inferTypeArguments.
+                    // So if this failure is on preceding type parameter, this type parameter is the new failure index.
                     context.failedTypeParameterIndex = index;
                 }
                 context.inferredTypes[index] = inferredType;
