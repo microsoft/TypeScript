@@ -1669,6 +1669,15 @@ declare module "typescript" {
 >Block : Block
 >Expression : Expression
     }
+    interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+>ArrowFunction : ArrowFunction
+>Expression : Expression
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+
+        equalsGreaterThanToken: Node;
+>equalsGreaterThanToken : Node
+>Node : Node
+    }
     interface LiteralExpression extends PrimaryExpression {
 >LiteralExpression : LiteralExpression
 >PrimaryExpression : PrimaryExpression
@@ -2324,9 +2333,13 @@ declare module "typescript" {
         isExportEquals?: boolean;
 >isExportEquals : boolean
 
-        expression: Expression;
+        expression?: Expression;
 >expression : Expression
 >Expression : Expression
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
     }
     interface FileReference extends TextRange {
 >FileReference : FileReference
@@ -3958,12 +3971,6 @@ declare module "typescript" {
         watch?: boolean;
 >watch : boolean
 
-        stripInternal?: boolean;
->stripInternal : boolean
-
-        preserveNewLines?: boolean;
->preserveNewLines : boolean
-
         [option: string]: string | number | boolean;
 >option : string
     }
@@ -4747,7 +4754,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
 >version : string
 
     function createCompilerHost(options: CompilerOptions): CompilerHost;

@@ -959,7 +959,7 @@ module ts {
                 if (pos >= len) {
                     return token = SyntaxKind.EndOfFileToken;
                 }
-                var ch = text.charCodeAt(pos);
+                let ch = text.charCodeAt(pos);
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
@@ -1248,10 +1248,10 @@ module ts {
                     case CharacterCodes.tilde:
                         return pos++, token = SyntaxKind.TildeToken;
                     case CharacterCodes.backslash:
-                        var ch = peekUnicodeEscape();
-                        if (ch >= 0 && isIdentifierStart(ch)) {
+                        let cookedChar = peekUnicodeEscape();
+                        if (cookedChar >= 0 && isIdentifierStart(cookedChar)) {
                             pos += 6;
-                            tokenValue = String.fromCharCode(ch) + scanIdentifierParts();
+                            tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
                         error(Diagnostics.Invalid_character);
