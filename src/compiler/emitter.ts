@@ -4706,14 +4706,11 @@ module ts {
             }
 
             function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
-                forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
-                        if (!(<MethodDeclaration>member).body) {
-                            return emitPinnedOrTripleSlashComments(member);
-                        }
-
+                for (let member of node.members) {
+                    if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
                     }
-                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -4732,7 +4729,7 @@ module ts {
                         emitEnd(member);
                         emitTrailingComments(member);
                     }
-                });
+                }
             }
 
             function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
@@ -4822,7 +4819,12 @@ module ts {
                     if (baseTypeNode) {
                         writeLine();
                         emitStart(baseTypeNode);
-                        languageVersion < ScriptTarget.ES6 ? write("_super.apply(this, arguments);") : write("super(...args);");
+                        if (languageVersion < ScriptTarget.ES6) {
+                            write("_super.apply(this, arguments);");
+                        }
+                        else {
+                            write("super(...args);");
+                        }
                         emitEnd(baseTypeNode);
                     }
                 }
