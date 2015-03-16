@@ -11037,10 +11037,16 @@ module ts {
                     case SyntaxKind.ClassDeclaration:
                         return false;
 
+                    case SyntaxKind.Constructor:
+                        if (node.kind !== SyntaxKind.Parameter) {
+                            break;
+                        }
+
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.Parameter:
                         target = target.parent;
                         continue;
+
                         
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:

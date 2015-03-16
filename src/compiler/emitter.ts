@@ -56,7 +56,7 @@ module ts {
     interface DecoratorEmitInfo {
         workingVariable?: Identifier; // temporary variable used as working memory for decorator application
         computedPropertyNameCache: Identifier[]; // a cache of temporary variables used to hold onto the result of the expression for a computed property
-        propertyDescriptorCache: Identifier[]; // a cache of property descriptors created when emitting accessor declarations
+        setterCache: Identifier[]; // a cache of property descriptors created when emitting accessor declarations
     }
 
     var indentStrings: string[] = ["", "    "];
@@ -4117,7 +4117,7 @@ module ts {
 
             function emitMemberFunctions(node: ClassDeclaration): DecoratorEmitInfo {
                 var computedPropertyNameCache: Identifier[];
-                var propertyDescriptorCache: Identifier[];
+                var setterCache: Identifier[];
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -4147,15 +4147,16 @@ module ts {
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            var tempDescriptor: Identifier;
-                            if (member.decorators) {
-                                if (!propertyDescriptorCache) {
-                                    propertyDescriptorCache = [];
+                            var tempSetter: Identifier;
+                            if (accessors.setAccessor) {
+                                if (forEach(accessors.setAccessor.parameters, p => !!p.decorators)) {
+                                    if (!setterCache) {
+                                        setterCache = [];
+                                    }
+                                    tempSetter = createTempVariable(node);
+                                    recordTempDeclaration(tempSetter);
+                                    setterCache[accessors.setAccessor.id] = tempSetter;
                                 }
-                                tempDescriptor = createTempVariable(node);
-                                recordTempDeclaration(tempDescriptor);
-                                propertyDescriptorCache[accessors.firstAccessor.id] = tempDescriptor;
-                                propertyDescriptorCache[accessors.lastAccessor.id] = tempDescriptor;
                             }
                             writeLine();
                             emitStart(member);
@@ -4170,12 +4171,7 @@ module ts {
                             // TODO: Shouldn't emitStart on name occur *here*?
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name, member.decorators ? computedPropertyNameCache : undefined);
                             emitEnd((<AccessorDeclaration>member).name);
-                            write(", ");
-                            if (tempDescriptor) {
-                                write(tempDescriptor.text);
-                                write(" = ");
-                            }
-                            write("{");
+                            write(", {");
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
@@ -4192,6 +4188,10 @@ module ts {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
                                 write("set: ");
+                                if (tempSetter) {
+                                    write(tempSetter.text);
+                                    write(" = ");
+                                }
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
@@ -4210,7 +4210,7 @@ module ts {
                         }
                     }
                 });
-                return { computedPropertyNameCache, propertyDescriptorCache };
+                return { computedPropertyNameCache, setterCache };
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -4424,8 +4424,7 @@ module ts {
                         emitNode((<ClassDeclaration>node.parent).name);
                     }
                     else if (node.kind === SyntaxKind.SetAccessor) {
-                        emitNode(info.propertyDescriptorCache[node.id]);
-                        write(".set");
+                        emitNode(info.setterCache[node.id]);
                     }
                     else {
                         emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
@@ -4447,13 +4446,20 @@ module ts {
                     case SyntaxKind.MethodDeclaration:
                         emitDecoratorsOfParameters(<MethodDeclaration>member, info);
                         break;
+
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
-                        if (accessors.setAccessor) {
+                        if (member === accessors.firstAccessor && accessors.setAccessor) {
                             emitDecoratorsOfParameters(accessors.setAccessor, info);
                         }
                         break;
+
+                    case SyntaxKind.PropertyDeclaration:
+                        break;
+
+                    default:
+                        return;
                 }
 
                 var name = member.name;
@@ -4472,21 +4478,6 @@ module ts {
                     emitTargetOfClassElement(node, member);
                     write(", ");
                     emitExpressionForPropertyName(name, info.computedPropertyNameCache);
-                    write(", ");
-                    if (languageVersion === ScriptTarget.ES3 || member.kind === SyntaxKind.PropertyDeclaration) {
-                        write("void 0");
-                    }
-                    else {
-                        if (info.propertyDescriptorCache && info.propertyDescriptorCache[member.id]) {
-                            emitNode(info.propertyDescriptorCache[member.id]);
-                        }
-                        else {
-                            write("{ enumerable: true, configurable: true, writable: true, value: ");
-                            emitTargetOfClassElement(node, member);
-                            emitMemberAccessForPropertyName(member.name, info.computedPropertyNameCache);
-                            write(" }");
-                        }
-                    }
                     write(");");
                     emitEnd(member);
                     writeLine();
@@ -4984,6 +4975,17 @@ module ts {
                 return statements.length;
             }
 
+            function writeHelper(text: string): void {
+                var lines = text.split(/\r\n|\r|\n/g);
+                for (var i = 0; i < lines.length; ++i) {
+                    var line = lines[i++];
+                    if (line.length) {
+                        writeLine();
+                        write(line);
+                    }
+                }
+            }
+
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
                 // Start new file on new line
@@ -5010,50 +5012,18 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
-                    writeLine();
-                    write("var __decorate = this.__decorate || function (decorators, target, key, desc) {");
-                    increaseIndent();
-                    writeLine();
-                    write(`var prop = arguments.length == 4, res = prop ? target : desc;`);
-                    writeLine();
-                    write(`if (desc) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`var enumerable = desc.enumerable, configurable = desc.configurable, writable = desc.writable, value = desc.value, get = desc.get, set = desc.set;`);
-                    decreaseIndent();
-                    writeLine();
-                    write(`}`);
-                    writeLine();
-                    write(`for (var i = decorators.length - 1; i >= 0; i--) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`var decorator = decorators[i];`);
-                    writeLine();
-                    write(`var tmp = prop ? decorator(target, key, res) : arguments.length == 3 ? decorator(target, key) : decorator(res);`);
-                    writeLine();
-                    write(`res = tmp != null ? tmp : res`);
-                    decreaseIndent();
-                    writeLine();
-                    write(`}`);
-                    writeLine();
-                    write(`if (prop && res && typeof Object.defineProperty === 'function') {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`if (!desc || enumerable != res.enumerable || configurable != res.configurable || writable != res.writable || value !== res.value || get != res.get || set != res.set) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`Object.defineProperty(target, key, res);`);
-                    decreaseIndent();
-                    writeLine();
-                    write(`}`);
-                    decreaseIndent();
-                    writeLine();
-                    write(`}`);
-                    writeLine();
-                    write(`return res;`);
-                    decreaseIndent();
-                    writeLine();
-                    write("};");
+                    writeHelper(`
+var __decorate = this.__decorate || (typeof Reflect === "object" && Reflect.decorate) || function (decorators, target, key) {
+    var kind = key == null ? 0 : typeof key === "number" ? 1 : 2, result = target;
+    if (kind == 2) result = Object.getOwnPropertyDescriptor(target, typeof key === "symbol" ? key : key = String(key));
+    for (var i = decorators.length - 1; i >= 0; --i) {
+        var decorator = decorators[i];
+        result = (kind == 0 ? decorator(result) : kind == 1 ? decorator(target, key) : decorator(target, key, result)) || result;
+    }
+    if (kind === 2 && result) Object.defineProperty(target, key, result);
+    if (kind === 0) return result;
+};
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { return function () { }; };`);
                     decorateEmitted = true;
                 }
                 if (isExternalModule(node)) {
