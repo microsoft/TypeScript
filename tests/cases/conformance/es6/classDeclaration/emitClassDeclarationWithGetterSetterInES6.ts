@@ -10,6 +10,17 @@ class C {
     static get ["computedname"]() {
         return "";
     }
+    get ["computedname"]() {
+        return "";
+    }
+    get ["computedname"]() {
+        return "";
+    }
+
+    set ["computedname"](x: any) {
+    }
+    set ["computedname"](y: string) {
+    }
 
     set foo(a: string) { }
     static set bar(b: number) { }

@@ -1,4 +1,4 @@
-//// [emitClassDeclarationWithTypeArgumentAndOverload.ts]
+//// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts]
 class B<T> {
     x: T;
     B: T;
@@ -22,7 +22,7 @@ class B<T> {
     }
 }
 
-//// [emitClassDeclarationWithTypeArgumentAndOverload.js]
+//// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.js]
 class B {
     constructor(a) {
         this.B = a;

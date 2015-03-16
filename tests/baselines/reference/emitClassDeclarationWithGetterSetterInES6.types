@@ -21,6 +21,19 @@ class C {
     static get ["computedname"]() {
         return "";
     }
+    get ["computedname"]() {
+        return "";
+    }
+    get ["computedname"]() {
+        return "";
+    }
+
+    set ["computedname"](x: any) {
+>x : any
+    }
+    set ["computedname"](y: string) {
+>y : string
+    }
 
     set foo(a: string) { }
 >foo : string

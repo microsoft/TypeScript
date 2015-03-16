@@ -1,4 +1,4 @@
-//// [emitClassDeclarationWithThisKeyword.ts]
+//// [emitClassDeclarationWithThisKeywordInES6.ts]
 class B {
     x = 10;
     constructor() {
@@ -18,7 +18,7 @@ class B {
     }
 }
 
-//// [emitClassDeclarationWithThisKeyword.js]
+//// [emitClassDeclarationWithThisKeywordInES6.js]
 class B {
     constructor() {
         this.x = 10;

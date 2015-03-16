@@ -4511,49 +4511,25 @@ module ts {
                             return emitPinnedOrTripleSlashComments(member);
                         }
 
+                    }
+                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
                         if (member.flags & NodeFlags.Static) {
                             write("static ");
                         }
+
+                        if (member.kind === SyntaxKind.GetAccessor) {
+                            write("get ");
+                        }
+                        else if (member.kind === SyntaxKind.SetAccessor) {
+                            write("set ");
+                        }
                         emit((<MethodDeclaration>member).name);
                         emitSignatureAndBody(<MethodDeclaration>member);
                         emitEnd(member);
                         emitTrailingComments(member);
-                    }
-                    else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
-                        var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
-                        if (member === accessors.firstAccessor) {
-                            writeLine();
-                            if (accessors.getAccessor) {
-                                writeLine();
-                                emitLeadingComments(accessors.getAccessor);
-                                emitStart(accessors.getAccessor);
-                                if (member.flags & NodeFlags.Static) {
-                                    write("static ");
-                                }
-                                write("get ");
-                                emit((<MethodDeclaration>member).name);
-                                emitSignatureAndBody(accessors.getAccessor);
-                                emitEnd(accessors.getAccessor);
-                                emitTrailingComments(accessors.getAccessor);
-                            }
-                            if (accessors.setAccessor) {
-                                // We will only write new line if we just emit getAccessor
-                                writeLine();
-                                emitLeadingComments(accessors.setAccessor);
-                                emitStart(accessors.setAccessor);
-                                if (member.flags & NodeFlags.Static) {
-                                    write("static ");
-                                }
-                                write("set ");
-                                emit((<MethodDeclaration>member).name);
-                                emitSignatureAndBody(accessors.setAccessor);
-                                emitEnd(accessors.setAccessor);
-                                emitTrailingComments(accessors.setAccessor);;
-                            }
-                        }
                     }
                 });
             }
