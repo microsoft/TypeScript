@@ -12,8 +12,6 @@ class C {
 
 //// [computedPropertyNamesWithStaticProperty.js]
 class C {
-    constructor() {
-    }
     get [C.staticProp]() {
         return "hello";
     }

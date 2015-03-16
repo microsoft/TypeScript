@@ -37,18 +37,24 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^
 3 >                ^^^^^^^
+4 >                       ^
+5 >                        ^^^
 1->
 2 >    [
 3 >                "hello"
+4 >                       ]
+5 >                        
 1->Emitted(4, 5) Source(2, 5) + SourceIndex(0) name (C)
 2 >Emitted(4, 17) Source(2, 6) + SourceIndex(0) name (C)
 3 >Emitted(4, 24) Source(2, 13) + SourceIndex(0) name (C)
+4 >Emitted(4, 25) Source(2, 14) + SourceIndex(0) name (C)
+5 >Emitted(4, 28) Source(2, 5) + SourceIndex(0) name (C)
 ---
 >>>        debugger;
 1 >^^^^^^^^
 2 >        ^^^^^^^^
 3 >                ^
-1 >]() {
+1 >["hello"]() {
   >        
 2 >        debugger
 3 >                ;

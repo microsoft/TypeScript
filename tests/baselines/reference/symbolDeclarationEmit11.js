@@ -8,8 +8,6 @@ class C {
 
 //// [symbolDeclarationEmit11.js]
 class C {
-    constructor() {
-    }
     static [Symbol.toPrimitive]() {
     }
     static get [Symbol.isRegExp]() {

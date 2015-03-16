@@ -11,8 +11,6 @@ class D {
 
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
 class C {
-    constructor() {
-    }
 }
 C.z = "Foo";
 class D {
