@@ -4615,10 +4615,18 @@ module ts {
                         if (target === typeParameters[i]) {
                             let inferences = context.inferences[i];
                             if (!inferences.isFixed) {
+                                // Any inferences that are made to a type parameter in a union type are inferior
+                                // to inferences made to a flat (non-union) type. This is because if we infer to
+                                // T | string[], we really don't know if we should be inferring to T or not (because
+                                // the correct constituent on the target side could be string[]). Therefore, we put
+                                // such inferior inferences into a secondary bucket, and only use them if the primary
+                                // bucket is empty.
                                 let candidates = inferiority ?
                                     inferences.secondary || (inferences.secondary = []) :
                                     inferences.primary || (inferences.primary = []);
-                                if (!contains(candidates, source)) candidates.push(source);
+                                if (!contains(candidates, source)) {
+                                    candidates.push(source);
+                                }
                             }
                             return;
                         }
@@ -6358,12 +6366,22 @@ module ts {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (let i = 0; i < typeParameters.length; i++) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
-                // for type parameters that have already been fixed on the previous call to inferTypeArguments
+                // for type parameters that have already been fixed on the previous call to inferTypeArguments.
+                // It would be just as correct to reset all of them. But then we'd be repeating the same work
+                // for the type parameters that were fixed, namely the work done by getInferredType.
                 if (!context.inferences[i].isFixed) {
                     context.inferredTypes[i] = undefined;
                 }
             }
-            if (context.failedTypeParameterIndex >= 0 && !context.inferences[context.failedTypeParameterIndex].isFixed) {
+
+            // On this call to inferTypeArguments, we may get more inferences for certain type parameters that were not
+            // fixed last time. This means that a type parameter that failed inference last time may succeed this time,
+            // or vice versa. Therefore, the failedTypeParameterIndex is useless if it points to an unfixed type parameter,
+            // because it may change. So here we reset it. However, getInferredType will not revisit any type parameters
+            // that were previously fixed. So if a fixed type parameter failed previously, it will fail again because
+            // it will contain the exact same set of inferences. So if we reset the index from a fixed type parameter,
+            // we will lose information that we won't recover this time around.
+            if (context.failedTypeParameterIndex !== undefined && !context.inferences[context.failedTypeParameterIndex].isFixed) {
                 context.failedTypeParameterIndex = undefined;
             }
 
