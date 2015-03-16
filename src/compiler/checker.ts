@@ -5696,29 +5696,6 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
-                // Disallow using a static property in computedPropertyName because classDeclaration is bound lexically in ES6
-                // and its static property assignment will be emitted after classDeclaration.
-                // Therefore, using static property inside computedPropertyName will cause an use-before-definition error
-                // Example:
-                //  * TypeScript
-                //      class C {
-                //          static p = 10;
-                //          [C.p]() {}
-                //      }
-                //  * JavaScript
-                //      class C {
-                //          [C.p]() {}  // Use before definition error
-                //      }
-                //      C.p = 10;
-                if (links.resolvedSymbol) {
-                    var declarations = links.resolvedSymbol.declarations;
-                    forEach(declarations, declaration => {
-                        if (declaration.flags & NodeFlags.Static) {
-                            error(node, Diagnostics.A_computed_property_name_cannot_reference_a_static_property);
-                        }
-                    });
-                }
-
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
                 if (!allConstituentTypesHaveKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
@@ -11891,9 +11868,7 @@ module ts {
                     var nameText = declarationNameToString(identifier);
 
                     // Always report 'eval' and 'arguments' invalid usage in strict mode code regardless of parser diagnostics
-                    var sourceFile = getSourceFileOfNode(identifier);
-                    diagnostics.add(createDiagnosticForNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText));
-                    return true;
+                    return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
                 }
             }
         }
