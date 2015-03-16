@@ -18,8 +18,6 @@ class C {
 
 //// [emitClassDeclarationWithGetterSetterInES6.js]
 class C {
-    constructor() {
-    }
     get name() {
         return this._name;
     }

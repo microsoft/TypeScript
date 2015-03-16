@@ -24,8 +24,6 @@ class D {
 
 //// [emitClassDeclarationWithMethodInES6.js]
 class D {
-    constructor() {
-    }
     foo() {
     }
     ["computedName"]() {

@@ -1,25 +1,48 @@
 //// [emitClassDeclarationWithExtensionInES6.ts]
-class B { }
-class C extends B { }
-class D extends B {
+class B {
+    baz(a: string, y = 10) { }
+}
+class C extends B {
+    foo() { }
+    baz(a: string, y:number) {
+        super.baz(a, y);
+    }
+}
+class D extends C {
     constructor() {
         super();
+    }
+
+    foo() {
+        super.foo();
+    }
+
+    baz() {
+        super.baz("hello", 10);
     }
 }
 
 
 //// [emitClassDeclarationWithExtensionInES6.js]
 class B {
-    constructor() {
+    baz(a, y = 10) {
     }
 }
 class C extends B {
-    constructor(...args) {
-        super(...args);
+    foo() {
+    }
+    baz(a, y) {
+        super.baz(a, y);
     }
 }
-class D extends B {
+class D extends C {
     constructor() {
         super();
+    }
+    foo() {
+        super.foo();
+    }
+    baz() {
+        super.baz("hello", 10);
     }
 }

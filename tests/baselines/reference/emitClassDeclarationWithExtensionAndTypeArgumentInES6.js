@@ -16,9 +16,6 @@ class B {
     }
 }
 class C extends B {
-    constructor(...args) {
-        super(...args);
-    }
 }
 class D extends B {
     constructor(b) {
