@@ -3571,8 +3571,22 @@ module ts {
             }
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+
+            let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+            // ensure the results are in the file we're interested in
+            results.forEach((value) => {
+                let targetFile = getCanonicalFileName(normalizeSlashes(value.fileName));
+                Debug.assert(sourceFile == targetFile, `Unexpected file in results. Found results in ${targetFile} expected only results in ${sourceFile}.`);
+            });
+
+            return results;
+        }
+
+        /// References and Occurrences
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
