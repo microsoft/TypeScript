@@ -390,6 +390,7 @@ module ts.formatting {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
@@ -459,9 +460,9 @@ module ts.formatting {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                case SyntaxKind.CallSignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
                 case SyntaxKind.ArrowFunction:
                     if ((<FunctionLikeDeclaration>n).body) {
                         return isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
