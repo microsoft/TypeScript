@@ -368,6 +368,8 @@ module ts.formatting {
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.ObjectBindingPattern:
                     return true;
             }
             return false;
