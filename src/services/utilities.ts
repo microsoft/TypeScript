@@ -160,8 +160,25 @@ module ts {
                 }
                 return isCompletedNode((<DoStatement>n).statement, sourceFile);
 
+            case SyntaxKind.TypeQuery:
+                return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
+
             case SyntaxKind.TypeOfExpression:
-                return isCompletedNode((<TypeOfExpression>n).expression, sourceFile);
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.SpreadElementExpression:
+                let unaryWordExpression = (<TypeOfExpression|DeleteExpression|VoidExpression|YieldExpression|SpreadElementExpression>n);
+                return isCompletedNode(unaryWordExpression.expression, sourceFile);
+
+            case SyntaxKind.TaggedTemplateExpression:
+                return isCompletedNode((<TaggedTemplateExpression>n).template, sourceFile);
+            case SyntaxKind.TemplateExpression:
+                let lastSpan = lastOrUndefined((<TemplateExpression>n).templateSpans);
+                return isCompletedNode(lastSpan, sourceFile);
+            case SyntaxKind.TemplateSpan:
+                return nodeIsPresent((<TemplateSpan>n).literal);
+
             case SyntaxKind.PrefixUnaryExpression:
                 return isCompletedNode((<PrefixUnaryExpression>n).operand, sourceFile);
             case SyntaxKind.BinaryExpression:
