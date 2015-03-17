@@ -2420,12 +2420,10 @@ module ts {
                     case SyntaxKind.ExportAssignment:
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript));
                         return;
-                    case SyntaxKind.TypeParameter:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_parameter_declarations_can_only_be_used_in_TypeScript));
-                        return;
                     case SyntaxKind.ClassDeclaration:
                         let classDeclaration = <ClassDeclaration>node;
-                        if (checkModifiers(classDeclaration.modifiers)) {
+                        if (checkModifiers(classDeclaration.modifiers) ||
+                            checkTypeParameters(classDeclaration.typeParameters)) {
                             return;
                         }
                         break;
@@ -2456,6 +2454,7 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                         let functionDeclaration = <FunctionLikeDeclaration>node;
                         if (checkModifiers(functionDeclaration.modifiers) ||
+                            checkTypeParameters(functionDeclaration.typeParameters) ||
                             checkTypeAnnotation(functionDeclaration.type)) {
                             return;
                         }
@@ -2476,7 +2475,8 @@ module ts {
                     case SyntaxKind.NewExpression:
                         let expression = <CallExpression>node;
                         if (expression.typeArguments && expression.typeArguments.length > 0) {
-                            diagnostics.push(createFileDiagnostic(sourceFile, expression.typeArguments.pos, expression.typeArguments.end,
+                            let start = expression.typeArguments.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
                                 Diagnostics.type_arguments_can_only_be_used_in_TypeScript));
                             return;
                         }
@@ -2484,7 +2484,8 @@ module ts {
                     case SyntaxKind.Parameter:
                         let parameter = <ParameterDeclaration>node;
                         if (parameter.modifiers) {
-                            diagnostics.push(createFileDiagnostic(sourceFile, parameter.modifiers.pos, parameter.modifiers.end,
+                            let start = parameter.modifiers.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
                                 Diagnostics.parameter_modifiers_can_only_be_used_in_TypeScript));
                             return;
                         }
@@ -2509,6 +2510,15 @@ module ts {
                 }
 
                 forEachChild(node, walk);
+            }
+
+            function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+                if (typeParameters) {
+                    let start = typeParameters.pos;
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_TypeScript));
+                    return true;
+                }
+                return false;
             }
 
             function checkTypeAnnotation(type: TypeNode): boolean {

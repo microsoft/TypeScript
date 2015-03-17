@@ -14,6 +14,7 @@
 //
 
 /// <reference path='..\services\services.ts' />
+/// <reference path='..\services\shims.ts' />
 /// <reference path='harnessLanguageService.ts' />
 /// <reference path='harness.ts' />
 /// <reference path='fourslashRunner.ts' />
@@ -126,12 +127,13 @@ module FourSlash {
         outDir: 'outDir',
         sourceMap: 'sourceMap',
         sourceRoot: 'sourceRoot',
+        allowNonTsExtensions: 'allowNonTsExtensions',
         resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
     var fileMetadataNames = [testOptMetadataNames.fileName, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
-    var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
+    var globalMetadataNames = [testOptMetadataNames.allowNonTsExtensions, testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
@@ -141,6 +143,9 @@ module FourSlash {
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
+                    case testOptMetadataNames.allowNonTsExtensions:
+                        settings.allowNonTsExtensions = true;
+                        break;
                     case testOptMetadataNames.declaration:
                         settings.declaration = true;
                         break;
@@ -786,6 +791,16 @@ module FourSlash {
 
         private assertionMessage(name: string, actualValue: any, expectedValue: any) {
             return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
+        }
+
+        public getSemanticDiagnostics(expected: string) {
+            var diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+            var realized = ts.realizeDiagnostics(diagnostics, "\r\n");
+            var actual = JSON.stringify(realized, null, "  ");
+            if (actual !== expected) {
+                ts.sys.writeFile("c:\\temp\\out.txt", actual);
+            }
+            assert.equal(actual, expected);
         }
 
         public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
