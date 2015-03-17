@@ -3049,7 +3049,7 @@ module ts {
                 write("[");
                 if (tempNames) {
                     if (tempNames[node.id]) {
-                        emitNode(tempNames[node.id]);
+                        emitNodeWithoutSourceMap(tempNames[node.id]);
                     }
                     else {
                         var tempName = createTempVariable(node);
@@ -4658,8 +4658,8 @@ module ts {
             }
 
             function emitMemberFunctions(node: ClassDeclaration): DecoratorEmitInfo {
-                var computedPropertyNameCache: Identifier[];
-                var setterCache: Identifier[];
+                let computedPropertyNameCache: Identifier[];
+                let setterCache: Identifier[];
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -4691,7 +4691,7 @@ module ts {
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            var tempSetter: Identifier;
+                            let tempSetter: Identifier;
                             if (accessors.setAccessor) {
                                 if (forEach(accessors.setAccessor.parameters, p => !!p.decorators)) {
                                     if (!setterCache) {
@@ -4768,9 +4768,9 @@ module ts {
                     write("_super");
                 }
                 write(") {");
-                var saveTempCount = tempCount;
-                var saveTempVariables = tempVariables;
-                var saveTempParameters = tempParameters;
+                let saveTempCount = tempCount;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
@@ -4786,7 +4786,7 @@ module ts {
                 }
                 writeLine();
                 emitConstructorOfClass();
-                var decoratorEmitInfo = emitMemberFunctions(node);
+                let decoratorEmitInfo = emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
                 emitDecoratorsOfClass(node, decoratorEmitInfo);
@@ -4905,7 +4905,7 @@ module ts {
             }
 
             function emitTargetOfClassElement(node: ClassDeclaration, member: Node) {
-                emitNode(node.name);
+                emitDeclarationName(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
                 }
@@ -4918,9 +4918,9 @@ module ts {
                         return member.decorators;
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            var decorators = accessors.firstAccessor.decorators;
+                            let decorators = accessors.firstAccessor.decorators;
                             if (member !== accessors.lastAccessor && accessors.lastAccessor.decorators) {
                                 if (decorators) {
                                     return decorators.concat(accessors.lastAccessor.decorators);
@@ -4935,18 +4935,18 @@ module ts {
             }
 
             function emitExpressionOfDecorator(node: Decorator) {
-                var expression = node.expression;
+                let expression = node.expression;
                 emit(expression);
             }
 
             function emitDecorateStart(decorators: Decorator[]): void {
                 write("__decorate([");
-                var decoratorCount = decorators.length;
-                for (var i = 0; i < decoratorCount; i++) {
+                let decoratorCount = decorators.length;
+                for (let i = 0; i < decoratorCount; i++) {
                     if (i > 0) {
                         write(", ");
                     }
-                    var decorator = decorators[i];
+                    let decorator = decorators[i];
                     emitStart(decorator);
                     emitExpressionOfDecorator(decorator);
                     emitEnd(decorator);
@@ -4955,7 +4955,7 @@ module ts {
             }
 
             function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number, info: DecoratorEmitInfo) {
-                var decorators = parameter.decorators;
+                let decorators = parameter.decorators;
                 if (!decorators || decorators.length === 0) {
                     return;
                 }
@@ -4973,10 +4973,10 @@ module ts {
             function emitPropertyAccessForMethod(node: FunctionLikeDeclaration, info: DecoratorEmitInfo) {
                 if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
                     if (node.kind === SyntaxKind.Constructor) {
-                        emitNode((<ClassDeclaration>node.parent).name);
+                        emitDeclarationName(<ClassDeclaration>node.parent);
                     }
                     else if (node.kind === SyntaxKind.SetAccessor) {
-                        emitNode(info.setterCache[node.id]);
+                        emitNodeWithoutSourceMap(info.setterCache[node.id]);
                     }
                     else {
                         emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
@@ -5001,7 +5001,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        var accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor && accessors.setAccessor) {
                             emitDecoratorsOfParameters(accessors.setAccessor, info);
                         }
@@ -5014,8 +5014,8 @@ module ts {
                         return;
                 }
 
-                var name = member.name;
-                var decorators = getDecoratorsOfMember(node, member);
+                let name = member.name;
+                let decorators = getDecoratorsOfMember(node, member);
                 if (!decorators || decorators.length === 0) {
                     return;
                 }
@@ -5037,21 +5037,21 @@ module ts {
             }
 
             function emitDecoratorsOfConstructor(node: ClassDeclaration, info: DecoratorEmitInfo) {
-                var constructor = getFirstConstructorWithBody(node);
+                let constructor = getFirstConstructorWithBody(node);
                 if (constructor) {
                     emitDecoratorsOfParameters(constructor, info);
                 }
 
-                var decorators = node.decorators;
+                let decorators = node.decorators;
                 if (!decorators || decorators.length === 0) {
                     return;
                 }
                 
                 emitStart(node);
-                emitNode(node.name);
+                emitDeclarationName(node);
                 write(" = ");
                 emitDecorateStart(node.decorators);
-                emitNode(node.name);
+                emitDeclarationName(node);
                 write(");");
                 emitEnd(node);
                 writeLine();

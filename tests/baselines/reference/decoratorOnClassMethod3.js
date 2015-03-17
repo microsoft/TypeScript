@@ -13,4 +13,5 @@ var C = (function () {
 })();
 public;
 method();
-{ }
+{
+}

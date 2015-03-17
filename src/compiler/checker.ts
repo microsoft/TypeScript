@@ -324,6 +324,7 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
+            let grandparent: Node;
 
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
@@ -389,7 +390,7 @@ module ts {
                     //   }
                     //
                     case SyntaxKind.ComputedPropertyName:
-                        let grandparent = location.parent.parent;
+                        grandparent = location.parent.parent;
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
@@ -424,7 +425,7 @@ module ts {
                     case SyntaxKind.Decorator:
                         if (location.parent) {
                             lastLocation = location;
-                            var grandparent = location.parent.parent;
+                            grandparent = location.parent.parent;
                             if (location.parent.kind === SyntaxKind.Parameter) {
                                 // Parameter decorators are resolved in the context of their great-grandparent
                                 if (grandparent) {
@@ -706,7 +707,7 @@ module ts {
                 return (<QualifiedName>node).left;
             }
             else {
-                var left = (<PropertyAccessExpression>node).expression;
+                let left = (<PropertyAccessExpression>node).expression;
                 if (left.kind === SyntaxKind.Identifier || left.kind === SyntaxKind.PropertyAccessExpression) {
                     return <Identifier | PropertyAccessExpression>left;
                 }
@@ -8501,27 +8502,27 @@ module ts {
         }
 
         function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message?: DiagnosticMessage, fallbackType?: Type) {
-            var parentType = getTypeOfNode(node.parent);
-            var signature = getSingleCallSignature(expectedDecoratorType);
+            let parentType = getTypeOfNode(node.parent);
+            let signature = getSingleCallSignature(expectedDecoratorType);
             if (!signature) {
                 // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
                 // and we have already reported an error in initializeTypeChecker.
                 return;
             }
             
-            var erasedSignature = signature.typeParameters && fallbackType ? getSignatureInstantiation(signature, [fallbackType]) : signature;
-            var erasedSignatureType = getOrCreateTypeFromSignature(erasedSignature);
-            if (checkTypeAssignableTo(exprType, erasedSignatureType, node) && signature.typeParameters && message) {
-                var instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
-                var instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
+            let fallbackSignature = signature.typeParameters && fallbackType ? getSignatureInstantiation(signature, [fallbackType]) : signature;
+            let fallbackSignatureType = getOrCreateTypeFromSignature(fallbackSignature);
+            if (checkTypeAssignableTo(exprType, fallbackSignatureType, node) && signature.typeParameters && message) {
+                let instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
+                let instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
                 checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);
             }
         }
 
         /** Check a decorator */
         function checkDecorator(node: Decorator): void {
-            var expression: Expression = node.expression;
-            var exprType = checkExpression(expression);
+            let expression: Expression = node.expression;
+            let exprType = checkExpression(expression);
 
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -9967,106 +9968,7 @@ module ts {
                             return getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
-                else {
-                    switch (e.kind) {
-                        case SyntaxKind.PrefixUnaryExpression:
-                            switch ((<PrefixUnaryExpression>e).operator) {
-                                case SyntaxKind.ExclamationToken: return !value;
-                            }
-                            break;
-                        case SyntaxKind.BinaryExpression:
-                            switch ((<BinaryExpression>e).operatorToken.kind) {
-                                case SyntaxKind.BarBarToken: return left || right;
-                                case SyntaxKind.AmpersandAmpersandToken: return left && right;
-                            }
-                            break;
-                        case SyntaxKind.StringLiteral:
-                            return (<StringLiteralExpression>e).text;
-                        case SyntaxKind.TrueKeyword:
-                            return true;
-                        case SyntaxKind.FalseKeyword:
-                            return false;
-                        case SyntaxKind.ArrayLiteralExpression:
-                            return evalArrayLiteralConstant(<ArrayLiteralExpression>e);
-                        case SyntaxKind.ObjectLiteralExpression:
-                            return evalObjectLiteralConstant(<ObjectLiteralExpression>e);
-                        case SyntaxKind.PropertyAccessExpression:
-                            var enumType = getTypeOfNode((<PropertyAccessExpression>e).expression);
-                            var propertyName = (<PropertyAccessExpression>e).name.text;
-                            if (!isConstEnumObjectType(enumType)) {
-                                return undefined;
-                            }
-                            var property = getPropertyOfObjectType(enumType, propertyName);
-                            if (!property || !(property.flags & SymbolFlags.EnumMember)) {
-                                return undefined;
-                            }
-                            var propertyDecl = property.valueDeclaration;                            
-                            return getNodeLinks(propertyDecl).enumMemberValue;
-                    }
-                }
-
                 return undefined;
-            }
-
-            function evalArrayLiteralConstant(node: ArrayLiteralExpression): any {
-                var result: any[];
-                var elements = node.elements;
-                var elementCount = elements.length;
-                for (var i = 0; i < elementCount; i++) {
-                    var value = evalConstantWorker(elements[i]);
-                    if (value === undefined) {
-                        return undefined;
-                    }
-                    if (!result) {
-                        result = new Array<any>(elementCount);
-                    }
-                    result[i] = value;
-                }
-                return result;
-            }
-
-            function evalObjectLiteralConstant(node: ObjectLiteralExpression): any {
-                var result: Map<any>;
-                var properties = node.properties;
-                var propertyCount = properties.length;
-                for (var i = 0; i < propertyCount; i++) {
-                    var property = properties[i];
-                    if (property.kind !== SyntaxKind.PropertyAssignment) {
-                        return undefined;
-                    }
-
-                    var key: string;
-                    var name = (<PropertyAssignment>property).name;
-                    switch (name.kind) {
-                        case SyntaxKind.Identifier:
-                        case SyntaxKind.StringLiteral:
-                        case SyntaxKind.NumericLiteral:
-                            key = (<Identifier | LiteralExpression>name).text;
-                            break;
-                        case SyntaxKind.ComputedPropertyName:
-                            var expression = (<ComputedPropertyName>name).expression;
-                            switch (expression.kind) {
-                                case SyntaxKind.Identifier:
-                                case SyntaxKind.StringLiteral:
-                                case SyntaxKind.NumericLiteral:
-                                    key = (<Identifier | LiteralExpression>name).text;
-                                    break;
-                                default:
-                                    return undefined;
-                            }
-                            break;
-                        default:
-                            return undefined;
-                    }
-
-                    var initializer = (<PropertyAssignment>property).initializer;
-                    var value = evalConstantWorker(initializer);
-                    if (!result) {
-                        result = {};
-                    }
-                    result[key] = value;
-                }
-                return result;
             }
         }
 
@@ -10259,7 +10161,7 @@ module ts {
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            checkGrammarDecorators(node) && checkGrammarModifiers(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
                 if (node.flags & NodeFlags.Export) {
@@ -11429,7 +11331,7 @@ module ts {
                 return false;
             }
 
-            var target = node;
+            let target = node;
             while (target) {
                 switch (target.kind) {
                     case SyntaxKind.ClassDeclaration:

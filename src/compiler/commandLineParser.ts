@@ -172,14 +172,6 @@ module ts {
             type: "boolean",
             description: Diagnostics.Watch_input_files,
         },
-        {
-            name: "define",
-            shortName: "d",
-            type: "string",
-            paramType: Diagnostics.SYMBOL,
-            multiple: true,
-            experimental: true
-        }
     ];
     
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {

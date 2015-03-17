@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts(3,1): error TS1198: Decorators are not valid on this declaration type.
+tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts(3,1): error TS1202: Decorators are not valid on this declaration type.
 
 
 ==== tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts (1 errors) ====
@@ -8,4 +8,4 @@ tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts(3,1): error T
     ~~~~
     type T = number;
     ~~~~~~~~~~~~~~~~
-!!! error TS1198: Decorators are not valid on this declaration type.
+!!! error TS1202: Decorators are not valid on this declaration type.
