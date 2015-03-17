@@ -1621,8 +1621,9 @@ module FourSlash {
             this.taoInvalidReason = 'verifyIndentationAtCurrentPosition NYI';
 
             var actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition);
-            if (actual != numberOfSpaces) {
-                this.raiseError('verifyIndentationAtCurrentPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
+            var lineCol = this.getLineColStringAtPosition(this.currentCaretPosition);
+            if (actual !== numberOfSpaces) {
+                this.raiseError('verifyIndentationAtCurrentPosition failed at ' + lineCol + ' - expected: ' + numberOfSpaces + ', actual: ' + actual);
             }
         }
 
@@ -1630,8 +1631,9 @@ module FourSlash {
             this.taoInvalidReason = 'verifyIndentationAtPosition NYI';
 
             var actual = this.getIndentation(fileName, position);
+            var lineCol = this.getLineColStringAtPosition(position);
             if (actual !== numberOfSpaces) {
-                this.raiseError('verifyIndentationAtPosition failed - expected: ' + numberOfSpaces + ', actual: ' + actual);
+                this.raiseError('verifyIndentationAtCurrentPosition failed at ' + lineCol + ' - expected: ' + numberOfSpaces + ', actual: ' + actual);
             }
         }
 
