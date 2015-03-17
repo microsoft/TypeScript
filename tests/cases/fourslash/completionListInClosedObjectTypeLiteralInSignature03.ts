@@ -11,6 +11,8 @@ goTo.marker("1");
 
 verify.memberListContains("I");
 verify.memberListContains("TString");
-verify.not.memberListContains("TNumber");
-verify.not.memberListContains("foo");
-verify.not.memberListContains("obj");
+verify.memberListContains("TNumber");  // REVIEW: Is this intended behavior?
+
+// Ideally the following shouldn't show up since they're not types.
+verify.memberListContains("foo");
+verify.memberListContains("obj");
