@@ -65,8 +65,7 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '        ' + convertPropertyName(nameMap[name]) +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + name.replace('"', '\\"') + '"' +
-        (diagnosticDetails.isEarly ? ', isEarly: true' : '') +
+        ', key: "' + name.replace(/[\"]/g, '\\"') + '"' +
         ' },\r\n';
     }
 

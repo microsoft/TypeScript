@@ -1,11 +1,9 @@
-=== tests/cases/compiler/es6-declaration-amd.ts ===
-
-class A
+=== tests/cases/compiler/es6Module.ts ===
+export class A
 >A : A
 {
     constructor ()
     {
-
     }
 
     public B()
