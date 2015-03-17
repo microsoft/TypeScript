@@ -357,6 +357,7 @@ module ts.formatting {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.TupleType:
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
