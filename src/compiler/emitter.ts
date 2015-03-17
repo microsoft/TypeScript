@@ -756,8 +756,13 @@ module ts {
             }
             else {
                 write(": ");
-                writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
-                resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                if (node.type) {
+                    emitType(node.type);
+                }
+                else {
+                    writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
+                    resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
             }
             write(";");
             writeLine();
