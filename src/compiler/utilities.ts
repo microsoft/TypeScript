@@ -1,4 +1,4 @@
-/// <reference path="types.ts" />
+/// <reference path="core.ts" />
 
 module ts {
     export interface ReferencePathMatchResult {
@@ -573,6 +573,17 @@ module ts {
         
         // Will either be a CallExpression or NewExpression.
         return (<CallExpression>node).expression;
+    }
+
+    function getConstructorWithBody(member: ClassElement): ConstructorDeclaration {
+        if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
+            return <ConstructorDeclaration>member;
+        }
+        return undefined;
+    }
+
+    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+        return forEach(node.members, getConstructorWithBody);
     }
 
     export function isExpression(node: Node): boolean {
