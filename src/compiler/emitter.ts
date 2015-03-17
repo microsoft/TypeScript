@@ -5080,7 +5080,7 @@ module ts {
 
                 // ES6 import
                 if (node.importClause) {
-                    let shouldEmitDefaultBindings = node.importClause.name && resolver.isReferencedAliasDeclaration(node.importClause);
+                    let shouldEmitDefaultBindings = hasReferencedDefaultName(node.importClause);
                     let shouldEmitNamedBindings = hasReferencedNamedBindings(node.importClause);
                     if (shouldEmitDefaultBindings || shouldEmitNamedBindings) {
                         write("import ");
@@ -5129,6 +5129,15 @@ module ts {
                     emit(node.moduleSpecifier);
                     write(";");
                 }
+            }
+
+            function hasReferencedDefaultName(importClause: ImportClause) {
+                // If the default import is used, the mark will be on the importClause, 
+                // as the alias declaration.
+                // If there are other named bindings on the import clause, we will
+                // will mark either the namedBindings(import * as n) or the NamedImport
+                // in the case of import {a}
+                return resolver.isReferencedAliasDeclaration(importClause);
             }
 
             function hasReferencedNamedBindings(importClause: ImportClause) {
@@ -5452,33 +5461,37 @@ module ts {
             }
 
             function emitES6Module(node: SourceFile, startIndex: number) {
-                createExternalModuleInfo(node);
                 externalImports = undefined;
                 exportSpecifiers = undefined;
+                exportDefault = undefined;
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                emitExportDefault(node, /*emitAsReturn*/ false);
+                // Emit exportDefault if it exists will happen as part 
+                // or normal statment emit.
+            }
+
+            function emitExportAssignment(node: ExportAssignment) {
+                // Only emit exportAssignment/export default if we are in ES6
+                // Other modules will handel it diffrentlly
+                if (languageVersion >= ScriptTarget.ES6) {
+                    writeLine();
+                    emitStart(node);
+                    write("export default ");
+                    var expression = node.expression;
+                    emit(expression);
+                    if (expression.kind !== SyntaxKind.FunctionDeclaration &&
+                        expression.kind !== SyntaxKind.ClassDeclaration) {
+                        write(";");
+                    }
+                    emitEnd(node);
+                }
             }
 
             function emitExportDefault(sourceFile: SourceFile, emitAsReturn: boolean) {
+                // ES6 emit is handled in emitExportAssignment
                 if (exportDefault && resolver.hasExportDefaultValue(sourceFile)) {
-                    if (languageVersion >= ScriptTarget.ES6) {
-                        Debug.assert(!emitAsReturn);
-                        if (exportDefault.kind === SyntaxKind.ExportAssignment) {
-                            writeLine();
-                            emitStart(exportDefault);
-                            write("export default ");
-                            var expression = (<ExportAssignment>exportDefault).expression;
-                            emit(expression);
-                            if (expression.kind !== SyntaxKind.FunctionDeclaration &&
-                                expression.kind !== SyntaxKind.ClassDeclaration) {
-                                write(";");
-                            }
-                            emitEnd(exportDefault);
-                        }
-                    }
-                    else {
+                    if (languageVersion < ScriptTarget.ES6) {
                         writeLine();
                         emitStart(exportDefault);
                         write(emitAsReturn ? "return " : "module.exports = ");
@@ -5772,6 +5785,8 @@ module ts {
                         return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                     case SyntaxKind.ExportDeclaration:
                         return emitExportDeclaration(<ExportDeclaration>node);
+                    case SyntaxKind.ExportAssignment:
+                        return emitExportAssignment(<ExportAssignment>node);
                     case SyntaxKind.SourceFile:
                         return emitSourceFileNode(<SourceFile>node);
                 }
@@ -5943,3 +5958,4 @@ module ts {
         }
     }
 }
+
