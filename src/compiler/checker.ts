@@ -10982,6 +10982,8 @@ module ts {
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
                 var symbolName = unescapeIdentifier(symbol.name);
+                // If this is es6 or higher, just use the name of the export
+                // no need to qualify it.
                 if (languageVersion >= ScriptTarget.ES6) {
                     return symbolName;
                 }

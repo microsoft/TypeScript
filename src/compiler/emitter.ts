@@ -4903,6 +4903,7 @@ module ts {
                 }
 
                 write("class ");
+                // check if this is an "export default class" as it may not have a name
                 if (node.name || !(node.flags & NodeFlags.Default)) {
                     emitDeclarationName(node);
                 }
