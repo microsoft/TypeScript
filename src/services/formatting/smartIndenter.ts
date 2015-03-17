@@ -491,10 +491,16 @@ module ts.formatting {
 
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ArrayBindingPattern:
-                case SyntaxKind.IndexSignature:
                 case SyntaxKind.ComputedPropertyName:
                 case SyntaxKind.TupleType:
                     return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
+
+                case SyntaxKind.IndexSignature:
+                    if ((<IndexSignatureDeclaration>n).type) {
+                        return isCompletedNode((<IndexSignatureDeclaration>n).type, sourceFile);
+                    }
+
+                    return hasChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
 
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
