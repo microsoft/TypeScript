@@ -160,8 +160,10 @@ module ts {
                 }
                 return isCompletedNode((<DoStatement>n).statement, sourceFile);
 
+            case SyntaxKind.TypeOfExpression:
+                return isCompletedNode((<TypeOfExpression>n).expression, sourceFile);
             case SyntaxKind.PrefixUnaryExpression:
-                return isCompletedNode(<PrefixUnaryExpression>n, sourceFile);
+                return isCompletedNode((<PrefixUnaryExpression>n).operand, sourceFile);
             case SyntaxKind.BinaryExpression:
                 return isCompletedNode((<BinaryExpression>n).right, sourceFile);
             case SyntaxKind.ConditionalExpression:

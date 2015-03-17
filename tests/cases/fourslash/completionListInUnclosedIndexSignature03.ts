@@ -2,7 +2,7 @@
 
 
 ////class C {
-////    [foo: string]: typeof /*1*/
+////    [foo: string]: { x: typeof /*1*/
 ////}
 
 goTo.marker("1");
