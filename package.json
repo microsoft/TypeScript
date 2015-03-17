@@ -38,7 +38,7 @@
         "mocha": "latest",
         "chai": "latest",
         "browserify": "latest",
-        "istanbul": "latest",
+        "istanbul": "latest"
     },
     "scripts": {
         "test": "jake runtests"
