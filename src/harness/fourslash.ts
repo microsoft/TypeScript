@@ -1633,7 +1633,7 @@ module FourSlash {
             var actual = this.getIndentation(fileName, position);
             var lineCol = this.getLineColStringAtPosition(position);
             if (actual !== numberOfSpaces) {
-                this.raiseError('verifyIndentationAtCurrentPosition failed at ' + lineCol + ' - expected: ' + numberOfSpaces + ', actual: ' + actual);
+                this.raiseError('verifyIndentationAtPosition failed at ' + lineCol + ' - expected: ' + numberOfSpaces + ', actual: ' + actual);
             }
         }
 
