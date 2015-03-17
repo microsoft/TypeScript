@@ -2,14 +2,14 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// var v = <string>undefined;
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'public' can only be used in TypeScript.",
-    "start": 0,
+    "message": "'type assertion expressions' can only be used in TypeScript.",
+    "start": 9,
     "length": 6,
     "category": "error",
-    "code": 8009
+    "code": 8016
   }
 ]`);

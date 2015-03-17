@@ -2384,7 +2384,8 @@ module ts {
             let targetSourceFile = getValidSourceFile(fileName);
 
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript 
+            // Instead, we just report errors for using TypeScript-only constructs from within a 
+            // JavaScript file.
             if (isJavaScript(fileName)) {
                 return getJavaScriptSemanticDiagnostics(targetSourceFile);
             }
@@ -2505,7 +2506,8 @@ module ts {
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_TypeScript));
                         return;
                     case SyntaxKind.TypeAssertionExpression:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_assertion_expressions_can_only_be_used_in_TypeScript));
+                        let typeAssertionExpression = <TypeAssertion>node;
+                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_TypeScript));
                         return;
                 }
 

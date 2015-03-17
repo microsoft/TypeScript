@@ -2,13 +2,13 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// declare var v;
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'public' can only be used in TypeScript.",
+    "message": "'declare' can only be used in TypeScript.",
     "start": 0,
-    "length": 6,
+    "length": 7,
     "category": "error",
     "code": 8009
   }

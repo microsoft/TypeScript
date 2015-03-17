@@ -2,14 +2,14 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// enum E { }
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'public' can only be used in TypeScript.",
-    "start": 0,
-    "length": 6,
+    "message": "'enum declarations' can only be used in TypeScript.",
+    "start": 5,
+    "length": 1,
     "category": "error",
-    "code": 8009
+    "code": 8015
   }
 ]`);

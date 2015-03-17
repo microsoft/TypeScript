@@ -797,9 +797,6 @@ module FourSlash {
             var diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
             var realized = ts.realizeDiagnostics(diagnostics, "\r\n");
             var actual = JSON.stringify(realized, null, "  ");
-            if (actual !== expected) {
-                ts.sys.writeFile("c:\\temp\\out.txt", actual);
-            }
             assert.equal(actual, expected);
         }
 

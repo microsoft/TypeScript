@@ -2,14 +2,14 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// Foo<number>();
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'public' can only be used in TypeScript.",
-    "start": 0,
+    "message": "'type arguments' can only be used in TypeScript.",
+    "start": 4,
     "length": 6,
     "category": "error",
-    "code": 8009
+    "code": 8011
   }
 ]`);

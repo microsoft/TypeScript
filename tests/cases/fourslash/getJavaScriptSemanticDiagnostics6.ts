@@ -2,14 +2,14 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// interface I { }
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'public' can only be used in TypeScript.",
-    "start": 0,
-    "length": 6,
+    "message": "'interface declarations' can only be used in TypeScript.",
+    "start": 10,
+    "length": 1,
     "category": "error",
-    "code": 8009
+    "code": 8006
   }
 ]`);

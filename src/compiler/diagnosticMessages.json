@@ -1964,39 +1964,39 @@
     },
     "'type aliases' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8007
+        "code": 8008
     },
     "'{0}' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8008
+        "code": 8009
     },
     "'types' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8009
+        "code": 8010
     },
     "'type arguments' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8010
+        "code": 8011
     },
     "'parameter modifiers' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8011
+        "code": 8012
     },
     "'?' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8012
+        "code": 8013
     },
     "'property declarations' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8013
+        "code": 8014
     },
     "'enum declarations' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8014
+        "code": 8015
     },
     "'type assertion expressions' can only be used in TypeScript.": {
         "category": "Error",
-        "code": 8014
+        "code": 8016
     },
 
     "'yield' expressions are not currently supported.": {

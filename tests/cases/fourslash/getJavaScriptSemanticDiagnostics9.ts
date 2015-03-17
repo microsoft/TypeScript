@@ -2,7 +2,7 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// public class C { }
+//// public function F() { }
 
 verify.getSemanticDiagnostics(`[
   {
