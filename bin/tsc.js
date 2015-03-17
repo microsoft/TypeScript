@@ -7000,11 +7000,12 @@ var ts;
                 }
                 else {
                     bindDeclaration(node, 512 /* ValueModule */, 106639 /* ValueModuleExcludes */, true);
-                    if (state === 2 /* ConstEnumOnly */) {
-                        node.symbol.constEnumOnlyModule = true;
+                    var currentModuleIsConstEnumOnly = state === 2 /* ConstEnumOnly */;
+                    if (node.symbol.constEnumOnlyModule === undefined) {
+                        node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
                     }
-                    else if (node.symbol.constEnumOnlyModule) {
-                        node.symbol.constEnumOnlyModule = false;
+                    else {
+                        node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
                     }
                 }
             }
