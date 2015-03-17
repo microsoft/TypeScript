@@ -2665,15 +2665,17 @@ module ts {
             }
 
             function emitSuper(node: Node) {
-                let flags = resolver.getNodeCheckFlags(node);
-                if (flags & NodeCheckFlags.SuperInstance) {
-                    write("_super.prototype");
-                }
-                else if (flags & NodeCheckFlags.SuperStatic) {
-                    write("_super");
+                if (languageVersion >= ScriptTarget.ES6) {
+                    write("super");
                 }
                 else {
-                    write("super");
+                    var flags = resolver.getNodeCheckFlags(node);
+                    if (flags & NodeCheckFlags.SuperInstance) {
+                        write("_super.prototype");
+                    }
+                    else {
+                        write("_super");
+                    }
                 }
             }
 
@@ -3222,14 +3224,14 @@ module ts {
                 }
                 let superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    write("_super");
+                    emitSuper(node.expression);
                     superCall = true;
                 }
                 else {
                     emit(node.expression);
                     superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
-                if (superCall) {
+                if (superCall && languageVersion < ScriptTarget.ES6) {
                     write(".call(");
                     emitThis(node.expression);
                     if (node.arguments.length) {
@@ -4627,7 +4629,7 @@ module ts {
                 });
             }
 
-            function emitMemberFunctions(node: ClassDeclaration) {
+            function emitMemberFunctionsForES5AndLower(node: ClassDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -4645,7 +4647,6 @@ module ts {
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
-                        // TODO (drosen): Should we performing emitStart twice on emitStart(member)?
                         emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
                         emitEnd(member);
@@ -4665,7 +4666,6 @@ module ts {
                                 write(".prototype");
                             }
                             write(", ");
-                            // TODO: Shouldn't emitStart on name occur *here*?
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
@@ -4705,7 +4705,194 @@ module ts {
                 });
             }
 
-            function emitClassDeclaration(node: ClassDeclaration) {
+            function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
+                for (let member of node.members) {
+                    if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
+                    }
+                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                        writeLine();
+                        emitLeadingComments(member);
+                        emitStart(member);
+                        if (member.flags & NodeFlags.Static) {
+                            write("static ");
+                        }
+
+                        if (member.kind === SyntaxKind.GetAccessor) {
+                            write("get ");
+                        }
+                        else if (member.kind === SyntaxKind.SetAccessor) {
+                            write("set ");
+                        }
+                        emit((<MethodDeclaration>member).name);
+                        emitSignatureAndBody(<MethodDeclaration>member);
+                        emitEnd(member);
+                        emitTrailingComments(member);
+                    }
+                }
+            }
+
+            function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+                let saveTempCount = tempCount;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+
+                let popFrame = enterNameScope();
+                // Check if we have property assignment inside class declaration.
+                // If there is property assignment, we need to emit constructor whether users define it or not
+                // If there is no property assignment, we can omit constructor if users do not define it
+                let hasInstancePropertyWithInitializer = false;
+
+                // Emit the constructor overload pinned comments
+                forEach(node.members, member => {
+                    if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
+                    }
+                    // Check if there is any non-static property assignment
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
+                        hasInstancePropertyWithInitializer = true;
+                    }
+                });
+
+                let ctor = getFirstConstructorWithBody(node);
+
+                // For target ES6 and above, if there is no user-defined constructor and there is no property assignment
+                // do not emit constructor in class declaration.
+                if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasInstancePropertyWithInitializer) {
+                    return;
+                }
+
+                if (ctor) {
+                    emitLeadingComments(ctor);
+                }
+                emitStart(ctor || node);
+
+                if (languageVersion < ScriptTarget.ES6) {
+                    write("function ");
+                    emitDeclarationName(node);
+                    emitSignatureParameters(ctor);
+                }
+                else {
+                    write("constructor");
+                    if (ctor) {
+                        emitSignatureParameters(ctor);
+                    }
+                    else {
+                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
+                        // If constructor is empty, then,
+                        //      If ClassHeritageopt is present, then
+                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
+                        //      Else,
+                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
+                        if (baseTypeNode) {
+                            write("(...args)");
+                        }
+                        else {
+                            write("()");
+                        }
+                    }
+                }
+
+                write(" {");
+                scopeEmitStart(node, "constructor");
+                increaseIndent();
+                if (ctor) {
+                    emitDetachedComments(ctor.body.statements);
+                }
+                emitCaptureThisForNodeIfNecessary(node);
+                if (ctor) {
+                    emitDefaultValueAssignments(ctor);
+                    emitRestParameter(ctor);
+                    if (baseTypeNode) {
+                        var superCall = findInitialSuperCall(ctor);
+                        if (superCall) {
+                            writeLine();
+                            emit(superCall);
+                        }
+                    }
+                    emitParameterPropertyAssignments(ctor);
+                }
+                else {
+                    if (baseTypeNode) {
+                        writeLine();
+                        emitStart(baseTypeNode);
+                        if (languageVersion < ScriptTarget.ES6) {
+                            write("_super.apply(this, arguments);");
+                        }
+                        else {
+                            write("super(...args);");
+                        }
+                        emitEnd(baseTypeNode);
+                    }
+                }
+                emitMemberAssignments(node, /*staticFlag*/0);
+                if (ctor) {
+                    var statements: Node[] = (<Block>ctor.body).statements;
+                    if (superCall) {
+                        statements = statements.slice(1);
+                    }
+                    emitLines(statements);
+                }
+                emitTempDeclarations(/*newLine*/ true);
+                writeLine();
+                if (ctor) {
+                    emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                }
+                decreaseIndent();
+                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                scopeEmitEnd();
+                emitEnd(<Node>ctor || node);
+                if (ctor) {
+                    emitTrailingComments(ctor);
+                }
+
+                exitNameScope(popFrame);
+
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
+                if (node.flags & NodeFlags.Export) {
+                    write("export ");
+
+                    if (node.flags & NodeFlags.Default) {
+                        write("default ");
+                    }
+                }
+
+                write("class ");
+                emitDeclarationName(node);
+                var baseTypeNode = getClassBaseTypeNode(node);
+                if (baseTypeNode) {
+                    write(" extends ");
+                    emit(baseTypeNode.typeName);
+                }
+                write(" {");
+                increaseIndent();
+                scopeEmitStart(node);
+                writeLine();
+                emitConstructor(node, baseTypeNode);
+                emitMemberFunctionsForES6AndHigher(node);
+                decreaseIndent();
+                writeLine();
+                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                scopeEmitEnd();
+
+                // Emit static property assignment. Because classDeclaration is lexically evaluated,
+                // it is safe to emit static property assignment after classDeclaration
+                // From ES6 specification:
+                //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
+                //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
+                writeLine();
+                emitMemberAssignments(node, NodeFlags.Static);
+            }
+
+            function emitClassDeclarationBelowES6(node: ClassDeclaration) {
                 write("var ");
                 emitDeclarationName(node);
                 write(" = (function (");
@@ -4725,8 +4912,8 @@ module ts {
                     emitEnd(baseTypeNode);
                 }
                 writeLine();
-                emitConstructorOfClass();
-                emitMemberFunctions(node);
+                emitConstructor(node, baseTypeNode);
+                emitMemberFunctionsForES5AndLower(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
@@ -4756,85 +4943,6 @@ module ts {
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
-                }
-
-                function emitConstructorOfClass() {
-                    let saveTempCount = tempCount;
-                    let saveTempVariables = tempVariables;
-                    let saveTempParameters = tempParameters;
-                    tempCount = 0;
-                    tempVariables = undefined;
-                    tempParameters = undefined;
-
-                    let popFrame = enterNameScope();
-
-                    // Emit the constructor overload pinned comments
-                    forEach(node.members, member => {
-                        if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
-                            emitPinnedOrTripleSlashComments(member);
-                        }
-                    });
-
-                    let ctor = getFirstConstructorWithBody(node);
-                    if (ctor) {
-                        emitLeadingComments(ctor);
-                    }
-                    emitStart(<Node>ctor || node);
-                    write("function ");
-                    emitDeclarationName(node);
-                    emitSignatureParameters(ctor);
-                    write(" {");
-                    scopeEmitStart(node, "constructor");
-                    increaseIndent();
-                    if (ctor) {
-                        emitDetachedComments((<Block>ctor.body).statements);
-                    }
-                    emitCaptureThisForNodeIfNecessary(node);
-                    let superCall: ExpressionStatement;
-                    if (ctor) {
-                        emitDefaultValueAssignments(ctor);
-                        emitRestParameter(ctor);
-                        if (baseTypeNode) {
-                            superCall = findInitialSuperCall(ctor);
-                            if (superCall) {
-                                writeLine();
-                                emit(superCall);
-                            }
-                        }
-                        emitParameterPropertyAssignments(ctor);
-                    }
-                    else {
-                        if (baseTypeNode) {
-                            writeLine();
-                            emitStart(baseTypeNode);
-                            write("_super.apply(this, arguments);");
-                            emitEnd(baseTypeNode);
-                        }
-                    }
-                    emitMemberAssignments(node, /*nonstatic*/0);
-                    if (ctor) {
-                        let statements: Node[] = (<Block>ctor.body).statements;
-                        if (superCall) statements = statements.slice(1);
-                        emitLines(statements);
-                    }
-                    emitTempDeclarations(/*newLine*/ true);
-                    writeLine();
-                    if (ctor) {
-                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
-                    }
-                    decreaseIndent();
-                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                    scopeEmitEnd();
-                    emitEnd(<Node>ctor || node);
-                    if (ctor) {
-                        emitTrailingComments(ctor);
-                    }
-
-                    exitNameScope(popFrame);
-
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
-                    tempParameters = saveTempParameters;
                 }
             }
 
@@ -5321,8 +5429,10 @@ module ts {
                 emitDetachedComments(node);
 
                 // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                // Only Emit __extends function when target ES5.
+                // For target ES6 and above, we can emit classDeclaration as if.
+                if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
                     writeLine();
                     write("var __extends = this.__extends || function (d, b) {");
                     increaseIndent();
@@ -5554,7 +5664,7 @@ module ts {
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(<ClassDeclaration>node);
+                        return languageVersion < ScriptTarget.ES6 ? emitClassDeclarationBelowES6(<ClassDeclaration>node) : emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:

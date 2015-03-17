@@ -5,24 +5,13 @@ class C {
 }
 
 //// [symbolDeclarationEmit13.js]
-var C = (function () {
-    function C() {
+class C {
+    get [Symbol.isRegExp]() {
+        return "";
     }
-    Object.defineProperty(C.prototype, Symbol.isRegExp, {
-        get: function () {
-            return "";
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, Symbol.toStringTag, {
-        set: function (x) {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    set [Symbol.toStringTag](x) {
+    }
+}
 
 
 //// [symbolDeclarationEmit13.d.ts]

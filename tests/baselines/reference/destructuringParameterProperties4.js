@@ -28,38 +28,26 @@ class C2 extends C1<number, string, boolean> {
 
 
 //// [destructuringParameterProperties4.js]
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var C1 = (function () {
-    function C1(k, [a, b, c]) {
+class C1 {
+    constructor(k, [a, b, c]) {
         this.k = k;
         this.[a, b, c] = [a, b, c];
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;
         }
     }
-    C1.prototype.getA = function () {
+    getA() {
         return this.a;
-    };
-    C1.prototype.getB = function () {
-        return this.b;
-    };
-    C1.prototype.getC = function () {
-        return this.c;
-    };
-    return C1;
-})();
-var C2 = (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        _super.apply(this, arguments);
     }
-    C2.prototype.doSomethingWithSuperProperties = function () {
+    getB() {
+        return this.b;
+    }
+    getC() {
+        return this.c;
+    }
+}
+class C2 extends C1 {
+    doSomethingWithSuperProperties() {
         return `${this.a} ${this.b} ${this.c}`;
-    };
-    return C2;
-})(C1);
+    }
+}

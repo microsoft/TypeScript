@@ -14,14 +14,13 @@ class A
 }
 
 //// [es6-declaration-amd.js]
-var A = (function () {
-    function A() {
+class A {
+    constructor() {
     }
-    A.prototype.B = function () {
+    B() {
         return 42;
-    };
-    return A;
-})();
+    }
+}
 //# sourceMappingURL=es6-declaration-amd.js.map
 
 //// [es6-declaration-amd.d.ts]

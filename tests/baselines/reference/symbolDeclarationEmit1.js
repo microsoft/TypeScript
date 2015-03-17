@@ -4,11 +4,8 @@ class C {
 }
 
 //// [symbolDeclarationEmit1.js]
-var C = (function () {
-    function C() {
-    }
-    return C;
-})();
+class C {
+}
 
 
 //// [symbolDeclarationEmit1.d.ts]
