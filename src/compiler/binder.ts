@@ -311,7 +311,7 @@ module ts {
                 }
                 else {
                     bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
-                    let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                    var currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
                     if (node.symbol.constEnumOnlyModule === undefined) {
                         // non-merged case - use the current state
                         node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
