@@ -11267,6 +11267,29 @@ module ts {
                 !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
         }
 
+        function getClassDeclarationVariableId(n: Identifier): number {
+            Debug.assert(!nodeIsSynthesized(n));
+
+            let isClassDeclaration = n.parent.kind === SyntaxKind.ClassDeclaration;
+
+            let symbol =
+                (isClassDeclaration ? getSymbolOfNode(n.parent) : undefined) ||
+                getNodeLinks(n).resolvedSymbol ||
+                resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+
+            symbol = getExportSymbolOfValueSymbolIfExported(symbol);
+
+            let isClass = symbol && (symbol.flags & SymbolFlags.Class) !== 0;
+
+            if (isClass) {
+                // side-effect of calling this method:
+                //   assign id to symbol if it was not yet set
+                getSymbolLinks(symbol);
+                return symbol.id;
+            }
+            return undefined;
+        }
+
         function getBlockScopedVariableId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
@@ -11309,6 +11332,7 @@ module ts {
                 getConstantValue,
                 isUnknownIdentifier,
                 getBlockScopedVariableId,
+                getClassDeclarationVariableId,
             };
         }
 

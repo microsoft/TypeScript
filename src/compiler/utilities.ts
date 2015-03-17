@@ -586,6 +586,78 @@ module ts {
         return forEach(node.members, getConstructorWithBody);
     }
 
+    export function nodeOrChildIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
+
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.Parameter:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.GetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return forEach((<FunctionLikeDeclaration>node).parameters, nodeOrChildIsDecorated);
+        }
+
+        return false;
+    }
+
+    export function nodeIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.Parameter:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.GetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+        }
+
+        return false;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
