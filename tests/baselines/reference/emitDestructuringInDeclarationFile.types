@@ -1,0 +1,49 @@
+=== tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile.ts ===
+var {a, b} = { a:10, b:"10"};
+>a : number
+>b : string
+>{ a:10, b:"10"} : { a: number; b: string; }
+>a : number
+>b : string
+
+var {c, d}: {c:string, d:string} = { c:"true", d:"false" };
+>c : string
+>d : string
+>c : string
+>d : string
+>{ c:"true", d:"false" } : { c: string; d: string; }
+>c : string
+>d : string
+
+let {k, j} = { k:true, j:{a:10}};
+>k : boolean
+>j : { a: number; }
+>{ k:true, j:{a:10}} : { k: boolean; j: { a: number; }; }
+>k : boolean
+>j : { a: number; }
+>{a:10} : { a: number; }
+>a : number
+
+var a1 = ["string", 10];
+>a1 : (string | number)[]
+>["string", 10] : (string | number)[]
+
+var [x] = a1;
+>x : string | number
+>a1 : (string | number)[]
+
+var [x, y] = a1;
+>x : string | number
+>y : string | number
+>a1 : (string | number)[]
+
+var [x, y, z] = a1;
+>x : string | number
+>y : string | number
+>z : string | number
+>a1 : (string | number)[]
+
+let [x1] = a1;
+>x1 : string | number
+>a1 : (string | number)[]
+

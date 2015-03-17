@@ -1042,19 +1042,35 @@ module ts {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
-                // If this node is a computed name, it can only be a symbol, because we've already skipped
-                // it if it's not a well known symbol. In that case, the text of the name will be exactly
-                // what we want, namely the name expression enclosed in brackets.
-                writeTextOfNode(currentSourceFile, node.name);
-                // If optional property emit ?
-                if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
-                    write("?");
+                // If the node.name is an object-binding-pattern, decent into each element and emit each element as variable declarations
+                if (node.name.kind === SyntaxKind.ObjectBindingPattern || node.name.kind === SyntaxKind.ArrayBindingPattern) {
+                    let elements = (<BindingPattern>node.name).elements;
+                    for (let i = 0, n = elements.length; i < n; ++i) {
+                        let element = elements[i];
+                        writeTextOfNode(currentSourceFile, element);
+                        writeTypeOfDeclaration(element, undefined, getVariableDeclarationTypeVisibilityError);
+                        // Do not emit comma if the element is the last element in the list
+                        if (i < n - 1) {
+                            write(", ");
+                        }
+                    }
                 }
-                if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
-                    emitTypeOfVariableDeclarationFromTypeLiteral(node);
-                }
-                else if (!(node.flags & NodeFlags.Private)) {
-                    writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
+                else {
+                    // If this node is a computed name, it can only be a symbol, because we've already skipped
+                    // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                    // what we want, namely the name expression enclosed in brackets.
+                    writeTextOfNode(currentSourceFile, node.name);
+
+                    // If optional property emit ?
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
+                        write("?");
+                    }
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
+                        emitTypeOfVariableDeclarationFromTypeLiteral(node);
+                    }
+                    else if (!(node.flags & NodeFlags.Private)) {
+                        writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
+                    }
                 }
             }
 
