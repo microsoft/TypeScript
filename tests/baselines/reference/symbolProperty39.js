@@ -11,14 +11,11 @@ class C {
 }
 
 //// [symbolProperty39.js]
-var C = (function () {
-    function C() {
+class C {
+    [Symbol.iterator](x) {
+        return undefined;
     }
-    C.prototype[Symbol.iterator] = function (x) {
+    [Symbol.iterator](x) {
         return undefined;
-    };
-    C.prototype[Symbol.iterator] = function (x) {
-        return undefined;
-    };
-    return C;
-})();
+    }
+}

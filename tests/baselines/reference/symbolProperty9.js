@@ -11,11 +11,8 @@ i = new C;
 var c: C = i;
 
 //// [symbolProperty9.js]
-var C = (function () {
-    function C() {
-    }
-    return C;
-})();
+class C {
+}
 var i;
 i = new C;
 var c = i;

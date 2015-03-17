@@ -103,26 +103,26 @@ var s = (_k = ["", ""], _k.raw = ["", ""], fn3(_k, 4));
 var s = (_l = ["", "", "", ""], _l.raw = ["", "", "", ""], fn3(_l, '', '', ''));
 var n = (_m = ["", "", "", ""], _m.raw = ["", "", "", ""], fn3(_m, '', '', 3));
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
-(_n = [""], _n.raw = [""], fn3(_n)); // Error
+(_o = [""], _o.raw = [""], fn3(_o)); // Error
 function fn4() {
 }
 // Generic overloads with constraints tagged with types that satisfy the constraints
-(_o = ["", "", ""], _o.raw = ["", "", ""], fn4(_o, '', 3));
-(_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, 3, ''));
-(_q = ["", "", ""], _q.raw = ["", "", ""], fn4(_q, 3, undefined));
-(_r = ["", "", ""], _r.raw = ["", "", ""], fn4(_r, '', null));
+(_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, '', 3));
+(_q = ["", "", ""], _q.raw = ["", "", ""], fn4(_q, 3, ''));
+(_r = ["", "", ""], _r.raw = ["", "", ""], fn4(_r, 3, undefined));
+(_s = ["", "", ""], _s.raw = ["", "", ""], fn4(_s, '', null));
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
-(_s = ["", "", ""], _s.raw = ["", "", ""], fn4(_s, null, null)); // Error
+(_t = ["", "", ""], _t.raw = ["", "", ""], fn4(_t, null, null)); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
-(_t = ["", "", ""], _t.raw = ["", "", ""], fn4(_t, true, null));
-(_u = ["", "", ""], _u.raw = ["", "", ""], fn4(_u, null, true));
+(_u = ["", "", ""], _u.raw = ["", "", ""], fn4(_u, true, null));
+(_v = ["", "", ""], _v.raw = ["", "", ""], fn4(_v, null, true));
 function fn5() {
     return undefined;
 }
-(_v = ["", ""], _v.raw = ["", ""], fn5(_v, function (n) {
+(_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) {
     return n.toFixed();
 })); // will error; 'n' should have type 'string'.
-(_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) {
+(_x = ["", ""], _x.raw = ["", ""], fn5(_x, function (n) {
     return n.substr(0);
 }));
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;

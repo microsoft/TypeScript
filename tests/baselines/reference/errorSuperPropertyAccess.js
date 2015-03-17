@@ -140,27 +140,27 @@ var __extends = this.__extends || function (d, b) {
 //super property access in instance member accessor(get and set) of class with no base type
 var NoBase = (function () {
     function NoBase() {
-        this.m = super.prototype;
-        this.n = super.hasOwnProperty.call(this, '');
-        var a = super.prototype;
-        var b = super.hasOwnProperty.call(this, '');
+        this.m = _super.prototype;
+        this.n = _super.hasOwnProperty.call(this, '');
+        var a = _super.prototype;
+        var b = _super.hasOwnProperty.call(this, '');
     }
     NoBase.prototype.fn = function () {
-        var a = super.prototype;
-        var b = super.hasOwnProperty.call(this, '');
+        var a = _super.prototype;
+        var b = _super.hasOwnProperty.call(this, '');
     };
     //super static property access in static member function of class with no base type
     //super static property access in static member accessor(get and set) of class with no base type
     NoBase.static1 = function () {
-        super.hasOwnProperty.call(this, '');
+        _super.hasOwnProperty.call(this, '');
     };
     Object.defineProperty(NoBase, "static2", {
         get: function () {
-            super.hasOwnProperty.call(this, '');
+            _super.hasOwnProperty.call(this, '');
             return '';
         },
         set: function (n) {
-            super.hasOwnProperty.call(this, '');
+            _super.hasOwnProperty.call(this, '');
         },
         enumerable: true,
         configurable: true
@@ -210,11 +210,11 @@ var SomeDerived1 = (function (_super) {
     });
     SomeDerived1.prototype.fn2 = function () {
         function inner() {
-            super.publicFunc.call(this);
+            _super.publicFunc.call(this);
         }
         var x = {
             test: function () {
-                return super.publicFunc.call(this);
+                return _super.publicFunc.call(this);
             }
         };
     };
@@ -278,6 +278,6 @@ var SomeDerived3 = (function (_super) {
 })(SomeBase);
 // In object literal
 var obj = {
-    n: super.wat,
-    p: super.foo.call(this)
+    n: _super.wat,
+    p: _super.foo.call(this)
 };

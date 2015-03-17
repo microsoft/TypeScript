@@ -585,6 +585,9 @@ declare module "typescript" {
         name?: Identifier;
         body: Block | Expression;
     }
+    interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+        equalsGreaterThanToken: Node;
+    }
     interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;
@@ -794,7 +797,8 @@ declare module "typescript" {
     type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression: Expression;
+        expression?: Expression;
+        type?: TypeNode;
     }
     interface FileReference extends TextRange {
         fileName: string;
@@ -1204,17 +1208,6 @@ declare module "typescript" {
     interface TypeMapper {
         (t: Type): Type;
     }
-    interface TypeInferences {
-        primary: Type[];
-        secondary: Type[];
-    }
-    interface InferenceContext {
-        typeParameters: TypeParameter[];
-        inferUnionTypes: boolean;
-        inferences: TypeInferences[];
-        inferredTypes: Type[];
-        failedTypeParameterIndex?: number;
-    }
     interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
@@ -1269,8 +1262,6 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        stripInternal?: boolean;
-        preserveNewLines?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1512,7 +1503,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
-    var version: string;
+    let version: string;
     function createCompilerHost(options: CompilerOptions): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
@@ -1520,7 +1511,7 @@ declare module "typescript" {
 }
 declare module "typescript" {
     /** The version of the language service API */
-    var servicesVersion: string;
+    let servicesVersion: string;
     interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -2007,7 +1998,7 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
     }
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
-    var disableIncrementalParsing: boolean;
+    let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
