@@ -4372,8 +4372,11 @@ module ts {
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
+            // The downfallType/bestSupertypeDownfallType is the first type that caused a particular candidate
+            // to not be the common supertype. So if it weren't for this one downfallType (and possibly others),
+            // the type in question could have been the common supertype.
             let bestSupertype: Type;
-            let bestSupertypeDownfallType: Type; // The type that caused bestSupertype not to be the common supertype
+            let bestSupertypeDownfallType: Type;
             let bestSupertypeScore = 0;
 
             for (let i = 0; i < types.length; i++) {
@@ -4575,9 +4578,9 @@ module ts {
                 inferences.push({ primary: undefined, secondary: undefined, isFixed: false });
             }
             return {
-                typeParameters: typeParameters,
-                inferUnionTypes: inferUnionTypes,
-                inferences: inferences,
+                typeParameters,
+                inferUnionTypes,
+                inferences,
                 inferredTypes: new Array(typeParameters.length),
             };
         }
