@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts(4,10): error TS1203: Decorators are not valid on this declaration type.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    function F() {
+             ~
+!!! error TS1203: Decorators are not valid on this declaration type.
+    }

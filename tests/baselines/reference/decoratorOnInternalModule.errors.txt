@@ -1,0 +1,12 @@
+tests/cases/conformance/decorators/invalid/decoratorOnInternalModule.ts(4,8): error TS1203: Decorators are not valid on this declaration type.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnInternalModule.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    module M {
+           ~
+!!! error TS1203: Decorators are not valid on this declaration type.
+        
+    }
