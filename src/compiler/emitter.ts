@@ -4894,7 +4894,7 @@ module ts {
             }
 
             function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
-                if (node.flags & NodeFlags.Export) {
+                if (isES6ModuleMemberDeclaration(node)) {
                     write("export ");
 
                     if (node.flags & NodeFlags.Default) {
@@ -4903,7 +4903,9 @@ module ts {
                 }
 
                 write("class ");
-                emitDeclarationName(node);
+                if (node.name || !(node.flags & NodeFlags.Default)) {
+                    emitDeclarationName(node);
+                }
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write(" extends ");

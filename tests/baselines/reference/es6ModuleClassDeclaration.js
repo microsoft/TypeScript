@@ -149,7 +149,7 @@ new c();
 new c2();
 var m1;
 (function (m1) {
-    export class c3 {
+    class c3 {
         constructor() {
             this.x = 10;
             this.y = 30;
@@ -189,7 +189,7 @@ var m1;
 export { m1 };
 var m2;
 (function (m2) {
-    export class c3 {
+    class c3 {
         constructor() {
             this.x = 10;
             this.y = 30;

@@ -15,7 +15,7 @@ module M {
 //// [symbolDeclarationEmit12.js]
 var M;
 (function (M) {
-    export class C {
+    class C {
         [Symbol.toPrimitive](x) {
         }
         [Symbol.isConcatSpreadable]() {
