@@ -60,14 +60,14 @@ var __extends = this.__extends || function (d, b) {
 };
 function foo() {
     // super in a non class context
-    var x = super.;
+    var x = _super.;
     var y = function () {
-        return super.;
+        return _super.;
     };
     var z = function () {
         return function () {
             return function () {
-                return super.;
+                return _super.;
             };
         };
     };
@@ -88,18 +88,18 @@ var RegisteredUser = (function (_super) {
         this.name = "Frank";
         // super call in an inner function in a constructor
         function inner() {
-            super.sayHello.call(this);
+            _super.sayHello.call(this);
         }
         // super call in a lambda in an inner function in a constructor 
         function inner2() {
             var x = function () {
-                return super.sayHello.call(this);
+                return _super.sayHello.call(this);
             };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () {
             return function () {
-                return super.;
+                return _super.;
             };
         })();
     }
@@ -109,13 +109,13 @@ var RegisteredUser = (function (_super) {
         // super call in a lambda in an inner function in a method
         function inner() {
             var x = function () {
-                return super.sayHello.call(this);
+                return _super.sayHello.call(this);
             };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () {
             return function () {
-                return super.;
+                return _super.;
             };
         })();
     };

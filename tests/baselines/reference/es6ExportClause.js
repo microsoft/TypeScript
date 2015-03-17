@@ -17,11 +17,8 @@ export { uninstantiated };
 export { x };
 
 //// [es6ExportClause.js]
-var c = (function () {
-    function c() {
-    }
-    return c;
-})();
+class c {
+}
 var m;
 (function (m) {
     m.x = 10;

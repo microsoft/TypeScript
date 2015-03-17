@@ -18,7 +18,7 @@ var C = (function () {
     function C() {
     }
     C.prototype.foo = function () {
-        super.foo.call(this);
+        _super.foo.call(this);
     };
     return C;
 })();
@@ -30,7 +30,7 @@ var M1;
             function C() {
             }
             C.prototype.foo = function () {
-                super.foo.call(this);
+                _super.foo.call(this);
             };
             return C;
         })();

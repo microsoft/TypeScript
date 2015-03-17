@@ -10,11 +10,8 @@ class C implements I {
 }
 
 //// [symbolProperty23.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype[Symbol.toPrimitive] = function () {
+class C {
+    [Symbol.toPrimitive]() {
         return true;
-    };
-    return C;
-})();
+    }
+}

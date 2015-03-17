@@ -15,14 +15,11 @@ class StringIterator {
 var x;
 for (var v of new StringIterator) {
 }
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype.next = function () {
+class StringIterator {
+    next() {
         return x;
-    };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

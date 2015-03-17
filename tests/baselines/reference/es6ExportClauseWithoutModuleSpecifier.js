@@ -21,12 +21,8 @@ export { uninstantiated } from "server";
 export { x } from "server";
 
 //// [server.js]
-var c = (function () {
-    function c() {
-    }
-    return c;
-})();
-export { c };
+export class c {
+}
 var m;
 (function (m) {
     m.x = 10;

@@ -17,12 +17,8 @@ export module uninstantiated {
 export * from "server";
 
 //// [server.js]
-var c = (function () {
-    function c() {
-    }
-    return c;
-})();
-export { c };
+export class c {
+}
 var m;
 (function (m) {
     m.x = 10;

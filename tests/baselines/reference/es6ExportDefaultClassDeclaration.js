@@ -6,14 +6,10 @@ export default class C {
 
 
 //// [es6ExportDefaultClassDeclaration.js]
-var C = (function () {
-    function C() {
+export default class C {
+    method() {
     }
-    C.prototype.method = function () {
-    };
-    return C;
-})();
-export { C };
+}
 
 
 //// [es6ExportDefaultClassDeclaration.d.ts]

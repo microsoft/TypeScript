@@ -6,14 +6,10 @@ export default class {
 
 
 //// [es6ExportDefaultClassDeclaration2.js]
-var _default = (function () {
-    function _default() {
+export default class _default {
+    method() {
     }
-    _default.prototype.method = function () {
-    };
-    return _default;
-})();
-export {  };
+}
 
 
 //// [es6ExportDefaultClassDeclaration2.d.ts]

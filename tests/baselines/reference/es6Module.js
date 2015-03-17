@@ -12,12 +12,10 @@ export class A
 }
 
 //// [es6Module.js]
-var A = (function () {
-    function A() {
+export class A {
+    constructor() {
     }
-    A.prototype.B = function () {
+    B() {
         return 42;
-    };
-    return A;
-})();
-export { A };
+    }
+}

@@ -11,20 +11,17 @@ class C {
 
 //// [computedPropertyNames14_ES6.js]
 var b;
-var C = (function () {
-    function C() {
+class C {
+    [b]() {
     }
-    C.prototype[b] = function () {
-    };
-    C[true] = function () {
-    };
-    C.prototype[[]] = function () {
-    };
-    C[{}] = function () {
-    };
-    C.prototype[undefined] = function () {
-    };
-    C[null] = function () {
-    };
-    return C;
-})();
+    static [true]() {
+    }
+    [[]]() {
+    }
+    static [{}]() {
+    }
+    [undefined]() {
+    }
+    static [null]() {
+    }
+}

@@ -283,7 +283,8 @@ module ts {
                     visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression);
+                    visitNode(cbNode, (<ExportAssignment>node).expression) ||
+                    visitNode(cbNode, (<ExportAssignment>node).type);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -4526,7 +4527,13 @@ module ts {
         }
 
         function parseClassDeclaration(fullStart: number, modifiers: ModifiersArray): ClassDeclaration {
-            let node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
+            // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
+            let savedStrictModeContext = inStrictModeContext();
+            if (languageVersion >= ScriptTarget.ES6) {
+                setStrictModeContext(true);
+            }
+
+            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
@@ -4546,7 +4553,10 @@ module ts {
             else {
                 node.members = createMissingList<ClassElement>();
             }
-            return finishNode(node);
+
+            var finishedNode = finishNode(node);
+            setStrictModeContext(savedStrictModeContext);
+            return finishedNode;
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
@@ -4867,12 +4877,17 @@ module ts {
             setModifiers(node, modifiers);
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 node.isExportEquals = true;
+                node.expression = parseAssignmentExpressionOrHigher();
             }
             else {
                 parseExpected(SyntaxKind.DefaultKeyword);
+                if (parseOptional(SyntaxKind.ColonToken)) {
+                    node.type = parseType();
+                }
+                else {
+                    node.expression = parseAssignmentExpressionOrHigher();
+                }
             }
-            //node.exportName = parseIdentifier();
-            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
