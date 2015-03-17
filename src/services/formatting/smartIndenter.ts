@@ -446,7 +446,6 @@ module ts.formatting {
                     }
                     // fall through
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.ConstructSignature:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ParenthesizedType:
                     return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
@@ -462,14 +461,20 @@ module ts.formatting {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ArrowFunction:
                     if ((<FunctionLikeDeclaration>n).body) {
                         return isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
                     }
 
-                    return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile) ||
-                        (<FunctionLikeDeclaration>n).typeParameters && hasChildOfKind(n, SyntaxKind.GreaterThanToken, sourceFile) 
+                    if ((<FunctionLikeDeclaration>n).type) {
+                        return isCompletedNode((<FunctionLikeDeclaration>n).type, sourceFile);
+                    }
+
+                    // Even though type parameters can be unclosed, we can get away with
+                    // having at least a closing paren.
+                    return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
 
                 case SyntaxKind.ModuleDeclaration:
                     return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
