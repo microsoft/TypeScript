@@ -131,6 +131,7 @@ module ts {
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.ComputedPropertyName:
             case SyntaxKind.TupleType:
                 return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
