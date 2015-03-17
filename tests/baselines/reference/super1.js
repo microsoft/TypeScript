@@ -166,7 +166,7 @@ var Base4;
         function Sub4E() {
         }
         Sub4E.prototype.x = function () {
-            return super.x.call(this);
+            return _super.x.call(this);
         };
         return Sub4E;
     })();

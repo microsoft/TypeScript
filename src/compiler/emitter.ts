@@ -2074,19 +2074,19 @@ module ts {
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithSourceMap(node: Node) {
+                function emitNodeWithSourceMap(node: Node, allowGeneratedIdentifiers?: boolean) {
                     if (node) {
                         if (nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node);
+                            return emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
                         }
                         if (node.kind != SyntaxKind.SourceFile) {
                             recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node);
+                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
                             recordEmitNodeEndSpan(node);
                         }
                         else {
                             recordNewSourceFileStart(<SourceFile>node);
-                            emitNodeWithoutSourceMap(node);
+                            emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
                         }
                     }
                 }
@@ -2116,16 +2116,22 @@ module ts {
 
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
             // name should be one that is appropriate for a for loop variable.
-            function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
-                let name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (name && !isExistingName(location, name)) {
-                        break;
-                    }
+            function createTempVariable(location: Node, preferredName?: string): Identifier {
+                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
                     // _a .. _h, _j ... _z, _0, _1, ...
-                    // Note that _i is skipped
-                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
-                    tempCount++;
+
+                    // Note: we avoid generating _i and _n as those are common names we want in other places.
+                    var char = CharacterCodes.a + tempCount;
+                    if (char === CharacterCodes.i || char === CharacterCodes.n) {
+                        continue;
+                    }
+
+                    if (tempCount < 26) {
+                        name = "_" + String.fromCharCode(char);
+                    }
+                    else {
+                        name = "_" + (tempCount - 26);
+                    }
                 }
                 
                 // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
@@ -2144,8 +2150,8 @@ module ts {
                 tempVariables.push(name);
             }
 
-            function createAndRecordTempVariable(location: Node): Identifier {
-                let temp = createTempVariable(location, /*forLoopVariable*/ false);
+            function createAndRecordTempVariable(location: Node, preferredName?: string): Identifier {
+                let temp = createTempVariable(location, preferredName);
                 recordTempDeclaration(temp);
 
                 return temp;
@@ -2617,17 +2623,24 @@ module ts {
                 }
             }
 
-            function getBlockScopedVariableId(node: Identifier): number {
-                // return undefined for synthesized nodes
-                return !nodeIsSynthesized(node) && resolver.getBlockScopedVariableId(node);
+            function getGeneratedNameForIdentifier(node: Identifier): string {
+                if (nodeIsSynthesized(node) || !generatedBlockScopeNames) {
+                    return undefined;
+                }
+
+                var variableId = resolver.getBlockScopedVariableId(node)
+                if (variableId === undefined) {
+                    return undefined;
+                }
+
+                return generatedBlockScopeNames[variableId];
             }
 
-            function emitIdentifier(node: Identifier) {
-                let variableId = getBlockScopedVariableId(node);
-                if (variableId !== undefined && generatedBlockScopeNames) {
-                    let text = generatedBlockScopeNames[variableId];
-                    if (text) {
-                        write(text);
+            function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
+                if (allowGeneratedIdentifiers) {
+                    let generatedName = getGeneratedNameForIdentifier(node);
+                    if (generatedName) {
+                        write(generatedName);
                         return;
                     }
                 }
@@ -2652,15 +2665,17 @@ module ts {
             }
 
             function emitSuper(node: Node) {
-                let flags = resolver.getNodeCheckFlags(node);
-                if (flags & NodeCheckFlags.SuperInstance) {
-                    write("_super.prototype");
-                }
-                else if (flags & NodeCheckFlags.SuperStatic) {
-                    write("_super");
+                if (languageVersion >= ScriptTarget.ES6) {
+                    write("super");
                 }
                 else {
-                    write("super");
+                    var flags = resolver.getNodeCheckFlags(node);
+                    if (flags & NodeCheckFlags.SuperInstance) {
+                        write("_super.prototype");
+                    }
+                    else {
+                        write("_super");
+                    }
                 }
             }
 
@@ -2680,7 +2695,7 @@ module ts {
 
             function emitBindingElement(node: BindingElement) {
                 if (node.propertyName) {
-                    emit(node.propertyName);
+                    emit(node.propertyName, /*allowGeneratedIdentifiers*/ false);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -2853,7 +2868,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        var { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                         // Only emit the first accessor.
                         if (firstAccessor !== property) {
@@ -3024,7 +3039,7 @@ module ts {
             }
 
             function emitMethod(node: MethodDeclaration) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
@@ -3032,13 +3047,13 @@ module ts {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 write(": ");
                 emit(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export let y;
@@ -3047,7 +3062,20 @@ module ts {
                 //      export let obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNameSubstitution(node.name)) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    // Emit identifier as an identifier
+                    write(": ");
+                    var generatedName = getGeneratedNameForIdentifier(node.name);
+                    if (generatedName) {
+                        write(generatedName);
+                    }
+                    else {
+                        // Even though this is stored as identifier treat it as an expression
+                        // Short-hand, { x }, is equivalent of normal form { x: x }
+                        emitExpressionIdentifier(node.name);
+                    }
+                }
+                else if (resolver.getExpressionNameSubstitution(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -3100,7 +3128,7 @@ module ts {
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
 
@@ -3196,14 +3224,14 @@ module ts {
                 }
                 let superCall = false;
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    write("_super");
+                    emitSuper(node.expression);
                     superCall = true;
                 }
                 else {
                     emit(node.expression);
                     superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
-                if (superCall) {
+                if (superCall && languageVersion < ScriptTarget.ES6) {
                     write(".call(");
                     emitThis(node.expression);
                     if (node.arguments.length) {
@@ -3580,8 +3608,10 @@ module ts {
                 //
                 // we don't want to emit a temporary variable for the RHS, just use it directly.
                 let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
-                let counter = createTempVariable(node, /*forLoopVariable*/ true);
-                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node, /*forLoopVariable*/ false);
+                let counter = createTempVariable(node, /*preferredName*/ "_i");
+                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node);
+
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, /*preferredName:*/ "_n") : undefined;
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -3602,14 +3632,30 @@ module ts {
                     emitNodeWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
+
+                if (cachedLength) {
+                    write(", ");
+                    emitNodeWithoutSourceMap(cachedLength);
+                    write(" = ");
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 write("; ");
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
-                write(".length");
+
+                if (cachedLength) {
+                    emitNodeWithoutSourceMap(cachedLength);
+                }
+                else {
+                    emitNodeWithoutSourceMap(rhsReference);
+                    write(".length");
+                }
+
                 emitEnd(node.initializer);
                 write("; ");
                 
@@ -3650,7 +3696,7 @@ module ts {
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (let of []) {}
-                        emitNodeWithoutSourceMap(createTempVariable(node, /*forLoopVariable*/ false));
+                        emitNodeWithoutSourceMap(createTempVariable(node));
                         write(" = ");
                         emitNodeWithoutSourceMap(rhsIterationValue);
                     }
@@ -4233,7 +4279,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
-                    let tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
+                    let tempName = createTempVariable(node, /*preferredName:*/ "_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -4270,7 +4316,7 @@ module ts {
 
             function emitAccessor(node: AccessorDeclaration) {
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
-                emit(node.name);
+                emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 emitSignatureAndBody(node);
             }
 
@@ -4583,7 +4629,7 @@ module ts {
                 });
             }
 
-            function emitMemberFunctions(node: ClassDeclaration) {
+            function emitMemberFunctionsForES5AndLower(node: ClassDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -4601,7 +4647,6 @@ module ts {
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
-                        // TODO (drosen): Should we performing emitStart twice on emitStart(member)?
                         emitStart(member);
                         emitFunctionDeclaration(<MethodDeclaration>member);
                         emitEnd(member);
@@ -4621,7 +4666,6 @@ module ts {
                                 write(".prototype");
                             }
                             write(", ");
-                            // TODO: Shouldn't emitStart on name occur *here*?
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
                             write(", {");
@@ -4661,7 +4705,194 @@ module ts {
                 });
             }
 
-            function emitClassDeclaration(node: ClassDeclaration) {
+            function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
+                for (let member of node.members) {
+                    if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
+                    }
+                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                        writeLine();
+                        emitLeadingComments(member);
+                        emitStart(member);
+                        if (member.flags & NodeFlags.Static) {
+                            write("static ");
+                        }
+
+                        if (member.kind === SyntaxKind.GetAccessor) {
+                            write("get ");
+                        }
+                        else if (member.kind === SyntaxKind.SetAccessor) {
+                            write("set ");
+                        }
+                        emit((<MethodDeclaration>member).name);
+                        emitSignatureAndBody(<MethodDeclaration>member);
+                        emitEnd(member);
+                        emitTrailingComments(member);
+                    }
+                }
+            }
+
+            function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+                let saveTempCount = tempCount;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+
+                let popFrame = enterNameScope();
+                // Check if we have property assignment inside class declaration.
+                // If there is property assignment, we need to emit constructor whether users define it or not
+                // If there is no property assignment, we can omit constructor if users do not define it
+                let hasInstancePropertyWithInitializer = false;
+
+                // Emit the constructor overload pinned comments
+                forEach(node.members, member => {
+                    if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
+                        emitPinnedOrTripleSlashComments(member);
+                    }
+                    // Check if there is any non-static property assignment
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
+                        hasInstancePropertyWithInitializer = true;
+                    }
+                });
+
+                let ctor = getFirstConstructorWithBody(node);
+
+                // For target ES6 and above, if there is no user-defined constructor and there is no property assignment
+                // do not emit constructor in class declaration.
+                if (languageVersion >= ScriptTarget.ES6 && !ctor && !hasInstancePropertyWithInitializer) {
+                    return;
+                }
+
+                if (ctor) {
+                    emitLeadingComments(ctor);
+                }
+                emitStart(ctor || node);
+
+                if (languageVersion < ScriptTarget.ES6) {
+                    write("function ");
+                    emitDeclarationName(node);
+                    emitSignatureParameters(ctor);
+                }
+                else {
+                    write("constructor");
+                    if (ctor) {
+                        emitSignatureParameters(ctor);
+                    }
+                    else {
+                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
+                        // If constructor is empty, then,
+                        //      If ClassHeritageopt is present, then
+                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
+                        //      Else,
+                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
+                        if (baseTypeNode) {
+                            write("(...args)");
+                        }
+                        else {
+                            write("()");
+                        }
+                    }
+                }
+
+                write(" {");
+                scopeEmitStart(node, "constructor");
+                increaseIndent();
+                if (ctor) {
+                    emitDetachedComments(ctor.body.statements);
+                }
+                emitCaptureThisForNodeIfNecessary(node);
+                if (ctor) {
+                    emitDefaultValueAssignments(ctor);
+                    emitRestParameter(ctor);
+                    if (baseTypeNode) {
+                        var superCall = findInitialSuperCall(ctor);
+                        if (superCall) {
+                            writeLine();
+                            emit(superCall);
+                        }
+                    }
+                    emitParameterPropertyAssignments(ctor);
+                }
+                else {
+                    if (baseTypeNode) {
+                        writeLine();
+                        emitStart(baseTypeNode);
+                        if (languageVersion < ScriptTarget.ES6) {
+                            write("_super.apply(this, arguments);");
+                        }
+                        else {
+                            write("super(...args);");
+                        }
+                        emitEnd(baseTypeNode);
+                    }
+                }
+                emitMemberAssignments(node, /*staticFlag*/0);
+                if (ctor) {
+                    var statements: Node[] = (<Block>ctor.body).statements;
+                    if (superCall) {
+                        statements = statements.slice(1);
+                    }
+                    emitLines(statements);
+                }
+                emitTempDeclarations(/*newLine*/ true);
+                writeLine();
+                if (ctor) {
+                    emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                }
+                decreaseIndent();
+                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                scopeEmitEnd();
+                emitEnd(<Node>ctor || node);
+                if (ctor) {
+                    emitTrailingComments(ctor);
+                }
+
+                exitNameScope(popFrame);
+
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
+                if (node.flags & NodeFlags.Export) {
+                    write("export ");
+
+                    if (node.flags & NodeFlags.Default) {
+                        write("default ");
+                    }
+                }
+
+                write("class ");
+                emitDeclarationName(node);
+                var baseTypeNode = getClassBaseTypeNode(node);
+                if (baseTypeNode) {
+                    write(" extends ");
+                    emit(baseTypeNode.typeName);
+                }
+                write(" {");
+                increaseIndent();
+                scopeEmitStart(node);
+                writeLine();
+                emitConstructor(node, baseTypeNode);
+                emitMemberFunctionsForES6AndHigher(node);
+                decreaseIndent();
+                writeLine();
+                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                scopeEmitEnd();
+
+                // Emit static property assignment. Because classDeclaration is lexically evaluated,
+                // it is safe to emit static property assignment after classDeclaration
+                // From ES6 specification:
+                //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
+                //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
+                writeLine();
+                emitMemberAssignments(node, NodeFlags.Static);
+            }
+
+            function emitClassDeclarationBelowES6(node: ClassDeclaration) {
                 write("var ");
                 emitDeclarationName(node);
                 write(" = (function (");
@@ -4681,8 +4912,8 @@ module ts {
                     emitEnd(baseTypeNode);
                 }
                 writeLine();
-                emitConstructorOfClass();
-                emitMemberFunctions(node);
+                emitConstructor(node, baseTypeNode);
+                emitMemberFunctionsForES5AndLower(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
@@ -4712,85 +4943,6 @@ module ts {
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
-                }
-
-                function emitConstructorOfClass() {
-                    let saveTempCount = tempCount;
-                    let saveTempVariables = tempVariables;
-                    let saveTempParameters = tempParameters;
-                    tempCount = 0;
-                    tempVariables = undefined;
-                    tempParameters = undefined;
-
-                    let popFrame = enterNameScope();
-
-                    // Emit the constructor overload pinned comments
-                    forEach(node.members, member => {
-                        if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
-                            emitPinnedOrTripleSlashComments(member);
-                        }
-                    });
-
-                    let ctor = getFirstConstructorWithBody(node);
-                    if (ctor) {
-                        emitLeadingComments(ctor);
-                    }
-                    emitStart(<Node>ctor || node);
-                    write("function ");
-                    emitDeclarationName(node);
-                    emitSignatureParameters(ctor);
-                    write(" {");
-                    scopeEmitStart(node, "constructor");
-                    increaseIndent();
-                    if (ctor) {
-                        emitDetachedComments((<Block>ctor.body).statements);
-                    }
-                    emitCaptureThisForNodeIfNecessary(node);
-                    let superCall: ExpressionStatement;
-                    if (ctor) {
-                        emitDefaultValueAssignments(ctor);
-                        emitRestParameter(ctor);
-                        if (baseTypeNode) {
-                            superCall = findInitialSuperCall(ctor);
-                            if (superCall) {
-                                writeLine();
-                                emit(superCall);
-                            }
-                        }
-                        emitParameterPropertyAssignments(ctor);
-                    }
-                    else {
-                        if (baseTypeNode) {
-                            writeLine();
-                            emitStart(baseTypeNode);
-                            write("_super.apply(this, arguments);");
-                            emitEnd(baseTypeNode);
-                        }
-                    }
-                    emitMemberAssignments(node, /*nonstatic*/0);
-                    if (ctor) {
-                        let statements: Node[] = (<Block>ctor.body).statements;
-                        if (superCall) statements = statements.slice(1);
-                        emitLines(statements);
-                    }
-                    emitTempDeclarations(/*newLine*/ true);
-                    writeLine();
-                    if (ctor) {
-                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
-                    }
-                    decreaseIndent();
-                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                    scopeEmitEnd();
-                    emitEnd(<Node>ctor || node);
-                    if (ctor) {
-                        emitTrailingComments(ctor);
-                    }
-
-                    exitNameScope(popFrame);
-
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
-                    tempParameters = saveTempParameters;
                 }
             }
 
@@ -5269,8 +5421,10 @@ module ts {
                 emitDetachedComments(node);
 
                 // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                // Only Emit __extends function when target ES5.
+                // For target ES6 and above, we can emit classDeclaration as if.
+                if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
                     writeLine();
                     write("var __extends = this.__extends || function (d, b) {");
                     increaseIndent();
@@ -5308,7 +5462,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNodeWithoutSourceMapWithComments(node: Node): void {
+            function emitNodeWithoutSourceMapWithComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -5322,14 +5476,14 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
 
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
             }
 
-            function emitNodeWithoutSourceMapWithoutComments(node: Node): void {
+            function emitNodeWithoutSourceMapWithoutComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -5338,7 +5492,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                emitJavaScriptWorker(node);
+                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
             }
 
             function shouldEmitLeadingAndTrailingComments(node: Node) {
@@ -5368,11 +5522,11 @@ module ts {
                 return true;
             }
 
-            function emitJavaScriptWorker(node: Node) {
+            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean = true) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node);
+                        return emitIdentifier(<Identifier>node, allowGeneratedIdentifiers);
                     case SyntaxKind.Parameter:
                         return emitParameter(<ParameterDeclaration>node);
                     case SyntaxKind.MethodDeclaration:
@@ -5502,7 +5656,7 @@ module ts {
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(<ClassDeclaration>node);
+                        return languageVersion < ScriptTarget.ES6 ? emitClassDeclarationBelowES6(<ClassDeclaration>node) : emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:

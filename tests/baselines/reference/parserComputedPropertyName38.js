@@ -4,10 +4,7 @@ class C {
 }
 
 //// [parserComputedPropertyName38.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype[public] = function () {
-    };
-    return C;
-})();
+class C {
+}
+(() => {
+});
