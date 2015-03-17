@@ -12,11 +12,8 @@ class StringIterator {
 var v;
 for (v of new StringIterator) {
 } // Should fail because the iterator is not iterable
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype.next = function () {
+class StringIterator {
+    next() {
         return "";
-    };
-    return StringIterator;
-})();
+    }
+}

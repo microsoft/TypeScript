@@ -4,10 +4,7 @@ class C {
 }
 
 //// [parserSymbolProperty7.js]
-var C = (function () {
-    function C() {
+class C {
+    [Symbol.toStringTag]() {
     }
-    C.prototype[Symbol.toStringTag] = function () {
-    };
-    return C;
-})();
+}

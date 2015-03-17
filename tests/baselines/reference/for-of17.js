@@ -18,17 +18,14 @@ class NumberIterator {
 var v;
 for (v of new NumberIterator) {
 } // Should succeed
-var NumberIterator = (function () {
-    function NumberIterator() {
-    }
-    NumberIterator.prototype.next = function () {
+class NumberIterator {
+    next() {
         return {
             value: 0,
             done: false
         };
-    };
-    NumberIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return NumberIterator;
-})();
+    }
+}

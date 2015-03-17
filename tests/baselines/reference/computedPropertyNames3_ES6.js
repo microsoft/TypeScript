@@ -11,40 +11,21 @@ class C {
 
 //// [computedPropertyNames3_ES6.js]
 var id;
-var C = (function () {
-    function C() {
+class C {
+    [0 + 1]() {
     }
-    C.prototype[0 + 1] = function () {
-    };
-    C[() => {
-    }] = function () {
-    };
-    Object.defineProperty(C.prototype, delete id, {
-        get: function () {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, [
+    static [() => {
+    }]() {
+    }
+    get [delete id]() {
+    }
+    set [[
         0,
         1
-    ], {
-        set: function (v) {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C, "", {
-        get: function () {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C, id.toString(), {
-        set: function (v) {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    ]](v) {
+    }
+    static get [""]() {
+    }
+    static set [id.toString()](v) {
+    }
+}
