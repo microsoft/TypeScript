@@ -2595,8 +2595,9 @@ module ts {
                     isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
+                    var scopeNode = getScopeNode(previousToken, position, sourceFile);
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    var symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
+                    var symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
@@ -2614,6 +2615,14 @@ module ts {
                 isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
+
+            function getScopeNode(initialToken: Node, position: number, sourceFile: SourceFile) {
+                var scope = initialToken;
+                while (scope && (isToken(scope) || !positionBelongsToNode(scope, position, sourceFile))) {
+                    scope = scope.parent;
+                }
+                return scope;
+            }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 var start = new Date().getTime();

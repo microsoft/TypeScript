@@ -59,6 +59,124 @@ module ts {
         return start < end;
     }
 
+    export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+    }
+
+    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+        if (n.getFullWidth() === 0) {
+            return false;
+        }
+
+        switch (n.kind) {
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.Block:
+            case SyntaxKind.ModuleBlock:
+            case SyntaxKind.CaseBlock:
+                return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
+            case SyntaxKind.CatchClause:
+                return isCompletedNode((<CatchClause>n).block, sourceFile);
+            case SyntaxKind.NewExpression:
+                if (!(<NewExpression>n).arguments) {
+                    return true;
+                }
+            // fall through
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.ParenthesizedType:
+                return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
+
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return isCompletedNode((<SignatureDeclaration>n).type, sourceFile);
+
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ArrowFunction:
+                if ((<FunctionLikeDeclaration>n).body) {
+                    return isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
+                }
+
+                if ((<FunctionLikeDeclaration>n).type) {
+                    return isCompletedNode((<FunctionLikeDeclaration>n).type, sourceFile);
+                }
+
+                // Even though type parameters can be unclosed, we can get away with
+                // having at least a closing paren.
+                return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
+
+            case SyntaxKind.ModuleDeclaration:
+                return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
+
+            case SyntaxKind.IfStatement:
+                if ((<IfStatement>n).elseStatement) {
+                    return isCompletedNode((<IfStatement>n).elseStatement, sourceFile);
+                }
+                return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
+
+            case SyntaxKind.ExpressionStatement:
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.ComputedPropertyName:
+            case SyntaxKind.TupleType:
+                return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
+
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                return false;
+
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.WhileStatement:
+                return isCompletedNode((<IterationStatement>n).statement, sourceFile);
+            case SyntaxKind.DoStatement:
+                // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
+                var hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
+                if (hasWhileKeyword) {
+                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
+                }
+                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+
+            default:
+                return true;
+        }
+    }
+
+    /*
+     * Checks if node ends with 'expectedLastToken'.
+     * If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
+     */
+    function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
+        var children = n.getChildren(sourceFile);
+        if (children.length) {
+            var last = children[children.length - 1];
+            if (last.kind === expectedLastToken) {
+                return true;
+            }
+            else if (last.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
+                return children[children.length - 2].kind === expectedLastToken;
+            }
+        }
+        return false;
+    }
+
     export function findListItemInfo(node: Node): ListItemInfo {
         var list = findContainingList(node);
 
