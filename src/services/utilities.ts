@@ -64,7 +64,7 @@ module ts {
     }
 
     export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
-        if (n.getFullWidth() === 0) {
+        if (nodeIsMissing(n)) {
             return false;
         }
 
