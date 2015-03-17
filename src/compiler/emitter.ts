@@ -4952,7 +4952,7 @@ module ts {
 
                 if (nodeOrChildIsDecorated(node)) {
                     if ((node.flags & NodeFlags.Default) === 0) {
-                        write("let ");
+                        write("var ");
                         emitDeclarationName(node);
                         write(" = ");
                     }
@@ -5022,6 +5022,11 @@ module ts {
                 if (nodeOrChildIsDecorated(node)) {
                     writeLine();
                     emitDecoratorsOfClass(node);
+
+                    write("return ");
+                    emitDeclarationName(node);
+                    write(";");
+
                     emitTempDeclarations(/*newLine*/ true);
                     writeLine();
                     tempCount = saveTempCount;
@@ -5030,8 +5035,6 @@ module ts {
                     generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
                     generatedSetterNames = saveGeneratedSetterNames;
 
-                    write("return ");
-                    emitDeclarationName(node);
                     decreaseIndent();
                     writeLine();
                     write("})();");

@@ -19,6 +19,6 @@ var C = (function () {
         _a[this.bar()] = 1,
         _a)[0]] = function () {
     };
+    var _a;
     return C;
 })();
-var _a;

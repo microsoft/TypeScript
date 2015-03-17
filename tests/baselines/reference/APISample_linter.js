@@ -996,6 +996,7 @@ declare module "typescript" {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        getClassDeclarationVariableId(node: Identifier): number;
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,
@@ -1101,6 +1102,7 @@ declare module "typescript" {
         ContextChecked = 64,
         EnumValuesComputed = 128,
         BlockScopedBindingInLoop = 256,
+        EmitDecorate = 512,
     }
     interface NodeLinks {
         resolvedType?: Type;
@@ -1489,6 +1491,7 @@ declare module "typescript" {
         character: number;
     };
     function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
