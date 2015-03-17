@@ -109,9 +109,11 @@ module ts {
 
         let anyArrayType: Type;
         let globalTypedPropertyDescriptorType: ObjectType;
-        let globalDecoratorFunctionType: ObjectType;
-        let globalParameterDecoratorFunctionType: ObjectType;
-        let globalMemberDecoratorFunctionType: ObjectType;
+        let globalClassDecoratorType: ObjectType;
+        let globalClassAnnotationType: ObjectType;
+        let globalParameterAnnotationType: ObjectType;
+        let globalPropertyAnnotationType: ObjectType;
+        let globalPropertyDecoratorType: ObjectType;
 
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
@@ -8501,21 +8503,18 @@ module ts {
             }
         }
 
-        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedDecoratorType: Type, message?: DiagnosticMessage, fallbackType?: Type) {
-            let parentType = getTypeOfNode(node.parent);
-            let signature = getSingleCallSignature(expectedDecoratorType);
-            if (!signature) {
-                // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
-                // and we have already reported an error in initializeTypeChecker.
-                return;
-            }
-            
-            let fallbackSignature = signature.typeParameters && fallbackType ? getSignatureInstantiation(signature, [fallbackType]) : signature;
-            let fallbackSignatureType = getOrCreateTypeFromSignature(fallbackSignature);
-            if (checkTypeAssignableTo(exprType, fallbackSignatureType, node) && signature.typeParameters && message) {
+        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedAnnotationType: Type, parentType?: Type, expectedDecoratorType?: Type, message?: DiagnosticMessage) {
+            if (checkTypeAssignableTo(exprType, expectedAnnotationType, node) && expectedDecoratorType) {
+                let signature = getSingleCallSignature(expectedDecoratorType);
+                if (!signature) {
+                    // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
+                    // and we have already reported an error in initializeTypeChecker.
+                    return;
+                }
+
                 let instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
                 let instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
-                checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);
+                checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);                
             }
         }
 
@@ -8526,18 +8525,21 @@ module ts {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
-                    checkDecoratorSignature(node, exprType, globalDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_class, globalFunctionType);
+                    let classSymbol = getSymbolOfNode(node.parent);                    
+                    let classType = getTypeOfSymbol(classSymbol);
+                    checkDecoratorSignature(node, exprType, globalClassAnnotationType, classType, globalClassDecoratorType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    checkDecoratorSignature(node, exprType, globalMemberDecoratorFunctionType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
+                    let propertyType = getTypeOfNode(node.parent);
+                    checkDecoratorSignature(node, exprType, globalPropertyAnnotationType, propertyType, globalPropertyDecoratorType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
                     break;
 
                 case SyntaxKind.Parameter:
-                    checkDecoratorSignature(node, exprType, globalParameterDecoratorFunctionType);
+                    checkDecoratorSignature(node, exprType, globalParameterAnnotationType);
                     break;
             }
         }
@@ -11299,9 +11301,11 @@ module ts {
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
-            globalDecoratorFunctionType = getGlobalType("DecoratorFunction");
-            globalParameterDecoratorFunctionType = getGlobalType("ParameterDecoratorFunction");
-            globalMemberDecoratorFunctionType = getGlobalType("MemberDecoratorFunction");
+            globalClassDecoratorType = getGlobalType("ClassDecorator");
+            globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
+            globalClassAnnotationType = getGlobalType("ClassAnnotation");
+            globalPropertyAnnotationType = getGlobalType("PropertyAnnotation");
+            globalParameterAnnotationType = getGlobalType("ParameterAnnotation");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
