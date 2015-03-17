@@ -2,14 +2,14 @@
 
 // @allowNonTsExtensions: true
 // @Filename: a.tsjs
-//// class C<T> { }
+//// public class C { }
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'type parameter declarations' can only be used in TypeScript.",
-    "start": 8,
-    "length": 1,
+    "message": "'public' can only be used in TypeScript.",
+    "start": 0,
+    "length": 6,
     "category": "error",
-    "code": 8004
+    "code": 8008
   }
 ]`);
