@@ -98,7 +98,7 @@ var SubSub1 = (function (_super) {
         _super.apply(this, arguments);
     }
     SubSub1.prototype.bar = function () {
-        return _super.prototype.super.foo;
+        return _super.prototype["super"].foo;
     };
     return SubSub1;
 })(Sub1);

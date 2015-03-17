@@ -19,19 +19,19 @@ var C = (function () {
     }
     C.prototype.public = function () {
     };
-    C.prototype.static = function () {
+    C.prototype["static"] = function () {
     };
     C.prototype.public = function () {
     };
-    C.prototype.static = function () {
+    C.prototype["static"] = function () {
     };
     C.public = function () {
     };
-    C.static = function () {
+    C["static"] = function () {
     };
     C.public = function () {
     };
-    C.static = function () {
+    C["static"] = function () {
     };
     return C;
 })();

@@ -292,7 +292,7 @@ var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
     var Program = (function () {
         function Program() {
-            this.case = bfs.STATEMENTS(4);
+            this["case"] = bfs.STATEMENTS(4);
         }
         Program.Main = function () {
             var args = [];
@@ -311,7 +311,7 @@ var TypeScriptAllInOne;
             finally {
             }
         };
-        Program.prototype.if = function (retValue) {
+        Program.prototype["if"] = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
              ^ retValue;
@@ -325,7 +325,7 @@ var TypeScriptAllInOne;
                 return 1;
             }
         };
-        Program.prototype.catch = function (e) {
+        Program.prototype["catch"] = function (e) {
             console.log(e);
         };
         return Program;

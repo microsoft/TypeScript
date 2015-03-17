@@ -2947,7 +2947,7 @@ var Harness;
                 this.any = this.get('var x : any', 'x');
                 this.number = this.get('var x : number', 'x');
                 this.string = this.get('var x : string', 'x');
-                this.boolean = this.get('var x : boolean', 'x');
+                this["boolean"] = this.get('var x : boolean', 'x');
             }
             TypeFactory.prototype.get = function (code, target) {
                 var targetIdentifier = '';
