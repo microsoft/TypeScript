@@ -1,0 +1,21 @@
+=== tests/cases/compiler/exportAssignmentWithoutIdentifier1.ts ===
+function Greeter() {
+>Greeter : () => void
+
+    //...
+}
+Greeter.prototype.greet = function () {
+>Greeter.prototype.greet = function () {    //...} : () => void
+>Greeter.prototype.greet : any
+>Greeter.prototype : any
+>Greeter : () => void
+>prototype : any
+>greet : any
+>function () {    //...} : () => void
+
+    //...
+}
+export = new Greeter();
+>new Greeter() : any
+>Greeter : () => void
+

@@ -13,8 +13,11 @@ A.a();
 //// [qualifiedModuleLocals.js]
 var A;
 (function (A) {
-    function b() { }
-    function a() { A.b(); }
+    function b() {
+    }
+    function a() {
+        A.b();
+    }
     A.a = a; // A.b should be an unresolved symbol error
 })(A || (A = {}));
 A.a();

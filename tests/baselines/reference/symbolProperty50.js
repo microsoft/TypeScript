@@ -13,7 +13,8 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype[Symbol.iterator] = function () { };
+        C.prototype[Symbol.iterator] = function () {
+        };
         return C;
     })();
 })(M || (M = {}));

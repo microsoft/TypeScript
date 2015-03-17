@@ -19,7 +19,9 @@ var C1 = (function () {
     function C1() {
     }
     C1.prototype[Symbol.toStringTag] = function () {
-        return { x: "" };
+        return {
+            x: ""
+        };
     };
     return C1;
 })();

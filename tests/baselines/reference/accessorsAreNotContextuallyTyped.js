@@ -20,7 +20,9 @@ var C = (function () {
     }
     Object.defineProperty(C.prototype, "x", {
         get: function () {
-            return function (x) { return ""; };
+            return function (x) {
+                return "";
+            };
         },
         set: function (v) {
         },

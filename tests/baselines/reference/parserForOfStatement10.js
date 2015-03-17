@@ -3,5 +3,5 @@ for (const v of X) {
 }
 
 //// [parserForOfStatement10.js]
-for (var v of X) {
+for (const v of X) {
 }

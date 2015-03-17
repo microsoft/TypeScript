@@ -27,10 +27,6 @@
         "category": "Error",
         "code": 1012
     },
-    "Catch clause parameter cannot have a type annotation.": {
-        "category": "Error",
-        "code": 1013
-    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -459,10 +455,6 @@
         "category": "Error",
         "code": 1157
     },
-    "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1159
-    },
     "Unterminated template literal.": {
         "category": "Error",
         "code": 1160
@@ -607,51 +599,50 @@
         "category": "Error",
         "code": 1194
     },
-    "Non-ambient decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
+    "Catch clause variable name must be an identifier.": {
+        "category": "Error",
+        "code": 1195
+    },
+    "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
     },
-    "Decorator '{0}' is not valid on this declaration type. It is only valid on '{1}' declarations.": {
+    "Catch clause variable cannot have an initializer.": {
         "category": "Error",
         "code": 1197
     },
-    "Decorators are not valid on this declaration type.": {
+    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
         "category": "Error",
         "code": 1198
     },
-    "Decorator is not valid on this declaration type.": {
+    "Unterminated Unicode escape sequence.": {
         "category": "Error",
         "code": 1199
     },
-    "Argument to ambient decorator must be constant expression.": {
+    "Line terminator not permitted before arrow.": {
         "category": "Error",
         "code": 1200
     },
-    "'{0}' decorator cannot be used when '{1}' is already specified.": {
+    "Decorators are only supported on class members when targeting ECMAScript 5 or higher.": {
         "category": "Error",
         "code": 1201
     },
-    "'{0}' decorator already specified.": {
+    "Decorators are not valid on this declaration type.": {
         "category": "Error",
         "code": 1202
     },
-    "Decorators may not change the type of a member.": {
+    "Argument to ambient decorator must be constant expression.": {
         "category": "Error",
         "code": 1203
     },
-    "Decorators may not change the type of a class.": {
+    "Decorators may not change the type of a member.": {
         "category": "Error",
         "code": 1204
     },
-    "'{0}' is obsolete.":  {
+    "Decorators may not change the type of a class.": {
         "category": "Error",
         "code": 1205
     },
-    "'{0}' is obsolete: '{1}'": {
-        "category": "Error",
-        "code": 1206
-    },
-
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1332,10 +1323,6 @@
         "category": "Error",
         "code": 2481
     },
-    "'for...of' statements are only available when targeting ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 2482
-    },
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2483
@@ -1343,6 +1330,50 @@
     "Export declaration conflicts with exported declaration of '{0}'": {
         "category": "Error",
         "code": 2484
+    },
+    "The left-hand side of a 'for...of' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2485
+    },
+    "The left-hand side of a 'for...in' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2486
+    },
+    "Invalid left-hand side in 'for...of' statement.": {
+        "category": "Error",
+        "code": 2487
+    },
+    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2488
+    },
+    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2489
+    },
+    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
+        "category": "Error",
+        "code": 2490
+    },
+    "The left-hand side of a 'for...in' statement cannot be a destructuring pattern.": {
+        "category": "Error",
+        "code": 2491
+    },
+    "Cannot redeclare identifier '{0}' in catch clause": {
+        "category": "Error",
+        "code": 2492
+    },
+    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+        "category": "Error",
+        "code": 2493
+    },
+    "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 2494
+    },
+    "Type '{0}' is not an array type or a string type.": {
+        "category": "Error",
+        "code": 2461
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1621,6 +1652,10 @@
         "category": "Error",
         "code": 4081
     },
+    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 4091
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1841,7 +1876,7 @@
         "category": "Message",
         "code": 6056
     },
-    "SYMBOL": {
+    "Preserve new-lines when emitting code.": {
         "category": "Message",
         "code": 6057
     },
@@ -1929,9 +1964,5 @@
     "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
         "category": "Error",
         "code": 9002
-    },
-    "'for...of' statements are not currently supported.": {
-        "category": "Error",
-        "code": 9003
     }
 }

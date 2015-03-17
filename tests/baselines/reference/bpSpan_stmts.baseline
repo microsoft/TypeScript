@@ -217,7 +217,15 @@
     >:=> (line 28, col 8) to (line 28, col 22)
 29 >    } catch (e) {
 
-         ~~~~~~~~~~~~~                            => Pos: (416 to 428)  SpanInfo: {"start":437,"length":15}
+         ~~~~~~~~                                 => Pos: (416 to 423)  SpanInfo: {"start":437,"length":15}
+    >if (obj.z < 10)
+    >:=> (line 30, col 8) to (line 30, col 23)
+29 >    } catch (e) {
+
+                 ~                                => Pos: (424 to 424)  SpanInfo: undefined
+29 >    } catch (e) {
+
+                  ~~~~                            => Pos: (425 to 428)  SpanInfo: {"start":437,"length":15}
     >if (obj.z < 10)
     >:=> (line 30, col 8) to (line 30, col 23)
 --------------------------------
@@ -286,7 +294,15 @@
     >:=> (line 37, col 8) to (line 37, col 25)
 38 >    } catch (e1) {
 
-         ~~~~~~~~~~~~~~                           => Pos: (581 to 594)  SpanInfo: {"start":603,"length":10}
+         ~~~~~~~~                                 => Pos: (581 to 588)  SpanInfo: {"start":603,"length":10}
+    >var b = e1
+    >:=> (line 39, col 8) to (line 39, col 18)
+38 >    } catch (e1) {
+
+                 ~~                               => Pos: (589 to 590)  SpanInfo: undefined
+38 >    } catch (e1) {
+
+                   ~~~~                           => Pos: (591 to 594)  SpanInfo: {"start":603,"length":10}
     >var b = e1
     >:=> (line 39, col 8) to (line 39, col 18)
 --------------------------------

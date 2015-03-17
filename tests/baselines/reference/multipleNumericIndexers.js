@@ -40,7 +40,10 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = { 1: '', "2": '' };
+var b = {
+    1: '',
+    "2": ''
+};
 var C2 = (function () {
     function C2() {
     }

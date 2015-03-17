@@ -15,9 +15,10 @@ var C = (function () {
     C.prototype.bar = function () {
         return 0;
     };
-    C.prototype[(_a = {}, _a[this.bar()] =
-    1,
-    _a)[0]] = function () { };
-    var _a;
+    C.prototype[(_a = {},
+        _a[this.bar()] = 1,
+        _a)[0]] = function () {
+    };
     return C;
 })();
+var _a;

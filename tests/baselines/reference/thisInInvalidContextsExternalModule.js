@@ -92,7 +92,8 @@ var M;
 //'this' as type parameter constraint
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
-function genericFunc(x) { }
+function genericFunc(x) {
+}
 genericFunc < this > (undefined); // Should be an error
 var ErrClass3 = (function () {
     function ErrClass3() {
@@ -108,4 +109,4 @@ var SomeEnum;
     SomeEnum[SomeEnum["A"] = this] = "A";
     SomeEnum[SomeEnum["B"] = this.spaaaace] = "B"; // Also should not be allowed
 })(SomeEnum || (SomeEnum = {}));
-this; // Should be an error
+module.exports = this;

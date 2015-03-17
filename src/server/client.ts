@@ -229,6 +229,7 @@ module ts.server {
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
+                    isCaseSensitive: entry.isCaseSensitive,
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end)
                 };

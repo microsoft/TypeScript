@@ -5,7 +5,8 @@ var obj = {
 
 //// [symbolDeclarationEmit9.js]
 var obj = {
-    [Symbol.isConcatSpreadable]() { }
+    [Symbol.isConcatSpreadable]() {
+    }
 };
 
 

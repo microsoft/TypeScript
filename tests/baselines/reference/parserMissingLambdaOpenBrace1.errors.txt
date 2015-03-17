@@ -8,9 +8,9 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpen
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts (5 errors) ====
     class C {
         where(filter: Iterator<T, boolean>): Query<T> {
-                      ~~~~~~~~~~~~~~~~~~~~
+                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'Iterator'.
-                                             ~~~~~~~~
+                                             ~~~~~
 !!! error TS2304: Cannot find name 'Query'.
             return fromDoWhile(test =>
                    ~~~~~~~~~~~

@@ -10,7 +10,9 @@ var y: number = makePoint(2).x;
 //// [getsetReturnTypes.js]
 function makePoint(x) {
     return {
-        get x() { return x; }
+        get x() {
+            return x;
+        }
     };
 }
 ;

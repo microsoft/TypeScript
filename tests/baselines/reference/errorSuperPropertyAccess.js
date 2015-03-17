@@ -172,10 +172,14 @@ var SomeBase = (function () {
         this.privateMember = 0;
         this.publicMember = 0;
     }
-    SomeBase.prototype.privateFunc = function () { };
-    SomeBase.prototype.publicFunc = function () { };
-    SomeBase.privateStaticFunc = function () { };
-    SomeBase.publicStaticFunc = function () { };
+    SomeBase.prototype.privateFunc = function () {
+    };
+    SomeBase.prototype.publicFunc = function () {
+    };
+    SomeBase.privateStaticFunc = function () {
+    };
+    SomeBase.publicStaticFunc = function () {
+    };
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
     return SomeBase;
@@ -209,7 +213,9 @@ var SomeDerived1 = (function (_super) {
             super.publicFunc.call(this);
         }
         var x = {
-            test: function () { return super.publicFunc.call(this); }
+            test: function () {
+                return super.publicFunc.call(this);
+            }
         };
     };
     return SomeDerived1;
@@ -271,4 +277,7 @@ var SomeDerived3 = (function (_super) {
     return SomeDerived3;
 })(SomeBase);
 // In object literal
-var obj = { n: super.wat, p: super.foo.call(this) };
+var obj = {
+    n: super.wat,
+    p: super.foo.call(this)
+};

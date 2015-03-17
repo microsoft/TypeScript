@@ -7,7 +7,8 @@ foo();
 
 
 //// [functionCall6.js]
-function foo(a) { }
+function foo(a) {
+}
 ;
 foo('bar');
 foo(2);

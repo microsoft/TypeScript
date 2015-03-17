@@ -1,9 +1,8 @@
 tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts(5,3): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'TemplateStringsArray'.
   Property 'raw' is missing in type '{ [x: number]: undefined; }'.
-tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts(7,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts (2 errors) ====
+==== tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts (1 errors) ====
     
     function f(x: TemplateStringsArray, y: number, z: number) {
     }
@@ -14,5 +13,3 @@ tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts(7,3): error TS
 !!! error TS2345:   Property 'raw' is missing in type '{ [x: number]: undefined; }'.
     
     f `abcdef${ 1234 }${ 5678 }ghijkl`;
-      ~~~~~~~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.

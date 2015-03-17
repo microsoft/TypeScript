@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputExternalModule2.baseline
 // @out: declSingleFile.js

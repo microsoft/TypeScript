@@ -1,0 +1,16 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements16.ts ===
+var v: any[];
+>v : any[]
+
+function foo(a = bar()) { }
+>foo : (a?: void) => void
+>a : void
+>bar() : void
+>bar : (a?: void) => void
+
+function bar(a = foo()) {
+>bar : (a?: void) => void
+>a : void
+>foo() : void
+>foo : (a?: void) => void
+}

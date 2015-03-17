@@ -28,7 +28,8 @@ var Foo = (function () {
 try {
     bar = someInitThatMightFail();
 }
-catch (e) { }
+catch (e) {
+}
 baz();
 {
     return this.bar; // doesn't get rewritten to Foo.bar.

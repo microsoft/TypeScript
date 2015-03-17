@@ -10,10 +10,14 @@ class C {
 var C = (function () {
     function C() {
     }
-    C[Symbol.toPrimitive] = function () { };
+    C[Symbol.toPrimitive] = function () {
+    };
     Object.defineProperty(C, Symbol.isRegExp, {
-        get: function () { return ""; },
-        set: function (x) { },
+        get: function () {
+            return "";
+        },
+        set: function (x) {
+        },
         enumerable: true,
         configurable: true
     });

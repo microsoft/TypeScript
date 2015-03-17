@@ -1,10 +1,7 @@
 tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts(1,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts(1,42): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts (2 errors) ====
+==== tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts (1 errors) ====
     `I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION`
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
-                                             ~~~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.

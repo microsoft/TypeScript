@@ -179,19 +179,19 @@ interface ObjectConstructor {
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes. 
       */
-    seal(o: any): any;
+    seal<T>(o: T): T;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze(o: any): any;
+    freeze<T>(o: T): T;
 
     /**
       * Prevents the addition of new properties to an object.
       * @param o Object to make non-extensible. 
       */
-    preventExtensions(o: any): any;
+    preventExtensions<T>(o: T): T;
 
     /**
       * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
@@ -425,6 +425,9 @@ interface String {
       */
     substr(from: number, length?: number): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): string;
+
     [index: number]: string;
 }
 
@@ -477,6 +480,9 @@ interface Number {
       * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
       */
     toPrecision(precision?: number): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): number;
 }
 
 interface NumberConstructor {
@@ -1396,22 +1402,22 @@ interface ArrayLike<T> {
 
 interface Array<T> {
     /** Iterator */
-    [Symbol.iterator] (): Iterator<T>;
+    [Symbol.iterator](): IterableIterator<T>;
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, T]>;
+    entries(): IterableIterator<[number, T]>;
 
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<T>;
+    values(): IterableIterator<T>;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -1495,7 +1501,7 @@ interface ArrayConstructor {
 
 interface String {
     /** Iterator */
-    [Symbol.iterator] (): Iterator<string>;
+    [Symbol.iterator](): IterableIterator<string>;
 
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
@@ -1613,12 +1619,17 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    [Symbol.iterator](): Iterator<T>;
     next(): IteratorResult<T>;
+    return?(value?: any): IteratorResult<T>;
+    throw?(e?: any): IteratorResult<T>;
 }
 
 interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;
+}
+
+interface IterableIterator<T> extends Iterator<T> {
+    [Symbol.iterator](): IterableIterator<T>;
 }
 
 interface GeneratorFunction extends Function {
@@ -1636,10 +1647,11 @@ interface GeneratorFunctionConstructor {
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
 
-interface Generator<T> extends Iterator<T> {
+interface Generator<T> extends IterableIterator<T> {
     next(value?: any): IteratorResult<T>;
-    throw (exception: any): IteratorResult<T>;
-    return (value: T): IteratorResult<T>;
+    throw(exception: any): IteratorResult<T>;
+    return(value: T): IteratorResult<T>;
+    [Symbol.iterator](): Generator<T>;
     [Symbol.toStringTag]: string;
 }
 
@@ -1807,15 +1819,15 @@ interface RegExp {
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    entries(): Iterator<[K, V]>;
+    entries(): IterableIterator<[K, V]>;
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V;
     has(key: K): boolean;
-    keys(): Iterator<K>;
+    keys(): IterableIterator<K>;
     set(key: K, value?: V): Map<K, V>;
     size: number;
-    values(): Iterator<V>;
-    [Symbol.iterator]():Iterator<[K,V]>;
+    values(): IterableIterator<V>;
+    [Symbol.iterator]():IterableIterator<[K,V]>;
     [Symbol.toStringTag]: string;
 }
 
@@ -1846,13 +1858,13 @@ interface Set<T> {
     add(value: T): Set<T>;
     clear(): void;
     delete(value: T): boolean;
-    entries(): Iterator<[T, T]>;
+    entries(): IterableIterator<[T, T]>;
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
-    keys(): Iterator<T>;
+    keys(): IterableIterator<T>;
     size: number;
-    values(): Iterator<T>;
-    [Symbol.iterator]():Iterator<T>;
+    values(): IterableIterator<T>;
+    [Symbol.iterator]():IterableIterator<T>;
     [Symbol.toStringTag]: string;
 }
 
@@ -2083,7 +2095,7 @@ interface Int8Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2163,7 +2175,7 @@ interface Int8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2300,10 +2312,10 @@ interface Int8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int8ArrayConstructor {
@@ -2373,7 +2385,7 @@ interface Uint8Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2453,7 +2465,7 @@ interface Uint8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2590,10 +2602,10 @@ interface Uint8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint8ArrayConstructor {
@@ -2663,7 +2675,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2743,7 +2755,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2880,10 +2892,10 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -2953,7 +2965,7 @@ interface Int16Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3033,7 +3045,7 @@ interface Int16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3170,10 +3182,10 @@ interface Int16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int16ArrayConstructor {
@@ -3243,7 +3255,7 @@ interface Uint16Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3323,7 +3335,7 @@ interface Uint16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3460,10 +3472,10 @@ interface Uint16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint16ArrayConstructor {
@@ -3533,7 +3545,7 @@ interface Int32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3613,7 +3625,7 @@ interface Int32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3750,10 +3762,10 @@ interface Int32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int32ArrayConstructor {
@@ -3823,7 +3835,7 @@ interface Uint32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3903,7 +3915,7 @@ interface Uint32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4040,10 +4052,10 @@ interface Uint32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint32ArrayConstructor {
@@ -4113,7 +4125,7 @@ interface Float32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -4193,7 +4205,7 @@ interface Float32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4330,10 +4342,10 @@ interface Float32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float32ArrayConstructor {
@@ -4403,7 +4415,7 @@ interface Float64Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -4483,7 +4495,7 @@ interface Float64Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4620,10 +4632,10 @@ interface Float64Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float64ArrayConstructor {
@@ -4682,7 +4694,7 @@ declare var Reflect: {
     construct(target: Function, argumentsList: ArrayLike<any>): any;
     defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
     deleteProperty(target: any, propertyKey: PropertyKey): boolean;
-    enumerate(target: any): Iterator<any>;
+    enumerate(target: any): IterableIterator<any>;
     get(target: any, propertyKey: PropertyKey, receiver?: any): any;
     getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     getPrototypeOf(target: any): any;

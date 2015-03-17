@@ -17,12 +17,12 @@
 ////    INITIATED123;
 ////    public horizon(): void;
 ////}
-
+debugger;
 var notFoundSearchValue = "mPointThatIJustInitiated wrongKeyWord";
 
 goTo.marker("file1");
 // case sensitive matching for 'Horizon' will fail
-verify.navigationItemsListCount(0, "Horizon", "exact");
+verify.navigationItemsListCount(1, "Horizon", "exact");
 // case insensitive matching will find 'horizon' 
 verify.navigationItemsListCount(1, "horizon", "exact");
 // case sensitive matching will find 'Distance' and INITIATED

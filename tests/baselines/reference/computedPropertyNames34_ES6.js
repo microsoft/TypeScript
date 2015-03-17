@@ -10,13 +10,16 @@ class C<T> {
 }
 
 //// [computedPropertyNames34_ES6.js]
-function foo() { return ''; }
+function foo() {
+    return '';
+}
 var C = (function () {
     function C() {
     }
     C.bar = function () {
         var obj = {
-            [foo()]() { }
+            [foo()]() {
+            }
         };
         return 0;
     };

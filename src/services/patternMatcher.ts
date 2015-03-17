@@ -1,10 +1,10 @@
 module ts {
     // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
     export enum PatternMatchKind {
-        Exact,
-        Prefix,
-        Substring,
-        CamelCase
+        exact,
+        prefix,
+        substring,
+        camelCase
     }
 
     // Information about a match made by the pattern matcher between a candidate and the 
@@ -46,7 +46,7 @@ module ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidate: string, dottedContainer: string): PatternMatch[];
+        getMatches(candidateContainers: string[], candidate: string): PatternMatch[];
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -112,13 +112,13 @@ module ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As 
         // such, we cache the information we compute about the candidate for the life of this 
         // pattern matcher so we don't have to compute it multiple times.
-        var stringToWordSpans: Map<TextSpan[]> = {};
+        let stringToWordSpans: Map<TextSpan[]> = {};
 
         pattern = pattern.trim();
 
-        var fullPatternSegment = createSegment(pattern);
-        var dotSeparatedSegments = pattern.split(".").map(p => createSegment(p.trim()));
-        var invalidPattern = dotSeparatedSegments.length === 0 || forEach(dotSeparatedSegments, segmentIsInvalid);
+        let fullPatternSegment = createSegment(pattern);
+        let dotSeparatedSegments = pattern.split(".").map(p => createSegment(p.trim()));
+        let invalidPattern = dotSeparatedSegments.length === 0 || forEach(dotSeparatedSegments, segmentIsInvalid);
 
         return {
             getMatches,
@@ -139,7 +139,7 @@ module ts {
             return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
         }
 
-        function getMatches(candidate: string, dottedContainer: string): PatternMatch[] {
+        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] {
             if (skipMatch(candidate)) {
                 return undefined;
             }
@@ -147,34 +147,33 @@ module ts {
             // First, check that the last part of the dot separated pattern matches the name of the
             // candidate.  If not, then there's no point in proceeding and doing the more
             // expensive work.
-            var candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
+            let candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
             if (!candidateMatch) {
                 return undefined;
             }
 
-            dottedContainer = dottedContainer || "";
-            var containerParts = dottedContainer.split(".");
+            candidateContainers = candidateContainers || [];
 
             // -1 because the last part was checked against the name, and only the rest
             // of the parts are checked against the container.
-            if (dotSeparatedSegments.length - 1 > containerParts.length) {
+            if (dotSeparatedSegments.length - 1 > candidateContainers.length) {
                 // There weren't enough container parts to match against the pattern parts.
                 // So this definitely doesn't match.
-                return null;
+                return undefined;
             }
 
             // So far so good.  Now break up the container for the candidate and check if all
             // the dotted parts match up correctly.
-            var totalMatch = candidateMatch;
+            let totalMatch = candidateMatch;
 
-            for (var i = dotSeparatedSegments.length - 2, j = containerParts.length - 1;
+            for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
                  i >= 0;
                  i--, j--) {
 
-                var segment = dotSeparatedSegments[i];
-                var containerName = containerParts[j];
+                let segment = dotSeparatedSegments[i];
+                let containerName = candidateContainers[j];
 
-                var containerMatch = matchSegment(containerName, segment);
+                let containerMatch = matchSegment(containerName, segment);
                 if (!containerMatch) {
                     // This container didn't match the pattern piece.  So there's no match at all.
                     return undefined;
@@ -197,21 +196,21 @@ module ts {
         }
 
         function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {
-            var index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
+            let index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
             if (index === 0) {
                 if (chunk.text.length === candidate.length) {
                     // a) Check if the part matches the candidate entirely, in an case insensitive or
                     //    sensitive manner.  If it does, return that there was an exact match.
-                    return createPatternMatch(PatternMatchKind.Exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
+                    return createPatternMatch(PatternMatchKind.exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
                 }
                 else {
                     // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
                     //    manner.  If it does, return that there was a prefix match.
-                    return createPatternMatch(PatternMatchKind.Prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+                    return createPatternMatch(PatternMatchKind.prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
                 }
             }
 
-            var isLowercase = chunk.isLowerCase;
+            let isLowercase = chunk.isLowerCase;
             if (isLowercase) {
                 if (index > 0) {
                     // c) If the part is entirely lowercase, then check if it is contained anywhere in the
@@ -221,11 +220,10 @@ module ts {
                     //    Note: We only have a substring match if the lowercase part is prefix match of some
                     //    word part. That way we don't match something like 'Class' when the user types 'a'.
                     //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
-                    var wordSpans = getWordSpans(candidate);
-                    for (var i = 0, n = wordSpans.length; i < n; i++) {
-                        var span = wordSpans[i]
+                    let wordSpans = getWordSpans(candidate);
+                    for (let span of wordSpans) {
                         if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                            return createPatternMatch(PatternMatchKind.Substring, punctuationStripped,
+                            return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
                                 /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
                         }
                     }
@@ -236,22 +234,22 @@ module ts {
                 //    candidate in a case *sensitive* manner. If so, return that there was a substring
                 //    match.
                 if (candidate.indexOf(chunk.text) > 0) {
-                    return createPatternMatch(PatternMatchKind.Substring, punctuationStripped, /*isCaseSensitive:*/ true);
+                    return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ true);
                 }
             }
 
             if (!isLowercase) {
                 // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
                 if (chunk.characterSpans.length > 0) {
-                    var candidateParts = getWordSpans(candidate);
-                    var camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
+                    let candidateParts = getWordSpans(candidate);
+                    let camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
                     if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.CamelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
+                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
                     }
 
                     camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true);
                     if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.CamelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
+                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
                     }
                 }
             }
@@ -266,7 +264,7 @@ module ts {
                 // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
                 if (chunk.text.length < candidate.length) {
                     if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
-                        return createPatternMatch(PatternMatchKind.Substring, punctuationStripped, /*isCaseSensitive:*/ false);
+                        return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ false);
                     }
                 }
             }
@@ -275,8 +273,8 @@ module ts {
         }
 
         function containsSpaceOrAsterisk(text: string): boolean {
-            for (var i = 0; i < text.length; i++) {
-                var ch = text.charCodeAt(i);
+            for (let i = 0; i < text.length; i++) {
+                let ch = text.charCodeAt(i);
                 if (ch === CharacterCodes.space || ch === CharacterCodes.asterisk) {
                     return true;
                 }
@@ -294,7 +292,7 @@ module ts {
             // Note: if the segment contains a space or an asterisk then we must assume that it's a
             // multi-word segment.
             if (!containsSpaceOrAsterisk(segment.totalTextChunk.text)) {
-                var match = matchTextChunk(candidate, segment.totalTextChunk, /*punctuationStripped:*/ false);
+                let match = matchTextChunk(candidate, segment.totalTextChunk, /*punctuationStripped:*/ false);
                 if (match) {
                     return [match];
                 }
@@ -337,14 +335,12 @@ module ts {
             //
             // Only if all words have some sort of match is the pattern considered matched.
 
-            var subWordTextChunks = segment.subWordTextChunks;
-            var matches: PatternMatch[] = undefined;
+            let subWordTextChunks = segment.subWordTextChunks;
+            let matches: PatternMatch[] = undefined;
 
-            for (var i = 0, n = subWordTextChunks.length; i < n; i++) {
-                var subWordTextChunk = subWordTextChunks[i];
-
+            for (let subWordTextChunk of subWordTextChunks) {
                 // Try to match the candidate with this word
-                var result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true);
+                let result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true);
                 if (!result) {
                     return undefined;
                 }
@@ -357,8 +353,8 @@ module ts {
         }
 
         function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan?: TextSpan): boolean {
-            var patternPartStart = patternSpan ? patternSpan.start : 0;
-            var patternPartLength = patternSpan ? patternSpan.length : pattern.length;
+            let patternPartStart = patternSpan ? patternSpan.start : 0;
+            let patternPartLength = patternSpan ? patternSpan.length : pattern.length;
 
             if (patternPartLength > candidateSpan.length) {
                 // Pattern part is longer than the candidate part. There can never be a match.
@@ -366,18 +362,18 @@ module ts {
             }
             
             if (ignoreCase) {
-                for (var i = 0; i < patternPartLength; i++) {
-                    var ch1 = pattern.charCodeAt(patternPartStart + i);
-                    var ch2 = candidate.charCodeAt(candidateSpan.start + i);
+                for (let i = 0; i < patternPartLength; i++) {
+                    let ch1 = pattern.charCodeAt(patternPartStart + i);
+                    let ch2 = candidate.charCodeAt(candidateSpan.start + i);
                     if (toLowerCase(ch1) !== toLowerCase(ch2)) {
                         return false;
                     }
                 }
             }
             else {
-                for (var i = 0; i < patternPartLength; i++) {
-                    var ch1 = pattern.charCodeAt(patternPartStart + i);
-                    var ch2 = candidate.charCodeAt(candidateSpan.start + i);
+                for (let i = 0; i < patternPartLength; i++) {
+                    let ch1 = pattern.charCodeAt(patternPartStart + i);
+                    let ch2 = candidate.charCodeAt(candidateSpan.start + i);
                     if (ch1 !== ch2) {
                         return false;
                     }
@@ -388,23 +384,23 @@ module ts {
         }
 
         function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
-            var chunkCharacterSpans = chunk.characterSpans;
+            let chunkCharacterSpans = chunk.characterSpans;
 
             // Note: we may have more pattern parts than candidate parts.  This is because multiple
             // pattern parts may match a candidate part.  For example "SiUI" against "SimpleUI".
             // We'll have 3 pattern parts Si/U/I against two candidate parts Simple/UI.  However, U
             // and I will both match in UI. 
 
-            var currentCandidate = 0;
-            var currentChunkSpan = 0;
-            var firstMatch: number = undefined;
-            var contiguous: boolean = undefined;
+            let currentCandidate = 0;
+            let currentChunkSpan = 0;
+            let firstMatch: number = undefined;
+            let contiguous: boolean = undefined;
 
             while (true) {
                 // Let's consider our termination cases
                 if (currentChunkSpan === chunkCharacterSpans.length) {
                     // We did match! We shall assign a weight to this
-                    var weight = 0;
+                    let weight = 0;
 
                     // Was this contiguous?
                     if (contiguous) {
@@ -423,15 +419,15 @@ module ts {
                     return undefined;
                 }
 
-                var candidatePart = candidateParts[currentCandidate];
-                var gotOneMatchThisCandidate = false;
+                let candidatePart = candidateParts[currentCandidate];
+                let gotOneMatchThisCandidate = false;
 
                 // Consider the case of matching SiUI against SimpleUIElement. The candidate parts
                 // will be Simple/UI/Element, and the pattern parts will be Si/U/I.  We'll match 'Si'
                 // against 'Simple' first.  Then we'll match 'U' against 'UI'. However, we want to
                 // still keep matching pattern parts against that candidate part. 
                 for (; currentChunkSpan < chunkCharacterSpans.length; currentChunkSpan++) {
-                    var chunkCharacterSpan = chunkCharacterSpans[currentChunkSpan];
+                    let chunkCharacterSpan = chunkCharacterSpans[currentChunkSpan];
 
                     if (gotOneMatchThisCandidate) {
                         // We've already gotten one pattern part match in this candidate.  We will
@@ -508,7 +504,7 @@ module ts {
     }
 
     function compareCamelCase(result1: PatternMatch, result2: PatternMatch) {
-        if (result1.kind === PatternMatchKind.CamelCase && result2.kind === PatternMatchKind.CamelCase) {
+        if (result1.kind === PatternMatchKind.camelCase && result2.kind === PatternMatchKind.camelCase) {
             // Swap the values here.  If result1 has a higher weight, then we want it to come
             // first.
             return result2.camelCaseWeight - result1.camelCaseWeight;
@@ -541,7 +537,7 @@ module ts {
 
         // TODO: find a way to determine this for any unicode characters in a 
         // non-allocating manner.
-        var str = String.fromCharCode(ch);
+        let str = String.fromCharCode(ch);
         return str === str.toUpperCase();
     }
 
@@ -558,12 +554,12 @@ module ts {
 
         // TODO: find a way to determine this for any unicode characters in a 
         // non-allocating manner.
-        var str = String.fromCharCode(ch);
+        let str = String.fromCharCode(ch);
         return str === str.toLowerCase();
     }
 
     function containsUpperCaseLetter(string: string): boolean {
-        for (var i = 0, n = string.length; i < n; i++) {
+        for (let i = 0, n = string.length; i < n; i++) {
             if (isUpperCaseLetter(string.charCodeAt(i))) {
                 return true;
             }
@@ -573,7 +569,7 @@ module ts {
     }
 
     function startsWith(string: string, search: string) {
-        for (var i = 0, n = search.length; i < n; i++) {
+        for (let i = 0, n = search.length; i < n; i++) {
             if (string.charCodeAt(i) !== search.charCodeAt(i)) {
                 return false;
             }
@@ -584,7 +580,7 @@ module ts {
 
     // Assumes 'value' is already lowercase.
     function indexOfIgnoringCase(string: string, value: string): number {
-        for (var i = 0, n = string.length - value.length; i <= n; i++) {
+        for (let i = 0, n = string.length - value.length; i <= n; i++) {
             if (startsWithIgnoringCase(string, value, i)) {
                 return i;
             }
@@ -595,9 +591,9 @@ module ts {
 
     // Assumes 'value' is already lowercase.
     function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
-        for (var i = 0, n = value.length; i < n; i++) {
-            var ch1 = toLowerCase(string.charCodeAt(i + start));
-            var ch2 = value.charCodeAt(i);
+        for (let i = 0, n = value.length; i < n; i++) {
+            let ch1 = toLowerCase(string.charCodeAt(i + start));
+            let ch2 = value.charCodeAt(i);
 
             if (ch1 !== ch2) {
                 return false;
@@ -632,12 +628,12 @@ module ts {
     }
 
     function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
-        var result: TextChunk[] = [];
-        var wordStart = 0;
-        var wordLength = 0;
+        let result: TextChunk[] = [];
+        let wordStart = 0;
+        let wordLength = 0;
 
-        for (var i = 0; i < pattern.length; i++) {
-            var ch = pattern.charCodeAt(i);
+        for (let i = 0; i < pattern.length; i++) {
+            let ch = pattern.charCodeAt(i);
             if (isWordChar(ch)) {
                 if (wordLength++ === 0) {
                     wordStart = i;
@@ -659,7 +655,7 @@ module ts {
     }
 
     function createTextChunk(text: string): TextChunk {
-        var textLowerCase = text.toLowerCase();
+        let textLowerCase = text.toLowerCase();
         return {
             text,
             textLowerCase,
@@ -677,15 +673,15 @@ module ts {
     }
 
     function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
-        var result: TextSpan[] = [];
+        let result: TextSpan[] = [];
 
-        var wordStart = 0;
-        for (var i = 1, n = identifier.length; i < n; i++) {
-            var lastIsDigit = isDigit(identifier.charCodeAt(i - 1));
-            var currentIsDigit = isDigit(identifier.charCodeAt(i));
+        let wordStart = 0;
+        for (let i = 1, n = identifier.length; i < n; i++) {
+            let lastIsDigit = isDigit(identifier.charCodeAt(i - 1));
+            let currentIsDigit = isDigit(identifier.charCodeAt(i));
 
-            var hasTransitionFromLowerToUpper = transitionFromLowerToUpper(identifier, word, i);
-            var hasTransitionFromUpperToLower = transitionFromUpperToLower(identifier, word, i, wordStart);
+            let hasTransitionFromLowerToUpper = transitionFromLowerToUpper(identifier, word, i);
+            let hasTransitionFromUpperToLower = transitionFromUpperToLower(identifier, word, i, wordStart);
 
             if (charIsPunctuation(identifier.charCodeAt(i - 1)) ||
                 charIsPunctuation(identifier.charCodeAt(i)) ||
@@ -740,8 +736,8 @@ module ts {
     }
 
     function isAllPunctuation(identifier: string, start: number, end: number): boolean {
-        for (var i = start; i < end; i++) {
-            var ch = identifier.charCodeAt(i);
+        for (let i = start; i < end; i++) {
+            let ch = identifier.charCodeAt(i);
 
             // We don't consider _ or $ as punctuation as there may be things with that name.
             if (!charIsPunctuation(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$) {
@@ -762,8 +758,8 @@ module ts {
             // etc.
             if (index != wordStart &&
                 index + 1 < identifier.length) {
-                var currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
-                var nextIsLower = isLowerCaseLetter(identifier.charCodeAt(index + 1));
+                let currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
+                let nextIsLower = isLowerCaseLetter(identifier.charCodeAt(index + 1));
 
                 if (currentIsUpper && nextIsLower) {
                     // We have a transition from an upper to a lower letter here.  But we only
@@ -774,7 +770,7 @@ module ts {
                     // that follows.  Note: this will make the following not split properly:
                     // "HELLOthere".  However, these sorts of names do not show up in .Net
                     // programs.
-                    for (var i = wordStart; i < index; i++) {
+                    for (let i = wordStart; i < index; i++) {
                         if (!isUpperCaseLetter(identifier.charCodeAt(i))) {
                             return false;
                         }
@@ -789,8 +785,8 @@ module ts {
     }
 
     function transitionFromLowerToUpper(identifier: string, word: boolean, index: number): boolean {
-        var lastIsUpper = isUpperCaseLetter(identifier.charCodeAt(index - 1));
-        var currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
+        let lastIsUpper = isUpperCaseLetter(identifier.charCodeAt(index - 1));
+        let currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
 
         // See if the casing indicates we're starting a new word. Note: if we're breaking on
         // words, then just seeing an upper case character isn't enough.  Instead, it has to
@@ -805,7 +801,7 @@ module ts {
         // on characters would be: A M
         //
         // We break the search string on characters.  But we break the symbol name on words.
-        var transition = word
+        let transition = word
             ? (currentIsUpper && !lastIsUpper)
             : currentIsUpper;
         return transition;

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of28.ts ===
+for (var v of new StringIterator) { }
+>v : any
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+
+class StringIterator {
+>StringIterator : StringIterator
+
+    next: any;
+>next : any
+
+    [Symbol.iterator]() {
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+        return this;
+>this : StringIterator
+    }
+}

@@ -82,7 +82,11 @@ obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
 xa[1].foo(1, 2, "abc");
 (_a = xa[1]).foo.apply(_a, [1, 2].concat(a));
 (_b = xa[1]).foo.apply(_b, [1, 2].concat(a, ["abc"]));
-(_c = xa[1]).foo.apply(_c, [1, 2, "abc"]);
+(_c = xa[1]).foo.apply(_c, [
+    1,
+    2,
+    "abc"
+]);
 var C = (function () {
     function C(x, y) {
         var z = [];

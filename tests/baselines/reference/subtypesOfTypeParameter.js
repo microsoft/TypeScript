@@ -143,7 +143,8 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-function f() { }
+function f() {
+}
 var f;
 (function (f) {
     f.bar = 1;
@@ -174,12 +175,22 @@ function f2(x, y) {
     var r4 = true ? x : new Date();
     var r5 = true ? /1/ : x;
     var r5 = true ? x : /1/;
-    var r6 = true ? { foo: 1 } : x;
-    var r6 = true ? x : { foo: 1 };
-    var r7 = true ? function () { } : x;
-    var r7 = true ? x : function () { };
-    var r8 = true ? function (x) { return x; } : x;
-    var r8b = true ? x : function (x) { return x; }; // type parameters not identical across declarations
+    var r6 = true ? {
+        foo: 1
+    } : x;
+    var r6 = true ? x : {
+        foo: 1
+    };
+    var r7 = true ? function () {
+    } : x;
+    var r7 = true ? x : function () {
+    };
+    var r8 = true ? function (x) {
+        return x;
+    } : x;
+    var r8b = true ? x : function (x) {
+        return x;
+    }; // type parameters not identical across declarations
     var i1;
     var r9 = true ? i1 : x;
     var r9 = true ? x : i1;

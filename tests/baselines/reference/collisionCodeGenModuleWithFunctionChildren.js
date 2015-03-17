@@ -23,7 +23,9 @@ module M {
 var M;
 (function (_M) {
     _M.x = 3;
-    function fn(M, p) { }
+    function fn(M, p) {
+        if (p === void 0) { p = _M.x; }
+    }
 })(M || (M = {}));
 var M;
 (function (_M_1) {

@@ -16,7 +16,8 @@ var Foo = (function () {
 })();
 exports.Foo = Foo;
 //// [declFileAliasUseBeforeDeclaration_test.js]
-function bar(a) { }
+function bar(a) {
+}
 exports.bar = bar;
 
 

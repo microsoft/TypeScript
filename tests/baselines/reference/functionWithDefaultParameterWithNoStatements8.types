@@ -1,0 +1,11 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements8.ts ===
+function foo(a = undefined) { }
+>foo : (a?: any) => void
+>a : any
+>undefined : undefined
+
+function bar(a = undefined) {
+>bar : (a?: any) => void
+>a : any
+>undefined : undefined
+}
