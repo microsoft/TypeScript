@@ -1938,6 +1938,67 @@
         "category": "Error",
         "code": 8001
     },
+    "'import ... =' can only be used in TypeScript.": {
+        "category": "Error",
+        "code":  8002
+    },
+    "'export=' can only be used in TypeScript.": {
+        "category": "Error",
+        "code":  8003
+    },
+    "'type parameter declarations' can only be used in TypeScript.": {
+        "category": "Error",
+        "code":  8004
+    },
+    "'implements clauses' can only be used in TypeScript.": {
+        "category": "Error",
+        "code":  8005
+    },
+    "'interface declarations' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8006
+    },
+    "'module declarations' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'type aliases' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'{0}' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8008
+    },
+    "'types' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8009
+    },
+    "'type arguments' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8010
+    },
+    "'parameter modifiers' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8011
+    },
+    "'?' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8012
+    },
+    "'property declarations' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8013
+    },
+    "'enum declarations' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8014
+    },
+    "'type assertion expressions' can only be used in TypeScript.": {
+        "category": "Error",
+        "code": 8014
+    },
+
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000
