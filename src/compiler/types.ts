@@ -307,6 +307,7 @@ module ts {
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
         OctalLiteral =      0x00004000,
+        ExportContext =     0x00008000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,

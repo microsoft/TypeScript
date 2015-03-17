@@ -784,15 +784,6 @@ module ts {
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            if (compilerOptions.target < ScriptTarget.ES6) {
-                // A default export hides all other exports in CommonJS and AMD modules
-                let defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
-                if (defaultSymbol) {
-                    return {
-                        "default": defaultSymbol
-                    };
-                }
-            }
             let result: SymbolTable;
             let visitedSymbols: Symbol[] = [];
             visit(moduleSymbol);
