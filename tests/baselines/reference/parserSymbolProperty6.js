@@ -4,9 +4,8 @@ class C {
 }
 
 //// [parserSymbolProperty6.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[Symbol.toStringTag] = "";
     }
-    return C;
-})();
+}

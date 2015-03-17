@@ -11,11 +11,8 @@ module M {
 var M;
 (function (M) {
     var Symbol;
-    var C = (function () {
-        function C() {
+    class C {
+        [Symbol.iterator]() {
         }
-        C.prototype[Symbol.iterator] = function () {
-        };
-        return C;
-    })();
+    }
 })(M || (M = {}));

@@ -4527,7 +4527,13 @@ module ts {
         }
 
         function parseClassDeclaration(fullStart: number, modifiers: ModifiersArray): ClassDeclaration {
-            let node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
+            // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
+            let savedStrictModeContext = inStrictModeContext();
+            if (languageVersion >= ScriptTarget.ES6) {
+                setStrictModeContext(true);
+            }
+
+            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
@@ -4547,7 +4553,10 @@ module ts {
             else {
                 node.members = createMissingList<ClassElement>();
             }
-            return finishNode(node);
+
+            var finishedNode = finishNode(node);
+            setStrictModeContext(savedStrictModeContext);
+            return finishedNode;
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
