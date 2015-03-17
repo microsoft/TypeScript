@@ -4581,7 +4581,8 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
         }
     }
     return value;
-};`);
+};
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };`);
                     decorateEmitted = true;
                 }
                 if (isExternalModule(node)) {
