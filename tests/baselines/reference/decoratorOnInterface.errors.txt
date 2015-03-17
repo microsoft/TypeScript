@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts(4,11): error TS1203: Decorators are not valid on this declaration type.
+tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts(4,11): error TS1206: Decorators are not valid on this declaration type.
 
 
 ==== tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts(4,11): error 
     @dec
     interface I {
               ~
-!!! error TS1203: Decorators are not valid on this declaration type.
+!!! error TS1206: Decorators are not valid on this declaration type.
     }
