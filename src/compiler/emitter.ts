@@ -4930,7 +4930,7 @@ module ts {
                 writeLine();
                 emitMemberAssignments(node, NodeFlags.Static);
 
-                // If this is an exported classes, but not on the top level (i.e. on an internal
+                // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
                 if (!isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Export)) {
                     writeLine();
@@ -5348,7 +5348,7 @@ module ts {
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || node.parent.kind !== SyntaxKind.SourceFile) {
                     if (node.moduleSpecifier) {
                         emitStart(node);
                         let generatedName = resolver.getGeneratedNameForNode(node);
@@ -5385,6 +5385,23 @@ module ts {
                             write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
                         }
                         emitEnd(node);
+                    }
+                    else {
+                        // internal module
+                        if (node.exportClause) {
+                            // export { x, y, ... }
+                            forEach(node.exportClause.elements, specifier => {
+                                writeLine();
+                                emitStart(specifier);
+                                emitContainingModuleName(specifier);
+                                write(".");
+                                emitNodeWithoutSourceMap(specifier.name);
+                                write(" = ");
+                                emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
+                                write(";");
+                                emitEnd(specifier);
+                            });
+                        }
                     }
                 }
                 else {
