@@ -833,3 +833,5 @@ module ts {
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
+
+let toolsVerions = "1.4.3.0";
