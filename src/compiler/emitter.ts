@@ -5310,14 +5310,6 @@ module ts {
                 }
             }
 
-            function getFirstExportAssignment(sourceFile: SourceFile) {
-                return forEach(sourceFile.statements, node => {
-                    if (node.kind === SyntaxKind.ExportAssignment) {
-                        return <ExportAssignment>node;
-                    }
-                });
-            }
-            
             function sortAMDModules(amdModules: {name: string; path: string}[]) {
                 // AMD modules with declared variable names go first
                 return amdModules.sort((moduleA, moduleB) => {
