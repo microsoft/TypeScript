@@ -148,6 +148,7 @@ module ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
+        "@": SyntaxKind.AtToken,
     };
 
     /*
@@ -313,6 +314,19 @@ module ts {
 
     export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
+    }
+
+    export function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean {
+        var lineStarts = getLineStarts(sourceFile);
+        var firstLine = binarySearch(lineStarts, firstPos);
+        var secondLine = binarySearch(lineStarts, secondPos);
+        if (firstLine < 0) {
+            firstLine = ~firstLine - 1;
+        }
+        if (secondLine < 0) {
+            secondLine = ~secondLine - 1;
+        }
+        return firstLine !== secondLine;
     }
 
     let hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -1247,6 +1261,8 @@ module ts {
                         return pos++, token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
                         return pos++, token = SyntaxKind.TildeToken;
+                    case CharacterCodes.at:
+                        return pos++, token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         let cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar)) {
