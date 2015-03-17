@@ -1637,6 +1637,10 @@
         "category": "Error",
         "code": 4081
     },
+    "Default export of the module has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4081
+    },
     "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 4091

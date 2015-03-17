@@ -11157,6 +11157,11 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
+        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+            var type = getTypeOfExpression(expr);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+        }
+
         function isUnknownIdentifier(location: Node, name: string): boolean {
             Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
             return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
@@ -11200,6 +11205,7 @@ module ts {
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
+                writeTypeOfExpression,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,

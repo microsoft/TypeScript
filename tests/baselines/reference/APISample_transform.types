@@ -3169,6 +3169,17 @@ declare module "typescript" {
 >writer : SymbolWriter
 >SymbolWriter : SymbolWriter
 
+        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+>writeTypeOfExpression : (expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
+>expr : Expression
+>Expression : Expression
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
 >isSymbolAccessible : (symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) => SymbolAccessiblityResult
 >symbol : Symbol

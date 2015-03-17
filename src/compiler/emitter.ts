@@ -751,7 +751,14 @@ module ts {
 
         function emitExportAssignment(node: ExportAssignment) {
             write(node.isExportEquals ? "export = " : "export default ");
-            writeTextOfNode(currentSourceFile, node.expression);
+            if (node.expression.kind === SyntaxKind.Identifier) {
+                writeTextOfNode(currentSourceFile, node.expression);
+            }
+            else {
+                write(": ");
+                writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
+                resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+            }
             write(";");
             writeLine();
 
@@ -762,8 +769,12 @@ module ts {
                 // write each of these declarations asynchronously
                 writeAsynchronousModuleElements(nodes);
             }
-            else {
-                Debug.fail("TODO(fixme)")
+
+            function getDefaultExportAccessibilityDiagnostic(diagnostic: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
+                return {
+                    diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+                    errorNode: node
+                };
             }
         }
         
@@ -839,7 +850,10 @@ module ts {
                     write("export ");
                 }
 
-                if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                if (node.flags & NodeFlags.Default) {
+                    write("default ");
+                }
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
                     write("declare ");
                 }
             }
