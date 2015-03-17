@@ -5,7 +5,7 @@
 ////    var processedFiles = rootFileNames.map(fileName => foo(/*1*/
 
 goTo.marker("1");
-verify.not.completionListContains("fileName");
-verify.not.completionListContains("rootFileNames");
-verify.not.completionListContains("getAllFiles");
-verify.not.completionListContains("foo");
+verify.completionListContains("fileName");
+verify.completionListContains("rootFileNames");
+verify.completionListContains("getAllFiles");
+verify.completionListContains("foo");
