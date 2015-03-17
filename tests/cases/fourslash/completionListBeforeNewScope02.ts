@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////a
+////a/*1*/
 ////
 ////{
 ////    let aaaaaa = 10;
