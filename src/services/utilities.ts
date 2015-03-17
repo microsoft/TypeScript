@@ -154,6 +154,13 @@ module ts {
                 }
                 return isCompletedNode((<DoStatement>n).statement, sourceFile);
 
+            case SyntaxKind.PrefixUnaryExpression:
+                return isCompletedNode(<PrefixUnaryExpression>n, sourceFile);
+            case SyntaxKind.BinaryExpression:
+                return isCompletedNode((<BinaryExpression>n).right, sourceFile);
+            case SyntaxKind.ConditionalExpression:
+                return isCompletedNode((<ConditionalExpression>n).whenFalse, sourceFile);
+
             default:
                 return true;
         }
