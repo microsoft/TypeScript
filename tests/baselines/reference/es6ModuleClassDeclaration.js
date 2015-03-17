@@ -165,6 +165,7 @@ var m1;
     }
     c3.k = 20;
     c3.l = 30;
+    m1.c3 = c3;
     class c4 {
         constructor() {
             this.x = 10;
@@ -205,6 +206,7 @@ var m2;
     }
     c3.k = 20;
     c3.l = 30;
+    m2.c3 = c3;
     class c4 {
         constructor() {
             this.x = 10;

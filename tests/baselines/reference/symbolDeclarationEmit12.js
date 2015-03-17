@@ -27,4 +27,5 @@ var M;
         set [Symbol.isRegExp](x) {
         }
     }
+    M.C = C;
 })(M || (M = {}));

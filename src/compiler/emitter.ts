@@ -4929,6 +4929,18 @@ module ts {
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
                 writeLine();
                 emitMemberAssignments(node, NodeFlags.Static);
+
+                // If this is an exported classes, but not on the top level (i.e. on an internal
+                // module), export it
+                if (!isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                    writeLine();
+                    emitStart(node);
+                    emitModuleMemberName(node);
+                    write(" = ");
+                    emitDeclarationName(node);
+                    emitEnd(node);
+                    write(";");
+                }
             }
 
             function emitClassDeclarationBelowES6(node: ClassDeclaration) {
@@ -4972,11 +4984,7 @@ module ts {
                 write(");");
                 emitEnd(node);
 
-                if (isES6ModuleMemberDeclaration(node)) {
-                    // TODO update this to emit "export class " when ES67 class emit is available
-                    emitES6NamedExportForDeclaration(node);
-                }
-                else if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
+                if (node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
