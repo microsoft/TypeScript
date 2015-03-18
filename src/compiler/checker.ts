@@ -79,8 +79,7 @@ module ts {
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        let inferenceFailureType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-
+        
         let anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
         let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
 
@@ -567,7 +566,7 @@ module ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            return node.expression && resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
         function getTargetOfImportDeclaration(node: Declaration): Symbol {
@@ -623,7 +622,7 @@ module ts {
             if (!links.referenced) {
                 links.referenced = true;
                 let node = getDeclarationOfAliasSymbol(symbol);
-                if (node.kind === SyntaxKind.ExportAssignment) {
+                if (node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
                 }
@@ -784,7 +783,7 @@ module ts {
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 // A default export hides all other exports in CommonJS and AMD modules
                 let defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
@@ -1813,6 +1812,11 @@ module ts {
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.ImportSpecifier:
+                        return false;
+
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
                     // Source file is always visible
@@ -2073,7 +2077,16 @@ module ts {
                 }
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
-                    return links.type = checkExpression((<ExportAssignment>declaration).expression);
+                    var exportAssignment = <ExportAssignment>declaration;
+                    if (exportAssignment.expression) {
+                        return links.type = checkExpression(exportAssignment.expression);
+                    }
+                    else if (exportAssignment.type) {
+                        return links.type = getTypeFromTypeNode(exportAssignment.type);
+                    }
+                    else {
+                        return links.type = anyType;
+                    }
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
@@ -3505,6 +3518,7 @@ module ts {
             return t => {
                 for (let i = 0; i < context.typeParameters.length; i++) {
                     if (t === context.typeParameters[i]) {
+                        context.inferences[i].isFixed = true;
                         return getInferredType(context, i);
                     }
                 }
@@ -4363,8 +4377,11 @@ module ts {
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
+            // The downfallType/bestSupertypeDownfallType is the first type that caused a particular candidate
+            // to not be the common supertype. So if it weren't for this one downfallType (and possibly others),
+            // the type in question could have been the common supertype.
             let bestSupertype: Type;
-            let bestSupertypeDownfallType: Type; // The type that caused bestSupertype not to be the common supertype
+            let bestSupertypeDownfallType: Type;
             let bestSupertypeScore = 0;
 
             for (let i = 0; i < types.length; i++) {
@@ -4378,6 +4395,8 @@ module ts {
                         downfallType = types[j];
                     }
                 }
+
+                Debug.assert(!!downfallType, "If there is no common supertype, each type should have a downfallType");
 
                 if (score > bestSupertypeScore) {
                     bestSupertype = types[i];
@@ -4561,13 +4580,12 @@ module ts {
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
             let inferences: TypeInferences[] = [];
             for (let unused of typeParameters) {
-                inferences.push({ primary: undefined, secondary: undefined });
+                inferences.push({ primary: undefined, secondary: undefined, isFixed: false });
             }
             return {
-                typeParameters: typeParameters,
-                inferUnionTypes: inferUnionTypes,
-                inferenceCount: 0,
-                inferences: inferences,
+                typeParameters,
+                inferUnionTypes,
+                inferences,
                 inferredTypes: new Array(typeParameters.length),
             };
         }
@@ -4613,11 +4631,21 @@ module ts {
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
                             let inferences = context.inferences[i];
-                            let candidates = inferiority ?
-                                inferences.secondary || (inferences.secondary = []) :
-                                inferences.primary || (inferences.primary = []);
-                            if (!contains(candidates, source)) candidates.push(source);
-                            break;
+                            if (!inferences.isFixed) {
+                                // Any inferences that are made to a type parameter in a union type are inferior
+                                // to inferences made to a flat (non-union) type. This is because if we infer to
+                                // T | string[], we really don't know if we should be inferring to T or not (because
+                                // the correct constituent on the target side could be string[]). Therefore, we put
+                                // such inferior inferences into a secondary bucket, and only use them if the primary
+                                // bucket is empty.
+                                let candidates = inferiority ?
+                                    inferences.secondary || (inferences.secondary = []) :
+                                    inferences.primary || (inferences.primary = []);
+                                if (!contains(candidates, source)) {
+                                    candidates.push(source);
+                                }
+                            }
+                            return;
                         }
                     }
                 }
@@ -4723,20 +4751,34 @@ module ts {
 
         function getInferredType(context: InferenceContext, index: number): Type {
             let inferredType = context.inferredTypes[index];
+            let inferenceSucceeded: boolean;
             if (!inferredType) {
                 let inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
-                    // Infer widened union or supertype, or the undefined type for no common supertype
+                    // Infer widened union or supertype, or the unknown type for no common supertype
                     let unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
-                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : inferenceFailureType;
+                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
+                    inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
-                    // Infer the empty object type when no inferences were made
+                    // Infer the empty object type when no inferences were made. It is important to remember that
+                    // in this case, inference still succeeds, meaning there is no error for not having inference
+                    // candidates. An inference error only occurs when there are *conflicting* candidates, i.e.
+                    // candidates with no common supertype.
                     inferredType = emptyObjectType;
+                    inferenceSucceeded = true;
                 }
-                if (inferredType !== inferenceFailureType) {
+
+                // Only do the constraint check if inference succeeded (to prevent cascading errors)
+                if (inferenceSucceeded) {
                     let constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                }
+                else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
+                    // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
+                    // It might be that inference has already failed on a later type parameter on a previous call to inferTypeArguments.
+                    // So if this failure is on preceding type parameter, this type parameter is the new failure index.
+                    context.failedTypeParameterIndex = index;
                 }
                 context.inferredTypes[index] = inferredType;
             }
@@ -6334,10 +6376,31 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
             let typeParameters = signature.typeParameters;
-            let context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             let inferenceMapper = createInferenceMapper(context);
+
+            // Clear out all the inference results from the last time inferTypeArguments was called on this context
+            for (let i = 0; i < typeParameters.length; i++) {
+                // As an optimization, we don't have to clear (and later recompute) inferred types
+                // for type parameters that have already been fixed on the previous call to inferTypeArguments.
+                // It would be just as correct to reset all of them. But then we'd be repeating the same work
+                // for the type parameters that were fixed, namely the work done by getInferredType.
+                if (!context.inferences[i].isFixed) {
+                    context.inferredTypes[i] = undefined;
+                }
+            }
+
+            // On this call to inferTypeArguments, we may get more inferences for certain type parameters that were not
+            // fixed last time. This means that a type parameter that failed inference last time may succeed this time,
+            // or vice versa. Therefore, the failedTypeParameterIndex is useless if it points to an unfixed type parameter,
+            // because it may change. So here we reset it. However, getInferredType will not revisit any type parameters
+            // that were previously fixed. So if a fixed type parameter failed previously, it will fail again because
+            // it will contain the exact same set of inferences. So if we reset the index from a fixed type parameter,
+            // we will lose information that we won't recover this time around.
+            if (context.failedTypeParameterIndex !== undefined && !context.inferences[context.failedTypeParameterIndex].isFixed) {
+                context.failedTypeParameterIndex = undefined;
+            }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
@@ -6373,18 +6436,7 @@ module ts {
                 }
             }
 
-            let inferredTypes = getInferredTypes(context);
-            // Inference has failed if the inferenceFailureType type is in list of inferences
-            context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
-
-            // Wipe out the inferenceFailureType from the array so that error recovery can work properly
-            for (let i = 0; i < inferredTypes.length; i++) {
-                if (inferredTypes[i] === inferenceFailureType) {
-                    inferredTypes[i] = unknownType;
-                }
-            }
-
-            return context;
+            getInferredTypes(context);
         }
 
         function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean): boolean {
@@ -6618,15 +6670,17 @@ module ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
-                for (let current of candidates) {
-                    if (!hasCorrectArity(node, args, current)) {
+                for (let originalCandidate of candidates) {
+                    if (!hasCorrectArity(node, args, originalCandidate)) {
                         continue;
                     }
-
-                    let originalCandidate = current;
-                    let inferenceResult: InferenceContext;
+                    
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
+                    let inferenceContext = originalCandidate.typeParameters
+                        ? createInferenceContext(originalCandidate.typeParameters, /*inferUnionTypes*/ false)
+                        : undefined;
+
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
@@ -6636,9 +6690,9 @@ module ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
-                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
-                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
-                                typeArgumentTypes = inferenceResult.inferredTypes;
+                                inferTypeArguments(candidate, args, excludeArgument, inferenceContext);
+                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
+                                typeArgumentTypes = inferenceContext.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
@@ -6668,7 +6722,7 @@ module ts {
                         else {
                             candidateForTypeArgumentError = originalCandidate;
                             if (!typeArguments) {
-                                resultOfFailedInference = inferenceResult;
+                                resultOfFailedInference = inferenceContext;
                             }
                         }
                     }
@@ -10044,6 +10098,12 @@ module ts {
                         }
                     }
                 }
+                else {
+                    if (languageVersion >= ScriptTarget.ES6) {
+                        // Import equals declaration is deprecated in es6 or above
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                    }
+                }
             }
         }
 
@@ -10075,13 +10135,27 @@ module ts {
             if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
-            if (node.expression.kind === SyntaxKind.Identifier) {
-                markExportAsReferenced(node);
+            if (node.expression) {
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    markExportAsReferenced(node);
+                }
+                else {
+                    checkExpressionCached(node.expression);
+                }
             }
-            else {
-                checkExpressionCached(node.expression);
+            if (node.type) {
+                checkSourceElement(node.type);
+                if (!isInAmbientContext(node)) {
+                    grammarErrorOnFirstToken(node.type, Diagnostics.A_type_annotation_on_an_export_statement_is_only_allowed_in_an_ambient_external_module_declaration);
+                }
             }
+
             checkExternalModuleExports(container);
+
+            if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
+                // export assignment is deprecated in es6 or above
+                grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+            }
         }
 
         function getModuleStatements(node: Declaration): ModuleElement[] {
@@ -10124,7 +10198,7 @@ module ts {
             if (!links.exportsChecked) {
                 let defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
-                    if (hasExportedMembers(moduleSymbol)) {
+                    if (languageVersion < ScriptTarget.ES6 && hasExportedMembers(moduleSymbol)) {
                         let declaration = getDeclarationOfAliasSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
@@ -10914,7 +10988,7 @@ module ts {
             }
 
             function generateNameForExportAssignment(node: ExportAssignment) {
-                if (node.expression.kind !== SyntaxKind.Identifier) {
+                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
                     assignGeneratedName(node, makeUniqueName("default"));
                 }
             }
@@ -10947,7 +11021,15 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                return "exports." + unescapeIdentifier(symbol.name);
+                var symbolName = unescapeIdentifier(symbol.name);
+                // If this is es6 or higher, just use the name of the export
+                // no need to qualify it.
+                if (languageVersion >= ScriptTarget.ES6) {
+                    return symbolName;
+                }
+                else {
+                    return "exports." + symbolName;
+                }
             }
             let node = location;
             let containerSymbol = getParentOfSymbol(symbol);
@@ -10975,7 +11057,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias) {
+                if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
                     return getAliasNameSubstitution(symbol);
                 }
             }
@@ -11011,7 +11093,6 @@ module ts {
                     return true;
                 }
             }
-            return forEachChild(node, isReferencedAliasDeclaration);
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
@@ -11085,26 +11166,11 @@ module ts {
         function getBlockScopedVariableId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
-            // ignore name parts of property access expressions
-            if (n.parent.kind === SyntaxKind.PropertyAccessExpression &&
-                (<PropertyAccessExpression>n.parent).name === n) {
-                return undefined;
-            }
+            let isVariableDeclarationOrBindingElement =
+                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
 
-            // ignore property names in object binding patterns
-            if (n.parent.kind === SyntaxKind.BindingElement &&
-                (<BindingElement>n.parent).propertyName === n) {
-                return undefined;
-            }
-
-            // for names in variable declarations and binding elements try to short circuit and fetch symbol from the node
-            let declarationSymbol: Symbol =
-                (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n) ||
-                 n.parent.kind === SyntaxKind.BindingElement
-                    ? getSymbolOfNode(n.parent)
-                    : undefined;
-
-            let symbol = declarationSymbol ||
+            let symbol = 
+                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 

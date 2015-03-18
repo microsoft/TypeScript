@@ -12,14 +12,11 @@ class C {
 var p1;
 var p2;
 var p3;
-var C = (function () {
-    function C() {
+class C {
+    [p1]() {
     }
-    C.prototype[p1] = function () {
-    };
-    C.prototype[p2] = function () {
-    };
-    C.prototype[p3] = function () {
-    };
-    return C;
-})();
+    [p2]() {
+    }
+    [p3]() {
+    }
+}

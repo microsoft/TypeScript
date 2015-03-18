@@ -49,3 +49,4 @@ tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_1.ts(6,8): e
 !!! error TS1192: External module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_0"' has no default export or export assignment.
            ~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'defaultBinding'.
+    

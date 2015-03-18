@@ -21,22 +21,16 @@ class FooIterator {
 v;
 for (var v of new FooIterator) {
 }
-var Foo = (function () {
-    function Foo() {
-    }
-    return Foo;
-})();
-var FooIterator = (function () {
-    function FooIterator() {
-    }
-    FooIterator.prototype.next = function () {
+class Foo {
+}
+class FooIterator {
+    next() {
         return {
             value: new Foo,
             done: false
         };
-    };
-    FooIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return FooIterator;
-})();
+    }
+}

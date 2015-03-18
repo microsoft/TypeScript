@@ -2602,9 +2602,13 @@ declare module "typescript" {
         isExportEquals?: boolean;
 >isExportEquals : boolean
 
-        expression: Expression;
+        expression?: Expression;
 >expression : Expression
 >Expression : Expression
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
     }
     interface FileReference extends TextRange {
 >FileReference : FileReference
@@ -4034,38 +4038,6 @@ declare module "typescript" {
 >t : Type
 >Type : Type
 >Type : Type
-    }
-    interface TypeInferences {
->TypeInferences : TypeInferences
-
-        primary: Type[];
->primary : Type[]
->Type : Type
-
-        secondary: Type[];
->secondary : Type[]
->Type : Type
-    }
-    interface InferenceContext {
->InferenceContext : InferenceContext
-
-        typeParameters: TypeParameter[];
->typeParameters : TypeParameter[]
->TypeParameter : TypeParameter
-
-        inferUnionTypes: boolean;
->inferUnionTypes : boolean
-
-        inferences: TypeInferences[];
->inferences : TypeInferences[]
->TypeInferences : TypeInferences
-
-        inferredTypes: Type[];
->inferredTypes : Type[]
->Type : Type
-
-        failedTypeParameterIndex?: number;
->failedTypeParameterIndex : number
     }
     interface DiagnosticMessage {
 >DiagnosticMessage : DiagnosticMessage

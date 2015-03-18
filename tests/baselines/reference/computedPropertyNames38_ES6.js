@@ -11,32 +11,15 @@ class C {
 }
 
 //// [computedPropertyNames38_ES6.js]
-var Foo = (function () {
-    function Foo() {
+class Foo {
+}
+class Foo2 {
+}
+class C {
+    // Computed properties
+    get [1 << 6]() {
+        return new Foo;
     }
-    return Foo;
-})();
-var Foo2 = (function () {
-    function Foo2() {
+    set [1 << 6](p) {
     }
-    return Foo2;
-})();
-var C = (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, 1 << 6, {
-        // Computed properties
-        get: function () {
-            return new Foo;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, 1 << 6, {
-        set: function (p) {
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+}

@@ -617,12 +617,29 @@
     },
     "Unterminated Unicode escape sequence.": {
         "category": "Error",
-        "code":  1199
+        "code": 1199
     },
     "Line terminator not permitted before arrow.": {
         "category": "Error",
         "code": 1200
     },
+    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
+        "category": "Error",
+        "code": 1201
+    },
+    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+        "category": "Error",
+        "code": 1202
+    },
+    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+        "category": "Error",
+        "code": 1203
+    },
+    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+        "category": "Error",
+        "code": 1204
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

@@ -796,7 +796,8 @@ declare module "typescript" {
     type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression: Expression;
+        expression?: Expression;
+        type?: TypeNode;
     }
     interface FileReference extends TextRange {
         fileName: string;
@@ -1205,17 +1206,6 @@ declare module "typescript" {
     }
     interface TypeMapper {
         (t: Type): Type;
-    }
-    interface TypeInferences {
-        primary: Type[];
-        secondary: Type[];
-    }
-    interface InferenceContext {
-        typeParameters: TypeParameter[];
-        inferUnionTypes: boolean;
-        inferences: TypeInferences[];
-        inferredTypes: Type[];
-        failedTypeParameterIndex?: number;
     }
     interface DiagnosticMessage {
         key: string;

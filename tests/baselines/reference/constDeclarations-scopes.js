@@ -242,30 +242,25 @@ var m;
     }
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         const c = 0;
         n = c;
     }
-    C.prototype.method = function () {
+    method() {
         const c = 0;
         n = c;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            const c = 0;
-            n = c;
-            return n;
-        },
-        set: function (value) {
-            const c = 0;
-            n = c;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        const c = 0;
+        n = c;
+        return n;
+    }
+    set v(value) {
+        const c = 0;
+        n = c;
+    }
+}
 // object literals
 var o = {
     f() {

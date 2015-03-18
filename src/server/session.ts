@@ -5,7 +5,7 @@
 /// <reference path="editorServices.ts" />
 
 module ts.server {
-    var spaceCache = [" ", "  ", "   ", "    "];
+    var spaceCache:string[] = [];
 
     interface StackTraceError extends Error {
         stack?: string;
@@ -397,9 +397,9 @@ module ts.server {
             };
         }
 
-        openClientFile(fileName: string) {
+        openClientFile(fileName: string, tabSize?: number) {
             var file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file);
+            this.projectService.openClientFile(file, tabSize);
         }
 
         getQuickInfo(line: number, col: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -441,7 +441,7 @@ module ts.server {
             
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
-             this.projectService.getFormatCodeOptions());
+                this.projectService.getFormatCodeOptions(file));
             if (!edits) {
                 return undefined;
             }
@@ -465,7 +465,7 @@ module ts.server {
 
             var compilerService = project.compilerService;
             var position = compilerService.host.lineColToPosition(file, line, col);
-            var formatOptions = this.projectService.getFormatCodeOptions();
+            var formatOptions = this.projectService.getFormatCodeOptions(file);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
                 formatOptions);
             // Check whether we should auto-indent. This will be when
@@ -611,8 +611,7 @@ module ts.server {
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                project.compilerService.host.reloadScript(file, tmpfile, 
-                    this.projectService.getFormatCodeOptions().TabSize, () => {
+                project.compilerService.host.reloadScript(file, tmpfile, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
             }
@@ -756,8 +755,8 @@ module ts.server {
                         break;
                     }
                     case CommandNames.Open: {
-                        var openArgs = <protocol.FileRequestArgs>request.arguments;
-                        this.openClientFile(openArgs.file);
+                        var openArgs = <protocol.OpenRequestArgs>request.arguments;
+                        this.openClientFile(openArgs.file,openArgs.tabSize);
                         responseRequired = false;
                         break;
                     }

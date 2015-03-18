@@ -19,13 +19,17 @@ module ts.server {
     class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
-
         defaultProject: Project;      // project to use by default for file
-
         fileWatcher: FileWatcher;
+        formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.svc = ScriptVersionCache.fromString(content);
+        }
+
+        setFormatOptions(tabSize: number, indentSize: number) {
+            this.formatCodeOptions.TabSize = tabSize;
+            this.formatCodeOptions.IndentSize = indentSize;
         }
 
         close() {
@@ -153,15 +157,18 @@ module ts.server {
             }
         }
 
-        reloadScript(filename: string, tmpfilename: string, tabSize: number, cb: () => any) {
+        reloadScript(filename: string, tmpfilename: string, cb: () => any) {
             var script = this.getScriptInfo(filename);
             if (script) {
-                script.svc.reloadFromFile(tmpfilename, tabSize, cb);
+                script.svc.reloadFromFile(tmpfilename, script.formatCodeOptions.TabSize, cb);
             }
         }
 
         editScript(filename: string, start: number, end: number, newText: string) {
             var script = this.getScriptInfo(filename);
+            if (newText && (newText.length > 0)) {
+                newText = expandTabs(newText, script.formatCodeOptions.TabSize);
+            }
             if (script) {
                 script.editContent(start, end, newText);
                 return;
@@ -365,6 +372,12 @@ module ts.server {
         hostInfo: string;
     }
 
+    export function expandTabs(text: string, tabSize: number) {
+        var spaces = generateSpaces(tabSize);
+        return text.replace(/\t/g, spaces);
+    }
+
+
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
         // open, non-configured files in two lists
@@ -386,7 +399,13 @@ module ts.server {
             }
         }
         
-        getFormatCodeOptions() {
+        getFormatCodeOptions(file?: string) {
+            if (file) {
+                var info = this.filenameToScriptInfo[file];                
+                if (info) {
+                    return info.formatCodeOptions;
+                }
+            }
             return this.hostConfiguration.formatCodeOptions;
         }
 
@@ -402,7 +421,7 @@ module ts.server {
             }
             else {
                 if (info && (!info.isOpen)) {
-                    info.svc.reloadFromFile(info.fileName, this.hostConfiguration.formatCodeOptions.TabSize);
+                    info.svc.reloadFromFile(info.fileName, info.formatCodeOptions.TabSize);
                 }
             }
         }
@@ -412,15 +431,19 @@ module ts.server {
         }
 
         setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
-            this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
-            this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
-            this.hostConfiguration.hostInfo = args.hostInfo;
-            this.log("Host information " + args.hostInfo, "Info");
-        }
-
-        expandTabs(text: string) {
-            var spaces = generateSpaces(this.hostConfiguration.formatCodeOptions.TabSize);
-            return text.replace(/\t/g, spaces);
+            if (args.file) {
+                var info = this.filenameToScriptInfo[args.file];
+                if (info) {
+                    info.setFormatOptions(args.tabSize, args.indentSize);
+                    this.log("Host configuration update for file " + args.file + " tab size " + args.tabSize);
+                }
+            }
+            else {
+                this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
+                this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
+                this.hostConfiguration.hostInfo = args.hostInfo;
+                this.log("Host information " + args.hostInfo, "Info");
+            }
         }
 
         closeLog() {
@@ -623,7 +646,7 @@ module ts.server {
         /**
          * @param filename is absolute pathname
          */
-        openFile(fileName: string, openedByClient = false) {
+        openFile(fileName: string, openedByClient: boolean, tabSize?: number) {
             fileName = ts.normalizePath(fileName);
             var info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -637,11 +660,25 @@ module ts.server {
                     }
                 }
                 if (content !== undefined) {
-                    content = this.expandTabs(content);
+                    var indentSize: number;
+                    if (!tabSize) {
+                        tabSize = this.hostConfiguration.formatCodeOptions.TabSize;
+                        indentSize = this.hostConfiguration.formatCodeOptions.IndentSize;
+                    }
+                    else {
+                        indentSize = tabSize;
+                    }
+                    if (openedByClient) {
+                        this.log("Expanding tabs for file " + fileName + " with tab size " + tabSize.toString());
+                        content = expandTabs(content, tabSize);
+                    }
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
+                    }
+                    else {
+                        info.setFormatOptions(tabSize, indentSize);
                     }
                 }
             }
@@ -658,9 +695,9 @@ module ts.server {
          * @param filename is absolute pathname
          */
 
-        openClientFile(filename: string) {
+        openClientFile(filename: string, tabSize?: number) {
             // TODO: tsconfig check
-            var info = this.openFile(filename, true);
+            var info = this.openFile(filename, true, tabSize);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -760,7 +797,8 @@ module ts.server {
                         var normRootFilename = ts.normalizePath(rootFilename);
                         normRootFilename = getAbsolutePath(normRootFilename, dirPath);
                         if (this.host.fileExists(normRootFilename)) {
-                            var info = this.openFile(normRootFilename);
+                            // TODO: pass true for file exiplicitly opened
+                            var info = this.openFile(normRootFilename, false);
                             proj.addRoot(info);
                         }
                         else {
@@ -1123,6 +1161,7 @@ module ts.server {
 
         reloadFromFile(filename: string, tabSize: number, cb?: () => any) {
             var content = ts.sys.readFile(filename);
+            content = expandTabs(content, tabSize);
             this.reload(content);
             if (cb)
                 cb();

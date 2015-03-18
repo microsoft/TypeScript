@@ -2,8 +2,10 @@
 /// <reference path="emitter.ts" />
 
 module ts {
+    /* @internal */ export let programTime = 0;
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
+    /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
     export let version = "1.5.0.0";
@@ -36,33 +38,34 @@ module ts {
                 }
                 text = "";
             }
-
             return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
         }
 
+        function directoryExists(directoryPath: string): boolean {
+            if (hasProperty(existingDirectories, directoryPath)) {
+                return true;
+            }
+            if (sys.directoryExists(directoryPath)) {
+                existingDirectories[directoryPath] = true;
+                return true;
+            }
+            return false;
+        }
+
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                let parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                sys.createDirectory(directoryPath);
+            }
+        }
+
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-            function directoryExists(directoryPath: string): boolean {
-                if (hasProperty(existingDirectories, directoryPath)) {
-                    return true;
-                }
-                if (sys.directoryExists(directoryPath)) {
-                    existingDirectories[directoryPath] = true;
-                    return true;
-                }
-                return false;
-            }
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                    let parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    sys.createDirectory(directoryPath);
-                }
-            }
-
             try {
+                var start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
                 sys.writeFile(fileName, data, writeByteOrderMark);
+                ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -120,16 +123,19 @@ module ts {
         let diagnostics = createDiagnosticCollection();
         let seenNoDefaultLib = options.noLib;
         let commonSourceDirectory: string;
-        host = host || createCompilerHost(options);
+        let diagnosticsProducingTypeChecker: TypeChecker;
+        let noDiagnosticsTypeChecker: TypeChecker;
 
+        let start = new Date().getTime();
+
+        host = host || createCompilerHost(options);
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
 
-        let diagnosticsProducingTypeChecker: TypeChecker;
-        let noDiagnosticsTypeChecker: TypeChecker;
+        programTime += new Date().getTime() - start;
 
         program = {
             getSourceFile: getSourceFile,
@@ -430,11 +436,20 @@ module ts {
                 return;
             }
 
+            let languageVersion = options.target || ScriptTarget.ES3;
+
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModuleSourceFile && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet       
-                let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                if (!options.module && languageVersion < ScriptTarget.ES6) {
+                    // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
+                    let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                }
+            }
+
+            // Cannot specify module gen target when in es6 or above
+            if (options.module && languageVersion >= ScriptTarget.ES6) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot

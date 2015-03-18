@@ -4,12 +4,11 @@ class C {
 }
 
 //// [symbolDeclarationEmit2.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[Symbol.isRegExp] = "";
     }
-    return C;
-})();
+}
 
 
 //// [symbolDeclarationEmit2.d.ts]

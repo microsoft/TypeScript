@@ -1008,10 +1008,20 @@ module ts.formatting {
         return SyntaxKind.Unknown;
     }
 
-    let internedTabsIndentation: string[];
-    let internedSpacesIndentation: string[];
+    var internedSizes: { tabSize: number; indentSize: number };
+    var internedTabsIndentation: string[];
+    var internedSpacesIndentation: string[];
 
     export function getIndentationString(indentation: number, options: FormatCodeOptions): string {
+        // reset interned strings if FormatCodeOptions were changed
+        let resetInternedStrings =
+            !internedSizes || (internedSizes.tabSize !== options.TabSize || internedSizes.indentSize !== options.IndentSize);
+
+        if (resetInternedStrings) {
+            internedSizes = { tabSize: options.TabSize, indentSize: options.IndentSize };
+            internedTabsIndentation = internedSpacesIndentation = undefined;
+        }
+
         if (!options.ConvertTabsToSpaces) {
             let tabs = Math.floor(indentation / options.TabSize);
             let spaces = indentation - tabs * options.TabSize;
