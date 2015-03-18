@@ -13,15 +13,13 @@ class StringIterator {
 
 //// [for-of15.js]
 var v;
-for (v of new StringIterator) { } // Should fail
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype.next = function () {
+for (v of new StringIterator) {
+} // Should fail
+class StringIterator {
+    next() {
         return "";
-    };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

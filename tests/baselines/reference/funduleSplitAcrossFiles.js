@@ -10,7 +10,8 @@ module D {
 D.y;
 
 //// [funduleSplitAcrossFiles_function.js]
-function D() { }
+function D() {
+}
 //// [funduleSplitAcrossFiles_module.js]
 var D;
 (function (D) {

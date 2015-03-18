@@ -185,7 +185,6 @@ function foo6() {
     use(x);
 }
 
-// TODO: once for-of is supported downlevel
 function foo7() {
     for (let x of []) {
         use(x);

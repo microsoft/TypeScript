@@ -94,7 +94,8 @@ var E;
         Color[Color["Red"] = 0] = "Red";
     })(E.Color || (E.Color = {}));
     var Color = E.Color;
-    function fn() { }
+    function fn() {
+    }
     E.fn = fn;
     var C = (function () {
         function C() {
@@ -115,7 +116,8 @@ var F;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
     })(Color || (Color = {}));
-    function fn() { }
+    function fn() {
+    }
     var C = (function () {
         function C() {
         }

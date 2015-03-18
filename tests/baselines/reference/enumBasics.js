@@ -150,9 +150,21 @@ var E9;
 // (refer to .js to validate)
 // Enum constant members are propagated
 var doNotPropagate = [
-    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
+    E8.B,
+    E7.A,
+    E4.Z,
+    E3.X,
+    E3.Y,
+    E3.Z
 ];
 // Enum computed members are not propagated
 var doPropagate = [
-    E9.A, E9.B, E6.B, E6.C, E6.A, E5.A, E5.B, E5.C
+    E9.A,
+    E9.B,
+    E6.B,
+    E6.C,
+    E6.A,
+    E5.A,
+    E5.B,
+    E5.C
 ];

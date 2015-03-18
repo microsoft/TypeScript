@@ -27,7 +27,7 @@ module ts.formatting {
 
             constructor(from: SyntaxKind, to: SyntaxKind, except: SyntaxKind[]) {
                 this.tokens = [];
-                for (var token = from; token <= to; token++) {
+                for (let token = from; token <= to; token++) {
                     if (except.indexOf(token) < 0) {
                         this.tokens.push(token);
                     }
@@ -74,8 +74,8 @@ module ts.formatting {
 
         export class TokenAllAccess implements ITokenAccess {
             public GetTokens(): SyntaxKind[] {
-                var result: SyntaxKind[] = [];
-                for (var token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
+                let result: SyntaxKind[] = [];
+                for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
                     result.push(token);
                 }
                 return result;

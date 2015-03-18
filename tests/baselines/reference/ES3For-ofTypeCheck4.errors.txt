@@ -1,0 +1,8 @@
+tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck4.ts(2,17): error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck4.ts (1 errors) ====
+    var union: string | string[];
+    for (const v of union) { }
+                    ~~~~~
+!!! error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.

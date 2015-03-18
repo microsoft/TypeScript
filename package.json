@@ -38,10 +38,9 @@
         "mocha": "latest",
         "chai": "latest",
         "browserify": "latest",
-        "istanbul": "latest",
-        "codeclimate-test-reporter": "latest"
+        "istanbul": "latest"
     },
     "scripts": {
-        "test": "jake --trace generate-code-coverage"
+        "test": "jake runtests"
     }
 }

@@ -250,7 +250,8 @@ var D11 = (function (_super) {
     }
     return D11;
 })(Base);
-function f() { }
+function f() {
+}
 var f;
 (function (f) {
     f.bar = 1;

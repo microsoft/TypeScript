@@ -20,7 +20,9 @@ var C = (function () {
     return C;
 })();
 var y = {
-    foo: , class: C2 }, _a = void 0;
+    foo: ,
+    class: C2
+}, _a = void 0;
 var M;
 (function (M) {
     var z = ;

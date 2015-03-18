@@ -27,7 +27,8 @@ var C = (function () {
     return C;
 })();
 var c = new C();
-function Foo() { }
+function Foo() {
+}
 var r = new Foo();
 var f;
 var r2 = new f();

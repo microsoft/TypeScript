@@ -1,0 +1,70 @@
+=== tests/cases/compiler/es6ModuleConst.ts ===
+export const a = "hello";
+>a : string
+
+export const x: string = a, y = x;
+>x : string
+>a : string
+>y : string
+>x : string
+
+const b = y;
+>b : string
+>y : string
+
+const c: string = b, d = c;
+>c : string
+>b : string
+>d : string
+>c : string
+
+export module m1 {
+>m1 : typeof m1
+
+    export const k = a;
+>k : string
+>a : string
+
+    export const l: string = b, m = k;
+>l : string
+>b : string
+>m : string
+>k : string
+
+    const n = m1.k;
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
+
+    const o: string = n, p = k;
+>o : string
+>n : string
+>p : string
+>k : string
+}
+module m2 {
+>m2 : typeof m2
+
+    export const k = a;
+>k : string
+>a : string
+
+    export const l: string = b, m = k;
+>l : string
+>b : string
+>m : string
+>k : string
+
+    const n = m1.k;
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
+
+    const o: string = n, p = k;
+>o : string
+>n : string
+>p : string
+>k : string
+}

@@ -19,5 +19,6 @@ var I2 = (function () {
     }
     return I2;
 })();
-function I3() { }
+function I3() {
+}
 var I4;

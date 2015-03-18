@@ -233,6 +233,7 @@ module ts {
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
+        CaseBlock,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -299,14 +300,15 @@ module ts {
         Private =           0x00000020,  // Property/Method
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
-        MultiLine =         0x00000100,  // Multi-line array or object literal
-        Synthetic =         0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00000400,  // Node is a .d.ts file
-        Let =               0x00000800,  // Variable declaration
-        Const =             0x00001000,  // Variable declaration
-        OctalLiteral =      0x00002000,
+        Default =           0x00000100,  // Function/Class (export default declaration)
+        MultiLine =         0x00000200,  // Multi-line array or object literal
+        Synthetic =         0x00000400,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00000800,  // Node is a .d.ts file
+        Let =               0x00001000,  // Variable declaration
+        Const =             0x00002000,  // Variable declaration
+        OctalLiteral =      0x00004000,
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -327,7 +329,7 @@ module ts {
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
-        // error.  
+        // error.
         ThisNodeHasError = 1 << 4,
 
         // Context flags set directly by the parser.
@@ -335,7 +337,7 @@ module ts {
 
         // Context flags computed by aggregating child flags upwards.
 
-        // Used during incremental parsing to determine if this node or any of its children had an 
+        // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
         ThisNodeOrAnySubNodesHasError = 1 << 5,
 
@@ -352,7 +354,7 @@ module ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        // Specific context the parser was in when this node was created.  Normally undefined. 
+        // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
         modifiers?: ModifiersArray;   // Array of modifiers
@@ -501,7 +503,7 @@ module ts {
     }
 
     export interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
-        name: Identifier;
+        name?: Identifier;
         body?: Block;
     }
 
@@ -522,7 +524,7 @@ module ts {
         body?: Block;
     }
 
-    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a 
+    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
@@ -573,12 +575,12 @@ module ts {
 
     export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
 
-    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
+    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
     // (structurally) than 'Node'.  Because of this you can pass any Node to a function that
     // takes an Expression without any error.  By using the 'brands' we ensure that the type
-    // checker actually thinks you have something of the right type.  Note: the brands are 
-    // never actually given values.  At runtime they have zero cost. 
+    // checker actually thinks you have something of the right type.  Note: the brands are
+    // never actually given values.  At runtime they have zero cost.
 
     export interface Expression extends Node {
         _expressionBrand: any;
@@ -640,13 +642,19 @@ module ts {
 
     export interface ConditionalExpression extends Expression {
         condition: Expression;
+        questionToken: Node;
         whenTrue: Expression;
+        colonToken: Node;
         whenFalse: Expression;
     }
 
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
+    }
+
+    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+        equalsGreaterThanToken: Node;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -693,6 +701,7 @@ module ts {
 
     export interface PropertyAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
+        dotToken: Node;
         name: Identifier;
     }
 
@@ -730,7 +739,7 @@ module ts {
     }
 
     export interface VariableStatement extends Statement {
-        declarationList: VariableDeclarationList; 
+        declarationList: VariableDeclarationList;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -786,6 +795,10 @@ module ts {
 
     export interface SwitchStatement extends Statement {
         expression: Expression;
+        caseBlock: CaseBlock;
+    }
+
+    export interface CaseBlock extends Node {
         clauses: NodeArray<CaseOrDefaultClause>;
     }
 
@@ -825,7 +838,7 @@ module ts {
     }
 
     export interface ClassDeclaration extends Declaration, ModuleElement {
-        name: Identifier;
+        name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
@@ -864,11 +877,7 @@ module ts {
         members: NodeArray<EnumMember>;
     }
 
-    export interface ExportContainer {
-        exportStars?: ExportDeclaration[];  // List of 'export *' statements (initialized by binding)
-    }
-
-    export interface ModuleDeclaration extends Declaration, ModuleElement, ExportContainer {
+    export interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
         body: ModuleBlock | ModuleDeclaration;
     }
@@ -898,7 +907,7 @@ module ts {
         moduleSpecifier: Expression;
     }
 
-    // In case of: 
+    // In case of:
     // import d from "mod" => name = d, namedBinding = undefined
     // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
@@ -913,7 +922,7 @@ module ts {
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends Statement, ModuleElement {
+    export interface ExportDeclaration extends Declaration, ModuleElement {
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
@@ -933,8 +942,10 @@ module ts {
     export type ImportSpecifier = ImportOrExportSpecifier;
     export type ExportSpecifier = ImportOrExportSpecifier;
 
-    export interface ExportAssignment extends Statement, ModuleElement {
-        exportName: Identifier;
+    export interface ExportAssignment extends Declaration, ModuleElement {
+        isExportEquals?: boolean;
+        expression?: Expression;
+        type?: TypeNode;
     }
 
     export interface FileReference extends TextRange {
@@ -946,7 +957,7 @@ module ts {
     }
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends Declaration, ExportContainer {
+    export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
 
@@ -963,7 +974,7 @@ module ts {
         externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
-        
+
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -971,10 +982,10 @@ module ts {
         // File level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
-        
+
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
-        
+
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
@@ -994,10 +1005,10 @@ module ts {
         getSourceFiles(): SourceFile[];
 
         /**
-         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then 
+         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
          * the javascript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the javascript and declaration for that
-         * specific file will be generated.  
+         * specific file will be generated.
          *
          * If writeFile is not specified then the writeFile callback from the compiler host will be
          * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
@@ -1015,7 +1026,7 @@ module ts {
 
         getCommonSourceDirectory(): string;
 
-        // For testing purposes only.  Should not be used by any other consumers (including the 
+        // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
@@ -1052,7 +1063,7 @@ module ts {
         // when -version or -help was provided, or this was a normal compilation, no diagnostics
         // were produced, and all outputs were generated successfully.
         Success = 0,
-        
+
         // Diagnostics were produced and because of them no code was generated.
         DiagnosticsPresent_OutputsSkipped = 1,
 
@@ -1162,12 +1173,12 @@ module ts {
 
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-        //     var a: C<number>; 
+        //     var a: C<number>;
         //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001, 
+        WriteTypeParametersOrArguments = 0x00000001,
 
         // Use only external alias information to get the symbol name in the given context
-        // eg.  module m { export class c { } } import x = m.c; 
+        // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
     }
@@ -1190,10 +1201,10 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: ModuleDeclaration | EnumDeclaration | ImportDeclaration | ExportDeclaration): string;
+        getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: Node): boolean;
+        hasExportDefaultValue(node: SourceFile): boolean;
+        isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
@@ -1229,18 +1240,17 @@ module ts {
         Signature               = 0x00020000,  // Call, construct, or index signature
         TypeParameter           = 0x00040000,  // Type parameter
         TypeAlias               = 0x00080000,  // Type alias
-
-        // Export markers (see comment in declareModuleMember in binder)
-        ExportValue             = 0x00100000,  // Exported value marker
-        ExportType              = 0x00200000,  // Exported type marker
-        ExportNamespace         = 0x00400000,  // Exported namespace marker
-        Import                  = 0x00800000,  // Import
+        ExportValue             = 0x00100000,  // Exported value marker (see comment in declareModuleMember in binder)
+        ExportType              = 0x00200000,  // Exported type marker (see comment in declareModuleMember in binder)
+        ExportNamespace         = 0x00400000,  // Exported namespace marker (see comment in declareModuleMember in binder)
+        Alias                   = 0x00800000,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
         Instantiated            = 0x01000000,  // Instantiated symbol
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
+        ExportStar              = 0x40000000,  // Export * declaration
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -1273,9 +1283,9 @@ module ts {
         SetAccessorExcludes = Value & ~GetAccessor,
         TypeParameterExcludes = Type & ~TypeParameter,
         TypeAliasExcludes = Type,
-        ImportExcludes = Import,  // Imports collide with all other imports with the same name
+        AliasExcludes = Alias,
 
-        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Import,
+        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
@@ -1308,10 +1318,9 @@ module ts {
         declaredType?: Type;                // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        exportAssignmentChecked?: boolean;  // True if export assignment was checked
-        exportAssignmentSymbol?: Symbol;    // Symbol exported from external module
         unionType?: UnionType;              // Containing union type for union property
         resolvedExports?: SymbolTable;      // Resolved exports of module
+        exportsChecked?: boolean;           // True if exports of external module have been checked
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1478,11 +1487,15 @@ module ts {
         (t: Type): Type;
     }
 
+    // @internal
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
+        isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
+                            // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
+    // @internal
     export interface InferenceContext {
         typeParameters: TypeParameter[];    // Type parameters for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
@@ -1554,7 +1567,9 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        stripInternal?: boolean;
+        /* @internal */ stripInternal?: boolean;
+        /* @internal */ preserveNewLines?: boolean;
+        /* @internal */ cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1772,7 +1787,7 @@ module ts {
         // Gets a count of how many times this collection has been modified.  This value changes
         // each time 'add' is called (regardless of whether or not an equivalent diagnostic was
         // already in the collection).  As such, it can be used as a simple way to tell if any
-        // operation caused diagnostics to be returned by storing and comparing the return value 
+        // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
     }

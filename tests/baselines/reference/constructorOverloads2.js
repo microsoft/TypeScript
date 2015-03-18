@@ -35,7 +35,8 @@ var __extends = this.__extends || function (d, b) {
 var FooBase = (function () {
     function FooBase(x) {
     }
-    FooBase.prototype.bar1 = function () { };
+    FooBase.prototype.bar1 = function () {
+    };
     return FooBase;
 })();
 var Foo = (function (_super) {
@@ -43,11 +44,16 @@ var Foo = (function (_super) {
     function Foo(x, y) {
         _super.call(this, x);
     }
-    Foo.prototype.bar1 = function () { };
+    Foo.prototype.bar1 = function () {
+    };
     return Foo;
 })(FooBase);
 var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);
-var f4 = new Foo([f1, f2, f3]);
+var f4 = new Foo([
+    f1,
+    f2,
+    f3
+]);
 f1.bar1();

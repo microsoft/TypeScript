@@ -5,4 +5,5 @@ function foo() {}
 
 //// [es6ClassTest9.js]
 ();
-function foo() { }
+function foo() {
+}

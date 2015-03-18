@@ -23,7 +23,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () { };
+    C.prototype.bar = function () {
+    };
     return C;
 })();
 var D = (function (_super) {
@@ -31,7 +32,8 @@ var D = (function (_super) {
     function D() {
         _super.apply(this, arguments);
     }
-    D.prototype.baz = function () { };
+    D.prototype.baz = function () {
+    };
     return D;
 })(C);
 var c;

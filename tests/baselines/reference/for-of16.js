@@ -10,12 +10,10 @@ class StringIterator {
 
 //// [for-of16.js]
 var v;
-for (v of new StringIterator) { } // Should fail
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype[Symbol.iterator] = function () {
+for (v of new StringIterator) {
+} // Should fail
+class StringIterator {
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

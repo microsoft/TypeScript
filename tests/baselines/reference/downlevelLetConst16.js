@@ -185,7 +185,6 @@ function foo6() {
     use(x);
 }
 
-// TODO: once for-of is supported downlevel
 function foo7() {
     for (let x of []) {
         use(x);
@@ -239,18 +238,26 @@ use(z);
 function foo1() {
     var _x = 1;
     use(_x);
-    var _y = ([1])[0];
+    var _y = ([
+        1
+    ])[0];
     use(_y);
-    var _z = ({ a: 1 }).a;
+    var _z = ({
+        a: 1
+    }).a;
     use(_z);
 }
 function foo2() {
     {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     }
     use(x);
@@ -261,18 +268,26 @@ var A = (function () {
     A.prototype.m1 = function () {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     };
     A.prototype.m2 = function () {
         {
             var _x = 1;
             use(_x);
-            var _y = ([1])[0];
+            var _y = ([
+                1
+            ])[0];
             use(_y);
-            var _z = ({ a: 1 }).a;
+            var _z = ({
+                a: 1
+            }).a;
             use(_z);
         }
         use(x);
@@ -285,18 +300,26 @@ var B = (function () {
     B.prototype.m1 = function () {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     };
     B.prototype.m2 = function () {
         {
             var _x = 1;
             use(_x);
-            var _y = ([1])[0];
+            var _y = ([
+                1
+            ])[0];
             use(_y);
-            var _z = ({ a: 1 }).a;
+            var _z = ({
+                a: 1
+            }).a;
             use(_z);
         }
         use(x);
@@ -306,18 +329,26 @@ var B = (function () {
 function bar1() {
     var _x = 1;
     use(_x);
-    var _y = ([1])[0];
+    var _y = ([
+        1
+    ])[0];
     use(_y);
-    var _z = ({ a: 1 }).a;
+    var _z = ({
+        a: 1
+    }).a;
     use(_z);
 }
 function bar2() {
     {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     }
     use(x);
@@ -326,9 +357,13 @@ var M1;
 (function (M1) {
     var _x = 1;
     use(_x);
-    var _y = ([1])[0];
+    var _y = ([
+        1
+    ])[0];
     use(_y);
-    var _z = ({ a: 1 }).a;
+    var _z = ({
+        a: 1
+    }).a;
     use(_z);
 })(M1 || (M1 = {}));
 var M2;
@@ -336,9 +371,13 @@ var M2;
     {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     }
     use(x);
@@ -347,9 +386,13 @@ var M3;
 (function (M3) {
     var _x = 1;
     use(_x);
-    var _y = ([1])[0];
+    var _y = ([
+        1
+    ])[0];
     use(_y);
-    var _z = ({ a: 1 }).a;
+    var _z = ({
+        a: 1
+    }).a;
     use(_z);
 })(M3 || (M3 = {}));
 var M4;
@@ -357,9 +400,13 @@ var M4;
     {
         var _x = 1;
         use(_x);
-        var _y = ([1])[0];
+        var _y = ([
+            1
+        ])[0];
         use(_y);
-        var _z = ({ a: 1 }).a;
+        var _z = ({
+            a: 1
+        }).a;
         use(_z);
     }
     use(x);
@@ -373,7 +420,9 @@ function foo3() {
     for (var _y = ([])[0];;) {
         use(_y);
     }
-    for (var _z = ({ a: 1 }).a;;) {
+    for (var _z = ({
+        a: 1
+    }).a;;) {
         use(_z);
     }
     use(x);
@@ -385,7 +434,9 @@ function foo4() {
     for (var _y = ([])[0];;) {
         use(_y);
     }
-    for (var _z = ({ a: 1 }).a;;) {
+    for (var _z = ({
+        a: 1
+    }).a;;) {
         use(_z);
     }
     use(x);
@@ -402,39 +453,44 @@ function foo6() {
     }
     use(x);
 }
-// TODO: once for-of is supported downlevel
 function foo7() {
-    for (var _x of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i];
         use(_x);
     }
     use(x);
 }
 function foo8() {
-    for (var _x = (void 0)[0] of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i][0];
         use(_x);
     }
     use(x);
 }
 function foo9() {
-    for (var _x = (void 0).a of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i].a;
         use(_x);
     }
     use(x);
 }
 function foo10() {
-    for (var _x of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i];
         use(_x);
     }
     use(x);
 }
 function foo11() {
-    for (var _x = (void 0)[0] of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i][0];
         use(_x);
     }
     use(x);
 }
 function foo12() {
-    for (var _x = (void 0).a of []) {
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var _x = _a[_i].a;
         use(_x);
     }
     use(x);

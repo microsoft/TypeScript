@@ -6,9 +6,7 @@ class C {
 
 //// [parserComputedPropertyName39.js]
 "use strict";
-var C = (function () {
-    function C() {
-    }
-    return C;
-})();
-(() => { });
+class C {
+}
+(() => {
+});

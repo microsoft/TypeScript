@@ -17,7 +17,10 @@ var cl = Point.Origin;
 
 //// [function.js]
 function Point() {
-    return { x: 0, y: 0 };
+    return {
+        x: 0,
+        y: 0
+    };
 }
 //// [test.js]
 var cl;

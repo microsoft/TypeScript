@@ -4,9 +4,8 @@ class C {
 }
 
 //// [parserComputedPropertyName10.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[e] = 1;
     }
-    return C;
-})();
+}

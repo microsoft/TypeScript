@@ -59,7 +59,9 @@ var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
         var _this = this;
-        _super.call(this, function () { return _this; }); // error
+        _super.call(this, function () {
+            return _this;
+        }); // error
         this.a = a;
     }
     return Derived3;
@@ -67,7 +69,9 @@ var Derived3 = (function (_super) {
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        _super.call(this, function () { return this; }); // ok
+        _super.call(this, function () {
+            return this;
+        }); // ok
         this.a = a;
     }
     return Derived4;

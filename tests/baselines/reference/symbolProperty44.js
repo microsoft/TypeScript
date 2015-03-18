@@ -9,15 +9,11 @@ class C {
 }
 
 //// [symbolProperty44.js]
-var C = (function () {
-    function C() {
+class C {
+    get [Symbol.hasInstance]() {
+        return "";
     }
-    Object.defineProperty(C.prototype, Symbol.hasInstance, {
-        get: function () {
-            return "";
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    get [Symbol.hasInstance]() {
+        return "";
+    }
+}

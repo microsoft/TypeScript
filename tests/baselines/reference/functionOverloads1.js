@@ -5,4 +5,6 @@ function foo():string { return "a" }
 
 //// [functionOverloads1.js]
 1 + 1;
-function foo() { return "a"; }
+function foo() {
+    return "a";
+}

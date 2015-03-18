@@ -2,4 +2,7 @@
 var v = { *foo() { } }
 
 //// [FunctionPropertyAssignments1_es6.js]
-var v = { foo: function () { } };
+var v = {
+    foo: function () {
+    }
+};

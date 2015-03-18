@@ -15,6 +15,7 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.baz = function () { };
+    D.prototype.baz = function () {
+    };
     return D;
 })();

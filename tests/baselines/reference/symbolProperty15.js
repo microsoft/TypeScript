@@ -15,11 +15,8 @@ var i: I;
 bar(i);
 
 //// [symbolProperty15.js]
-var C = (function () {
-    function C() {
-    }
-    return C;
-})();
+class C {
+}
 foo(new C);
 var i;
 bar(i);

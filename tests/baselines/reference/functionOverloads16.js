@@ -5,4 +5,6 @@ function foo(foo:{a:string; b?:number;}):any { return "" }
 
 
 //// [functionOverloads16.js]
-function foo(foo) { return ""; }
+function foo(foo) {
+    return "";
+}

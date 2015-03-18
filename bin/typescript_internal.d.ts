@@ -62,7 +62,7 @@ declare module "typescript" {
      * index in the array will be the one associated with the produced key.
      */
     function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
-    var localizedDiagnosticMessages: Map<string>;
+    let localizedDiagnosticMessages: Map<string>;
     function getLocaleSpecificMessage(message: string): string;
     function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -74,7 +74,7 @@ declare module "typescript" {
     function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function normalizeSlashes(path: string): string;
     function getRootLength(path: string): number;
-    var directorySeparator: string;
+    let directorySeparator: string;
     function normalizePath(path: string): string;
     function getDirectoryPath(path: string): string;
     function isUrl(path: string): boolean;
@@ -87,12 +87,6 @@ declare module "typescript" {
     function combinePaths(path1: string, path2: string): string;
     function fileExtensionIs(path: string, extension: string): boolean;
     function removeFileExtension(path: string): string;
-    /**
-     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters.
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    function escapeString(s: string): string;
     function getDefaultLibFileName(options: CompilerOptions): string;
     interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
@@ -100,7 +94,7 @@ declare module "typescript" {
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
-    var objectAllocator: ObjectAllocator;
+    let objectAllocator: ObjectAllocator;
     const enum AssertionLevel {
         None = 0,
         Normal = 1,
@@ -143,6 +137,11 @@ declare module "typescript" {
         diagnosticMessage?: DiagnosticMessage;
         isNoDefaultLib?: boolean;
     }
+    interface SynthesizedNode extends Node {
+        leadingCommentRanges?: CommentRange[];
+        trailingCommentRanges?: CommentRange[];
+        startsOnNewLine: boolean;
+    }
     function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration;
     interface StringSymbolWriter extends SymbolWriter {
         string(): string;
@@ -171,10 +170,13 @@ declare module "typescript" {
     function escapeIdentifier(identifier: string): string;
     function unescapeIdentifier(identifier: string): string;
     function makeIdentifierFromModuleName(moduleName: string): string;
+    function isBlockOrCatchScoped(declaration: Declaration): boolean;
+    function getEnclosingBlockScopeContainer(node: Node): Node;
+    function isCatchClauseVariableDeclaration(declaration: Declaration): boolean;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
     function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
-    function getErrorSpanForNode(node: Node): Node;
+    function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
     function isExternalModule(file: SourceFile): boolean;
     function isDeclarationFile(file: SourceFile): boolean;
     function isConstEnumDeclaration(node: Node): boolean;
@@ -184,9 +186,9 @@ declare module "typescript" {
     function isPrologueDirective(node: Node): boolean;
     function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile): CommentRange[];
     function getJsDocComments(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
-    var fullTripleSlashReferencePathRegEx: RegExp;
+    let fullTripleSlashReferencePathRegEx: RegExp;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
-    function isAnyFunction(node: Node): boolean;
+    function isFunctionLike(node: Node): boolean;
     function isFunctionBlock(node: Node): boolean;
     function isObjectLiteralMethod(node: Node): boolean;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
@@ -209,7 +211,7 @@ declare module "typescript" {
     function isInAmbientContext(node: Node): boolean;
     function isDeclaration(node: Node): boolean;
     function isStatement(n: Node): boolean;
-    function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean;
+    function isDeclarationName(name: Node): boolean;
     function getClassBaseTypeNode(node: ClassDeclaration): TypeReferenceNode;
     function getClassImplementedTypeNodes(node: ClassDeclaration): NodeArray<TypeReferenceNode>;
     function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<TypeReferenceNode>;
@@ -255,7 +257,7 @@ declare module "typescript" {
     function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
     function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
     function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
-    var unchangedTextChangeRange: TextChangeRange;
+    let unchangedTextChangeRange: TextChangeRange;
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
@@ -265,6 +267,17 @@ declare module "typescript" {
      * Vn.
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+    function nodeStartsNewLexicalEnvironment(n: Node): boolean;
+    function nodeIsSynthesized(node: Node): boolean;
+    function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node;
+    function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string;
+    /**
+     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
+    function escapeString(s: string): string;
+    function escapeNonAsciiCharacters(s: string): string;
 }
 declare module "typescript" {
     var optionDeclarations: CommandLineOption[];

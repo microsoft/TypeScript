@@ -14,7 +14,8 @@ function main() {
 
 
 //// [voidAsNonAmbiguousReturnType_0.js]
-function mkdirSync(path, mode) { }
+function mkdirSync(path, mode) {
+}
 exports.mkdirSync = mkdirSync;
 //// [voidAsNonAmbiguousReturnType_1.js]
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>

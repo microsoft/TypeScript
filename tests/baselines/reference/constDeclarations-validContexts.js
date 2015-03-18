@@ -201,26 +201,21 @@ var m;
     }
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         const c24 = 0;
     }
-    C.prototype.method = function () {
+    method() {
         const c25 = 0;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            const c26 = 0;
-            return c26;
-        },
-        set: function (value) {
-            const c27 = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        const c26 = 0;
+        return c26;
+    }
+    set v(value) {
+        const c27 = value;
+    }
+}
 // object literals
 var o = {
     f() {

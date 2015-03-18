@@ -16,10 +16,22 @@ var c = (function () {
     }
     return c;
 })();
-var x = [function () { return new c(); }];
-var y = [function () { return new c(); }];
-var k = (function () { return new c(); }) || "";
-var l = (function () { return new c(); }) || "";
+var x = [
+    function () {
+        return new c();
+    }
+];
+var y = [
+    function () {
+        return new c();
+    }
+];
+var k = (function () {
+    return new c();
+}) || "";
+var l = (function () {
+    return new c();
+}) || "";
 
 
 //// [declFileTypeAnnotationParenType.d.ts]

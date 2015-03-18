@@ -5,8 +5,6 @@ class Base {
     }
 }
 class C extends Base {
-    // Gets emitted as super, not _super, which is consistent with
-    // use of super in static properties initializers.
     [super.bar()]() { }
 }
 
@@ -30,8 +28,7 @@ var C = (function (_super) {
     function C() {
         _super.apply(this, arguments);
     }
-    // Gets emitted as super, not _super, which is consistent with
-    // use of super in static properties initializers.
-    C.prototype[super.bar.call(this)] = function () { };
+    C.prototype[_super.bar.call(this)] = function () {
+    };
     return C;
 })(Base);

@@ -9,12 +9,10 @@ class StringIterator {
 }
 
 //// [for-of28.js]
-for (var v of new StringIterator) { }
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype[Symbol.iterator] = function () {
+for (var v of new StringIterator) {
+}
+class StringIterator {
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

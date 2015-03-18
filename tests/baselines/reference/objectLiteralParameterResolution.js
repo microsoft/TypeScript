@@ -23,7 +23,9 @@ var s = $.extend({
     success: wrapSuccessCallback(requestContext, callback),
     error: wrapErrorCallback(requestContext, errorCallback),
     dataType: "json",
-    converters: { "text json": "" },
+    converters: {
+        "text json": ""
+    },
     traditional: true,
     timeout: 12
 }, "");

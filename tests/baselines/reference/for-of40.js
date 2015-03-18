@@ -6,7 +6,12 @@ for (var [k = "", v = false] of map) {
 }
 
 //// [for-of40.js]
-var map = new Map([["", true]]);
+var map = new Map([
+    [
+        "",
+        true
+    ]
+]);
 for (var [k = "", v = false] of map) {
     k;
     v;

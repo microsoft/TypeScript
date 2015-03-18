@@ -11,12 +11,12 @@ tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21
     declare function _<T>(value: Array<T>): _<T>;
                      ~
 !!! error TS2300: Duplicate identifier '_'.
-                                            ~~~~
+                                            ~
 !!! error TS2304: Cannot find name '_'.
     declare function _<T>(value: T): _<T>;
                      ~
 !!! error TS2300: Duplicate identifier '_'.
-                                     ~~~~
+                                     ~
 !!! error TS2304: Cannot find name '_'.
     
     declare module _ {

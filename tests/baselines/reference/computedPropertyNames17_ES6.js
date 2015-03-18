@@ -11,38 +11,20 @@ class C {
 
 //// [computedPropertyNames17_ES6.js]
 var b;
-var C = (function () {
-    function C() {
+class C {
+    get [b]() {
+        return 0;
     }
-    Object.defineProperty(C.prototype, b, {
-        get: function () { return 0; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C, true, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, [], {
-        get: function () { return 0; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, {}, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C, undefined, {
-        get: function () { return 0; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, null, {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    static set [true](v) {
+    }
+    get [[]]() {
+        return 0;
+    }
+    set [{}](v) {
+    }
+    static get [undefined]() {
+        return 0;
+    }
+    set [null](v) {
+    }
+}

@@ -5,5 +5,6 @@ var x = {
 
 //// [parserSymbolIndexer5.js]
 var x = {
-    [s]: symbol, "": 
+    [s]: symbol,
+    "": 
 };

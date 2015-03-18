@@ -1,5 +1,5 @@
 // @target: es6
-// @module: commonjs
+// @declaration: true
 
 // @filename: es6ImportDefaultBindingFollowedWithNamedImport_0.ts
 export var a = 10;

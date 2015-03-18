@@ -4,5 +4,6 @@ f<any>(null)
 
 
 //// [genericCallWithNonGenericArgs1.js]
-function f(x) { }
+function f(x) {
+}
 f(null);

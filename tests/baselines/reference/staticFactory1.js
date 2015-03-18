@@ -23,7 +23,9 @@ var __extends = this.__extends || function (d, b) {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.foo = function () { return 1; };
+    Base.prototype.foo = function () {
+        return 1;
+    };
     Base.create = function () {
         return new this();
     };
@@ -34,7 +36,9 @@ var Derived = (function (_super) {
     function Derived() {
         _super.apply(this, arguments);
     }
-    Derived.prototype.foo = function () { return 2; };
+    Derived.prototype.foo = function () {
+        return 2;
+    };
     return Derived;
 })(Base);
 var d = Derived.create();

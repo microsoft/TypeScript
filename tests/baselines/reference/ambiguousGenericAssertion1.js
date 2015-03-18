@@ -6,8 +6,12 @@ var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operatio
 
 
 //// [ambiguousGenericAssertion1.js]
-function f(x) { return null; }
-var r = function (x) { return x; };
+function f(x) {
+    return null;
+}
+var r = function (x) {
+    return x;
+};
 var r2 = f; // valid
 var r3 =  << T > (x), T;
 T > f; // ambiguous, appears to the parser as a << operation

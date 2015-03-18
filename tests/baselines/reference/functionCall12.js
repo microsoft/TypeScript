@@ -9,7 +9,8 @@ foo('foo', 1, 3);
 
 
 //// [functionCall12.js]
-function foo(a, b, c) { }
+function foo(a, b, c) {
+}
 foo('foo', 1);
 foo('foo');
 foo();

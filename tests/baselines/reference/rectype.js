@@ -16,7 +16,9 @@ module M {
 //// [rectype.js]
 var M;
 (function (M) {
-    function f(p) { return f; }
+    function f(p) {
+        return f;
+    }
     M.f = f;
     ;
     var i;

@@ -6,12 +6,10 @@ class C {
 }
 
 //// [symbolDeclarationEmit3.js]
-var C = (function () {
-    function C() {
+class C {
+    [Symbol.isRegExp](x) {
     }
-    C.prototype[Symbol.isRegExp] = function (x) { };
-    return C;
-})();
+}
 
 
 //// [symbolDeclarationEmit3.d.ts]

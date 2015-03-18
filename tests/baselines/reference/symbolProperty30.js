@@ -7,11 +7,10 @@ class C1 {
 }
 
 //// [symbolProperty30.js]
-var C1 = (function () {
-    function C1() {
+class C1 {
+    [Symbol.toStringTag]() {
+        return {
+            x: ""
+        };
     }
-    C1.prototype[Symbol.toStringTag] = function () {
-        return { x: "" };
-    };
-    return C1;
-})();
+}

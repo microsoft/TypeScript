@@ -6,5 +6,6 @@
 
 //// [FunctionDeclaration6.js]
 {
-    function bar() { }
+    function bar() {
+    }
 }

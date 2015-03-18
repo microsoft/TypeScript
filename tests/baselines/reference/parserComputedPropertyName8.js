@@ -4,8 +4,5 @@ class C {
 }
 
 //// [parserComputedPropertyName8.js]
-var C = (function () {
-    function C() {
-    }
-    return C;
-})();
+class C {
+}

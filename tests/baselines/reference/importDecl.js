@@ -89,7 +89,9 @@ var d = (function () {
 })();
 exports.d = d;
 exports.x;
-function foo() { return null; }
+function foo() {
+    return null;
+}
 exports.foo = foo;
 //// [importDecl_require1.js]
 var d = (function () {
@@ -99,7 +101,9 @@ var d = (function () {
 })();
 exports.d = d;
 var x;
-function foo() { return null; }
+function foo() {
+    return null;
+}
 exports.foo = foo;
 //// [importDecl_require2.js]
 var d = (function () {
@@ -109,7 +113,9 @@ var d = (function () {
 })();
 exports.d = d;
 exports.x;
-function foo() { return null; }
+function foo() {
+    return null;
+}
 exports.foo = foo;
 //// [importDecl_require3.js]
 var d = (function () {
@@ -119,10 +125,14 @@ var d = (function () {
 })();
 exports.d = d;
 exports.x;
-function foo() { return null; }
+function foo() {
+    return null;
+}
 exports.foo = foo;
 //// [importDecl_require4.js]
-function foo2() { return null; }
+function foo2() {
+    return null;
+}
 exports.foo2 = foo2;
 //// [importDecl_1.js]
 ///<reference path='importDecl_require.ts'/>

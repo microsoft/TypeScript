@@ -12,6 +12,9 @@ function fn5() { }
 
 
 //// [functionOverloadErrorsSyntax.js]
-function fn4a() { }
-function fn4b() { }
-function fn5() { }
+function fn4a() {
+}
+function fn4b() {
+}
+function fn5() {
+}
