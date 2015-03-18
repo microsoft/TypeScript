@@ -5568,12 +5568,12 @@ module ts {
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 // Emit exportDefault if it exists will happen as part 
-                // or normal statment emit.
+                // or normal statement emit.
             }
 
             function emitExportAssignment(node: ExportAssignment) {
                 // Only emit exportAssignment/export default if we are in ES6
-                // Other modules will handel it diffrentlly
+                // Other modules will handle it differently
                 if (languageVersion >= ScriptTarget.ES6) {
                     writeLine();
                     emitStart(node);
@@ -5699,7 +5699,7 @@ module ts {
             function shouldEmitLeadingAndTrailingComments(node: Node) {
                 switch (node.kind) {
                     // All of these entities are emitted in a specialized fashion.  As such, we allow
-                    // the specilized methods for each to handle the comments on the nodes.
+                    // the specialized methods for each to handle the comments on the nodes.
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportDeclaration:
@@ -5719,7 +5719,7 @@ module ts {
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If this is the expression body of an arrow function that we're downleveling, 
+                // If this is the expression body of an arrow function that we're down-leveling, 
                 // then we don't want to emit comments when we emit the body.  It will have already
                 // been taken care of when we emitted the 'return' statement for the function
                 // expression body.
@@ -5913,26 +5913,7 @@ module ts {
                 return leadingComments;
             }
 
-            function getLeadingCommentsToEmit(node: Node) {
-                // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
-                if (node.parent) {
-                    if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                        let leadingComments: CommentRange[];
-                        if (hasDetachedComments(node.pos)) {
-                            // get comments without detached comments
-                            leadingComments = getLeadingCommentsWithoutDetachedComments();
-                        }
-                        else {
-                            // get the leading comments from the node
-                            leadingComments = getLeadingCommentRangesOfNode(node, currentSourceFile);
-                        }
-
-                        return leadingComments;
-                    }
-                }
-            }
-
-            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[]{
+            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[] {
                 // If we're removing comments, then we want to strip out all but the pinned or
                 // triple slash comments.
                 if (ranges && onlyPinnedOrTripleSlashComments) {
@@ -5943,6 +5924,31 @@ module ts {
                 }
 
                 return ranges;
+            }
+
+            function getLeadingCommentsToEmit(node: Node) {
+                // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
+                if (node.parent) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                        if (hasDetachedComments(node.pos)) {
+                            // get comments without detached comments
+                            return getLeadingCommentsWithoutDetachedComments();
+                        }
+                        else {
+                            // get the leading comments from the node
+                            return getLeadingCommentRangesOfNode(node, currentSourceFile);
+                        }
+                    }
+                }
+            }
+
+            function getTrailingCommentsToEmit(node: Node) {
+                // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
+                if (node.parent) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                        return getTrailingCommentRanges(currentSourceFile.text, node.end);
+                    }
+                }
             }
 
             function emitOnlyPinnedOrTripleSlashComments(node: Node) {
@@ -5966,16 +5972,10 @@ module ts {
 
             function emitTrailingComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                if (node.parent) {
-                    if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                        let trailingComments = filterComments(
-                            getTrailingCommentRanges(currentSourceFile.text, node.end),
-                            /*emitOnlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+                var trailingComments = filterComments(getTrailingCommentsToEmit(node), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
 
-                        // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                        emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
-                    }
-                }
+                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
             function emitLeadingCommentsOfPosition(pos: number) {
