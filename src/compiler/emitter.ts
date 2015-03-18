@@ -5719,13 +5719,15 @@ module ts {
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If this is the expression body of an arrow function, then we don't want to emit
-                // comments when we emit the body.  It will have been already taken care of when
-                // we emitted the 'return' statement for the function expression body.
+                // If this is the expression body of an arrow function that we're downleveling, 
+                // then we don't want to emit comments when we emit the body.  It will have already
+                // been taken care of when we emitted the 'return' statement for the function
+                // expression body.
                 if (node.kind !== SyntaxKind.Block &&
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
-                    (<ArrowFunction>node.parent).body === node) {
+                    (<ArrowFunction>node.parent).body === node && 
+                    compilerOptions.target <= ScriptTarget.ES5) {
 
                     return false;
                 }
@@ -5930,10 +5932,10 @@ module ts {
                 }
             }
 
-            function filterCommentsBasedOnOptions(ranges: CommentRange[]): CommentRange[]{
+            function filterComments(ranges: CommentRange[], onlyPinnedOrTripleSlashComments: boolean): CommentRange[]{
                 // If we're removing comments, then we want to strip out all but the pinned or
                 // triple slash comments.
-                if (ranges && compilerOptions.removeComments) {
+                if (ranges && onlyPinnedOrTripleSlashComments) {
                     ranges = filter(ranges, isPinnedOrTripleSlashComment);
                     if (ranges.length === 0) {
                         return undefined;
@@ -5948,17 +5950,13 @@ module ts {
             }
 
             function emitLeadingComments(node: Node) {
-                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ false);
+                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
             }
 
             function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
-                let leadingComments = getLeadingCommentsToEmit(node);
-
                 // If the caller only wants pinned or triple slash comments, then always filter
                 // down to that set.  Otherwise, filter based on the current compiler options.
-                leadingComments = onlyPinnedOrTripleSlashComments
-                    ? filter(leadingComments, isPinnedOrTripleSlashComment)
-                    : filterCommentsBasedOnOptions(leadingComments);
+                let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
 
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
 
@@ -5970,7 +5968,9 @@ module ts {
                 // Emit the trailing comments only if the parent's end doesn't match
                 if (node.parent) {
                     if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                        let trailingComments = filterCommentsBasedOnOptions(getTrailingCommentRanges(currentSourceFile.text, node.end));
+                        let trailingComments = filterComments(
+                            getTrailingCommentRanges(currentSourceFile.text, node.end),
+                            /*emitOnlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
 
                         // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                         emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
@@ -5989,7 +5989,7 @@ module ts {
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
 
-                leadingComments = filterCommentsBasedOnOptions(leadingComments);
+                leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
