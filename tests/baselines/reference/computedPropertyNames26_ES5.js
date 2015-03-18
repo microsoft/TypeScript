@@ -34,6 +34,6 @@ var C = (function (_super) {
         _a[_super.bar.call(this)] = 1,
         _a)[0]] = function () {
     };
-    var _a;
     return C;
+    var _a;
 })(Base);

@@ -4752,7 +4752,7 @@ module ts {
 
                                     var preferredName: string;
                                     if ((<AccessorDeclaration>member).name.kind === SyntaxKind.Identifier) {
-                                        preferredName = "set_" + (<Identifier>(<AccessorDeclaration>member).name).text;
+                                        preferredName = "_set_" + (<Identifier>(<AccessorDeclaration>member).name).text;
                                     }
 
                                     let generatedVariable = createTempVariable(node, preferredName);
@@ -5028,7 +5028,6 @@ module ts {
                     write(";");
 
                     emitTempDeclarations(/*newLine*/ true);
-                    writeLine();
                     tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                     tempParameters = saveTempParameters;
@@ -5039,6 +5038,7 @@ module ts {
                     writeLine();
                     write("})();");
                 }
+
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
                 if (!isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Export)) {
@@ -5087,18 +5087,18 @@ module ts {
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
                 emitDecoratorsOfClass(node);
-                emitTempDeclarations(/*newLine*/ true);
                 writeLine();
-                tempCount = saveTempCount;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
-                generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
-                generatedSetterNames = saveGeneratedSetterNames;
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
                     emitDeclarationName(node);
                 });
                 write(";");
+                emitTempDeclarations(/*newLine*/ true);
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+                generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
+                generatedSetterNames = saveGeneratedSetterNames;
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
