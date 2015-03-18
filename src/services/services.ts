@@ -2618,9 +2618,13 @@ module ts {
                 entries: activeCompletionSession.entries
             };
 
+            /**
+             * Finds the first node that "embraces" the position, so that one may
+             * accurately aggregate locals from the closest containing scope.
+             */
             function getScopeNode(initialToken: Node, position: number, sourceFile: SourceFile) {
                 var scope = initialToken;
-                while (scope && (isToken(scope) || !positionBelongsToNode(scope, position, sourceFile))) {
+                while (scope && !positionBelongsToNode(scope, position, sourceFile)) {
                     scope = scope.parent;
                 }
                 return scope;
