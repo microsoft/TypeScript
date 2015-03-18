@@ -3419,6 +3419,29 @@ declare module "typescript" {
 >getBlockScopedVariableId : (node: Identifier) => number
 >node : Identifier
 >Identifier : Identifier
+<<<<<<< HEAD
+=======
+
+        getClassDeclarationVariableId(node: Identifier): number;
+>getClassDeclarationVariableId : (node: Identifier) => number
+>node : Identifier
+>Identifier : Identifier
+
+        serializeTypeOfNode(node: Node): string | string[];
+>serializeTypeOfNode : (node: Node) => string | string[]
+>node : Node
+>Node : Node
+
+        serializeParameterTypesOfNode(node: Node): (string | string[])[];
+>serializeParameterTypesOfNode : (node: Node) => (string | string[])[]
+>node : Node
+>Node : Node
+
+        serializeReturnTypeOfNode(node: Node): string | string[];
+>serializeReturnTypeOfNode : (node: Node) => string | string[]
+>node : Node
+>Node : Node
+>>>>>>> Updated baselines
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags

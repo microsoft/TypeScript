@@ -8702,6 +8702,41 @@ module ts {
             }
         }
 
+        /** Checks a type reference node as an expression. */
+        function checkTypeNodeAsExpression(node: TypeNode | LiteralExpression) {
+            if (node && node.kind === SyntaxKind.TypeReference) {
+                var type = getTypeFromTypeNode(node);
+                if (!type || type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike)) {
+                    return;
+                }
+                if (type.symbol.valueDeclaration) {
+                    checkExpressionOrQualifiedName((<TypeReferenceNode>node).typeName);
+                }
+            }
+        }
+
+        /**
+          * Checks the type annotation of an accessor declaration or property declaration as 
+          * an expression if it is a type reference to a type with a value declaration.
+          */
+        function checkTypeAnnotationAsExpression(node: AccessorDeclaration | PropertyDeclaration | ParameterDeclaration | MethodDeclaration) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:    return checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
+                case SyntaxKind.Parameter:              return checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
+                case SyntaxKind.MethodDeclaration:      return checkTypeNodeAsExpression((<MethodDeclaration>node).type);
+                case SyntaxKind.GetAccessor:            return checkTypeNodeAsExpression((<AccessorDeclaration>node).type);
+                case SyntaxKind.SetAccessor:            return checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
+            }
+        }
+        
+        /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
+        function checkParameterTypeAnnotationsAsExpressions(node: FunctionLikeDeclaration) {
+            // ensure all type annotations with a value declaration are checked as an expression
+            if (node) {
+                forEach(node.parameters, checkTypeAnnotationAsExpression);
+            }
+        }
+
         /** Check the decorators of a node */
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
@@ -8710,18 +8745,28 @@ module ts {
 
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
+                    var constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
+                    if (constructor) {
+                        checkParameterTypeAnnotationsAsExpressions(constructor);
+                    }
+                    break;
+
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
+                    checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
+                    // fall-through
+
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessor:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    emitDecorate = true;
+                    checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
                     break;
 
                 default:
                     return;
             }
 
+            emitDecorate = true;
             forEach(node.decorators, checkDecorator);
         }
 
@@ -11400,16 +11445,16 @@ module ts {
             else if (type.flags & TypeFlags.ESSymbol) {
                 return "Symbol";
             }
-            else if (type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName, getGeneratedNameForNode);
-            }
-            else if (typeHasCallOrConstructSignatures(type)) {
-                return "Function";
-            }
             else if (type === unknownType) {
                 var fallbackPath: string[] = [];
                 serializeEntityName(node.typeName, getGeneratedNameForNode, fallbackPath);
                 return fallbackPath;
+            }
+            else if (type.symbol && type.symbol.valueDeclaration) {
+                return serializeEntityName(node.typeName, getGeneratedNameForNode);
+            }
+            else if (typeHasCallOrConstructSignatures(type)) {
+                return "Function";
             }
 
             return "Object";
@@ -11473,7 +11518,7 @@ module ts {
             // 
             // For rules on serializing type annotations, see `serializeTypeNode`.
             switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:       return serializeEntityName((<ClassDeclaration>node).name, getGeneratedNameForNode);
+                case SyntaxKind.ClassDeclaration:       return "Function";
                 case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type, getGeneratedNameForNode);
                 case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type, getGeneratedNameForNode);
                 case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type, getGeneratedNameForNode);
@@ -11508,7 +11553,22 @@ module ts {
                     if (parameterCount > 0) {
                         result = new Array<string>(parameterCount);
                         for (var i = 0; i < parameterCount; i++) {
-                            result[i] = serializeTypeOfNode(parameters[i], getGeneratedNameForNode);
+                            if (parameters[i].dotDotDotToken) {
+                                var parameterType = parameters[i].type;
+                                if (parameterType.kind === SyntaxKind.ArrayType) {
+                                    parameterType = (<ArrayTypeNode>parameterType).elementType;
+                                }
+                                else if (parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
+                                    parameterType = (<TypeReferenceNode>parameterType).typeArguments[0];
+                                }
+                                else {
+                                    parameterType = undefined;
+                                }
+                                result[i] = serializeTypeNode(parameterType, getGeneratedNameForNode);
+                            }
+                            else {
+                                result[i] = serializeTypeOfNode(parameters[i], getGeneratedNameForNode);
+                            }
                         }
                         return result;
                     }
@@ -11612,6 +11672,9 @@ module ts {
                 resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
+                serializeTypeOfNode,
+                serializeParameterTypesOfNode,
+                serializeReturnTypeOfNode,
             };
         }
 
