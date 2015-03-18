@@ -2614,7 +2614,7 @@ module ts {
             return {
                 isMemberCompletion,
                 isNewIdentifierLocation,
-                isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
+                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
 
