@@ -320,6 +320,17 @@ module ts {
             && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
 
+    export function isAccessibilityModifier(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+                return true;
+        }
+
+        return false;
+    }
+
     export function compareDataObjects(dst: any, src: any): boolean {
         for (let e in dst) {
             if (typeof dst[e] === "object") {

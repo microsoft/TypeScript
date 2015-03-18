@@ -4011,18 +4011,18 @@ module ts {
                 let container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
-                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                if (isAccessibilityModifier(modifier)) {
                     if (!(container.kind === SyntaxKind.ClassDeclaration ||
                         (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                         return undefined;
                     }
                 }
-                else if (declaration.flags & NodeFlags.Static) {
+                else if (modifier === SyntaxKind.StaticKeyword) {
                     if (container.kind !== SyntaxKind.ClassDeclaration) {
                         return undefined;
                     }
                 }
-                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
                     if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
                         return undefined;
                     }
@@ -4063,7 +4063,7 @@ module ts {
                     default:
                         Debug.fail("Invalid container kind.")
                 }
-
+                
                 forEach(nodes, node => {
                     if (node.modifiers && node.flags & modifierFlag) {
                         forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
@@ -5842,17 +5842,6 @@ module ts {
         //     Where on the second line, you will get the 'return' keyword,
         //     a string literal, and a template end consisting of '} } `'.
         let templateStack: SyntaxKind[] = [];
-
-        function isAccessibilityModifier(kind: SyntaxKind) {
-            switch (kind) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                    return true;
-            }
-
-            return false;
-        }
 
         /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
         function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {
