@@ -1861,7 +1861,7 @@ module ts {
             }
         }
 
-        function setDeclarationsOfIdentifierAsVisible(node: Identifier): Node[]{
+        function collectLinkedAliases(node: Identifier): Node[]{
             var exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
                 exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
@@ -11268,7 +11268,7 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
-                setDeclarationsOfIdentifierAsVisible,
+                collectLinkedAliases,
                 getBlockScopedVariableId,
             };
         }

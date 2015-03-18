@@ -769,7 +769,7 @@ module ts {
 
             // Make all the declarations visible for the export name
             if (node.expression.kind === SyntaxKind.Identifier) {
-                let nodes = resolver.setDeclarationsOfIdentifierAsVisible(<Identifier>node.expression);
+                let nodes = resolver.collectLinkedAliases(<Identifier>node.expression);
 
                 // write each of these declarations asynchronously
                 writeAsynchronousModuleElements(nodes);
@@ -967,7 +967,7 @@ module ts {
             emitImportOrExportSpecifier(node);
 
             // Make all the declarations visible for the export name
-            let nodes = resolver.setDeclarationsOfIdentifierAsVisible(node.propertyName || node.name);
+            let nodes = resolver.collectLinkedAliases(node.propertyName || node.name);
 
             // write each of these declarations asynchronously
             writeAsynchronousModuleElements(nodes);
