@@ -19,9 +19,10 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };
 var C = (function () {
     function C() {
     }
-    C = __decorate([dec], C);
+    C = __decorate([dec, __metadata('design:paramtypes', [])], C);
     return C;
 })();

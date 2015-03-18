@@ -19,6 +19,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };
 var C = (function () {
     function C() {
     }
@@ -27,6 +28,6 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "accessor", __decorate([dec], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+    Object.defineProperty(C.prototype, "accessor", __decorate([dec, __metadata('design:type', Object)], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
     return C;
 })();

@@ -19,10 +19,11 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };
 var C = (function () {
     function C() {
     }
     C.prototype.method = function (p) { };
-    __decorate([dec], C.prototype, "method", 0);
+    __decorate([dec, __metadata('design:type', Number)], C.prototype, "method", 0);
     return C;
 })();

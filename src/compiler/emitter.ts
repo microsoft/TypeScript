@@ -1108,9 +1108,7 @@ module ts {
                             return;
                         }
 
-                        let generatedVariable = createTempVariable(TempFlags.Auto);
-                        generatedName = generatedVariable.text;
-                        recordTempDeclaration(generatedVariable);
+                        generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
                         computedPropertyNamesToGeneratedNames[node.id] = generatedName;
                         write(generatedName);
                         write(" = ");
@@ -3723,7 +3721,7 @@ module ts {
                 emitStart(node);
                 emitDeclarationName(node);
                 write(" = ");
-                emitDecorateStart(node.decorators);
+                emitDecorateStart(node);
                 emitDeclarationName(node);
                 write(");");
                 emitEnd(node);
@@ -3811,7 +3809,7 @@ module ts {
                         write(", ");
                     }
 
-                    emitDecorateStart(decorators);
+                    emitDecorateStart(member);
                     emitStart(member.name);
                     emitClassMemberPrefix(node, member);
                     write(", ");
@@ -3863,7 +3861,7 @@ module ts {
 
                     writeLine();
                     emitStart(parameter);
-                    emitDecorateStart(parameter.decorators);
+                    emitDecorateStart(parameter);
                     emitStart(parameter.name);
 
                     if (member.kind === SyntaxKind.Constructor) {
@@ -3885,8 +3883,9 @@ module ts {
                 });
             }
 
-            function emitDecorateStart(decorators: Decorator[]): void {
+            function emitDecorateStart(node: Declaration): void {
                 write("__decorate([");
+                let decorators = node.decorators;
                 let decoratorCount = decorators.length;
                 for (let i = 0; i < decoratorCount; i++) {
                     if (i > 0) {
@@ -3897,9 +3896,94 @@ module ts {
                     emit(decorator.expression);
                     emitEnd(decorator);
                 }
+                emitSerializedTypeMetadata(node);
                 write("], ");
             }
 
+            function formatPathSegment(location: Node, path: string[], index: number): string {
+                switch (index) {
+                    case 0:
+                        return `typeof ${path[index]} !== 'undefined' && ${path[index]}`;
+                    case 1:
+                        return `${formatPathSegment(location, path, index - 1) }.${path[index]}`;
+                    default:
+                        let temp = createAndRecordTempVariable(TempFlags.Auto).text;
+                        return `(${temp} = ${formatPathSegment(location, path, index - 1) }) && ${temp}.${path[index]}`;
+                }
+            }
+
+            function shouldEmitTypeMetadata(node: Declaration): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.Parameter:
+                        return true;
+                }
+                return false;
+            }
+
+            function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                        return true;
+                }
+                return false;
+            }
+
+            function shouldEmitParamTypesMetadata(node: Declaration): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.SetAccessor:
+                        return true;
+                }
+                return false;
+            }
+
+            function emitSerializedTypeMetadata(node: Declaration): void {
+                if (shouldEmitTypeMetadata(node)) {
+                    var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
+                    if (serializedType) {
+                        write(", __metadata('design:type', ");
+                        emitSerializedType(node, serializedType);
+                        write(")");
+                    }
+                }
+                if (shouldEmitParamTypesMetadata(node)) {
+                    var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
+                    if (serializedTypes) {
+                        write(", __metadata('design:paramtypes', [");
+                        for (var i = 0; i < serializedTypes.length; ++i) {
+                            if (i > 0) {
+                                write(", ");
+                            }
+                            emitSerializedType(node, serializedTypes[i]);
+                        }
+                        write("])");
+                    }
+                }
+                if (shouldEmitReturnTypeMetadata(node)) {
+                    var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
+                    if (serializedType) {
+                        write(", __metadata('design:returntype', ");
+                        emitSerializedType(node, serializedType);
+                        write(")");
+                    }
+                }
+            }
+
+            function emitSerializedType(location: Node, name: string | string[]): void {
+                if (typeof name === "string") {
+                    write(name);
+                    return;
+                }
+                else {
+                    Debug.assert(name.length > 0, "Invalid type name path for serialization");
+                    write(`(${formatPathSegment(location, name, name.length - 1) }) || Object`);
+                }
+            }
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitOnlyPinnedOrTripleSlashComments(node);
             }
