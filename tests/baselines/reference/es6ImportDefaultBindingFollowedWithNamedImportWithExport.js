@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
     exports.m = exports.a;
 });
 //// [client.js]
-define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, defaultBinding2, defaultBinding3, defaultBinding4, defaultBinding5, defaultBinding6) {
+define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, _server_1, _server_2, _server_3, _server_4, _server_5) {
     exports.x1 = _server_1.a;
     exports.x1 = _server_2.a;
     exports.x1 = _server_3.x;

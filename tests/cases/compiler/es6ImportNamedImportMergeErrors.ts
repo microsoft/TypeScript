@@ -1,4 +1,3 @@
-// @target: es6
 // @module: commonjs
 
 // @filename: es6ImportNamedImportMergeErrors_0.ts

@@ -1,5 +1,5 @@
 // @target: es6
-// @module: commonjs
+// @declaration: true
 // @declaration: true
 
 // @filename: es6ImportWithoutFromClause_0.ts

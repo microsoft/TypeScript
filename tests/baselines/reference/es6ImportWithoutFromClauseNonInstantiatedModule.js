@@ -10,7 +10,7 @@ import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
 
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_0.js]
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_1.js]
-require("es6ImportWithoutFromClauseNonInstantiatedModule_0");
+import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
 
 
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_0.d.ts]

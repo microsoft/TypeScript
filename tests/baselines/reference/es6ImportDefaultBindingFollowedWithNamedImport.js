@@ -22,21 +22,21 @@ var x1: number = m;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport_0.js]
-exports.a = 10;
-exports.x = exports.a;
-exports.m = exports.a;
+export var a = 10;
+export var x = a;
+export var m = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
-var defaultBinding2 = require("es6ImportDefaultBindingFollowedWithNamedImport_0");
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_1.a;
-var defaultBinding3 = require("es6ImportDefaultBindingFollowedWithNamedImport_0");
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_2.a;
-var defaultBinding4 = require("es6ImportDefaultBindingFollowedWithNamedImport_0");
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_3.x;
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_3.a;
-var defaultBinding5 = require("es6ImportDefaultBindingFollowedWithNamedImport_0");
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_4.x;
-var defaultBinding6 = require("es6ImportDefaultBindingFollowedWithNamedImport_0");
-var x1 = _es6ImportDefaultBindingFollowedWithNamedImport_0_5.m;
+import { a } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
+var x1 = a;
+import { a as b } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
+var x1 = b;
+import { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
+var x1 = x;
+var x1 = y;
+import { x as z } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
+var x1 = z;
+import { m } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
+var x1 = m;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport_0.d.ts]

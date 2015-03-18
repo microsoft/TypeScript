@@ -3938,38 +3938,6 @@ declare module "typescript" {
 >Type : Type
 >Type : Type
     }
-    interface TypeInferences {
->TypeInferences : TypeInferences
-
-        primary: Type[];
->primary : Type[]
->Type : Type
-
-        secondary: Type[];
->secondary : Type[]
->Type : Type
-    }
-    interface InferenceContext {
->InferenceContext : InferenceContext
-
-        typeParameters: TypeParameter[];
->typeParameters : TypeParameter[]
->TypeParameter : TypeParameter
-
-        inferUnionTypes: boolean;
->inferUnionTypes : boolean
-
-        inferences: TypeInferences[];
->inferences : TypeInferences[]
->TypeInferences : TypeInferences
-
-        inferredTypes: Type[];
->inferredTypes : Type[]
->Type : Type
-
-        failedTypeParameterIndex?: number;
->failedTypeParameterIndex : number
-    }
     interface DiagnosticMessage {
 >DiagnosticMessage : DiagnosticMessage
 

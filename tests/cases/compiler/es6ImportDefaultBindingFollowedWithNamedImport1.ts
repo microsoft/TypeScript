@@ -1,5 +1,4 @@
 // @target: es6
-// @module: commonjs
 // @declaration: true
 
 // @filename: es6ImportDefaultBindingFollowedWithNamedImport1_0.ts

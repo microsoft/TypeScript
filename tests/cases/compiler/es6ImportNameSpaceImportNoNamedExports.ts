@@ -1,4 +1,4 @@
-// @target: es6
+// @target: es5
 // @module: commonjs
 
 // @filename: es6ImportNameSpaceImportNoNamedExports_0.ts

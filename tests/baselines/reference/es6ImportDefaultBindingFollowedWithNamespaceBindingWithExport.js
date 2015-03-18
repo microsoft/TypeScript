@@ -11,7 +11,7 @@ export var x: number = nameSpaceBinding.a;
 //// [server.js]
 exports.a = 10;
 //// [client.js]
-var defaultBinding = require("server");
+var nameSpaceBinding = require("server");
 exports.x = nameSpaceBinding.a;
 
 

@@ -4,10 +4,9 @@ export default function foo() {
 }
 
 //// [declarationEmitDefaultExport3.js]
-function foo() {
+export default function foo() {
     return "";
 }
-module.exports = foo;
 
 
 //// [declarationEmitDefaultExport3.d.ts]
