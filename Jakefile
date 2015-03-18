@@ -65,7 +65,7 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
-	"navigateTo.ts",
+    "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
@@ -109,6 +109,7 @@ var definitionsRoots = [
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
     "compiler/program.d.ts",
+    "compiler/emitter.d.ts",
     "services/services.d.ts",
 ];
 
@@ -539,7 +540,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 

@@ -3389,6 +3389,28 @@ declare module "typescript" {
 >node : Identifier
 >Identifier : Identifier
     }
+    interface EmitHost extends ScriptReferenceHost {
+>EmitHost : EmitHost
+>ScriptReferenceHost : ScriptReferenceHost
+
+        getSourceFiles(): SourceFile[];
+>getSourceFiles : () => SourceFile[]
+>SourceFile : SourceFile
+
+        getCommonSourceDirectory(): string;
+>getCommonSourceDirectory : () => string
+
+        getCanonicalFileName(fileName: string): string;
+>getCanonicalFileName : (fileName: string) => string
+>fileName : string
+
+        getNewLine(): string;
+>getNewLine : () => string
+
+        writeFile: WriteFileCallback;
+>writeFile : WriteFileCallback
+>WriteFileCallback : WriteFileCallback
+    }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
 
@@ -5032,6 +5054,17 @@ declare module "typescript" {
 >host : CompilerHost
 >CompilerHost : CompilerHost
 >Program : Program
+}
+declare module "typescript" {
+    function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult;
+>emitFiles : (resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile) => EmitResult
+>resolver : EmitResolver
+>EmitResolver : EmitResolver
+>host : EmitHost
+>EmitHost : EmitHost
+>targetSourceFile : SourceFile
+>SourceFile : SourceFile
+>EmitResult : EmitResult
 }
 declare module "typescript" {
     /** The version of the language service API */

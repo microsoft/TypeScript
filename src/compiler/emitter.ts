@@ -57,6 +57,8 @@ module ts {
     }
 
     let indentStrings: string[] = ["", "    "];
+
+    // @internal
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
             indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
@@ -68,6 +70,7 @@ module ts {
         return indentStrings[1].length;
     }
 
+    // @internal
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
@@ -78,7 +81,7 @@ module ts {
         return false;
     }
 
-    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
+    function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
@@ -1757,14 +1760,14 @@ module ts {
         }
     }
 
-    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+    // @internal
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[]{
         let diagnostics: Diagnostic[] = [];
         let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
         emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
         return diagnostics;
     }
 
-    // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         let compilerOptions = host.getCompilerOptions();

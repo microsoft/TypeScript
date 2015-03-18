@@ -988,6 +988,13 @@ declare module "typescript" {
         isUnknownIdentifier(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
     }
+    interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+        writeFile: WriteFileCallback;
+    }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
@@ -1511,6 +1518,9 @@ declare module "typescript" {
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
+}
+declare module "typescript" {
+    function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult;
 }
 declare module "typescript" {
     /** The version of the language service API */

@@ -1223,6 +1223,16 @@ module ts {
         getBlockScopedVariableId(node: Identifier): number;
     }
 
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        writeFile: WriteFileCallback;
+    }
+
     export const enum SymbolFlags {
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
