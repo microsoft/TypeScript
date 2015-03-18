@@ -39,6 +39,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -57,6 +58,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -65,7 +67,7 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
-	"navigateTo.ts",
+    "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
@@ -539,7 +541,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
