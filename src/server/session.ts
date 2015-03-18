@@ -44,7 +44,7 @@ module ts.server {
         else if (a.file == b.file) {
             var n = compareNumber(a.start.line, b.start.line);
             if (n == 0) {
-                return compareNumber(a.start.col, b.start.col);
+                return compareNumber(a.start.offset, b.start.offset);
             }
             else return n;
         }
@@ -55,8 +55,8 @@ module ts.server {
        
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
-            start: project.compilerService.host.positionToLineCol(fileName, diag.start),
-            end: project.compilerService.host.positionToLineCol(fileName, diag.start + diag.length),
+            start: project.compilerService.host.positionToLineOffset(fileName, diag.start),
+            end: project.compilerService.host.positionToLineOffset(fileName, diag.start + diag.length),
             text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
         };
     }
@@ -260,7 +260,7 @@ module ts.server {
             }
         }
 
-        getDefinition(line: number, col: number, fileName: string): protocol.FileSpan[] {
+        getDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -268,7 +268,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
 
             var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
@@ -277,12 +277,12 @@ module ts.server {
 
             return definitions.map(def => ({
                 file: def.fileName,
-                start: compilerService.host.positionToLineCol(def.fileName, def.textSpan.start),
-                end: compilerService.host.positionToLineCol(def.fileName, ts.textSpanEnd(def.textSpan))
+                start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
+                end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
             }));
         }
 
-        getRenameLocations(line: number, col: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
+        getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -290,7 +290,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             var renameInfo = compilerService.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
                 return undefined;
@@ -310,8 +310,8 @@ module ts.server {
 
             var bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
                 file: location.fileName,
-                start: compilerService.host.positionToLineCol(location.fileName, location.textSpan.start),
-                end: compilerService.host.positionToLineCol(location.fileName, ts.textSpanEnd(location.textSpan)),
+                start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
+                end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
             })).sort((a, b) => {
                 if (a.file < b.file) {
                     return -1;
@@ -328,7 +328,7 @@ module ts.server {
                         return -1;
                     }
                     else {
-                        return b.start.col - a.start.col;
+                        return b.start.offset - a.start.offset;
                     }
                 }
             }).reduce<protocol.SpanGroup[]>((accum: protocol.SpanGroup[], cur: protocol.FileSpan) => {
@@ -350,7 +350,7 @@ module ts.server {
             return { info: renameInfo, locs: bakedRenameLocs };
         }
 
-        getReferences(line: number, col: number, fileName: string): protocol.ReferencesResponseBody {
+        getReferences(line: number, offset: number, fileName: string): protocol.ReferencesResponseBody {
             // TODO: get all projects for this file; report refs for all projects deleting duplicates
             // can avoid duplicates by eliminating same ref file from subsequent projects
             var file = ts.normalizePath(fileName);
@@ -360,7 +360,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
 
             var references = compilerService.languageService.getReferencesAtPosition(file, position);
             if (!references) {
@@ -374,10 +374,10 @@ module ts.server {
 
             var displayString = ts.displayPartsToString(nameInfo.displayParts);
             var nameSpan = nameInfo.textSpan;
-            var nameColStart = compilerService.host.positionToLineCol(file, nameSpan.start).col;
+            var nameColStart = compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
             var bakedRefs: protocol.ReferencesResponseItem[] = references.map((ref) => {
-                var start = compilerService.host.positionToLineCol(ref.fileName, ref.textSpan.start);
+                var start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
                 var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
                 var lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
@@ -385,24 +385,27 @@ module ts.server {
                     file: ref.fileName,
                     start: start,
                     lineText: lineText,
-                    end: compilerService.host.positionToLineCol(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                    end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
                     isWriteAccess: ref.isWriteAccess
                 };
             }).sort(compareFileStart);
             return {
                 refs: bakedRefs,
                 symbolName: nameText,
-                symbolStartCol: nameColStart,
+                symbolStartOffset: nameColStart,
                 symbolDisplayString: displayString
             };
         }
 
-        openClientFile(fileName: string, tabSize?: number) {
+        openClientFile(fileName: string, tabSize?: number, indentSize?: number) {
             var file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file, tabSize);
+            var info = this.projectService.openClientFile(file);
+            if (info) {
+                info.setFormatOptions(tabSize, indentSize);
+            }
         }
 
-        getQuickInfo(line: number, col: number, fileName: string): protocol.QuickInfoResponseBody {
+        getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -410,7 +413,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             var quickInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!quickInfo) {
                 return undefined;
@@ -421,14 +424,14 @@ module ts.server {
             return {
                 kind: quickInfo.kind,
                 kindModifiers: quickInfo.kindModifiers,
-                start: compilerService.host.positionToLineCol(file, quickInfo.textSpan.start),
-                end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(quickInfo.textSpan)),
+                start: compilerService.host.positionToLineOffset(file, quickInfo.textSpan.start),
+                end: compilerService.host.positionToLineOffset(file, ts.textSpanEnd(quickInfo.textSpan)),
                 displayString: displayString,
                 documentation: docString,
             };
         }
 
-        getFormattingEditsForRange(line: number, col: number, endLine: number, endCol: number, fileName: string): protocol.CodeEdit[] {
+        getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string): protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -436,8 +439,8 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var startPosition = compilerService.host.lineColToPosition(file, line, col);
-            var endPosition = compilerService.host.lineColToPosition(file, endLine, endCol);
+            var startPosition = compilerService.host.lineOffsetToPosition(file, line, offset);
+            var endPosition = compilerService.host.lineOffsetToPosition(file, endLine, endOffset);
             
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
@@ -448,14 +451,14 @@ module ts.server {
 
             return edits.map((edit) => {
                 return {
-                    start: compilerService.host.positionToLineCol(file, edit.span.start),
-                    end: compilerService.host.positionToLineCol(file, ts.textSpanEnd(edit.span)),
+                    start: compilerService.host.positionToLineOffset(file, edit.span.start),
+                    end: compilerService.host.positionToLineOffset(file, ts.textSpanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
         }
 
-        getFormattingEditsAfterKeystroke(line: number, col: number, key: string, fileName: string): protocol.CodeEdit[] {
+        getFormattingEditsAfterKeystroke(line: number, offset: number, key: string, fileName: string): protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
 
             var project = this.projectService.getProjectForFile(file);
@@ -464,7 +467,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             var formatOptions = this.projectService.getFormatCodeOptions(file);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
                 formatOptions);
@@ -519,16 +522,16 @@ module ts.server {
 
             return edits.map((edit) => {
                 return {
-                    start: compilerService.host.positionToLineCol(file,
+                    start: compilerService.host.positionToLineOffset(file,
                         edit.span.start),
-                    end: compilerService.host.positionToLineCol(file,
+                    end: compilerService.host.positionToLineOffset(file,
                         ts.textSpanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
         }
 
-        getCompletions(line: number, col: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
+        getCompletions(line: number, offset: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
             if (!prefix) {
                 prefix = "";
             }
@@ -539,7 +542,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
 
             var completions = compilerService.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
@@ -554,7 +557,7 @@ module ts.server {
             }, []);
         }
 
-        getCompletionEntryDetails(line: number, col: number,
+        getCompletionEntryDetails(line: number, offset: number,
             entryNames: string[], fileName: string): protocol.CompletionEntryDetails[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
@@ -563,7 +566,7 @@ module ts.server {
             }
 
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
 
             return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
                 var details = compilerService.languageService.getCompletionEntryDetails(file, position, entryName);
@@ -589,13 +592,13 @@ module ts.server {
             }
         }
 
-        change(line: number, col: number, endLine: number, endCol: number, insertString: string, fileName: string) {
+        change(line: number, offset: number, endLine: number, endOffset: number, insertString: string, fileName: string) {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (project) {
                 var compilerService = project.compilerService;
-                var start = compilerService.host.lineColToPosition(file, line, col);
-                var end = compilerService.host.lineColToPosition(file, endLine, endCol);
+                var start = compilerService.host.lineOffsetToPosition(file, line, offset);
+                var end = compilerService.host.lineOffsetToPosition(file, endLine, endOffset);
                 if (start >= 0) {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
@@ -644,8 +647,8 @@ module ts.server {
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
                 spans: item.spans.map(span => ({
-                    start: compilerService.host.positionToLineCol(fileName, span.start),
-                    end: compilerService.host.positionToLineCol(fileName, ts.textSpanEnd(span))
+                    start: compilerService.host.positionToLineOffset(fileName, span.start),
+                    end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
                 })),
                 childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
             }));
@@ -681,8 +684,8 @@ module ts.server {
             }
 
             return navItems.map((navItem) => {
-                var start = compilerService.host.positionToLineCol(navItem.fileName, navItem.textSpan.start);
-                var end = compilerService.host.positionToLineCol(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                var start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
+                var end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
                 var bakedItem: protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
@@ -706,7 +709,7 @@ module ts.server {
             });
         }
 
-        getBraceMatching(line: number, col: number, fileName: string): protocol.TextSpan[] {
+        getBraceMatching(line: number, offset: number, fileName: string): protocol.TextSpan[] {
             var file = ts.normalizePath(fileName);
             
             var project = this.projectService.getProjectForFile(file);
@@ -715,7 +718,7 @@ module ts.server {
             }
             
             var compilerService = project.compilerService;
-            var position = compilerService.host.lineColToPosition(file, line, col);
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             
             var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
@@ -723,8 +726,8 @@ module ts.server {
             }
             
             return spans.map(span => ({
-                start: compilerService.host.positionToLineCol(file, span.start),
-                end: compilerService.host.positionToLineCol(file, span.start + span.length)
+                start: compilerService.host.positionToLineOffset(file, span.start),
+                end: compilerService.host.positionToLineOffset(file, span.start + span.length)
             }));
         }
 
@@ -741,49 +744,50 @@ module ts.server {
                 switch (request.command) {
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getDefinition(defArgs.line, defArgs.col, defArgs.file);
+                        response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;
                     }
                     case CommandNames.References: { 
                         var refArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getReferences(refArgs.line, refArgs.col, refArgs.file);
+                        response = this.getReferences(refArgs.line, refArgs.offset, refArgs.file);
                         break;
                     }
                     case CommandNames.Rename: {
                         var renameArgs = <protocol.RenameRequestArgs>request.arguments;
-                        response = this.getRenameLocations(renameArgs.line, renameArgs.col, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
+                        response = this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings);
                         break;
                     }
                     case CommandNames.Open: {
                         var openArgs = <protocol.OpenRequestArgs>request.arguments;
-                        this.openClientFile(openArgs.file,openArgs.tabSize);
+                        this.openClientFile(openArgs.file,openArgs.tabSize, openArgs.indentSize);
                         responseRequired = false;
                         break;
                     }
                     case CommandNames.Quickinfo: {
                         var quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.col, quickinfoArgs.file);
+                        response = this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file);
                         break;
                     }
                     case CommandNames.Format: {
                         var formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.col, formatArgs.endLine, formatArgs.endCol, formatArgs.file);
+                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file);
                         break;
                     }
                     case CommandNames.Formatonkey: {
                         var formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.col, formatOnKeyArgs.key, formatOnKeyArgs.file);
+                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file);
                         break;
                     }
                     case CommandNames.Completions: {
                         var completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                        response = this.getCompletions(request.arguments.line, request.arguments.col, completionsArgs.prefix, request.arguments.file);
+                        response = this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file);
                         break;
                     }
                     case CommandNames.CompletionDetails: {
                         var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
-                        response = this.getCompletionEntryDetails(request.arguments.line, request.arguments.col, completionDetailsArgs.entryNames,
-                                                                  request.arguments.file);
+                        response =
+                            this.getCompletionEntryDetails(completionDetailsArgs.line,completionDetailsArgs.offset,
+                                                           completionDetailsArgs.entryNames,completionDetailsArgs.file);
                         break;
                     }
                     case CommandNames.Geterr: {
@@ -794,7 +798,7 @@ module ts.server {
                     }
                     case CommandNames.Change: {
                         var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
-                        this.change(changeArgs.line, changeArgs.col, changeArgs.endLine, changeArgs.endCol,
+                        this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
                                     changeArgs.insertString, changeArgs.file);
                         responseRequired = false;
                         break;
@@ -831,7 +835,7 @@ module ts.server {
                     }
                     case CommandNames.Brace: {
                         var braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this.getBraceMatching(braceArguments.line, braceArguments.col, braceArguments.file);
+                        response = this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file);
                         break;
                     }
                     case CommandNames.NavBar: {
