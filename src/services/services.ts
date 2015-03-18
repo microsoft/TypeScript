@@ -3492,7 +3492,6 @@ module ts {
                 }
             }
 
-            let result: DefinitionInfo[] = [];
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
             // using go-to-definition at such position should go to the variable declaration of the property value rather than
@@ -3501,16 +3500,19 @@ module ts {
             // assignment. This case and others are handled by the following code.
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 let shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                if (!shorthandSymbol) {
+                    return [];
+                }
+
                 let shorthandDeclarations = shorthandSymbol.getDeclarations();
                 let shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
                 let shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 let shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
-                forEach(shorthandDeclarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
-                });
-                return result
+                return map(shorthandDeclarations,
+                    declaration => getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
+            let result: DefinitionInfo[] = [];
             let declarations = symbol.getDeclarations();
             let symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             let symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
