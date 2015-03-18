@@ -5953,6 +5953,9 @@ module ts {
 
             function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
                 let leadingComments = getLeadingCommentsToEmit(node);
+
+                // If the caller only wants pinned or triple slash comments, then always filter
+                // down to that set.  Otherwise, filter based on the current compiler options.
                 leadingComments = onlyPinnedOrTripleSlashComments
                     ? filter(leadingComments, isPinnedOrTripleSlashComment)
                     : filterCommentsBasedOnOptions(leadingComments);
