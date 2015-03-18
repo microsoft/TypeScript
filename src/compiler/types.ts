@@ -363,7 +363,7 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;  // Array of decorators
+        decorators?: NodeArray<Decorator>;  // Array of decorators (in document order)
         modifiers?: ModifiersArray;         // Array of modifiers
         id?: number;                        // Unique id (used to look up NodeLinks)
         parent?: Node;                      // Parent node (initialized by binding)
