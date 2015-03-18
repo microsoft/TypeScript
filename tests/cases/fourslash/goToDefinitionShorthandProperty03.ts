@@ -1,9 +1,16 @@
 /// <reference path='fourslash.ts' />
 
-////let /*def*/x = {
-////    /*prop*/x
+////var /*varDef*/x = {
+////    /*varProp*/x
+////}
+////let /*letDef*/y = {
+////    /*letProp*/y
 ////}
 
-goTo.marker("prop");
+goTo.marker("varProp");
 goTo.definition();
-verify.caretAtMarker("def");
+verify.caretAtMarker("varDef");
+
+goTo.marker("letProp");
+goTo.definition();
+verify.caretAtMarker("letDef");
