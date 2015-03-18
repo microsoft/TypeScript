@@ -17,4 +17,3 @@ import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
 export interface i {
 }
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_1.d.ts]
-import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
