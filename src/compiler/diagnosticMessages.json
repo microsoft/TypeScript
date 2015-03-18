@@ -1370,7 +1370,11 @@
     },
     "Type '{0}' is not an array type or a string type.": {
         "category": "Error",
-        "code": 2461
+        "code": 2495
+    },
+    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+        "category": "Error",
+        "code": 2496
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1957,9 +1961,5 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
-    },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
-        "category": "Error",
-        "code": 9002
     }
 }
