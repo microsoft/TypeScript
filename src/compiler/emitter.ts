@@ -57,6 +57,20 @@ module ts {
     }
 
     let indentStrings: string[] = ["", "    "];
+
+    // When emitting for ES3, property access via dot notation (i.e. obj.prop ) cannot be used
+    // if the property name is a reserved word.  Use index notation (i.e. obj["prop"]).
+    let ES3ReservedWords = [
+        "null", "true", "false", "break", "else", "new", "var", "case", "finally", "return", "void", "catch", "for",
+        "switch", "while", "continue", "function", "this", "with", "default", "if", "throw", "delete", "in", "try",
+        "do", "instanceof", "typeof", "abstract", "enum", "int", "short", "boolean", "export", "interface", "static",
+        "byte", "extends", "long", "super", "char", "final", "native", "synchronized", "class", "float", "package",
+        "throws", "const", "goto", "private", "transient", "debugger", "implements", "protected", "volatile"];
+
+    function IdentifierIsES3ReservedWord(node: Node) {
+        return node.kind === SyntaxKind.Identifier && contains(ES3ReservedWords, (<Identifier>node).text);
+    }
+
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
             indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
@@ -3340,12 +3354,20 @@ module ts {
                     return;
                 }
 
+                var emitAsIndexed = (languageVersion === ScriptTarget.ES3 && IdentifierIsES3ReservedWord(node.name))
+
                 emit(node.expression);
-                let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
-                write(".");
-                let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
-                decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
+                if (!emitAsIndexed) {
+                    let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
+                    write(".");
+                    let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
+                    emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                    decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
+                } else {
+                    write('["');
+                    emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                    write('"]');
+                }
             }
 
             function emitQualifiedName(node: QualifiedName) {
@@ -4845,8 +4867,11 @@ module ts {
                     write("[");
                     emitNodeWithoutSourceMap(memberName);
                     write("]");
-                }
-                else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
+                } else if (languageVersion === ScriptTarget.ES3 && IdentifierIsES3ReservedWord(memberName)) {
+                    write('["');
+                    emitNodeWithoutSourceMap(memberName);
+                    write('"]');
+                } else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
                     emitComputedPropertyName(<ComputedPropertyName>memberName);
                 }
                 else {

@@ -283,13 +283,13 @@ var C = (function () {
     return C;
 })();
 var c;
-var r1 = c.abstract;
+var r1 = c["abstract"];
 var r2 = c.as;
 var i;
-var r3 = i.abstract;
+var r3 = i["abstract"];
 var r4 = i.as;
 var a;
-var r5 = a.abstract;
+var r5 = a["abstract"];
 var r6 = a.as;
 var E;
 (function (E) {
