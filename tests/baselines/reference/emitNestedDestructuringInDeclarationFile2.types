@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/destructuring/emitNestedDestructuringInDeclarationFile2.ts ===
+var [[j]] = [[{}]];
+>j : {}
+>[[{}]] : [[{}]]
+>[{}] : [{}]
+>{} : {}
+
+var [[foo, bar]] = [[10, 20, "undefined"]];
+>foo : number
+>bar : number
+>[[10, 20, "undefined"]] : [[number, number, string]]
+>[10, 20, "undefined"] : [number, number, string]
+
+var [[foo1, bar1, [baz]]] = [[false, true, ["undefined"]]];
+>foo1 : boolean
+>bar1 : boolean
+>baz : string
+>[[false, true, ["undefined"]]] : [[boolean, boolean, [string]]]
+>[false, true, ["undefined"]] : [boolean, boolean, [string]]
+>["undefined"] : [string]
+

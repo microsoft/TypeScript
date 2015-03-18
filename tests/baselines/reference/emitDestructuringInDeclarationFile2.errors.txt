@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile2.ts(3,16): error TS4025: Exported variable '{b}' has or is using private name 'c'.
+tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile2.ts(6,16): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile2.ts(6,16): error TS4025: Exported variable '{a}' has or is using private name 'c'.
+
+
+==== tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile2.ts (3 errors) ====
+    module M {
+        class c { }
+        export var {b} = {
+                   ~~~
+!!! error TS4025: Exported variable '{b}' has or is using private name 'c'.
+            b: new c()
+        };
+        export var {a}: { a: c };
+                   ~~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+                   ~~~
+!!! error TS4025: Exported variable '{a}' has or is using private name 'c'.
+    }
+    

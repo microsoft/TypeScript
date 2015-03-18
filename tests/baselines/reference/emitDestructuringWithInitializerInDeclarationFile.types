@@ -1,0 +1,49 @@
+=== tests/cases/conformance/es6/destructuring/emitDestructuringWithInitializerInDeclarationFile.ts ===
+class C { }
+>C : C
+
+class D extends C { }
+>D : D
+>C : C
+
+var {s = '10', c} = { s: 'bar', c: true };
+>s : string
+>c : boolean
+>{ s: 'bar', c: true } : { s: string; c: boolean; }
+>s : string
+>c : boolean
+
+var [s1 = '10', c1] = ['hello', 'word'];
+>s1 : string
+>c1 : string
+>['hello', 'word'] : [string, string]
+
+var {s2 = { prop1: new C(), prop2: new C() }, c2} = { s2: { prop1: new D(), prop2: new D() }, c2: false };
+>s2 : { prop1: D; prop2: D; }
+>{ prop1: new C(), prop2: new C() } : { prop1: C; prop2: C; }
+>prop1 : C
+>new C() : C
+>C : typeof C
+>prop2 : C
+>new C() : C
+>C : typeof C
+>c2 : boolean
+>{ s2: { prop1: new D(), prop2: new D() }, c2: false } : { s2: { prop1: D; prop2: D; }; c2: boolean; }
+>s2 : { prop1: D; prop2: D; }
+>{ prop1: new D(), prop2: new D() } : { prop1: D; prop2: D; }
+>prop1 : D
+>new D() : D
+>D : typeof D
+>prop2 : D
+>new D() : D
+>D : typeof D
+>c2 : boolean
+
+var [[s3 = [], c3]] = [[[10,20], "blah"]];
+>s3 : number[]
+>[] : undefined[]
+>c3 : string
+>[[[10,20], "blah"]] : [[number[], string]]
+>[[10,20], "blah"] : [number[], string]
+>[10,20] : number[]
+
