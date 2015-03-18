@@ -455,11 +455,13 @@ module ts {
         return pos;
     }
 
-    // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
-    // the first line break and comments between that location and the next token are returned. If trailing is true, comments occurring
-    // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
-    // comment. Single-line comment ranges include the beginning '//' characters but not the ending line break. Multi-line comment
-    // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
+    // Extract comments from the given source text starting at the given position. If trailing is 
+    // false, whitespace is skipped until the first line break and comments between that location 
+    // and the next token are returned.If trailing is true, comments occurring between the given 
+    // position and the next line break are returned.The return value is an array containing a 
+    // TextRange for each comment. Single-line comment ranges include the beginning '//' characters 
+    // but not the ending line break. Multi - line comment ranges include the beginning '/* and 
+    // ending '*/' characters.The return value is undefined if no comments were found.
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
@@ -467,7 +469,9 @@ module ts {
             let ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -509,7 +513,10 @@ module ts {
                             }
                         }
                         if (collecting) {
-                            if (!result) result = [];
+                            if (!result) {
+                                result = [];
+                            }
+
                             result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
                         }
                         continue;

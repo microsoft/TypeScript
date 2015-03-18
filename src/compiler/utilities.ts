@@ -361,16 +361,16 @@ module ts {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
-    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile) {
-        sourceFileOfNode = sourceFileOfNode || getSourceFileOfNode(node);
-
+    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                // e.g.:     (
-                //            /** blah */ a,
-                //            /** blah */ b);
+
+            // e.g.:     (
+            //            /** blah */ a,
+            //            /** blah */ b);
+            return concatenate(
+                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
                 getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
         }
         else {
