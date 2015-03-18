@@ -1,0 +1,35 @@
+=== tests/cases/conformance/es6/destructuring/emitNestedDestructuringInDeclarationFile3.ts ===
+var {a: [b, c]} = { a: [10, "HI"] };
+>a : unknown
+>b : number
+>c : string
+>{ a: [10, "HI"] } : { a: [number, string]; }
+>a : [number, string]
+>[10, "HI"] : [number, string]
+
+var [{x, y}, {t:{z}}] = [{ x: true, y: 200 }, {t:{z: "string" }}];
+>x : boolean
+>y : number
+>t : unknown
+>z : string
+>[{ x: true, y: 200 }, {t:{z: "string" }}] : [{ x: boolean; y: number; }, { t: { z: string; }; }]
+>{ x: true, y: 200 } : { x: boolean; y: number; }
+>x : boolean
+>y : number
+>{t:{z: "string" }} : { t: { z: string; }; }
+>t : { z: string; }
+>{z: "string" } : { z: string; }
+>z : string
+
+var [[[foo, bar, {baz}], e1], e2] = [[[10, "bar", { baz: "baz" }], true], 2000];
+>foo : number
+>bar : string
+>baz : string
+>e1 : boolean
+>e2 : number
+>[[[10, "bar", { baz: "baz" }], true], 2000] : [[[number, string, { baz: string; }], boolean], number]
+>[[10, "bar", { baz: "baz" }], true] : [[number, string, { baz: string; }], boolean]
+>[10, "bar", { baz: "baz" }] : [number, string, { baz: string; }]
+>{ baz: "baz" } : { baz: string; }
+>baz : string
+

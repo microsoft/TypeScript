@@ -1039,21 +1039,36 @@ module ts {
         }
 
         function emitVariableDeclaration(node: VariableDeclaration) {
+            function emitBindingElement(bindingElement: BindingElement) {
+                if (bindingElement.name.kind === SyntaxKind.ObjectBindingPattern || bindingElement.name.kind === SyntaxKind.ArrayBindingPattern) {
+                    let elements = (<BindingPattern>bindingElement.name).elements;
+                    for (let i = 0, n = elements.length; i < n; i++) {
+                        if (i) {
+                            write(", ");
+                        }
+                        let element = elements[i];
+                        emitBindingElement(element);
+                    }
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, bindingElement.name);
+                    // By given undefined for type, writeTypeOfDeclaration will call resolver to get type of the symbol
+                    writeTypeOfDeclaration(bindingElement, /*type*/ undefined, getVariableDeclarationTypeVisibilityError);
+                }
+            }
+
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
-                // If the node.name is an object-binding-pattern, decent into each element and emit each element as variable declarations
+                // If the node.name is an object-binding-pattern or array-binding-pattern,
+                // decent into each element and emit each element as separate variable declarations
+                // For example:
+                // TypeScript:
+                //      var {a,b} = {a:"string", b:10}
+                // .d.ts:
+                //      declare var a: string, b: number;
                 if (node.name.kind === SyntaxKind.ObjectBindingPattern || node.name.kind === SyntaxKind.ArrayBindingPattern) {
-                    let elements = (<BindingPattern>node.name).elements;
-                    for (let i = 0, n = elements.length; i < n; ++i) {
-                        let element = elements[i];
-                        writeTextOfNode(currentSourceFile, element);
-                        writeTypeOfDeclaration(element, undefined, getVariableDeclarationTypeVisibilityError);
-                        // Do not emit comma if the element is the last element in the list
-                        if (i < n - 1) {
-                            write(", ");
-                        }
-                    }
+                    emitBindingElement(<BindingElement>node);
                 }
                 else {
                     // If this node is a computed name, it can only be a symbol, because we've already skipped

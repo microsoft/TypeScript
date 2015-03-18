@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile1.ts(6,16): error TS1182: A destructuring declaration must have an initializer.
+
+
+==== tests/cases/conformance/es6/destructuring/emitDestructuringInDeclarationFile1.ts (1 errors) ====
+    module M {
+        export class c { }
+        export var {b} = {
+            b: new c()
+        };
+        export var {a}: { a: c };
+                   ~~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+    }
+    

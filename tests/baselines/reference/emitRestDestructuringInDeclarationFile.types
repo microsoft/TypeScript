@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/destructuring/emitRestDestructuringInDeclarationFile.ts ===
+var [a, b, ...rest] = [1, 2, 3, "string"];
+>a : string | number
+>b : string | number
+>rest : (string | number)[]
+>[1, 2, 3, "string"] : (string | number)[]
+
+var [a1, b1, [...rest]] = [1, 2, [3, "string"]];
+>a1 : number
+>b1 : number
+>rest : (string | number)[]
+>[1, 2, [3, "string"]] : [number, number, (string | number)[]]
+>[3, "string"] : (string | number)[]
+
