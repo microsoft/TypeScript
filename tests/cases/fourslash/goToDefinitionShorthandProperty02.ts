@@ -5,5 +5,4 @@
 ////}
 
 goTo.marker("1");
-goTo.definition();
 verify.not.definitionLocationExists();
