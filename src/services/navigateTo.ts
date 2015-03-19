@@ -6,7 +6,7 @@ module ts.NavigateTo {
         let rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[] 
-        forEach(program.getSourceFiles(), sourceFile => {
+        for (let sourceFile of program.getSourceFiles()) {
             cancellationToken.throwIfCancellationRequested();
 
             let declarations = sourceFile.getNamedDeclarations();
@@ -27,7 +27,7 @@ module ts.NavigateTo {
                     if (patternMatcher.patternContainsDots) {
                         let containers = getContainers(declaration);
                         if (!containers) {
-                            return undefined;
+                            return;
                         }
 
                         matches = patternMatcher.getMatches(containers, name);
@@ -42,7 +42,7 @@ module ts.NavigateTo {
                     rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                 }
             }
-        });
+        }
 
         rawItems.sort(compareNavigateToItems);
         if (maxResultCount !== undefined) {
