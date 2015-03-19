@@ -339,10 +339,13 @@ module ts {
                     let sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        for (let jsDocCommentTextRange of getJsDocCommentTextRanges(declaration.parent, sourceFileOfDeclaration)) {
-                            let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                        let jsDocCommentRanges = getJsDocCommentTextRanges(declaration.parent, sourceFileOfDeclaration);
+                        if (jsDocCommentRanges) {
+                            for (let jsDocCommentTextRange of jsDocCommentRanges) {
+                                let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                                if (cleanedParamJsDocComment) {
+                                    jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                                }
                             }
                         }
                     }
@@ -360,10 +363,12 @@ module ts {
                     // Get the cleaned js doc comment text from the declaration
                     let docCommentOwner = declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration;
                     let jsDocCommentRanges = getJsDocCommentTextRanges(docCommentOwner, sourceFileOfDeclaration);
-                    for (let jsDocCommentTextRange of jsDocCommentRanges) {
-                        let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                        if (cleanedJsDocComment) {
-                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                    if (jsDocCommentRanges) {
+                        for (let jsDocCommentTextRange of jsDocCommentRanges) {
+                            let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                            if (cleanedJsDocComment) {
+                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                            }
                         }
                     }
                 }
@@ -2637,13 +2642,15 @@ module ts {
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 let start = new Date().getTime();
-                for (let symbol of symbols) {
-                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
-                    if (entry) {
-                        let id = escapeIdentifier(entry.name);
-                        if (!lookUp(session.symbols, id)) {
-                            session.entries.push(entry);
-                            session.symbols[id] = symbol;
+                if (symbols) {
+                    for (let symbol of symbols) {
+                        let entry = createCompletionEntry(symbol, session.typeChecker, location);
+                        if (entry) {
+                            let id = escapeIdentifier(entry.name);
+                            if (!lookUp(session.symbols, id)) {
+                                session.entries.push(entry);
+                                session.symbols[id] = symbol;
+                            }
                         }
                     }
                 }
@@ -3509,7 +3516,6 @@ module ts {
                 return result
             }
 
-            let declarations = symbol.getDeclarations();
             let symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             let symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
             let containerSymbol = symbol.parent;
@@ -3517,9 +3523,13 @@ module ts {
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+
                 // Just add all the declarations. 
-                for (let declaration of declarations) {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                let declarations = symbol.getDeclarations();
+                if (declarations) {
+                    for (let declaration of declarations) {
+                        result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                    }
                 }
             }
 
@@ -4687,8 +4697,11 @@ module ts {
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    for (let contextualSymbol of getPropertySymbolsFromContextualType(location)) {
-                        result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                    let propertySymbols = getPropertySymbolsFromContextualType(location);
+                    if (propertySymbols) {
+                        for (let contextualSymbol of propertySymbols) {
+                            result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                        }
                     }
 
                     /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
