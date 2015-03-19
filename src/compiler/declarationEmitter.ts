@@ -1291,7 +1291,8 @@ module ts {
                 write("...");
             }
             if (isBindingPattern(node.name)) {
-                write("_" + indexOf((<FunctionLikeDeclaration>node.parent).parameters, node));
+                // By emitting binding pattern as binding pattern in function parameters, language service can provide better signature help
+                write(getTextOfNode(node.name));
             }
             else {
                 writeTextOfNode(currentSourceFile, node.name);

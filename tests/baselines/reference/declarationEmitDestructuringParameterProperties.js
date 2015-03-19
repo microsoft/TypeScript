@@ -43,12 +43,12 @@ var C3 = (function () {
 //// [declarationEmitDestructuringParameterProperties.d.ts]
 declare class C1 {
     x: string, y: string, z: string;
-    constructor(_0: string[]);
+    constructor([x, y, z]: string[]);
 }
 declare type TupleType1 = [string, number, boolean];
 declare class C2 {
     x: string, y: number, z: boolean;
-    constructor(_0: TupleType1);
+    constructor([x, y, z]: TupleType1);
 }
 declare type ObjType1 = {
     x: number;
@@ -57,5 +57,5 @@ declare type ObjType1 = {
 };
 declare class C3 {
     x: number, y: string, z: boolean;
-    constructor(_0: ObjType1);
+    constructor({ x, y, z }: ObjType1);
 }
