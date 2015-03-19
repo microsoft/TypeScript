@@ -4914,7 +4914,6 @@ module ts {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
-
             let outputFiles: OutputFile[] = [];
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
