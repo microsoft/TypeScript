@@ -281,8 +281,8 @@ function f15(x) {
 function f16(x) {
     var r13 = true ? E : x; // ok
     var r13 = true ? x : E; // ok
-    var r14 = true ? 0 /* A */ : x; // ok
-    var r14 = true ? x : 0 /* A */; // ok
+    var r14 = true ? E.A : x; // ok
+    var r14 = true ? x : E.A; // ok
 }
 function f17(x) {
     var af;

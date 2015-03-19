@@ -61,7 +61,7 @@ var ra3 = a3 in x;
 var ra4 = a4 in x;
 var ra5 = null in x;
 var ra6 = undefined in x;
-var ra7 = 0 /* a */ in x;
+var ra7 = E.a in x;
 var ra8 = false in x;
 var ra9 = {} in x;
 // invalid right operands

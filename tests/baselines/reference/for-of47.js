@@ -21,7 +21,7 @@ var E;
 })(E || (E = {}));
 for ({
     x,
-    y: y = 0 /* x */
+    y: y = E.x
 } of array) {
     x;
     y;

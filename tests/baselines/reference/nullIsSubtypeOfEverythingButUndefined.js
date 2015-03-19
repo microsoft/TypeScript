@@ -149,8 +149,8 @@ var E;
 })(E || (E = {}));
 var r13 = true ? E : null;
 var r13 = true ? null : E;
-var r14 = true ? 0 /* A */ : null;
-var r14 = true ? null : 0 /* A */;
+var r14 = true ? E.A : null;
+var r14 = true ? null : E.A;
 function f() {
 }
 var f;

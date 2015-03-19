@@ -73,13 +73,13 @@ var M;
         var x = [];
         var result = "";
         x[0] = {
-            color: 2 /* Brown */
+            color: Color.Brown
         };
         x[1] = {
-            color: 1 /* Blue */
+            color: Color.Blue
         };
         x[2] = {
-            color: 0 /* Green */
+            color: Color.Green
         };
         x = x.sort(CompareYeux); // parameter mismatch
         // type of z inferred from specialized array type
