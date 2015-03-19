@@ -6315,11 +6315,13 @@ module ts {
                 let appliedSyncOutputPos = 0;
                 let declarationOutput = "";
                 // apply asynchronous additions to the synchronous output
-                for (let aliasEmitInfo of moduleElementDeclarationEmitInfo) {
-                    if (aliasEmitInfo.asynchronousOutput) {
-                        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
-                        declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
-                        appliedSyncOutputPos = aliasEmitInfo.outputPos;
+                if (moduleElementDeclarationEmitInfo) {
+                    for (let aliasEmitInfo of moduleElementDeclarationEmitInfo) {
+                        if (aliasEmitInfo.asynchronousOutput) {
+                            declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                            declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
+                            appliedSyncOutputPos = aliasEmitInfo.outputPos;
+                        }
                     }
                 }
                 declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
