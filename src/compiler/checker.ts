@@ -195,16 +195,22 @@ module ts {
                     target.constEnumOnlyModule = false;
                 }
                 target.flags |= source.flags;
-                if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
-                forEach(source.declarations, node => {
+                if (!target.valueDeclaration && source.valueDeclaration) {
+                    target.valueDeclaration = source.valueDeclaration;
+                }
+                for (let node of source.declarations) {
                     target.declarations.push(node);
-                });
+                }
                 if (source.members) {
-                    if (!target.members) target.members = {};
+                    if (!target.members) {
+                        target.members = {};
+                    }
                     mergeSymbolTable(target.members, source.members);
                 }
                 if (source.exports) {
-                    if (!target.exports) target.exports = {};
+                    if (!target.exports) {
+                        target.exports = {};
+                    }
                     mergeSymbolTable(target.exports, source.exports);
                 }
                 recordMergedSymbol(target, source);
@@ -212,12 +218,12 @@ module ts {
             else {
                 let message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
-                forEach(source.declarations, node => {
+                for (let node of source.declarations) {
                     error(node.name ? node.name : node, message, symbolToString(source));
-                });
-                forEach(target.declarations, node => {
+                }
+                for (let node of target.declarations) {
                     error(node.name ? node.name : node, message, symbolToString(source));
-                });
+                }
             }
         }
 
@@ -824,9 +830,9 @@ module ts {
                     // All export * declarations are collected in an __export symbol by the binder
                     let exportStars = symbol.exports["__export"];
                     if (exportStars) {
-                        forEach(exportStars.declarations, node => {
+                        for (let node of exportStars.declarations) {
                             visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
-                        });
+                        }
                     }
                 }
             }
@@ -1774,6 +1780,7 @@ module ts {
                                 }
                                 current = current.parent;
                             }
+                            return false;
                         });
                     }
                 }
@@ -1876,7 +1883,7 @@ module ts {
             return result;
 
             function buildVisibleNodeList(declarations: Declaration[]) {
-                forEach(declarations, declaration => {
+                for (let declaration of declarations) {
                     getNodeLinks(declaration).isVisible = true;
                     var resultNode = getAnyImportSyntax(declaration) || declaration;
                     if (!contains(result, resultNode)) {
@@ -1891,7 +1898,7 @@ module ts {
                             Diagnostics.Cannot_find_name_0, firstIdentifier);
                         buildVisibleNodeList(importSymbol.declarations);
                     }
-                });
+                }
             }
         }
 
@@ -2048,13 +2055,13 @@ module ts {
         // Return the type implied by an object binding pattern
         function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
             let members: SymbolTable = {};
-            forEach(pattern.elements, e => {
+            for (let e of pattern.elements) {
                 let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
                 let name = e.propertyName || <Identifier>e.name;
                 let symbol = <TransientSymbol>createSymbol(flags, name.text);
                 symbol.type = getTypeFromBindingElement(e);
                 members[symbol.name] = symbol;
-            });
+            }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
         }
 
@@ -2062,12 +2069,12 @@ module ts {
         function getTypeFromArrayBindingPattern(pattern: BindingPattern): Type {
             let hasSpreadElement: boolean = false;
             let elementTypes: Type[] = [];
-            forEach(pattern.elements, e => {
+            for (let e of pattern.elements) {
                 elementTypes.push(e.kind === SyntaxKind.OmittedExpression || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
                 if (e.dotDotDotToken) {
                     hasSpreadElement = true;
                 }
-            });
+            }
             return !elementTypes.length ? anyArrayType : hasSpreadElement ? createArrayType(getUnionType(elementTypes)) : createTupleType(elementTypes);
         }
 
@@ -2308,22 +2315,22 @@ module ts {
         // for all type parameters.
         function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
-            forEach(symbol.declarations, node => {
+            for (let node of symbol.declarations) {
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
                     let declaration = <InterfaceDeclaration>node;
                     if (declaration.typeParameters && declaration.typeParameters.length) {
-                        forEach(declaration.typeParameters, node => {
-                            let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
+                        for (let typeParam of declaration.typeParameters) {
+                            let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(typeParam));
                             if (!result) {
                                 result = [tp];
                             }
                             else if (!contains(result, tp)) {
                                 result.push(tp);
                             }
-                        });
+                        }
                     }
                 }
-            });
+            }
             return result;
         }
 
@@ -2382,9 +2389,9 @@ module ts {
                     (<GenericType>type).typeArguments = type.typeParameters;
                 }
                 type.baseTypes = [];
-                forEach(symbol.declarations, declaration => {
+                for (let declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
-                        forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
+                        for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                             let baseType = getTypeFromTypeReferenceNode(node);
                             if (baseType !== unknownType) {
                                 if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
@@ -2399,9 +2406,9 @@ module ts {
                                     error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
                                 }
                             }
-                        });
+                        }
                     }
-                });
+                }
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
@@ -2523,13 +2530,13 @@ module ts {
             let numberIndexType = type.declaredNumberIndexType;
             if (type.baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
-                forEach(type.baseTypes, baseType => {
+                for (let baseType of type.baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
-                });
+                }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
@@ -2542,14 +2549,14 @@ module ts {
             let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
             let stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
             let numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            forEach(target.baseTypes, baseType => {
+            for (let baseType of target.baseTypes) {
                 let instantiatedBaseType = instantiateType(baseType, mapper);
                 addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                 constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
                 stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
                 numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
-            });
+            }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
@@ -2751,12 +2758,12 @@ module ts {
 
         function getPropertiesOfUnionType(type: UnionType): Symbol[] {
             let result: Symbol[] = [];
-            forEach(getPropertiesOfType(type.types[0]), prop => {
+            for (let prop of getPropertiesOfType(type.types[0])) {
                 let unionProp = getPropertyOfUnionType(type, prop.name);
                 if (unionProp) {
                     result.push(unionProp);
                 }
-            });
+            }
             return result;
         }
 
@@ -2897,12 +2904,12 @@ module ts {
         // type checking functions).
         function getTypeParametersFromDeclaration(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
             let result: TypeParameter[] = [];
-            forEach(typeParameterDeclarations, node => {
+            for (let node of typeParameterDeclarations) {
                 let tp = getDeclaredTypeOfTypeParameter(node.symbol);
                 if (!contains(result, tp)) {
                     result.push(tp);
                 }
-            });
+            }
             return result;
         }
 
@@ -4499,7 +4506,7 @@ module ts {
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
             let properties = getPropertiesOfObjectType(type);
             let members: SymbolTable = {};
-            forEach(properties, p => {
+            for (let p of properties) {
                 let propType = getTypeOfSymbol(p);
                 let widenedType = getWidenedType(propType);
                 if (propType !== widenedType) {
@@ -4512,7 +4519,7 @@ module ts {
                     p = symbol;
                 }
                 members[p.name] = p;
-            });
+            }
             let stringIndexType = getIndexTypeOfType(type, IndexKind.String);
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
             if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
@@ -4541,11 +4548,11 @@ module ts {
         function reportWideningErrorsInType(type: Type): boolean {
             if (type.flags & TypeFlags.Union) {
                 let errorReported = false;
-                forEach((<UnionType>type).types, t => {
+                for (let t of (<UnionType>type).types) {
                     if (reportWideningErrorsInType(t)) {
                         errorReported = true;
                     }
-                });
+                }
                 return errorReported;
             }
             if (isArrayType(type)) {
@@ -4553,7 +4560,7 @@ module ts {
             }
             if (type.flags & TypeFlags.ObjectLiteral) {
                 let errorReported = false;
-                forEach(getPropertiesOfObjectType(type), p => {
+                for (let p of getPropertiesOfObjectType(type)) {
                     let t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
@@ -4561,7 +4568,7 @@ module ts {
                         }
                         errorReported = true;
                     }
-                });
+                }
                 return errorReported;
             }
             return false;
@@ -5002,7 +5009,9 @@ module ts {
                 }
             }
 
-            ts.forEach(containerNodes, node => { getTypeOfNode(node); });
+            for (let node of containerNodes) {
+                getTypeOfNode(node);
+            }
         }
 
         function getSymbolAtLocation(node: Node): Symbol {
@@ -5833,7 +5842,7 @@ module ts {
             }
             let hasSpreadElement: boolean = false;
             let elementTypes: Type[] = [];
-            forEach(elements, e => {
+            for (let e of elements) {
                 let type = checkExpression(e, contextualMapper);
                 if (e.kind === SyntaxKind.SpreadElementExpression) {
                     elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
@@ -5842,7 +5851,7 @@ module ts {
                 else {
                     elementTypes.push(type);
                 }
-            });
+            }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
@@ -6264,9 +6273,9 @@ module ts {
                 checkExpression((<TaggedTemplateExpression>node).template);
             }
             else {
-                forEach((<CallExpression>node).arguments, argument => {
+                for (let argument of (<CallExpression>node).arguments) {
                     checkExpression(argument);
-                });
+                }
             }
             return anySignature;
         }
@@ -6551,9 +6560,9 @@ module ts {
                 args = [template];
 
                 if (template.kind === SyntaxKind.TemplateExpression) {
-                    forEach((<TemplateExpression>template).templateSpans, span => {
+                    for (let span of (<TemplateExpression>template).templateSpans) {
                         args.push(span.expression);
-                    });
+                    }
                 }
             }
             else {
@@ -7708,9 +7717,9 @@ module ts {
             // It is worth asking whether this is what we really want though.
             // A place where we actually *are* concerned with the expressions' types are
             // in tagged templates.
-            forEach((<TemplateExpression>node).templateSpans, templateSpan => {
+            for (let templateSpan of (<TemplateExpression>node).templateSpans) {
                 checkExpression(templateSpan.expression);
-            });
+            }
 
             return stringType;
         }
@@ -8093,7 +8102,7 @@ module ts {
                     //   or the containing class declares instance member variables with initializers.
                     let superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
+                        forEach(node.parameters, p => p.flags & NodeFlags.AccessibilityModifier);
 
                     if (superCallShouldBeFirst) {
                         let statements = (<Block>node.body).statements;
@@ -8282,7 +8291,7 @@ module ts {
                 if (someButNotAllOverloadFlags !== 0) {
                     let canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
 
-                    forEach(overloads, o => {
+                    for (let o of overloads) {
                         let deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
                         if (deviation & NodeFlags.Export) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
@@ -8293,19 +8302,19 @@ module ts {
                         else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
-                    });
+                    }
                 }
             }
 
             function checkQuestionTokenAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration, someHaveQuestionToken: boolean, allHaveQuestionToken: boolean): void {
                 if (someHaveQuestionToken !== allHaveQuestionToken) {
                     let canonicalHasQuestionToken = hasQuestionToken(getCanonicalOverload(overloads, implementation));
-                    forEach(overloads, o => {
+                    for (let o of overloads) {
                         let deviation = hasQuestionToken(o) !== canonicalHasQuestionToken;
                         if (deviation) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
                         }
-                    });
+                    }
                 }
             }
 
@@ -8420,15 +8429,15 @@ module ts {
             }
 
             if (multipleConstructorImplementation) {
-                forEach(declarations, declaration => {
+                for (let declaration of declarations) {
                     error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
-                });
+                }
             }
 
             if (duplicateFunctionDeclaration) {
-                forEach(declarations, declaration => {
+                for (let declaration of declarations) {
                     error(declaration.name, Diagnostics.Duplicate_function_implementation);
-                });
+                }
             }
 
             if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
@@ -8499,7 +8508,7 @@ module ts {
             // to denote disjoint declarationSpaces (without making new enum type).
             let exportedDeclarationSpaces: SymbolFlags = 0;
             let nonExportedDeclarationSpaces: SymbolFlags = 0;
-            forEach(symbol.declarations, d => {
+            for (let d of symbol.declarations) {
                 let declarationSpaces = getDeclarationSpaces(d);
                 if (getEffectiveDeclarationFlags(d, NodeFlags.Export)) {
                     exportedDeclarationSpaces |= declarationSpaces;
@@ -8507,17 +8516,17 @@ module ts {
                 else {
                     nonExportedDeclarationSpaces |= declarationSpaces;
                 }
-            });
+            }
 
             let commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
 
             if (commonDeclarationSpace) {
                 // declaration spaces for exported and non-exported declarations intersect
-                forEach(symbol.declarations, d => {
+                for (let d of symbol.declarations) {
                     if (getDeclarationSpaces(d) & commonDeclarationSpace) {
                         error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
                     }
-                });
+                }
             }
 
             function getDeclarationSpaces(d: Declaration): SymbolFlags {
@@ -8534,7 +8543,9 @@ module ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                         let result: SymbolFlags = 0;
                         let target = resolveAlias(getSymbolOfNode(d));
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                        for (let d of target.declarations) {
+                            result |= getDeclarationSpaces(d);
+                        }
                         return result;
                     default:
                         return SymbolFlags.ExportValue;
@@ -8619,11 +8630,11 @@ module ts {
                 return;
             }
 
-            forEach(node.parameters, p => {
+            for (let p of node.parameters) {
                 if (p.name && !isBindingPattern(p.name) && (<Identifier>p.name).text === argumentsSymbol.name) {
                     error(p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
                 }
-            });
+            }
         }
 
         function needCollisionCheckForIdentifier(node: Node, identifier: Identifier, name: string): boolean {
@@ -9313,7 +9324,7 @@ module ts {
             let hasDuplicateDefaultClause = false;
 
             let expressionType = checkExpression(node.expression);
-            forEach(node.caseBlock.clauses, clause => {
+            for (let clause of node.caseBlock.clauses) {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
                     if (firstDefaultClause === undefined) {
@@ -9339,7 +9350,7 @@ module ts {
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
-            });
+            }
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
@@ -9426,11 +9437,11 @@ module ts {
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
 
             if (stringIndexType || numberIndexType) {
-                forEach(getPropertiesOfObjectType(type), prop => {
+                for (let prop of getPropertiesOfObjectType(type)) {
                     let propType = getTypeOfSymbol(prop);
                     checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                     checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
-                });
+                }
 
                 if (type.flags & TypeFlags.Class && type.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
                     let classDeclaration = <ClassDeclaration>type.symbol.valueDeclaration;
@@ -9577,7 +9588,7 @@ module ts {
 
             let implementedTypeNodes = getClassImplementedTypeNodes(node);
             if (implementedTypeNodes) {
-                forEach(implementedTypeNodes, typeRefNode => {
+                for (let typeRefNode of implementedTypeNodes) {
                     checkTypeReference(typeRefNode);
                     if (produceDiagnostics) {
                         let t = getTypeFromTypeReferenceNode(typeRefNode);
@@ -9591,7 +9602,7 @@ module ts {
                             }
                         }
                     }
-                });
+                }
             }
 
             forEach(node.members, checkSourceElement);
@@ -9715,7 +9726,9 @@ module ts {
             }
 
             let seen: Map<{ prop: Symbol; containingType: Type }> = {};
-            forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
+            for (let p of type.declaredProperties) {
+                seen[p.name] = { prop: p, containingType: type };
+            }
             let ok = true;
 
             for (let base of type.baseTypes) {
@@ -9766,9 +9779,9 @@ module ts {
                     let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                        forEach(type.baseTypes, baseType => {
+                        for (let baseType of type.baseTypes) {
                             checkTypeAssignableTo(type, baseType, node.name , Diagnostics.Interface_0_incorrectly_extends_interface_1);
-                        });
+                        }
                         checkIndexConstraints(type);
                     }
                 }
@@ -9799,7 +9812,7 @@ module ts {
                 let ambient = isInAmbientContext(node);
                 let enumIsConst = isConst(node);
 
-                forEach(node.members, member => {
+                for (let member of node.members) {
                     if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
@@ -9835,7 +9848,7 @@ module ts {
                     if (autoValue !== undefined) {
                         getNodeLinks(member).enumMemberValue = autoValue++;
                     }
-                });
+                }
 
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
@@ -9973,11 +9986,11 @@ module ts {
                 if (enumSymbol.declarations.length > 1) {
                     let enumIsConst = isConst(node);
                     // check that const is placed\omitted on all enum declarations
-                    forEach(enumSymbol.declarations, decl => {
+                    for (let decl of enumSymbol.declarations) {
                         if (isConstEnumDeclaration(decl) !== enumIsConst) {
                             error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
-                    });
+                    }
                 }
 
                 let seenEnumMissingInitialInitializer = false;
@@ -10908,11 +10921,11 @@ module ts {
             type = getApparentType(type);
             let propsByName = createSymbolTable(getPropertiesOfType(type));
             if (getSignaturesOfType(type, SignatureKind.Call).length || getSignaturesOfType(type, SignatureKind.Construct).length) {
-                forEach(getPropertiesOfType(globalFunctionType), p => {
+                for (let p of getPropertiesOfType(globalFunctionType)) {
                     if (!hasProperty(propsByName, p.name)) {
                         propsByName[p.name] = p;
                     }
-                });
+                }
             }
             return getNamedMembers(propsByName);
         }
@@ -10921,9 +10934,9 @@ module ts {
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 let symbols: Symbol[] = [];
                 let name = symbol.name;
-                forEach(getSymbolLinks(symbol).unionType.types, t => {
+                for (let t of getSymbolLinks(symbol).unionType.types) {
                     symbols.push(getPropertyOfType(t, name));
-                });
+                }
                 return symbols;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
@@ -11274,17 +11287,17 @@ module ts {
         }
 
         function initializeTypeChecker() {
+            let sourceFiles = host.getSourceFiles();
+
             // Bind all source files and propagate errors
-            forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file);
-            });
+            forEach(sourceFiles, bindSourceFile);
 
             // Initialize global symbol table
-            forEach(host.getSourceFiles(), file => {
+            for (let file of sourceFiles) {
                 if (!isExternalModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
-            });
+            }
 
             // Initialize special symbols
             getSymbolLinks(undefinedSymbol).type = undefinedType;

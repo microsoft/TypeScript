@@ -154,9 +154,9 @@ module ts {
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 
                         : Diagnostics.Duplicate_identifier_0;
 
-                    forEach(symbol.declarations, declaration => {
+                    for (let declaration of symbol.declarations) {
                         file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
-                    });
+                    }
                     file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
