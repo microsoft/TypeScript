@@ -2654,10 +2654,11 @@ module ts {
                 return undefined;
             }
 
-            // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
-            // other wise, it is a request for all visible symbols in the scope, and the node is the current location
-            let node: Node;
-            let isRightOfDot: boolean;
+            // Find the node where completion is requested on, in the case of a completion after 
+            // a dot, it is the member access expression other wise, it is a request for all 
+            // visible symbols in the scope, and the node is the current location.
+            let node = currentToken;
+            let isRightOfDot = false;
             if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = (<PropertyAccessExpression>previousToken.parent).expression;
                 isRightOfDot = true;
@@ -2665,10 +2666,6 @@ module ts {
             else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
                 node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
-            }
-            else {
-                node = currentToken;
-                isRightOfDot = false;
             }
 
             // Clear the current activeCompletionSession for this session
