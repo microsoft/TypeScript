@@ -6273,8 +6273,10 @@ module ts {
                 checkExpression((<TaggedTemplateExpression>node).template);
             }
             else {
-                for (let argument of (<CallExpression>node).arguments) {
-                    checkExpression(argument);
+                if ((<CallExpression>node).arguments) {
+                    for (let argument of (<CallExpression>node).arguments) {
+                        checkExpression(argument);
+                    }
                 }
             }
             return anySignature;
