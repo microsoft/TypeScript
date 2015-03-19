@@ -4887,7 +4887,8 @@ module ts {
                 for (let member of node.members) {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
-                            return emitOnlyPinnedOrTripleSlashComments(member);
+                            emitOnlyPinnedOrTripleSlashComments(member);
+                            continue;
                         }
 
                         writeLine();
