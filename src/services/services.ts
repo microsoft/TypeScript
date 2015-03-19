@@ -2614,7 +2614,7 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number) {
+        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
 
             let syntacticStart = new Date().getTime();
@@ -2688,6 +2688,29 @@ module ts {
             let isNewIdentifierLocation: boolean;
 
             if (isRightOfDot) {
+                if (!tryGetMemberCompletionEntries()) {
+                    return undefined;
+                }
+            }
+            else {
+                if (!tryGetGlobalCompletionEntries()) {
+                    return undefined;
+                }
+            }
+
+            // Add keywords if this is not a member completion list
+            if (!isMemberCompletion) {
+                addRange(activeCompletionSession.entries, keywordCompletions);
+            }
+            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+
+            return {
+                isMemberCompletion,
+                isNewIdentifierLocation,
+                entries: activeCompletionSession.entries
+            };
+
+            function tryGetMemberCompletionEntries(): boolean {
                 // Right of dot member completion list
                 let symbols: Symbol[] = [];
                 isMemberCompletion = true;
@@ -2722,8 +2745,10 @@ module ts {
                 }
 
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                return true;
             }
-            else {
+
+            function tryGetGlobalCompletionEntries(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
@@ -2732,7 +2757,7 @@ module ts {
 
                     let contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
-                        return undefined;
+                        return false;
                     }
 
                     let contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
@@ -2766,20 +2791,9 @@ module ts {
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
-            }
 
-            // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
+                return true;
             }
-            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
-
-            return {
-                isMemberCompletion,
-                isNewIdentifierLocation,
-                isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
-                entries: activeCompletionSession.entries
-            };
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 let start = new Date().getTime();
