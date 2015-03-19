@@ -1783,6 +1783,10 @@ module ts {
 
         function processTripleSlashDirectives(): void {
             let commentRanges = getLeadingCommentRanges(sourceText, 0);
+            if (!commentRanges) {
+                return;
+            }
+
             for (let commentRange of commentRanges) {
                 let comment = sourceText.substring(commentRange.pos, commentRange.end);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
