@@ -249,9 +249,9 @@ module ts {
     export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
         let result: Map<T> = {};
 
-        forEach(array, value => {
+        for (let value of array) {
             result[makeKey(value)] = value;
-        });
+        }
 
         return result;
     }

@@ -181,12 +181,12 @@ module ts {
         var shortOptionNames: Map<string> = {};
         var optionNameMap: Map<CommandLineOption> = {};
 
-        forEach(optionDeclarations, option => {
+        for (let option of optionDeclarations) {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
                 shortOptionNames[option.shortName] = option.name;
             }
-        });
+        }
         parseStrings(commandLine);
         return {
             options,
@@ -304,9 +304,9 @@ module ts {
         function getCompilerOptions(): CompilerOptions {
             var options: CompilerOptions = {};
             var optionNameMap: Map<CommandLineOption> = {};
-            forEach(optionDeclarations, option => {
+            for (let option of optionDeclarations) {
                 optionNameMap[option.name] = option;
-            });
+            }
             var jsonOptions = json["compilerOptions"];
             if (jsonOptions) {
                 for (var id in jsonOptions) {
