@@ -26,7 +26,7 @@ var a;
 var c;
 (function (c) {
     var b = a.weekend;
-    c.bVal = 2 /* Sunday */;
+    c.bVal = b.Sunday;
 })(c || (c = {}));
 
 

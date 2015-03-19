@@ -34,7 +34,7 @@ define(["require", "exports"], function (require, exports) {
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     var color;
-    if (color === 1 /* green */) {
+    if (color === foo.green) {
         color = foo.answer;
     }
 });

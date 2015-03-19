@@ -202,8 +202,8 @@ function f2(x, y) {
     var r12 = true ? x : c2;
     var r13 = true ? E : x;
     var r13 = true ? x : E;
-    var r14 = true ? 0 /* A */ : x;
-    var r14 = true ? x : 0 /* A */;
+    var r14 = true ? E.A : x;
+    var r14 = true ? x : E.A;
     var af;
     var r15 = true ? af : x;
     var r15 = true ? x : af;
