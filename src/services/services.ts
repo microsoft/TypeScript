@@ -2920,12 +2920,12 @@ module ts {
                 for (let m of existingMembers) {
                     if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                         // Ignore omitted expressions for missing members in the object literal
-                        return;
+                        continue;
                     }
 
                     if (m.getStart() <= position && position <= m.getEnd()) {
                         // If this is the current item we are editing right now, do not filter it out
-                        return;
+                        continue;
                     }
 
                     // TODO(jfreeman): Account for computed property name
@@ -4526,6 +4526,10 @@ module ts {
                         // First, we have to see if this position actually landed in a comment.
                         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
+                        if (!commentRanges) {
+                            return false;
+                        }
+
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
                         for (let c of commentRanges) {
@@ -4536,8 +4540,6 @@ module ts {
                                 }
                             }
                         }
-
-                        return false;
                     }
 
                     return false;
