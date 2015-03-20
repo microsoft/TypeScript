@@ -300,6 +300,11 @@ module ts.server {
             });
         }
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            // Not yet implemented.
+            return [];
+        }
+
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
