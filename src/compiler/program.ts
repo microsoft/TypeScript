@@ -87,6 +87,11 @@ module ts {
 
     export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
         let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+
+        if (program.getCompilerOptions().declaration) {
+            diagnostics.concat(program.getDeclarationDiagnostics());
+        }
+
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
@@ -178,11 +183,6 @@ module ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
-            let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
-            return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
-        }
-
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.
@@ -232,6 +232,10 @@ module ts {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
         }
 
+        function getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile);
+        }
+
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return sourceFile.parseDiagnostics;
         }
@@ -245,6 +249,15 @@ module ts {
             let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
 
             return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+        }
+
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            if (!isDeclarationFile(sourceFile)) {
+                let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+                // Don't actually write any files since we're just getting diagnostics.
+                var writeFile: WriteFileCallback = () => { };
+                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
+            }
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
