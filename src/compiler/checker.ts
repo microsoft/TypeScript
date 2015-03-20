@@ -417,24 +417,25 @@ module ts {
                         }
                         break;
                     case SyntaxKind.Decorator:
-                        // Decorators are resolved at the class declaration as that point where they are evaluated in the emit:
+                        // Decorators are resolved at the class declaration. Resolving at the parameter 
+                        // or member would result in looking up locals in the method.
                         //
                         //   function y() {}
                         //   class C {
-                        //       method(@y x, y) {} // <-- All references to decorators should occur at the class declaration
+                        //       method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
                         //   }
                         //
-                        let parent = location.parent;
-                        if (parent && parent.kind === SyntaxKind.Parameter) {
-                            parent = parent.parent;
+                        if (location.parent && location.parent.kind === SyntaxKind.Parameter) {
+                            location = location.parent;
                         }
-                        if (parent && isClassElement(parent)) {
-                            parent = parent.parent;
-                        }
-                        if (parent) {
-                            lastLocation = location;
-                            location = parent;
-                            continue;
+                        //
+                        //   function y() {}
+                        //   class C {
+                        //       @y method(x, y) {} // <-- decorator y should be resolved at the class declaration, not the method.
+                        //   }
+                        //
+                        if (location.parent && isClassElement(location.parent)) {
+                            location = location.parent;
                         }
                         break;
                 }
