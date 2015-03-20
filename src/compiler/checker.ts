@@ -194,19 +194,22 @@ module ts {
                     // reset flag when merging instantiated module into value module that has only const enums
                     target.constEnumOnlyModule = false;
                 }
+
                 target.flags |= source.flags;
+
                 if (!target.valueDeclaration && source.valueDeclaration) {
                     target.valueDeclaration = source.valueDeclaration;
                 }
-                for (let node of source.declarations) {
-                    target.declarations.push(node);
-                }
+
+                addRange(target.declarations, source.declarations);
+
                 if (source.members) {
                     if (!target.members) {
                         target.members = {};
                     }
                     mergeSymbolTable(target.members, source.members);
                 }
+
                 if (source.exports) {
                     if (!target.exports) {
                         target.exports = {};
@@ -218,9 +221,11 @@ module ts {
             else {
                 let message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
+
                 for (let node of source.declarations) {
                     error(node.name ? node.name : node, message, symbolToString(source));
                 }
+
                 for (let node of target.declarations) {
                     error(node.name ? node.name : node, message, symbolToString(source));
                 }
