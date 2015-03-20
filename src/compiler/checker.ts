@@ -8545,8 +8545,11 @@ module ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                         let result: SymbolFlags = 0;
                         let target = resolveAlias(getSymbolOfNode(d));
-                        for (let d of target.declarations) {
-                            result |= getDeclarationSpaces(d);
+                        let declarations = target.declarations;
+                        if (declarations) {
+                            for (let d of declarations) {
+                                result |= getDeclarationSpaces(d);
+                            }
                         }
                         return result;
                     default:
