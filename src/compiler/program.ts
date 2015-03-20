@@ -254,7 +254,9 @@ module ts {
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             if (!isDeclarationFile(sourceFile)) {
                 let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
-                return ts.getDeclarationDiagnostics(getEmitHost(), resolver, sourceFile);
+                // Don't actually write any files since we're just getting diagnostics.
+                var writeFile: WriteFileCallback = () => { };
+                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
             }
         }
 
