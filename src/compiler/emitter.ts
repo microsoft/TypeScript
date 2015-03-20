@@ -277,6 +277,14 @@ module ts {
         }
     }
 
+    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+        return forEach(node.members, member => {
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
+                return <ConstructorDeclaration>member;
+            }
+        });
+    }
+
     function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
         let firstAccessor: AccessorDeclaration;
         let lastAccessor: AccessorDeclaration;

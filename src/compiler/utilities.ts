@@ -1,4 +1,4 @@
-/// <reference path="core.ts" />
+/// <reference path="binder.ts" />
 
 module ts {
     export interface ReferencePathMatchResult {
@@ -575,17 +575,6 @@ module ts {
         return (<CallExpression>node).expression;
     }
 
-    function getConstructorWithBody(member: ClassElement): ConstructorDeclaration {
-        if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
-            return <ConstructorDeclaration>member;
-        }
-        return undefined;
-    }
-
-    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
-        return forEach(node.members, getConstructorWithBody);
-    }
-
     export function nodeOrChildIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
@@ -891,6 +880,19 @@ module ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isClassElement(n: Node): boolean {
+        switch (n.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
                 return true;
             default:
                 return false;

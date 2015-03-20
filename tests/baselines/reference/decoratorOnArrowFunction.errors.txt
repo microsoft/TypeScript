@@ -1,5 +1,5 @@
 tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,9): error TS1109: Expression expected.
-tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,9): error TS1146: Declaration expected.
+tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,16): error TS1146: Declaration expected.
 tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,17): error TS1128: Declaration or statement expected.
 
 
@@ -9,7 +9,7 @@ tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,17): er
     var F = @dec () => {
             ~
 !!! error TS1109: Expression expected.
-            ~~~~~~~
+                   
 !!! error TS1146: Declaration expected.
                     ~~
 !!! error TS1128: Declaration or statement expected.

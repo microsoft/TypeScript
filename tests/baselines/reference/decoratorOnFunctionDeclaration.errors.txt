@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts(4,10): error TS1206: Decorators are not valid on this declaration type.
+tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts(4,10): error TS1206: Decorators are not valid here.
 
 
 ==== tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts(4,1
     @dec
     function F() {
              ~
-!!! error TS1206: Decorators are not valid on this declaration type.
+!!! error TS1206: Decorators are not valid here.
     }

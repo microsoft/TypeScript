@@ -246,7 +246,7 @@ module ts {
         ExportDeclaration,
         NamedExports,
         ExportSpecifier,
-        IncompleteDeclaration,
+        MissingDeclaration,
 
         // Module references
         ExternalModuleReference,
@@ -405,7 +405,6 @@ module ts {
     }
 
     export interface Decorator extends Node {
-        atToken: Node;
         expression: LeftHandSideExpression;
     }
 
@@ -699,9 +698,7 @@ module ts {
     }
 
     export interface ArrayLiteralExpression extends PrimaryExpression {
-        openBracketToken: Node;
         elements: NodeArray<Expression>;
-        closeBracketToken: Node;
     }
 
     export interface SpreadElementExpression extends Expression {
@@ -721,9 +718,7 @@ module ts {
 
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
-        openBracketToken: Node;
         argumentExpression?: Expression;
-        closeBracketToken: Node;
     }
 
     export interface CallExpression extends LeftHandSideExpression {

@@ -103,7 +103,7 @@ module ts {
         let globalTypedPropertyDescriptorType: ObjectType;
         let globalClassDecoratorType: ObjectType;
         let globalClassAnnotationType: ObjectType;
-        let globalParameterAnnotationType: ObjectType;
+        let globalParameterDecoratorType: ObjectType;
         let globalPropertyAnnotationType: ObjectType;
         let globalPropertyDecoratorType: ObjectType;
 
@@ -417,22 +417,23 @@ module ts {
                         }
                         break;
                     case SyntaxKind.Decorator:
-                        if (location.parent) {
+                        // Decorators are resolved at the class declaration as that point where they are evaluated in the emit:
+                        //
+                        //   function y() {}
+                        //   class C {
+                        //       method(@y x, y) {} // <-- All references to decorators should occur at the class declaration
+                        //   }
+                        //
+                        let parent = location.parent;
+                        if (parent && parent.kind === SyntaxKind.Parameter) {
+                            parent = parent.parent;
+                        }
+                        if (parent && isClassElement(parent)) {
+                            parent = parent.parent;
+                        }
+                        if (parent) {
                             lastLocation = location;
-                            grandparent = location.parent.parent;
-                            if (location.parent.kind === SyntaxKind.Parameter) {
-                                // Parameter decorators are resolved in the context of their great-grandparent
-                                if (grandparent) {
-                                    location = grandparent.parent;
-                                }
-                                else {
-                                    break loop;
-                                }
-                            }
-                            else {
-                                // all other decorators are resolved in the context of their grandparent
-                                location = grandparent;
-                            }
+                            location = parent;
                             continue;
                         }
                         break;
@@ -8121,8 +8122,8 @@ module ts {
             checkFunctionLikeDeclaration(node);
         }
 
-        function checkIncompleteDeclaration(node: Declaration) {
-            error(node, Diagnostics.Declaration_expected);
+        function checkMissingDeclaration(node: Node) {
+            checkDecorators(node);
         }
 
         function checkTypeReference(node: TypeReferenceNode) {
@@ -8538,9 +8539,9 @@ module ts {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
-                    let classSymbol = getSymbolOfNode(node.parent);                    
+                    let classSymbol = getSymbolOfNode(node.parent);
                     let classType = getTypeOfSymbol(classSymbol);
-                    checkDecoratorSignature(node, exprType, globalClassAnnotationType, classType, globalClassDecoratorType, Diagnostics.Decorators_may_not_change_the_type_of_a_class);
+                    checkDecoratorSignature(node, exprType, globalClassAnnotationType, classType, globalClassDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_class);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
@@ -8548,11 +8549,11 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     let propertyType = getTypeOfNode(node.parent);
-                    checkDecoratorSignature(node, exprType, globalPropertyAnnotationType, propertyType, globalPropertyDecoratorType, Diagnostics.Decorators_may_not_change_the_type_of_a_member);
+                    checkDecoratorSignature(node, exprType, globalPropertyAnnotationType, propertyType, globalPropertyDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_member);
                     break;
 
                 case SyntaxKind.Parameter:
-                    checkDecoratorSignature(node, exprType, globalParameterAnnotationType);
+                    checkDecoratorSignature(node, exprType, globalParameterDecoratorType);
                     break;
             }
         }
@@ -8561,7 +8562,7 @@ module ts {
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
                 return;
-            }
+            }            
 
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -10330,8 +10331,6 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return checkAccessorDeclaration(<AccessorDeclaration>node);
-                case SyntaxKind.IncompleteDeclaration:
-                    return checkIncompleteDeclaration(<Declaration>node);
                 case SyntaxKind.TypeReference:
                     return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypeQuery:
@@ -10410,6 +10409,8 @@ module ts {
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
+                case SyntaxKind.MissingDeclaration:
+                    return checkMissingDeclaration(node);
             }
         }
 
@@ -11315,6 +11316,20 @@ module ts {
             return undefined;
         }
 
+        function getAnnotationTypeForDecoratorType(type: Type, typeArgument: Type): Type {
+            if (type === unknownType) {
+                return unknownType;
+            }
+
+            let signature = getSingleCallSignature(type);
+            if (!signature) {
+                return unknownType;
+            }
+            
+            let instantiatedSignature = getSignatureInstantiation(signature, [typeArgument]);
+            return getOrCreateTypeFromSignature(instantiatedSignature);
+        }
+
         function createResolver(): EmitResolver {
             return {
                 getGeneratedNameForNode,
@@ -11365,10 +11380,10 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
             globalClassDecoratorType = getGlobalType("ClassDecorator");
+            globalClassAnnotationType = getAnnotationTypeForDecoratorType(globalClassDecoratorType, globalFunctionType);
             globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalClassAnnotationType = getGlobalType("ClassAnnotation");
-            globalPropertyAnnotationType = getGlobalType("PropertyAnnotation");
-            globalParameterAnnotationType = getGlobalType("ParameterAnnotation");
+            globalPropertyAnnotationType = getAnnotationTypeForDecoratorType(globalPropertyDecoratorType, anyType);
+            globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
@@ -11402,6 +11417,9 @@ module ts {
             while (target) {
                 switch (target.kind) {
                     case SyntaxKind.ClassDeclaration:
+                        if (languageVersion < ScriptTarget.ES5) {
+                            return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
+                        }
                         return false;
 
                     case SyntaxKind.Constructor:
@@ -11414,7 +11432,6 @@ module ts {
                         target = target.parent;
                         continue;
 
-                        
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -11426,7 +11443,7 @@ module ts {
                 }
                 break;
             }
-            return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_on_this_declaration_type);
+            return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_here);
         }
 
         function checkGrammarModifiers(node: Node): boolean {

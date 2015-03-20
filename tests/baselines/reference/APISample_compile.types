@@ -840,8 +840,8 @@ declare module "typescript" {
         ExportSpecifier = 214,
 >ExportSpecifier : SyntaxKind
 
-        IncompleteDeclaration = 215,
->IncompleteDeclaration : SyntaxKind
+        MissingDeclaration = 215,
+>MissingDeclaration : SyntaxKind
 
         ExternalModuleReference = 216,
 >ExternalModuleReference : SyntaxKind
@@ -1156,10 +1156,6 @@ declare module "typescript" {
     }
     interface Decorator extends Node {
 >Decorator : Decorator
->Node : Node
-
-        atToken: Node;
->atToken : Node
 >Node : Node
 
         expression: LeftHandSideExpression;
@@ -1764,18 +1760,10 @@ declare module "typescript" {
 >ArrayLiteralExpression : ArrayLiteralExpression
 >PrimaryExpression : PrimaryExpression
 
-        openBracketToken: Node;
->openBracketToken : Node
->Node : Node
-
         elements: NodeArray<Expression>;
 >elements : NodeArray<Expression>
 >NodeArray : NodeArray<T>
 >Expression : Expression
-
-        closeBracketToken: Node;
->closeBracketToken : Node
->Node : Node
     }
     interface SpreadElementExpression extends Expression {
 >SpreadElementExpression : SpreadElementExpression
@@ -1819,17 +1807,9 @@ declare module "typescript" {
 >expression : LeftHandSideExpression
 >LeftHandSideExpression : LeftHandSideExpression
 
-        openBracketToken: Node;
->openBracketToken : Node
->Node : Node
-
         argumentExpression?: Expression;
 >argumentExpression : Expression
 >Expression : Expression
-
-        closeBracketToken: Node;
->closeBracketToken : Node
->Node : Node
     }
     interface CallExpression extends LeftHandSideExpression {
 >CallExpression : CallExpression

@@ -343,7 +343,7 @@ declare module "typescript" {
         ExportDeclaration = 212,
         NamedExports = 213,
         ExportSpecifier = 214,
-        IncompleteDeclaration = 215,
+        MissingDeclaration = 215,
         ExternalModuleReference = 216,
         CaseClause = 217,
         DefaultClause = 218,
@@ -449,7 +449,6 @@ declare module "typescript" {
         expression: Expression;
     }
     interface Decorator extends Node {
-        atToken: Node;
         expression: LeftHandSideExpression;
     }
     interface TypeParameterDeclaration extends Declaration {
@@ -654,9 +653,7 @@ declare module "typescript" {
         expression: Expression;
     }
     interface ArrayLiteralExpression extends PrimaryExpression {
-        openBracketToken: Node;
         elements: NodeArray<Expression>;
-        closeBracketToken: Node;
     }
     interface SpreadElementExpression extends Expression {
         expression: Expression;
@@ -671,9 +668,7 @@ declare module "typescript" {
     }
     interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
-        openBracketToken: Node;
         argumentExpression?: Expression;
-        closeBracketToken: Node;
     }
     interface CallExpression extends LeftHandSideExpression {
         expression: LeftHandSideExpression;
