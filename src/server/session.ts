@@ -554,7 +554,7 @@ module ts.server {
                     result.push(entry);
                 }
                 return result;
-            }, []);
+            }, []).sort((a, b) => a.name.localeCompare(b.name));
         }
 
         getCompletionEntryDetails(line: number, offset: number,
