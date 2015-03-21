@@ -3455,7 +3455,49 @@ module ts {
             };
         }
 
-        function getDefinitionInfos(node: Node, symbol: Symbol): DefinitionInfo[] {
+        /// Goto definition
+        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            synchronizeHostData();
+
+            let sourceFile = getValidSourceFile(fileName);
+
+            let node = getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                let labelName = (<Identifier>node).text;
+                let label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            }
+
+            /// Triple slash reference comments
+            let comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            if (comment) {
+                let referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                if (referenceFile) {
+                    return [{
+                        fileName: referenceFile.fileName,
+                        textSpan: createTextSpanFromBounds(0, 0),
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.fileName,
+                        containerName: undefined,
+                        containerKind: undefined
+                    }];
+                }
+                return undefined;
+            }
+
+            let symbol = typeInfoResolver.getSymbolAtLocation(node);
+
+            // Could not find a symbol e.g. node is string or number keyword,
+            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
+            if (!symbol) {
+                return undefined;
+            }
+
             // If this is an alias, and the request came at the declaration location
             // get the aliased symbol instead. This allows for goto def on an import e.g.
             //   import {A, B} from "mod";
@@ -3547,52 +3589,6 @@ module ts {
 
                 return false;
             }
-        }
-
-        /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
-            synchronizeHostData();
-
-            let sourceFile = getValidSourceFile(fileName);
-
-            let node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
-                return undefined;
-            }
-
-            // Labels
-            if (isJumpStatementTarget(node)) {
-                let labelName = (<Identifier>node).text;
-                let label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
-            }
-
-            /// Triple slash reference comments
-            let comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
-            if (comment) {
-                let referenceFile = tryResolveScriptReference(program, sourceFile, comment);
-                if (referenceFile) {
-                    return [{
-                        fileName: referenceFile.fileName,
-                        textSpan: createTextSpanFromBounds(0, 0),
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.fileName,
-                        containerName: undefined,
-                        containerKind: undefined
-                    }];
-                }
-                return undefined;
-            }
-
-            let symbol = typeInfoResolver.getSymbolAtLocation(node);
-
-            // Could not find a symbol e.g. node is string or number keyword,
-            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol) {
-                return undefined;
-            }
-
-            return getDefinitionInfos(node, symbol);
         }
 
         /// References and Occurrences
@@ -4149,20 +4145,23 @@ module ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[]{
-            var referenceSymbols = findReferencesWorker(fileName, position, findInStrings, findInComments);
-            return convertReferences(referenceSymbols);
+            var referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            return convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            var referenceSymbols = findReferencesWorker(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
-            return convertReferences(referenceSymbols);
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            return filter(findReferencesWorker(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false), rs => !!rs.definition);
+        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+
+            // Only include referenced symbols that have a valid definition.
+            return filter(referencedSymbols, rs => !!rs.definition);
         }
 
-        function findReferencesWorker(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -4264,6 +4263,24 @@ module ts {
             }
 
             return result;
+
+            function getDefinition(symbol: Symbol): DefinitionInfo {
+                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), typeInfoResolver, node);
+                let name = map(info.displayParts, p => p.text).join("");
+                let declarations = symbol.declarations;
+                if (!declarations || declarations.length === 0) {
+                    return undefined;
+                }
+
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    name,
+                    kind: info.symbolKind,
+                    fileName: declarations[0].getSourceFile().fileName,
+                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                };
+            }
 
             function isImportOrExportSpecifierName(location: Node): boolean {
                 return location.parent &&
@@ -4513,6 +4530,11 @@ module ts {
                             // for.
                             if ((findInStrings && isInString(position)) ||
                                 (findInComments && isInComment(position))) {
+
+                                // In the case where we're looking inside comments/strings, we don't have
+                                // an actual definition.  So just use 'undefined' here.  Features like
+                                // 'Rename' won't care (as they ignore the definitions), and features like
+                                // 'FindReferences' will just filter out these results.
                                 result.push({
                                     definition: undefined,
                                     references: [{
@@ -4563,7 +4585,7 @@ module ts {
                         symbolToIndex[symbolId] = index;
 
                         result.push({
-                            definition: getDefinitionInfos(node, symbol)[0],
+                            definition: getDefinition(symbol),
                             references: []
                         });
                     }
@@ -4644,8 +4666,7 @@ module ts {
                     }
                 });
 
-                var definitions = getDefinitionInfos(superKeyword, searchSpaceNode.symbol);
-                var definition = definitions[0];
+                var definition = getDefinition(searchSpaceNode.symbol);
                 return [{ definition, references }];
             }
 
