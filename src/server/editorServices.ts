@@ -508,6 +508,16 @@ module ts.server {
             this.printProjects();
         }
 
+        gcConfiguredProjects() {
+            var configuredProjects: Project[] = [];
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                if (this.configuredProjects[i].openRefCount > 0) {
+                    configuredProjects.push(this.configuredProjects[i]);
+                }
+            }
+            this.configuredProjects = configuredProjects;
+        }
+
         setConfiguredProjectRoot(info: ScriptInfo) {
              for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
                  let configuredProject = this.configuredProjects[i];
@@ -555,6 +565,7 @@ module ts.server {
                     this.openFileRoots.push(info);
                 }
             }
+            this.gcConfiguredProjects();
         }
 
         /**
