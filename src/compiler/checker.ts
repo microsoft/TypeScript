@@ -8519,17 +8519,10 @@ module ts {
         }
 
         function checkDecoratorSignature(node: Decorator, exprType: Type, expectedAnnotationType: Type, parentType?: Type, expectedDecoratorType?: Type, message?: DiagnosticMessage) {
+            // first validate that we are using the correct decorator signature for the declaration
             if (checkTypeAssignableTo(exprType, expectedAnnotationType, node) && expectedDecoratorType) {
-                let signature = getSingleCallSignature(expectedDecoratorType);
-                if (!signature) {
-                    // if we couldn't get the signature of the decorator function type, it is likely because we are using an out-of-date lib.d.ts
-                    // and we have already reported an error in initializeTypeChecker.
-                    return;
-                }
-
-                let instantiatedSignature = getSignatureInstantiation(signature, [parentType]);
-                let instantiatedSignatureType = getOrCreateTypeFromSignature(instantiatedSignature);
-                checkTypeAssignableTo(exprType, instantiatedSignatureType, node, message);                
+                // next validate that we are not changing the static type in the decorator to a type that is not assignable.
+                checkTypeAssignableTo(exprType, instantiateSingleCallFunctionType(expectedDecoratorType, [parentType]), node, message);
             }
         }
 
@@ -11317,17 +11310,17 @@ module ts {
             return undefined;
         }
 
-        function getAnnotationTypeForDecoratorType(type: Type, typeArgument: Type): Type {
-            if (type === unknownType) {
+        function instantiateSingleCallFunctionType(functionType: Type, typeArguments: Type[]): Type {
+            if (functionType === unknownType) {
                 return unknownType;
             }
 
-            let signature = getSingleCallSignature(type);
+            let signature = getSingleCallSignature(functionType);
             if (!signature) {
                 return unknownType;
             }
             
-            let instantiatedSignature = getSignatureInstantiation(signature, [typeArgument]);
+            let instantiatedSignature = getSignatureInstantiation(signature, typeArguments);
             return getOrCreateTypeFromSignature(instantiatedSignature);
         }
 
@@ -11381,9 +11374,9 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
             globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalClassAnnotationType = getAnnotationTypeForDecoratorType(globalClassDecoratorType, globalFunctionType);
+            globalClassAnnotationType = instantiateSingleCallFunctionType(globalClassDecoratorType, [globalFunctionType]);
             globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalPropertyAnnotationType = getAnnotationTypeForDecoratorType(globalPropertyDecoratorType, anyType);
+            globalPropertyAnnotationType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [anyType]);
             globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.

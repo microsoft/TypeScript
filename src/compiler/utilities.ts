@@ -893,6 +893,7 @@ module ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.IndexSignature:
                 return true;
             default:
                 return false;
