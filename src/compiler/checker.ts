@@ -11402,42 +11402,41 @@ module ts {
 
 
         // GRAMMAR CHECKING
+        function isValidDecoratorTarget(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    // classes are valid targets
+                    return true;
+
+                case SyntaxKind.PropertyDeclaration:
+                    // property declarations are valid if their parent is a class declaration.
+                    return node.parent.kind === SyntaxKind.ClassDeclaration;
+
+                case SyntaxKind.Parameter:
+                    // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                    return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                    // if this method has a body and its parent is a class declaration, this is a valid target.
+                    return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+            }
+
+            return false;
+        }
+
         function checkGrammarDecorators(node: Node): boolean {
             if (!node.decorators) {
                 return false;
             }
-
-            let target = node;
-            while (target) {
-                switch (target.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                        if (languageVersion < ScriptTarget.ES5) {
-                            return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
-                        }
-                        return false;
-
-                    case SyntaxKind.Constructor:
-                        if (node.kind !== SyntaxKind.Parameter) {
-                            break;
-                        }
-
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.Parameter:
-                        target = target.parent;
-                        continue;
-
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        if ((<FunctionLikeDeclaration>target).body) {
-                            target = target.parent;
-                            continue;
-                        }
-                        break;
-                }
-                break;
+            if (languageVersion < ScriptTarget.ES5) {
+                return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
-            return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_here);
+            else if (!isValidDecoratorTarget(node)) {
+                return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_here);
+            }
+            return false;
         }
 
         function checkGrammarModifiers(node: Node): boolean {
@@ -12322,7 +12321,7 @@ module ts {
         }
 
         function checkGrammarTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
-            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
+            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces, and imports:
             // categories:
             //
             //  DeclarationElement:

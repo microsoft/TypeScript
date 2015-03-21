@@ -1165,6 +1165,6 @@ interface TypedPropertyDescriptor<T> {
     set?: (value: T) => void;
 }
 
-interface ClassDecorator { <TFunction extends Function>(target: TFunction): TFunction | void; }
-interface PropertyDecorator { <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void; }
-interface ParameterDecorator { (target: Function, parameterIndex: number): void; }
+declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
+declare type PropertyDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
+declare type ParameterDecorator = (target: Function, parameterIndex: number) => void;
