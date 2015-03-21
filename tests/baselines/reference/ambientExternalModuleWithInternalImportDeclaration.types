@@ -11,23 +11,23 @@ var c = new A();
 === tests/cases/compiler/ambientExternalModuleWithInternalImportDeclaration_0.ts ===
 declare module 'M' {
     module C {
->C : typeof X
+>C : typeof C
 
         export var f: number;
 >f : number
     }
     class C {
->C : X
+>C : C
 
         foo(): void;
 >foo : () => void
     }
     import X = C;
->X : typeof X
->C : X
+>X : typeof C
+>C : C
 
     export = X;
->X : X
+>X : C
 
 }
 

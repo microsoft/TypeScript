@@ -321,6 +321,7 @@ declare module "typescript" {
         Let = 4096,
         Const = 8192,
         OctalLiteral = 16384,
+        ExportContext = 32768,
         Modifier = 499,
         AccessibilityModifier = 112,
         BlockScoped = 12288,
@@ -935,7 +936,7 @@ declare module "typescript" {
     interface EmitResolver {
         getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        hasExportDefaultValue(node: SourceFile): boolean;
+        isValueExportDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;

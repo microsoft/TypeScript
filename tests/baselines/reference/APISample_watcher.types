@@ -1247,6 +1247,9 @@ declare module "typescript" {
         OctalLiteral = 16384,
 >OctalLiteral : NodeFlags
 
+        ExportContext = 32768,
+>ExportContext : NodeFlags
+
         Modifier = 499,
 >Modifier : NodeFlags
 
@@ -3264,10 +3267,10 @@ declare module "typescript" {
 >node : Identifier
 >Identifier : Identifier
 
-        hasExportDefaultValue(node: SourceFile): boolean;
->hasExportDefaultValue : (node: SourceFile) => boolean
->node : SourceFile
->SourceFile : SourceFile
+        isValueExportDeclaration(node: Node): boolean;
+>isValueExportDeclaration : (node: Node) => boolean
+>node : Node
+>Node : Node
 
         isReferencedAliasDeclaration(node: Node): boolean;
 >isReferencedAliasDeclaration : (node: Node) => boolean
