@@ -4983,10 +4983,9 @@ module ts {
                     emitLiteral(<LiteralExpression>moduleName);
                     emitEnd(moduleName);
                     emitToken(SyntaxKind.CloseParenToken, moduleName.end);
-                    write(";");
                 }
                 else {
-                    write("require();");
+                    write("require()");
                 }
             }
 
@@ -5022,6 +5021,7 @@ module ts {
                             write(" = ");
                         }
                         emitRequire(getExternalModuleName(node));
+                        write(";");
                         emitEnd(node);
                         emitTrailingComments(node);
                     }
@@ -5062,14 +5062,15 @@ module ts {
                 if (node.moduleSpecifier && (!node.exportClause || resolver.isValueExportDeclaration(node))) {
                     emitStart(node);
                     let generatedName = resolver.getGeneratedNameForNode(node);
-                    if (compilerOptions.module !== ModuleKind.AMD) {
-                        write("var ");
-                        write(generatedName);
-                        write(" = ");
-                        emitRequire(getExternalModuleName(node));
-                    }
                     if (node.exportClause) {
                         // export { x, y, ... } from "foo"
+                        if (compilerOptions.module !== ModuleKind.AMD) {
+                            write("var ");
+                            write(generatedName);
+                            write(" = ");
+                            emitRequire(getExternalModuleName(node));
+                            write(";");
+                        }
                         for (let specifier of node.exportClause.elements) {
                             if (resolver.isValueExportDeclaration(specifier)) {
                                 writeLine();
@@ -5088,13 +5089,15 @@ module ts {
                     }
                     else {
                         // export * from "foo"
-                        let tempName = createTempVariable(node).text;
                         writeLine();
-                        write("for (var " + tempName + " in " + generatedName + ") if (!");
-                        emitContainingModuleName(node);
-                        write(".hasOwnProperty(" + tempName + ")) ");
-                        emitContainingModuleName(node);
-                        write("[" + tempName + "] = " + generatedName + "[" + tempName + "];");
+                        write("__export(");
+                        if (compilerOptions.module !== ModuleKind.AMD) {
+                            emitRequire(getExternalModuleName(node));
+                        }
+                        else {
+                            write(generatedName);
+                        }
+                        write(");");
                     }
                     emitEnd(node);
                 }
@@ -5177,6 +5180,19 @@ module ts {
                 });
             }
 
+            function emitExportStarHelper() {
+                if (hasExportStars) {
+                    writeLine();
+                    write("function __export(m) {");
+                    increaseIndent();
+                    writeLine();
+                    write("for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];");
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                }
+            }
+
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 writeLine();
                 write("define(");
@@ -5219,6 +5235,7 @@ module ts {
                 }
                 write(") {");
                 increaseIndent();
+                emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
@@ -5229,6 +5246,7 @@ module ts {
             }
 
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
+                emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
