@@ -16,12 +16,6 @@ module ts {
         getIndent(): number;
     }
 
-    interface ExternalImportInfo {
-        rootNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration;
-        declarationNode?: ImportEqualsDeclaration | ImportClause | NamespaceImport;
-        namedImports?: NamedImports;
-    }
-
     interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
@@ -1587,9 +1581,10 @@ module ts {
             let tempCount = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
-            let externalImports: ExternalImportInfo[];
+            let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
             let exportSpecifiers: Map<ExportSpecifier[]>;
             let exportEquals: ExportAssignment;
+            let hasExportStars: boolean;
 
             /** write emitted output to disk*/
             let writeEmittedFiles = writeJavaScriptFile;
@@ -4995,41 +4990,47 @@ module ts {
                 }
             }
 
+            function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    return <ImportEqualsDeclaration>node;
+                }
+                let importClause = (<ImportDeclaration>node).importClause;
+                if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                    return <NamespaceImport>importClause.namedBindings;
+                }
+            }
+
+            function isNakedImport(node: ImportDeclaration | ImportEqualsDeclaration) {
+                return node.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
+            }
+
             function emitImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
-                let info = getExternalImportInfo(node);
-                if (info) {
-                    let declarationNode = info.declarationNode;
-                    let namedImports = info.namedImports;
+                if (contains(externalImports, node)) {
+                    let exportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
+                    let namespaceDeclaration = getNamespaceDeclarationNode(node);
                     if (compilerOptions.module !== ModuleKind.AMD) {
                         emitLeadingComments(node);
                         emitStart(node);
-                        let moduleName = getExternalModuleName(node);
-                        if (declarationNode) {
-                            if (!(declarationNode.flags & NodeFlags.Export)) write("var ");
-                            emitModuleMemberName(declarationNode);
+                        if (namespaceDeclaration) {
+                            if (!exportedImport) write("var ");
+                            emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
-                            emitRequire(moduleName);
                         }
-                        else if (namedImports) {
+                        else if (!isNakedImport(node)) {
                             write("var ");
                             write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
                             write(" = ");
-                            emitRequire(moduleName);
                         }
-                        else {
-                            emitRequire(moduleName);
-                        }
+                        emitRequire(getExternalModuleName(node));
                         emitEnd(node);
                         emitTrailingComments(node);
                     }
                     else {
-                        if (declarationNode) {
-                            if (declarationNode.flags & NodeFlags.Export) {
-                                emitModuleMemberName(declarationNode);
-                                write(" = ");
-                                emit(declarationNode.name);
-                                write(";");
-                            }
+                        if (exportedImport) {
+                            emitModuleMemberName(namespaceDeclaration);
+                            write(" = ");
+                            emit(namespaceDeclaration.name);
+                            write(";");
                         }
                     }
                 }
@@ -5111,82 +5112,54 @@ module ts {
                 }
             }
 
-            function createExternalImportInfo(node: Node): ExternalImportInfo {
-                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        return {
-                            rootNode: <ImportEqualsDeclaration>node,
-                            declarationNode: <ImportEqualsDeclaration>node
-                        };
-                    }
-                }
-                else if (node.kind === SyntaxKind.ImportDeclaration) {
-                    let importClause = (<ImportDeclaration>node).importClause;
-                    if (importClause) {
-                        if (importClause.name) {
-                            return {
-                                rootNode: <ImportDeclaration>node,
-                                declarationNode: importClause
-                            };
-                        }
-                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            return {
-                                rootNode: <ImportDeclaration>node,
-                                declarationNode: <NamespaceImport>importClause.namedBindings
-                            };
-                        }
-                        return {
-                            rootNode: <ImportDeclaration>node,
-                            namedImports: <NamedImports>importClause.namedBindings,
-                            localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
-                        };
-                    }
-                    return {
-                        rootNode: <ImportDeclaration>node
-                    }
-                }
-                else if (node.kind === SyntaxKind.ExportDeclaration) {
-                    if ((<ExportDeclaration>node).moduleSpecifier) {
-                        return {
-                            rootNode: <ExportDeclaration>node,
-                        };
-                    }
-                }
-            }
-
-            function createExternalModuleInfo(sourceFile: SourceFile) {
+            function collectExternalModuleInfo(sourceFile: SourceFile) {
                 externalImports = [];
                 exportSpecifiers = {};
                 exportEquals = undefined;
-                forEach(sourceFile.statements, node => {
-                    if (node.kind === SyntaxKind.ExportAssignment) {
-                        if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
-                            exportEquals = <ExportAssignment>node;
-                        }
-                    }
-                    else if (node.kind === SyntaxKind.ExportDeclaration && !(<ExportDeclaration>node).moduleSpecifier) {
-                        forEach((<ExportDeclaration>node).exportClause.elements, specifier => {
-                            let name = (specifier.propertyName || specifier.name).text;
-                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
-                        });
-                    }
-                    else {
-                        let info = createExternalImportInfo(node);
-                        if (info) {
-                            if ((!info.declarationNode && !info.namedImports) || resolver.isReferencedAliasDeclaration(node)) {
-                                externalImports.push(info);
+                hasExportStars = false;
+                for (let node of sourceFile.statements) {
+                    switch (node.kind) {
+                        case SyntaxKind.ImportDeclaration:
+                            if (!(<ImportDeclaration>node).importClause || resolver.isReferencedAliasDeclaration(node)) {
+                                // import "mod"
+                                // import x from "mod" where x is referenced
+                                // import * as x from "mod" where x is referenced
+                                // import { x, y } from "mod" where at least one import is referenced
+                                externalImports.push(<ImportDeclaration>node);
                             }
-                        }
-                    }
-                });
-            }
-
-            function getExternalImportInfo(node: ImportDeclaration | ImportEqualsDeclaration): ExternalImportInfo {
-                if (externalImports) {
-                    for (let info of externalImports) {
-                        if (info.rootNode === node) {
-                            return info;
-                        }
+                            break;
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
+                                // import x = require("mod") where x is referenced
+                                externalImports.push(<ImportEqualsDeclaration>node);
+                            }
+                            break;
+                        case SyntaxKind.ExportDeclaration:
+                            if ((<ExportDeclaration>node).moduleSpecifier) {
+                                if (!(<ExportDeclaration>node).exportClause) {
+                                    // export * from "mod"
+                                    externalImports.push(<ExportDeclaration>node);
+                                    hasExportStars = true;
+                                }
+                                else if (resolver.isValueExportDeclaration(node)) {
+                                    // export { x, y } from "mod" where at least one export is a value symbol
+                                    externalImports.push(<ExportDeclaration>node);
+                                }
+                            }
+                            else {
+                                // export { x, y }
+                                for (let specifier of (<ExportDeclaration>node).exportClause.elements) {
+                                    let name = (specifier.propertyName || specifier.name).text;
+                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                                }
+                            }
+                            break;
+                        case SyntaxKind.ExportAssignment:
+                            if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
+                                // export = x
+                                exportEquals = <ExportAssignment>node;
+                            }
+                            break;
                     }
                 }
             }
@@ -5212,37 +5185,38 @@ module ts {
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                forEach(externalImports, info => {
+                for (let importNode of externalImports) {
                     write(", ");
-                    let moduleName = getExternalModuleName(info.rootNode);
+                    let moduleName = getExternalModuleName(importNode);
                     if (moduleName.kind === SyntaxKind.StringLiteral) {
                         emitLiteral(<LiteralExpression>moduleName);
                     }
                     else {
                         write("\"\"");
                     }
-                });
-                forEach(node.amdDependencies, amdDependency => {
+                }
+                for (let amdDependency of node.amdDependencies) {
                     let text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
-                });
+                }
                 write("], function (require, exports");
-                forEach(externalImports, info => {
+                for (let importNode of externalImports) {
                     write(", ");
-                    if (info.declarationNode) {
-                        emit(info.declarationNode.name);
+                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                    if (namespaceDeclaration) {
+                        emit(namespaceDeclaration.name);
                     }
                     else {
-                        write(resolver.getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>info.rootNode));
+                        write(resolver.getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
                     }
-                });
-                forEach(node.amdDependencies, amdDependency => {
+                }
+                for (let amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
                         write(", ");
                         write(amdDependency.name);
                     }
-                });
+                }
                 write(") {");
                 increaseIndent();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -5313,7 +5287,7 @@ module ts {
                     extendsEmitted = true;
                 }
                 if (isExternalModule(node)) {
-                    createExternalModuleInfo(node);
+                    collectExternalModuleInfo(node);
                     if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
@@ -5325,6 +5299,7 @@ module ts {
                     externalImports = undefined;
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
+                    hasExportStars = false;
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
                     emitTempDeclarations(/*newLine*/ true);
