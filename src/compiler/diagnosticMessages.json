@@ -587,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export or export assignment.": {
+    "External module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -1350,6 +1350,14 @@
     "Type '{0}' is not an array type or a string type.": {
         "category": "Error",
         "code": 2461
+    },
+    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+        "category": "Error",
+        "code": 2496
+    },
+    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+        "category": "Error",
+        "code": 2497
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

@@ -220,16 +220,6 @@ module ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function mapToArray<T>(map: Map<T>): T[] {
-        let result: T[] = [];
-
-        for (let id in map) {
-            result.push(map[id]);
-        }
-
-        return result;
-    }
-
     export function copyMap<T>(source: Map<T>, target: Map<T>): void {
         for (let p in source) {
             target[p] = source[p];

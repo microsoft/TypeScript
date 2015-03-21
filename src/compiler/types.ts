@@ -1199,7 +1199,7 @@ module ts {
     export interface EmitResolver {
         getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        hasExportDefaultValue(node: SourceFile): boolean;
+        isValueExportDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
