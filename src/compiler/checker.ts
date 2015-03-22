@@ -10963,14 +10963,26 @@ module ts {
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
-                    // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
-                        return false;
+            let locals = container.locals;
+            let local = locals && getProperty(container.locals, name);
+            if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                return false;
+            }
+
+            let childContainers = container.childContainers;
+            if (childContainers) {
+                if (childContainers instanceof Array) {
+                    for (let child of childContainers) {
+                        if (!isUniqueLocalName(name, child)) {
+                            return false;
+                        }
                     }
                 }
+                else {
+                    return isUniqueLocalName(name, <Node>childContainers);
+                }
             }
+
             return true;
         }
 

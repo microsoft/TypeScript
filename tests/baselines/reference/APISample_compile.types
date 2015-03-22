@@ -1061,13 +1061,14 @@ declare module "typescript" {
 >locals : SymbolTable
 >SymbolTable : SymbolTable
 
-        nextContainer?: Node;
->nextContainer : Node
->Node : Node
-
         localSymbol?: Symbol;
 >localSymbol : Symbol
 >Symbol : Symbol
+
+        childContainers?: Node | Node[];
+>childContainers : Node | Node[]
+>Node : Node
+>Node : Node
     }
     interface NodeArray<T> extends Array<T>, TextRange {
 >NodeArray : NodeArray<T>

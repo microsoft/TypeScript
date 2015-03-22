@@ -267,9 +267,11 @@ module Utils {
                         o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
                         break;
 
-                    case "nextContainer":
-                        if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                    case "childContainers":
+                        if (n.childContainers) {
+                            o[propertyName] = (<ts.Node[]>n.childContainers).length === undefined
+                                ? convertContainer(<ts.Node>n.childContainers)
+                                : (<ts.Node[]>n.childContainers).map(convertContainer);
                         }
                         break;
 
@@ -288,6 +290,10 @@ module Utils {
             });
 
             return o;
+        }
+
+        function convertContainer(n: ts.Node) {
+            return { kind: n.kind, pos: n.pos, end: n.end };
         }
     }
 

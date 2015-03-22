@@ -61,7 +61,6 @@ module ts {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
-        let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
 
@@ -246,11 +245,33 @@ module ts {
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
 
-                if (lastContainer) {
-                    lastContainer.nextContainer = container;
-                }
+                if (saveContainer) {
+                    // Add this container into the parent container's childContainer list. We use 
+                    // this in the checker to determine if there is a child name in scope that would
+                    // conflict with this name.
+                    
+                    if (!saveContainer.childContainers) {
+                        // If this is the first child container for this parent, then just have it point
+                        // directly at the container.
+                        saveContainer.childContainers = container;
+                    }
+                    else {
+                        if (!(saveContainer.childContainers instanceof Array)) {
+                            // We're pointing at a node.  Upgrade it to an array.
+                            saveContainer.childContainers = [<Node>saveContainer.childContainers];
+                        }
 
-                lastContainer = container;
+                        var childContainers = <Node[]>saveContainer.childContainers;
+
+                        // Don't add the container if it is already in the list.  This can happen when
+                        // the binder recurses into the same children multiple times.  An example of
+                        // this are the parameters for a constructor.  We'll hit them once treating them
+                        // just like parameters, and then again, looking for property-parameters.
+                        if (indexOf(childContainers, container) < 0) {
+                            childContainers.push(container);
+                        }
+                    }
+                }
             }
 
             if (isBlockScopeContainer) {

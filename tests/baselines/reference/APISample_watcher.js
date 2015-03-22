@@ -418,8 +418,8 @@ declare module "typescript" {
         parent?: Node;
         symbol?: Symbol;
         locals?: SymbolTable;
-        nextContainer?: Node;
         localSymbol?: Symbol;
+        childContainers?: Node | Node[];
     }
     interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
