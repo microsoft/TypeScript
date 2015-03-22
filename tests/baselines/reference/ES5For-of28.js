@@ -9,7 +9,7 @@ for (var _i = 0, _a = [
     2,
     3
 ]; _i < _a.length; _i++) {
-    var _b = _a[_i], _c = _b[0], a = _c === void 0 ? 0 : _c, _d = _b[1], b = _d === void 0 ? 1 : _d;
-    a;
-    b;
+    var _b = _a[_i], _c = _b[0], _a_1 = _c === void 0 ? 0 : _c, _d = _b[1], _b_1 = _d === void 0 ? 1 : _d;
+    _a_1;
+    _b_1;
 }

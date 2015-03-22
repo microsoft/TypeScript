@@ -22,5 +22,5 @@ var l8 = 23;
 var l9 = 0, l10 = "", l11 = null;
 for (var _l11 in {}) {
 }
-for (var l12 = 0; l12 < 9; l12++) {
+for (var _l12 = 0; _l12 < 9; _l12++) {
 }

@@ -51,27 +51,27 @@ exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
 //// [es6ImportNamedImportInEs5_1.js]
+var _es6ImportNamedImportInEs5_0 = require("es6ImportNamedImportInEs5_0");
+var xxxx = _es6ImportNamedImportInEs5_0.a;
 var _es6ImportNamedImportInEs5_0_1 = require("es6ImportNamedImportInEs5_0");
 var xxxx = _es6ImportNamedImportInEs5_0_1.a;
 var _es6ImportNamedImportInEs5_0_2 = require("es6ImportNamedImportInEs5_0");
+var xxxx = _es6ImportNamedImportInEs5_0_2.x;
 var xxxx = _es6ImportNamedImportInEs5_0_2.a;
 var _es6ImportNamedImportInEs5_0_3 = require("es6ImportNamedImportInEs5_0");
 var xxxx = _es6ImportNamedImportInEs5_0_3.x;
-var xxxx = _es6ImportNamedImportInEs5_0_3.a;
 var _es6ImportNamedImportInEs5_0_4 = require("es6ImportNamedImportInEs5_0");
-var xxxx = _es6ImportNamedImportInEs5_0_4.x;
+var xxxx = _es6ImportNamedImportInEs5_0_4.m;
 var _es6ImportNamedImportInEs5_0_5 = require("es6ImportNamedImportInEs5_0");
-var xxxx = _es6ImportNamedImportInEs5_0_5.m;
+var xxxx = _es6ImportNamedImportInEs5_0_5.a1;
+var xxxx = _es6ImportNamedImportInEs5_0_5.x1;
 var _es6ImportNamedImportInEs5_0_6 = require("es6ImportNamedImportInEs5_0");
 var xxxx = _es6ImportNamedImportInEs5_0_6.a1;
 var xxxx = _es6ImportNamedImportInEs5_0_6.x1;
 var _es6ImportNamedImportInEs5_0_7 = require("es6ImportNamedImportInEs5_0");
-var xxxx = _es6ImportNamedImportInEs5_0_7.a1;
-var xxxx = _es6ImportNamedImportInEs5_0_7.x1;
+var z111 = _es6ImportNamedImportInEs5_0_7.z1;
 var _es6ImportNamedImportInEs5_0_8 = require("es6ImportNamedImportInEs5_0");
-var z111 = _es6ImportNamedImportInEs5_0_8.z1;
-var _es6ImportNamedImportInEs5_0_9 = require("es6ImportNamedImportInEs5_0");
-var z2 = _es6ImportNamedImportInEs5_0_9.z2; // z2 shouldn't give redeclare error
+var z2 = _es6ImportNamedImportInEs5_0_8.z2; // z2 shouldn't give redeclare error
 
 
 //// [es6ImportNamedImportInEs5_0.d.ts]

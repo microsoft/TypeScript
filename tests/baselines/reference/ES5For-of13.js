@@ -9,7 +9,7 @@ for (var _i = 0, _a = [
     'b',
     'c'
 ]; _i < _a.length; _i++) {
-    var v = _a[_i];
-    var x = v;
+    var _v = _a[_i];
+    var x = _v;
 }
 //# sourceMappingURL=ES5For-of13.js.map
