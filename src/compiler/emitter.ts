@@ -3,16 +3,22 @@
 
 module ts {
 
+    interface ScopeTemp {
+        names?: Map<string>;
+        previous: ScopeTemp;
+        counter: number;
+        tempVariables?: Identifier[];
+        tempParameters?: Identifier[];
+    }
+
+    function newScopeTemp(previous?: ScopeTemp): ScopeTemp {
+        return { previous, counter: 0 };
+    }
+
     interface ExternalImportInfo {
         rootNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration;
         declarationNode?: ImportEqualsDeclaration | ImportClause | NamespaceImport;
         namedImports?: NamedImports;
-    }
-
-    // represents one LexicalEnvironment frame to store unique generated names
-    interface ScopeFrame {
-        names: Map<string>;
-        previous: ScopeFrame;
     }
 
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
@@ -71,15 +77,12 @@ module ts {
 
             let currentSourceFile: SourceFile;
 
-            let lastFrame: ScopeFrame;
-            let currentScopeNames: Map<string>;
-
-            let generatedBlockScopeNames: string[];
+            let generatedNames: Map<string>;
+            let nodeToGeneratedName: string[];
+            let blockScopedVariableToGeneratedName: string[];
+            let currentScopeTemp: ScopeTemp = newScopeTemp();
 
             let extendsEmitted = false;
-            let tempCount = 0;
-            let tempVariables: Identifier[];
-            let tempParameters: Identifier[];
             let externalImports: ExternalImportInfo[];
             let exportSpecifiers: Map<ExportSpecifier[]>;
             let exportDefault: FunctionDeclaration | ClassDeclaration | ExportAssignment | ExportSpecifier;
@@ -144,81 +147,193 @@ module ts {
                 emit(sourceFile);
             }
 
-            // enters the new lexical environment
-            // return value should be passed to matching call to exitNameScope.
-            function enterNameScope(): boolean {
-                let names = currentScopeNames;
-                currentScopeNames = undefined;
-                if (names) {
-                    lastFrame = { names, previous: lastFrame };
-                    return true;
+            function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+                while (node) {
+                    if (node === ancestor) return true;
+                    node = node.parent;
                 }
                 return false;
             }
 
-            function exitNameScope(popFrame: boolean): void {
-                if (popFrame) {
-                    currentScopeNames = lastFrame.names;
-                    lastFrame = lastFrame.previous;
-                }
-                else {
-                    currentScopeNames = undefined;
-                }
-            }
-
-            function generateUniqueNameForLocation(location: Node, baseName: string): string {
-                let name: string
-                // first try to check if base name can be used as is
-                if (!isExistingName(location, baseName)) {
-                    name = baseName;
-                }
-                else {
-                    name = generateUniqueName(baseName, n => isExistingName(location, n));
-                }
-                
-                return recordNameInCurrentScope(name);
-            }
-            
-            function recordNameInCurrentScope(name: string): string {
-                if (!currentScopeNames) {
-                    currentScopeNames = {};
-                }
-
-                return currentScopeNames[name] = name;
-            }
-
-            function isExistingName(location: Node, name: string) {
-                // check if resolver is aware of this name (if name was seen during the typecheck)
-                if (!resolver.isUnknownIdentifier(location, name)) {
-                    return true;
-                }
-
-                // check if name is present in generated names that were introduced by the emitter
-                if (currentScopeNames && hasProperty(currentScopeNames, name)) {
-                    return true;
-                }
-
-                // check generated names in outer scopes
-                // let x;
-                // function foo() {
-                //    let x; // 1
-                //    function bar() {
-                //        {
-                //            let x; // 2
-                //        }
-                //        console.log(x); // 3
-                //    }
-                //}
-                // here both x(1) and x(2) should be renamed and their names should be different
-                // so x in (3) will refer to x(1)
-                let frame = lastFrame;
-                while (frame) {
-                    if (hasProperty(frame.names, name)) {
-                        return true;
+            function isUniqueLocalName(name: string, container: Node): boolean {
+                for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+                    if (node.locals && hasProperty(node.locals, name)) {
+                        // We conservatively include alias symbols to cover cases where they're emitted as locals
+                        if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                            return false;
+                        }
                     }
-                    frame = frame.previous;
                 }
-                return false;
+                return true;
+            }
+
+            function generateNameForNode(node: Node): string {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                        return generateNameForFunctionOrClassDeclaration(<Declaration>node);
+                    case SyntaxKind.ModuleDeclaration:
+                        return generateNameForModuleOrEnum(<ModuleDeclaration>node);
+                    case SyntaxKind.EnumDeclaration:
+                        return generateNameForModuleOrEnum(<EnumDeclaration>node);
+                    case SyntaxKind.ImportDeclaration:
+                        return generateNameForImportDeclaration(<ImportDeclaration>node);
+                    case SyntaxKind.ExportDeclaration:
+                        return generateNameForExportDeclaration(<ExportDeclaration>node);
+                    case SyntaxKind.ExportAssignment:
+                        return generateNameForExportAssignment(<ExportAssignment>node);
+                    default: 
+                        Debug.fail("Unexpected node kind:" + node.kind);
+                        return undefined;
+                }
+            }
+
+            function isUniqueName(name: string) {
+                return !resolver.hasGlobalName(name) &&
+                    !hasProperty(currentSourceFile.identifiers, name) &&
+                    (!generatedNames || !hasProperty(generatedNames, name));
+            }
+
+            function isUniqueTempVariableName(location: Node, name: string): boolean {
+                if (!resolver.isUnknownIdentifier(location, name)) {
+                    return false;
+                }
+
+                return !currentScopeTemp.names || !hasProperty(currentScopeTemp.names, name);
+            }
+
+            function makeUniqueName(baseName: string): string {
+                // First try '_name'
+                if (baseName.charCodeAt(0) !== CharacterCodes._) {
+                    baseName = "_" + baseName;
+                    if (isUniqueName(baseName)) {
+                        return recordGeneratedName(baseName, /*isTempVariableName*/ false);
+                    }
+                }
+                // Find the first unique '_name_n', where n is a positive number
+                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+                    baseName += "_";
+                }
+                let i = 1;
+                while (true) {
+                    let name = baseName + i;
+                    if (isUniqueName(name)) {
+                        return recordGeneratedName(name, /*isTempVariableName*/ false);;
+                    }
+                    i++;
+                }
+            }
+
+            // Create a temporary variable with a unique unused name.
+            function createTempVariable(location: Node, preferredName?: string): Identifier {
+                for (var name = preferredName; !name || !isUniqueTempVariableName(location, name); currentScopeTemp.counter++) {
+                    // _a .. _h, _j ... _z, _0, _1, ...
+
+                    // Note: we avoid generating _i and _n as those are common names we want in other places.
+                    var char = CharacterCodes.a + currentScopeTemp.counter;
+                    if (char === CharacterCodes.i || char === CharacterCodes.n) {
+                        continue;
+                    }
+
+                    if (currentScopeTemp.counter < 26) {
+                        name = "_" + String.fromCharCode(char);
+                    }
+                    else {
+                        name = "_" + (currentScopeTemp.counter - 26);
+                    }
+                }
+
+                recordGeneratedName(name, /*isTempVariableName*/ true)
+
+                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                result.text = name;
+                return result;
+            }
+
+
+            function recordGeneratedName(name: string, isTempVariableName: boolean) {
+                if (!generatedNames) {
+                    generatedNames = {};
+                }
+
+                generatedNames[name] = name;
+
+                if (isTempVariableName) {
+                    if (!currentScopeTemp.names) {
+                        currentScopeTemp.names = {};
+                    }
+                    currentScopeTemp.names[name] = name;
+                }
+
+                return name;
+            }
+
+            function recordTempDeclaration(name: Identifier): void {
+                if (!currentScopeTemp.tempVariables) {
+                    currentScopeTemp.tempVariables = [];
+                }
+                currentScopeTemp.tempVariables.push(name);
+            }
+
+            function createAndRecordTempVariable(location: Node, preferredName?: string): Identifier {
+                let temp = createTempVariable(location, preferredName);
+                recordTempDeclaration(temp);
+                return temp;
+            }
+
+
+            function assignGeneratedName(node: Node, name: string): string {
+                if (!nodeToGeneratedName) {
+                    nodeToGeneratedName = [];
+                }
+                return nodeToGeneratedName[resolver.getNodeId(node)] = unescapeIdentifier(name);
+            }
+
+            function generateNameForFunctionOrClassDeclaration(node: Declaration): string {
+                if (!node.name) {
+                    return assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
+
+            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration): string {
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    let name = node.name.text;
+                    // Use module/enum name itself if it is unique, otherwise make a unique variation
+                    return assignGeneratedName(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
+                }
+            }
+
+            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration): string {
+                let expr = getExternalModuleName(node);
+                let baseName = expr.kind === SyntaxKind.StringLiteral ?
+                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+                return assignGeneratedName(node, makeUniqueName(baseName));
+            }
+
+            function generateNameForImportDeclaration(node: ImportDeclaration): string {
+                if (node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+                    return generateNameForImportOrExportDeclaration(node);
+                }
+            }
+
+            function generateNameForExportDeclaration(node: ExportDeclaration): string {
+                if (node.moduleSpecifier) {
+                    return generateNameForImportOrExportDeclaration(node);
+                }
+            }
+
+            function generateNameForExportAssignment(node: ExportAssignment): string {
+                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
+                    return assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
+
+            function getGeneratedNameForNode(node: Node) {
+                var nodeId = resolver.getNodeId(node);
+                if (nodeToGeneratedName && nodeToGeneratedName[nodeId]) {
+                    return nodeToGeneratedName[nodeId];
+                }
+                return generateNameForNode(node);
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -585,51 +700,8 @@ module ts {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
-            // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
-            // name should be one that is appropriate for a for loop variable.
-            function createTempVariable(location: Node, preferredName?: string): Identifier {
-                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
-                    // _a .. _h, _j ... _z, _0, _1, ...
-
-                    // Note: we avoid generating _i and _n as those are common names we want in other places.
-                    var char = CharacterCodes.a + tempCount;
-                    if (char === CharacterCodes.i || char === CharacterCodes.n) {
-                        continue;
-                    }
-
-                    if (tempCount < 26) {
-                        name = "_" + String.fromCharCode(char);
-                    }
-                    else {
-                        name = "_" + (tempCount - 26);
-                    }
-                }
-                
-                // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
-                // we just generated.
-                recordNameInCurrentScope(name);
-                
-                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                result.text = name;
-                return result;
-            }
-
-            function recordTempDeclaration(name: Identifier): void {
-                if (!tempVariables) {
-                    tempVariables = [];
-                }
-                tempVariables.push(name);
-            }
-
-            function createAndRecordTempVariable(location: Node, preferredName?: string): Identifier {
-                let temp = createTempVariable(location, preferredName);
-                recordTempDeclaration(temp);
-
-                return temp;
-            }
-
             function emitTempDeclarations(newLine: boolean) {
-                if (tempVariables) {
+                if (currentScopeTemp.tempVariables) {
                     if (newLine) {
                         writeLine();
                     }
@@ -637,7 +709,7 @@ module ts {
                         write(" ");
                     }
                     write("var ");
-                    emitCommaList(tempVariables);
+                    emitCommaList(currentScopeTemp.tempVariables);
                     write(";");
                 }
             }
@@ -1085,7 +1157,7 @@ module ts {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                let substitution = resolver.getExpressionNameSubstitution(node);
+                let substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
                 if (substitution) {
                     write(substitution);
                 }
@@ -1094,8 +1166,8 @@ module ts {
                 }
             }
 
-            function getGeneratedNameForIdentifier(node: Identifier): string {
-                if (nodeIsSynthesized(node) || !generatedBlockScopeNames) {
+            function getGeneratedNameForBlockScopedVariable(node: Identifier): string {
+                if (nodeIsSynthesized(node) || !blockScopedVariableToGeneratedName) {
                     return undefined;
                 }
 
@@ -1104,12 +1176,12 @@ module ts {
                     return undefined;
                 }
 
-                return generatedBlockScopeNames[variableId];
+                return blockScopedVariableToGeneratedName[variableId];
             }
 
             function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
                 if (allowGeneratedIdentifiers) {
-                    let generatedName = getGeneratedNameForIdentifier(node);
+                    let generatedName = getGeneratedNameForBlockScopedVariable(node);
                     if (generatedName) {
                         write(generatedName);
                         return;
@@ -1332,7 +1404,7 @@ module ts {
                         // manage by just emitting strings (which is a lot more performant).
                         //let prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
                         //return createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
-                        return createIdentifier(resolver.getExpressionNameSubstitution((<ShorthandPropertyAssignment>property).name));
+                        return createIdentifier(resolver.getExpressionNameSubstitution((<ShorthandPropertyAssignment>property).name, getGeneratedNameForNode));
 
                     case SyntaxKind.MethodDeclaration:
                         return createFunctionExpression((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
@@ -1536,7 +1608,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6) {
                     // Emit identifier as an identifier
                     write(": ");
-                    var generatedName = getGeneratedNameForIdentifier(node.name);
+                    var generatedName = getGeneratedNameForBlockScopedVariable(node.name);
                     if (generatedName) {
                         write(generatedName);
                     }
@@ -1546,7 +1618,7 @@ module ts {
                         emitExpressionIdentifier(node.name);
                     }
                 }
-                else if (resolver.getExpressionNameSubstitution(node.name)) {
+                else if (resolver.getExpressionNameSubstitution(node.name, getGeneratedNameForNode)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -2323,7 +2395,7 @@ module ts {
 
             function emitContainingModuleName(node: Node) {
                 let container = getContainingModule(node);
-                write(container ? resolver.getGeneratedNameForNode(container) : "exports");
+                write(container ? getGeneratedNameForNode(container) : "exports");
             }
 
             function emitModuleMemberName(node: Declaration) {
@@ -2331,7 +2403,7 @@ module ts {
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
                     if (container) {
-                        write(resolver.getGeneratedNameForNode(container));
+                        write(getGeneratedNameForNode(container));
                         write(".");
                     }
                     else if (languageVersion < ScriptTarget.ES6) {
@@ -2678,17 +2750,12 @@ module ts {
                     return;
                 }
 
-                let blockScopeContainer = getEnclosingBlockScopeContainer(node);
-                let parent = blockScopeContainer.kind === SyntaxKind.SourceFile
-                    ? blockScopeContainer
-                    : blockScopeContainer.parent;
-
-                let generatedName = generateUniqueNameForLocation(parent, (<Identifier>node).text);
+                let generatedName = makeUniqueName((<Identifier>node).text);
                 let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
-                if (!generatedBlockScopeNames) {
-                    generatedBlockScopeNames = [];
+                if (!blockScopedVariableToGeneratedName) {
+                    blockScopedVariableToGeneratedName = [];
                 }
-                generatedBlockScopeNames[variableId] = generatedName;
+                blockScopedVariableToGeneratedName[variableId] = generatedName;
             }
 
             function isES6ModuleMemberDeclaration(node: Node) {
@@ -2717,10 +2784,10 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6) {
                     if (isBindingPattern(node.name)) {
                         let name = createTempVariable(node);
-                        if (!tempParameters) {
-                            tempParameters = [];
+                        if (!currentScopeTemp.tempParameters) {
+                            currentScopeTemp.tempParameters = [];
                         }
-                        tempParameters.push(name);
+                        currentScopeTemp.tempParameters.push(name);
                         emit(name);
                     }
                     else {
@@ -2743,7 +2810,7 @@ module ts {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
-                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, tempParameters[tempIndex]);
+                            emitDestructuring(p, /*isAssignmentExpressionStatement*/ false, currentScopeTemp.tempParameters[tempIndex]);
                             write(";");
                             tempIndex++;
                         }
@@ -2820,7 +2887,7 @@ module ts {
                     emitNodeWithoutSourceMap(node.name);
                 }
                 else {
-                    write(resolver.getGeneratedNameForNode(node));
+                    write(getGeneratedNameForNode(node));
                 }
             }
 
@@ -2903,14 +2970,7 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
-                let saveTempCount = tempCount;
-                let saveTempVariables = tempVariables;
-                let saveTempParameters = tempParameters;
-                tempCount = 0;
-                tempVariables = undefined;
-                tempParameters = undefined;
-
-                let popFrame = enterNameScope()
+                currentScopeTemp = newScopeTemp(currentScopeTemp);
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (shouldEmitAsArrowFunction(node)) {
@@ -2943,11 +3003,7 @@ module ts {
                     write(";");
                 }
 
-                exitNameScope(popFrame);
-
-                tempCount = saveTempCount;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
+                currentScopeTemp = currentScopeTemp.previous;
             }
 
             // Returns true if any preamble code was emitted.
@@ -3238,14 +3294,8 @@ module ts {
             }
 
             function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
-                let saveTempCount = tempCount;
-                let saveTempVariables = tempVariables;
-                let saveTempParameters = tempParameters;
-                tempCount = 0;
-                tempVariables = undefined;
-                tempParameters = undefined;
+                currentScopeTemp = newScopeTemp(currentScopeTemp);
 
-                let popFrame = enterNameScope();
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -3354,11 +3404,7 @@ module ts {
                     emitTrailingComments(ctor);
                 }
 
-                exitNameScope(popFrame);
-
-                tempCount = saveTempCount;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
+                currentScopeTemp = currentScopeTemp.previous;
             }
 
             function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
@@ -3494,7 +3540,7 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getGeneratedNameForNode(node));
+                write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") {");
                 increaseIndent();
@@ -3529,11 +3575,11 @@ module ts {
             }
 
             function emitEnumMember(node: EnumMember) {
-                let enumParent = <EnumDeclaration>node.parent;
+                let enumParentName = getGeneratedNameForNode(<EnumDeclaration>node.parent);
                 emitStart(node);
-                write(resolver.getGeneratedNameForNode(enumParent));
+                write(enumParentName);
                 write("[");
-                write(resolver.getGeneratedNameForNode(enumParent));
+                write(enumParentName);
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
@@ -3586,21 +3632,15 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getGeneratedNameForNode(node));
+                write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
-                    let saveTempCount = tempCount;
-                    let saveTempVariables = tempVariables;
-                    tempCount = 0;
-                    tempVariables = undefined;
-                    let popFrame = enterNameScope();
+                    currentScopeTemp = newScopeTemp(currentScopeTemp);
 
                     emit(node.body);
 
-                    exitNameScope(popFrame);
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
+                    currentScopeTemp = currentScopeTemp.previous;
                 }
                 else {
                     write("{");
@@ -3762,7 +3802,7 @@ module ts {
                         }
                         else if (namedImports) {
                             write("var ");
-                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                            write(getGeneratedNameForNode(<ImportDeclaration>node));
                             write(" = ");
                             emitRequire(moduleName);
                         }
@@ -3817,7 +3857,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 || node.parent.kind !== SyntaxKind.SourceFile) {
                     if (node.moduleSpecifier) {
                         emitStart(node);
-                        let generatedName = resolver.getGeneratedNameForNode(node);
+                        let generatedName = getGeneratedNameForNode(node);
                         if (compilerOptions.module !== ModuleKind.AMD) {
                             write("var ");
                             write(generatedName);
@@ -3920,7 +3960,7 @@ module ts {
                                 return {
                                     rootNode: <ImportDeclaration>node,
                                     namedImports: <NamedImports>importClause.namedBindings,
-                                    localName: resolver.getGeneratedNameForNode(<ImportDeclaration>node)
+                                    localName: getGeneratedNameForNode(<ImportDeclaration>node)
                                 };
                             }
                         }
@@ -4025,7 +4065,7 @@ module ts {
                         emit(info.declarationNode.name);
                     }
                     else {
-                        write(resolver.getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>info.rootNode));
+                        write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>info.rootNode));
                     }
                 });
                 forEach(node.amdDependencies, amdDependency => {
@@ -4558,4 +4598,3 @@ module ts {
         }
     }
 }
-
