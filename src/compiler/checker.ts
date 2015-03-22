@@ -10117,30 +10117,6 @@ module ts {
             return emptyArray;
         }
 
-        //function hasExportedMembers(moduleSymbol: Symbol) {
-        //    let declarations = moduleSymbol.declarations;
-        //    for (let current of declarations) {
-        //        let statements = getModuleStatements(current);
-        //        for (let node of statements) {
-        //            if (node.kind === SyntaxKind.ExportDeclaration) {
-        //                let exportClause = (<ExportDeclaration>node).exportClause;
-        //                if (!exportClause) {
-        //                    return true;
-        //                }
-        //                let specifiers = exportClause.elements;
-        //                for (let specifier of specifiers) {
-        //                    if (!(specifier.propertyName && specifier.name && specifier.name.text === "default")) {
-        //                        return true;
-        //                    }
-        //                }
-        //            }
-        //            else if (node.kind !== SyntaxKind.ExportAssignment && node.flags & NodeFlags.Export && !(node.flags & NodeFlags.Default)) {
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //}
-
         function hasExportedMembers(moduleSymbol: Symbol) {
             for (var id in moduleSymbol.exports) {
                 if (id !== "export=") {
