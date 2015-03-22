@@ -531,6 +531,24 @@ module ts {
             }
         }
 
+        // This function creates a synthetic symbol that combines the value side of one symbol with the
+        // type/namespace side of another symbol. Consider this example:
+        //
+        //   declare module graphics {
+        //       interface Point {
+        //           x: number;
+        //           y: number;
+        //       }
+        //   }
+        //   declare var graphics: {
+        //       Point: new (x: number, y: number) => graphics.Point;
+        //   }
+        //   declare module "graphics" {
+        //       export = graphics;
+        //   }
+        //
+        // An 'import { Point } from "graphics"' needs to create a symbol that combines the value side 'Point'
+        // property with the type/namespace side interface 'Point'.
         function combineValueAndTypeSymbols(valueSymbol: Symbol, typeSymbol: Symbol): Symbol {
             if (valueSymbol.flags & (SymbolFlags.Type | SymbolFlags.Namespace)) {
                 return valueSymbol;
@@ -776,10 +794,15 @@ module ts {
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
+        // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
+        // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol): Symbol {
             return moduleSymbol && resolveSymbol(moduleSymbol.exports["export="]) || moduleSymbol;
         }
 
+        // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
+        // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
+        // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression): Symbol {
             let symbol = resolveExternalModuleSymbol(moduleSymbol);
             if (symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
