@@ -10963,24 +10963,23 @@ module ts {
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            if (container.locals &&
-                hasProperty(container.locals, name) &&
-                container.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
-
+            let locals = container.locals;
+            let local = locals && getProperty(container.locals, name);
+            if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                 return false;
             }
 
-            if (container.childContainers) {
-                if ((<Node[]>container.childContainers).length === undefined) {
-                    return isUniqueLocalName(name, <Node>container.childContainers);
-                }
-                else {
-                    var array = <Node[]>container.childContainers;
-                    for (let child of array) {
+            let childContainers = container.childContainers;
+            if (childContainers) {
+                if (childContainers instanceof Array) {
+                    for (let child of childContainers) {
                         if (!isUniqueLocalName(name, child)) {
                             return false;
                         }
                     }
+                }
+                else {
+                    return isUniqueLocalName(name, <Node>childContainers);
                 }
             }
 

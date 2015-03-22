@@ -249,14 +249,14 @@ module ts {
                     // Add this container into the parent container's childContainer list. We use 
                     // this in the checker to determine if there is a child name in scope that would
                     // conflict with this name.
-
+                    
                     if (!saveContainer.childContainers) {
                         // If this is the first child container for this parent, then just have it point
                         // directly at the container.
                         saveContainer.childContainers = container;
                     }
                     else {
-                        if ((<Node[]>saveContainer.childContainers).length === undefined) {
+                        if (!(saveContainer.childContainers instanceof Array)) {
                             // We're pointing at a node.  Upgrade it to an array.
                             saveContainer.childContainers = [<Node>saveContainer.childContainers];
                         }
