@@ -3094,8 +3094,8 @@ declare module "typescript" {
 >node : Identifier
 >Identifier : Identifier
 
-        isValueExportDeclaration(node: Node): boolean;
->isValueExportDeclaration : (node: Node) => boolean
+        isValueAliasDeclaration(node: Node): boolean;
+>isValueAliasDeclaration : (node: Node) => boolean
 >node : Node
 >Node : Node
 

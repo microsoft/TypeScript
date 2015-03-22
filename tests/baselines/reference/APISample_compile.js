@@ -936,7 +936,7 @@ declare module "typescript" {
     interface EmitResolver {
         getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
-        isValueExportDeclaration(node: Node): boolean;
+        isValueAliasDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
