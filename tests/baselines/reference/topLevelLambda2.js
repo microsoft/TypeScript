@@ -7,4 +7,6 @@ foo(()=>this.window);
 var _this = this;
 function foo(x) {
 }
-foo(function () { return _this.window; });
+foo(function () {
+    return _this.window;
+});

@@ -124,9 +124,9 @@ var r2: D1 | C2 = c2Ord1 instanceof C1 && c2Ord1; // C2 | D1
 >r2 : C2 | D1
 >D1 : D1
 >C2 : C2
->c2Ord1 instanceof C1 && c2Ord1 : C2 | D1
+>c2Ord1 instanceof C1 && c2Ord1 : D1
 >c2Ord1 instanceof C1 : boolean
 >c2Ord1 : C2 | D1
 >C1 : typeof C1
->c2Ord1 : C2 | D1
+>c2Ord1 : D1
 

@@ -69,7 +69,9 @@ var Derived = (function (_super) {
 var BaseCollection = (function () {
     function BaseCollection(f) {
         (function (item) {
-            return [item.Components];
+            return [
+                item.Components
+            ];
         });
     }
     return BaseCollection;

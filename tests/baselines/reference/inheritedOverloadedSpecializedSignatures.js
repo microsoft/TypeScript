@@ -28,22 +28,43 @@ interface B  {
     (x: 'B2'): string[];
 }
 
-var b: B;
-// non of these lines should error
-var x1: string[] = b('B2'); 
-var x2: number = b('B1');
-var x3: boolean = b('A2');
-var x4: string = b('A1');
-var x5: void = b('A0');
+interface C1 extends B {
+	(x: 'C1'): number[];
+}
+
+interface C2 extends B {
+	(x: 'C2'): boolean[];
+}
+
+interface C extends C1, C2 {
+	(x: 'C'): string;
+}
+
+var c: C;
+// none of these lines should error
+var x1: string[] = c('B2');
+var x2: number = c('B1');
+var x3: boolean = c('A2');
+var x4: string = c('A1');
+var x5: void = c('A0');
+var x6: number[] = c('C1');
+var x7: boolean[] = c('C2');
+var x8: string = c('C');
+var x9: void = c('generic');
+
 
 //// [inheritedOverloadedSpecializedSignatures.js]
 var b;
 // Should not error
 b('foo').charAt(0);
-var b;
-// non of these lines should error
-var x1 = b('B2');
-var x2 = b('B1');
-var x3 = b('A2');
-var x4 = b('A1');
-var x5 = b('A0');
+var c;
+// none of these lines should error
+var x1 = c('B2');
+var x2 = c('B1');
+var x3 = c('A2');
+var x4 = c('A1');
+var x5 = c('A0');
+var x6 = c('C1');
+var x7 = c('C2');
+var x8 = c('C');
+var x9 = c('generic');

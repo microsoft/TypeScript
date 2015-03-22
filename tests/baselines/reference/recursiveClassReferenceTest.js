@@ -116,7 +116,7 @@ var Sample;
     var Actions;
     (function (Actions) {
         var Thing;
-        (function (_Thing) {
+        (function (_Thing_1) {
             var Find;
             (function (Find) {
                 var StartFindAction = (function () {
@@ -131,7 +131,7 @@ var Sample;
                     return StartFindAction;
                 })();
                 Find.StartFindAction = StartFindAction;
-            })(Find = _Thing.Find || (_Thing.Find = {}));
+            })(Find = _Thing_1.Find || (_Thing_1.Find = {}));
         })(Thing = Actions.Thing || (Actions.Thing = {}));
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));

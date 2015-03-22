@@ -104,11 +104,24 @@ var b;
 var b = new C();
 var b = new C2();
 var f = F;
-var f = function (x) { return ''; };
+var f = function (x) {
+    return '';
+};
 var arr;
-var arr = [1, 2, 3, 4];
-var arr = [new C(), new C2(), new D()];
-var arr2 = [new D()];
+var arr = [
+    1,
+    2,
+    3,
+    4
+];
+var arr = [
+    new C(),
+    new C2(),
+    new D()
+];
+var arr2 = [
+    new D()
+];
 var arr2 = new Array();
 var m;
 var m = M.A;

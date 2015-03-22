@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit3.ts ===
+class C {
+>C : C
+
+    [Symbol.isRegExp](x: number);
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+>x : number
+
+    [Symbol.isRegExp](x: string);
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+>x : string
+
+    [Symbol.isRegExp](x: any) { }
+>Symbol.isRegExp : symbol
+>Symbol : SymbolConstructor
+>isRegExp : symbol
+>x : any
+}

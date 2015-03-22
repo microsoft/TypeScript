@@ -61,7 +61,10 @@ var objA = new A();
 var ResultIsBoolean1 = delete BOOLEAN;
 // boolean type literal
 var ResultIsBoolean2 = delete true;
-var ResultIsBoolean3 = delete { x: true, y: false };
+var ResultIsBoolean3 = delete {
+    x: true,
+    y: false
+};
 // boolean type expressions
 var ResultIsBoolean4 = delete objA.a;
 var ResultIsBoolean5 = delete M.n;

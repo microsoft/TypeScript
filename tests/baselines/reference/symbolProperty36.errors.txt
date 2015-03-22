@@ -1,0 +1,13 @@
+tests/cases/conformance/es6/Symbols/symbolProperty36.ts(2,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+tests/cases/conformance/es6/Symbols/symbolProperty36.ts(3,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty36.ts (2 errors) ====
+    var x = {
+        [Symbol.isConcatSpreadable]: 0,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+        [Symbol.isConcatSpreadable]: 1
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
+    }

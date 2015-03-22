@@ -13,8 +13,6 @@
 //// }
 //// 
 
-diagnostics.setEditValidation(IncrementalEditValidation.SyntacticOnly);
-
 goTo.marker('addParam');
 
 edit.insert(", X");
@@ -22,5 +20,3 @@ edit.insert(", X");
 goTo.marker('addTypeParam');
 
 edit.insert(", X");
-
-diagnostics.validateTypesAtPositions(91, 163);

@@ -31,8 +31,9 @@ interface i3 {
     new (p6: string, ...p7: any[]);
 }
 interface i4 {
-    //Index Signatures
+    // Used to be indexer, now it is a computed property
     [p];
+    //Index Signatures
     [p1: string];
     [p2: string, p3: number];
 }
@@ -65,9 +66,10 @@ interface i11 {
     new (...p3: any[]);
     new (p4: string, p5?: string);
     new (p6: string, ...p7: any[]);
-
-    //Index Signatures
+    
+    // Used to be indexer, now it is a computed property
     [p];
+    //Index Signatures
     [p1: string];
     [p2: string, p3: number];
 

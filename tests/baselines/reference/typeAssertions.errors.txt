@@ -4,7 +4,9 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2352: Neither type 'SomeOther' nor type 'SomeDerived' is assignable to the other.
   Property 'x' is missing in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): error TS2352: Neither type 'SomeDerived' nor type 'SomeOther' is assignable to the other.
+  Property 'q' is missing in type 'SomeDerived'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
+  Property 'q' is missing in type 'SomeBase'.
 
 
 ==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (5 errors) ====
@@ -55,9 +57,11 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): err
     someOther = <SomeOther>someDerived; // Error
                 ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type 'SomeDerived' nor type 'SomeOther' is assignable to the other.
+!!! error TS2352:   Property 'q' is missing in type 'SomeDerived'.
     someOther = <SomeOther>someBase; // Error
                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
+!!! error TS2352:   Property 'q' is missing in type 'SomeBase'.
     someOther = <SomeOther>someOther;
     
     

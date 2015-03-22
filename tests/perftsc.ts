@@ -13,9 +13,9 @@ if (perftest.hasLogIOFlag()) {
         getDefaultLibFilename: () => ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(perftest.getExecutingFilePath())), "lib.d.ts"),
         writeFile: (f: string, content: string) => { throw new Error("Unexpected operation: writeFile"); },
         getCurrentDirectory: () => perftest.getCurrentDirectory(),
-        getCanonicalFileName: ts.getCanonicalFileName,
-        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-        getNewLine: () => sys.newLine
+        getCanonicalFileName: (f: string) => ts.sys.useCaseSensitiveFileNames ? f : f.toLowerCase(),
+        useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+        getNewLine: () => ts.sys.newLine
     };
 
     var commandLine = ts.parseCommandLine(perftest.getArgsWithoutLogIOFlag());

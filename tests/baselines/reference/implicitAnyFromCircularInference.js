@@ -70,7 +70,9 @@ var f1 = function () {
     return f1();
 };
 // Error expected
-var f2 = function () { return f2(); };
+var f2 = function () {
+    return f2();
+};
 // Error expected
 function h() {
     return foo();

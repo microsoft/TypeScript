@@ -82,7 +82,9 @@ var clodule3 = (function () {
 })();
 var clodule3;
 (function (clodule3) {
-    clodule3.y = { id: T };
+    clodule3.y = {
+        id: T
+    };
 })(clodule3 || (clodule3 = {}));
 var clodule4 = (function () {
     function clodule4() {

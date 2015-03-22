@@ -97,7 +97,13 @@ for (var x in {}) {
 }
 for (var x in []) {
 }
-for (var x in [1, 2, 3, 4, 5]) {
+for (var x in [
+    1,
+    2,
+    3,
+    4,
+    5
+]) {
 }
 function fn() {
 }
@@ -120,7 +126,9 @@ for (var x in 42 ? d[x] : c[x]) {
 }
 for (var x in c[d]) {
 }
-for (var x in (function (x) { return x; })) {
+for (var x in (function (x) {
+    return x;
+})) {
 }
 for (var x in function (x, y) {
     return x + y;
@@ -192,5 +200,5 @@ var Color;
 })(Color || (Color = {}));
 for (var x in Color) {
 }
-for (var x in 1 /* Blue */) {
+for (var x in Color.Blue) {
 }

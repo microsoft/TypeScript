@@ -81,13 +81,21 @@ var M;
     function m_f8(x3, y3) {
     }
     // No implicit-'any' errors.
-    var m_f9 = function () { return ""; };
+    var m_f9 = function () {
+        return "";
+    };
     // Implicit-'any' error for x.
-    var m_f10 = function (x) { return ""; };
+    var m_f10 = function (x) {
+        return "";
+    };
     // Implicit-'any' errors for x, y, and z.
-    var m_f11 = function (x, y, z) { return ""; };
+    var m_f11 = function (x, y, z) {
+        return "";
+    };
     // Implicit-'any' errors for x and z.
-    var m_f12 = function (x, y, z) { return ""; };
+    var m_f12 = function (x, y, z) {
+        return "";
+    };
     // Implicit-'any[]' errors for r.
     var m_f13 = function () {
         var r = [];

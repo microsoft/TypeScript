@@ -18,20 +18,12 @@ var c = foo2 `${1}`;          // number
 var d = foo2([], 1);          // number
 
 //// [taggedTemplateStringsWithOverloadResolution2_ES6.js]
-function foo1() {
-    var stuff = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
-    }
+function foo1(...stuff) {
     return undefined;
 }
 var a = foo1 `${1}`; // string
 var b = foo1([], 1); // number
-function foo2() {
-    var stuff = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
-    }
+function foo2(...stuff) {
     return undefined;
 }
 var c = foo2 `${1}`; // number

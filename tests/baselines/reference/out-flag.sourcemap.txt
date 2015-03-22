@@ -33,31 +33,18 @@ sourceFile:out-flag.ts
 3 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
 ---
 >>>var MyClass = (function () {
-1->^^^^
-2 >    ^^^^^^^
-3 >           ^^^^^^^^^^^^^^->
-1->
-  >class 
-2 >    MyClass
-1->Emitted(3, 5) Source(4, 7) + SourceIndex(0)
-2 >Emitted(3, 12) Source(4, 14) + SourceIndex(0)
----
 >>>    function MyClass() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             MyClass
+  >
 1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(4, 14) Source(4, 7) + SourceIndex(0) name (MyClass)
-3 >Emitted(4, 21) Source(4, 14) + SourceIndex(0) name (MyClass)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->class MyClass
   >{
   >    // my function comments
   >    public Count(): number
@@ -71,7 +58,7 @@ sourceFile:out-flag.ts
   >    }
   >
 2 >    }
-1 >Emitted(5, 5) Source(16, 1) + SourceIndex(0) name (MyClass.constructor)
+1->Emitted(5, 5) Source(16, 1) + SourceIndex(0) name (MyClass.constructor)
 2 >Emitted(5, 6) Source(16, 2) + SourceIndex(0) name (MyClass.constructor)
 ---
 >>>    // my function comments

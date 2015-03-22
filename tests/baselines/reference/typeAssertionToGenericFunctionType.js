@@ -8,7 +8,9 @@ x.b<string>(); // error
 
 //// [typeAssertionToGenericFunctionType.js]
 var x = {
-    a: (function (x) { return 1; }),
+    a: (function (x) {
+        return 1;
+    }),
     b: function (x) {
         x;
     }

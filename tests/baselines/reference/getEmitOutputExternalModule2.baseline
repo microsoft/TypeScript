@@ -1,5 +1,5 @@
-EmitOutputStatus : JSGeneratedWithSemanticErrors
-Filename : declSingleFile.js
+EmitSkipped: false
+FileName : declSingleFile.js
 var x = 5;
 var Bar = (function () {
     function Bar() {

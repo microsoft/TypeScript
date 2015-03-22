@@ -267,30 +267,54 @@ while ([]) {
 }
 do {
 } while ([]);
-if ([1, 2]) {
+if ([
+    1,
+    2
+]) {
 }
-while ([1, 2]) {
+while ([
+    1,
+    2
+]) {
 }
 do {
-} while ([1, 2]);
+} while ([
+    1,
+    2
+]);
 if ({}) {
 }
 while ({}) {
 }
 do {
 } while ({});
-if ({ x: 1, y: 'a' }) {
+if ({
+    x: 1,
+    y: 'a'
+}) {
 }
-while ({ x: 1, y: 'a' }) {
+while ({
+    x: 1,
+    y: 'a'
+}) {
 }
 do {
-} while ({ x: 1, y: 'a' });
-if (function () { return 43; }) {
+} while ({
+    x: 1,
+    y: 'a'
+});
+if (function () {
+    return 43;
+}) {
 }
-while (function () { return 43; }) {
+while (function () {
+    return 43;
+}) {
 }
 do {
-} while (function () { return 43; });
+} while (function () {
+    return 43;
+});
 if (new C()) {
 }
 while (new C()) {
@@ -360,7 +384,10 @@ while (h) {
 }
 do {
 } while (h);
-var i = [1, 2];
+var i = [
+    1,
+    2
+];
 if (i) {
 }
 while (i) {
@@ -374,7 +401,10 @@ while (j) {
 }
 do {
 } while (j);
-var k = { x: 1, y: 'a' };
+var k = {
+    x: 1,
+    y: 'a'
+};
 if (k) {
 }
 while (k) {

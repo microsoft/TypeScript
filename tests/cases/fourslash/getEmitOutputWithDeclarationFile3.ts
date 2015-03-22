@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithDeclarationFile3.baseline
 // @out: declSingle.js
@@ -18,6 +18,5 @@
 
 // @Filename: inputFile5.js
 //// var x2 = 1000;
-
 debugger;
 verify.baselineGetEmitOutput();

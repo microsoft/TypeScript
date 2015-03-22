@@ -6,9 +6,6 @@
 ////    }
 ////}/*end*/
 
-// make sure no typeCheck is triggered after edit
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 // Edit to invalidate the intial typeCheck state
 goTo.eof();
 edit.insertLine("");

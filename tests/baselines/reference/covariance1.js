@@ -31,7 +31,11 @@ var M;
     }
     M.f = f;
     var a;
-    f({ x: a }); // ok
+    f({
+        x: a
+    }); // ok
     var b;
-    f({ x: b }); // ok covariant subtype
+    f({
+        x: b
+    }); // ok covariant subtype
 })(M || (M = {}));

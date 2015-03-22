@@ -1,8 +1,8 @@
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(5,9): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(8,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(11,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(14,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(17,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(5,9): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.

@@ -1,5 +1,5 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts(5,1): error TS1130: 'case' or 'default' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts(3,13): error TS2304: Cannot find name 'e'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts(5,1): error TS1130: 'case' or 'default' expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts (2 errors) ====

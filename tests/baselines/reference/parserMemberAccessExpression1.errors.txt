@@ -1,13 +1,13 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,7): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,13): error TS1005: ')' expected.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,7): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,16): error TS1005: ')' expected.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(1,1): error TS2304: Cannot find name 'Foo'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(2,1): error TS2304: Cannot find name 'Foo'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,7): error TS1005: '(' expected.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,8): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,13): error TS1005: ')' expected.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,7): error TS1005: '(' expected.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,8): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,16): error TS1005: ')' expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (10 errors) ====
@@ -18,21 +18,21 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
     Foo<T>.Bar();
+    ~~~
+!!! error TS2304: Cannot find name 'Foo'.
           ~
 !!! error TS1005: '(' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'Bar'.
                 ~
 !!! error TS1005: ')' expected.
+    Foo<T>.Bar<T>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
-           ~~~
-!!! error TS2304: Cannot find name 'Bar'.
-    Foo<T>.Bar<T>();
           ~
 !!! error TS1005: '(' expected.
-                   ~
-!!! error TS1005: ')' expected.
-    ~~~
-!!! error TS2304: Cannot find name 'Foo'.
            ~~~
 !!! error TS2304: Cannot find name 'Bar'.
+                   ~
+!!! error TS1005: ')' expected.
     

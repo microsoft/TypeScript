@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS1133: Type reference expected.
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,30): error TS1005: ';' expected.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(28,13): error TS2331: 'this' cannot be referenced in a module body.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS1133: Type reference expected.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,30): error TS1005: ';' expected.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(44,9): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(45,9): error TS2332: 'this' cannot be referenced in current location.
 

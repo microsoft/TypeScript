@@ -34,7 +34,9 @@ var CalcButton2 = (function () {
     }
     CalcButton2.prototype.b = function () {
         var _this = this;
-        (function () { return _this.onClick(); });
+        (function () {
+            return _this.onClick();
+        });
     };
     CalcButton2.prototype.onClick = function () {
     };

@@ -85,9 +85,13 @@ var anOtherAny = new C();
 var anUndefined = undefined;
 var aClass = new C();
 var aGenericClass = new D();
-var anObjectLiteral = { id: 12 };
+var anObjectLiteral = {
+    id: 12
+};
 var aFunction = F;
-var aLambda = function (x) { return 2; };
+var aLambda = function (x) {
+    return 2;
+};
 var aModule = M;
 var aClassInModule = new M.A();
 var aFunctionInModule = M.F2;

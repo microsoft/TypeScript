@@ -12,4 +12,7 @@ var z1 = foo1({ x: undefined, y: undefined });
 function foo1(f1) {
     return undefined;
 }
-var z1 = foo1({ x: undefined, y: undefined });
+var z1 = foo1({
+    x: undefined,
+    y: undefined
+});

@@ -1,0 +1,52 @@
+//// [cloduleWithDuplicateMember1.ts]
+class C {
+    get x() { return 1; }
+    static get x() {
+        return '';
+    }
+    static foo() { }
+}
+
+module C {
+    export var x = 1;
+}
+module C {
+    export function foo() { }
+    export function x() { }
+}
+
+//// [cloduleWithDuplicateMember1.js]
+var C = (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "x", {
+        get: function () {
+            return '';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    C.foo = function () {
+    };
+    return C;
+})();
+var C;
+(function (C) {
+    C.x = 1;
+})(C || (C = {}));
+var C;
+(function (C) {
+    function foo() {
+    }
+    C.foo = foo;
+    function x() {
+    }
+    C.x = x;
+})(C || (C = {}));

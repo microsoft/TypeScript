@@ -1,0 +1,96 @@
+=== tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts ===
+enum Color { R, G, B }
+>Color : Color
+>R : Color
+>G : Color
+>B : Color
+
+function f1(x: Color | string) {
+>f1 : (x: string | Color) => void
+>x : string | Color
+>Color : Color
+
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : string
+>x : string | Color
+
+        var y = x;
+>y : Color
+>x : Color
+
+        var y: Color;
+>y : Color
+>Color : Color
+    }
+    else {
+        var z = x;
+>z : string
+>x : string
+
+        var z: string;
+>z : string
+    }
+}
+
+function f2(x: Color | string | string[]) {
+>f2 : (x: string | string[] | Color) => void
+>x : string | string[] | Color
+>Color : Color
+
+    if (typeof x === "object") {
+>typeof x === "object" : boolean
+>typeof x : string
+>x : string | string[] | Color
+
+        var y = x;
+>y : string[]
+>x : string[]
+
+        var y: string[];
+>y : string[]
+    }
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : string
+>x : string | string[] | Color
+
+        var z = x;
+>z : Color
+>x : Color
+
+        var z: Color;
+>z : Color
+>Color : Color
+    }
+    else {
+        var w = x;
+>w : string | string[]
+>x : string | string[]
+
+        var w: string | string[];
+>w : string | string[]
+    }
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | string[] | Color
+
+        var a = x;
+>a : string
+>x : string
+
+        var a: string;
+>a : string
+    }
+    else {
+        var b = x;
+>b : string[] | Color
+>x : string[] | Color
+
+        var b: Color | string[];
+>b : string[] | Color
+>Color : Color
+    }
+}
+

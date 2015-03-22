@@ -17,18 +17,29 @@ var person3: { name: string; id:number } = bar("Hello", 5);
 //// [objectLiteralShorthandPropertiesAssignment.js]
 var id = 10000;
 var name = "my name";
-var person = { name: name, id: id };
+var person = {
+    name: name,
+    id: id
+};
 function foo(obj) {
 }
 ;
 function bar(name, id) {
-    return { name: name, id: id };
+    return {
+        name: name,
+        id: id
+    };
 }
 function bar1(name, id) {
-    return { name: name };
+    return {
+        name: name
+    };
 }
 function baz(name, id) {
-    return { name: name, id: id };
+    return {
+        name: name,
+        id: id
+    };
 }
 foo(person);
 var person1 = bar("Hello", 5);

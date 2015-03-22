@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames18_ES5.ts ===
+function foo() {
+>foo : () => void
+
+    var obj = {
+>obj : {}
+>{        [this.bar]: 0    } : {}
+
+        [this.bar]: 0
+>this.bar : any
+>this : any
+>bar : any
+    }
+}

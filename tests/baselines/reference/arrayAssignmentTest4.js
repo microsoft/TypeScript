@@ -47,7 +47,9 @@ Type 1 of any[]:
 
 */
 var c3 = new C3();
-var o1 = { one: 1 };
+var o1 = {
+    one: 1
+};
 var arr_any = [];
 arr_any = function () {
     return null;

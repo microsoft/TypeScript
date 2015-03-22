@@ -1,9 +1,12 @@
 tests/cases/compiler/yieldExpression1.ts(1,9): error TS9001: Generators are not currently supported.
+tests/cases/compiler/yieldExpression1.ts(2,5): error TS9000: 'yield' expressions are not currently supported.
 
 
-==== tests/cases/compiler/yieldExpression1.ts (1 errors) ====
+==== tests/cases/compiler/yieldExpression1.ts (2 errors) ====
     function* foo() {
             ~
 !!! error TS9001: Generators are not currently supported.
         yield
+        ~~~~~
+!!! error TS9000: 'yield' expressions are not currently supported.
     }

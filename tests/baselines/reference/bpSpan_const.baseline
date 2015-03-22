@@ -76,21 +76,21 @@
 --------------------------------
 7  >    export const cc1 = false;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (181 to 210)  SpanInfo: {"start":185,"length":24}
-    >export const cc1 = false
-    >:=> (line 7, col 4) to (line 7, col 28)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (181 to 210)  SpanInfo: {"start":192,"length":17}
+    >const cc1 = false
+    >:=> (line 7, col 11) to (line 7, col 28)
 --------------------------------
 8  >    export const cc2: number = 23;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (211 to 245)  SpanInfo: {"start":215,"length":29}
-    >export const cc2: number = 23
-    >:=> (line 8, col 4) to (line 8, col 33)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (211 to 245)  SpanInfo: {"start":222,"length":22}
+    >const cc2: number = 23
+    >:=> (line 8, col 11) to (line 8, col 33)
 --------------------------------
 9  >    export const cc3 = 0, cc4 :string = "", cc5 = null;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (246 to 270)  SpanInfo: {"start":250,"length":20}
-    >export const cc3 = 0
-    >:=> (line 9, col 4) to (line 9, col 24)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (246 to 270)  SpanInfo: {"start":257,"length":13}
+    >const cc3 = 0
+    >:=> (line 9, col 11) to (line 9, col 24)
 9  >    export const cc3 = 0, cc4 :string = "", cc5 = null;
 
                              ~~~~~~~~~~~~~~~~~~   => Pos: (271 to 288)  SpanInfo: {"start":272,"length":16}

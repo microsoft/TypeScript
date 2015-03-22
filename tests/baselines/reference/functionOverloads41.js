@@ -9,4 +9,6 @@ var x = foo([{}]);
 function foo(bar) {
     return bar;
 }
-var x = foo([{}]);
+var x = foo([
+    {}
+]);

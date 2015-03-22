@@ -16,4 +16,6 @@ var x;
 (function (a) {
 });
 var y;
-(function () { return null; });
+(function () {
+    return null;
+});

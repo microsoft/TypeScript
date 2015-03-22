@@ -50,7 +50,9 @@ var M;
         default:
             break;
     }
-    var a = function () { return asdf; };
+    var a = function () {
+        return asdf;
+    };
     var b = function (asdf) {
         return qwerty;
     };

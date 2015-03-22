@@ -93,7 +93,9 @@ for (var aClass = new C();;) {
 }
 for (var aGenericClass = new D();;) {
 }
-for (var anObjectLiteral = { id: 12 };;) {
+for (var anObjectLiteral = {
+    id: 12
+};;) {
 }
 for (var anOtherObjectLiteral = new C();;) {
 }
@@ -101,11 +103,15 @@ for (var aFunction = F;;) {
 }
 for (var anOtherFunction = F;;) {
 }
-for (var aLambda = function (x) { return 2; };;) {
+for (var aLambda = function (x) {
+    return 2;
+};;) {
 }
 for (var aModule = M;;) {
 }
 for (var aClassInModule = new M.A();;) {
 }
-for (var aFunctionInModule = function (x) { return 'this is a string'; };;) {
+for (var aFunctionInModule = function (x) {
+    return 'this is a string';
+};;) {
 }

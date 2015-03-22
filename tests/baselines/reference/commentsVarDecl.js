@@ -66,9 +66,13 @@ var n = 30;
 /** var deckaration with comment on type as well*/
 var y = 20;
 /// var deckaration with comment on type as well
-var yy = 20;
+var yy = 
+/// value comment
+20;
 /** comment2 */
-var z = function (x, y) { return x + y; };
+var z = function (x, y) {
+    return x + y;
+};
 var z2;
 var x2 = z2;
 var n4;

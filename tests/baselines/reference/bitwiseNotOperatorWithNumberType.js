@@ -47,7 +47,10 @@ var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
 //// [bitwiseNotOperatorWithNumberType.js]
 // ~ operator on number type
 var NUMBER;
-var NUMBER1 = [1, 2];
+var NUMBER1 = [
+    1,
+    2
+];
 function foo() {
     return 1;
 }
@@ -69,10 +72,16 @@ var ResultIsNumber1 = ~NUMBER;
 var ResultIsNumber2 = ~NUMBER1;
 // number type literal
 var ResultIsNumber3 = ~1;
-var ResultIsNumber4 = ~{ x: 1, y: 2 };
-var ResultIsNumber5 = ~{ x: 1, y: function (n) {
-    return n;
-} };
+var ResultIsNumber4 = ~{
+    x: 1,
+    y: 2
+};
+var ResultIsNumber5 = ~{
+    x: 1,
+    y: function (n) {
+        return n;
+    }
+};
 // number type expressions
 var ResultIsNumber6 = ~objA.a;
 var ResultIsNumber7 = ~M.n;

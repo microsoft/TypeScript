@@ -55,8 +55,12 @@ var C = (function () {
 var a;
 var b;
 var c;
-var r1 = foo(function (x) { return x; });
-var r2 = foo(function (x) { return x; });
+var r1 = foo(function (x) {
+    return x;
+});
+var r2 = foo(function (x) {
+    return x;
+});
 var r3 = foo(function (x) {
     return x;
 });
@@ -77,6 +81,8 @@ var c2;
 var r9 = foo(function (x) {
     return x;
 });
-var r10 = foo(function (x) { return x; });
+var r10 = foo(function (x) {
+    return x;
+});
 var r12 = foo(i2);
 var r15 = foo(c2);

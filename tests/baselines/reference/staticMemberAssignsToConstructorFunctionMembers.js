@@ -23,8 +23,12 @@ var C = (function () {
     C.bar = function (x) {
         C.bar = function () {
         }; // error
-        C.bar = function (x) { return x; }; // ok
-        C.bar = function (x) { return 1; }; // ok
+        C.bar = function (x) {
+            return x;
+        }; // ok
+        C.bar = function (x) {
+            return 1;
+        }; // ok
         return 1;
     };
     return C;

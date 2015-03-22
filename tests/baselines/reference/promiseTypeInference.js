@@ -12,4 +12,6 @@ var $$x = load("something").then(s => convert(s));
 
 
 //// [promiseTypeInference.js]
-var $$x = load("something").then(function (s) { return convert(s); });
+var $$x = load("something").then(function (s) {
+    return convert(s);
+});

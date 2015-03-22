@@ -1,30 +1,30 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(24,22): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(38,23): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(48,26): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(68,28): error TS2305: Module 'TypeScript' has no exported member 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(24,33): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(38,34): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(48,37): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(68,39): error TS2305: Module 'TypeScript' has no exported member 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(70,35): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(75,21): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(79,21): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(86,36): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(75,32): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(79,32): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(86,47): error TS2305: Module 'TypeScript' has no exported member 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(94,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(95,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(96,20): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(96,31): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(103,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(104,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(105,20): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(105,31): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(112,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(113,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(114,20): error TS2305: Module 'TypeScript' has no exported member 'ArgDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(114,31): error TS2305: Module 'TypeScript' has no exported member 'ArgDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(121,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(122,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(123,20): error TS2305: Module 'TypeScript' has no exported member 'VarDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(123,31): error TS2305: Module 'TypeScript' has no exported member 'VarDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(130,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(131,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(132,20): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(132,31): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(139,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(140,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(141,20): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(141,31): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(148,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(149,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(156,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
@@ -35,128 +35,128 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(172,65): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(173,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(174,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(175,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(176,20): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(177,20): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(178,20): error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(176,31): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(177,31): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(178,31): error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(185,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(186,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(191,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,38): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,49): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,109): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(197,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(198,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(199,20): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(199,31): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,38): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,49): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,113): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(205,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(206,20): error TS2305: Module 'TypeScript' has no exported member 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(206,31): error TS2305: Module 'TypeScript' has no exported member 'Script'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(211,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(212,20): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(212,31): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(217,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(218,20): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(218,31): error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(223,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(224,20): error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(224,31): error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(229,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(230,20): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(230,31): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(235,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(236,20): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(236,31): error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(241,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(242,19): error TS2305: Module 'TypeScript' has no exported member 'Block'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(242,30): error TS2305: Module 'TypeScript' has no exported member 'Block'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(247,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(248,19): error TS2305: Module 'TypeScript' has no exported member 'ForStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(248,30): error TS2305: Module 'TypeScript' has no exported member 'ForStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(253,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(254,19): error TS2305: Module 'TypeScript' has no exported member 'CaseStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(254,30): error TS2305: Module 'TypeScript' has no exported member 'CaseStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(259,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(260,19): error TS2305: Module 'TypeScript' has no exported member 'Try'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(260,30): error TS2305: Module 'TypeScript' has no exported member 'Try'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(265,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(266,19): error TS2305: Module 'TypeScript' has no exported member 'Catch'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(266,30): error TS2305: Module 'TypeScript' has no exported member 'Catch'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(271,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(272,19): error TS2305: Module 'TypeScript' has no exported member 'DoWhileStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(272,30): error TS2305: Module 'TypeScript' has no exported member 'DoWhileStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(277,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(278,19): error TS2305: Module 'TypeScript' has no exported member 'WhileStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(278,30): error TS2305: Module 'TypeScript' has no exported member 'WhileStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(283,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(284,19): error TS2305: Module 'TypeScript' has no exported member 'ForInStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(284,30): error TS2305: Module 'TypeScript' has no exported member 'ForInStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(289,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(290,19): error TS2305: Module 'TypeScript' has no exported member 'WithStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(290,30): error TS2305: Module 'TypeScript' has no exported member 'WithStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(295,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(296,19): error TS2305: Module 'TypeScript' has no exported member 'Finally'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(296,30): error TS2305: Module 'TypeScript' has no exported member 'Finally'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(301,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(302,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(303,19): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(303,30): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(308,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(309,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(310,19): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(311,19): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(310,30): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(311,30): error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(316,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(317,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(318,19): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(318,30): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(327,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(328,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(329,19): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(330,19): error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(329,30): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(330,30): error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(335,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(336,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(337,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(338,19): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(338,30): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(343,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(344,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(345,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(346,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(347,19): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(347,30): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(352,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(353,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(354,19): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(354,30): error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(359,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(360,19): error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(360,30): error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(365,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(366,19): error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(366,30): error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(371,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(377,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(378,19): error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(378,30): error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(383,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(384,19): error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(384,30): error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(393,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(394,19): error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(394,30): error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(399,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(400,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(401,19): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(401,30): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(406,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(407,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(408,19): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(408,30): error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(413,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(414,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(415,19): error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(415,30): error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(420,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(421,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(422,19): error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(422,30): error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(427,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(428,19): error TS2305: Module 'TypeScript' has no exported member 'Block'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(432,41): error TS2305: Module 'TypeScript' has no exported member 'ASTSpan'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(462,50): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(463,41): error TS2305: Module 'TypeScript' has no exported member 'Comment'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,34): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,58): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(428,30): error TS2305: Module 'TypeScript' has no exported member 'Block'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(432,52): error TS2305: Module 'TypeScript' has no exported member 'ASTSpan'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(462,61): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(463,52): error TS2305: Module 'TypeScript' has no exported member 'Comment'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,45): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,69): error TS2305: Module 'TypeScript' has no exported member 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,82): error TS2304: Cannot find name 'IAstWalker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(489,21): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(490,49): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(516,22): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(525,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(533,51): error TS2305: Module 'TypeScript' has no exported member 'Script'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,25): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,49): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,73): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,97): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(533,62): error TS2305: Module 'TypeScript' has no exported member 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,36): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,60): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,84): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,108): error TS2305: Module 'TypeScript' has no exported member 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(551,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,34): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,84): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,34): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,58): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,82): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,35): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,59): error TS2305: Module 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,83): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,45): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,95): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,45): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,69): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,93): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,46): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,70): error TS2305: Module 'TypeScript' has no exported member 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,94): error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
 
 
@@ -187,7 +187,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
         //
         export class AstPath {
             public asts: TypeScript.AST[] = [];
-                         ~~~~~~~~~~~~~~
+                                    ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             public top: number = -1;
     
@@ -203,7 +203,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
             }
     
             public pop(): TypeScript.AST {
-                          ~~~~~~~~~~~~~~
+                                     ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 var head = this.ast();
                 this.up();
@@ -215,7 +215,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
             }
     
             public push(ast: TypeScript.AST) {
-                             ~~~~~~~~~~~~~~
+                                        ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 while (this.asts.length > this.count()) {
                     this.asts.pop();
@@ -237,7 +237,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
             }
     
             public nodeType(): TypeScript.NodeType {
-                               ~~~~~~~~~~~~~~~~~~~
+                                          ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'NodeType'.
                 if (this.ast() == null)
                     return TypeScript.NodeType.None;
@@ -248,13 +248,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
     
             public ast() {
                 return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
-                        ~~~~~~~~~~~~~~
+                                   ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             }
     
             public parent() {
                 return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
-                        ~~~~~~~~~~~~~~
+                                   ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             }
     
@@ -263,7 +263,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
             }
     
             public get(index: number): TypeScript.AST {
-                                       ~~~~~~~~~~~~~~
+                                                  ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 return this.asts[index];
             }
@@ -279,7 +279,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
@@ -294,7 +294,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
@@ -309,7 +309,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.ArgDecl>this.parent()).id === this.ast());
-                       ~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ArgDecl'.
             }
     
@@ -324,7 +324,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.VarDecl>this.parent()).id === this.ast());
-                       ~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'VarDecl'.
             }
     
@@ -339,7 +339,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast());
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
             }
     
@@ -354,7 +354,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                            ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.FuncDecl>this.parent()).name === this.ast());
-                       ~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
@@ -411,13 +411,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&
-                       ~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
                     ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&
-                       ~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
                     ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]);
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
             }
     
@@ -441,7 +441,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                     TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
                                ~~~~~~~
 !!! error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                                                                                                                 ~~~~~~~~~~~
 !!! error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
@@ -456,12 +456,12 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] &&
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                     TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
                                ~~~~~~~
 !!! error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
                                                                                                                     ~~~~~~~~~~~
 !!! error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
@@ -473,7 +473,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~
+                                  ~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Script'.
             }
     
@@ -483,7 +483,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
@@ -493,7 +493,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ModuleDeclaration'.
             }
     
@@ -503,7 +503,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ClassDeclaration'.
             }
     
@@ -513,7 +513,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
@@ -523,7 +523,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                      (<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                  ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'InterfaceDeclaration'.
             }
     
@@ -533,7 +533,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~
+                                 ~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Block'.
             }
     
@@ -543,7 +543,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ForStatement'.
             }
     
@@ -553,7 +553,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'CaseStatement'.
             }
     
@@ -563,7 +563,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~
+                                 ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Try'.
             }
     
@@ -573,7 +573,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~
+                                 ~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Catch'.
             }
     
@@ -583,7 +583,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'DoWhileStatement'.
             }
     
@@ -593,7 +593,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'WhileStatement'.
             }
     
@@ -603,7 +603,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ForInStatement'.
             }
     
@@ -613,7 +613,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'WithStatement'.
             }
     
@@ -623,7 +623,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Finally'.
             }
     
@@ -636,7 +636,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
@@ -649,10 +649,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] &&
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
                     (<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'SwitchStatement'.
             }
     
@@ -665,7 +665,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
@@ -682,10 +682,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] &&
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
                     (<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0;
-                      ~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
             }
     
@@ -701,7 +701,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
@@ -720,7 +720,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
@@ -733,7 +733,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'UnaryExpression'.
             }
     
@@ -743,7 +743,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
             }
     
@@ -753,7 +753,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'BinaryExpression'.
             }
     
@@ -771,7 +771,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
             }
     
@@ -781,7 +781,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IfStatement'.
             }
     
@@ -795,7 +795,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                 ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.ASTList>this.asts[this.top]).members.length === 1;
-                      ~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ASTList'.
             }
     
@@ -808,7 +808,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
@@ -821,7 +821,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1];
-                      ~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'FuncDecl'.
             }
     
@@ -834,7 +834,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
             }
     
@@ -847,7 +847,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'CallExpression'.
             }
     
@@ -857,13 +857,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                                                                     ~~~~~~~~
 !!! error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
                     (<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false;
-                      ~~~~~~~~~~~~~~~~
+                                 ~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Block'.
             }
         }
     
         export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
-                                            ~~~~~~~~~~~~~~~~~~
+                                                       ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'ASTSpan'.
             if (ast === null)
                 return false;
@@ -895,10 +895,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
         /// Return the stack of AST nodes containing "position"
         ///
         export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
-                                                     ~~~~~~~~~~~~~~
+                                                                ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
             var lookInComments = (comments: TypeScript.Comment[]) => {
-                                            ~~~~~~~~~~~~~~~~~~
+                                                       ~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Comment'.
                 if (comments && comments.length > 0) {
                     for (var i = 0; i < comments.length; i++) {
@@ -915,9 +915,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
             }
     
             var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
-                                     ~~~~~~~~~~~~~~
+                                                ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                             ~~~~~~~~~~~~~~
+                                                                        ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                                                                                      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'IAstWalker'.
@@ -984,17 +984,17 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
         // This is used when "position" might be inside a comment or string, etc.
         //
         export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
-                                                      ~~~~~~~~~~~~~~~~~
+                                                                 ~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'Script'.
             var bestOffset = 0;
             var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
-                            ~~~~~~~~~~~~~~
+                                       ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                    ~~~~~~~~~~~~~~
+                                                               ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                                            ~~~~~~~~~~~~~~~~~~~~~
+                                                                                       ~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
-                                                                                                    ~~~~~~~~~~~~~~
+                                                                                                               ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
                 if (TypeScript.isValidAstNode(cur)) {
                     // Did we find a closer offset?
@@ -1021,16 +1021,16 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
         /// Simple function to Walk an AST using a simple callback function.
         ///
         export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
-                                     ~~~~~~~~~~~~~~
+                                                ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                                                       ~~~~~~~~~~~~~~~~~~~~~
+                                                                                                  ~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
             var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
-                                     ~~~~~~~~~~~~~~
+                                                ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                             ~~~~~~~~~~~~~~
+                                                                        ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                                                     ~~~~~~~~~~~~~~~~~~~~~
+                                                                                                ~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
                 var path: TypeScript.AstPath = walker.state;
                 path.push(cur);
@@ -1038,11 +1038,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
                 return cur;
             }
             var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
-                                      ~~~~~~~~~~~~~~
+                                                 ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                              ~~~~~~~~~~~~~~
+                                                                         ~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'AST'.
-                                                                                      ~~~~~~~~~~~~~~~~~~~~~
+                                                                                                 ~~~~~~~~~~
 !!! error TS2305: Module 'TypeScript' has no exported member 'IAstWalker'.
                 var path: TypeScript.AstPath = walker.state;
                 path.pop();

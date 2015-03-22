@@ -137,11 +137,11 @@ var M;
 var M;
 (function (M) {
     M.c = M.x;
-    M.meb = 1 /* B */;
+    M.meb = M.E.B;
 })(M || (M = {}));
 var cprime = null;
 var c = new M.C();
 var z = M.x;
-var alpha = 0 /* A */;
+var alpha = M.E.A;
 var omega = M.exported_var;
 c.someMethodThatCallsAnOuterMethod();

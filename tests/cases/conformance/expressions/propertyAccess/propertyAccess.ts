@@ -1,3 +1,9 @@
+class A {
+    a: number;
+}
+class B extends A {
+    b: number;
+}
 enum Compass {
     North, South, East, West
 }
@@ -6,8 +12,8 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
 var bothIndex:
     {
-        [n: string]: HTMLElement;
-        [m: number]: HTMLDivElement;
+        [n: string]: A;
+        [m: number]: B;
     };
 
 function noIndex() { }
@@ -20,6 +26,8 @@ var obj = {
     'literal property': 100
 };
 var anyVar: any = {};
+var stringOrNumber: string | number;
+var someObject: { name: string };
 
 // Assign to a property access
 obj.y = 4;
@@ -69,7 +77,7 @@ var kk = numIndex['what'];
 var kk: any;
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
-var ll = numIndex[window]; // Error
+var ll = numIndex[someObject]; // Error
 
 // Bracket notation property access using string value on type with string index signature and no numeric index signature
 var mm = strIndex['N'];
@@ -106,7 +114,7 @@ var tt = noIndex[<any>null];
 var tt: any;
 
 // Bracket notation property access using values of other types on type with no index signatures
-var uu = noIndex[window]; // Error
+var uu = noIndex[someObject]; // Error
 
 // Bracket notation property access using numeric value on type with numeric index signature and string index signature
 var vv = noIndex[32];
@@ -114,19 +122,28 @@ var vv: any;
 
 // Bracket notation property access using enum value on type with numeric index signature and string index signature
 var ww = bothIndex[Compass.East];
-var ww: HTMLDivElement;
+var ww: B;
 
 // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
 var xx = bothIndex[<any>null];
-var xx: HTMLDivElement;
+var xx: B;
 
 // Bracket notation property access using string value on type with numeric index signature and string index signature
 var yy = bothIndex['foo'];
-var yy: HTMLElement;
+var yy: A;
 
 // Bracket notation property access using numeric string value on type with numeric index signature and string index signature
 var zz = bothIndex['1.0'];
-var zz: HTMLElement;
+var zz: A;
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
-var zzzz = bothIndex[window]; // Error
+var zzzz = bothIndex[someObject]; // Error
+
+var x1 = numIndex[stringOrNumber];
+var x1: any;
+
+var x2 = strIndex[stringOrNumber];
+var x2: Compass;
+
+var x3 = bothIndex[stringOrNumber];
+var x3: A;

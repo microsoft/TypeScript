@@ -59,7 +59,12 @@ function derive(baseClass, constructor, instanceMembers, staticMembers) {
         var basePrototype = baseClass.prototype;
         constructor.prototype = Object.create(basePrototype);
         PluginUtilities.Utilities.markSupportedForProcessing(constructor);
-        Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
+        Object.defineProperty(constructor.prototype, "constructor", {
+            value: constructor,
+            writable: true,
+            configurable: true,
+            enumerable: true
+        });
         if (instanceMembers) {
             initializeProperties(constructor.prototype, instanceMembers);
         }

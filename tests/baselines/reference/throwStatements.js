@@ -131,12 +131,16 @@ var aClass = new C();
 throw aClass;
 var aGenericClass = new D();
 throw aGenericClass;
-var anObjectLiteral = { id: 12 };
+var anObjectLiteral = {
+    id: 12
+};
 throw anObjectLiteral;
 var aFunction = F;
 throw aFunction;
 throw aFunction('');
-var aLambda = function (x) { return 2; };
+var aLambda = function (x) {
+    return 2;
+};
 throw aLambda;
 throw aLambda(1);
 var aModule = M;
@@ -149,6 +153,7 @@ throw aFunctionInModule;
 // no initializer or annotation, so this is an 'any'
 var x;
 throw x;
+// literals
 throw 0.0;
 throw false;
 throw null;
@@ -157,10 +162,20 @@ throw 'a string';
 throw function () {
     return 'a string';
 };
-throw function (x) { return 42; };
-throw { x: 12, y: 13 };
+throw function (x) {
+    return 42;
+};
+throw {
+    x: 12,
+    y: 13
+};
 throw [];
-throw ['a', ['b']];
+throw [
+    'a',
+    [
+        'b'
+    ]
+];
 throw /[a-z]/;
 throw new Date();
 throw new C();

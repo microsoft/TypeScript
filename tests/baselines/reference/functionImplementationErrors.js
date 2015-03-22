@@ -96,10 +96,14 @@ var f3 = function () {
 // FunctionExpression with no return type annotation with return branch of number[] and other of string[]
 var f4 = function () {
     if (true) {
-        return [''];
+        return [
+            ''
+        ];
     }
     else {
-        return [1];
+        return [
+            1
+        ];
     }
 };
 // Function implemetnation with non -void return type annotation with no return

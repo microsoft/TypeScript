@@ -1,5 +1,6 @@
 tests/cases/compiler/maxConstraints.ts(5,6): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/maxConstraints.ts(8,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Comparable<any>'.
+  Property 'compareTo' is missing in type 'Number'.
 
 
 ==== tests/cases/compiler/maxConstraints.ts (2 errors) ====
@@ -15,3 +16,4 @@ tests/cases/compiler/maxConstraints.ts(8,22): error TS2345: Argument of type 'nu
     var maxResult = max2(1, 2);
                          ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Comparable<any>'.
+!!! error TS2345:   Property 'compareTo' is missing in type 'Number'.

@@ -1,4 +1,4 @@
-﻿/// <reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithDeclarationFile.baseline
 
@@ -14,5 +14,4 @@
 ////    y : number;
 //// }
 
-debugger;
 verify.baselineGetEmitOutput();

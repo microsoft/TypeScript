@@ -12,8 +12,6 @@
 ////    var r/*2*/4 = b.b/*1*/ar; // string
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.marker('1');
 verify.quickInfoIs("(property) B<string>.bar: string", undefined);
 edit.deleteAtCaret(1);

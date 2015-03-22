@@ -15,10 +15,14 @@ function f() {
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i - 0] = arguments[_i];
     }
-    x.forEach(function (n, i) { return void ('item ' + i + ' = ' + n); });
+    x.forEach(function (n, i) {
+        return void ('item ' + i + ' = ' + n);
+    });
 }
 function g(x, y) {
 }
 var n = g;
 n = f;
-n([4], 'foo');
+n([
+    4
+], 'foo');

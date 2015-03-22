@@ -205,6 +205,7 @@ for (let l = 0; n = l; l++) {
 }
 for (let l in {}) {
 }
+// Try/catch/finally
 try {
     let l = 0;
     n = l;
@@ -217,12 +218,14 @@ finally {
     let l = 0;
     n = l;
 }
+// Switch
 switch (0) {
     case 0:
         let l = 0;
         n = l;
         break;
 }
+// blocks
 {
     let l = 0;
     n = l;
@@ -236,7 +239,7 @@ function F() {
     let l = 0;
     n = l;
 }
-var F2 = function () {
+var F2 = () => {
     let l = 0;
     n = l;
 };
@@ -256,37 +259,32 @@ var m;
     lable: let l2 = 0;
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         let l = 0;
         n = l;
     }
-    C.prototype.method = function () {
+    method() {
         let l = 0;
         n = l;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            let l = 0;
-            n = l;
-            return n;
-        },
-        set: function (value) {
-            let l = 0;
-            n = l;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        let l = 0;
+        n = l;
+        return n;
+    }
+    set v(value) {
+        let l = 0;
+        n = l;
+    }
+}
 // object literals
 var o = {
     f() {
         let l = 0;
         n = l;
     },
-    f2: function () {
+    f2: () => {
         let l = 0;
         n = l;
     }

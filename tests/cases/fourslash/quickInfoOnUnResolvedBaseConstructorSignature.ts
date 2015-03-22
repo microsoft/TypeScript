@@ -10,6 +10,5 @@
 ////}
 ////new class/*1*/InheritingSpecializedClass();
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
 goTo.marker('1');
 verify.quickInfoExists();

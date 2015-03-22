@@ -61,7 +61,10 @@ var objA = new A();
 var ResultIsAny1 = void BOOLEAN;
 // boolean type literal
 var ResultIsAny2 = void true;
-var ResultIsAny3 = void { x: true, y: false };
+var ResultIsAny3 = void {
+    x: true,
+    y: false
+};
 // boolean type expressions
 var ResultIsAny4 = void objA.a;
 var ResultIsAny5 = void M.n;

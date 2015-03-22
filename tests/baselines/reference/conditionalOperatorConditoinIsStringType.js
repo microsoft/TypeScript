@@ -96,7 +96,11 @@ function foo() {
     return "string";
 }
 ;
-var array = ["1", "2", "3"];
+var array = [
+    "1",
+    "2",
+    "3"
+];
 typeof condString ? exprAny1 : exprAny2;
 condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 condString + "string" ? exprNumber1 : exprNumber2;

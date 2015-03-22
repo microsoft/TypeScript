@@ -93,6 +93,7 @@ var M;
     }
     M.F2 = F2;
 })(M || (M = {}));
+// all of these are errors
 for (var a;;) {
 }
 for (var a = 1;;) {
@@ -113,15 +114,28 @@ for (var b = new C2();;) {
 }
 for (var f = F;;) {
 }
-for (var f = function (x) { return ''; };;) {
+for (var f = function (x) {
+    return '';
+};;) {
 }
 for (var arr;;) {
 }
-for (var arr = [1, 2, 3, 4];;) {
+for (var arr = [
+    1,
+    2,
+    3,
+    4
+];;) {
 }
-for (var arr = [new C(), new C2(), new D()];;) {
+for (var arr = [
+    new C(),
+    new C2(),
+    new D()
+];;) {
 }
-for (var arr2 = [new D()];;) {
+for (var arr2 = [
+    new D()
+];;) {
 }
 for (var arr2 = new Array();;) {
 }

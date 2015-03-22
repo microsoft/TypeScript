@@ -1,4 +1,6 @@
 /// <reference path="..\src\compiler\sys.ts"/>
+/// <reference path="..\src\compiler\types.ts"/>
+
 module perftest {
 
     interface IOLog {
@@ -10,24 +12,24 @@ module perftest {
         getOut(): string;
     }
 
-    export var readFile = sys.readFile;
-    var writeFile = sys.writeFile;
-    export var write = sys.write;
-    var resolvePath = sys.resolvePath;
-    export var getExecutingFilePath = sys.getExecutingFilePath;
-    export var getCurrentDirectory = sys.getCurrentDirectory;
-    var exit = sys.exit;
+    export var readFile = ts.sys.readFile;
+    var writeFile = ts.sys.writeFile;
+    export var write = ts.sys.write;
+    var resolvePath = ts.sys.resolvePath;
+    export var getExecutingFilePath = ts.sys.getExecutingFilePath;
+    export var getCurrentDirectory = ts.sys.getCurrentDirectory;
+    var exit = ts.sys.exit;
 
-    var args = sys.args;
+    var args = ts.sys.args;
 
     // augment sys so first ts.executeCommandLine call will be finish silently
-    sys.write = (s: string) => { };
-    sys.exit = (code: number) => { };
-    sys.args = []
+    ts.sys.write = (s: string) => { };
+    ts.sys.exit = (code: number) => { };
+    ts.sys.args = []
 
     export function restoreSys() {
-        sys.args = args;
-        sys.write = write;
+        ts.sys.args = args;
+        ts.sys.write = write;
     }
 
     export function hasLogIOFlag() {
@@ -45,7 +47,7 @@ module perftest {
     var resolvePathLog: ts.Map<string> = {};
     
     export function interceptIO() {
-        sys.resolvePath = (s) => {
+        ts.sys.resolvePath = (s) => {
             var result = resolvePath(s);
             resolvePathLog[s] = result;
             return result;
@@ -68,21 +70,21 @@ module perftest {
         var files: ts.Map<string> = {};
         log.fileNames.forEach(f => { files[f] = readFile(f); })
         
-        sys.createDirectory = (s: string) => { };
-        sys.directoryExists = (s: string) => true;
-        sys.fileExists = (s: string) => true;
+        ts.sys.createDirectory = (s: string) => { };
+        ts.sys.directoryExists = (s: string) => true;
+        ts.sys.fileExists = (s: string) => true;
 
-        var currentDirectory = sys.getCurrentDirectory();
-        sys.getCurrentDirectory = () => currentDirectory;
+        var currentDirectory = ts.sys.getCurrentDirectory();
+        ts.sys.getCurrentDirectory = () => currentDirectory;
 
-        var executingFilePath = sys.getExecutingFilePath();
-        sys.getExecutingFilePath = () => executingFilePath;
+        var executingFilePath = ts.sys.getExecutingFilePath();
+        ts.sys.getExecutingFilePath = () => executingFilePath;
 
-        sys.readFile = (s: string) => {
+        ts.sys.readFile = (s: string) => {
             return files[s];
         }
 
-        sys.resolvePath = (s: string) => {
+        ts.sys.resolvePath = (s: string) => {
             var path = log.resolvePath[s];
             if (!path) {
                 throw new Error("Unexpected path '" + s + "'");
@@ -90,11 +92,11 @@ module perftest {
             return path
         }
 
-        sys.writeFile = (path: string, data: string) => { };        
+        ts.sys.writeFile = (path: string, data: string) => { };
 
         var out: string = "";
 
-        sys.write = (s: string) => { out += s; };
+        ts.sys.write = (s: string) => { out += s; };
 
         return {
             getOut: () => out,

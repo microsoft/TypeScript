@@ -6,5 +6,7 @@ function foo():{a:any;} { return {a:1} }
 
 //// [functionOverloads14.js]
 function foo() {
-    return { a: 1 };
+    return {
+        a: 1
+    };
 }

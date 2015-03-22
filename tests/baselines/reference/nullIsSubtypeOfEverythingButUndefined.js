@@ -108,8 +108,12 @@ var r4 = true ? new Date() : null;
 var r4 = true ? null : new Date();
 var r5 = true ? /1/ : null;
 var r5 = true ? null : /1/;
-var r6 = true ? { foo: 1 } : null;
-var r6 = true ? null : { foo: 1 };
+var r6 = true ? {
+    foo: 1
+} : null;
+var r6 = true ? null : {
+    foo: 1
+};
 var r7 = true ? function () {
 } : null;
 var r7 = true ? null : function () {
@@ -145,8 +149,8 @@ var E;
 })(E || (E = {}));
 var r13 = true ? E : null;
 var r13 = true ? null : E;
-var r14 = true ? 0 /* A */ : null;
-var r14 = true ? null : 0 /* A */;
+var r14 = true ? E.A : null;
+var r14 = true ? null : E.A;
 function f() {
 }
 var f;

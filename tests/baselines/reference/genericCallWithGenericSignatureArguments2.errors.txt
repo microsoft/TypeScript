@@ -3,10 +3,15 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+  Types of parameters 'a' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,36): error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
+  Type 'F' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+  Types of parameters 'a' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
 
@@ -46,6 +51,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
             var r7 = foo2((a: T) => a, (b: T) => b); // error
                           ~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+!!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
+!!! error TS2345:     Type 'T' is not assignable to type 'Date'.
             var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
         }
     
@@ -60,6 +67,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
                                        ~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
+!!! error TS2345:   Type 'F' is not assignable to type 'E'.
     }
     
     module TU {
@@ -89,6 +97,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
             var r7 = foo2((a: T) => a, (b: T) => b); 
                           ~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+!!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
+!!! error TS2345:     Type 'T' is not assignable to type 'Date'.
             var r7b = foo2((a) => a, (b) => b); 
         }
     

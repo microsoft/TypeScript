@@ -6,7 +6,6 @@
 ////{ function h() {
 ////return 0;
 ////}}
-debugger;
 format.document();
 verify.currentFileContentIs(
     "function f()\n" +
@@ -17,4 +16,3 @@ verify.currentFileContentIs(
     "    }\n" + 
     "}"
     );
-

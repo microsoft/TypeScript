@@ -1,0 +1,24 @@
+=== tests/cases/compiler/server.ts ===
+
+export class c {
+>c : c
+}
+export interface i {
+>i : i
+}
+export module m {
+>m : typeof m
+
+    export var x = 10;
+>x : number
+}
+export var x = 10;
+>x : number
+
+export module uninstantiated {
+>uninstantiated : unknown
+}
+
+=== tests/cases/compiler/client.ts ===
+export * from "server";
+No type information for this code.

@@ -10,8 +10,6 @@
 ////    }
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 verify.numberOfErrorsInCurrentFile(0);
 
 // Edit and bind and resolve only var decl

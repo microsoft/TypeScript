@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/literals/literals.ts(20,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/literals/literals.ts(25,10): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/literals/literals.ts(9,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/literals/literals.ts(9,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/literals/literals.ts(10,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/literals/literals.ts(10,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/literals/literals.ts(20,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/literals/literals.ts(25,10): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
 
 
 ==== tests/cases/conformance/expressions/literals/literals.ts (6 errors) ====

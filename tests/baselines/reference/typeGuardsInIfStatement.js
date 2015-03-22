@@ -258,7 +258,8 @@ function foo10(x) {
     else {
         var y;
         var b = x; // number | boolean
-        return typeof x === "number" ? x === 10 : x; // x should be boolean
+        return typeof x === "number" ? x === 10 // number
+         : x; // x should be boolean
     }
 }
 function foo11(x) {
@@ -270,7 +271,13 @@ function foo11(x) {
     else {
         var y;
         var b = x; // number | boolean | string - because below we are changing value of x in if statement
-        return typeof x === "number" ? (x = 10 && x.toString()) : (y = x && x.toString());
+        return typeof x === "number" ? (
+        // change value of x
+        x = 10 && x.toString() // number | boolean | string
+        ) : (
+        // do not change value
+        y = x && x.toString() // number | boolean | string
+        );
     }
 }
 function foo12(x) {
@@ -282,6 +289,7 @@ function foo12(x) {
     else {
         x = 10;
         var b = x; // number | boolean | string
-        return typeof x === "number" ? x.toString() : x.toString(); // boolean | string
+        return typeof x === "number" ? x.toString() // number
+         : x.toString(); // boolean | string
     }
 }

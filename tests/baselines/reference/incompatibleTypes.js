@@ -110,7 +110,10 @@ if1(c1);
 function of1(a) {
     return null;
 }
-of1({ e: 0, f: 0 });
+of1({
+    e: 0,
+    f: 0
+});
 function foo(fn) {
 }
 function bar() {
@@ -119,7 +122,25 @@ function bar() {
         map = {};
     });
 }
-var o1 = { e: 0, f: 0 };
-var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+var o1 = {
+    e: 0,
+    f: 0
+};
+var a1 = [
+    {
+        e: 0,
+        f: 0
+    },
+    {
+        e: 0,
+        f: 0
+    },
+    {
+        e: 0,
+        g: 0
+    }
+];
 var i1c1 = 5;
-var fp1 = function (a) { return 0; };
+var fp1 = function (a) {
+    return 0;
+};

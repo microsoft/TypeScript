@@ -74,7 +74,9 @@ var C2 = (function () {
     Object.defineProperty(C2.prototype, "y", {
         get: function () {
             var _this = this;
-            (function () { return _this.x; });
+            (function () {
+                return _this.x;
+            });
             return null;
         },
         set: function (x) {
@@ -88,12 +90,16 @@ var C2 = (function () {
     });
     C2.prototype.foo = function () {
         var _this = this;
-        (function () { return _this.foo; });
+        (function () {
+            return _this.foo;
+        });
     };
     Object.defineProperty(C2, "y", {
         get: function () {
             var _this = this;
-            (function () { return _this.x; });
+            (function () {
+                return _this.x;
+            });
             return null;
         },
         set: function (x) {
@@ -107,11 +113,15 @@ var C2 = (function () {
     });
     C2.foo = function () {
         var _this = this;
-        (function () { return _this.foo; });
+        (function () {
+            return _this.foo;
+        });
     };
     C2.bar = function () {
         var _this = this;
-        (function () { return _this.foo(); });
+        (function () {
+            return _this.foo();
+        });
     };
     return C2;
 })();

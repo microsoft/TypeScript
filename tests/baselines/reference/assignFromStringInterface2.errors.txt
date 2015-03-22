@@ -1,5 +1,5 @@
-tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(46,1): error TS2322: Type 'String' is not assignable to type 'string'.
-tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(47,1): error TS2322: Type 'NotString' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(47,1): error TS2322: Type 'String' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48,1): error TS2322: Type 'NotString' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts (2 errors) ====
@@ -35,6 +35,7 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(47
         trim(): string;
         length: number;
         substr(from: number, length?: number): string;
+        valueOf(): string;
         [index: number]: string;
     }
     

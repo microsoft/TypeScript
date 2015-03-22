@@ -32,7 +32,13 @@ function h(nonarray) {
 }
 function i(array, opt) {
 }
-var a = [1, 2, 3, 4, 5];
+var a = [
+    1,
+    2,
+    3,
+    4,
+    5
+];
 f(a); // OK
 g(a); // OK
 h(a); // OK

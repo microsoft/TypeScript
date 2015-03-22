@@ -1,0 +1,103 @@
+//// [genericTypeReferenceWithoutTypeArgument.ts]
+// it is an error to use a generic type without type arguments
+// all of these are errors 
+
+class C<T> {
+    foo: T;
+}
+
+var c: C;
+
+var a: { x: C };
+var b: { (x: C): C };
+var d: { [x: C]: C };
+
+var e = (x: C) => { var y: C; return y; }
+
+function f(x: C): C { var y: C; return y; }
+
+var g = function f(x: C): C { var y: C; return y; }
+
+class D extends C {
+}
+
+interface I extends C {}
+
+module M {
+    export class E<T> { foo: T }
+}
+
+class D2 extends M.E { }
+class D3<T extends M.E> { }
+interface I2 extends M.E { }
+
+function h<T extends C>(x: T) { }
+function i<T extends M.E>(x: T) { }
+
+var j = <C>null;
+var k = <M.E>null;
+
+//// [genericTypeReferenceWithoutTypeArgument.js]
+// it is an error to use a generic type without type arguments
+// all of these are errors 
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var C = (function () {
+    function C() {
+    }
+    return C;
+})();
+var c;
+var a;
+var b;
+var d;
+var e = function (x) {
+    var y;
+    return y;
+};
+function f(x) {
+    var y;
+    return y;
+}
+var g = function f(x) {
+    var y;
+    return y;
+};
+var D = (function (_super) {
+    __extends(D, _super);
+    function D() {
+        _super.apply(this, arguments);
+    }
+    return D;
+})(C);
+var M;
+(function (M) {
+    var E = (function () {
+        function E() {
+        }
+        return E;
+    })();
+    M.E = E;
+})(M || (M = {}));
+var D2 = (function (_super) {
+    __extends(D2, _super);
+    function D2() {
+        _super.apply(this, arguments);
+    }
+    return D2;
+})(M.E);
+var D3 = (function () {
+    function D3() {
+    }
+    return D3;
+})();
+function h(x) {
+}
+function i(x) {
+}
+var j = null;
+var k = null;

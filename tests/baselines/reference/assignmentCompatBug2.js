@@ -39,9 +39,16 @@ b3 = {
 }; // error
 
 //// [assignmentCompatBug2.js]
-var b2 = { a: 0 }; // error
-b2 = { a: 0 }; // error
-b2 = { b: 0, a: 0 };
+var b2 = {
+    a: 0
+}; // error
+b2 = {
+    a: 0
+}; // error
+b2 = {
+    b: 0,
+    a: 0
+};
 var b3;
 b3 = {
     f: function (n) {

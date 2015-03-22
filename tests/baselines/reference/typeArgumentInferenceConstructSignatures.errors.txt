@@ -1,13 +1,20 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(25,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(51,19): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(61,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(71,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(81,45): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+  Types of parameters 'n' and 'b' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,15): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,15): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '{ x: number; z: any; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
+    Property 'z' is missing in type '{ x: number; y: string; }'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
 
@@ -80,6 +87,8 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     new someGenerics4<string, number>('', (x: string) => ''); // Error
                                           ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     new someGenerics4<string, number>(null, null);
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
@@ -92,6 +101,8 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     new someGenerics5<number, string>('', (x: string) => ''); // Error
                                           ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     new someGenerics5<string, number>(null, null);
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
@@ -104,6 +115,8 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
                                                 ~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+!!! error TS2345:   Types of parameters 'n' and 'b' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
     
     // Generic call with multiple arguments of function types that each have parameters of different generic type
@@ -151,6 +164,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
                   ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ x: number; z: any; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
+!!! error TS2453:     Property 'z' is missing in type '{ x: number; y: string; }'.
                                                       ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
     var a9e: {};

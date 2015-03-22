@@ -36,8 +36,8 @@ module ts.formatting {
                 return true;
             }
 
-            for (var i = 0, len = this.customContextChecks.length; i < len; i++) {
-                if (!this.customContextChecks[i](context)) {
+            for (let check of this.customContextChecks) {
+                if (!check(context)) {
                     return false;
                 }
             }

@@ -2,5 +2,7 @@
 var v = { get Foo() { } };
 
 //// [parserAccessors3.js]
-var v = { get Foo() {
-} };
+var v = {
+    get Foo() {
+    }
+};

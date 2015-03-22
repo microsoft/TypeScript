@@ -37,12 +37,24 @@ var r = foo({}, 1);
 var a;
 var b;
 var r2 = foo(a, b);
-var r3 = foo({ x: 1 }, { x: 2, y: 3 });
+var r3 = foo({
+    x: 1
+}, {
+    x: 2,
+    y: 3
+});
 function foo2(x, y) {
     return y;
 }
 foo2(1, '');
-foo2({}, { length: 2 });
-foo2(1, { width: 3, length: 2 });
+foo2({}, {
+    length: 2
+});
+foo2(1, {
+    width: 3,
+    length: 2
+});
 foo2(1, []);
-foo2(1, ['']);
+foo2(1, [
+    ''
+]);

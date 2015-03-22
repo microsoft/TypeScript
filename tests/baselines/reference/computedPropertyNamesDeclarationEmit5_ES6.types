@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit5_ES6.ts ===
+var v = {
+>v : {}
+>{    ["" + ""]: 0,    ["" + ""]() { },    get ["" + ""]() { return 0; },    set ["" + ""](x) { }} : {}
+
+    ["" + ""]: 0,
+>"" + "" : string
+
+    ["" + ""]() { },
+>"" + "" : string
+
+    get ["" + ""]() { return 0; },
+>"" + "" : string
+
+    set ["" + ""](x) { }
+>"" + "" : string
+>x : any
+}

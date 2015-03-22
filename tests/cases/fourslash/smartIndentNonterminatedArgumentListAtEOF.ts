@@ -4,4 +4,4 @@
 /////**/
 
 goTo.marker();
-verify.indentationIs(0);
+verify.indentationIs(4);

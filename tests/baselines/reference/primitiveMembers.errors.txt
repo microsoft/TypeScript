@@ -1,7 +1,7 @@
-tests/cases/compiler/primitiveMembers.ts(24,35): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/primitiveMembers.ts(25,56): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/compiler/primitiveMembers.ts(5,3): error TS2339: Property 'toBAZ' does not exist on type 'number'.
 tests/cases/compiler/primitiveMembers.ts(11,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+tests/cases/compiler/primitiveMembers.ts(24,35): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/primitiveMembers.ts(25,56): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 
 
 ==== tests/cases/compiler/primitiveMembers.ts (4 errors) ====

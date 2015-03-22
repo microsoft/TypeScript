@@ -6,4 +6,8 @@ f(x => f(y => x = y));
 function f(p) {
 }
 ;
-f(function (x) { return f(function (y) { return x = y; }); });
+f(function (x) {
+    return f(function (y) {
+        return x = y;
+    });
+});

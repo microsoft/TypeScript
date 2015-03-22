@@ -96,13 +96,21 @@ class C {
 var C = (function () {
     function C() {
         // No implicit-'any' errors.
-        this.pub_f9 = function () { return ""; };
+        this.pub_f9 = function () {
+            return "";
+        };
         // Implicit-'any' errors for x.
-        this.pub_f10 = function (x) { return ""; };
+        this.pub_f10 = function (x) {
+            return "";
+        };
         // Implicit-'any' errors for x, y, and z.
-        this.pub_f11 = function (x, y, z) { return ""; };
+        this.pub_f11 = function (x, y, z) {
+            return "";
+        };
         // Implicit-'any' errors for x and z.
-        this.pub_f12 = function (x, y, z) { return ""; };
+        this.pub_f12 = function (x, y, z) {
+            return "";
+        };
         // Implicit-'any[]' error for r.
         this.pub_f13 = function () {
             var r = [];
@@ -120,13 +128,21 @@ var C = (function () {
             return "";
         };
         // No implicit-'any' errors.
-        this.priv_f9 = function () { return ""; };
+        this.priv_f9 = function () {
+            return "";
+        };
         // Implicit-'any' errors for x.
-        this.priv_f10 = function (x) { return ""; };
+        this.priv_f10 = function (x) {
+            return "";
+        };
         // Implicit-'any' errors for x, y, and z.
-        this.priv_f11 = function (x, y, z) { return ""; };
+        this.priv_f11 = function (x, y, z) {
+            return "";
+        };
         // Implicit-'any' errors for x and z.
-        this.priv_f12 = function (x, y, z) { return ""; };
+        this.priv_f12 = function (x, y, z) {
+            return "";
+        };
         // Implicit-'any[]' error for r.
         this.priv_f13 = function () {
             var r = [];

@@ -21,21 +21,33 @@ function foo(callback) {
 foo(function (x) {
     x;
 });
-[1].forEach(function (v, i, a) {
+[
+    1
+].forEach(function (v, i, a) {
     v;
 });
-["hello"].every(function (v, i, a) {
+[
+    "hello"
+].every(function (v, i, a) {
     return true;
 });
-[1].every(function (v, i, a) {
+[
+    1
+].every(function (v, i, a) {
     return true;
 });
-[1].every(function (v, i, a) {
+[
+    1
+].every(function (v, i, a) {
     return true;
 });
-["s"].every(function (v, i, a) {
+[
+    "s"
+].every(function (v, i, a) {
     return true;
 });
-["s"].forEach(function (v, i, a) {
+[
+    "s"
+].forEach(function (v, i, a) {
     v;
 });

@@ -61,7 +61,10 @@ var objA = new A();
 var ResultIsBoolean1 = !BOOLEAN;
 // boolean type literal
 var ResultIsBoolean2 = !true;
-var ResultIsBoolean3 = !{ x: true, y: false };
+var ResultIsBoolean3 = !{
+    x: true,
+    y: false
+};
 // boolean type expressions
 var ResultIsBoolean4 = !objA.a;
 var ResultIsBoolean5 = !M.n;

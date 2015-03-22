@@ -90,7 +90,9 @@ function tryCatchFn() {
 
 //// [arrowFunctionExpressions.js]
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
-var a = function (p) { return p.length; };
+var a = function (p) {
+    return p.length;
+};
 var a = function (p) {
     return p.length;
 };
@@ -103,36 +105,62 @@ var b = function (j) {
 };
 // Identifier => AssignmentExpression is equivalent to(Identifier) => AssignmentExpression
 var c;
-var d = function (n) { return c = n; };
-var d = function (n) { return c = n; };
+var d = function (n) {
+    return c = n;
+};
+var d = function (n) {
+    return c = n;
+};
 var d;
 // Arrow function used in class member initializer
 // Arrow function used in class member function
 var MyClass = (function () {
     function MyClass() {
         var _this = this;
-        this.m = function (n) { return n + 1; };
-        this.p = function (n) { return n && _this; };
+        this.m = function (n) {
+            return n + 1;
+        };
+        this.p = function (n) {
+            return n && _this;
+        };
     }
     MyClass.prototype.fn = function () {
         var _this = this;
-        var m = function (n) { return n + 1; };
-        var p = function (n) { return n && _this; };
+        var m = function (n) {
+            return n + 1;
+        };
+        var p = function (n) {
+            return n && _this;
+        };
     };
     return MyClass;
 })();
 // Arrow function used in arrow function
-var arrrr = function () { return function (m) { return function () { return function (n) { return m + n; }; }; }; };
+var arrrr = function () {
+    return function (m) {
+        return function () {
+            return function (n) {
+                return m + n;
+            };
+        };
+    };
+};
 var e = arrrr()(3)()(4);
 var e;
 // Arrow function used in arrow function used in function
 function someFn() {
-    var arr = function (n) { return function (p) { return p * n; }; };
+    var arr = function (n) {
+        return function (p) {
+            return p * n;
+        };
+    };
     arr(3)(4).toExponential();
 }
 // Arrow function used in function
 function someOtherFn() {
-    var arr = function (n) { return '' + n; };
+    var arr = function (n) {
+        return '' + n;
+    };
     arr(4).charAt(0);
 }
 // Arrow function used in nested function in function
@@ -147,7 +175,9 @@ function outerFn() {
 // Arrow function used in nested function in arrow function
 var f = function (n) {
     function fn(x) {
-        return function () { return n + x; };
+        return function () {
+            return n + x;
+        };
     }
     return fn(4);
 };
@@ -157,7 +187,9 @@ var g;
 function someOuterFn() {
     var arr = function (n) {
         function innerFn() {
-            return function () { return n.length; };
+            return function () {
+                return n.length;
+            };
         }
         return innerFn;
     };
@@ -169,12 +201,18 @@ h.toExponential();
 function tryCatchFn() {
     var _this = this;
     try {
-        var x = function () { return _this; };
+        var x = function () {
+            return _this;
+        };
     }
     catch (e) {
-        var t = function () { return e + _this; };
+        var t = function () {
+            return e + _this;
+        };
     }
     finally {
-        var m = function () { return _this + ''; };
+        var m = function () {
+            return _this + '';
+        };
     }
 }

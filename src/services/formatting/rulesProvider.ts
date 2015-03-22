@@ -22,7 +22,7 @@ module ts.formatting {
         private activeRules: Rule[];
         private rulesMap: RulesMap;
 
-        constructor(private logger: Logger) {
+        constructor() {
             this.globalRules = new Rules();
         }
 
@@ -40,8 +40,8 @@ module ts.formatting {
 
         public ensureUpToDate(options: ts.FormatCodeOptions) {
             if (this.options == null || !ts.compareDataObjects(this.options, options)) {
-                var activeRules = this.createActiveRules(options);
-                var rulesMap = RulesMap.create(activeRules);
+                let activeRules = this.createActiveRules(options);
+                let rulesMap = RulesMap.create(activeRules);
 
                 this.activeRules = activeRules;
                 this.rulesMap = rulesMap;
@@ -50,7 +50,7 @@ module ts.formatting {
         }
 
         private createActiveRules(options: ts.FormatCodeOptions): Rule[] {
-            var rules = this.globalRules.HighPriorityCommonRules.slice(0);
+            let rules = this.globalRules.HighPriorityCommonRules.slice(0);
 
             if (options.InsertSpaceAfterCommaDelimiter) {
                 rules.push(this.globalRules.SpaceAfterComma);

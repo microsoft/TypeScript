@@ -34,12 +34,33 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var arr1 = [1, 2]; // number[]
-var arr2 = ["hello", true]; // (string | number)[]
-var arr3Tuple = [3, "three"]; // [number, string]
-var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
+var arr1 = [
+    1,
+    2
+]; // number[]
+var arr2 = [
+    "hello",
+    true
+]; // (string | number)[]
+var arr3Tuple = [
+    3,
+    "three"
+]; // [number, string]
+var arr4Tuple = [
+    3,
+    "three",
+    "hello"
+]; // [number, string, string]
 var arrEmpty = [];
-var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
+var arr5Tuple = [
+    "hello",
+    true,
+    false,
+    " hello",
+    true,
+    10,
+    "any"
+]; // Tuple
 var C = (function () {
     function C() {
     }
@@ -73,7 +94,20 @@ var F = (function (_super) {
     return F;
 })(C);
 var c, d, e, f;
-var arr6 = [c, d]; // (C | D)[]
-var arr7 = [c, d, e]; // (C | D)[]
-var arr8 = [c, e]; // C[]
-var arr9 = [e, f]; // (E|F)[]
+var arr6 = [
+    c,
+    d
+]; // (C | D)[]
+var arr7 = [
+    c,
+    d,
+    e
+]; // (C | D)[]
+var arr8 = [
+    c,
+    e
+]; // C[]
+var arr9 = [
+    e,
+    f
+]; // (E|F)[]

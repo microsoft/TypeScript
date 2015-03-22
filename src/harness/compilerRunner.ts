@@ -53,19 +53,13 @@ class CompilerBaselineRunner extends RunnerBase {
             var rootDir: string;
 
             var result: Harness.Compiler.CompilerResult;
-            var checker: ts.TypeChecker;
+            var program: ts.Program;
             var options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
             var toBeCompiled: { unitName: string; content: string }[];
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
-
-            var declFileCompilationResult: {
-                declInputFiles: { unitName: string; content: string }[];
-                declOtherFiles: { unitName: string; content: string }[];
-                declResult: Harness.Compiler.CompilerResult;
-            };
 
             var createNewInstance = false;
 
@@ -97,10 +91,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
-                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _checker) {
+                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _program) {
                     result = compileResult;
-                    // The checker will be used by typeWriter
-                    checker = _checker;
+                    // The program will be used by typeWriter
+                    program = _program;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
                 });
@@ -138,12 +132,11 @@ class CompilerBaselineRunner extends RunnerBase {
                 lastUnit = undefined;
                 rootDir = undefined;
                 result = undefined;
-                checker = undefined;
+                program = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
                 harnessCompiler = undefined;
-                declFileCompilationResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
@@ -159,7 +152,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (this.errors) {
                     Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
-                        
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
                 }
@@ -177,13 +169,6 @@ class CompilerBaselineRunner extends RunnerBase {
                         return record;
                     });
                 }
-            });
-
-            // Compile .d.ts files
-            it('Correct compiler generated.d.ts for ' + fileName, () => {
-                declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
-                    harnessCompiler.setCompilerSettings(tcSettings);
-                }, options);
             });
 
 
@@ -222,6 +207,10 @@ class CompilerBaselineRunner extends RunnerBase {
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
+
+                        var declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                            harnessCompiler.setCompilerSettings(tcSettings);
+                        }, options);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += '\r\n\r\n//// [DtsFileErrors]\r\n';
@@ -266,11 +255,40 @@ class CompilerBaselineRunner extends RunnerBase {
             it('Correct type baselines for ' + fileName, () => {
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
-                    Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => {
-                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!checker.getProgram().getSourceFile(file.unitName));
+                    // The full walker simulates the types that you would get from doing a full 
+                    // compile.  The pull walker simulates the types you get when you just do
+                    // a type query for a random node (like how the LS would do it).  Most of the
+                    // time, these will be the same.  However, occasionally, they can be different.
+                    // Specifically, when the compiler internally depends on symbol IDs to order
+                    // things, then we may see different results because symbols can be created in a 
+                    // different order with 'pull' operations, and thus can produce slightly differing
+                    // output.
+                    //
+                    // For example, with a full type check, we may see a type outputed as: number | string
+                    // But with a pull type check, we may see it as:                       string | number
+                    //
+                    // These types are equivalent, but depend on what order the compiler observed 
+                    // certain parts of the program.
+
+                    var fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
+                    var pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
+
+                    var fullTypes = generateTypes(fullWalker);
+                    var pullTypes = generateTypes(pullWalker);
+
+                    if (fullTypes !== pullTypes) {
+                        Harness.Baseline.runBaseline('Correct full expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => fullTypes);
+                        Harness.Baseline.runBaseline('Correct pull expression types for ' + fileName, justName.replace(/\.ts/, '.types.pull'), () => pullTypes);
+                    }
+                    else {
+                        Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => fullTypes);
+                    }
+
+                    function generateTypes(walker: TypeWriterWalker): string {
+                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
                         var typeLines: string[] = [];
                         var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                        var walker = new TypeWriterWalker(checker);
+
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
                             walker.getTypes(file.unitName).forEach(result => {
@@ -309,7 +327,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         });
 
                         return typeLines.join('');
-                    });
+                    }
                 }
             });
         });

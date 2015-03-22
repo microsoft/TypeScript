@@ -12,8 +12,6 @@
 ////var b = val.p1;
 /////*1*/b;
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 // Resolve without typeCheck
 goTo.marker('1');
 verify.quickInfoIs("(var) b: string");

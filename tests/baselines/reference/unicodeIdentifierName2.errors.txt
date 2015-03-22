@@ -1,8 +1,8 @@
 tests/cases/compiler/unicodeIdentifierName2.ts(1,6): error TS1127: Invalid character.
 tests/cases/compiler/unicodeIdentifierName2.ts(1,8): error TS1134: Variable declaration expected.
 tests/cases/compiler/unicodeIdentifierName2.ts(1,10): error TS1134: Variable declaration expected.
-tests/cases/compiler/unicodeIdentifierName2.ts(1,26): error TS1127: Invalid character.
 tests/cases/compiler/unicodeIdentifierName2.ts(1,19): error TS2304: Cannot find name 'alert'.
+tests/cases/compiler/unicodeIdentifierName2.ts(1,26): error TS1127: Invalid character.
 
 
 ==== tests/cases/compiler/unicodeIdentifierName2.ts (5 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/unicodeIdentifierName2.ts(1,19): error TS2304: Cannot find 
 !!! error TS1134: Variable declaration expected.
              ~~~~~~~
 !!! error TS1134: Variable declaration expected.
-                             
-!!! error TS1127: Invalid character.
                       ~~~~~
 !!! error TS2304: Cannot find name 'alert'.
+                             
+!!! error TS1127: Invalid character.

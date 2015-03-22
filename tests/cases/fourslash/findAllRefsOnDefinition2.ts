@@ -14,8 +14,6 @@
 ////var start: Second.Test.start;
 ////var stop: Second.Test.stop;
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.file("findAllRefsOnDefinition2-import.ts");
 goTo.marker("1");
 

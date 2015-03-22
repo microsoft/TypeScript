@@ -39,7 +39,9 @@ var C = (function () {
     function C() {
         this.a = '';
         this.b = '';
-        this.d = function () { return ''; };
+        this.d = function () {
+            return '';
+        };
     }
     C.prototype.c = function () {
         return '';
@@ -47,7 +49,9 @@ var C = (function () {
     C.f = function () {
         return '';
     };
-    C.g = function () { return ''; };
+    C.g = function () {
+        return '';
+    };
     return C;
 })();
 var D = (function (_super) {

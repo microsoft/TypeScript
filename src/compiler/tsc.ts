@@ -1,15 +1,10 @@
-/// <reference path="core.ts"/>
-/// <reference path="sys.ts"/>
-/// <reference path="types.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
-/// <reference path="binder.ts"/>
-/// <reference path="checker.ts"/>
-/// <reference path="emitter.ts"/>
+/// <reference path="program.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.4.0.0";
+    export interface SourceFile {
+        fileWatcher: FileWatcher;
+    }
 
     /**
      * Checks to see if the locale is in the appropriate format,
@@ -75,27 +70,27 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += getLineStarts(file).length;
         });
         return count;
     }
 
     function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
-        var diagnostic: Diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return diagnostic.messageText;
+        var diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return <string>diagnostic.messageText;
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
         var output = "";
         
         if (diagnostic.file) {
-            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+            var loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
-            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
 
         sys.write(output);
     }
@@ -133,16 +128,43 @@ module ts {
         reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
+    function isJSONSupported() {
+        return typeof JSON === "object" && typeof JSON.parse === "function";
+    }
+
+    function findConfigFile(): string {
+        var searchPath = normalizePath(sys.getCurrentDirectory());
+        var fileName = "tsconfig.json";
+        while (true) {
+            if (sys.fileExists(fileName)) {
+                return fileName;
+            }
+            var parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+            fileName = "../" + fileName;
+        }
+        return undefined;
+    }
+
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
-        var compilerOptions = commandLine.options;
+        var configFileName: string;                 // Configuration file name (if any)
+        var configFileWatcher: FileWatcher;         // Configuration file watcher
+        var cachedProgram: Program;                 // Program cached from last compilation
+        var rootFileNames: string[];                // Root fileNames for compilation
+        var compilerOptions: CompilerOptions;       // Compiler options for compilation
+        var compilerHost: CompilerHost;             // Compiler host
+        var hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
+        var timerHandle: number;                    // Handle for 0.25s wait timer
 
-        if (compilerOptions.locale) {
-            if (typeof JSON === "undefined") {
+        if (commandLine.options.locale) {
+            if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(1);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
@@ -150,186 +172,243 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
-        if (compilerOptions.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(EmitReturnStatus.Succeeded);
+        if (commandLine.options.version) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            return sys.exit(ExitStatus.Success);
         }
 
-        if (compilerOptions.help) {
+        if (commandLine.options.help) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.Succeeded);
+            return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.filenames.length === 0) {
+        if (commandLine.options.project) {
+            if (!isJSONSupported()) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
+            configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
+            if (commandLine.fileNames.length !== 0) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
+        }
+        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+            configFileName = findConfigFile();
+        }
+
+        if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
             printHelp();
-            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            return sys.exit(ExitStatus.Success);
         }
 
-        var defaultCompilerHost = createCompilerHost(compilerOptions);
-        
-        if (compilerOptions.watch) {
+        if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-
-            watchProgram(commandLine, defaultCompilerHost);
-        }
-        else {
-            var result = compile(commandLine, defaultCompilerHost).exitStatus
-            return sys.exit(result);
-        }
-    }
-
-    /**
-     * Compiles the program once, and then watches all given and referenced files for changes.
-     * Upon detecting a file change, watchProgram will queue up file modification events for the next
-     * 250ms and then perform a recompilation. The reasoning is that in some cases, an editor can
-     * save all files at once, and we'd like to just perform a single recompilation.
-     */
-    function watchProgram(commandLine: ParsedCommandLine, compilerHost: CompilerHost): void {
-        var watchers: Map<FileWatcher> = {};
-        var updatedFiles: Map<boolean> = {};
-
-        // Compile the program the first time and watch all given/referenced files.
-        var program = compile(commandLine, compilerHost).program;
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-        addWatchers(program);
-        return;
-
-        function addWatchers(program: Program) {
-            forEach(program.getSourceFiles(), f => {
-                var filename = getCanonicalName(f.filename);
-                watchers[filename] = sys.watchFile(filename, fileUpdated);
-            });
+            if (configFileName) {
+                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+            }
         }
 
-        function removeWatchers(program: Program) {
-            forEach(program.getSourceFiles(), f => {
-                var filename = getCanonicalName(f.filename);
-                if (hasProperty(watchers, filename)) {
-                    watchers[filename].close();
+        performCompilation();
+
+        // Invoked to perform initial compilation or re-compilation in watch mode
+        function performCompilation() {
+
+            if (!cachedProgram) {
+                if (configFileName) {
+                    var configObject = readConfigFile(configFileName);
+                    if (!configObject) {
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                    }
+                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
+                    if (configParseResult.errors.length > 0) {
+                        reportDiagnostics(configParseResult.errors);
+                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                    }
+                    rootFileNames = configParseResult.fileNames;
+                    compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
-            });
-
-            watchers = {};
-        }
-
-        // Fired off whenever a file is changed.
-        function fileUpdated(filename: string) {
-            var firstNotification = isEmpty(updatedFiles);
-            updatedFiles[getCanonicalName(filename)] = true;
-
-            // Only start this off when the first file change comes in,
-            // so that we can batch up all further changes.
-            if (firstNotification) {
-                setTimeout(() => {
-                    var changedFiles = updatedFiles;
-                    updatedFiles = {};
-
-                    recompile(changedFiles);
-                }, 250);
+                else {
+                    rootFileNames = commandLine.fileNames;
+                    compilerOptions = commandLine.options;
+                }
+                compilerHost = createCompilerHost(compilerOptions);
+                hostGetSourceFile = compilerHost.getSourceFile;
+                compilerHost.getSourceFile = getSourceFile;
             }
+
+            var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
+
+            if (!compilerOptions.watch) {
+                return sys.exit(compileResult.exitStatus);
+            }
+
+            setCachedProgram(compileResult.program);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function recompile(changedFiles: Map<boolean>) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
-            // Remove all the watchers, as we may not be watching every file
-            // specified since the last compilation cycle.
-            removeWatchers(program);
-
-            // Reuse source files from the last compilation so long as they weren't changed.
-            var oldSourceFiles = arrayToMap(
-                filter(program.getSourceFiles(), file => !hasProperty(changedFiles, getCanonicalName(file.filename))),
-                file => getCanonicalName(file.filename));
-
-            // We create a new compiler host for this compilation cycle.
-            // This new host is effectively the same except that 'getSourceFile'
-            // will try to reuse the SourceFiles from the last compilation cycle
-            // so long as they were not modified.
-            var newCompilerHost = clone(compilerHost);
-            newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
-                fileName = getCanonicalName(fileName);
-
-                var sourceFile = lookUp(oldSourceFiles, fileName);
-                if (sourceFile) {
+        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+            // Return existing SourceFile object if one is available
+            if (cachedProgram) {
+                var sourceFile = cachedProgram.getSourceFile(fileName);
+                // A modified source file has no watcher and should not be reused
+                if (sourceFile && sourceFile.fileWatcher) {
                     return sourceFile;
                 }
-
-                return compilerHost.getSourceFile(fileName, languageVersion, onError);
-            };
-
-            program = compile(commandLine, newCompilerHost).program;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-            addWatchers(program);
+            }
+            // Use default host function
+            var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
+            if (sourceFile && compilerOptions.watch) {
+                // Attach a file watcher
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+            }
+            return sourceFile;
         }
 
-        function getCanonicalName(fileName: string) {
-            return compilerHost.getCanonicalFileName(fileName);
+        // Change cached program to the given program
+        function setCachedProgram(program: Program) {
+            if (cachedProgram) {
+                var newSourceFiles = program ? program.getSourceFiles() : undefined;
+                forEach(cachedProgram.getSourceFiles(), sourceFile => {
+                    if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
+                        if (sourceFile.fileWatcher) {
+                            sourceFile.fileWatcher.close();
+                            sourceFile.fileWatcher = undefined;
+                        }
+                    }
+                });
+            }
+            cachedProgram = program;
+        }
+
+        // If a source file changes, mark it as unwatched and start the recompilation timer
+        function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher = undefined;
+            startTimer();
+        }
+
+        // If the configuration file changes, forget cached program and start the recompilation timer
+        function configFileChanged() {
+            setCachedProgram(undefined);
+            startTimer();
+        }
+
+        // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
+        // operations (such as saving all modified files in an editor) a chance to complete before we kick
+        // off a new compilation.
+        function startTimer() {
+            if (timerHandle) {
+                clearTimeout(timerHandle);
+            }
+            timerHandle = setTimeout(recompile, 250);
+        }
+
+        function recompile() {
+            timerHandle = undefined;
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            performCompilation();
         }
     }
 
-    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
-        var parseStart = new Date().getTime();
-        var compilerOptions = commandLine.options;
-        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
+    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+        ioReadTime = 0;
+        ioWriteTime = 0;
+        programTime = 0;
+        bindTime = 0;
+        checkTime = 0;
+        emitTime = 0;
 
-        var bindStart = new Date().getTime();
-        var errors: Diagnostic[] = program.getDiagnostics();
-        var exitStatus: EmitReturnStatus;
+        var program = createProgram(fileNames, compilerOptions, compilerHost);
+        var exitStatus = compileProgram();
 
-        if (errors.length) {
-            var checkStart = bindStart;
-            var emitStart = bindStart;
-            var reportStart = bindStart;
-            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-        }
-        else {
-            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
-            var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
-            if (checker.isEmitBlocked()) {
-                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-            }
-            else {
-                var emitStart = new Date().getTime();
-                var emitOutput = checker.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
-                var reportStart = new Date().getTime();
-                errors = concatenate(errors, emitErrors);
-            }
+        if (compilerOptions.listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                sys.write(file.fileName + sys.newLine);
+            });
         }
 
-        reportDiagnostics(errors);
-        if (commandLine.options.diagnostics) {
+        if (compilerOptions.diagnostics) {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
-            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportCountStatistic("Nodes", program.getNodeCount());
+            reportCountStatistic("Identifiers", program.getIdentifierCount());
+            reportCountStatistic("Symbols", program.getSymbolCount());
+            reportCountStatistic("Types", program.getTypeCount());
+
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
-            reportTimeStatistic("Parse time", bindStart - parseStart);
-            reportTimeStatistic("Bind time", checkStart - bindStart);
-            reportTimeStatistic("Check time", emitStart - checkStart);
-            reportTimeStatistic("Emit time", reportStart - emitStart);
-            reportTimeStatistic("Total time", reportStart - parseStart);
+
+            // Individual component times.
+            // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
+            // I/O read time and processing time for triple-slash references and module imports, and the reported
+            // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
+            reportTimeStatistic("I/O read", ioReadTime);
+            reportTimeStatistic("I/O write", ioWriteTime);
+            reportTimeStatistic("Parse time", programTime);
+            reportTimeStatistic("Bind time", bindTime);
+            reportTimeStatistic("Check time", checkTime);
+            reportTimeStatistic("Emit time", emitTime);
+            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
 
         return { program, exitStatus };
+
+        function compileProgram(): ExitStatus {
+            // First get any syntactic errors. 
+            var diagnostics = program.getSyntacticDiagnostics();
+            reportDiagnostics(diagnostics);
+
+            // If we didn't have any syntactic errors, then also try getting the global and 
+            // semantic errors.
+            if (diagnostics.length === 0) {
+                var diagnostics = program.getGlobalDiagnostics();
+                reportDiagnostics(diagnostics);
+
+                if (diagnostics.length === 0) {
+                    var diagnostics = program.getSemanticDiagnostics();
+                    reportDiagnostics(diagnostics);
+                }
+            }
+
+            // If the user doesn't want us to emit, then we're done at this point.
+            if (compilerOptions.noEmit) {
+                return diagnostics.length
+                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
+                    : ExitStatus.Success;
+            }
+
+            // Otherwise, emit and report any errors we ran into.
+            var emitOutput = program.emit();
+            reportDiagnostics(emitOutput.diagnostics);
+
+            // If the emitter didn't emit anything, then pass that value along.
+            if (emitOutput.emitSkipped) {
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            }
+
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
+            }
+
+            return ExitStatus.Success;
+        }
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
     function printHelp() {
@@ -357,7 +436,7 @@ module ts {
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        var optsList = optionDeclarations.slice();
+        var optsList = filter(optionDeclarations.slice(), v => !v.experimental);
         optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,

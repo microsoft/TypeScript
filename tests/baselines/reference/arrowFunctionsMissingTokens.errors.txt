@@ -19,9 +19,9 @@ tests/cases/compiler/arrowFunctionsMissingTokens.ts(41,5): error TS1128: Declara
 tests/cases/compiler/arrowFunctionsMissingTokens.ts(42,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/arrowFunctionsMissingTokens.ts(45,14): error TS1109: Expression expected.
 tests/cases/compiler/arrowFunctionsMissingTokens.ts(47,21): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(49,14): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/arrowFunctionsMissingTokens.ts(51,35): error TS1005: '=>' expected.
 tests/cases/compiler/arrowFunctionsMissingTokens.ts(53,41): error TS1005: '=>' expected.
-tests/cases/compiler/arrowFunctionsMissingTokens.ts(49,14): error TS2304: Cannot find name 'x'.
 
 
 ==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (24 errors) ====

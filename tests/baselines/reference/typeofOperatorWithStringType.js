@@ -60,7 +60,10 @@ z: typeof M.n;
 //// [typeofOperatorWithStringType.js]
 // typeof  operator on string type
 var STRING;
-var STRING1 = ["", "abc"];
+var STRING1 = [
+    "",
+    "abc"
+];
 function foo() {
     return "abc";
 }
@@ -82,10 +85,16 @@ var ResultIsString1 = typeof STRING;
 var ResultIsString2 = typeof STRING1;
 // string type literal
 var ResultIsString3 = typeof "";
-var ResultIsString4 = typeof { x: "", y: "" };
-var ResultIsString5 = typeof { x: "", y: function (s) {
-    return s;
-} };
+var ResultIsString4 = typeof {
+    x: "",
+    y: ""
+};
+var ResultIsString5 = typeof {
+    x: "",
+    y: function (s) {
+        return s;
+    }
+};
 // string type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;
@@ -110,7 +119,10 @@ var r;
 z: typeof STRING;
 x: typeof STRING1;
 r: typeof foo;
-var y = { a: "", b: "" };
+var y = {
+    a: "",
+    b: ""
+};
 z: typeof y.a;
 z: typeof objA.a;
 z: typeof A.foo;

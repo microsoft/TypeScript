@@ -1,0 +1,10 @@
+tests/cases/compiler/superCallFromFunction1.ts(3,5): error TS2335: 'super' can only be referenced in a derived class.
+
+
+==== tests/cases/compiler/superCallFromFunction1.ts (1 errors) ====
+    
+    function foo() {
+        super(value => String(value));
+        ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+    }

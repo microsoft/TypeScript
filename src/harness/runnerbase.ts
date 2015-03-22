@@ -22,7 +22,7 @@ class RunnerBase {
         throw new Error('method not implemented');
     }
 
-    /** Replaces instances of full paths with filenames only */
+    /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
         var fixedPath = path;
 

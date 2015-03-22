@@ -28,7 +28,9 @@ var Foo = (function () {
     Foo.a = function (n) {
     };
     Foo.c = [];
-    Foo.d = false || (function (x) { return x || undefined; })(null);
+    Foo.d = false || (function (x) {
+        return x || undefined;
+    })(null);
     Foo.e = function (x) {
         return null;
     };

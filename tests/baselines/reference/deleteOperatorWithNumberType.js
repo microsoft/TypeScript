@@ -48,7 +48,10 @@ delete objA.a, M.n;
 //// [deleteOperatorWithNumberType.js]
 // delete  operator on number type
 var NUMBER;
-var NUMBER1 = [1, 2];
+var NUMBER1 = [
+    1,
+    2
+];
 function foo() {
     return 1;
 }
@@ -70,10 +73,16 @@ var ResultIsBoolean1 = delete NUMBER;
 var ResultIsBoolean2 = delete NUMBER1;
 // number type literal
 var ResultIsBoolean3 = delete 1;
-var ResultIsBoolean4 = delete { x: 1, y: 2 };
-var ResultIsBoolean5 = delete { x: 1, y: function (n) {
-    return n;
-} };
+var ResultIsBoolean4 = delete {
+    x: 1,
+    y: 2
+};
+var ResultIsBoolean5 = delete {
+    x: 1,
+    y: function (n) {
+        return n;
+    }
+};
 // number type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

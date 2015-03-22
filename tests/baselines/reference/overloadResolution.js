@@ -177,5 +177,9 @@ fn4(null, true); // Error
 function fn5() {
     return undefined;
 }
-var n = fn5(function (n) { return n.toFixed(); });
-var s = fn5(function (n) { return n.substr(0); });
+var n = fn5(function (n) {
+    return n.toFixed();
+});
+var s = fn5(function (n) {
+    return n.substr(0);
+});

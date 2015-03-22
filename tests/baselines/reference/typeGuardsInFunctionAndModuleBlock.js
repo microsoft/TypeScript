@@ -84,25 +84,29 @@ module m1 {
 function foo(x) {
     return typeof x === "string" ? x : function f() {
         var b = x; // number | boolean
-        return typeof x === "boolean" ? x.toString() : x.toString(); // number
+        return typeof x === "boolean" ? x.toString() // boolean
+         : x.toString(); // number
     }();
 }
 function foo2(x) {
     return typeof x === "string" ? x : function f(a) {
         var b = x; // new scope - number | boolean
-        return typeof x === "boolean" ? x.toString() : x.toString(); // number
+        return typeof x === "boolean" ? x.toString() // boolean
+         : x.toString(); // number
     }(x); // x here is narrowed to number | boolean
 }
 function foo3(x) {
     return typeof x === "string" ? x : (function () {
         var b = x; // new scope - number | boolean
-        return typeof x === "boolean" ? x.toString() : x.toString(); // number
+        return typeof x === "boolean" ? x.toString() // boolean
+         : x.toString(); // number
     })();
 }
 function foo4(x) {
     return typeof x === "string" ? x : (function (a) {
         var b = x; // new scope - number | boolean
-        return typeof x === "boolean" ? x.toString() : x.toString(); // number
+        return typeof x === "boolean" ? x.toString() // boolean
+         : x.toString(); // number
     })(x); // x here is narrowed to number | boolean
 }
 // Type guards affect nested function expressions, but not nested function declarations
@@ -125,7 +129,8 @@ var m;
             y = x; // string;
         }
         else {
-            y = typeof x === "boolean" ? x.toString() : x.toString(); // number
+            y = typeof x === "boolean" ? x.toString() // boolean
+             : x.toString(); // number
         }
     })(m2 || (m2 = {}));
 })(m || (m = {}));
@@ -142,7 +147,8 @@ var m1;
                 y = x; // string;
             }
             else {
-                y = typeof x === "boolean" ? x.toString() : x.toString(); // number
+                y = typeof x === "boolean" ? x.toString() // boolean
+                 : x.toString(); // number
             }
         })(m3 = m2.m3 || (m2.m3 = {}));
     })(m2 || (m2 = {}));

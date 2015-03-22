@@ -31,23 +31,10 @@
 
 declare var FourSlash;
 
-enum IncrementalEditValidation {
-    None = FourSlash.IncrementalEditValidation.None,
-    SyntacticOnly = FourSlash.IncrementalEditValidation.SyntacticOnly,
-    Complete = FourSlash.IncrementalEditValidation.Complete
-}
-
-enum TypingFidelity {
-    /** Performs typing and formatting (if formatting is enabled) */
-    Low = FourSlash.TypingFidelity.Low,
-    /** Performs typing, checks completion lists, signature help, and formatting (if enabled) */
-    High = FourSlash.TypingFidelity.High
-}
-
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
 enum EmitReturnStatus {
-    Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+    Succeeded = 0,                      // All outputs generated if requested (.js, .map, .d.ts), no errors reported
     AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
     JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
     DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
@@ -61,6 +48,25 @@ module FourSlashInterface {
         fileName: string;
         position: number;
         data?: any;
+    }
+    
+    export interface EditorOptions {
+        IndentSize: number;
+        TabSize: number;
+        NewLineCharacter: string;
+        ConvertTabsToSpaces: boolean;
+    }
+
+    export interface FormatCodeOptions extends EditorOptions {
+        InsertSpaceAfterCommaDelimiter: boolean;
+        InsertSpaceAfterSemicolonInForStatements: boolean;
+        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        PlaceOpenBraceOnNewLineForFunctions: boolean;
+        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        [s: string]: boolean | number| string;
     }
 
     export interface Range {
@@ -90,24 +96,6 @@ module FourSlashInterface {
 
         public markerByName(s: string): Marker {
             return FourSlash.currentTestState.getMarkerByName(s);
-        }
-    }
-
-    export class diagnostics {
-        public validateTypeAtCurrentPosition() {
-            return this.validateTypesAtPositions(FourSlash.currentTestState.currentCaretPosition);
-        }
-
-        public validateTypesAtPositions(...positions: number[]) {
-            return FourSlash.currentTestState.verifyTypesAgainstFullCheckAtPositions(positions);
-        }
-
-        public setEditValidation(validation: IncrementalEditValidation) {
-            FourSlash.currentTestState.editValidation = validation;
-        }
-
-        public setTypingFidelity(fidelity: TypingFidelity) {
-            FourSlash.currentTestState.typingFidelity = fidelity;
         }
     }
 
@@ -193,6 +181,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyCompletionListIsEmpty(this.negative);
         }
 
+        public completionListAllowsNewIdentifier() {
+            FourSlash.currentTestState.verifyCompletionListAllowsNewIdentifier(this.negative);
+        }
+
         public memberListIsEmpty() {
             FourSlash.currentTestState.verifyMemberListIsEmpty(this.negative);
         }
@@ -238,6 +230,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyQuickInfoExists(this.negative);
         }
 
+        public definitionCountIs(expectedCount: number) {
+            FourSlash.currentTestState.verifyDefinitionsCount(this.negative, expectedCount);
+        }
+
         public definitionLocationExists() {
             FourSlash.currentTestState.verifyDefinitionLocationExists(this.negative);
         }
@@ -279,6 +275,10 @@ module FourSlashInterface {
 
         public currentFileContentIs(text: string) {
             FourSlash.currentTestState.verifyCurrentFileContent(text);
+        }
+
+        public verifyGetEmitOutputForCurrentFile(expected: string): void {
+            FourSlash.currentTestState.verifyGetEmitOutputForCurrentFile(expected);
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
@@ -560,6 +560,14 @@ module FourSlashInterface {
             FourSlash.currentTestState.formatDocument();
         }
 
+        public copyFormatOptions(): FormatCodeOptions {
+            return FourSlash.currentTestState.copyFormatOptions();
+        }
+
+        public setFormatOptions(options: FormatCodeOptions) {
+            return FourSlash.currentTestState.setFormatOptions(options);
+        }
+
         public selection(startMarker: string, endMarker: string) {
             FourSlash.currentTestState.formatSelection(FourSlash.currentTestState.getMarkerByName(startMarker).position, FourSlash.currentTestState.getMarkerByName(endMarker).position);
         }
@@ -574,11 +582,11 @@ module FourSlashInterface {
 
     export class cancellation {
         public resetCancelled() {
-            FourSlash.currentTestState.cancellationToken.resetCancelled();
+            FourSlash.currentTestState.resetCancelled();
         }
 
         public setCancelled(numberOfCalls: number = 0) {
-            FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
+            FourSlash.currentTestState.setCancelled(numberOfCalls);
         }
     }
 
@@ -660,7 +668,6 @@ module fs {
     export var edit = new FourSlashInterface.edit();
     export var debug = new FourSlashInterface.debug();
     export var format = new FourSlashInterface.format();
-    export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
 }
 module ts {
@@ -679,6 +686,5 @@ var verify = new FourSlashInterface.verify();
 var edit = new FourSlashInterface.edit();
 var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
-var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
 var classification = FourSlashInterface.classification;

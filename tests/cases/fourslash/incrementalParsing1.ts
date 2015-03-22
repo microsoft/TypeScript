@@ -20,7 +20,5 @@
 // Force a syntax tree ot be created.
 verify.noMatchingBracePositionInCurrentFile(0);
 
-// make sure we check the tree after every edit.
-diagnostics.setTypingFidelity(TypingFidelity.High);
 goTo.marker('1');
 edit.insert('Fo');

@@ -189,6 +189,7 @@ while (false) {
     label2: label3: label4: const c = 0;
     n = c;
 }
+// Try/catch/finally
 try {
     const c = 0;
     n = c;
@@ -201,12 +202,14 @@ finally {
     const c = 0;
     n = c;
 }
+// Switch
 switch (0) {
     case 0:
         const c = 0;
         n = c;
         break;
 }
+// blocks
 {
     const c = 0;
     n = c;
@@ -220,7 +223,7 @@ function F() {
     const c = 0;
     n = c;
 }
-var F2 = function () {
+var F2 = () => {
     const c = 0;
     n = c;
 };
@@ -239,37 +242,32 @@ var m;
     }
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         const c = 0;
         n = c;
     }
-    C.prototype.method = function () {
+    method() {
         const c = 0;
         n = c;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            const c = 0;
-            n = c;
-            return n;
-        },
-        set: function (value) {
-            const c = 0;
-            n = c;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        const c = 0;
+        n = c;
+        return n;
+    }
+    set v(value) {
+        const c = 0;
+        n = c;
+    }
+}
 // object literals
 var o = {
     f() {
         const c = 0;
         n = c;
     },
-    f2: function () {
+    f2: () => {
         const c = 0;
         n = c;
     }

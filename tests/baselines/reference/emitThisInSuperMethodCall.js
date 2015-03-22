@@ -49,20 +49,20 @@ var RegisteredUser = (function (_super) {
     RegisteredUser.prototype.f = function () {
         (function () {
             function inner() {
-                super.sayHello.call(this);
+                _super.sayHello.call(this);
             }
         });
     };
     RegisteredUser.prototype.g = function () {
         function inner() {
             (function () {
-                super.sayHello.call(this);
+                _super.sayHello.call(this);
             });
         }
     };
     RegisteredUser.prototype.h = function () {
         function inner() {
-            super.sayHello.call(this);
+            _super.sayHello.call(this);
         }
     };
     return RegisteredUser;

@@ -2,7 +2,7 @@
 
 ////class C {
 ////<<<<<<< HEAD
-////    v = 1;
+////v = 1;
 ////=======
 ////v = 2;
 ////>>>>>>> Branch - a
@@ -13,6 +13,6 @@ verify.currentFileContentIs("class C {\r\n\
 <<<<<<< HEAD\r\n\
     v = 1;\r\n\
 =======\r\n\
-    v = 2;\r\n\
+v = 2;\r\n\
 >>>>>>> Branch - a\r\n\
 }");

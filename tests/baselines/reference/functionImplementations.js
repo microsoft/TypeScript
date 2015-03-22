@@ -269,7 +269,10 @@ function opt1(n) {
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n) {
-    if (n === void 0) { n = { x: null, y: undefined }; }
+    if (n === void 0) { n = {
+        x: null,
+        y: undefined
+    }; }
     var m = n;
     var m;
 }

@@ -16,7 +16,5 @@
 ////    var /*1*/r4 = a(1, true);
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.marker('1');
 verify.quickInfoIs("(var) r4: number");

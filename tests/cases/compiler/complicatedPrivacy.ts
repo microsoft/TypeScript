@@ -33,7 +33,7 @@ module m1 {
 
     export function f4(arg1: 
     {
-    [number]: C1;
+    [number]: C1; // Used to be indexer, now it is a computed property
     }) {
     }
 

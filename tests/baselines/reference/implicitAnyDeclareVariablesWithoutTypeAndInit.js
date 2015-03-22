@@ -16,7 +16,7 @@ var x1: any; var y1 = new x1;
 var x; // error at "x"
 function func(k) {
 }
-;
+; //error at "k"
 func(x);
 // this shouldn't be an error
 var bar = 3;

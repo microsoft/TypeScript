@@ -160,7 +160,9 @@ var PB = (function (_super) {
     return PB;
 })(B);
 var a;
-var b = { foo: '' };
+var b = {
+    foo: ''
+};
 function foo1(x) {
 }
 function foo1b(x) {

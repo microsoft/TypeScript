@@ -5,7 +5,6 @@ const c1;
 const c2: number;
 const c3, c4, c5 :string, c6;  // error, missing initialicer
 
-// error, can not be unintalized
 for(const c in {}) { }
 
 // error, assigning to a const

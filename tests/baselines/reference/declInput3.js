@@ -18,7 +18,11 @@ var bar = (function () {
         return '';
     };
     bar.prototype.g = function () {
-        return { a: null, b: undefined, c: void 4 };
+        return {
+            a: null,
+            b: undefined,
+            c: void 4
+        };
     };
     bar.prototype.h = function (x, y, z) {
         if (x === void 0) { x = 4; }

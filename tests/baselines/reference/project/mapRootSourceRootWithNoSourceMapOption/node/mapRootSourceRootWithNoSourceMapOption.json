@@ -11,5 +11,8 @@
         "m1.ts",
         "test.ts"
     ],
-    "emittedFiles": []
+    "emittedFiles": [
+        "m1.js",
+        "test.js"
+    ]
 }

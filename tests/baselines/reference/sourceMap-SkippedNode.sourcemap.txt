@@ -13,17 +13,17 @@ sourceFile:sourceMap-SkippedNode.ts
 2 >^^^^
 3 >    ^
 1 >
-2 >
-3 >    t
+2 >try 
+3 >    {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 1) + SourceIndex(0)
-3 >Emitted(1, 6) Source(1, 2) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
 ---
 >>>}
 1 >
 2 >^
 3 > ^^^^^^^^^->
-1 >ry {
+1 >
   >// ...
   >
 2 >}
@@ -33,16 +33,16 @@ sourceFile:sourceMap-SkippedNode.ts
 >>>finally {
 1->^^^^^^^^
 2 >        ^
-1-> 
-2 >        f
-1->Emitted(3, 9) Source(3, 3) + SourceIndex(0)
-2 >Emitted(3, 10) Source(3, 4) + SourceIndex(0)
+1-> finally 
+2 >        {
+1->Emitted(3, 9) Source(3, 11) + SourceIndex(0)
+2 >Emitted(3, 10) Source(3, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
 2 >^
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >inally {
+1 >
   >// N.B. No 'catch' block
   >
 2 >}

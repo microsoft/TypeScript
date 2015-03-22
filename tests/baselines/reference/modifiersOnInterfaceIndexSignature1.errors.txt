@@ -1,0 +1,9 @@
+tests/cases/compiler/modifiersOnInterfaceIndexSignature1.ts(2,3): error TS1145: Modifiers not permitted on index signature members.
+
+
+==== tests/cases/compiler/modifiersOnInterfaceIndexSignature1.ts (1 errors) ====
+    interface I {
+      public [a: string]: number;
+      ~~~~~~
+!!! error TS1145: Modifiers not permitted on index signature members.
+    }

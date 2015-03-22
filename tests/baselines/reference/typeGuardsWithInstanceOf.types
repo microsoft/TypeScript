@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
+interface I { global: string; }
+>I : I
+>global : string
+
+var result: I;
+>result : I
+>I : I
+
+var result2: I;
+>result2 : I
+>I : I
+
+if (!(result instanceof RegExp)) {
+>!(result instanceof RegExp) : boolean
+>(result instanceof RegExp) : boolean
+>result instanceof RegExp : boolean
+>result : I
+>RegExp : RegExpConstructor
+
+    result = result2;
+>result = result2 : I
+>result : I
+>result2 : I
+
+} else if (!result.global) {
+>!result.global : boolean
+>result.global : string
+>result : I
+>global : string
+}

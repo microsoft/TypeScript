@@ -47,7 +47,10 @@ delete objA.a,M.n;
 //// [deleteOperatorWithStringType.js]
 // delete  operator on string type
 var STRING;
-var STRING1 = ["", "abc"];
+var STRING1 = [
+    "",
+    "abc"
+];
 function foo() {
     return "abc";
 }
@@ -69,10 +72,16 @@ var ResultIsBoolean1 = delete STRING;
 var ResultIsBoolean2 = delete STRING1;
 // string type literal
 var ResultIsBoolean3 = delete "";
-var ResultIsBoolean4 = delete { x: "", y: "" };
-var ResultIsBoolean5 = delete { x: "", y: function (s) {
-    return s;
-} };
+var ResultIsBoolean4 = delete {
+    x: "",
+    y: ""
+};
+var ResultIsBoolean5 = delete {
+    x: "",
+    y: function (s) {
+        return s;
+    }
+};
 // string type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

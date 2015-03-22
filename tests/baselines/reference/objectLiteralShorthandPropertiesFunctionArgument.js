@@ -13,8 +13,14 @@ var obj = { name: name, id: id };
 //// [objectLiteralShorthandPropertiesFunctionArgument.js]
 var id = 10000;
 var name = "my name";
-var person = { name: name, id: id };
+var person = {
+    name: name,
+    id: id
+};
 function foo(p) {
 }
 foo(person);
-var obj = { name: name, id: id };
+var obj = {
+    name: name,
+    id: id
+};

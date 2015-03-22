@@ -95,7 +95,11 @@ function foo() {
     return 1;
 }
 ;
-var array = [1, 2, 3];
+var array = [
+    1,
+    2,
+    3
+];
 1 * 0 ? exprAny1 : exprAny2;
 1 + 1 ? exprBoolean1 : exprBoolean2;
 "string".length ? exprNumber1 : exprNumber2;

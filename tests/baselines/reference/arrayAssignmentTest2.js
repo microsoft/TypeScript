@@ -111,7 +111,9 @@ var c1 = new C1();
 var i1 = c1;
 var c2 = new C2();
 var c3 = new C3();
-var o1 = { one: 1 };
+var o1 = {
+    one: 1
+};
 var f1 = function () {
     return new C1();
 };

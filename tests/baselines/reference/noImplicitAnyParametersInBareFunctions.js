@@ -77,13 +77,21 @@ function f7(x) {
 function f8(x3, y3) {
 }
 // No implicit-'any' errors.
-var f9 = function () { return ""; };
+var f9 = function () {
+    return "";
+};
 // Implicit-'any' errors for x.
-var f10 = function (x) { return ""; };
+var f10 = function (x) {
+    return "";
+};
 // Implicit-'any' errors for x, y, and z.
-var f11 = function (x, y, z) { return ""; };
+var f11 = function (x, y, z) {
+    return "";
+};
 // Implicit-'any' errors for x and z.
-var f12 = function (x, y, z) { return ""; };
+var f12 = function (x, y, z) {
+    return "";
+};
 // Implicit-'any[]' error for r.
 var f13 = function () {
     var r = [];

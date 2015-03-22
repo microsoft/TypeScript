@@ -173,6 +173,7 @@ if (true) {
 while (false) {
     label2: label3: label4: let l9 = 0;
 }
+// Try/catch/finally
 try {
     let l10 = 0;
 }
@@ -182,6 +183,7 @@ catch (e) {
 finally {
     let l12 = 0;
 }
+// Switch
 switch (0) {
     case 0:
         let l13 = 0;
@@ -190,6 +192,7 @@ switch (0) {
         let l14 = 0;
         break;
 }
+// blocks
 {
     let l15 = 0;
     {
@@ -203,7 +206,7 @@ let l18 = 0;
 function F() {
     let l19 = 0;
 }
-var F2 = function () {
+var F2 = () => {
     let l20 = 0;
 };
 var F3 = function () {
@@ -218,35 +221,31 @@ var m;
     }
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         let l24 = 0;
     }
-    C.prototype.method = function () {
+    method() {
         let l25 = 0;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            let l26 = 0;
-            return l26;
-        },
-        set: function (value) {
-            let l27 = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        let l26 = 0;
+        return l26;
+    }
+    set v(value) {
+        let l27 = value;
+    }
+}
 // object literals
 var o = {
     f() {
         let l28 = 0;
     },
-    f2: function () {
+    f2: () => {
         let l29 = 0;
     }
 };
+// labels
 label: let l30 = 0;
 {
     label2: let l31 = 0;

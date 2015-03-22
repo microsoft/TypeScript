@@ -9,4 +9,8 @@ var x = foo([{a:true}]);
 function foo(bar) {
     return bar;
 }
-var x = foo([{ a: true }]);
+var x = foo([
+    {
+        a: true
+    }
+]);

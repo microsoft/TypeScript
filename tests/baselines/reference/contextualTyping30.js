@@ -5,4 +5,7 @@ function foo(param:number[]){}; foo([1, "a"]);
 function foo(param) {
 }
 ;
-foo([1, "a"]);
+foo([
+    1,
+    "a"
+]);

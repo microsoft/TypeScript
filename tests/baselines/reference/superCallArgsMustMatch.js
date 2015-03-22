@@ -13,7 +13,9 @@ class T6 extends T5<number>{
 
     constructor() {
 
-        super("hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
+        // Should error; base constructor has type T for first arg,
+        // which is instantiated with 'number' in the extends clause
+        super("hi");
 
         var x: number = this.foo;
 
@@ -39,7 +41,9 @@ var T5 = (function () {
 var T6 = (function (_super) {
     __extends(T6, _super);
     function T6() {
-        _super.call(this, "hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
+        // Should error; base constructor has type T for first arg,
+        // which is instantiated with 'number' in the extends clause
+        _super.call(this, "hi");
         var x = this.foo;
     }
     return T6;

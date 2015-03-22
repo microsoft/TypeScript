@@ -2,6 +2,7 @@ tests/cases/compiler/genericConstraint2.ts(5,18): error TS2313: Constraint of a 
 tests/cases/compiler/genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
   Property 'comparer' is missing in type 'ComparableString'.
 tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>'.
+  Property 'comparer' is missing in type 'ComparableString'.
 
 
 ==== tests/cases/compiler/genericConstraint2.ts (3 errors) ====
@@ -33,3 +34,4 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2344: Type 'Comparabl
     var c = compare<ComparableString>(a, b);
                     ~~~~~~~~~~~~~~~~
 !!! error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<any>'.
+!!! error TS2344:   Property 'comparer' is missing in type 'ComparableString'.

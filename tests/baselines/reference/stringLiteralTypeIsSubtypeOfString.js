@@ -61,6 +61,7 @@ class C implements String {
     trim(): string { return null; }
     length: number;
     substr(from: number, length?: number): string { return null; }
+    valueOf(): string { return null; }
     [index: number]: string;
 }
  
@@ -181,6 +182,9 @@ var C = (function () {
         return null;
     };
     C.prototype.substr = function (from, length) {
+        return null;
+    };
+    C.prototype.valueOf = function () {
         return null;
     };
     return C;

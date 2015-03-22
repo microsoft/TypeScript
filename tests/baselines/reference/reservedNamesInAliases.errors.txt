@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1003: Identifier expected.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1005: ';' expected.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(2,6): error TS2457: Type alias name cannot be 'any'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(5,6): error TS2457: Type alias name cannot be 'string'
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1003: Identifier expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1005: ';' expected.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2304: Cannot find name 'I'.
 
 

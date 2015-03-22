@@ -1,6 +1,7 @@
-﻿/// <reference path="fourslash.ts" />
+/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithDeclarationFile2.baseline
+// @module: CommonJS
 
 // @Filename: decl.d.ts
 // @emitThisFile: true
@@ -14,5 +15,4 @@
 // @emitThisFile: true
 //// var x:string = "hello";
 
-debugger;
 verify.baselineGetEmitOutput();

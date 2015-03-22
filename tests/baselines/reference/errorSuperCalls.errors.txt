@@ -1,4 +1,3 @@
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2335: 'super' can only be referenced in a derived class.
@@ -8,6 +7,7 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(26,9): error T
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors

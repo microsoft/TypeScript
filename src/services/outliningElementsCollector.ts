@@ -16,14 +16,14 @@
 module ts {
     export module OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
-            var elements: OutliningSpan[] = [];
-            var collapseText = "...";
+            let elements: OutliningSpan[] = [];
+            let collapseText = "...";
 
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
-                    var span: OutliningSpan = {
-                        textSpan: TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                    let span: OutliningSpan = {
+                        textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
+                        hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -32,19 +32,11 @@ module ts {
             }
 
             function autoCollapse(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return false;
-                }
-
-                return true;
+                return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
             }
 
-            var depth = 0;
-            var maxDepth = 20;
+            let depth = 0;
+            let maxDepth = 20;
             function walk(n: Node): void {
                 if (depth > maxDepth) {
                     return;
@@ -52,15 +44,16 @@ module ts {
                 switch (n.kind) {
                     case SyntaxKind.Block:
                         if (!isFunctionBlock(n)) {
-                            var parent = n.parent;
-                            var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                            var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                            let parent = n.parent;
+                            let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                            let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
 
                             // Check if the block is standalone, or 'attached' to some parent statement.
                             // If the latter, we want to collaps the block, but consider its hint span
                             // to be the entire span of the parent.
                             if (parent.kind === SyntaxKind.DoStatement ||
                                 parent.kind === SyntaxKind.ForInStatement ||
+                                parent.kind === SyntaxKind.ForOfStatement ||
                                 parent.kind === SyntaxKind.ForStatement ||
                                 parent.kind === SyntaxKind.IfStatement ||
                                 parent.kind === SyntaxKind.WhileStatement ||
@@ -68,41 +61,59 @@ module ts {
                                 parent.kind === SyntaxKind.CatchClause) {
 
                                 addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                                break;
                             }
-                            else {
-                                // Block was a standalone block.  In this case we want to only collapse
-                                // the span of the block, independent of any parent span.
-                                var span = TextSpan.fromBounds(n.getStart(), n.end);
-                                elements.push({
-                                    textSpan: span,
-                                    hintSpan: span,
-                                    bannerText: collapseText,
-                                    autoCollapse: autoCollapse(n)
-                                });
+
+                            if (parent.kind === SyntaxKind.TryStatement) {
+                                // Could be the try-block, or the finally-block.
+                                let tryStatement = <TryStatement>parent;
+                                if (tryStatement.tryBlock === n) {
+                                    addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                                    break;
+                                }
+                                else if (tryStatement.finallyBlock === n) {
+                                    let finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                                    if (finallyKeyword) {
+                                        addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n));
+                                        break;
+                                    }
+                                }
+
+                                // fall through.
                             }
+
+                            // Block was a standalone block.  In this case we want to only collapse
+                            // the span of the block, independent of any parent span.
+                            let span = createTextSpanFromBounds(n.getStart(), n.end);
+                            elements.push({
+                                textSpan: span,
+                                hintSpan: span,
+                                bannerText: collapseText,
+                                autoCollapse: autoCollapse(n)
+                            });
                             break;
                         }
                         // Fallthrough.
 
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
-                        var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                        var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                    case SyntaxKind.ModuleBlock: {
+                        let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n));
                         break;
+                    }
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.SwitchStatement:
-                        var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                        var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                    case SyntaxKind.CaseBlock: {
+                        let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));
                         break;
+                    }
                     case SyntaxKind.ArrayLiteralExpression:
-                        var openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
-                        var closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
+                        let openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
+                        let closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
                         addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
                         break;
                 }
