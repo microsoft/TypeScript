@@ -834,6 +834,23 @@ module ts {
         return false;
     }
 
+    // An alias symbol is created by one of the following declarations:
+    // import <symbol> = ...
+    // import <symbol> from ...
+    // import * as <symbol> from ...
+    // import { x as <symbol> } from ...
+    // export { x as <symbol> } from ...
+    // export = ...
+    // export default ...
+    export function isAliasSymbolDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+            node.kind === SyntaxKind.NamespaceImport ||
+            node.kind === SyntaxKind.ImportSpecifier ||
+            node.kind === SyntaxKind.ExportSpecifier ||
+            node.kind === SyntaxKind.ExportAssignment;
+    }
+
     export function getClassBaseTypeNode(node: ClassDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;

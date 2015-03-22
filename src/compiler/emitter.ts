@@ -2598,7 +2598,12 @@ module ts {
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
                         return (<Declaration>parent).name === node;
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ExportSpecifier:
+                        return (<ImportOrExportSpecifier>parent).name === node || (<ImportOrExportSpecifier>parent).propertyName === node;
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
                     case SyntaxKind.ExportAssignment:
@@ -3873,7 +3878,7 @@ module ts {
                         emitNodeWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
-                        emitNodeWithoutSourceMap(name);
+                        emitExpressionIdentifier(name);
                         write(";");
                     }
                 }
@@ -5003,6 +5008,13 @@ module ts {
                 return node.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
             }
 
+            function emitExportImportAssignments(node: Node) {
+                if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
+                    emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
+                }
+                forEachChild(node, emitExportImportAssignments);
+            }
+
             function emitImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 if (contains(externalImports, node)) {
                     let exportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
@@ -5023,6 +5035,7 @@ module ts {
                         emitRequire(getExternalModuleName(node));
                         write(";");
                         emitEnd(node);
+                        emitExportImportAssignments(node);
                         emitTrailingComments(node);
                     }
                     else {
@@ -5032,6 +5045,7 @@ module ts {
                             emit(namespaceDeclaration.name);
                             write(";");
                         }
+                        emitExportImportAssignments(node);
                     }
                 }
             }
@@ -5054,12 +5068,13 @@ module ts {
                     emit(node.moduleReference);
                     write(";");
                     emitEnd(node);
+                    emitExportImportAssignments(node);
                     emitTrailingComments(node);
                 }
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier && (!node.exportClause || resolver.isValueExportDeclaration(node))) {
+                if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                     emitStart(node);
                     let generatedName = resolver.getGeneratedNameForNode(node);
                     if (node.exportClause) {
@@ -5072,7 +5087,7 @@ module ts {
                             write(";");
                         }
                         for (let specifier of node.exportClause.elements) {
-                            if (resolver.isValueExportDeclaration(specifier)) {
+                            if (resolver.isValueAliasDeclaration(specifier)) {
                                 writeLine();
                                 emitStart(specifier);
                                 emitContainingModuleName(specifier);
@@ -5104,7 +5119,7 @@ module ts {
             }
 
             function emitExportAssignment(node: ExportAssignment) {
-                if (!node.isExportEquals && resolver.isValueExportDeclaration(node)) {
+                if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
                     writeLine();
                     emitStart(node);
                     emitContainingModuleName(node);
@@ -5144,7 +5159,7 @@ module ts {
                                     externalImports.push(<ExportDeclaration>node);
                                     hasExportStars = true;
                                 }
-                                else if (resolver.isValueExportDeclaration(node)) {
+                                else if (resolver.isValueAliasDeclaration(node)) {
                                     // export { x, y } from "mod" where at least one export is a value symbol
                                     externalImports.push(<ExportDeclaration>node);
                                 }
@@ -5254,7 +5269,7 @@ module ts {
             }
 
             function emitExportEquals(emitAsReturn: boolean) {
-                if (exportEquals && resolver.isValueExportDeclaration(exportEquals)) {
+                if (exportEquals && resolver.isValueAliasDeclaration(exportEquals)) {
                     writeLine();
                     emitStart(exportEquals);
                     write(emitAsReturn ? "return " : "module.exports = ");

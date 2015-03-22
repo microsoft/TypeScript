@@ -323,7 +323,7 @@ module ts {
                         if (!isExternalModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
-                            if (!(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
+                            if (result.flags & meaning || !(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
                                 break loop;
                             }
                             result = undefined;
@@ -493,23 +493,6 @@ module ts {
                 }
             }
             return false;
-        }
-
-        // An alias symbol is created by one of the following declarations:
-        // import <symbol> = ...
-        // import <symbol> from ...
-        // import * as <symbol> from ...
-        // import { x as <symbol> } from ...
-        // export { x as <symbol> } from ...
-        // export = ...
-        // export default ...
-        function isAliasSymbolDeclaration(node: Node): boolean {
-            return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-                node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
-                node.kind === SyntaxKind.NamespaceImport ||
-                node.kind === SyntaxKind.ImportSpecifier ||
-                node.kind === SyntaxKind.ExportSpecifier ||
-                node.kind === SyntaxKind.ExportAssignment;
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
@@ -10987,7 +10970,7 @@ module ts {
             let node = getDeclarationOfAliasSymbol(symbol);
             if (node) {
                 if (node.kind === SyntaxKind.ImportClause) {
-                    return unescapeIdentifier(symbol.name) + ".default";
+                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + ".default";
                 }
                 if (node.kind === SyntaxKind.ImportSpecifier) {
                     let moduleName = getGeneratedNameForNode(<ImportDeclaration>node.parent.parent.parent);
@@ -11012,7 +10995,7 @@ module ts {
         }
 
         function getExpressionNameSubstitution(node: Identifier): string {
-            let symbol = getNodeLinks(node).resolvedSymbol;
+            let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
             if (symbol) {
                 // Whan an identifier resolves to a parented symbol, it references an exported entity from
                 // another declaration of the same internal module.
@@ -11033,16 +11016,19 @@ module ts {
             }
         }
 
-        function isValueExportDeclaration(node: Node): boolean {
-            if (node.kind === SyntaxKind.ExportAssignment) {
-                return (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ? isAliasResolvedToValue(getSymbolOfNode(node)) : true;
-            }
-            if (node.kind === SyntaxKind.ExportDeclaration) {
-                let exportClause = (<ExportDeclaration>node).exportClause;
-                return exportClause && forEach(exportClause.elements, isValueExportDeclaration);
-            }
-            if (node.kind === SyntaxKind.ExportSpecifier) {
-                return isAliasResolvedToValue(getSymbolOfNode(node));
+        function isValueAliasDeclaration(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                    return isAliasResolvedToValue(getSymbolOfNode(node));
+                case SyntaxKind.ExportDeclaration:
+                    let exportClause = (<ExportDeclaration>node).exportClause;
+                    return exportClause && forEach(exportClause.elements, isValueAliasDeclaration);
+                case SyntaxKind.ExportAssignment:
+                    return (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ? isAliasResolvedToValue(getSymbolOfNode(node)) : true;
             }
             return false;
         }
@@ -11187,7 +11173,7 @@ module ts {
             return {
                 getGeneratedNameForNode,
                 getExpressionNameSubstitution,
-                isValueExportDeclaration,
+                isValueAliasDeclaration,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
