@@ -87,11 +87,6 @@ module ts {
 
     export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
         let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
-
-        if (program.getCompilerOptions().declaration) {
-            diagnostics.concat(program.getDeclarationDiagnostics());
-        }
-
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
