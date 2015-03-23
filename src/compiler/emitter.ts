@@ -3668,10 +3668,6 @@ module ts {
                 }
             }
 
-            function isNakedImport(node: ImportDeclaration | ImportEqualsDeclaration) {
-                return node.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
-            }
-
             function emitExportImportAssignments(node: Node) {
                 if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
                     emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
@@ -3749,30 +3745,48 @@ module ts {
 
             function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 if (contains(externalImports, node)) {
-                    let exportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
+                    let isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     let namespaceDeclaration = getNamespaceDeclarationNode(node);
 
                     if (compilerOptions.module !== ModuleKind.AMD) {
                         emitLeadingComments(node);
                         emitStart(node);
-                        if (namespaceDeclaration) {
-                            if (!exportedImport) write("var ");
+                        let isDefaultImport = node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause && !!(<ImportDeclaration>node).importClause.name;
+                        if (namespaceDeclaration && !isDefaultImport) {
+                            // import x = require("foo")
+                            // import * as x from "foo"
+                            if (!isExportedImport) write("var ");
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                         }
-                        else if (!isNakedImport(node)) {
-                            write("var ");
-                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
-                            write(" = ");
+                        else {
+                            // import "foo"
+                            // import x from "foo"
+                            // import { x, y } from "foo"
+                            // import d, * as x from "foo"
+                            // import d, { x, y } from "foo"
+                            let isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
+                            if (!isNakedImport) {
+                                write("var ");
+                                write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                                write(" = ");
+                            }
                         }
                         emitRequire(getExternalModuleName(node));
+                        if (namespaceDeclaration && isDefaultImport) {
+                            // import d, * as x from "foo"
+                            write(", ");
+                            emitModuleMemberName(namespaceDeclaration);
+                            write(" = ");
+                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                        }
                         write(";");
                         emitEnd(node);
                         emitExportImportAssignments(node);
                         emitTrailingComments(node);
                     }
                     else {
-                        if (exportedImport) {
+                        if (isExportedImport) {
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             emit(namespaceDeclaration.name);

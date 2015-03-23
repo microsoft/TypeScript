@@ -848,7 +848,7 @@ module ts {
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment;
+            node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
     export function getClassBaseTypeNode(node: ClassDeclaration) {
