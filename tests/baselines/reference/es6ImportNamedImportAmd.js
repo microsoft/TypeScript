@@ -53,19 +53,19 @@ define(["require", "exports"], function (require, exports) {
     exports.aaaa = 10;
 });
 //// [es6ImportNamedImportAmd_1.js]
-define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, _es6ImportNamedImportAmd_0_1, _es6ImportNamedImportAmd_0_2, _es6ImportNamedImportAmd_0_3, _es6ImportNamedImportAmd_0_4, _es6ImportNamedImportAmd_0_5, _es6ImportNamedImportAmd_0_6, _es6ImportNamedImportAmd_0_7, _es6ImportNamedImportAmd_0_8, _es6ImportNamedImportAmd_0_9) {
+define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, _es6ImportNamedImportAmd_0, _es6ImportNamedImportAmd_0_1, _es6ImportNamedImportAmd_0_2, _es6ImportNamedImportAmd_0_3, _es6ImportNamedImportAmd_0_4, _es6ImportNamedImportAmd_0_5, _es6ImportNamedImportAmd_0_6, _es6ImportNamedImportAmd_0_7, _es6ImportNamedImportAmd_0_8) {
+    var xxxx = _es6ImportNamedImportAmd_0.a;
     var xxxx = _es6ImportNamedImportAmd_0_1.a;
+    var xxxx = _es6ImportNamedImportAmd_0_2.x;
     var xxxx = _es6ImportNamedImportAmd_0_2.a;
     var xxxx = _es6ImportNamedImportAmd_0_3.x;
-    var xxxx = _es6ImportNamedImportAmd_0_3.a;
-    var xxxx = _es6ImportNamedImportAmd_0_4.x;
-    var xxxx = _es6ImportNamedImportAmd_0_5.m;
+    var xxxx = _es6ImportNamedImportAmd_0_4.m;
+    var xxxx = _es6ImportNamedImportAmd_0_5.a1;
+    var xxxx = _es6ImportNamedImportAmd_0_5.x1;
     var xxxx = _es6ImportNamedImportAmd_0_6.a1;
     var xxxx = _es6ImportNamedImportAmd_0_6.x1;
-    var xxxx = _es6ImportNamedImportAmd_0_7.a1;
-    var xxxx = _es6ImportNamedImportAmd_0_7.x1;
-    var z111 = _es6ImportNamedImportAmd_0_8.z1;
-    var z2 = _es6ImportNamedImportAmd_0_9.z2; // z2 shouldn't give redeclare error
+    var z111 = _es6ImportNamedImportAmd_0_7.z1;
+    var z2 = _es6ImportNamedImportAmd_0_8.z2; // z2 shouldn't give redeclare error
 });
 
 

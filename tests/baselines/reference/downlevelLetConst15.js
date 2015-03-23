@@ -110,18 +110,18 @@ use(z6);
 var z = false;
 var z5 = 1;
 {
-    var _z = "";
-    var _z5 = ([
+    var _z_1 = "";
+    var _z5_1 = ([
         5
     ])[0];
     {
-        var _z_1 = 1;
-        var _z5_1 = ({
+        var _z_2 = 1;
+        var _z5_2 = ({
             a: 1
         }).a;
         // try to step on generated name
-        use(_z_1);
+        use(_z_2);
     }
-    use(_z);
+    use(_z_1);
 }
 use(y);

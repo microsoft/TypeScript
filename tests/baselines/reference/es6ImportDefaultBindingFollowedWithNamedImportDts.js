@@ -62,17 +62,17 @@ var x11 = (function () {
 })();
 exports.x11 = x11;
 //// [client.js]
+var _server = require("server");
+exports.x1 = new _server.a();
 var _server_1 = require("server");
-exports.x1 = new _server_1.a();
+exports.x2 = new _server_1.a11();
 var _server_2 = require("server");
-exports.x2 = new _server_2.a11();
+exports.x4 = new _server_2.x();
+exports.x5 = new _server_2.a12();
 var _server_3 = require("server");
-exports.x4 = new _server_3.x();
-exports.x5 = new _server_3.a12();
+exports.x3 = new _server_3.x11();
 var _server_4 = require("server");
-exports.x3 = new _server_4.x11();
-var _server_5 = require("server");
-exports.x6 = new _server_5.m();
+exports.x6 = new _server_4.m();
 
 
 //// [server.d.ts]

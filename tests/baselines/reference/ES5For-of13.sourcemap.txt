@@ -75,40 +75,40 @@ sourceFile:ES5For-of13.ts
 5 >Emitted(5, 24) Source(1, 30) + SourceIndex(0)
 6 >Emitted(5, 25) Source(1, 31) + SourceIndex(0)
 ---
->>>    var v = _a[_i];
+>>>    var _v = _a[_i];
 1 >^^^^
 2 >    ^^^^
-3 >        ^
-4 >         ^^^^^^^^^
+3 >        ^^
+4 >          ^^^^^^^^^
 1 >
 2 >    let 
 3 >        v
-4 >         
+4 >          
 1 >Emitted(6, 5) Source(1, 6) + SourceIndex(0)
 2 >Emitted(6, 9) Source(1, 10) + SourceIndex(0)
-3 >Emitted(6, 10) Source(1, 11) + SourceIndex(0)
-4 >Emitted(6, 19) Source(1, 11) + SourceIndex(0)
+3 >Emitted(6, 11) Source(1, 11) + SourceIndex(0)
+4 >Emitted(6, 20) Source(1, 11) + SourceIndex(0)
 ---
->>>    var x = v;
+>>>    var x = _v;
 1 >^^^^
 2 >    ^^^^
 3 >        ^
 4 >         ^^^
-5 >            ^
-6 >             ^
+5 >            ^^
+6 >              ^
 1 > of ['a', 'b', 'c']) {
   >    
 2 >    var 
 3 >        x
 4 >          = 
 5 >            v
-6 >             ;
+6 >              ;
 1 >Emitted(7, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(7, 9) Source(2, 9) + SourceIndex(0)
 3 >Emitted(7, 10) Source(2, 10) + SourceIndex(0)
 4 >Emitted(7, 13) Source(2, 13) + SourceIndex(0)
-5 >Emitted(7, 14) Source(2, 14) + SourceIndex(0)
-6 >Emitted(7, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(7, 15) Source(2, 14) + SourceIndex(0)
+6 >Emitted(7, 16) Source(2, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^

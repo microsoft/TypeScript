@@ -4,5 +4,5 @@ for (let [a, b] of X) {
 
 //// [parserES5ForOfStatement14.js]
 for (var _i = 0; _i < X.length; _i++) {
-    var _a = X[_i], a = _a[0], b = _a[1];
+    var _a = X[_i], _a_1 = _a[0], _b = _a[1];
 }

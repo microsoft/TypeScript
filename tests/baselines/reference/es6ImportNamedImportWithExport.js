@@ -50,27 +50,27 @@ exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
 //// [client.js]
+var _server = require("server");
+exports.xxxx = _server.a;
 var _server_1 = require("server");
 exports.xxxx = _server_1.a;
 var _server_2 = require("server");
+exports.xxxx = _server_2.x;
 exports.xxxx = _server_2.a;
 var _server_3 = require("server");
 exports.xxxx = _server_3.x;
-exports.xxxx = _server_3.a;
 var _server_4 = require("server");
-exports.xxxx = _server_4.x;
+exports.xxxx = _server_4.m;
 var _server_5 = require("server");
-exports.xxxx = _server_5.m;
+exports.xxxx = _server_5.a1;
+exports.xxxx = _server_5.x1;
 var _server_6 = require("server");
 exports.xxxx = _server_6.a1;
 exports.xxxx = _server_6.x1;
 var _server_7 = require("server");
-exports.xxxx = _server_7.a1;
-exports.xxxx = _server_7.x1;
+exports.z111 = _server_7.z1;
 var _server_8 = require("server");
-exports.z111 = _server_8.z1;
-var _server_9 = require("server");
-exports.z2 = _server_9.z2; // z2 shouldn't give redeclare error
+exports.z2 = _server_8.z2; // z2 shouldn't give redeclare error
 
 
 //// [server.d.ts]

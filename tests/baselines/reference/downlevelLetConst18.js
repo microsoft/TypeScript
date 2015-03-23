@@ -32,12 +32,6 @@ for (let x; ;) {
 
 //// [downlevelLetConst18.js]
 'use strict';
-for (var x = void 0;;) {
-    function foo() {
-        x;
-    }
-    ;
-}
 for (var _x = void 0;;) {
     function foo() {
         _x;
@@ -45,33 +39,39 @@ for (var _x = void 0;;) {
     ;
 }
 for (var _x_1 = void 0;;) {
-    (function () {
+    function foo() {
         _x_1;
-    })();
+    }
+    ;
 }
-for (var _x_2 = 1;;) {
+for (var _x_2 = void 0;;) {
     (function () {
         _x_2;
     })();
 }
-for (var _x_3 = void 0;;) {
-    ({
-        foo: function () {
-            _x_3;
-        }
-    });
+for (var _x_3 = 1;;) {
+    (function () {
+        _x_3;
+    })();
 }
 for (var _x_4 = void 0;;) {
     ({
-        get foo() {
-            return _x_4;
+        foo: function () {
+            _x_4;
         }
     });
 }
 for (var _x_5 = void 0;;) {
     ({
+        get foo() {
+            return _x_5;
+        }
+    });
+}
+for (var _x_6 = void 0;;) {
+    ({
         set foo(v) {
-            _x_5;
+            _x_6;
         }
     });
 }

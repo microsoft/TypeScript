@@ -1,0 +1,50 @@
+=== tests/cases/compiler/letCollidingNameInNestedScope.ts ===
+declare function foo(a: any);
+>foo : (a: any) => any
+>a : any
+
+var x = 1;
+>x : number
+{
+    let x = true;
+>x : boolean
+
+    foo(x);
+>foo(x) : any
+>foo : (a: any) => any
+>x : boolean
+
+    function bar() {
+>bar : () => void
+
+        var _x = 1;
+>_x : number
+
+        foo(_x);
+>foo(_x) : any
+>foo : (a: any) => any
+>_x : number
+
+        foo(x);
+>foo(x) : any
+>foo : (a: any) => any
+>x : boolean
+        {
+            let x = 1;
+>x : number
+
+            foo(x);
+>foo(x) : any
+>foo : (a: any) => any
+>x : number
+        }
+        foo(_x);
+>foo(_x) : any
+>foo : (a: any) => any
+>_x : number
+    }
+    foo(x);
+>foo(x) : any
+>foo : (a: any) => any
+>x : boolean
+}

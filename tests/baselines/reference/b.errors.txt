@@ -1,0 +1,9 @@
+tests/cases/compiler/b.ts(2,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
+==== tests/cases/compiler/b.ts (1 errors) ====
+    class D { }
+    export = D;
+    ~~~~~~~~~~~
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+    
