@@ -1203,8 +1203,8 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: Node): string;
-        getExpressionNameSubstitution(node: Identifier): string;
+        hasGlobalName(name: string): boolean;
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
         hasExportDefaultValue(node: SourceFile): boolean;
         isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;

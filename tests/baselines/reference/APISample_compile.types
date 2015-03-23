@@ -3003,15 +3003,17 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: Node): string;
+        hasGlobalName(name: string): boolean;
+>hasGlobalName : (name: string) => boolean
+>name : string
+
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
+>getExpressionNameSubstitution : (node: Identifier, getGeneratedNameForNode: (node: Node) => string) => string
+>node : Identifier
+>Identifier : Identifier
 >getGeneratedNameForNode : (node: Node) => string
 >node : Node
 >Node : Node
-
-        getExpressionNameSubstitution(node: Identifier): string;
->getExpressionNameSubstitution : (node: Identifier) => string
->node : Identifier
->Identifier : Identifier
 
         hasExportDefaultValue(node: SourceFile): boolean;
 >hasExportDefaultValue : (node: SourceFile) => boolean

@@ -5,6 +5,12 @@ module ts {
     let nextNodeId = 1;
     let nextMergeId = 1;
 
+    // @internal
+    export function getNodeId(node: Node): number {
+        if (!node.id) node.id = nextNodeId++;
+        return node.id;
+    }
+
     /* @internal */ export let checkTime = 0;
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
@@ -255,8 +261,8 @@ module ts {
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            if (!node.id) node.id = nextNodeId++;
-            return nodeLinks[node.id] || (nodeLinks[node.id] = {});
+            let nodeId = getNodeId(node);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
         function getSourceFile(node: Node): SourceFile {
@@ -10954,126 +10960,7 @@ module ts {
             return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
         }
 
-        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
-            while (node) {
-                if (node === ancestor) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
-        function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
-                    // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        function getGeneratedNamesForSourceFile(sourceFile: SourceFile): Map<string> {
-            let links = getNodeLinks(sourceFile);
-            let generatedNames = links.generatedNames;
-            if (!generatedNames) {
-                generatedNames = links.generatedNames = {};
-                generateNames(sourceFile);
-            }
-            return generatedNames;
-
-            function generateNames(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ClassDeclaration:
-                        generateNameForFunctionOrClassDeclaration(<Declaration>node);
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        generateNameForModuleOrEnum(<ModuleDeclaration>node);
-                        generateNames((<ModuleDeclaration>node).body);
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        generateNameForModuleOrEnum(<EnumDeclaration>node);
-                        break;
-                    case SyntaxKind.ImportDeclaration:
-                        generateNameForImportDeclaration(<ImportDeclaration>node);
-                        break;
-                    case SyntaxKind.ExportDeclaration:
-                        generateNameForExportDeclaration(<ExportDeclaration>node);
-                        break;
-                    case SyntaxKind.ExportAssignment:
-                        generateNameForExportAssignment(<ExportAssignment>node);
-                        break;
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleBlock:
-                        forEach((<SourceFile | ModuleBlock>node).statements, generateNames);
-                        break;
-                }
-            }
-
-            function isExistingName(name: string) {
-                return hasProperty(globals, name) ||  hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
-            }
-
-            function makeUniqueName(baseName: string): string {
-                let name = generateUniqueName(baseName, isExistingName);
-                return generatedNames[name] = name;
-            }
-
-            function assignGeneratedName(node: Node, name: string) {
-                getNodeLinks(node).generatedName = unescapeIdentifier(name);
-            }
-
-            function generateNameForFunctionOrClassDeclaration(node: Declaration) {
-                if (!node.name) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
-
-            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                if (node.name.kind === SyntaxKind.Identifier) {
-                    let name = node.name.text;
-                    // Use module/enum name itself if it is unique, otherwise make a unique variation
-                    assignGeneratedName(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
-                }
-            }
-
-            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
-                let expr = getExternalModuleName(node);
-                let baseName = expr.kind === SyntaxKind.StringLiteral ?
-                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
-                assignGeneratedName(node, makeUniqueName(baseName));
-            }
-
-            function generateNameForImportDeclaration(node: ImportDeclaration) {
-                if (node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportAssignment(node: ExportAssignment) {
-                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
-        }
-
-        function getGeneratedNameForNode(node: Node) {
-            let links = getNodeLinks(node);
-            if (!links.generatedName) {
-                getGeneratedNamesForSourceFile(getSourceFile(node));
-            }
-            return links.generatedName;
-        }
-
-        function getAliasNameSubstitution(symbol: Symbol): string {
+        function getAliasNameSubstitution(symbol: Symbol, getGeneratedNameForNode: (Node: Node) => string): string {
             let declaration = getDeclarationOfAliasSymbol(symbol);
             if (declaration && declaration.kind === SyntaxKind.ImportSpecifier) {
                 let moduleName = getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent);
@@ -11082,7 +10969,7 @@ module ts {
             }
         }
 
-        function getExportNameSubstitution(symbol: Symbol, location: Node): string {
+        function getExportNameSubstitution(symbol: Symbol, location: Node, getGeneratedNameForNode: (Node: Node) => string): string {
             if (isExternalModuleSymbol(symbol.parent)) {
                 var symbolName = unescapeIdentifier(symbol.name);
                 // If this is es6 or higher, just use the name of the export
@@ -11104,24 +10991,24 @@ module ts {
             }
         }
 
-        function getExpressionNameSubstitution(node: Identifier): string {
+        function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
             let symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
                 // Whan an identifier resolves to a parented symbol, it references an exported entity from
                 // another declaration of the same internal module.
                 if (symbol.parent) {
-                    return getExportNameSubstitution(symbol, node.parent);
+                    return getExportNameSubstitution(symbol, node.parent, getGeneratedNameForNode);
                 }
                 // If we reference an exported entity within the same module declaration, then whether
                 // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
                 // kinds that we do NOT prefix.
                 let exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
                 if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                    return getExportNameSubstitution(exportSymbol, node.parent);
+                    return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
                 }
                 // Named imports from ES6 import declarations are rewritten
                 if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
-                    return getAliasNameSubstitution(symbol);
+                    return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
                 }
             }
         }
@@ -11224,10 +11111,13 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
+        function hasGlobalName(name: string): boolean {
+            return hasProperty(globals, name);
+        }
+
         function isUnknownIdentifier(location: Node, name: string): boolean {
             Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
-            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
-                !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
+            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
@@ -11257,8 +11147,8 @@ module ts {
 
         function createResolver(): EmitResolver {
             return {
-                getGeneratedNameForNode,
                 getExpressionNameSubstitution,
+                hasGlobalName,
                 hasExportDefaultValue,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,

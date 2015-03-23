@@ -38,40 +38,40 @@ for (var x = void 0;;) {
     }
     ;
 }
-for (var _x = void 0;;) {
+for (var x = void 0;;) {
     function foo() {
-        _x;
+        x;
     }
     ;
 }
-for (var _x_1 = void 0;;) {
+for (var x = void 0;;) {
     (function () {
-        _x_1;
+        x;
     })();
 }
-for (var _x_2 = 1;;) {
+for (var x = 1;;) {
     (function () {
-        _x_2;
+        x;
     })();
 }
-for (var _x_3 = void 0;;) {
+for (var x = void 0;;) {
     ({
         foo: function () {
-            _x_3;
+            x;
         }
     });
 }
-for (var _x_4 = void 0;;) {
+for (var x = void 0;;) {
     ({
         get foo() {
-            return _x_4;
+            return x;
         }
     });
 }
-for (var _x_5 = void 0;;) {
+for (var x = void 0;;) {
     ({
         set foo(v) {
-            _x_5;
+            x;
         }
     });
 }
