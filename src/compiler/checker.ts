@@ -613,7 +613,7 @@ module ts {
             return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
-        function getTargetOfImportDeclaration(node: Declaration): Symbol {
+        function getTargetOfAliasDeclaration(node: Declaration): Symbol {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                     return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node);
@@ -640,7 +640,7 @@ module ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 let node = getDeclarationOfAliasSymbol(symbol);
-                let target = getTargetOfImportDeclaration(node);
+                let target = getTargetOfAliasDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
