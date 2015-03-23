@@ -1228,7 +1228,6 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
-        getClassDeclarationVariableId(node: Identifier): number;
     }
 
     export const enum SymbolFlags {

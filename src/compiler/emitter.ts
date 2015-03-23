@@ -1586,7 +1586,6 @@ module ts {
             let currentScopeNames: Map<string>;
 
             let generatedBlockScopeNames: string[];
-            let generatedClassNames: string[];
             let generatedComputedPropertyNames: string[];
             let generatedSetterNames: string[];
 
@@ -2573,6 +2572,15 @@ module ts {
                     emitLiteral(<LiteralExpression>node);
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
+                    // if this is a decorated computed property, we will need to capture the result
+                    // of the property expression so that we can apply decorators later. This is to ensure 
+                    // we don't introduce unintended side effects:
+                    //
+                    //   class C {
+                    //     [_a = x]() { }
+                    //   }
+                    //   __decorate([dec], C.prototype, _a);
+                    //
                     if (nodeIsDecorated(node.parent)) {
                         if (!generatedComputedPropertyNames) {
                             generatedComputedPropertyNames = [];
@@ -2580,6 +2588,7 @@ module ts {
 
                         let generatedName = generatedComputedPropertyNames[node.id];
                         if (generatedName) {
+                            // we have already generated a variable for this node, write that value instead.
                             write(generatedName);
                             return;
                         }
@@ -2650,29 +2659,26 @@ module ts {
                 }
             }
 
-            function getGeneratedNameForIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean): string {
-                if (!nodeIsSynthesized(node)) {
-                    if (allowGeneratedIdentifiers && generatedBlockScopeNames) {
-                        var variableId = resolver.getBlockScopedVariableId(node)
-                        if (variableId !== undefined) {
-                            return generatedBlockScopeNames[variableId];
-                        }
-                    }
-                    if (languageVersion >= ScriptTarget.ES6 && generatedClassNames) {
-                        var variableId = resolver.getClassDeclarationVariableId(node);
-                        if (variableId !== undefined) {
-                            return generatedClassNames[variableId];
-                        }
-                    }
+            function getGeneratedNameForIdentifier(node: Identifier): string {
+                if (nodeIsSynthesized(node) || !generatedBlockScopeNames) {
+                    return undefined;
                 }
-                return undefined;
+
+                var variableId = resolver.getBlockScopedVariableId(node)
+                if (variableId === undefined) {
+                    return undefined;
+                }
+
+                return generatedBlockScopeNames[variableId];
             }
 
             function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
-                let generatedName = getGeneratedNameForIdentifier(node, allowGeneratedIdentifiers);
-                if (generatedName) {
-                    write(generatedName);
-                    return;
+                if (allowGeneratedIdentifiers) {
+                    let generatedName = getGeneratedNameForIdentifier(node);
+                    if (generatedName) {
+                        write(generatedName);
+                        return;
+                    }
                 }
                 if (!node.parent) {
                     write(node.text);
@@ -3095,7 +3101,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6) {
                     // Emit identifier as an identifier
                     write(": ");
-                    var generatedName = getGeneratedNameForIdentifier(node.name, /*allowGeneratedIdentifiers*/ true);
+                    var generatedName = getGeneratedNameForIdentifier(node.name);
                     if (generatedName) {
                         write(generatedName);
                     }
@@ -4958,14 +4964,52 @@ module ts {
                     }
                 }
 
-                if (nodeOrChildIsDecorated(node)) {
-                    if ((node.flags & NodeFlags.Default) === 0) {
-                        write("var ");
+                let thisNodeIsDecorated = nodeIsDecorated(node);
+                let thisNodeOrChildrenAreDecorated = nodeOrChildIsDecorated(node);                
+                if (thisNodeOrChildrenAreDecorated) {
+                    // When decorations are applied to a class, they may need to introduce new
+                    // temporary variables or even replace the class constructor. As such, we
+                    // need to ensure all decorators are applied before the declaration is
+                    // visible, and avoid unnecessarily leaking internal temporary state to the
+                    // module or global scope. 
+                    //
+                    // We also may need to alias the class declaration to avoid a pitfall in 
+                    // ES6 classes due to the fact that the class identifier is doubly-bound both
+                    // in its outer scope and its class body. A class decorator could replace the 
+                    // class constructor. In that case, we need to emit the class as a class expression
+                    // without an identifier, and assign that name later using Object.defineProperty 
+                    // (since the `name` property of a class/function is `writable:false` but 
+                    // `configurable:true`).
+                    // 
+                    //
+                    // For example:
+                    //
+                    //   @dec 
+                    //   class C {
+                    //     static x() {}
+                    //     y() { C.x(); }
+                    //   }
+                    //
+                    //   let C = () => {
+                    //       let C = class {
+                    //           static x() {}
+                    //           y() { C.x(); }
+                    //       }
+                    //       Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //       C = __decorate([dec], C);
+                    //       return C;
+                    //   }();
+                    //
+
+                    // if this is not an export, emit the name
+                    if (!(node.flags & NodeFlags.Default)) {
+                        write("let ");
                         emitDeclarationName(node);
                         write(" = ");
                     }
 
-                    write("(function() {");
+                    // begin the IIFE
+                    write("() => {");
 
                     var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
@@ -4981,27 +5025,21 @@ module ts {
                     increaseIndent();
                     writeLine();
 
-                    if (nodeIsDecorated(node)) {
-                        if (!generatedClassNames) {
-                            generatedClassNames = [];
-                        }
-
-                        var generatedName = generateUniqueNameForLocation(node, "_" + node.name.text);
-                        var variableId = resolver.getClassDeclarationVariableId(node.name);
+                    if (thisNodeIsDecorated) {
                         write("let ");
-                        write(generatedName);
+                        emitDeclarationName(node);
                         write(" = ");
                     }
                 }
 
-                write("class ");
-                // check if this is an "export default class" as it may not have a name
-                if (node.name || !(node.flags & NodeFlags.Default)) {
+                write("class");
+                
+                // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
+                if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
+                    write(" ");
                     emitDeclarationName(node);
-                    if (nodeIsDecorated(node)) {
-                        generatedClassNames[variableId] = generatedName;
-                    }
                 }
+
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write(" extends ");
@@ -5019,6 +5057,17 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
                 scopeEmitEnd();
 
+                // For a decorated class, we need to assign its name (if it has one).
+                if ((node.name || !(node.flags & NodeFlags.Default)) && thisNodeIsDecorated) {
+                    writeLine();
+                    write("Object.defineProperty(");
+                    emitDeclarationName(node);
+                    write(", \"name\", { value: \"");
+                    emitDeclarationName(node);
+                    write("\", configurable: true });");
+                    writeLine();
+                }
+
                 // Emit static property assignment. Because classDeclaration is lexically evaluated,
                 // it is safe to emit static property assignment after classDeclaration
                 // From ES6 specification:
@@ -5027,7 +5076,7 @@ module ts {
                 writeLine();
                 emitMemberAssignments(node, NodeFlags.Static);
 
-                if (nodeOrChildIsDecorated(node)) {
+                if (thisNodeOrChildrenAreDecorated) {
                     writeLine();
                     emitDecoratorsOfClass(node);
 
@@ -5044,7 +5093,7 @@ module ts {
 
                     decreaseIndent();
                     writeLine();
-                    write("})();");
+                    write("}();");
                 }
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
@@ -5134,10 +5183,38 @@ module ts {
                 }
             }
 
-            function emitTargetOfClassElement(node: ClassDeclaration, member: Node) {
+            function emitClassMemberPrefix(node: ClassDeclaration, member: Node) {
                 emitDeclarationName(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
+                }
+            }
+
+            function emitClassMemberAsExpression(node: FunctionLikeDeclaration) {
+                if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (node.kind === SyntaxKind.Constructor) {
+                        emitDeclarationName(<ClassDeclaration>node.parent);
+                    }
+                    else if (node.kind === SyntaxKind.SetAccessor) {
+                        if (generatedSetterNames) {
+                            var generatedName = generatedSetterNames[node.id];
+                            if (generatedName) {
+                                write(generatedName);
+                                return;
+                            }
+                        }
+
+                        // for an ES6 setter, we never had a chance to cache the setter. 
+                        write("Object.getOwnPropertyDescriptor(");
+                        emitClassMemberPrefix(<ClassDeclaration>node.parent, node);
+                        write(", ");
+                        emitExpressionForPropertyName(node.name);
+                        write(").set");
+                    }
+                    else {
+                        emitClassMemberPrefix(<ClassDeclaration>node.parent, node);
+                        emitMemberAccessForPropertyName(node.name);
+                    }
                 }
             }
 
@@ -5184,6 +5261,10 @@ module ts {
                 write(`], `);
             }
 
+            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration) {
+                forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex));
+            }
+
             function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number) {
                 let decorators = parameter.decorators;
                 if (!decorators || decorators.length === 0) {
@@ -5192,7 +5273,7 @@ module ts {
 
                 emitStart(node);
                 emitDecorateStart(decorators);
-                emitPropertyAccessForMethod(node);
+                emitClassMemberAsExpression(node);
                 write(", ");
                 write(String(parameterIndex));
                 write(");");
@@ -5200,42 +5281,15 @@ module ts {
                 writeLine();
             }
 
-            function emitPropertyAccessForMethod(node: FunctionLikeDeclaration) {
-                if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
-                    if (node.kind === SyntaxKind.Constructor) {
-                        emitDeclarationName(<ClassDeclaration>node.parent);
-                    }
-                    else if (node.kind === SyntaxKind.SetAccessor) {
-                        if (generatedSetterNames) {
-                            var generatedName = generatedSetterNames[node.id];
-                            if (generatedName) {
-                                write(generatedName);
-                                return;
-                            }
-                        }
+            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {                
+                forEach(node.members, member => emitDecoratorsOfMember(node, member, staticFlag));
+            }
 
-                        write("Object.getOwnPropertyDescriptor(");
-                        emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
-                        write(", ");
-                        emitExpressionForPropertyName(node.name);
-                        write(").set");                        
-                    }
-                    else {
-                        emitTargetOfClassElement(<ClassDeclaration>node.parent, node);
-                        emitMemberAccessForPropertyName(node.name);
-                    }
+            function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, staticFlag: NodeFlags) {
+                if ((member.flags & NodeFlags.Static) !== staticFlag) {
+                    return;
                 }
-            }
 
-            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration) {
-                forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex));
-            }
-
-            function emitDecoratorsOfMembers(node: ClassDeclaration) {
-                forEach(node.members, member => emitDecoratorsOfMember(node, member));
-            }
-
-            function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement) {
                 switch (member.kind) {
                     case SyntaxKind.MethodDeclaration:
                         emitDecoratorsOfParameters(<MethodDeclaration>member);
@@ -5262,16 +5316,14 @@ module ts {
                     return;
                 }
 
-                if (languageVersion >= ScriptTarget.ES5) {
-                    emitStart(member);
-                    emitDecorateStart(decorators);
-                    emitTargetOfClassElement(node, member);
-                    write(", ");
-                    emitExpressionForPropertyName(name);
-                    write(");");
-                    emitEnd(member);
-                    writeLine();
-                }
+                emitStart(member);
+                emitDecorateStart(decorators);
+                emitClassMemberPrefix(node, member);
+                write(", ");
+                emitExpressionForPropertyName(name);
+                write(");");
+                emitEnd(member);
+                writeLine();
             }
 
             function emitDecoratorsOfConstructor(node: ClassDeclaration) {
@@ -5296,7 +5348,12 @@ module ts {
             }
 
             function emitDecoratorsOfClass(node: ClassDeclaration) {
-                emitDecoratorsOfMembers(node);
+                if (languageVersion < ScriptTarget.ES5) {
+                    return;
+                }
+
+                emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
+                emitDecoratorsOfMembers(node, NodeFlags.Static);
                 emitDecoratorsOfConstructor(node);
             }
 
@@ -5996,6 +6053,7 @@ module ts {
 var __decorate = this.__decorate || function (decorators, target, key) {
     var kind = key == null ? 0 : typeof key == "number" ? 1 : 2, result = target;
     if (kind == 2) result = Object.getOwnPropertyDescriptor(target, typeof key == "symbol" ? key : key = String(key));
+    if (kind == 2 && !result) kind = 1;
     for (var i = decorators.length - 1; i >= 0; --i) {
         var decorator = decorators[i];
         result = (kind == 0 ? decorator(result) : kind == 1 ? decorator(target, key) : decorator(target, key, result)) || result;

@@ -575,42 +575,6 @@ module ts {
         return (<CallExpression>node).expression;
     }
 
-    export function nodeOrChildIsDecorated(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ClassDeclaration:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
-
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.Parameter:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.GetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.SetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return forEach((<FunctionLikeDeclaration>node).parameters, nodeOrChildIsDecorated);
-        }
-
-        return false;
-    }
-
     export function nodeIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
@@ -645,6 +609,23 @@ module ts {
         }
 
         return false;
+    }
+    
+    export function childIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
+        }
+
+        return false;
+    }
+
+    export function nodeOrChildIsDecorated(node: Node): boolean {
+        return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
     export function isExpression(node: Node): boolean {
