@@ -102,10 +102,10 @@ module ts {
         let anyArrayType: Type;
         let globalTypedPropertyDescriptorType: ObjectType;
         let globalClassDecoratorType: ObjectType;
-        let globalClassAnnotationType: ObjectType;
+        let globalClassDecoratorErasedType: ObjectType;
         let globalParameterDecoratorType: ObjectType;
-        let globalPropertyAnnotationType: ObjectType;
         let globalPropertyDecoratorType: ObjectType;
+        let globalPropertyDecoratorErasedType: ObjectType;
 
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
@@ -8518,11 +8518,11 @@ module ts {
             }
         }
 
-        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedAnnotationType: Type, parentType?: Type, expectedDecoratorType?: Type, message?: DiagnosticMessage) {
+        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedErasedDecoratorType: Type, parentType?: Type, expectedGenericDecoratorType?: Type, message?: DiagnosticMessage) {            
             // first validate that we are using the correct decorator signature for the declaration
-            if (checkTypeAssignableTo(exprType, expectedAnnotationType, node) && expectedDecoratorType) {
+            if (checkTypeAssignableTo(exprType, expectedErasedDecoratorType, node) && parentType && expectedGenericDecoratorType && message) {
                 // next validate that we are not changing the static type in the decorator to a type that is not assignable.
-                checkTypeAssignableTo(exprType, instantiateSingleCallFunctionType(expectedDecoratorType, [parentType]), node, message);
+                checkTypeAssignableTo(exprType, instantiateSingleCallFunctionType(expectedGenericDecoratorType, [parentType]), node, message);
             }
         }
 
@@ -8535,7 +8535,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration:
                     let classSymbol = getSymbolOfNode(node.parent);
                     let classType = getTypeOfSymbol(classSymbol);
-                    checkDecoratorSignature(node, exprType, globalClassAnnotationType, classType, globalClassDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_class);
+                    checkDecoratorSignature(node, exprType, globalClassDecoratorErasedType, classType, globalClassDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_class);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
@@ -8543,7 +8543,7 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     let propertyType = getTypeOfNode(node.parent);
-                    checkDecoratorSignature(node, exprType, globalPropertyAnnotationType, propertyType, globalPropertyDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_member);
+                    checkDecoratorSignature(node, exprType, globalPropertyDecoratorErasedType, propertyType, globalPropertyDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_member);
                     break;
 
                 case SyntaxKind.Parameter:
@@ -11374,9 +11374,9 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
             globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalClassAnnotationType = instantiateSingleCallFunctionType(globalClassDecoratorType, [globalFunctionType]);
+            globalClassDecoratorErasedType = instantiateSingleCallFunctionType(globalClassDecoratorType, [globalFunctionType]);
             globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalPropertyAnnotationType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [anyType]);
+            globalPropertyDecoratorErasedType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [anyType]);
             globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
