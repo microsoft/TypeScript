@@ -11073,14 +11073,6 @@ module ts {
             return links.generatedName;
         }
 
-        function getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string {
-            return getGeneratedNameForNode(container);
-        }
-
-        function getLocalNameForImportDeclaration(node: ImportDeclaration): string {
-            return getGeneratedNameForNode(node);
-        }
-
         function getAliasNameSubstitution(symbol: Symbol): string {
             let declaration = getDeclarationOfAliasSymbol(symbol);
             if (declaration && declaration.kind === SyntaxKind.ImportSpecifier) {
