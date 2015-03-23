@@ -5004,6 +5004,10 @@ module ts {
                 }
             }
 
+            function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+                return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause && !!(<ImportDeclaration>node).importClause.name;
+            }
+
             function emitExportImportAssignments(node: Node) {
                 if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node)) {
                     emitExportMemberAssignments(<Identifier>(<Declaration>node).name);
@@ -5018,8 +5022,7 @@ module ts {
                     if (compilerOptions.module !== ModuleKind.AMD) {
                         emitLeadingComments(node);
                         emitStart(node);
-                        let isDefaultImport = node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause && !!(<ImportDeclaration>node).importClause.name;
-                        if (namespaceDeclaration && !isDefaultImport) {
+                        if (namespaceDeclaration && !isDefaultImport(node)) {
                             // import x = require("foo")
                             // import * as x from "foo"
                             if (!isExportedImport) write("var ");
@@ -5040,7 +5043,7 @@ module ts {
                             }
                         }
                         emitRequire(getExternalModuleName(node));
-                        if (namespaceDeclaration && isDefaultImport) {
+                        if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
                             write(", ");
                             emitModuleMemberName(namespaceDeclaration);
@@ -5057,6 +5060,14 @@ module ts {
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             emit(namespaceDeclaration.name);
+                            write(";");
+                        }
+                        else if (namespaceDeclaration && isDefaultImport(node)) {
+                            // import d, * as x from "foo"
+                            write("var ");
+                            emitModuleMemberName(namespaceDeclaration);
+                            write(" = ");
+                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
                             write(";");
                         }
                         emitExportImportAssignments(node);
@@ -5249,7 +5260,7 @@ module ts {
                 for (let importNode of externalImports) {
                     write(", ");
                     let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration) {
+                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
                         emit(namespaceDeclaration.name);
                     }
                     else {
