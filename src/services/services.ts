@@ -2370,14 +2370,25 @@ module ts {
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
+        function isJavaScript(fileName: string) {
+            return fileExtensionIs(fileName, ".js");
+        }
+
         /**
          * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors  
          */
-        function getSemanticDiagnostics(fileName: string) {
+        function getSemanticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
             let targetSourceFile = getValidSourceFile(fileName);
+
+            // For JavaScript files, we don't want to report the normal typescript semantic errors.
+            // Instead, we just report errors for using TypeScript-only constructs from within a 
+            // JavaScript file.
+            if (isJavaScript(fileName)) {
+                return getJavaScriptSemanticDiagnostics(targetSourceFile);
+            }
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
@@ -2392,13 +2403,166 @@ module ts {
             return semanticDiagnostics.concat(declarationDiagnostics);
         }
 
+        function getJavaScriptSemanticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
+            let diagnostics: Diagnostic[] = [];
+            walk(sourceFile);
+
+            return diagnostics;
+
+            function walk(node: Node) {
+                if (!node) {
+                    return;
+                }
+
+                switch (node.kind) {
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.ExportAssignment:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.ClassDeclaration:
+                        let classDeclaration = <ClassDeclaration>node;
+                        if (checkModifiers(classDeclaration.modifiers) ||
+                            checkTypeParameters(classDeclaration.typeParameters)) {
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.HeritageClause:
+                        let heritageClause = <HeritageClause>node;
+                        if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript));
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.InterfaceDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.ModuleDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.TypeAliasDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionDeclaration:
+                        let functionDeclaration = <FunctionLikeDeclaration>node;
+                        if (checkModifiers(functionDeclaration.modifiers) ||
+                            checkTypeParameters(functionDeclaration.typeParameters) ||
+                            checkTypeAnnotation(functionDeclaration.type)) {
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.VariableStatement:
+                        let variableStatement = <VariableStatement>node;
+                        if (checkModifiers(variableStatement.modifiers)) {
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.VariableDeclaration:
+                        let variableDeclaration = <VariableDeclaration>node;
+                        if (checkTypeAnnotation(variableDeclaration.type)) {
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        let expression = <CallExpression>node;
+                        if (expression.typeArguments && expression.typeArguments.length > 0) {
+                            let start = expression.typeArguments.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                                Diagnostics.type_arguments_can_only_be_used_in_TypeScript));
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.Parameter:
+                        let parameter = <ParameterDeclaration>node;
+                        if (parameter.modifiers) {
+                            let start = parameter.modifiers.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                                Diagnostics.parameter_modifiers_can_only_be_used_in_TypeScript));
+                            return;
+                        }
+                        if (parameter.questionToken) {
+                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics.can_only_be_used_in_TypeScript));
+                            return;
+                        }
+                        if (parameter.type) {
+                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_TypeScript));
+                            return;
+                        }
+                        break;
+                    case SyntaxKind.PropertyDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_TypeScript));
+                        return
+                    case SyntaxKind.EnumDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_TypeScript));
+                        return;
+                    case SyntaxKind.TypeAssertionExpression:
+                        let typeAssertionExpression = <TypeAssertion>node;
+                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_TypeScript));
+                        return;
+                }
+
+                forEachChild(node, walk);
+            }
+
+            function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+                if (typeParameters) {
+                    let start = typeParameters.pos;
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_TypeScript));
+                    return true;
+                }
+                return false;
+            }
+
+            function checkTypeAnnotation(type: TypeNode): boolean {
+                if (type) {
+                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_TypeScript));
+                    return true;
+                }
+
+                return false;
+            }
+
+            function checkModifiers(modifiers: ModifiersArray): boolean {
+                if (modifiers) {
+                    for (let modifier of modifiers) {
+                        switch (modifier.kind) {
+                            case SyntaxKind.PublicKeyword:
+                            case SyntaxKind.PrivateKeyword:
+                            case SyntaxKind.ProtectedKeyword:
+                            case SyntaxKind.DeclareKeyword:
+                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_TypeScript, tokenToString(modifier.kind)));
+                                return true;
+
+                            // These are all legal modifiers.
+                            case SyntaxKind.StaticKeyword:
+                            case SyntaxKind.ExportKeyword:
+                            case SyntaxKind.ConstKeyword:
+                            case SyntaxKind.DefaultKeyword:
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
             return program.getGlobalDiagnostics();
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget): string {
+        function getValidCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget): string {
             let displayName = symbol.getName();
             if (displayName && displayName.length > 0) {
                 let firstCharCode = displayName.charCodeAt(0);
@@ -2409,7 +2573,8 @@ module ts {
                     return undefined;
                 }
 
-                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                if (displayName && displayName.length >= 2 &&
+                    firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                     (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
                     // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
@@ -2421,7 +2586,6 @@ module ts {
                     isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
-
                 if (isValid) {
                     return unescapeIdentifier(displayName);
                 }
@@ -2430,11 +2594,29 @@ module ts {
             return undefined;
         }
 
+        function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
+            let firstCharCode = displayName.charCodeAt(0);
+            if (displayName && displayName.length >= 2 &&
+                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                displayName = displayName.substring(1, displayName.length - 1);
+            }
+
+            let isValid = isIdentifierStart(displayName.charCodeAt(0), target);
+            for (let i = 1, n = displayName.length; isValid && i < n; i++) {
+                isValid = isIdentifierPart(displayName.charCodeAt(i), target);
+            }
+
+            return isValid ? unescapeIdentifier(displayName) : undefined;
+        }
+
         function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getValidCompletionEntryDisplayName(symbol, program.getCompilerOptions().target);
+            let displayName = getValidCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -2450,7 +2632,7 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number) {
+        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
 
             let syntacticStart = new Date().getTime();
@@ -2490,10 +2672,11 @@ module ts {
                 return undefined;
             }
 
-            // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
-            // other wise, it is a request for all visible symbols in the scope, and the node is the current location
-            let node: Node;
-            let isRightOfDot: boolean;
+            // Find the node where completion is requested on, in the case of a completion after 
+            // a dot, it is the member access expression other wise, it is a request for all 
+            // visible symbols in the scope, and the node is the current location.
+            let node = currentToken;
+            let isRightOfDot = false;
             if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = (<PropertyAccessExpression>previousToken.parent).expression;
                 isRightOfDot = true;
@@ -2501,10 +2684,6 @@ module ts {
             else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
                 node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
-            }
-            else {
-                node = currentToken;
-                isRightOfDot = false;
             }
 
             // Clear the current activeCompletionSession for this session
@@ -2524,6 +2703,64 @@ module ts {
             let isNewIdentifierLocation: boolean;
 
             if (isRightOfDot) {
+                if (isJavaScript(fileName)) {
+                    // If this is JavaScript, then just present a simple identifier list.
+                    if (!tryGetJavaScriptMemberCompletionEntries()) {
+                        return undefined;
+                    }
+                }
+                else {
+                    if (!tryGetTypeScriptMemberCompletionEntries()) {
+                        return undefined;
+                    }
+                }
+            }
+            else {
+                // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
+                // global symbols in scope.  These results should be valid for either language as
+                // the set of symbols that can be referenced from this location.
+                if (!tryGetGlobalCompletionEntries()) {
+                    return undefined;
+                }
+            }
+
+            // Add keywords if this is not a member completion list
+            if (!isMemberCompletion) {
+                addRange(activeCompletionSession.entries, keywordCompletions);
+            }
+            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+
+            return {
+                isMemberCompletion,
+                isNewIdentifierLocation,
+                entries: activeCompletionSession.entries
+            };
+
+            function tryGetJavaScriptMemberCompletionEntries(): boolean {
+                let allIdentifiers: Map<string> = {};
+                for (let sourceFile of program.getSourceFiles()) {
+                    let nameTable = getNameTable(sourceFile);
+                    for (let name in nameTable) {
+                        allIdentifiers[name] = name;
+                    }
+                }
+
+                var target = program.getCompilerOptions().target;
+                for (let name in allIdentifiers) {
+                    let displayName = getValidCompletionEntryDisplayName(name, target);
+                    if (displayName) {
+                        activeCompletionSession.entries.push({
+                            name: displayName,
+                            kind: ScriptElementKind.unknown,
+                            kindModifiers: ""
+                        });
+                    }
+                }
+
+                return true;
+            }
+
+            function tryGetTypeScriptMemberCompletionEntries(): boolean {
                 // Right of dot member completion list
                 let symbols: Symbol[] = [];
                 isMemberCompletion = true;
@@ -2557,9 +2794,11 @@ module ts {
                     });
                 }
 
-                getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                getCompletionEntriesFromSymbols(symbols);
+                return true;
             }
-            else {
+
+            function tryGetGlobalCompletionEntries(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
@@ -2568,14 +2807,14 @@ module ts {
 
                     let contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
-                        return undefined;
+                        return false;
                     }
 
                     let contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
                     if (contextualTypeMembers && contextualTypeMembers.length > 0) {
                         // Add filtered items to the completion list
                         let filteredMembers = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
-                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                        getCompletionEntriesFromSymbols(filteredMembers);
                     }
                 }
                 else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
@@ -2588,7 +2827,7 @@ module ts {
                         Debug.assert(importDeclaration !== undefined);
                         let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
                         let filteredExports = filterModuleExports(exports, importDeclaration);
-                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                        getCompletionEntriesFromSymbols(filteredExports);
                     }
                 }
                 else {
@@ -2601,22 +2840,11 @@ module ts {
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     let symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
 
-                    getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                    getCompletionEntriesFromSymbols(symbols);
                 }
-            }
 
-            // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
+                return true;
             }
-            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
-
-            return {
-                isMemberCompletion,
-                isNewIdentifierLocation,
-                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
-                entries: activeCompletionSession.entries
-            };
 
             /**
              * Finds the first node that "embraces" the position, so that one may
@@ -2630,7 +2858,9 @@ module ts {
                 return scope;
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[]): void {
+                var session = activeCompletionSession;
+
                 let start = new Date().getTime();
                 forEach(symbols, symbol => {
                     let entry = createCompletionEntry(symbol, session.typeChecker, location);
@@ -4912,6 +5142,12 @@ module ts {
 
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
+
+            // If the option is set to not emit on errors, and there are any errors, then we don't 
+            // want to proceed.
+            if (program.getCompilerOptions().noEmitOnError && getPreEmitDiagnostics(program).length > 0) {
+                return { outputFiles: [], emitSkipped: true };
+            }
 
             let sourceFile = getValidSourceFile(fileName);
             let outputFiles: OutputFile[] = [];

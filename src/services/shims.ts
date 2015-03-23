@@ -325,6 +325,22 @@ module ts {
         }
     }
 
+    /* @internal */
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
+        return diagnostics.map(d => realizeDiagnostic(d, newLine));
+    }
+
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
+        return {
+            message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
+            start: diagnostic.start,
+            length: diagnostic.length,
+            /// TODO: no need for the tolowerCase call
+            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+            code: diagnostic.code
+        };
+    }
+
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
         private logger: Logger;
 
@@ -385,18 +401,7 @@ module ts {
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
             var newLine = this.getNewLine();
-            return diagnostics.map(d => this.realizeDiagnostic(d, newLine));
-        }
-
-        private realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
-            return {
-                message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-                start: diagnostic.start,
-                length: diagnostic.length,
-                /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase(),
-                code: diagnostic.code
-            };
+            return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
