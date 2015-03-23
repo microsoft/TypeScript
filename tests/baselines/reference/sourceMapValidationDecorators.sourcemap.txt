@@ -435,6 +435,7 @@ sourceFile:sourceMapValidationDecorators.ts
 7 >                                                       ^^
 8 >                                                         ^
 9 >                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                     ^^^^->
 1 >
   >
   >    
@@ -458,40 +459,6 @@ sourceFile:sourceMapValidationDecorators.ts
 8 >Emitted(37, 59) Source(28, 28) + SourceIndex(0) name (Greeter)
 9 >Emitted(37, 86) Source(29, 23) + SourceIndex(0) name (Greeter)
 ---
->>>    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
-1 >^^^^
-2 >    ^^^^^^^^^^^^
-3 >                ^^^^^^^^^^^^^^^^^^
-4 >                                  ^^
-5 >                                    ^^^^^^^^^^^^^^^^^^
-6 >                                                      ^
-7 >                                                       ^^
-8 >                                                         ^
-9 >                                                          ^^^^^^^^^^^^^^^^^^
-10>                                                                            ^^^^^^^^^^^^^->
-1 >
-  >
-  >    
-2 >    @
-3 >                PropertyDecorator1
-4 >                                  
-  >                                      @
-5 >                                    PropertyDecorator2
-6 >                                                      (
-7 >                                                       60
-8 >                                                         )
-9 >                                                          
-  >                                                              private static x1: number = 10;
-1 >Emitted(38, 5) Source(31, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(38, 17) Source(31, 6) + SourceIndex(0) name (Greeter)
-3 >Emitted(38, 35) Source(31, 24) + SourceIndex(0) name (Greeter)
-4 >Emitted(38, 37) Source(32, 6) + SourceIndex(0) name (Greeter)
-5 >Emitted(38, 55) Source(32, 24) + SourceIndex(0) name (Greeter)
-6 >Emitted(38, 56) Source(32, 25) + SourceIndex(0) name (Greeter)
-7 >Emitted(38, 58) Source(32, 27) + SourceIndex(0) name (Greeter)
-8 >Emitted(38, 59) Source(32, 28) + SourceIndex(0) name (Greeter)
-9 >Emitted(38, 77) Source(33, 36) + SourceIndex(0) name (Greeter)
----
 >>>    __decorate([ParameterDecorator1, ParameterDecorator2(70)], Greeter.prototype.fn, 0);
 1->^^^^
 2 >    ^^^^^^^^^^^^
@@ -503,6 +470,10 @@ sourceFile:sourceMapValidationDecorators.ts
 8 >                                                           ^
 9 >                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
+  >
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(60)
+  >    private static x1: number = 10;
   >    
   >    
 2 >    private fn(
@@ -518,15 +489,15 @@ sourceFile:sourceMapValidationDecorators.ts
   >                                                                  x: number) {
   >                                                                    return this.greeting;
   >                                                                }
-1->Emitted(39, 5) Source(35, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(39, 17) Source(36, 8) + SourceIndex(0) name (Greeter)
-3 >Emitted(39, 36) Source(36, 27) + SourceIndex(0) name (Greeter)
-4 >Emitted(39, 38) Source(37, 8) + SourceIndex(0) name (Greeter)
-5 >Emitted(39, 57) Source(37, 27) + SourceIndex(0) name (Greeter)
-6 >Emitted(39, 58) Source(37, 28) + SourceIndex(0) name (Greeter)
-7 >Emitted(39, 60) Source(37, 30) + SourceIndex(0) name (Greeter)
-8 >Emitted(39, 61) Source(37, 31) + SourceIndex(0) name (Greeter)
-9 >Emitted(39, 89) Source(40, 6) + SourceIndex(0) name (Greeter)
+1->Emitted(38, 5) Source(35, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(38, 17) Source(36, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(38, 36) Source(36, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(38, 38) Source(37, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(38, 57) Source(37, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(38, 58) Source(37, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(38, 60) Source(37, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(38, 61) Source(37, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(38, 89) Source(40, 6) + SourceIndex(0) name (Greeter)
 ---
 >>>    __decorate([ParameterDecorator1, ParameterDecorator2(90)], _set_greetings, 0);
 1 >^^^^
@@ -563,15 +534,15 @@ sourceFile:sourceMapValidationDecorators.ts
   >                                                                  greetings: string) {
   >                                                                    this.greeting = greetings;
   >                                                                }
-1 >Emitted(40, 5) Source(48, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(40, 17) Source(51, 8) + SourceIndex(0) name (Greeter)
-3 >Emitted(40, 36) Source(51, 27) + SourceIndex(0) name (Greeter)
-4 >Emitted(40, 38) Source(52, 8) + SourceIndex(0) name (Greeter)
-5 >Emitted(40, 57) Source(52, 27) + SourceIndex(0) name (Greeter)
-6 >Emitted(40, 58) Source(52, 28) + SourceIndex(0) name (Greeter)
-7 >Emitted(40, 60) Source(52, 30) + SourceIndex(0) name (Greeter)
-8 >Emitted(40, 61) Source(52, 31) + SourceIndex(0) name (Greeter)
-9 >Emitted(40, 83) Source(55, 6) + SourceIndex(0) name (Greeter)
+1 >Emitted(39, 5) Source(48, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(39, 17) Source(51, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(39, 36) Source(51, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(39, 38) Source(52, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(39, 57) Source(52, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(39, 58) Source(52, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(39, 60) Source(52, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(39, 61) Source(52, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(39, 83) Source(55, 6) + SourceIndex(0) name (Greeter)
 ---
 >>>    __decorate([PropertyDecorator1, PropertyDecorator2(80), PropertyDecorator1, PropertyDecorator2(90)], Greeter.prototype, "greetings");
 1->^^^^
@@ -613,22 +584,53 @@ sourceFile:sourceMapValidationDecorators.ts
 14>                                                                                                   90
 15>                                                                                                     )
 16>                                                                                                      
-1->Emitted(41, 5) Source(42, 5) + SourceIndex(0) name (Greeter)
-2 >Emitted(41, 17) Source(42, 6) + SourceIndex(0) name (Greeter)
-3 >Emitted(41, 35) Source(42, 24) + SourceIndex(0) name (Greeter)
-4 >Emitted(41, 37) Source(43, 6) + SourceIndex(0) name (Greeter)
-5 >Emitted(41, 55) Source(43, 24) + SourceIndex(0) name (Greeter)
-6 >Emitted(41, 56) Source(43, 25) + SourceIndex(0) name (Greeter)
-7 >Emitted(41, 58) Source(43, 27) + SourceIndex(0) name (Greeter)
-8 >Emitted(41, 59) Source(43, 28) + SourceIndex(0) name (Greeter)
-9 >Emitted(41, 61) Source(48, 6) + SourceIndex(0) name (Greeter)
-10>Emitted(41, 79) Source(48, 24) + SourceIndex(0) name (Greeter)
-11>Emitted(41, 81) Source(49, 6) + SourceIndex(0) name (Greeter)
-12>Emitted(41, 99) Source(49, 24) + SourceIndex(0) name (Greeter)
-13>Emitted(41, 100) Source(49, 25) + SourceIndex(0) name (Greeter)
-14>Emitted(41, 102) Source(49, 27) + SourceIndex(0) name (Greeter)
-15>Emitted(41, 103) Source(49, 28) + SourceIndex(0) name (Greeter)
-16>Emitted(41, 138) Source(46, 6) + SourceIndex(0) name (Greeter)
+1->Emitted(40, 5) Source(42, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(40, 17) Source(42, 6) + SourceIndex(0) name (Greeter)
+3 >Emitted(40, 35) Source(42, 24) + SourceIndex(0) name (Greeter)
+4 >Emitted(40, 37) Source(43, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(40, 55) Source(43, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(40, 56) Source(43, 25) + SourceIndex(0) name (Greeter)
+7 >Emitted(40, 58) Source(43, 27) + SourceIndex(0) name (Greeter)
+8 >Emitted(40, 59) Source(43, 28) + SourceIndex(0) name (Greeter)
+9 >Emitted(40, 61) Source(48, 6) + SourceIndex(0) name (Greeter)
+10>Emitted(40, 79) Source(48, 24) + SourceIndex(0) name (Greeter)
+11>Emitted(40, 81) Source(49, 6) + SourceIndex(0) name (Greeter)
+12>Emitted(40, 99) Source(49, 24) + SourceIndex(0) name (Greeter)
+13>Emitted(40, 100) Source(49, 25) + SourceIndex(0) name (Greeter)
+14>Emitted(40, 102) Source(49, 27) + SourceIndex(0) name (Greeter)
+15>Emitted(40, 103) Source(49, 28) + SourceIndex(0) name (Greeter)
+16>Emitted(40, 138) Source(46, 6) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
+1 >^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^
+4 >                                  ^^
+5 >                                    ^^^^^^^^^^^^^^^^^^
+6 >                                                      ^
+7 >                                                       ^^
+8 >                                                         ^
+9 >                                                          ^^^^^^^^^^^^^^^^^^
+1 >
+2 >    @
+3 >                PropertyDecorator1
+4 >                                  
+  >                                      @
+5 >                                    PropertyDecorator2
+6 >                                                      (
+7 >                                                       60
+8 >                                                         )
+9 >                                                          
+  >                                                              private static x1: number = 10;
+1 >Emitted(41, 5) Source(31, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(41, 17) Source(31, 6) + SourceIndex(0) name (Greeter)
+3 >Emitted(41, 35) Source(31, 24) + SourceIndex(0) name (Greeter)
+4 >Emitted(41, 37) Source(32, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(41, 55) Source(32, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(41, 56) Source(32, 25) + SourceIndex(0) name (Greeter)
+7 >Emitted(41, 58) Source(32, 27) + SourceIndex(0) name (Greeter)
+8 >Emitted(41, 59) Source(32, 28) + SourceIndex(0) name (Greeter)
+9 >Emitted(41, 77) Source(33, 36) + SourceIndex(0) name (Greeter)
 ---
 >>>    __decorate([ParameterDecorator1, ParameterDecorator2(20)], Greeter, 0);
 1 >^^^^

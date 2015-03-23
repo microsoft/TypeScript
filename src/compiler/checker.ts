@@ -102,11 +102,9 @@ module ts {
         let anyArrayType: Type;
         let globalTypedPropertyDescriptorType: ObjectType;
         let globalClassDecoratorType: ObjectType;
-        let globalClassDecoratorErasedType: ObjectType;
         let globalParameterDecoratorType: ObjectType;
         let globalPropertyDecoratorType: ObjectType;
-        let globalPropertyDecoratorErasedType: ObjectType;
-
+        
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let stringLiteralTypes: Map<StringLiteralType> = {};
@@ -11344,9 +11342,7 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
             globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalClassDecoratorErasedType = instantiateSingleCallFunctionType(globalClassDecoratorType, [globalFunctionType]);
             globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalPropertyDecoratorErasedType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [anyType]);
             globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.

@@ -16,7 +16,7 @@ var __decorate = this.__decorate || function (decorators, target, key) {
     if (kind == 2 && result) Object.defineProperty(target, key, result);
     if (kind == 0) return result;
 };
-var C = (function() {
+let C = () => {
     class C {
         [_a = "method"]() {
         }
@@ -24,4 +24,4 @@ var C = (function() {
     __decorate([dec], C.prototype, _a);
     return C;
     var _a;
-})();
+}();

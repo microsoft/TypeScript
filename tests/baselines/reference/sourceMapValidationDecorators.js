@@ -94,10 +94,10 @@ var Greeter = (function () {
     Greeter.x1 = 10;
     __decorate([PropertyDecorator1, PropertyDecorator2(40)], Greeter.prototype, "greet");
     __decorate([PropertyDecorator1, PropertyDecorator2(50)], Greeter.prototype, "x");
-    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
     __decorate([ParameterDecorator1, ParameterDecorator2(70)], Greeter.prototype.fn, 0);
     __decorate([ParameterDecorator1, ParameterDecorator2(90)], _set_greetings, 0);
     __decorate([PropertyDecorator1, PropertyDecorator2(80), PropertyDecorator1, PropertyDecorator2(90)], Greeter.prototype, "greetings");
+    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
     __decorate([ParameterDecorator1, ParameterDecorator2(20)], Greeter, 0);
     __decorate([ParameterDecorator1, ParameterDecorator2(30)], Greeter, 1);
     Greeter = __decorate([ClassDecorator1, ClassDecorator2(10)], Greeter);

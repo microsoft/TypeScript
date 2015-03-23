@@ -3122,11 +3122,6 @@ declare module "typescript" {
 >getBlockScopedVariableId : (node: Identifier) => number
 >node : Identifier
 >Identifier : Identifier
-
-        getClassDeclarationVariableId(node: Identifier): number;
->getClassDeclarationVariableId : (node: Identifier) => number
->node : Identifier
->Identifier : Identifier
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
@@ -4613,13 +4608,6 @@ declare module "typescript" {
 >SourceFile : SourceFile
 >position : number
 >LineAndCharacter : LineAndCharacter
-
-    function lineBreakBetween(sourceFile: SourceFile, firstPos: number, secondPos: number): boolean;
->lineBreakBetween : (sourceFile: SourceFile, firstPos: number, secondPos: number) => boolean
->sourceFile : SourceFile
->SourceFile : SourceFile
->firstPos : number
->secondPos : number
 
     function isWhiteSpace(ch: number): boolean;
 >isWhiteSpace : (ch: number) => boolean
