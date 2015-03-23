@@ -8518,14 +8518,6 @@ module ts {
             }
         }
 
-        function checkDecoratorSignature(node: Decorator, exprType: Type, expectedErasedDecoratorType: Type, parentType?: Type, expectedGenericDecoratorType?: Type, message?: DiagnosticMessage) {            
-            // first validate that we are using the correct decorator signature for the declaration
-            if (checkTypeAssignableTo(exprType, expectedErasedDecoratorType, node) && parentType && expectedGenericDecoratorType && message) {
-                // next validate that we are not changing the static type in the decorator to a type that is not assignable.
-                checkTypeAssignableTo(exprType, instantiateSingleCallFunctionType(expectedGenericDecoratorType, [parentType]), node, message);
-            }
-        }
-
         /** Check a decorator */
         function checkDecorator(node: Decorator): void {
             let expression: Expression = node.expression;
@@ -8534,8 +8526,9 @@ module ts {
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                     let classSymbol = getSymbolOfNode(node.parent);
-                    let classType = getTypeOfSymbol(classSymbol);
-                    checkDecoratorSignature(node, exprType, globalClassDecoratorErasedType, classType, globalClassDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_class);
+                    let classConstructorType = getTypeOfSymbol(classSymbol);
+                    let classDecoratorType = instantiateSingleCallFunctionType(globalClassDecoratorType, [classConstructorType]);
+                    checkTypeAssignableTo(exprType, classDecoratorType, node);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
@@ -8543,11 +8536,12 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     let propertyType = getTypeOfNode(node.parent);
-                    checkDecoratorSignature(node, exprType, globalPropertyDecoratorErasedType, propertyType, globalPropertyDecoratorType, Diagnostics.A_decorator_may_not_change_the_type_of_a_member);
+                    let propertyDecoratorType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [propertyType]);
+                    checkTypeAssignableTo(exprType, propertyDecoratorType, node);
                     break;
 
                 case SyntaxKind.Parameter:
-                    checkDecoratorSignature(node, exprType, globalParameterDecoratorType);
+                    checkTypeAssignableTo(exprType, globalParameterDecoratorType, node);
                     break;
             }
         }
@@ -11430,11 +11424,11 @@ module ts {
             if (!node.decorators) {
                 return false;
             }
-            if (languageVersion < ScriptTarget.ES5) {
-                return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
-            }
-            else if (!isValidDecoratorTarget(node)) {
+            if (!isValidDecoratorTarget(node)) {
                 return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_here);
+            }
+            else if (languageVersion < ScriptTarget.ES5) {
+                return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             return false;
         }

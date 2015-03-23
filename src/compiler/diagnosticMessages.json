@@ -647,14 +647,6 @@
         "category": "Error",
         "code": 1206
     },
-    "A decorator may not change the type of a member.": {
-        "category": "Error",
-        "code": 1208
-    },
-    "A decorator may not change the type of a class.": {
-        "category": "Error",
-        "code": 1209
-    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
