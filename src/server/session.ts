@@ -431,7 +431,7 @@ module ts.server {
             };
         }
 
-        getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string): protocol.CodeEdit[] {
+        getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string, options?: protocol.FormatOptions): protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -444,7 +444,7 @@ module ts.server {
             
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
-                this.projectService.getFormatCodeOptions(file));
+                this.projectService.getFormatCodeOptions(file, options));
             if (!edits) {
                 return undefined;
             }
@@ -458,7 +458,7 @@ module ts.server {
             });
         }
 
-        getFormattingEditsAfterKeystroke(line: number, offset: number, key: string, fileName: string): protocol.CodeEdit[] {
+        getFormattingEditsAfterKeystroke(line: number, offset: number, key: string, fileName: string, options?: protocol.FormatOptions): protocol.CodeEdit[] {
             var file = ts.normalizePath(fileName);
 
             var project = this.projectService.getProjectForFile(file);
@@ -468,7 +468,7 @@ module ts.server {
 
             var compilerService = project.compilerService;
             var position = compilerService.host.lineOffsetToPosition(file, line, offset);
-            var formatOptions = this.projectService.getFormatCodeOptions(file);
+            var formatOptions = this.projectService.getFormatCodeOptions(file, options);
             var edits = compilerService.languageService.getFormattingEditsAfterKeystroke(file, position, key,
                 formatOptions);
             // Check whether we should auto-indent. This will be when
@@ -484,20 +484,20 @@ module ts.server {
                     if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
                         var lineText = lineInfo.leaf.text;
                         if (lineText.search("\\S") < 0) {
-                            // TODO: get these options from host
                             var editorOptions: ts.EditorOptions = {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
-                                NewLineCharacter: "\n",
-                                ConvertTabsToSpaces: true,
+                                NewLineCharacter: formatOptions.NewLineCharacter,
+                                ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
                             for (var i = 0, len = lineText.length; i < len; i++) {
                                 if (lineText.charAt(i) == " ") {
                                     indentPosition--;
-                                }
-                                else {
+                                } else if (lineText.charAt(i) == '\t') {
+                                    indentPosition -= editorOptions.TabSize;
+                                } else {
                                     break;
                                 }
                             }
@@ -770,12 +770,12 @@ module ts.server {
                     }
                     case CommandNames.Format: {
                         var formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file);
+                        response = this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file, formatArgs.options);
                         break;
                     }
                     case CommandNames.Formatonkey: {
                         var formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file);
+                        response = this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file, formatOnKeyArgs.options);
                         break;
                     }
                     case CommandNames.Completions: {

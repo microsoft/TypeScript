@@ -417,6 +417,23 @@ declare module ts.server.protocol {
     }
 
     /**
+     * Format options
+     */
+    export interface FormatOptions {
+        /** Number of spaces for each tab */
+        tabSize: number;
+        
+        /** Number of spaces to indent during formatting */
+        indentSize: number;
+        
+        /** The new line character to be used */
+        newLineCharacter: string;
+        
+        /** Whether tabs should be converted to spaces */
+        convertTabsToSpaces: boolean;        
+    }
+
+    /**
       * Arguments for format messages.
       */
     export interface FormatRequestArgs extends FileLocationRequestArgs {
@@ -429,6 +446,11 @@ declare module ts.server.protocol {
           * Character offset on last line of range for which to format text in file.
           */
         endOffset: number;
+        
+        /**
+         * Additional format options used for this format request.
+         */
+        options?: FormatOptions;
     }
 
     /**
@@ -482,6 +504,11 @@ declare module ts.server.protocol {
           * Key pressed (';', '\n', or '}').
           */
         key: string;
+        
+        /**
+         * Additional format options used for this format request.
+         */
+        options?: FormatOptions;
     }
 
     /**
