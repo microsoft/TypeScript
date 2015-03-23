@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @allowNonTsExtensions: true
-// @Filename: a.tsjs
+// @Filename: a.js
 //// interface I { }
 
 verify.getSemanticDiagnostics(`[

@@ -2371,7 +2371,7 @@ module ts {
         }
 
         function isJavaScript(fileName: string) {
-            return fileExtensionIs(fileName, ".tsjs");
+            return fileExtensionIs(fileName, ".js");
         }
 
         /**
@@ -2562,7 +2562,7 @@ module ts {
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget): string {
+        function getValidCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget): string {
             let displayName = symbol.getName();
             if (displayName && displayName.length > 0) {
                 let firstCharCode = displayName.charCodeAt(0);
@@ -2573,7 +2573,8 @@ module ts {
                     return undefined;
                 }
 
-                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                if (displayName && displayName.length >= 2 &&
+                    firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                     (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
                     // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
@@ -2585,7 +2586,6 @@ module ts {
                     isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
-
                 if (isValid) {
                     return unescapeIdentifier(displayName);
                 }
@@ -2594,11 +2594,29 @@ module ts {
             return undefined;
         }
 
+        function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
+            let firstCharCode = displayName.charCodeAt(0);
+            if (displayName && displayName.length >= 2 &&
+                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                displayName = displayName.substring(1, displayName.length - 1);
+            }
+
+            let isValid = isIdentifierStart(displayName.charCodeAt(0), target);
+            for (let i = 1, n = displayName.length; isValid && i < n; i++) {
+                isValid = isIdentifierPart(displayName.charCodeAt(i), target);
+            }
+
+            return isValid ? unescapeIdentifier(displayName) : undefined;
+        }
+
         function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getValidCompletionEntryDisplayName(symbol, program.getCompilerOptions().target);
+            let displayName = getValidCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -2685,11 +2703,22 @@ module ts {
             let isNewIdentifierLocation: boolean;
 
             if (isRightOfDot) {
-                if (!tryGetMemberCompletionEntries()) {
-                    return undefined;
+                if (isJavaScript(fileName)) {
+                    // If this is JavaScript, then just present a simple identifier list.
+                    if (!tryGetJavaScriptMemberCompletionEntries()) {
+                        return undefined;
+                    }
+                }
+                else {
+                    if (!tryGetTypeScriptMemberCompletionEntries()) {
+                        return undefined;
+                    }
                 }
             }
             else {
+                // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
+                // global symbols in scope.  These results should be valid for either language as
+                // the set of symbols that can be referenced from this location.
                 if (!tryGetGlobalCompletionEntries()) {
                     return undefined;
                 }
@@ -2707,7 +2736,31 @@ module ts {
                 entries: activeCompletionSession.entries
             };
 
-            function tryGetMemberCompletionEntries(): boolean {
+            function tryGetJavaScriptMemberCompletionEntries(): boolean {
+                let allIdentifiers: Map<string> = {};
+                for (let sourceFile of program.getSourceFiles()) {
+                    let nameTable = getNameTable(sourceFile);
+                    for (let name in nameTable) {
+                        allIdentifiers[name] = name;
+                    }
+                }
+
+                var target = program.getCompilerOptions().target;
+                for (let name in allIdentifiers) {
+                    let displayName = getValidCompletionEntryDisplayName(name, target);
+                    if (displayName) {
+                        activeCompletionSession.entries.push({
+                            name: displayName,
+                            kind: ScriptElementKind.unknown,
+                            kindModifiers: ""
+                        });
+                    }
+                }
+
+                return true;
+            }
+
+            function tryGetTypeScriptMemberCompletionEntries(): boolean {
                 // Right of dot member completion list
                 let symbols: Symbol[] = [];
                 isMemberCompletion = true;
@@ -2741,7 +2794,7 @@ module ts {
                     });
                 }
 
-                getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                getCompletionEntriesFromSymbols(symbols);
                 return true;
             }
 
@@ -2761,7 +2814,7 @@ module ts {
                     if (contextualTypeMembers && contextualTypeMembers.length > 0) {
                         // Add filtered items to the completion list
                         let filteredMembers = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
-                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                        getCompletionEntriesFromSymbols(filteredMembers);
                     }
                 }
                 else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
@@ -2774,7 +2827,7 @@ module ts {
                         Debug.assert(importDeclaration !== undefined);
                         let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
                         let filteredExports = filterModuleExports(exports, importDeclaration);
-                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                        getCompletionEntriesFromSymbols(filteredExports);
                     }
                 }
                 else {
@@ -2786,13 +2839,14 @@ module ts {
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     let symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
 
-                    getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                    getCompletionEntriesFromSymbols(symbols);
                 }
 
                 return true;
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[]): void {
+                let session = activeCompletionSession;
                 let start = new Date().getTime();
                 forEach(symbols, symbol => {
                     let entry = createCompletionEntry(symbol, session.typeChecker, location);
@@ -5073,8 +5127,13 @@ module ts {
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            let sourceFile = getValidSourceFile(fileName);
+            // If the option is set to not emit on errors, and there are any errors, then we don't 
+            // want to proceed.
+            if (program.getCompilerOptions().noEmitOnError && getPreEmitDiagnostics(program).length > 0) {
+                return { outputFiles: [], emitSkipped: true };
+            }
 
+            let sourceFile = getValidSourceFile(fileName);
             let outputFiles: OutputFile[] = [];
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
