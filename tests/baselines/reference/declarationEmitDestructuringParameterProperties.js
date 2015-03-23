@@ -57,5 +57,5 @@ declare type ObjType1 = {
 };
 declare class C3 {
     x: number, y: string, z: boolean;
-    constructor({ x, y, z }: ObjType1);
+    constructor({x, y, z}: ObjType1);
 }
