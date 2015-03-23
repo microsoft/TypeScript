@@ -3706,18 +3706,7 @@ module ts {
                             }
                             else {
                                 write("{ ");
-                                let importSpecifiers = (<NamedImports>node.importClause.namedBindings).elements;
-                                let currentTextPos = writer.getTextPos();
-                                let needsComma = false;
-                                for (var i = 0, n = importSpecifiers.length; i < n; i++) {
-                                    if (resolver.isReferencedAliasDeclaration(importSpecifiers[i])) {
-                                        if (needsComma) {
-                                            write(", ");
-                                        }
-                                        needsComma = true;
-                                        emit(importSpecifiers[i]);
-                                    }
-                                }
+                                emitExportOrImportSpecifierList((<NamedImports>node.importClause.namedBindings).elements);
                                 write(" }");
                             }
                             emitEnd(node.importClause.namedBindings);
@@ -3756,15 +3745,6 @@ module ts {
                             namedImport => resolver.isReferencedAliasDeclaration(namedImport));
                     }
                 }
-            }
-
-            function emitImportOrExportSpecifier(node: ImportSpecifier) {
-                Debug.assert(languageVersion >= ScriptTarget.ES6);
-                if (node.propertyName) {
-                    emit(node.propertyName);
-                    write(" as ");
-                }
-                emit(node.name);
             }
 
             function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
@@ -3902,24 +3882,50 @@ module ts {
                             }
                             write(");");
                         }
+                        emitEnd(node);
                     }
                 }
                 else {
-                    write("export ");
-                    if (node.exportClause) {
-                        // export { x, y, ... }
-                        write("{ ");
-                        emitCommaList(node.exportClause.elements);
-                        write(" }");
+                    if (!node.exportClause || resolver.isValueAliasDeclaration(node)) {
+                        emitStart(node);
+                        write("export ");
+                        if (node.exportClause) {
+                            // export { x, y, ... }
+                            write("{ ");
+                            emitExportOrImportSpecifierList(node.exportClause.elements);
+                            write(" }");
+                        }
+                        else {
+                            write("*");
+                        }
+                        if (node.moduleSpecifier) {
+                            write(" from ");
+                            emitNodeWithoutSourceMap(node.moduleSpecifier);
+                        }
+                        write(";");
+                        emitEnd(node);
                     }
-                    else {
-                        write("*");
+                }
+            }
+
+            function emitExportOrImportSpecifierList(specifiers: ImportOrExportSpecifier[]) {
+                Debug.assert(languageVersion >= ScriptTarget.ES6);
+
+                let needsComma = false;
+                for (let specifier of specifiers) {
+                    if (resolver.isValueAliasDeclaration(specifier)) {
+                        if (needsComma) {
+                            write(", ");
+                        }
+                        emitStart(specifier);
+                        if (specifier.propertyName) {
+                            emitNodeWithoutSourceMap(specifier.propertyName);
+                            write(" as ");
+                        }
+                        emitNodeWithoutSourceMap(specifier.name);
+                        emitEnd(specifier);
+                        needsComma = true;
                     }
-                    if (node.moduleSpecifier) {
-                        write(" from ");
-                        emit(node.moduleSpecifier);
-                    }
-                    write(";");
                 }
             }
 
@@ -4386,9 +4392,6 @@ module ts {
                         return emitModuleDeclaration(<ModuleDeclaration>node);
                     case SyntaxKind.ImportDeclaration:
                         return emitImportDeclaration(<ImportDeclaration>node);
-                    case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ExportSpecifier:
-                        return emitImportOrExportSpecifier(<ImportOrExportSpecifier>node);
                     case SyntaxKind.ImportEqualsDeclaration:
                         return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                     case SyntaxKind.ExportDeclaration:
