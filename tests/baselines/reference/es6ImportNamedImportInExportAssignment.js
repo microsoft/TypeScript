@@ -12,7 +12,6 @@ export = a;
 export var a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 import { a } from "es6ImportNamedImportInExportAssignment_0";
-export default a;
 
 
 //// [es6ImportNamedImportInExportAssignment_0.d.ts]

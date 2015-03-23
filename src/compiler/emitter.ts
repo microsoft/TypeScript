@@ -3924,26 +3924,28 @@ module ts {
             }
 
             function emitExportAssignment(node: ExportAssignment) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    writeLine();
-                    emitStart(node);
-                    write("export default ");
-                    var expression = node.expression;
-                    emit(expression);
-                    if (expression.kind !== SyntaxKind.FunctionDeclaration &&
-                        expression.kind !== SyntaxKind.ClassDeclaration) {
-                        write(";");
+                if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
+                    if (languageVersion >= ScriptTarget.ES6) {
+                        writeLine();
+                        emitStart(node);
+                        write("export default ");
+                        var expression = node.expression;
+                        emit(expression);
+                        if (expression.kind !== SyntaxKind.FunctionDeclaration &&
+                            expression.kind !== SyntaxKind.ClassDeclaration) {
+                            write(";");
+                        }
+                        emitEnd(node);
                     }
-                    emitEnd(node);
-                }
-                else if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                    writeLine();
-                    emitStart(node);
-                    emitContainingModuleName(node);
-                    write(".default = ");
-                    emit(node.expression);
-                    write(";");
-                    emitEnd(node);
+                    else {
+                        writeLine();
+                        emitStart(node);
+                        emitContainingModuleName(node);
+                        write(".default = ");
+                        emit(node.expression);
+                        write(";");
+                        emitEnd(node);
+                    }
                 }
             }
 
