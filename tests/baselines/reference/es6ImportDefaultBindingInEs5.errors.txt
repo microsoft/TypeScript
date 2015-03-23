@@ -3,7 +3,8 @@ tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts(1,8): error TS1192: Exter
 
 ==== tests/cases/compiler/es6ImportDefaultBindingInEs5_0.ts (0 errors) ====
     
-    export var a = 10;
+    var a = 10;
+    export = a;
     
 ==== tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts (1 errors) ====
     import defaultBinding from "es6ImportDefaultBindingInEs5_0";

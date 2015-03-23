@@ -19,13 +19,21 @@ module ts.server {
     class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
-
         defaultProject: Project;      // project to use by default for file
-
         fileWatcher: FileWatcher;
+        formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.svc = ScriptVersionCache.fromString(content);
+        }
+
+        setFormatOptions(tabSize?: number, indentSize?: number) {
+            if (tabSize) {
+                this.formatCodeOptions.TabSize = tabSize;
+            }
+            if (indentSize) {
+                this.formatCodeOptions.IndentSize = indentSize;
+            }
         }
 
         close() {
@@ -200,33 +208,33 @@ module ts.server {
             }
             else {
                 var nextLineInfo = index.lineNumberToInfo(line + 2);
-                len = nextLineInfo.col - lineInfo.col;
+                len = nextLineInfo.offset - lineInfo.offset;
             }
-            return ts.createTextSpan(lineInfo.col, len);
+            return ts.createTextSpan(lineInfo.offset, len);
         }
 
         /**
          * @param line 1 based index
-         * @param col 1 based index
+         * @param offset 1 based index
          */
-        lineColToPosition(filename: string, line: number, col: number): number {
+        lineOffsetToPosition(filename: string, line: number, offset: number): number {
             var script: ScriptInfo = this.filenameToScript[filename];
             var index = script.snap().index;
 
             var lineInfo = index.lineNumberToInfo(line);
-            // TODO: assert this column is actually on the line
-            return (lineInfo.col + col - 1);
+            // TODO: assert this offset is actually on the line
+            return (lineInfo.offset + offset - 1);
         }
 
         /**
          * @param line 1-based index
-         * @param col 1-based index
+         * @param offset 1-based index
          */
-        positionToLineCol(filename: string, position: number): ILineInfo {
+        positionToLineOffset(filename: string, position: number): ILineInfo {
             var script: ScriptInfo = this.filenameToScript[filename];
             var index = script.snap().index;
-            var lineCol = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineCol.line, col: lineCol.col + 1 };
+            var lineOffset = index.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
         }
     }
 
@@ -259,7 +267,6 @@ module ts.server {
     interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        formatCodeOptions?: ts.FormatCodeOptions;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -338,7 +345,6 @@ module ts.server {
             if (projectOptions.compilerOptions) {
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
-            // TODO: format code options
         }
     }
 
@@ -362,6 +368,11 @@ module ts.server {
         (eventName: string, project: Project, fileName: string): void;
     }
 
+    interface HostConfiguration {
+        formatCodeOptions: ts.FormatCodeOptions;
+        hostInfo: string;
+    }
+
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
         // open, non-configured files in two lists
@@ -369,9 +380,28 @@ module ts.server {
         openFilesReferenced: ScriptInfo[] = [];
         // projects covering open files
         inferredProjects: Project[] = [];
+        hostConfiguration: HostConfiguration;
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
+            this.addDefaultHostConfiguration();
+        }
+
+        addDefaultHostConfiguration() {
+            this.hostConfiguration = {
+                formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
+                hostInfo: "Unknown host"
+            }
+        }
+        
+        getFormatCodeOptions(file?: string) {
+            if (file) {
+                var info = this.filenameToScriptInfo[file];                
+                if (info) {
+                    return info.formatCodeOptions;
+                }
+            }
+            return this.hostConfiguration.formatCodeOptions;
         }
 
         watchedFileChanged(fileName: string) {
@@ -393,6 +423,22 @@ module ts.server {
         
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
+        }
+
+        setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
+            if (args.file) {
+                var info = this.filenameToScriptInfo[args.file];
+                if (info) {
+                    info.setFormatOptions(args.tabSize, args.indentSize);
+                    this.log("Host configuration update for file " + args.file + " tab size " + args.tabSize);
+                }
+            }
+            else {
+                this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
+                this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
+                this.hostConfiguration.hostInfo = args.hostInfo;
+                this.log("Host information " + args.hostInfo, "Info");
+            }
         }
 
         closeLog() {
@@ -595,7 +641,7 @@ module ts.server {
         /**
          * @param filename is absolute pathname
          */
-        openFile(fileName: string, openedByClient = false) {
+        openFile(fileName: string, openedByClient: boolean) {
             fileName = ts.normalizePath(fileName);
             var info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -609,6 +655,7 @@ module ts.server {
                     }
                 }
                 if (content !== undefined) {
+                    var indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
@@ -731,7 +778,8 @@ module ts.server {
                         var normRootFilename = ts.normalizePath(rootFilename);
                         normRootFilename = getAbsolutePath(normRootFilename, dirPath);
                         if (this.host.fileExists(normRootFilename)) {
-                            var info = this.openFile(normRootFilename);
+                            // TODO: pass true for file exiplicitly opened
+                            var info = this.openFile(normRootFilename, false);
                             proj.addRoot(info);
                         }
                         else {
@@ -742,9 +790,6 @@ module ts.server {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
-                    if (rawConfig.formatCodeOptions) {
-                        projectOptions.formatCodeOptions = rawConfig.formatCodeOptions;
-                    }
                     proj.setProjectOptions(projectOptions);
                     return { success: true, project: proj };
                 }
@@ -768,7 +813,6 @@ module ts.server {
         classifier: ts.Classifier;
         settings = ts.getDefaultCompilerOptions();
         documentRegistry = ts.createDocumentRegistry();
-        formatCodeOptions: ts.FormatCodeOptions = CompilerService.defaultFormatCodeOptions;
 
         constructor(public project: Project) {
             this.host = new LSHost(project.projectService.host, project);
@@ -815,7 +859,7 @@ module ts.server {
 
     export interface ILineInfo {
         line: number;
-        col: number;
+        offset: number;
         text?: string;
         leaf?: LineLeaf;
     }
@@ -1208,7 +1252,7 @@ module ts.server {
 
         getLineMapper() {
             return ((line: number) => {
-                return this.index.lineNumberToInfo(line).col;
+                return this.index.lineNumberToInfo(line).offset;
             });
         }
 
@@ -1245,7 +1289,7 @@ module ts.server {
             else {
                 return {
                     line: lineNumber,
-                    col: this.root.charCount()
+                    offset: this.root.charCount()
                 }
             }
         }
@@ -1331,7 +1375,7 @@ module ts.server {
                     // check whether last characters deleted are line break
                     var e = pos + deleteLength;
                     var lineInfo = this.charOffsetToLineNumberAndPos(e);
-                    if ((lineInfo && (lineInfo.col == 0))) {
+                    if ((lineInfo && (lineInfo.offset == 0))) {
                         // move range end just past line that will merge with previous line
                         deleteLength += lineInfo.text.length;
                         // store text by appending to end of insertedText
@@ -1507,14 +1551,14 @@ module ts.server {
             if (!childInfo.child) {
                 return {
                     line: lineNumber,
-                    col: charOffset,
+                    offset: charOffset,
                 }
             }
             else if (childInfo.childIndex < this.children.length) {
                 if (childInfo.child.isLeaf()) {
                     return {
                         line: childInfo.lineNumber,
-                        col: childInfo.charOffset,
+                        offset: childInfo.charOffset,
                         text: (<LineLeaf>(childInfo.child)).text,
                         leaf: (<LineLeaf>(childInfo.child))
                     };
@@ -1526,7 +1570,7 @@ module ts.server {
             }
             else {
                 var lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
-                return { line: this.lineCount(), col: lineInfo.leaf.charCount() };
+                return { line: this.lineCount(), offset: lineInfo.leaf.charCount() };
             }
         }
 
@@ -1535,13 +1579,13 @@ module ts.server {
             if (!childInfo.child) {
                 return {
                     line: lineNumber,
-                    col: charOffset
+                    offset: charOffset
                 }
-            }
+            } 
             else if (childInfo.child.isLeaf()) {
                 return {
                     line: lineNumber,
-                    col: childInfo.charOffset,
+                    offset: childInfo.charOffset,
                     text: (<LineLeaf>(childInfo.child)).text,
                     leaf: (<LineLeaf>(childInfo.child))
                 }

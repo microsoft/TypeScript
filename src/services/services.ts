@@ -2597,8 +2597,9 @@ module ts {
                     isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
+                    let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    let symbols = typeInfoResolver.getSymbolsInScope(node, symbolMeanings);
+                    let symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
@@ -2613,9 +2614,21 @@ module ts {
             return {
                 isMemberCompletion,
                 isNewIdentifierLocation,
-                isBuilder : isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
+                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
+
+            /**
+             * Finds the first node that "embraces" the position, so that one may
+             * accurately aggregate locals from the closest containing scope.
+             */
+            function getScopeNode(initialToken: Node, position: number, sourceFile: SourceFile) {
+                var scope = initialToken;
+                while (scope && !positionBelongsToNode(scope, position, sourceFile)) {
+                    scope = scope.parent;
+                }
+                return scope;
+            }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 let start = new Date().getTime();
@@ -3479,7 +3492,6 @@ module ts {
                 }
             }
 
-            let result: DefinitionInfo[] = [];
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
             // using go-to-definition at such position should go to the variable declaration of the property value rather than
@@ -3488,16 +3500,19 @@ module ts {
             // assignment. This case and others are handled by the following code.
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 let shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                if (!shorthandSymbol) {
+                    return [];
+                }
+
                 let shorthandDeclarations = shorthandSymbol.getDeclarations();
                 let shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
                 let shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 let shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
-                forEach(shorthandDeclarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
-                });
-                return result
+                return map(shorthandDeclarations,
+                    declaration => getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
+            let result: DefinitionInfo[] = [];
             let declarations = symbol.getDeclarations();
             let symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             let symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
@@ -4011,18 +4026,18 @@ module ts {
                 let container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
-                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                if (isAccessibilityModifier(modifier)) {
                     if (!(container.kind === SyntaxKind.ClassDeclaration ||
                         (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                         return undefined;
                     }
                 }
-                else if (declaration.flags & NodeFlags.Static) {
+                else if (modifier === SyntaxKind.StaticKeyword) {
                     if (container.kind !== SyntaxKind.ClassDeclaration) {
                         return undefined;
                     }
                 }
-                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
                     if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
                         return undefined;
                     }
@@ -4063,7 +4078,7 @@ module ts {
                     default:
                         Debug.fail("Invalid container kind.")
                 }
-
+                
                 forEach(nodes, node => {
                     if (node.modifiers && node.flags & modifierFlag) {
                         forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
@@ -4899,7 +4914,6 @@ module ts {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
-
             let outputFiles: OutputFile[] = [];
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
@@ -5842,17 +5856,6 @@ module ts {
         //     Where on the second line, you will get the 'return' keyword,
         //     a string literal, and a template end consisting of '} } `'.
         let templateStack: SyntaxKind[] = [];
-
-        function isAccessibilityModifier(kind: SyntaxKind) {
-            switch (kind) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                    return true;
-            }
-
-            return false;
-        }
 
         /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
         function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {

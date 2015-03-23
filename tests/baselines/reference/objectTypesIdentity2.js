@@ -88,7 +88,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var b = {
-    foo: 0 /* A */
+    foo: E.A
 };
 function foo5(x) {
 }

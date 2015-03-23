@@ -122,8 +122,10 @@ module ts {
     }
 
     export function addRange<T>(to: T[], from: T[]): void {
-        for (let v of from) {
-            to.push(v);
+        if (to && from) {
+            for (let v of from) {
+                to.push(v);
+            }
         }
     } 
 
