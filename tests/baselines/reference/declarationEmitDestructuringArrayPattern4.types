@@ -1,0 +1,45 @@
+=== tests/cases/compiler/declarationEmitDestructuringArrayPattern4.ts ===
+var [...a5] = [1, 2, 3];
+>a5 : number[]
+>[1, 2, 3] : number[]
+
+var [x14, ...a6] = [1, 2, 3];
+>x14 : number
+>a6 : number[]
+>[1, 2, 3] : number[]
+
+var [x15, y15, ...a7] = [1, 2, 3];
+>x15 : number
+>y15 : number
+>a7 : number[]
+>[1, 2, 3] : number[]
+
+var [x16, y16, z16, ...a8] = [1, 2, 3];
+>x16 : number
+>y16 : number
+>z16 : number
+>a8 : number[]
+>[1, 2, 3] : number[]
+
+var [...a9] = [1, "hello", true];
+>a9 : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | boolean)[]
+
+var [x17, ...a10] = [1, "hello", true];
+>x17 : string | number | boolean
+>a10 : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | boolean)[]
+
+var [x18, y18, ...a12] = [1, "hello", true];
+>x18 : string | number | boolean
+>y18 : string | number | boolean
+>a12 : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | boolean)[]
+
+var [x19, y19, z19, ...a13] = [1, "hello", true];
+>x19 : string | number | boolean
+>y19 : string | number | boolean
+>z19 : string | number | boolean
+>a13 : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | boolean)[]
+

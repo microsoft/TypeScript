@@ -23,6 +23,6 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
-    if (0 /* A */ === 0) {
+    if (foo.E1.A === 0) {
     }
 });

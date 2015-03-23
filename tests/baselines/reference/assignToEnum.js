@@ -14,6 +14,6 @@ var A;
     A[A["bar"] = 1] = "bar";
 })(A || (A = {}));
 A = undefined; // invalid LHS
-A = 1 /* bar */; // invalid LHS
-0 /* foo */ = 1; // invalid LHS
-0 /* foo */ = 1 /* bar */; // invalid LHS
+A = A.bar; // invalid LHS
+A.foo = 1; // invalid LHS
+A.foo = A.bar; // invalid LHS

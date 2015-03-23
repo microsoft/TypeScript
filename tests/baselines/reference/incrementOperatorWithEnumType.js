@@ -22,8 +22,8 @@ var ENUM1;
 })(ENUM1 || (ENUM1 = {}));
 ;
 // expression
-var ResultIsNumber1 = ++1 /* "B" */;
-var ResultIsNumber2 = 1 /* B */++;
+var ResultIsNumber1 = ++ENUM1["B"];
+var ResultIsNumber2 = ENUM1.B++;
 // miss assignment operator
-++1 /* "B" */;
-1 /* B */++;
+++ENUM1["B"];
+ENUM1.B++;

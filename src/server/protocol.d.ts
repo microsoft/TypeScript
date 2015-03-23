@@ -96,7 +96,7 @@ declare module ts.server.protocol {
 
     /**
       * Instances of this interface specify a location in a source file:
-      * (file, line, col), where line and column are 1-based.
+      * (file, line, character offset), where line and character offset are 1-based.
       */
     export interface FileLocationRequestArgs extends FileRequestArgs {
         /** 
@@ -105,9 +105,9 @@ declare module ts.server.protocol {
         line: number;
 
         /** 
-          * The column for the request (1-based).
+          * The character offset (on the line) for the request (1-based).
           */
-        col: number;
+        offset: number;
     }
 
     /**
@@ -126,11 +126,11 @@ declare module ts.server.protocol {
     }
 
     /**
-      * Location in source code expressed as (one-based) line and column.
+      * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
         line: number;
-        col: number;
+        offset: number;
     }
 
     /**
@@ -202,9 +202,9 @@ declare module ts.server.protocol {
         symbolName: string;
 
         /**
-          * The start column of the symbol (on the line provided by the references request).
+          * The start character offset of the symbol (on the line provided by the references request).
           */
-        symbolStartCol: number;
+        symbolStartOffset: number;
 
         /** 
           * The full display name of the symbol.
@@ -300,6 +300,50 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Information found in a configure request.
+      */
+    export interface ConfigureRequestArguments {
+        /** Number of spaces for each tab */
+        tabSize: number;
+        /** Number of spaces to indent during formatting */
+        indentSize: number;
+        /** 
+          * Information about the host, for example 'Emacs 24.4' or
+          * 'Sublime Text version 3075'
+          */
+        hostInfo: string;
+        /**
+          * If present, tab settings apply only to this file.
+          */
+        file?: string;
+    }
+
+    /**
+      *  Configure request; value of command field is "configure".  Specifies 
+      *  host information, such as host type, tab size, and indent size.
+      */
+    export interface ConfigureRequest extends Request {
+        arguments: ConfigureRequestArguments;
+    }
+
+    /**
+      * Response to "configure" request.  This is just an acknowledgement, so
+      * no body field is required.
+      */
+    export interface ConfigureResponse extends Response {
+    }
+
+    /**
+      *  Information found in an "open" request.
+      */
+    export interface OpenRequestArgs extends FileRequestArgs {
+        /** Initial tab size of file. */
+        tabSize?: number;
+        /** Number of spaces to indent during formatting */
+        indentSize?: number;
+    }
+
+    /**
       * Open request; value of command field is "open". Notify the
       * server that the client has file open.  The server will not
       * monitor the filesystem for changes in this file and will assume
@@ -307,7 +351,8 @@ declare module ts.server.protocol {
       * reload messages) when the file changes. Server does not currently
       * send a response to an open request.
       */
-    export interface OpenRequest extends FileRequest {
+    export interface OpenRequest extends Request {
+        arguments: OpenRequestArgs;
     }
 
     /**
@@ -381,9 +426,9 @@ declare module ts.server.protocol {
         endLine: number;
         
         /**
-          * Last column of range for which to format text in file.
+          * Character offset on last line of range for which to format text in file.
           */
-        endCol: number;
+        endOffset: number;
     }
 
     /**
@@ -762,7 +807,7 @@ declare module ts.server.protocol {
       */
     export interface ChangeRequestArgs extends FormatRequestArgs {
         /**
-          * Optional string to insert at location (file, line, col).
+          * Optional string to insert at location (file, line, offset).
           */
         insertString?: string;
     }
@@ -786,7 +831,7 @@ declare module ts.server.protocol {
     /**
       * Brace matching request; value of command field is "brace".
       * Return response giving the file locations of matching braces
-      * found in file at location line, col.
+      * found in file at location line, offset.
       */
     export interface BraceRequest extends FileLocationRequest {
     }

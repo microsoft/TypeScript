@@ -625,7 +625,7 @@ module FourSlash {
             this.scenarioActions.push('<VerifyCompletionDoesNotContainItem ItemName="' + escapeXmlAttributeValue(symbol) + '" />');
 
             var members = this.getMemberListAtCaret();
-            if (members.entries.filter(e => e.name === symbol).length !== 0) {
+            if (members && members.entries.filter(e => e.name === symbol).length !== 0) {
                 this.raiseError('Member list did contain ' + symbol);
             }
         }
@@ -696,7 +696,12 @@ module FourSlash {
 
         public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             var completions = this.getCompletionListAtCaret();
-            this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
+            if (completions) {
+                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
+            }
+            else {
+                this.raiseError(`No completions at position '${ this.currentCaretPosition }' when looking for '${ symbol }'.`);
+            }
         }
 
         public verifyCompletionListDoesNotContain(symbol: string) {
@@ -704,7 +709,7 @@ module FourSlash {
             this.scenarioActions.push('<VerifyCompletionDoesNotContainItem ItemName="' + escapeXmlAttributeValue(symbol) + '" />');
 
             var completions = this.getCompletionListAtCaret();
-            if (completions && completions.entries && completions.entries.filter(e => e.name === symbol).length !== 0) {
+            if (completions && completions.entries.filter(e => e.name === symbol).length !== 0) {
                 this.raiseError('Completion list did contain ' + symbol);
             }
         }

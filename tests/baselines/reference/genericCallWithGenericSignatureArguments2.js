@@ -125,10 +125,10 @@ var onlyT;
         var r;
         return r;
     }
-    var r7 = foo3(0 /* A */, function (x) {
-        return 0 /* A */;
+    var r7 = foo3(E.A, function (x) {
+        return E.A;
     }, function (x) {
-        return 0 /* A */;
+        return F.A;
     }); // error
 })(onlyT || (onlyT = {}));
 var TU;
@@ -179,9 +179,9 @@ var TU;
         var r;
         return r;
     }
-    var r7 = foo3(0 /* A */, function (x) {
-        return 0 /* A */;
+    var r7 = foo3(E.A, function (x) {
+        return E.A;
     }, function (x) {
-        return 0 /* A */;
+        return F.A;
     });
 })(TU || (TU = {}));
