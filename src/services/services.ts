@@ -2440,7 +2440,7 @@ module ts {
             };
         }
 
-        function getCompletionSymbols(fileName: string, position: number, symbolName?: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node } {
+        function getCompletionData(fileName: string, position: number, symbolName?: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node } {
             let result = getCompletionSymbolsWorker(fileName, position, symbolName);
             if (!result) {
                 return undefined;
@@ -2899,12 +2899,12 @@ module ts {
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
             
-            let result = getCompletionSymbols(fileName, position);
-            if (!result) {
+            let completionData = getCompletionData(fileName, position);
+            if (!completionData) {
                 return undefined;
             }
 
-            let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = result;
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = completionData;
             if (!symbols || symbols.length === 0) {
                 return undefined;
             }
@@ -2923,7 +2923,7 @@ module ts {
                 var entries: CompletionEntry[] = [];
                 var nameToSymbol: Map<Symbol> = {};
 
-                forEach(symbols, symbol => {
+                for (let symbol of symbols) {
                     let entry = createCompletionEntry(symbol, typeInfoResolver, location);
                     if (entry) {
                         let id = escapeIdentifier(entry.name);
@@ -2932,7 +2932,7 @@ module ts {
                             nameToSymbol[id] = symbol;
                         }
                     }
-                });
+                }
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
                 return entries;
             }
@@ -2942,9 +2942,9 @@ module ts {
             synchronizeHostData();
 
             // Look up a completion symbol with this name.
-            let result = getCompletionSymbols(fileName, position, entryName);
-            if (result) {
-                let { symbols, location } = result;
+            let completionData = getCompletionData(fileName, position, entryName);
+            if (completionData) {
+                let { symbols, location } = completionData;
                 if (symbols && symbols.length > 0) {
                     let symbol = symbols[0];
                     let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
@@ -2959,7 +2959,7 @@ module ts {
             }
             
             // Didn't find a symbol with this name.  See if we can find a keyword instead.
-            let keywordCompletion = filter(keywordCompletions, c => c.name === entryName);
+            let keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
             if (keywordCompletion) {
                 return {
                     name: entryName,
