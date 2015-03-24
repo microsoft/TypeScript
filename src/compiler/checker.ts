@@ -10556,7 +10556,7 @@ module ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
             let symbols: SymbolTable = {};
             let memberFlags: NodeFlags = 0;
 
@@ -10572,85 +10572,59 @@ module ts {
             function populateSymbols() {
                 while (location) {
                     if (location.locals && !isGlobalSourceFile(location)) {
-                        if (copySymbols(location.locals, meaning)) {
-                            return;
-                        }
+                        copySymbols(location.locals, meaning);
                     }
+
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
                             if (!isExternalModule(<SourceFile>location)) {
                                 break;
                             }
                         case SyntaxKind.ModuleDeclaration:
-                            if (copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember)) {
-                                return;
-                            }
+                            copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember);
                             break;
                         case SyntaxKind.EnumDeclaration:
-                            if (copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember)) {
-                                return;
-                            }
+                            copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
                             break;
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             if (!(memberFlags & NodeFlags.Static)) {
-                                if (copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type)) {
-                                    return;
-                                }
+                                copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
                             if ((<FunctionExpression>location).name) {
-                                if (copySymbol(location.symbol, meaning)) {
-                                    return;
-                                }
+                                copySymbol(location.symbol, meaning);
                             }
                             break;
                     }
+
                     memberFlags = location.flags;
                     location = location.parent;
                 }
-                if (copySymbols(globals, meaning)) {
-                    return;
-                }
+
+                copySymbols(globals, meaning);
             }
 
             // Returns 'true' if we should stop processing symbols.
-            function copySymbol(symbol: Symbol, meaning: SymbolFlags): boolean {
+            function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (symbol.flags & meaning) {
                     let id = symbol.name;
                     if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
-                        if (predicate) {
-                            // If we were supplied a predicate function, then check if this symbol 
-                            // matches with it.  If so, we're done and can immediately return.
-                            // Otherwise, just ignore this symbol and keep going.
-                            if (predicate(symbol)) {
-                                symbols[id] = symbol;
-                                return true;
-                            }
-                        }
-                        else {
-                            // If no predicate was supplied, then just add the symbol as is.
-                            symbols[id] = symbol;
-                        }
+                        // If no predicate was supplied, then just add the symbol as is.
+                        symbols[id] = symbol;
                     }
                 }
-
-                return false;
             }
 
-            function copySymbols(source: SymbolTable, meaning: SymbolFlags): boolean {
+            function copySymbols(source: SymbolTable, meaning: SymbolFlags): void {
                 if (meaning) {
                     for (let id in source) {
                         if (hasProperty(source, id)) {
-                            if (copySymbol(source[id], meaning)) {
-                                return true;
-                            }
+                            copySymbol(source[id], meaning);
                         }
                     }
                 }
-
-                return false;
             }
         }
 

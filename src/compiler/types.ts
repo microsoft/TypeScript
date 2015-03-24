@@ -1095,7 +1095,7 @@ module ts {
 
         // If 'predicate' is supplied, then only the first symbol in scope matching the predicate 
         // will be returned.  Otherwise, all symbols in scope will be returned.
-        getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[];
+        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
