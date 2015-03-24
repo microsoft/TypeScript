@@ -332,7 +332,7 @@ goTo.marker('25q');
 verify.quickInfoIs("(method) c1.pp2(b: number): number", "sum with property");
 
 goTo.marker('26');
-verify.quickInfoIs("(constructor) c1(): c1", "Constructor method");
+verify.quickInfoIs("constructor c1(): c1", "Constructor method");
 
 goTo.marker('27');
 verify.quickInfoIs("(property) c1.s1: number", "s1 is static property of c1");
@@ -500,15 +500,15 @@ goTo.marker('63q');
 verify.quickInfoIs("(method) c1.nc_s2(b: number): number", "");
 
 goTo.marker('64');
-verify.quickInfoIs("(var) i1: c1", "");
+verify.quickInfoIs("var i1: c1", "");
 
 goTo.marker('65');
 verify.currentSignatureHelpDocCommentIs("Constructor method");
 goTo.marker('65q');
-verify.quickInfoIs("(constructor) c1(): c1", "Constructor method");
+verify.quickInfoIs("constructor c1(): c1", "Constructor method");
 
 goTo.marker('66');
-verify.quickInfoIs("(var) i1_p: number", "");
+verify.quickInfoIs("var i1_p: number", "");
 
 goTo.marker('67');
 verify.quickInfoIs("(property) c1.p1: number", "p1 is property of c1");
@@ -520,13 +520,13 @@ verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
 
 goTo.marker('68');
-verify.quickInfoIs("(var) i1_f: (b: number) => number", "");
+verify.quickInfoIs("var i1_f: (b: number) => number", "");
 
 goTo.marker('69');
 verify.quickInfoIs("(method) c1.p2(b: number): number", "sum with property");
 
 goTo.marker('70');
-verify.quickInfoIs("(var) i1_r: number", "");
+verify.quickInfoIs("var i1_r: number", "");
 
 goTo.marker('71');
 verify.currentSignatureHelpDocCommentIs("sum with property");
@@ -535,28 +535,28 @@ goTo.marker('71q');
 verify.quickInfoIs("(method) c1.p2(b: number): number", "sum with property");
 
 goTo.marker('72');
-verify.quickInfoIs("(var) i1_prop: number", "");
+verify.quickInfoIs("var i1_prop: number", "");
 goTo.marker('73');
 verify.quickInfoIs("(property) c1.p3: number", "getter property\nsetter property");
 goTo.marker('74');
 verify.quickInfoIs("(property) c1.p3: number", "getter property\nsetter property");
 goTo.marker('75');
-verify.quickInfoIs("(var) i1_prop: number", "");
+verify.quickInfoIs("var i1_prop: number", "");
 
 goTo.marker('76');
-verify.quickInfoIs("(var) i1_nc_p: number", "");
+verify.quickInfoIs("var i1_nc_p: number", "");
 
 goTo.marker('77');
 verify.quickInfoIs("(property) c1.nc_p1: number", "");
 
 goTo.marker('78');
-verify.quickInfoIs("(var) i1_ncf: (b: number) => number", "");
+verify.quickInfoIs("var i1_ncf: (b: number) => number", "");
 
 goTo.marker('79');
 verify.quickInfoIs("(method) c1.nc_p2(b: number): number", "");
 
 goTo.marker('80');
-verify.quickInfoIs("(var) i1_ncr: number", "");
+verify.quickInfoIs("var i1_ncr: number", "");
 
 goTo.marker('81');
 verify.currentSignatureHelpDocCommentIs("");
@@ -565,16 +565,16 @@ goTo.marker('81q');
 verify.quickInfoIs("(method) c1.nc_p2(b: number): number", "");
 
 goTo.marker('82');
-verify.quickInfoIs("(var) i1_ncprop: number", "");
+verify.quickInfoIs("var i1_ncprop: number", "");
 goTo.marker('83');
 verify.quickInfoIs("(property) c1.nc_p3: number", "");
 goTo.marker('84');
 verify.quickInfoIs("(property) c1.nc_p3: number", "");
 goTo.marker('85');
-verify.quickInfoIs("(var) i1_ncprop: number", "");
+verify.quickInfoIs("var i1_ncprop: number", "");
 
 goTo.marker('86');
-verify.quickInfoIs("(var) i1_s_p: number", "");
+verify.quickInfoIs("var i1_s_p: number", "");
 
 goTo.marker('87');
 verify.quickInfoIs("class c1", "This is comment for c1");
@@ -590,13 +590,13 @@ verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
 
 goTo.marker('89');
-verify.quickInfoIs("(var) i1_s_f: (b: number) => number", "");
+verify.quickInfoIs("var i1_s_f: (b: number) => number", "");
 
 goTo.marker('90');
 verify.quickInfoIs("(method) c1.s2(b: number): number", "static sum with property");
 
 goTo.marker('91');
-verify.quickInfoIs("(var) i1_s_r: number", "");
+verify.quickInfoIs("var i1_s_r: number", "");
 
 goTo.marker('92');
 verify.currentSignatureHelpDocCommentIs("static sum with property");
@@ -605,28 +605,28 @@ goTo.marker('92q');
 verify.quickInfoIs("(method) c1.s2(b: number): number", "static sum with property");
 
 goTo.marker('93');
-verify.quickInfoIs("(var) i1_s_prop: number", "");
+verify.quickInfoIs("var i1_s_prop: number", "");
 goTo.marker('94');
 verify.quickInfoIs("(property) c1.s3: number", "static getter property\nsetter property");
 goTo.marker('95');
 verify.quickInfoIs("(property) c1.s3: number", "static getter property\nsetter property");
 goTo.marker('96');
-verify.quickInfoIs("(var) i1_s_prop: number", "");
+verify.quickInfoIs("var i1_s_prop: number", "");
 
 goTo.marker('97');
-verify.quickInfoIs("(var) i1_s_nc_p: number", "");
+verify.quickInfoIs("var i1_s_nc_p: number", "");
 
 goTo.marker('98');
 verify.quickInfoIs("(property) c1.nc_s1: number", "");
 
 goTo.marker('99');
-verify.quickInfoIs("(var) i1_s_ncf: (b: number) => number", "");
+verify.quickInfoIs("var i1_s_ncf: (b: number) => number", "");
 
 goTo.marker('100');
 verify.quickInfoIs("(method) c1.nc_s2(b: number): number", "");
 
 goTo.marker('101');
-verify.quickInfoIs("(var) i1_s_ncr: number", "");
+verify.quickInfoIs("var i1_s_ncr: number", "");
 
 goTo.marker('102');
 verify.currentSignatureHelpDocCommentIs("");
@@ -635,41 +635,41 @@ goTo.marker('102q');
 verify.quickInfoIs("(method) c1.nc_s2(b: number): number", "");
 
 goTo.marker('103');
-verify.quickInfoIs("(var) i1_s_ncprop: number", "");
+verify.quickInfoIs("var i1_s_ncprop: number", "");
 goTo.marker('104');
 verify.quickInfoIs("(property) c1.nc_s3: number", "");
 goTo.marker('105');
 verify.quickInfoIs("(property) c1.nc_s3: number", "");
 goTo.marker('106');
-verify.quickInfoIs("(var) i1_s_ncprop: number", "");
+verify.quickInfoIs("var i1_s_ncprop: number", "");
 
 goTo.marker('107');
-verify.quickInfoIs("(var) i1_c: typeof c1", "");
+verify.quickInfoIs("var i1_c: typeof c1", "");
 
 goTo.marker('108');
 verify.quickInfoIs("class c1", "This is comment for c1");
 
 goTo.marker('109');
 verify.completionListContains("c1", "class c1", "This is comment for c1");
-verify.completionListContains("i1", "(var) i1: c1", "");
-verify.completionListContains("i1_p", "(var) i1_p: number", "");
-verify.completionListContains("i1_f", "(var) i1_f: (b: number) => number", "");
-verify.completionListContains("i1_r", "(var) i1_r: number", "");
-verify.completionListContains("i1_prop", "(var) i1_prop: number", "");
-verify.completionListContains("i1_nc_p", "(var) i1_nc_p: number", "");
-verify.completionListContains("i1_ncf", "(var) i1_ncf: (b: number) => number", "");
-verify.completionListContains("i1_ncr", "(var) i1_ncr: number", "");
-verify.completionListContains("i1_ncprop", "(var) i1_ncprop: number", "");
-verify.completionListContains("i1_s_p", "(var) i1_s_p: number", "");
-verify.completionListContains("i1_s_f", "(var) i1_s_f: (b: number) => number", "");
-verify.completionListContains("i1_s_r", "(var) i1_s_r: number", "");
-verify.completionListContains("i1_s_prop", "(var) i1_s_prop: number", "");
-verify.completionListContains("i1_s_nc_p", "(var) i1_s_nc_p: number", "");
-verify.completionListContains("i1_s_ncf", "(var) i1_s_ncf: (b: number) => number", "");
-verify.completionListContains("i1_s_ncr", "(var) i1_s_ncr: number", "");
-verify.completionListContains("i1_s_ncprop", "(var) i1_s_ncprop: number", "");
+verify.completionListContains("i1", "var i1: c1", "");
+verify.completionListContains("i1_p", "var i1_p: number", "");
+verify.completionListContains("i1_f", "var i1_f: (b: number) => number", "");
+verify.completionListContains("i1_r", "var i1_r: number", "");
+verify.completionListContains("i1_prop", "var i1_prop: number", "");
+verify.completionListContains("i1_nc_p", "var i1_nc_p: number", "");
+verify.completionListContains("i1_ncf", "var i1_ncf: (b: number) => number", "");
+verify.completionListContains("i1_ncr", "var i1_ncr: number", "");
+verify.completionListContains("i1_ncprop", "var i1_ncprop: number", "");
+verify.completionListContains("i1_s_p", "var i1_s_p: number", "");
+verify.completionListContains("i1_s_f", "var i1_s_f: (b: number) => number", "");
+verify.completionListContains("i1_s_r", "var i1_s_r: number", "");
+verify.completionListContains("i1_s_prop", "var i1_s_prop: number", "");
+verify.completionListContains("i1_s_nc_p", "var i1_s_nc_p: number", "");
+verify.completionListContains("i1_s_ncf", "var i1_s_ncf: (b: number) => number", "");
+verify.completionListContains("i1_s_ncr", "var i1_s_ncr: number", "");
+verify.completionListContains("i1_s_ncprop", "var i1_s_ncprop: number", "");
 
-verify.completionListContains("i1_c", "(var) i1_c: typeof c1", "");
+verify.completionListContains("i1_c", "var i1_c: typeof c1", "");
 
 goTo.marker('110');
 verify.quickInfoIs("(property) cProperties.p2: number", "setter only property");
@@ -703,4 +703,4 @@ goTo.marker('118');
 verify.quickInfoIs("(local var) bbbb: number", "");
 
 goTo.marker('119');
-verify.quickInfoIs("(constructor) cWithConstructorProperty(a: number): cWithConstructorProperty", "this is class cWithConstructorProperty's constructor");
+verify.quickInfoIs("constructor cWithConstructorProperty(a: number): cWithConstructorProperty", "this is class cWithConstructorProperty's constructor");

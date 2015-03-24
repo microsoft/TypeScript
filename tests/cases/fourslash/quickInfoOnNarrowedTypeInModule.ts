@@ -27,25 +27,25 @@
 ////}
 
 goTo.marker('1');
-verify.quickInfoIs('(var) nonExportedStrOrNum: string | number');
-verify.completionListContains("nonExportedStrOrNum", "(var) nonExportedStrOrNum: string | number");
+verify.quickInfoIs('var nonExportedStrOrNum: string | number');
+verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: string | number");
 
 goTo.marker('2');
-verify.quickInfoIs('(var) nonExportedStrOrNum: number');
-verify.completionListContains("nonExportedStrOrNum", "(var) nonExportedStrOrNum: number");
+verify.quickInfoIs('var nonExportedStrOrNum: number');
+verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: number");
 
 goTo.marker('3');
-verify.quickInfoIs('(var) nonExportedStrOrNum: string');
-verify.completionListContains("nonExportedStrOrNum", "(var) nonExportedStrOrNum: string");
+verify.quickInfoIs('var nonExportedStrOrNum: string');
+verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: string");
 
 ['4', '5', '6', '7', '8', '9'].forEach((marker, index, arr) => {
     goTo.marker(marker);
-    verify.quickInfoIs('(var) m.exportedStrOrNum: string | number');
-    verify.completionListContains("exportedStrOrNum", "(var) m.exportedStrOrNum: string | number");
+    verify.quickInfoIs('var m.exportedStrOrNum: string | number');
+    verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string | number");
 });
 
 ['7', '8', '9'].forEach((marker, index, arr) => {
     goTo.marker(marker);
-    verify.quickInfoIs('(var) m.exportedStrOrNum: string | number');
-    verify.memberListContains("exportedStrOrNum", "(var) m.exportedStrOrNum: string | number");
+    verify.quickInfoIs('var m.exportedStrOrNum: string | number');
+    verify.memberListContains("exportedStrOrNum", "var m.exportedStrOrNum: string | number");
 });

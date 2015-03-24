@@ -98,7 +98,7 @@ verifyProtectedStaticProperty('81s');
 
 goTo.marker('9');
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9").position, length: "cInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
@@ -114,7 +114,7 @@ verifyStaticProperty('12');
 
 goTo.marker('9s');
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9s").position, length: "cInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);

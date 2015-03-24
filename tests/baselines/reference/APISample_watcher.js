@@ -929,7 +929,7 @@ declare module "typescript" {
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
-        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+        getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
@@ -1828,6 +1828,7 @@ declare module "typescript" {
         name: string;
         kind: string;
         kindModifiers: string;
+        sortText: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -1970,6 +1971,7 @@ declare module "typescript" {
     }
     class ScriptElementKind {
         static unknown: string;
+        static warning: string;
         static keyword: string;
         static scriptElement: string;
         static moduleElement: string;

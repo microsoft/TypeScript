@@ -17,9 +17,9 @@
 goTo.marker('1');
 verify.quickInfoIs("import test = require('exportEqualTypes_file0')");
 goTo.marker('2');
-verify.quickInfoIs('(var) r1: Date');
+verify.quickInfoIs('var r1: Date');
 goTo.marker('3');
-verify.quickInfoIs('(var) r2: string');
+verify.quickInfoIs('var r2: string');
 goTo.marker('4');
 verify.memberListContains('foo');
 verify.numberOfErrorsInCurrentFile(0);

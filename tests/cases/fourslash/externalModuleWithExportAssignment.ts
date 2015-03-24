@@ -33,7 +33,7 @@ goTo.marker('1');
 verify.quickInfoIs('import a1 = require("externalModuleWithExportAssignment_file0")');
 
 goTo.marker('2');
-verify.quickInfoIs("(var) a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);
+verify.quickInfoIs("var a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);
 
 goTo.marker('3');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
@@ -49,13 +49,13 @@ goTo.marker('5');
 verify.currentSignatureHelpIs("test2(): a1.connectModule");
 
 goTo.marker('6');
-verify.quickInfoIs("(var) r1: a1.connectModule", undefined);
+verify.quickInfoIs("var r1: a1.connectModule", undefined);
 
 goTo.marker('7');
 verify.currentSignatureHelpIs("a(): a1.connectExport");
 
 goTo.marker('8');
-verify.quickInfoIs("(var) r2: a1.connectExport", undefined);
+verify.quickInfoIs("var r2: a1.connectExport", undefined);
 
 goTo.marker('9');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
@@ -71,13 +71,13 @@ goTo.marker('11');
 verify.currentSignatureHelpIs("test2(): a1.connectModule");
 
 goTo.marker('12');
-verify.quickInfoIs("(var) r3: a1.connectModule", undefined);
+verify.quickInfoIs("var r3: a1.connectModule", undefined);
 
 goTo.marker('13');
 verify.currentSignatureHelpIs("a1(): a1.connectExport");
 
 goTo.marker('14');
-verify.quickInfoIs("(var) r4: a1.connectExport", undefined);
+verify.quickInfoIs("var r4: a1.connectExport", undefined);
 
 goTo.marker('15');
 verify.not.completionListContains("test1", "(property) test1: a1.connectModule", undefined);

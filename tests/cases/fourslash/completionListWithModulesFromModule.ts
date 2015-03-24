@@ -278,16 +278,16 @@ function goToMarkAndVerifyShadow()
 
 // from a shadow module with no export
 goTo.marker('shadowModuleWithNoExport');
-verify.completionListContains('shwvar', '(var) shwvar: string');
-verify.completionListContains('shwfn', '(function) shwfn(shadow: any): void');
+verify.completionListContains('shwvar', 'var shwvar: string');
+verify.completionListContains('shwfn', 'function shwfn(shadow: any): void');
 verify.completionListContains('shwcls', 'class shwcls');
 verify.completionListContains('shwint', 'interface shwint');
 goToMarkAndVerifyShadow();
 
 // from a shadow module with export
 goTo.marker('shadowModuleWithExport');
-verify.completionListContains('shwvar', '(var) mod4.shwvar: string');
-verify.completionListContains('shwfn', '(function) mod4.shwfn(shadow: any): void');
+verify.completionListContains('shwvar', 'var mod4.shwvar: string');
+verify.completionListContains('shwfn', 'function mod4.shwfn(shadow: any): void');
 verify.completionListContains('shwcls', 'class mod4.shwcls');
 verify.completionListContains('shwint', 'interface mod4.shwint');
 goToMarkAndVerifyShadow();
@@ -297,8 +297,8 @@ goTo.marker('moduleWithImport');
 verify.completionListContains('mod1', 'module mod1');
 verify.completionListContains('mod2', 'module mod2');
 verify.completionListContains('mod3', 'module mod3');
-verify.completionListContains('shwvar', '(var) shwvar: number');
-verify.completionListContains('shwfn', '(function) shwfn(): void');
+verify.completionListContains('shwvar', 'var shwvar: number');
+verify.completionListContains('shwfn', 'function shwfn(): void');
 verify.completionListContains('shwcls', 'class shwcls');
 verify.completionListContains('shwint', 'interface shwint');
 

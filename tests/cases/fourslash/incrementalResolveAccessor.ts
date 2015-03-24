@@ -14,7 +14,7 @@
 
 // Resolve without typeCheck
 goTo.marker('1');
-verify.quickInfoIs("(var) b: string");
+verify.quickInfoIs("var b: string");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(3);
