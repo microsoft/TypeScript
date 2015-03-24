@@ -8,5 +8,4 @@ function baz2([[]] = [[1,2,3]]) { }
 
 function baz3({}) { }
 function baz4({} = { x: 10 }) { }
-function baz5({} = { x: 10, y: { a: 2 }, z: [1,2] }) { }
 
