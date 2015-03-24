@@ -53,6 +53,7 @@ class TypeWriterWalker {
             case ts.SyntaxKind.PostfixUnaryExpression:
             case ts.SyntaxKind.BinaryExpression:
             case ts.SyntaxKind.ConditionalExpression:
+            case ts.SyntaxKind.SpreadElementExpression:
                 this.log(node, this.getTypeOfNode(node));
                 break;
 
