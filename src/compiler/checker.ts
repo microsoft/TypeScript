@@ -104,6 +104,7 @@ module ts {
         let globalClassDecoratorType: ObjectType;
         let globalParameterDecoratorType: ObjectType;
         let globalPropertyDecoratorType: ObjectType;
+        let globalMethodDecoratorType: ObjectType;
         
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
@@ -8530,12 +8531,15 @@ module ts {
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
+                    checkTypeAssignableTo(exprType, globalPropertyDecoratorType, node);
+                    break;
+
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    let propertyType = getTypeOfNode(node.parent);
-                    let propertyDecoratorType = instantiateSingleCallFunctionType(globalPropertyDecoratorType, [propertyType]);
-                    checkTypeAssignableTo(exprType, propertyDecoratorType, node);
+                    let methodType = getTypeOfNode(node.parent);
+                    let methodDecoratorType = instantiateSingleCallFunctionType(globalMethodDecoratorType, [methodType]);
+                    checkTypeAssignableTo(exprType, methodDecoratorType, node);
                     break;
 
                 case SyntaxKind.Parameter:
@@ -11343,6 +11347,7 @@ module ts {
             globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
             globalClassDecoratorType = getGlobalType("ClassDecorator");
             globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
+            globalMethodDecoratorType = getGlobalType("MethodDecorator");
             globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
