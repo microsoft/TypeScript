@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
         var weekend = a.weekend;
     })(a = exports.a || (exports.a = {}));
     exports.b = a.weekend;
-    exports.bVal = 2 /* Sunday */;
+    exports.bVal = exports.b.Sunday;
 });
 
 

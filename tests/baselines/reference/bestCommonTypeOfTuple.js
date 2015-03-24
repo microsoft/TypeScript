@@ -53,16 +53,16 @@ t1 = [
     f2
 ];
 t2 = [
-    0 /* one */,
-    0 /* two */
+    E1.one,
+    E2.two
 ];
 t3 = [
     5,
     undefined
 ];
 t4 = [
-    0 /* one */,
-    0 /* two */,
+    E1.one,
+    E2.two,
     20
 ];
 var e1 = t1[2]; // {}

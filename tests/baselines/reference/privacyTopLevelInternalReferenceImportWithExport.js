@@ -168,8 +168,8 @@ define(["require", "exports"], function (require, exports) {
     // Usage of privacy error imports
     var privateUse_im_public_c_private = new exports.im_public_c_private();
     exports.publicUse_im_public_c_private = new exports.im_public_c_private();
-    var privateUse_im_public_e_private = 0 /* Happy */;
-    exports.publicUse_im_public_e_private = 1 /* Grumpy */;
+    var privateUse_im_public_e_private = exports.im_public_e_private.Happy;
+    exports.publicUse_im_public_e_private = exports.im_public_e_private.Grumpy;
     var privateUse_im_public_f_private = exports.im_public_f_private();
     exports.publicUse_im_public_f_private = exports.im_public_f_private();
     var privateUse_im_public_v_private = exports.im_public_v_private;
@@ -189,8 +189,8 @@ define(["require", "exports"], function (require, exports) {
     // Usage of above decls
     var privateUse_im_public_c_public = new exports.im_public_c_public();
     exports.publicUse_im_public_c_public = new exports.im_public_c_public();
-    var privateUse_im_public_e_public = 0 /* Happy */;
-    exports.publicUse_im_public_e_public = 1 /* Grumpy */;
+    var privateUse_im_public_e_public = exports.im_public_e_public.Happy;
+    exports.publicUse_im_public_e_public = exports.im_public_e_public.Grumpy;
     var privateUse_im_public_f_public = exports.im_public_f_public();
     exports.publicUse_im_public_f_public = exports.im_public_f_public();
     var privateUse_im_public_v_public = exports.im_public_v_public;

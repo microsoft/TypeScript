@@ -46,14 +46,14 @@ var e1;
 var e2;
 (function (e2) {
     e2[e2["a"] = 10] = "a";
-    e2[e2["b"] = e2.a + 2] = "b";
+    e2[e2["b"] = 12] = "b";
     e2[e2["c"] = 10] = "c";
 })(e2 || (e2 = {}));
 var e3;
 (function (e3) {
     e3[e3["a"] = 10] = "a";
     e3[e3["b"] = Math.PI] = "b";
-    e3[e3["c"] = e3.a + 3] = "c";
+    e3[e3["c"] = 13] = "c";
 })(e3 || (e3 = {}));
 var e4;
 (function (e4) {
@@ -80,13 +80,13 @@ declare enum e1 {
 }
 declare enum e2 {
     a = 10,
-    b,
+    b = 12,
     c = 10,
 }
 declare enum e3 {
     a = 10,
     b,
-    c,
+    c = 13,
 }
 declare enum e4 {
     a = 0,

@@ -1,0 +1,17 @@
+tests/cases/compiler/es5ModuleWithoutModuleGenTarget.ts(1,14): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
+==== tests/cases/compiler/es5ModuleWithoutModuleGenTarget.ts (1 errors) ====
+    export class A
+                 ~
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+    {
+        constructor ()
+        {
+        }
+    
+        public B()
+        {
+            return 42;
+        }
+    }

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
+
+var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+>a : unknown
+>x11 : number
+>b : unknown
+>a : unknown
+>y11 : string
+>b : unknown
+>a : unknown
+>z11 : boolean
+>{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
+>a : number
+>b : { a: string; b: { a: boolean; }; }
+>{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
+>a : string
+>b : { a: boolean; }
+>{ a: true } : { a: boolean; }
+>a : boolean
+
+function f15() {
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+
+    var a4 = "hello";
+>a4 : string
+
+    var b4 = 1;
+>b4 : number
+
+    var c4 = true;
+>c4 : boolean
+
+    return { a4, b4, c4 };
+>{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
+>a4 : string
+>b4 : number
+>c4 : boolean
+}
+var { a4, b4, c4 } = f15();
+>a4 : string
+>b4 : number
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+
+module m {
+>m : typeof m
+
+    export var { a4, b4, c4 } = f15();
+>a4 : string
+>b4 : number
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+}

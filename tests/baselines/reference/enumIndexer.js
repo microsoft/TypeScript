@@ -21,7 +21,7 @@ var _arr = [
         key: 'bar'
     }
 ];
-var enumValue = 0 /* foo */;
+var enumValue = MyEnumType.foo;
 var x = _arr.map(function (o) {
     return MyEnumType[o.key] === enumValue;
 }); // these are not same type

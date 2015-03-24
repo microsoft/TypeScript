@@ -3239,6 +3239,11 @@ declare module "typescript" {
         CannotBeNamed = 2,
 >CannotBeNamed : SymbolAccessibility
     }
+    type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+>ImportEqualsDeclaration : ImportEqualsDeclaration
+
     interface SymbolVisibilityResult {
 >SymbolVisibilityResult : SymbolVisibilityResult
 
@@ -3246,9 +3251,9 @@ declare module "typescript" {
 >accessibility : SymbolAccessibility
 >SymbolAccessibility : SymbolAccessibility
 
-        aliasesToMakeVisible?: ImportEqualsDeclaration[];
->aliasesToMakeVisible : ImportEqualsDeclaration[]
->ImportEqualsDeclaration : ImportEqualsDeclaration
+        aliasesToMakeVisible?: AnyImportSyntax[];
+>aliasesToMakeVisible : (ImportEqualsDeclaration | ImportDeclaration)[]
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
 
         errorSymbolName?: string;
 >errorSymbolName : string
@@ -3303,6 +3308,12 @@ declare module "typescript" {
 >node : Declaration
 >Declaration : Declaration
 
+        collectLinkedAliases(node: Identifier): Node[];
+>collectLinkedAliases : (node: Identifier) => Node[]
+>node : Identifier
+>Identifier : Identifier
+>Node : Node
+
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
 >isImplementationOfOverload : (node: FunctionLikeDeclaration) => boolean
 >node : FunctionLikeDeclaration
@@ -3324,6 +3335,17 @@ declare module "typescript" {
 >writeReturnTypeOfSignatureDeclaration : (signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
 >signatureDeclaration : SignatureDeclaration
 >SignatureDeclaration : SignatureDeclaration
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+
+        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+>writeTypeOfExpression : (expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
+>expr : Expression
+>Expression : Expression
 >enclosingDeclaration : Node
 >Node : Node
 >flags : TypeFormatFlags
@@ -4983,10 +5005,11 @@ declare module "typescript" {
     let version: string;
 >version : string
 
-    function createCompilerHost(options: CompilerOptions): CompilerHost;
->createCompilerHost : (options: CompilerOptions) => CompilerHost
+    function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
+>createCompilerHost : (options: CompilerOptions, setParentNodes?: boolean) => CompilerHost
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
+>setParentNodes : boolean
 >CompilerHost : CompilerHost
 
     function getPreEmitDiagnostics(program: Program): Diagnostic[];

@@ -11,9 +11,9 @@ enum E {
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
-    E[E["b"] = E.a] = "b";
+    E[E["b"] = 0] = "b";
 })(E || (E = {}));
 var E;
 (function (E) {
-    E[E["c"] = E.a] = "c";
+    E[E["c"] = 0] = "c";
 })(E || (E = {}));

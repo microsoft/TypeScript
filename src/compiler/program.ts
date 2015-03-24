@@ -10,7 +10,7 @@ module ts {
     /** The version of the TypeScript compiler release */
     export let version = "1.5.0.0";
 
-    export function createCompilerHost(options: CompilerOptions): CompilerHost {
+    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
 
@@ -38,7 +38,7 @@ module ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
         function directoryExists(directoryPath: string): boolean {
@@ -87,6 +87,11 @@ module ts {
 
     export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
         let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+
+        if (program.getCompilerOptions().declaration) {
+            diagnostics.concat(program.getDeclarationDiagnostics());
+        }
+
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
@@ -178,11 +183,6 @@ module ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
-            let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
-            return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
-        }
-
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.
@@ -232,6 +232,10 @@ module ts {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
         }
 
+        function getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile);
+        }
+
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return sourceFile.parseDiagnostics;
         }
@@ -245,6 +249,15 @@ module ts {
             let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
 
             return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+        }
+
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            if (!isDeclarationFile(sourceFile)) {
+                let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+                // Don't actually write any files since we're just getting diagnostics.
+                var writeFile: WriteFileCallback = () => { };
+                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
+            }
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -436,11 +449,20 @@ module ts {
                 return;
             }
 
+            let languageVersion = options.target || ScriptTarget.ES3;
+
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModuleSourceFile && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet       
-                let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                if (!options.module && languageVersion < ScriptTarget.ES6) {
+                    // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
+                    let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                }
+            }
+
+            // Cannot specify module gen target when in es6 or above
+            if (options.module && languageVersion >= ScriptTarget.ES6) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot

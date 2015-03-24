@@ -1,11 +1,15 @@
-tests/cases/compiler/es6ImportDefaultBinding_1.ts(1,8): error TS1192: External module '"tests/cases/compiler/es6ImportDefaultBinding_0"' has no default export or export assignment.
+tests/cases/compiler/es6ImportDefaultBinding_0.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
 
 
-==== tests/cases/compiler/es6ImportDefaultBinding_0.ts (0 errors) ====
+==== tests/cases/compiler/es6ImportDefaultBinding_0.ts (1 errors) ====
     
-    export var a = 10;
+    var a = 10;
+    export = a;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
     
-==== tests/cases/compiler/es6ImportDefaultBinding_1.ts (1 errors) ====
+==== tests/cases/compiler/es6ImportDefaultBinding_1.ts (0 errors) ====
     import defaultBinding from "es6ImportDefaultBinding_0";
-           ~~~~~~~~~~~~~~
-!!! error TS1192: External module '"tests/cases/compiler/es6ImportDefaultBinding_0"' has no default export or export assignment.
+    var x = defaultBinding;
+    import defaultBinding2 from "es6ImportDefaultBinding_0"; // elide this import since defaultBinding2 is not used
+    
