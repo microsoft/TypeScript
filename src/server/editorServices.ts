@@ -280,12 +280,7 @@ module ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
-            if (projectOptions && projectOptions.compilerOptions) {
-                this.compilerService = new CompilerService(this,projectOptions.compilerOptions);
-            }
-            else {
-                this.compilerService = new CompilerService(this);
-            }
+            this.compilerService = new CompilerService(this,projectOptions && projectOptions.compilerOptions);
         }
 
         addOpenRef() {
@@ -508,7 +503,7 @@ module ts.server {
             this.printProjects();
         }
 
-        gcConfiguredProjects() {
+        updateConfiguredProjectList() {
             var configuredProjects: Project[] = [];
             for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
                 if (this.configuredProjects[i].openRefCount > 0) {
@@ -565,7 +560,7 @@ module ts.server {
                     this.openFileRoots.push(info);
                 }
             }
-            this.gcConfiguredProjects();
+            this.updateConfiguredProjectList();
         }
 
         /**
@@ -762,13 +757,18 @@ module ts.server {
          */
 
         openClientFile(fileName: string) {
-            var configFileName = this.findConfigFile(fileName);
+            var searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            var configFileName = ts.findConfigFile(searchPath);
+            if (configFileName) {
+                configFileName = getAbsolutePath(configFileName, searchPath);
+            }
             if (configFileName && (!this.configProjectIsActive(configFileName))) {
                 var configResult = this.openConfigFile(configFileName, fileName);
                 if (!configResult.success) {
                     this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
                 }
                 else {
+                    this.log("Opened configuration file " + configFileName,"Info");
                     this.configuredProjects.push(configResult.project);                    
                 }
             }
@@ -859,22 +859,6 @@ module ts.server {
             }
             return false;
         }
-
-        findConfigFile(openedFileName: string): string {
-            var searchPath = getDirectoryPath(openedFileName);
-            while (true) {
-                var fileName = searchPath + ts.directorySeparator + "tsconfig.json";
-                if (sys.fileExists(fileName)) {
-                    return fileName;
-                }
-                var parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
-            return undefined;
-        }
         
         openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
             configFilename = ts.normalizePath(configFilename);
@@ -915,9 +899,9 @@ module ts.server {
         }
 
         createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            var eproj = new Project(this, projectOptions);
-            eproj.projectFilename = projectFilename;
-            return eproj;
+            var project = new Project(this, projectOptions);
+            project.projectFilename = projectFilename;
+            return project;
         }
 
     }
@@ -943,8 +927,6 @@ module ts.server {
 
         setCompilerOptions(opt: ts.CompilerOptions) {
             this.settings = opt;
-            // override default ES6 (remove when compiler default back at ES5)
-            this.settings.target = ts.ScriptTarget.ES5;
             this.host.setCompilationSettings(opt);
         }
 

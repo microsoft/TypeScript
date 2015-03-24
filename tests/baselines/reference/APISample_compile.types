@@ -4736,6 +4736,10 @@ declare module "typescript" {
     let version: string;
 >version : string
 
+    function findConfigFile(searchPath: string): string;
+>findConfigFile : (searchPath: string) => string
+>searchPath : string
+
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
 >createCompilerHost : (options: CompilerOptions, setParentNodes?: boolean) => CompilerHost
 >options : CompilerOptions
