@@ -5154,6 +5154,12 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
+>findReferences : (fileName: string, position: number) => ReferencedSymbol[]
+>fileName : string
+>position : number
+>ReferencedSymbol : ReferencedSymbol
+
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
 >getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
@@ -5424,6 +5430,17 @@ declare module "typescript" {
 
         containerName: string;
 >containerName : string
+    }
+    interface ReferencedSymbol {
+>ReferencedSymbol : ReferencedSymbol
+
+        definition: DefinitionInfo;
+>definition : DefinitionInfo
+>DefinitionInfo : DefinitionInfo
+
+        references: ReferenceEntry[];
+>references : ReferenceEntry[]
+>ReferenceEntry : ReferenceEntry
     }
     enum SymbolDisplayPartKind {
 >SymbolDisplayPartKind : SymbolDisplayPartKind
