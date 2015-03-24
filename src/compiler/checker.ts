@@ -11402,6 +11402,12 @@ module ts {
             else if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
+            else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
+                let accessors = mergeAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
+                if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
+                    return grammarErrorOnNode(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
+                }
+            }
             return false;
         }
 

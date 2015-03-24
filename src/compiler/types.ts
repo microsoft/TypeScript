@@ -542,6 +542,14 @@ module ts {
         body: Block;
     }
 
+    // A merged view of get/set accessors
+    export interface MergedAccessorDeclarations {
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+    }
+
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
         _indexSignatureDeclarationBrand: any;
     }

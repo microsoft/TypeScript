@@ -575,6 +575,56 @@ module ts {
         return (<CallExpression>node).expression;
     }
 
+    export function mergeAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): MergedAccessorDeclarations {
+        let firstAccessor: AccessorDeclaration;
+        let secondAccessor: AccessorDeclaration;
+        let getAccessor: AccessorDeclaration;
+        let setAccessor: AccessorDeclaration;
+        if (hasDynamicName(accessor)) {
+            firstAccessor = accessor;
+            if (accessor.kind === SyntaxKind.GetAccessor) {
+                getAccessor = accessor;
+            }
+            else if (accessor.kind === SyntaxKind.SetAccessor) {
+                setAccessor = accessor;
+            }
+            else {
+                Debug.fail("Accessor has wrong kind");
+            }
+        }
+        else {
+            forEach(declarations, (member: Declaration) => {
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    let memberName = getPropertyNameForPropertyNameNode(member.name);
+                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    if (memberName === accessorName) {
+                        if (!firstAccessor) {
+                            firstAccessor = <AccessorDeclaration>member;
+                        }
+                        else if (!secondAccessor) {
+                            secondAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            getAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            setAccessor = <AccessorDeclaration>member;
+                        }
+                    }
+                }
+            });
+        }
+        return {
+            firstAccessor,
+            secondAccessor,
+            getAccessor,
+            setAccessor
+        };
+    }
+
     export function nodeIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:

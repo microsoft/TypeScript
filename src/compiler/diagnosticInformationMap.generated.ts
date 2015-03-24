@@ -164,6 +164,7 @@ module ts {
         Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher: { code: 1204, category: DiagnosticCategory.Error, key: "Cannot compile external modules into amd or commonjs when targeting es6 or higher." },
         Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1205, category: DiagnosticCategory.Error, key: "Decorators are only available when targeting ECMAScript 5 and higher." },
         Decorators_are_not_valid_here: { code: 1206, category: DiagnosticCategory.Error, key: "Decorators are not valid here." },
+        Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name: { code: 1207, category: DiagnosticCategory.Error, key: "Decorators cannot be applied to multiple get/set accessors of the same name." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

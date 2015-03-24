@@ -285,55 +285,6 @@ module ts {
         });
     }
 
-    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
-        let firstAccessor: AccessorDeclaration;
-        let lastAccessor: AccessorDeclaration;
-        let getAccessor: AccessorDeclaration;
-        let setAccessor: AccessorDeclaration;
-        if (hasDynamicName(accessor)) {
-            firstAccessor = accessor;
-            lastAccessor = accessor;
-            if (accessor.kind === SyntaxKind.GetAccessor) {
-                getAccessor = accessor;
-            }
-            else if (accessor.kind === SyntaxKind.SetAccessor) {
-                setAccessor = accessor;
-            }
-            else {
-                Debug.fail("Accessor has wrong kind");
-            }
-        }
-        else {
-            forEach(declarations, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
-                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    let memberName = getPropertyNameForPropertyNameNode(member.name);
-                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
-                    if (memberName === accessorName) {
-                        if (!firstAccessor) {
-                            firstAccessor = <AccessorDeclaration>member;
-                        }
-
-                        lastAccessor = <AccessorDeclaration>member;
-                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <AccessorDeclaration>member;
-                        }
-
-                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <AccessorDeclaration>member;
-                        }
-                    }
-                }
-            });
-        }
-        return {
-            firstAccessor,
-            lastAccessor,
-            getAccessor,
-            setAccessor
-        };
-    }
-
     function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
@@ -1139,7 +1090,7 @@ module ts {
                 return;
             }
 
-            let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
+            let accessors = mergeAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
             let accessorWithTypeAnnotation: AccessorDeclaration;
 
             if (node === accessors.firstAccessor) {
@@ -2904,7 +2855,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                        let { firstAccessor, getAccessor, setAccessor } = mergeAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                         // Only emit the first accessor.
                         if (firstAccessor !== property) {
@@ -4725,7 +4676,7 @@ module ts {
                         emitTrailingComments(member);
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
-                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
@@ -5226,16 +5177,14 @@ module ts {
                         return member.decorators;
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            let decorators = accessors.firstAccessor.decorators;
-                            if (member !== accessors.lastAccessor && accessors.lastAccessor.decorators) {
-                                if (decorators) {
-                                    return decorators.concat(accessors.lastAccessor.decorators);
-                                }
-                                return accessors.lastAccessor.decorators;
+                            if (accessors.firstAccessor.decorators) {
+                                return accessors.firstAccessor.decorators;
                             }
-                            return decorators;
+                            if (accessors.secondAccessor && accessors.secondAccessor.decorators) {
+                                return accessors.secondAccessor.decorators;
+                            }
                         }
                         break;
                 }
@@ -5298,7 +5247,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor && accessors.setAccessor) {
                             emitDecoratorsOfParameters(accessors.setAccessor);
                         }

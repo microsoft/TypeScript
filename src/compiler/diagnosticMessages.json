@@ -647,6 +647,10 @@
         "category": "Error",
         "code": 1206
     },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
