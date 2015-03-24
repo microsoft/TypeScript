@@ -10547,62 +10547,102 @@ module ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[] {
             let symbols: SymbolTable = {};
             let memberFlags: NodeFlags = 0;
-            function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
-                if (symbol.flags & meaning) {
-                    let id = symbol.name;
-                    if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
-                        symbols[id] = symbol;
-                    }
-                }
-            }
-            function copySymbols(source: SymbolTable, meaning: SymbolFlags) {
-                if (meaning) {
-                    for (let id in source) {
-                        if (hasProperty(source, id)) {
-                            copySymbol(source[id], meaning);
-                        }
-                    }
-                }
-            }
 
             if (isInsideWithStatementBody(location)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return [];
             }
 
-            while (location) {
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    copySymbols(location.locals, meaning);
-                }
-                switch (location.kind) {
-                    case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
-                    case SyntaxKind.ModuleDeclaration:
-                        copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember);
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember);
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (!(memberFlags & NodeFlags.Static)) {
-                            copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
-                        }
-                        break;
-                    case SyntaxKind.FunctionExpression:
-                        if ((<FunctionExpression>location).name) {
-                            copySymbol(location.symbol, meaning);
-                        }
-                        break;
-                }
-                memberFlags = location.flags;
-                location = location.parent;
-            }
-            copySymbols(globals, meaning);
+            populateSymbols();
+
             return mapToArray(symbols);
+
+            function populateSymbols() {
+                while (location) {
+                    if (location.locals && !isGlobalSourceFile(location)) {
+                        if (copySymbols(location.locals, meaning)) {
+                            return;
+                        }
+                    }
+                    switch (location.kind) {
+                        case SyntaxKind.SourceFile:
+                            if (!isExternalModule(<SourceFile>location)) {
+                                break;
+                            }
+                        case SyntaxKind.ModuleDeclaration:
+                            if (copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember)) {
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.EnumDeclaration:
+                            if (copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.EnumMember)) {
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                            if (!(memberFlags & NodeFlags.Static)) {
+                                if (copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type)) {
+                                    return;
+                                }
+                            }
+                            break;
+                        case SyntaxKind.FunctionExpression:
+                            if ((<FunctionExpression>location).name) {
+                                if (copySymbol(location.symbol, meaning)) {
+                                    return;
+                                }
+                            }
+                            break;
+                    }
+                    memberFlags = location.flags;
+                    location = location.parent;
+                }
+                if (copySymbols(globals, meaning)) {
+                    return;
+                }
+            }
+
+            // Returns 'true' if we should stop processing symbols.
+            function copySymbol(symbol: Symbol, meaning: SymbolFlags): boolean {
+                if (symbol.flags & meaning) {
+                    let id = symbol.name;
+                    if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
+                        if (predicate) {
+                            // If we were supplied a predicate function, then check if this symbol 
+                            // matches with it.  If so, we're done and can immediately return.
+                            // Otherwise, just ignore this symbol and keep going.
+                            if (predicate(symbol)) {
+                                symbols[id] = symbol;
+                                return true;
+                            }
+                        }
+                        else {
+                            // If no predicate was supplied, then just add the symbol as is.
+                            symbols[id] = symbol;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            function copySymbols(source: SymbolTable, meaning: SymbolFlags): boolean {
+                if (meaning) {
+                    for (let id in source) {
+                        if (hasProperty(source, id)) {
+                            if (copySymbol(source[id], meaning)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
         }
 
         function isTypeDeclarationName(name: Node): boolean {

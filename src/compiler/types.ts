@@ -1092,7 +1092,10 @@ module ts {
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
-        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+
+        // If 'predicate' is supplied, then only the first symbol in scope matching the predicate 
+        // will be returned.  Otherwise, all symbols in scope will be returned.
+        getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;

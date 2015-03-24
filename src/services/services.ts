@@ -2421,7 +2421,6 @@ module ts {
                     isValid = isIdentifierPart(displayName.charCodeAt(i), target);
                 }
 
-
                 if (isValid) {
                     return unescapeIdentifier(displayName);
                 }
@@ -2450,7 +2449,21 @@ module ts {
             };
         }
 
-        function getCompletionSymbols(fileName: string, position: number): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node }{
+        function getCompletionSymbols(fileName: string, position: number, symbolName?: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node } {
+            let result = getCompletionSymbolsWorker(fileName, position, symbolName);
+            if (!result) {
+                return undefined;
+            }
+
+            if (result.symbols && symbolName) {
+                var target = program.getCompilerOptions().target;
+                result.symbols = filter(result.symbols, s => getValidCompletionEntryDisplayName(s, target) === symbolName);
+            }
+
+            return result;
+        }
+
+        function getCompletionSymbolsWorker(fileName: string, position: number, symbolName: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node }{
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
@@ -2502,7 +2515,8 @@ module ts {
             }
 
             let location = getTouchingPropertyName(sourceFile, position);
-            // Populate the completion list
+            var target = program.getCompilerOptions().target;
+
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
@@ -2580,7 +2594,12 @@ module ts {
                     /// TODO filter meaning based on the current context
                     let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
+                    
+                    // Filter down to the symbol that matches the symbolName if we were given one.
+                    let predicate: (s: Symbol) => boolean = symbolName 
+                        ? s => getValidCompletionEntryDisplayName(s, target) === symbolName
+                        : undefined;
+                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings, predicate);
                 }
             }
 
@@ -2938,37 +2957,27 @@ module ts {
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            // Note: No need to call synchronizeHostData, as we have captured all the data we need
-            //       in the getCompletionsAtPosition earlier
-            let sourceFile = getValidSourceFile(fileName);
+            synchronizeHostData();
 
-            let session = activeCompletionSession;
-
-            // Ensure that the current active completion session is still valid for this request
-            if (!session || session.fileName !== fileName || session.position !== position) {
-                return undefined;
+            // Look up a completion symbol with this name.
+            let result = getCompletionSymbols(fileName, position, entryName);
+            if (result) {
+                let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = result;
+                if (symbols && symbols.length > 0) {
+                    let symbol = symbols[0];
+                    let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
+                    return {
+                        name: entryName,
+                        kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
+                        kindModifiers: getSymbolModifiers(symbol),
+                        displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
+                        documentation: displayPartsDocumentationsAndSymbolKind.documentation
+                    };
+                }
             }
 
-            let symbol = lookUp(activeCompletionSession.symbols, escapeIdentifier(entryName));
-            if (symbol) {
-                let location = getTouchingPropertyName(sourceFile, position);
-                let completionEntry = createCompletionEntry(symbol, session.typeChecker, location);
-                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
-                //               which is permissible given that it is backwards compatible; but really we should consider
-                //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
-                //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
-                let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, session.typeChecker, location, SemanticMeaning.All);
-                return {
-                    name: entryName,
-                    kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
-                    kindModifiers: completionEntry.kindModifiers,
-                    displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
-                    documentation: displayPartsDocumentationsAndSymbolKind.documentation
-                };
-            }
-            else {
-                // No symbol, it is a keyword
+            let keywordCompletion = filter(keywordCompletions, c => c.name === entryName);
+            if (keywordCompletion) {
                 return {
                     name: entryName,
                     kind: ScriptElementKind.keyword,
@@ -2977,6 +2986,8 @@ module ts {
                     documentation: undefined
                 };
             }
+
+            return undefined;
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
