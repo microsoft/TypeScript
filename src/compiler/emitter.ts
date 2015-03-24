@@ -1538,7 +1538,6 @@ module ts {
 
             let generatedBlockScopeNames: string[];
             let generatedComputedPropertyNames: string[];
-            let generatedSetterNames: string[];
 
             let extendsEmitted = false;
             let decorateEmitted = false;
@@ -2530,7 +2529,11 @@ module ts {
                     //   class C {
                     //     [_a = x]() { }
                     //   }
-                    //   __decorate([dec], C.prototype, _a);
+                    //
+                    // The emit for the decorated computed property decorator is:
+                    //
+                    //   _a = typeof _a == "symbol" ? _a : String(_a);
+                    //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
                     //
                     if (nodeIsDecorated(node.parent)) {
                         if (!generatedComputedPropertyNames) {
@@ -4704,23 +4707,6 @@ module ts {
                                 emitLeadingComments(accessors.setAccessor);
                                 write("set: ");
                                 emitStart(accessors.setAccessor);
-                                if (forEach(accessors.setAccessor.parameters, nodeIsDecorated)) {
-                                    if (!generatedSetterNames) {
-                                        generatedSetterNames = [];
-                                    }
-
-                                    var preferredName: string;
-                                    if ((<AccessorDeclaration>member).name.kind === SyntaxKind.Identifier) {
-                                        preferredName = "_set_" + (<Identifier>(<AccessorDeclaration>member).name).text;
-                                    }
-
-                                    let generatedVariable = createTempVariable(node, preferredName);
-                                    let generatedName = generatedVariable.text;
-                                    recordTempDeclaration(generatedVariable);
-                                    generatedSetterNames[accessors.setAccessor.id] = generatedName;
-                                    write(generatedName);
-                                    write(" = ");
-                                }
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
@@ -4927,13 +4913,15 @@ module ts {
                     // `configurable:true`).
                     // 
                     //
-                    // For example:
+                    // Given the class:
                     //
                     //   @dec 
                     //   class C {
                     //     static x() {}
                     //     y() { C.x(); }
                     //   }
+                    //
+                    // The ES6 emit for the is:
                     //
                     //   let C = () => {
                     //       let C = class {
@@ -4961,12 +4949,10 @@ module ts {
                     var saveTempVariables = tempVariables;
                     var saveTempParameters = tempParameters;
                     var saveGeneratedComputedPropertyNames = generatedComputedPropertyNames;
-                    var saveGeneratedSetterNames = generatedSetterNames;
                     tempCount = 0;
                     tempVariables = undefined;
                     tempParameters = undefined;
                     generatedComputedPropertyNames = undefined;
-                    generatedSetterNames = undefined;
 
                     increaseIndent();
                     writeLine();
@@ -5041,7 +5027,6 @@ module ts {
                     tempVariables = saveTempVariables;
                     tempParameters = saveTempParameters;
                     generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
-                    generatedSetterNames = saveGeneratedSetterNames;
 
                     decreaseIndent();
                     writeLine();
@@ -5074,12 +5059,10 @@ module ts {
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
                 let saveGeneratedComputedPropertyNames = generatedComputedPropertyNames;
-                let saveGeneratedSetterNames = generatedSetterNames;
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
                 generatedComputedPropertyNames = undefined;
-                generatedSetterNames = undefined;
                 increaseIndent();
                 scopeEmitStart(node);
                 if (baseTypeNode) {
@@ -5107,7 +5090,6 @@ module ts {
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
                 generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
-                generatedSetterNames = saveGeneratedSetterNames;
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -5141,59 +5123,200 @@ module ts {
                     write(".prototype");
                 }
             }
+            
+            function emitDecoratorsOfClass(node: ClassDeclaration) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    return;
+                }
 
-            function emitClassMemberAsExpression(node: FunctionLikeDeclaration) {
-                if (node.parent && node.parent.kind === SyntaxKind.ClassDeclaration) {
-                    if (node.kind === SyntaxKind.Constructor) {
-                        emitDeclarationName(<ClassDeclaration>node.parent);
+                emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
+                emitDecoratorsOfMembers(node, NodeFlags.Static);
+                emitDecoratorsOfConstructor(node);
+            }
+
+            function emitDecoratorsOfConstructor(node: ClassDeclaration) {
+                let constructor = getFirstConstructorWithBody(node);
+                if (constructor) {
+                    emitDecoratorsOfParameters(node, constructor);
+                }
+
+                if (!nodeIsDecorated(node)) {
+                    return;
+                }
+
+                // Emit the call to __decorate. Given the class:
+                //
+                //   @dec
+                //   class C {
+                //   }
+                //
+                // The emit for the class is:
+                //
+                //   C = __decorate([dec], C, void 0, C);
+                //
+
+                emitStart(node);
+                emitDeclarationName(node);
+                write(" = ");
+                emitDecorateStart(node.decorators);
+                emitDeclarationName(node);
+                write(", void 0, ");
+                emitDeclarationName(node);
+                write(");");
+                emitEnd(node);
+                writeLine();
+            }
+
+            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {
+                forEach(node.members, member => {
+                    if ((member.flags & NodeFlags.Static) !== staticFlag) {
+                        return;
                     }
-                    else if (node.kind === SyntaxKind.SetAccessor) {
-                        if (generatedSetterNames) {
-                            var generatedName = generatedSetterNames[node.id];
-                            if (generatedName) {
-                                write(generatedName);
+
+                    let decorators: NodeArray<Decorator>;
+                    switch (member.kind) {
+                        case SyntaxKind.MethodDeclaration:
+                            // emit decorators of the method's parameters
+                            emitDecoratorsOfParameters(node, <MethodDeclaration>member);
+                            decorators = member.decorators;
+                            break;
+
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                            if (member !== accessors.firstAccessor) {
+                                // skip the second accessor as we processed it with the first.
                                 return;
                             }
-                        }
 
-                        // for an ES6 setter, we never had a chance to cache the setter. 
-                        write("Object.getOwnPropertyDescriptor(");
-                        emitClassMemberPrefix(<ClassDeclaration>node.parent, node);
+                            if (accessors.setAccessor) {
+                                // emit decorators of the set accessor parameter
+                                emitDecoratorsOfParameters(node, <AccessorDeclaration>accessors.setAccessor);
+                            }
+
+                            // get the decorators from the first decorated accessor.
+                            decorators = accessors.firstAccessor.decorators;
+                            if (!decorators && accessors.secondAccessor) {
+                                decorators = accessors.secondAccessor.decorators;
+                            }
+                            break;
+
+                        case SyntaxKind.PropertyDeclaration:
+                            decorators = member.decorators;
+                            break;
+
+                        default:
+                            // Constructor cannot be decorated, and its parameters are handled in emitDecoratorsOfConstructor
+                            // Other members (i.e. IndexSignature) cannot be decorated.
+                            return;
+                    }
+
+                    if (!decorators) {
+                        return;
+                    }
+
+                    // Emit the call to __decorate. Given the following:
+                    //
+                    //   class C {
+                    //     @dec method() {}
+                    //     @dec get accessor() {}
+                    //     @dec prop;
+                    //   }
+                    //
+                    // The emit for a method is:
+                    //
+                    //   Object.defineProperty(C.prototype, "method", __decorate([dec], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+                    // 
+                    // The emit for an accessor is:
+                    //
+                    //   Object.defineProperty(C.prototype, "accessor", __decorate([dec], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+                    //
+                    // The emit for a property is:
+                    //
+                    //   __decorate([dec], C.prototype, "prop");
+                    //
+
+                    emitStart(member);
+                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                        write("Object.defineProperty(");
+                        emitStart(member.name);
+                        emitClassMemberPrefix(node, member);
                         write(", ");
-                        emitExpressionForPropertyName(node.name);
-                        write(").set");
+                        emitExpressionForPropertyName(member.name);
+                        emitEnd(member.name);
+                        write(", ");
+                    }
+
+                    emitDecorateStart(decorators);
+                    emitStart(member.name);
+                    emitClassMemberPrefix(node, member);
+                    write(", ");
+                    emitExpressionForPropertyName(member.name);
+                    emitEnd(member.name);
+
+                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                        write(", Object.getOwnPropertyDescriptor(");
+                        emitStart(member.name);
+                        emitClassMemberPrefix(node, member);
+                        write(", ");
+                        emitExpressionForPropertyName(member.name);
+                        emitEnd(member.name);
+                        write("))");
+                    }
+
+                    write(");");
+                    emitEnd(member);
+                    writeLine();
+                });
+            }
+            
+            function emitDecoratorsOfParameters(node: ClassDeclaration, member: FunctionLikeDeclaration) {
+                forEach(member.parameters, (parameter, parameterIndex) => {
+                    if (!nodeIsDecorated(parameter)) {
+                        return;
+                    }
+
+                    // Emit the decorators for a parameter. Given the following:
+                    //
+                    //   class C {
+                    //     constructor(@dec p) { }
+                    //     method(@dec p) { }
+                    //     set accessor(@dec value) { }
+                    //   }
+                    //
+                    // The emit for a constructor is:
+                    //
+                    //   __decorate([dec], C.prototype, void 0, 0);
+                    //
+                    // The emit for a parameter is:
+                    //
+                    //   __decorate([dec], C.prototype, "method", 0);
+                    //
+                    // The emit for an accessor is:
+                    //
+                    //   __decorate([dec], C.prototype, "accessor", 0);
+                    //
+
+                    emitStart(parameter);
+                    emitDecorateStart(parameter.decorators);
+                    emitStart(parameter.name);
+                    emitClassMemberPrefix(node, member);
+                    write(", ");
+
+                    if (member.kind === SyntaxKind.Constructor) {
+                        write("void 0");
                     }
                     else {
-                        emitClassMemberPrefix(<ClassDeclaration>node.parent, node);
-                        emitMemberAccessForPropertyName(node.name);
+                        emitExpressionForPropertyName(member.name);
                     }
-                }
-            }
 
-            function getDecoratorsOfMember(node: ClassDeclaration, member: ClassElement) {
-                switch (member.kind) {
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.PropertyDeclaration:
-                        return member.decorators;
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
-                        if (member === accessors.firstAccessor) {
-                            if (accessors.firstAccessor.decorators) {
-                                return accessors.firstAccessor.decorators;
-                            }
-                            if (accessors.secondAccessor && accessors.secondAccessor.decorators) {
-                                return accessors.secondAccessor.decorators;
-                            }
-                        }
-                        break;
-                }
-                return undefined;
-            }
-
-            function emitExpressionOfDecorator(node: Decorator) {
-                let expression = node.expression;
-                emit(expression);
+                    write(", ");
+                    write(String(parameterIndex));
+                    emitEnd(parameter.name);
+                    write(");");
+                    emitEnd(parameter);
+                    writeLine();
+                });
             }
 
             function emitDecorateStart(decorators: Decorator[]): void {
@@ -5205,106 +5328,10 @@ module ts {
                     }
                     let decorator = decorators[i];
                     emitStart(decorator);
-                    emitExpressionOfDecorator(decorator);
+                    emit(decorator.expression);
                     emitEnd(decorator);
                 }
-                write(`], `);
-            }
-
-            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration) {
-                forEach(node.parameters, (parameter, parameterIndex) => emitDecoratorsOfParameter(node, parameter, parameterIndex));
-            }
-
-            function emitDecoratorsOfParameter(node: FunctionLikeDeclaration, parameter: ParameterDeclaration, parameterIndex: number) {
-                let decorators = parameter.decorators;
-                if (!decorators || decorators.length === 0) {
-                    return;
-                }
-
-                emitStart(node);
-                emitDecorateStart(decorators);
-                emitClassMemberAsExpression(node);
-                write(", ");
-                write(String(parameterIndex));
-                write(");");
-                emitEnd(node);
-                writeLine();
-            }
-
-            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {                
-                forEach(node.members, member => emitDecoratorsOfMember(node, member, staticFlag));
-            }
-
-            function emitDecoratorsOfMember(node: ClassDeclaration, member: ClassElement, staticFlag: NodeFlags) {
-                if ((member.flags & NodeFlags.Static) !== staticFlag) {
-                    return;
-                }
-
-                switch (member.kind) {
-                    case SyntaxKind.MethodDeclaration:
-                        emitDecoratorsOfParameters(<MethodDeclaration>member);
-                        break;
-
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
-                        if (member === accessors.firstAccessor && accessors.setAccessor) {
-                            emitDecoratorsOfParameters(accessors.setAccessor);
-                        }
-                        break;
-
-                    case SyntaxKind.PropertyDeclaration:
-                        break;
-
-                    default:
-                        return;
-                }                
-
-                let decorators = getDecoratorsOfMember(node, member);
-                if (!decorators || decorators.length === 0) {
-                    return;
-                }
-
-                emitStart(member);
-                emitDecorateStart(decorators);
-                emitStart(member.name);
-                emitClassMemberPrefix(node, member);
-                write(", ");
-                emitExpressionForPropertyName(member.name);
-                emitEnd(member.name);
-                write(");");
-                emitEnd(member);
-                writeLine();
-            }
-
-            function emitDecoratorsOfConstructor(node: ClassDeclaration) {
-                let constructor = getFirstConstructorWithBody(node);
-                if (constructor) {
-                    emitDecoratorsOfParameters(constructor);
-                }
-
-                if (!nodeIsDecorated(node)) {
-                    return;
-                }
-                
-                emitStart(node);
-                emitDeclarationName(node);
-                write(" = ");
-                emitDecorateStart(node.decorators);
-                emitDeclarationName(node);
-                write(");");
-                emitEnd(node);
-                writeLine();
-            }
-
-            function emitDecoratorsOfClass(node: ClassDeclaration) {
-                if (languageVersion < ScriptTarget.ES5) {
-                    return;
-                }
-
-                emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
-                emitDecoratorsOfMembers(node, NodeFlags.Static);
-                emitDecoratorsOfConstructor(node);
+                write("], ");
             }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -6000,15 +6027,18 @@ module ts {
                 }
                 if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
                     writeHelper(`
-var __decorate = this.__decorate || function (decorators, target, key) {
-    var kind = key == null ? 0 : typeof key == "number" ? 1 : 2, result = target;
-    if (kind == 2) result = Object.getOwnPropertyDescriptor(target, typeof key == "symbol" ? key : key = String(key));
+var __decorate = this.__decorate || function (decorators, target, key, value) {
+    var kind = typeof value;
     for (var i = decorators.length - 1; i >= 0; --i) {
         var decorator = decorators[i];
-        result = (kind == 0 ? decorator(result) : kind == 1 ? decorator(target, key) : decorator(target, key, result)) || result;
+        switch (kind) {
+            case "object": value = decorator(target, key, value) || value; break;
+            case "number": decorator(target, key, value); break;
+            case "function": target = decorator(target) || target; break;
+            case "undefined": decorator(target, key); break;
+        }
     }
-    if (kind == 2 && result) Object.defineProperty(target, key, result);
-    if (kind == 0) return result;
+    return value || target;
 };`);
                     decorateEmitted = true;
                 }
