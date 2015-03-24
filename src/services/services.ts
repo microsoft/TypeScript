@@ -3379,17 +3379,19 @@ module ts {
             }
 
             function pushTypePart(symbolKind: string) {
-                if (symbolKind === ScriptElementKind.variableElement ||
-                    symbolKind === ScriptElementKind.functionElement ||
-                    symbolKind === ScriptElementKind.letElement ||
-                    symbolKind === ScriptElementKind.constElement ||
-                    symbolKind === ScriptElementKind.constructorImplementationElement) {
-                    displayParts.push(textOrKeywordPart(symbolKind));
-                }
-                else {
-                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(textOrKeywordPart(symbolKind));
-                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                switch (symbolKind) {
+                    case ScriptElementKind.variableElement:
+                    case ScriptElementKind.functionElement:
+                    case ScriptElementKind.letElement:
+                    case ScriptElementKind.constElement:
+                    case ScriptElementKind.constructorImplementationElement:
+                        displayParts.push(textOrKeywordPart(symbolKind));
+                        return;
+                    default:
+                        displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                        displayParts.push(textOrKeywordPart(symbolKind));
+                        displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                        return;
                 }
             }
 
