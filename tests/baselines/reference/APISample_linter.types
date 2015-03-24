@@ -3257,8 +3257,8 @@ declare module "typescript" {
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
-        isUnknownIdentifier(location: Node, name: string): boolean;
->isUnknownIdentifier : (location: Node, name: string) => boolean
+        resolvesToSomeValue(location: Node, name: string): boolean;
+>resolvesToSomeValue : (location: Node, name: string) => boolean
 >location : Node
 >Node : Node
 >name : string

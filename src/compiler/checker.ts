@@ -11115,9 +11115,9 @@ module ts {
             return hasProperty(globals, name);
         }
 
-        function isUnknownIdentifier(location: Node, name: string): boolean {
-            Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
-            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function resolvesToSomeValue(location: Node, name: string): boolean {
+            Debug.assert(!nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
+            return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
@@ -11161,7 +11161,7 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
-                isUnknownIdentifier,
+                resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
             };

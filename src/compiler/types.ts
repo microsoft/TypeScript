@@ -1219,7 +1219,7 @@ module ts {
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        isUnknownIdentifier(location: Node, name: string): boolean;
+        resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
     }
 

@@ -88,10 +88,6 @@ module ts {
             return true;
         }
 
-        function isUnknownNameInEnclosingScope(name: string, location: Node): boolean {
-            return resolver.isUnknownIdentifier(location, name);
-        }
-
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             let writer = createTextWriter(newLine);
             let write = writer.write;
@@ -254,7 +250,7 @@ module ts {
                 let tempName: string;
                 if (tempVariableKind !== TempVariableKind.auto && !(predefinedTempsInUse & tempVariableKind)) {
                     tempName = tempVariableKind === TempVariableKind._i ? "_i" : "_n";
-                    if (resolver.isUnknownIdentifier(location, tempName)) {
+                    if (!resolver.resolvesToSomeValue(location, tempName)) {
                         predefinedTempsInUse |= tempVariableKind;
                         return tempName;
                     }
@@ -273,8 +269,8 @@ module ts {
                     }
 
                     tempCount++;
-
-                } while (!resolver.isUnknownIdentifier(location, tempName));
+                }
+                while (resolver.resolvesToSomeValue(location, tempName));
 
                 return tempName;
             }
@@ -2817,7 +2813,7 @@ module ts {
                     : blockScopeContainer.parent;
 
                 var hasConflictsInEnclosingScope =
-                    !resolver.isUnknownIdentifier(parent, (<Identifier>node).text) ||
+                    resolver.resolvesToSomeValue(parent, (<Identifier>node).text) ||
                     nameConflictsWithSomeTempVariable((<Identifier>node).text);
 
                 if (hasConflictsInEnclosingScope) {
