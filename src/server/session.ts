@@ -550,7 +550,7 @@ module ts.server {
             }
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
-                if (completions.isMemberCompletion || entry.name.indexOf(prefix) == 0) {
+                if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) == 0)) {
                     result.push(entry);
                 }
                 return result;
