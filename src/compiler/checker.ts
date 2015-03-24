@@ -7253,7 +7253,7 @@ module ts {
                 }
             }
 
-            function isImportedNameFromEternalModule(n: Node): boolean {
+            function isImportedNameFromExternalModule(n: Node): boolean {
                 switch (n.kind) {
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression: {
@@ -7264,7 +7264,7 @@ module ts {
                         return symbol && symbol.flags & SymbolFlags.Alias && isExternalModuleSymbol(resolveAlias(symbol));
                     }
                     case SyntaxKind.ParenthesizedExpression:
-                        return isImportedNameFromEternalModule((<ParenthesizedExpression>n).expression);
+                        return isImportedNameFromExternalModule((<ParenthesizedExpression>n).expression);
                     default:
                         return false;
                 }
@@ -7280,7 +7280,7 @@ module ts {
                 return false;
             }
 
-            if (isImportedNameFromEternalModule(n)) {
+            if (isImportedNameFromExternalModule(n)) {
                 error(n, invalidReferenceMessage);
             }
 
