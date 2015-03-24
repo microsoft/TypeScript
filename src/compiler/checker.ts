@@ -7239,7 +7239,6 @@ module ts {
                     case SyntaxKind.ElementAccessExpression: {
                         let index = (<ElementAccessExpression>n).argumentExpression;
                         let symbol = findSymbol((<ElementAccessExpression>n).expression);
-
                         if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
                             let name = (<LiteralExpression>index).text;
                             let prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
@@ -7254,14 +7253,37 @@ module ts {
                 }
             }
 
+            function isImportedNameFromEternalModule(n: Node): boolean {
+                switch (n.kind) {
+                    case SyntaxKind.ElementAccessExpression:
+                    case SyntaxKind.PropertyAccessExpression: {
+                        // all bindings for external module should be immutable
+                        // so attempt to use a.b or a[b] as lhs will always fail
+                        // no matter what b is
+                        let symbol = findSymbol((<PropertyAccessExpression | ElementAccessExpression>n).expression);
+                        return symbol && symbol.flags & SymbolFlags.Alias && isExternalModuleSymbol(resolveAlias(symbol));
+                    }
+                    case SyntaxKind.ParenthesizedExpression:
+                        return isImportedNameFromEternalModule((<ParenthesizedExpression>n).expression);
+                    default:
+                        return false;
+                }
+            }
+
             if (!isReferenceOrErrorExpression(n)) {
                 error(n, invalidReferenceMessage);
                 return false;
             }
+
             if (isConstVariableReference(n)) {
                 error(n, constantVariableMessage);
                 return false;
             }
+
+            if (isImportedNameFromEternalModule(n)) {
+                error(n, invalidReferenceMessage);
+            }
+
             return true;
         }
 
