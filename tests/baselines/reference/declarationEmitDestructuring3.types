@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern7.ts ===
+=== tests/cases/compiler/declarationEmitDestructuring3.ts ===
 function bar([x, z, ...w]) { }
 >bar : ([x, z, ...w]: any[]) => void
 >x : any
@@ -10,4 +10,5 @@ function foo([x, ...y] = [1, "string", true]) { }
 >x : string | number | boolean
 >y : (string | number | boolean)[]
 >[1, "string", true] : (string | number | boolean)[]
+
 
