@@ -2443,6 +2443,11 @@ module ts {
             };
         }
 
+        // If symbolName is undefined, all symbols at the specified are returned.  If symbolName 
+        // is not undefined, then the first symbol with that name at the specified position
+        // will be returned.  Calling without symbolName is useful when you want the entire
+        // list of symbols (like for getCompletionsAtPosition).  Calling with a symbolName is
+        // useful when you want information about a single symbol (like for getCompletionEntryDetails).
         function getCompletionData(fileName: string, position: number, symbolName?: string) {
             let result = getCompletionDataWorker(fileName, position, symbolName);
             if (!result) {
