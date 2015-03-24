@@ -595,7 +595,7 @@ declare module ts.server.protocol {
     /**
      * Signature help information for a single parameter    
      */    
-    interface SignatureHelpParameter {
+    export interface SignatureHelpParameter {
         
         /**
          * The parameter's name
@@ -621,7 +621,7 @@ declare module ts.server.protocol {
     /**
      * Represents a single signature to show in signature help.    
      */    
-    interface SignatureHelpItem {
+    export interface SignatureHelpItem {
       
         /**
          * Whether the signature accepts a variable number of arguments. 
@@ -657,7 +657,7 @@ declare module ts.server.protocol {
     /**
      * Signation help items found in the response of a signature help request.
      */
-    interface SignatureHelpItems {
+    export interface SignatureHelpItems {
       
         /**
          * The signaure help items.    
