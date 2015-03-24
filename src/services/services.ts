@@ -2368,7 +2368,7 @@ module ts {
         }
 
         function isJavaScript(fileName: string) {
-            return fileExtensionIs(fileName, ".js");
+            return fileExtensionIs(fileName, ".tsjs");
         }
 
         /**
