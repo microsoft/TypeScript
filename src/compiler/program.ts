@@ -149,7 +149,7 @@ module ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            getCurrentDirectory: host.getCurrentDirectory,
+            getCurrentDirectory: () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -159,14 +159,15 @@ module ts {
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
-                getCanonicalFileName: host.getCanonicalFileName,
+                getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: host.getCurrentDirectory,
-                getNewLine: host.getNewLine,
+                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                writeFile: writeFileCallback || host.writeFile,
+                writeFile: writeFileCallback || (
+                    (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
         }
 
