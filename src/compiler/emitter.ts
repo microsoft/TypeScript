@@ -2,7 +2,6 @@
 /// <reference path="declarationEmitter.ts"/>
 
 module ts {
-
     interface ExternalImportInfo {
         rootNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration;
         declarationNode?: ImportEqualsDeclaration | ImportClause | NamespaceImport;
@@ -29,12 +28,12 @@ module ts {
         let newLine = host.getNewLine();
 
         if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
+            for (let sourceFile of host.getSourceFiles()) {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
-            });
+            }
 
             if (compilerOptions.out) {
                 emitFile(compilerOptions.out);
@@ -128,11 +127,11 @@ module ts {
                 emitSourceFile(root);
             }
             else {
-                forEach(host.getSourceFiles(), sourceFile => {
+                for (let sourceFile of host.getSourceFiles()) {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
-                });
+                }
             }
 
             writeLine();
@@ -848,17 +847,17 @@ module ts {
                 write('"' + text + '"');
             }
             
-            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, emitTemplateLiteral: (literal: LiteralExpression) => void) {
                 write("[");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                    literalEmitter(<LiteralExpression>node.template);
+                    emitTemplateLiteral(<LiteralExpression>node.template);
                 }
                 else {
-                    literalEmitter((<TemplateExpression>node.template).head);
-                    forEach((<TemplateExpression>node.template).templateSpans, (child) => {
+                    emitTemplateLiteral((<TemplateExpression>node.template).head);
+                    for (let child of (<TemplateExpression>node.template).templateSpans) {
                         write(", ");
-                        literalEmitter(child.literal);
-                    });
+                        emitTemplateLiteral(child.literal);
+                    }
                 }
                 write("]");
             }
@@ -882,12 +881,12 @@ module ts {
                 
                 // Now we emit the expressions
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
-                    forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
+                    for (let templateSpan of (<TemplateExpression>node.template).templateSpans) {
                         write(", ");
                         let needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
                             && (<BinaryExpression>templateSpan.expression).operatorToken.kind === SyntaxKind.CommaToken;
                         emitParenthesizedIf(templateSpan.expression, needsParens);
-                    });
+                    }
                 }
                 write("))");
             }
@@ -1282,7 +1281,7 @@ module ts {
                 // This will end up being something like '_a = { ... }, _a.x = 10, _a.y = 20, _a'.
                 let propertyPatches = createBinaryExpression(tempVar, SyntaxKind.EqualsToken, initialObjectLiteral);
 
-                ts.forEach(originalObjectLiteral.properties, property => {
+                for (let property of originalObjectLiteral.properties) {
                     let patchedProperty = tryCreatePatchingPropertyAssignment(originalObjectLiteral, tempVar, property);
                     if (patchedProperty) {
                         // TODO(drosen): Preserve comments
@@ -1292,7 +1291,7 @@ module ts {
 
                         propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, patchedProperty);
                     }
-                });
+                }
 
                 // Finally, return the temp variable.
                 propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, createIdentifier(tempVar.text, /*startsOnNewLine:*/ true));
@@ -2352,7 +2351,7 @@ module ts {
 
             function emitExportMemberAssignments(name: Identifier) {
                 if (!exportDefault && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                    forEach(exportSpecifiers[name.text], specifier => {
+                    for (let specifier of exportSpecifiers[name.text]) {
                         writeLine();
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
@@ -2362,7 +2361,7 @@ module ts {
                         write(" = ");
                         emitNodeWithoutSourceMap(name);
                         write(";");
-                    });
+                    }
                 }
             }
 
@@ -2739,7 +2738,7 @@ module ts {
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
-                    forEach(node.parameters, p => {
+                    for (let p of node.parameters) {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
@@ -2762,7 +2761,7 @@ module ts {
                             emitEnd(p);
                             write("; }");
                         }
-                    });
+                    }
                 }
             }
 
@@ -3078,7 +3077,7 @@ module ts {
             }
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
-                forEach(node.parameters, param => {
+                for (let param of node.parameters) {
                     if (param.flags & NodeFlags.AccessibilityModifier) {
                         writeLine();
                         emitStart(param);
@@ -3091,7 +3090,7 @@ module ts {
                         write(";");
                         emitEnd(param);
                     }
-                });
+                }
             }
 
             function emitMemberAccessForPropertyName(memberName: DeclarationName) {
@@ -3111,7 +3110,7 @@ module ts {
             }
 
             function emitMemberAssignments(node: ClassDeclaration, staticFlag: NodeFlags) {
-                forEach(node.members, member => {
+                for (let member of node.members) {
                     if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
                         writeLine();
                         emitLeadingComments(member);
@@ -3131,14 +3130,15 @@ module ts {
                         emitEnd(member);
                         emitTrailingComments(member);
                     }
-                });
+                }
             }
 
             function emitMemberFunctionsForES5AndLower(node: ClassDeclaration) {
-                forEach(node.members, member => {
+                for (let member of node.members) {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
-                            return emitOnlyPinnedOrTripleSlashComments(member);
+                            emitOnlyPinnedOrTripleSlashComments(member);
+                            continue;
                         }
 
                         writeLine();
@@ -3207,7 +3207,7 @@ module ts {
                             emitEnd(member);
                         }
                     }
-                });
+                }
             }
 
             function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
@@ -3252,7 +3252,7 @@ module ts {
                 let hasInstancePropertyWithInitializer = false;
 
                 // Emit the constructor overload pinned comments
-                forEach(node.members, member => {
+                for (let member of node.members) {
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
@@ -3260,7 +3260,7 @@ module ts {
                     if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
                         hasInstancePropertyWithInitializer = true;
                     }
-                });
+                }
 
                 let ctor = getFirstConstructorWithBody(node);
 
@@ -3826,7 +3826,7 @@ module ts {
                         }
                         if (node.exportClause) {
                             // export { x, y, ... }
-                            forEach(node.exportClause.elements, specifier => {
+                            for (let specifier of node.exportClause.elements) {
                                 writeLine();
                                 emitStart(specifier);
                                 emitContainingModuleName(specifier);
@@ -3838,7 +3838,7 @@ module ts {
                                 emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
                                 write(";");
                                 emitEnd(specifier);
-                            });
+                            }
                         }
                         else {
                             // export *
@@ -3856,7 +3856,7 @@ module ts {
                         // internal module
                         if (node.exportClause) {
                             // export { x, y, ... }
-                            forEach(node.exportClause.elements, specifier => {
+                            for (let specifier of node.exportClause.elements) {
                                 writeLine();
                                 emitStart(specifier);
                                 emitContainingModuleName(specifier);
@@ -3866,7 +3866,7 @@ module ts {
                                 emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
                                 write(";");
                                 emitEnd(specifier);
-                            });
+                            }
                         }
                     }
                 }
@@ -3944,15 +3944,15 @@ module ts {
                 externalImports = [];
                 exportSpecifiers = {};
                 exportDefault = undefined;
-                forEach(sourceFile.statements, node => {
+                for (let node of sourceFile.statements) {
                     if (node.kind === SyntaxKind.ExportDeclaration && !(<ExportDeclaration>node).moduleSpecifier) {
-                        forEach((<ExportDeclaration>node).exportClause.elements, specifier => {
+                        for (let specifier of (<ExportDeclaration>node).exportClause.elements) {
                             if (specifier.name.text === "default") {
                                 exportDefault = exportDefault || specifier;
                             }
                             let name = (specifier.propertyName || specifier.name).text;
                             (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
-                        });
+                        }
                     }
                     else if (node.kind === SyntaxKind.ExportAssignment) {
                         exportDefault = exportDefault || <ExportAssignment>node;
@@ -3968,7 +3968,7 @@ module ts {
                             externalImports.push(info);
                         }
                     }
-                });
+                }
             }
 
             function getExternalImportInfo(node: ImportDeclaration | ImportEqualsDeclaration): ExternalImportInfo {
@@ -4003,7 +4003,7 @@ module ts {
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                forEach(externalImports, info => {
+                for (let info of externalImports) {
                     write(", ");
                     let moduleName = getExternalModuleName(info.rootNode);
                     if (moduleName.kind === SyntaxKind.StringLiteral) {
@@ -4012,14 +4012,14 @@ module ts {
                     else {
                         write("\"\"");
                     }
-                });
-                forEach(node.amdDependencies, amdDependency => {
+                }
+                for (let amdDependency of node.amdDependencies) {
                     let text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
-                });
+                }
                 write("], function (require, exports");
-                forEach(externalImports, info => {
+                for (let info of externalImports) {
                     write(", ");
                     if (info.declarationNode) {
                         emit(info.declarationNode.name);
@@ -4027,13 +4027,13 @@ module ts {
                     else {
                         write(resolver.getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>info.rootNode));
                     }
-                });
-                forEach(node.amdDependencies, amdDependency => {
+                }
+                for (let amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
                         write(", ");
                         write(amdDependency.name);
                     }
-                });
+                }
                 write(") {");
                 increaseIndent();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -4495,7 +4495,7 @@ module ts {
                     let detachedComments: CommentRange[] = [];
                     let lastComment: CommentRange;
 
-                    forEach(leadingComments, comment => {
+                    for (let comment of leadingComments) {
                         if (lastComment) {
                             let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
                             let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
@@ -4504,13 +4504,13 @@ module ts {
                                 // There was a blank line between the last comment and this comment.  This
                                 // comment is not part of the copyright comments.  Return what we have so
                                 // far.
-                                return detachedComments;
+                                break;
                             }
                         }
 
                         detachedComments.push(comment);
                         lastComment = comment;
-                    });
+                    }
 
                     if (detachedComments.length) {
                         // All comments look like they could have been part of the copyright header.  Make

@@ -727,21 +727,21 @@ module ts {
                         isLibFile: result.isLibFile
                     };
 
-                    forEach(result.referencedFiles, refFile => {
+                    for (let refFile of result.referencedFiles) {
                         convertResult.referencedFiles.push({
                             path: normalizePath(refFile.fileName),
                             position: refFile.pos,
                             length: refFile.end - refFile.pos
                         });
-                    });
+                    }
 
-                    forEach(result.importedFiles, importedFile => {
+                    for (let importedFile of result.importedFiles) {
                         convertResult.importedFiles.push({
                             path: normalizeSlashes(importedFile.fileName),
                             position: importedFile.pos,
                             length: importedFile.end - importedFile.pos
                         });
-                    });
+                    }
                     return convertResult;
                 });
         }

@@ -315,12 +315,12 @@ module ts {
     function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string, canUseParsedParamTagComments: boolean) {
         let documentationComment = <SymbolDisplayPart[]>[];
         let docComments = getJsDocCommentsSeparatedByNewLines();
-        ts.forEach(docComments, docComment => {
+        for (let docComment of docComments) {
             if (documentationComment.length) {
                 documentationComment.push(lineBreakPart());
             }
             documentationComment.push(docComment);
-        });
+        }
 
         return documentationComment;
 
@@ -339,12 +339,15 @@ module ts {
                     let sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                        let jsDocCommentRanges = getJsDocCommentTextRanges(declaration.parent, sourceFileOfDeclaration);
+                        if (jsDocCommentRanges) {
+                            for (let jsDocCommentTextRange of jsDocCommentRanges) {
+                                let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                                if (cleanedParamJsDocComment) {
+                                    jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                                }
                             }
-                        });
+                        }
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
@@ -358,19 +361,22 @@ module ts {
                     } 
 
                     // Get the cleaned js doc comment text from the declaration
-                    ts.forEach(getJsDocCommentTextRange(
-                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                    let docCommentOwner = declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration;
+                    let jsDocCommentRanges = getJsDocCommentTextRanges(docCommentOwner, sourceFileOfDeclaration);
+                    if (jsDocCommentRanges) {
+                        for (let jsDocCommentTextRange of jsDocCommentRanges) {
                             let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
                                 jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
                             }
-                        });
+                        }
+                    }
                 }
             });
 
             return jsDocCommentParts;
 
-            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+            function getJsDocCommentTextRanges(node: Node, sourceFile: SourceFile): TextRange[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
                         return {
@@ -1467,10 +1473,9 @@ module ts {
             if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
                 return false;
             }
-
-            // If the parent is not sourceFile or module block it is local variable
+            
             for (let parent = declaration.parent; !isFunctionBlock(parent); parent = parent.parent) {
-                // Reached source file or module block
+                // The container is a SourceFile or ModuleBlock; try the next declaration.
                 if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
                     return false;
                 }
@@ -1783,7 +1788,11 @@ module ts {
 
         function processTripleSlashDirectives(): void {
             let commentRanges = getLeadingCommentRanges(sourceText, 0);
-            forEach(commentRanges, commentRange => {
+            if (!commentRanges) {
+                return;
+            }
+
+            for (let commentRange of commentRanges) {
                 let comment = sourceText.substring(commentRange.pos, commentRange.end);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
@@ -1793,7 +1802,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                 }
-            });
+            }
         }
 
         function recordModuleName() {
@@ -2358,8 +2367,9 @@ module ts {
 
         function dispose(): void {
             if (program) {
-                forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                for (let f of program.getSourceFiles()) {
+                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions());
+                }
             }
         }
 
@@ -2550,11 +2560,11 @@ module ts {
                 let type = typeInfoResolver.getTypeAtLocation(node);
                 if (type) {
                     // Filter private properties
-                    forEach(type.getApparentProperties(), symbol => {
+                    for (let symbol of type.getApparentProperties()) {
                         if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
-                    });
+                    }
                 }
 
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -2632,16 +2642,18 @@ module ts {
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 let start = new Date().getTime();
-                forEach(symbols, symbol => {
-                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
-                    if (entry) {
-                        let id = escapeIdentifier(entry.name);
-                        if (!lookUp(session.symbols, id)) {
-                            session.entries.push(entry);
-                            session.symbols[id] = symbol;
+                if (symbols) {
+                    for (let symbol of symbols) {
+                        let entry = createCompletionEntry(symbol, session.typeChecker, location);
+                        if (entry) {
+                            let id = escapeIdentifier(entry.name);
+                            if (!lookUp(session.symbols, id)) {
+                                session.entries.push(entry);
+                                session.symbols[id] = symbol;
+                            }
                         }
                     }
-                });
+                }
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
@@ -2887,10 +2899,10 @@ module ts {
                 if (importDeclaration.importClause.namedBindings &&
                     importDeclaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
 
-                    forEach((<NamedImports>importDeclaration.importClause.namedBindings).elements, el => {
+                    for (let el of (<NamedImports>importDeclaration.importClause.namedBindings).elements) {
                         let name = el.propertyName || el.name;
                         exisingImports[name.text] = true;
-                    });
+                    }
                 }
 
                 if (isEmpty(exisingImports)) {
@@ -2905,29 +2917,22 @@ module ts {
                 }
 
                 let existingMemberNames: Map<boolean> = {};
-                forEach(existingMembers, m => {
+                for (let m of existingMembers) {
                     if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                         // Ignore omitted expressions for missing members in the object literal
-                        return;
+                        continue;
                     }
 
                     if (m.getStart() <= position && position <= m.getEnd()) {
                         // If this is the current item we are editing right now, do not filter it out
-                        return;
+                        continue;
                     }
 
                     // TODO(jfreeman): Account for computed property name
                     existingMemberNames[(<Identifier>m.name).text] = true;
-                });
-
-                let filteredMembers: Symbol[] = [];
-                forEach(contextualMemberSymbols, s => {
-                    if (!existingMemberNames[s.name]) {
-                        filteredMembers.push(s);
-                    }
-                });
-
-                return filteredMembers;
+                }
+                
+                return filter(contextualMemberSymbols, s => !existingMemberNames[s.name]);
             }
         }
 
@@ -3281,7 +3286,7 @@ module ts {
                 displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
-                ts.forEach(symbol.declarations, declaration => {
+                for (let declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
                         let importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
                         if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
@@ -3302,9 +3307,9 @@ module ts {
                                 addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
                             }
                         }
-                        return true;
+                        break;
                     }
-                });
+                }
             }
             if (!hasAddedSymbolInfo) {
                 if (symbolKind !== ScriptElementKind.unknown) {
@@ -3513,7 +3518,6 @@ module ts {
             }
 
             let result: DefinitionInfo[] = [];
-            let declarations = symbol.getDeclarations();
             let symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
             let symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
             let containerSymbol = symbol.parent;
@@ -3521,10 +3525,14 @@ module ts {
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+
                 // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
+                let declarations = symbol.getDeclarations();
+                if (declarations) {
+                    for (let declaration of declarations) {
+                        result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                    }
+                }
             }
 
             return result;
@@ -3544,13 +3552,15 @@ module ts {
                 let declarations: Declaration[] = [];
                 let definition: Declaration;
 
-                forEach(signatureDeclarations, d => {
+                for (let d of signatureDeclarations) {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
                         (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
                         declarations.push(d);
-                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+                        if ((<FunctionLikeDeclaration>d).body) {
+                            definition = d;
+                        }
                     }
-                });
+                }
 
                 if (definition) {
                     result.push(getDefinitionInfo(definition, symbolKind, symbolName, containerName));
@@ -4398,12 +4408,12 @@ module ts {
                 let sourceFile = container.getSourceFile();
                 let labelName = targetLabel.text;
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
-                forEach(possiblePositions, position => {
+                for (let position of possiblePositions) {
                     cancellationToken.throwIfCancellationRequested();
 
                     let node = getTouchingWord(sourceFile, position);
                     if (!node || node.getWidth() !== labelName.length) {
-                        return;
+                        continue;
                     }
 
                     // Only pick labels that are either the target label, or have a target that is the target label
@@ -4411,7 +4421,7 @@ module ts {
                         (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
                         result.push(getReferenceEntryFromNode(node));
                     }
-                });
+                }
                 return result;
             }
 
@@ -4462,7 +4472,7 @@ module ts {
                     // Build the set of symbols to search for, initially it has only the current symbol
                     let searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation);
 
-                    forEach(possiblePositions, position => {
+                    for (let position of possiblePositions) {
                         cancellationToken.throwIfCancellationRequested();
 
                         let referenceLocation = getTouchingPropertyName(sourceFile, position);
@@ -4478,11 +4488,11 @@ module ts {
                                     isWriteAccess: false
                                 });
                             }
-                            return;
+                            continue;
                         }
 
                         if (!(getMeaningFromLocation(referenceLocation) & searchMeaning)) {
-                            return;
+                            continue;
                         }
 
                         let referenceSymbol = typeInfoResolver.getSymbolAtLocation(referenceLocation);
@@ -4502,7 +4512,7 @@ module ts {
                                 result.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
                         }
-                    });
+                    }
                 }
 
                 function isInString(position: number) {
@@ -4516,16 +4526,20 @@ module ts {
                         // First, we have to see if this position actually landed in a comment.
                         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
+                        if (!commentRanges) {
+                            return false;
+                        }
+
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
-                        return forEach(commentRanges, c => {
+                        for (let c of commentRanges) {
                             if (c.pos < position && position < c.end) {
                                 let commentText = sourceFile.text.substring(c.pos, c.end);
                                 if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
                                     return true;
                                 }
                             }
-                        });
+                        }
                     }
 
                     return false;
@@ -4559,13 +4573,13 @@ module ts {
 
                 let sourceFile = searchSpaceNode.getSourceFile();
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
-                forEach(possiblePositions, position => {
+                for (let position of possiblePositions) {
                     cancellationToken.throwIfCancellationRequested();
 
                     let node = getTouchingWord(sourceFile, position);
 
                     if (!node || node.kind !== SyntaxKind.SuperKeyword) {
-                        return;
+                        continue;
                     }
 
                     let container = getSuperContainer(node, /*includeFunctions*/ false);
@@ -4576,7 +4590,7 @@ module ts {
                     if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
                         result.push(getReferenceEntryFromNode(node));
                     }
-                });
+                }
 
                 return result;
             }
@@ -4620,10 +4634,10 @@ module ts {
 
                 let possiblePositions: number[];
                 if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
-                    forEach(sourceFiles, sourceFile => {
+                    for (let sourceFile of sourceFiles) {
                         possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
                         getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
-                    });
+                    }
                 }
                 else {
                     let sourceFile = searchSpaceNode.getSourceFile();
@@ -4634,12 +4648,12 @@ module ts {
                 return result;
 
                 function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
-                    forEach(possiblePositions, position => {
+                    for (let position of possiblePositions) {
                         cancellationToken.throwIfCancellationRequested();
 
                         let node = getTouchingWord(sourceFile, position);
                         if (!node || node.kind !== SyntaxKind.ThisKeyword) {
-                            return;
+                            continue;
                         }
 
                         let container = getThisContainer(node, /* includeArrowFunctions */ false);
@@ -4670,7 +4684,7 @@ module ts {
                                 }
                                 break;
                         }
-                    });
+                    }
                 }
             }
 
@@ -4687,9 +4701,12 @@ module ts {
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
-                        result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
-                    });
+                    let propertySymbols = getPropertySymbolsFromContextualType(location);
+                    if (propertySymbols) {
+                        for (let contextualSymbol of propertySymbols) {
+                            result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
+                        }
+                    }
 
                     /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
                      * When we do findAllReference at the position of the short-hand property assignment, we would want to have references to position of
@@ -4710,7 +4727,7 @@ module ts {
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
                 // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-                forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                for (let rootSymbol of typeInfoResolver.getRootSymbols(symbol)) {
                     if (rootSymbol !== symbol) {
                         result.push(rootSymbol);
                     }
@@ -4719,14 +4736,14 @@ module ts {
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
                     }
-                });
+                }
 
                 return result;
             }
 
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    forEach(symbol.getDeclarations(), declaration => {
+                    for (let declaration of symbol.getDeclarations()) {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
                             forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
@@ -4734,7 +4751,7 @@ module ts {
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                             forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
-                    });
+                    }
                 }
                 return;
 
@@ -4810,12 +4827,12 @@ module ts {
                             }
                             else {
                                 let result: Symbol[] = [];
-                                forEach((<UnionType>contextualType).types, t => {
+                                for (let t of (<UnionType>contextualType).types) {
                                     let symbol = t.getProperty(name);
                                     if (symbol) {
                                         result.push(symbol);
                                     }
-                                });
+                                }
                                 return result;
                             }
                         }

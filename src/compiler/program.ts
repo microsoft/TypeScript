@@ -212,9 +212,9 @@ module ts {
             }
 
             let allDiagnostics: Diagnostic[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
+            for (let sourceFile of program.getSourceFiles()) {
                 addRange(allDiagnostics, getDiagnostics(sourceFile));
-            });
+            }
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -371,15 +371,15 @@ module ts {
             }
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string) {
-            forEach(file.referencedFiles, ref => {
+        function processReferencedFiles(file: SourceFile, basePath: string): void {
+            for (let ref of file.referencedFiles) {
                 let referencedFileName = isRootedDiskPath(ref.fileName) ? ref.fileName : combinePaths(basePath, ref.fileName);
-                processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.pos, ref.end);
-            });
+                processSourceFile(normalizePath(referencedFileName), /*isDefaultLib*/ false, file, ref.pos, ref.end);
+            }
         }
 
-        function processImportedModules(file: SourceFile, basePath: string) {
-            forEach(file.statements, node => {
+        function processImportedModules(file: SourceFile, basePath: string): void {
+            for (let node of file.statements) {
                 if (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration || node.kind === SyntaxKind.ExportDeclaration) {
                     let moduleNameExpr = getExternalModuleName(node);
                     if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
@@ -425,7 +425,7 @@ module ts {
                         }
                     });
                 }
-            });
+            }
 
             function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
                 return findSourceFile(fileName, /* isDefaultLib */ false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
@@ -468,7 +468,7 @@ module ts {
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
                 let commonPathComponents: string[];
-                forEach(files, sourceFile => {
+                for (let sourceFile of files) {
                     // Each file contributes into common source file path
                     if (!(sourceFile.flags & NodeFlags.DeclarationFile)
                         && !fileExtensionIs(sourceFile.fileName, ".js")) {
@@ -498,7 +498,7 @@ module ts {
                             commonPathComponents = sourcePathComponents;
                         }
                     }
-                });
+                }
 
                 commonSourceDirectory = getNormalizedPathFromPathComponents(commonPathComponents);
                 if (commonSourceDirectory) {

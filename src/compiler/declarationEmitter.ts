@@ -68,7 +68,7 @@ module ts {
             // Emitting just a single file, so emit references in this file only
             if (!compilerOptions.noResolve) {
                 let addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
+                for (let fileReference of root.referencedFiles) {
                     let referencedFile = tryResolveScriptReference(host, root, fileReference);
 
                     // All the references that are not going to be part of same file
@@ -81,7 +81,7 @@ module ts {
                             addedGlobalFileReference = true;
                         }
                     }
-                });
+                }
             }
 
             emitSourceFile(root);
@@ -89,7 +89,7 @@ module ts {
             // create asynchronous output for the importDeclarations
             if (moduleElementDeclarationEmitInfo.length) {
                 let oldWriter = writer;
-                forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                for (let aliasEmitInfo of moduleElementDeclarationEmitInfo) {
                     if (aliasEmitInfo.isVisible) {
                         Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
                         createAndSetNewTextWriterWithSymbolWriter();
@@ -97,18 +97,18 @@ module ts {
                         writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
                         aliasEmitInfo.asynchronousOutput = writer.getText();
                     }
-                });
+                }
                 setWriter(oldWriter);
             }
         }
         else {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
+            for (let sourceFile of host.getSourceFiles()) {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
+                        for (let fileReference of sourceFile.referencedFiles) {
                             let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                             // If the reference file is a declaration file or an external module, emit that reference
@@ -118,12 +118,12 @@ module ts {
                                 writeReferencePath(referencedFile);
                                 emittedReferencedFiles.push(referencedFile);
                             }
-                        });
+                        }
                     }
 
                     emitSourceFile(sourceFile);
                 }
-            });
+            }
         }
 
         return {
@@ -862,11 +862,11 @@ module ts {
         function writeClassDeclaration(node: ClassDeclaration) {
             function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                 if (constructorDeclaration) {
-                    forEach(constructorDeclaration.parameters, param => {
+                    for (let param of constructorDeclaration.parameters) {
                         if (param.flags & NodeFlags.AccessibilityModifier) {
                             emitPropertyDeclaration(param);
                         }
-                    });
+                    }
                 }
             }
 
@@ -1451,14 +1451,15 @@ module ts {
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;
             let declarationOutput = "";
-            // apply asynchronous additions to the synchronous output
-            forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                if (aliasEmitInfo.asynchronousOutput) {
-                    declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
-                    declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
-                    appliedSyncOutputPos = aliasEmitInfo.outputPos;
+            if (moduleElementDeclarationEmitInfo) {
+                for (let aliasEmitInfo of moduleElementDeclarationEmitInfo) {
+                    if (aliasEmitInfo.asynchronousOutput) {
+                        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                        declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
+                        appliedSyncOutputPos = aliasEmitInfo.outputPos;
+                    }
                 }
-            });
+            }
             declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
             return declarationOutput;
         }
