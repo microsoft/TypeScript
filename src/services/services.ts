@@ -2395,7 +2395,7 @@ module ts {
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
-            return semanticDiagnostics.concat(declarationDiagnostics);
+            return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
