@@ -229,21 +229,21 @@ function goToMarkAndGeneralVerify(marker: string)
 {
     goTo.marker(marker);
 
-    verify.completionListContains('mod1var', '(var) mod1var: number');
-    verify.completionListContains('mod1fn', '(function) mod1fn(): void');
+    verify.completionListContains('mod1var', 'var mod1var: number');
+    verify.completionListContains('mod1fn', 'function mod1fn(): void');
     verify.completionListContains('mod1cls', 'class mod1cls');
     verify.completionListContains('mod1int', 'interface mod1int');
     verify.completionListContains('mod1mod', 'module mod1mod');
-    verify.completionListContains('mod1evar', '(var) mod1.mod1evar: number');
-    verify.completionListContains('mod1efn', '(function) mod1.mod1efn(): void');
+    verify.completionListContains('mod1evar', 'var mod1.mod1evar: number');
+    verify.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
     verify.completionListContains('mod1ecls', 'class mod1.mod1ecls');
     verify.completionListContains('mod1eint', 'interface mod1.mod1eint');
     verify.completionListContains('mod1emod', 'module mod1.mod1emod');
-    verify.completionListContains('mod1eexvar', '(var) mod1.mod1eexvar: number');
+    verify.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
     verify.completionListContains('mod2', 'module mod2');
     verify.completionListContains('mod3', 'module mod3');
-    verify.completionListContains('shwvar', '(var) shwvar: number');
-    verify.completionListContains('shwfn', '(function) shwfn(): void');
+    verify.completionListContains('shwvar', 'var shwvar: number');
+    verify.completionListContains('shwfn', 'function shwfn(): void');
     verify.completionListContains('shwcls', 'class shwcls');
     verify.completionListContains('shwint', 'interface shwint');
 
@@ -289,13 +289,13 @@ goToMarkAndGeneralVerify('interface');
 
 // from module in mod1
 goToMarkAndGeneralVerify('module');
-verify.completionListContains('m1X', '(var) m1X: number');
-verify.completionListContains('m1Func', '(function) m1Func(): void');
+verify.completionListContains('m1X', 'var m1X: number');
+verify.completionListContains('m1Func', 'function m1Func(): void');
 verify.completionListContains('m1Class', 'class m1Class');
 verify.completionListContains('m1Int', 'interface m1Int');
 verify.completionListContains('m1Mod', 'module m1Mod');
-verify.completionListContains('m1eX', '(var) mod1mod.m1eX: number');
-verify.completionListContains('m1eFunc', '(function) mod1mod.m1eFunc(): void');
+verify.completionListContains('m1eX', 'var mod1mod.m1eX: number');
+verify.completionListContains('m1eFunc', 'function mod1mod.m1eFunc(): void');
 verify.completionListContains('m1eClass', 'class mod1mod.m1eClass');
 verify.completionListContains('m1eInt', 'interface mod1mod.m1eInt');
 verify.completionListContains('m1eMod', 'module mod1mod.m1eMod');
@@ -315,29 +315,29 @@ goToMarkAndGeneralVerify('exportedInterface');
 
 // from exported module in mod1
 goToMarkAndGeneralVerify('exportedModule');
-verify.completionListContains('mX', '(var) mX: number');
-verify.completionListContains('mFunc', '(function) mFunc(): void');
+verify.completionListContains('mX', 'var mX: number');
+verify.completionListContains('mFunc', 'function mFunc(): void');
 verify.completionListContains('mClass', 'class mClass');
 verify.completionListContains('mInt', 'interface mInt');
 verify.completionListContains('mMod', 'module mMod');
-verify.completionListContains('meX', '(var) mod1.mod1emod.meX: number');
-verify.completionListContains('meFunc', '(function) mod1.mod1emod.meFunc(): void');
+verify.completionListContains('meX', 'var mod1.mod1emod.meX: number');
+verify.completionListContains('meFunc', 'function mod1.mod1emod.meFunc(): void');
 verify.completionListContains('meClass', 'class mod1.mod1emod.meClass');
 verify.completionListContains('meInt', 'interface mod1.mod1emod.meInt');
 verify.completionListContains('meMod', 'module mod1.mod1emod.meMod');
 
 // from extended module
 goTo.marker('extendedModule');
-verify.completionListContains('mod1evar', '(var) mod1.mod1evar: number');
-verify.completionListContains('mod1efn', '(function) mod1.mod1efn(): void');
+verify.completionListContains('mod1evar', 'var mod1.mod1evar: number');
+verify.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
 verify.completionListContains('mod1ecls', 'class mod1.mod1ecls');
 verify.completionListContains('mod1eint', 'interface mod1.mod1eint');
 verify.completionListContains('mod1emod', 'module mod1.mod1emod');
-verify.completionListContains('mod1eexvar', '(var) mod1.mod1eexvar: number');
+verify.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
 verify.completionListContains('mod2', 'module mod2');
 verify.completionListContains('mod3', 'module mod3');
-verify.completionListContains('shwvar', '(var) shwvar: number');
-verify.completionListContains('shwfn', '(function) shwfn(): void');
+verify.completionListContains('shwvar', 'var shwvar: number');
+verify.completionListContains('shwfn', 'function shwfn(): void');
 verify.completionListContains('shwcls', 'class shwcls');
 verify.completionListContains('shwint', 'interface shwint');
 

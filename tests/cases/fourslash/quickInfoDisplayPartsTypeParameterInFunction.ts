@@ -85,8 +85,7 @@ function getFunctionDisplay(name: string, optionalInstanceType?: ts.SymbolDispla
 function verifyFunctionDisplay(name: string, optionalInstanceType?: ts.SymbolDisplayPart[],
     optionalExtends?: ts.SymbolDisplayPart[]) {
     goToMarker();
-    var functionDisplay = [{ text: "(", kind: "punctuation" }, { text: "function", kind: "text" },
-        { text: ")", kind: "punctuation" }, { text: " ", kind: "space" }].concat(
+    var functionDisplay = [{ text: "function", kind: "keyword" }, { text: " ", kind: "space" }].concat(
         getFunctionDisplay(name, optionalInstanceType, optionalExtends));
 
     verify.verifyQuickInfoDisplayParts("function", "",

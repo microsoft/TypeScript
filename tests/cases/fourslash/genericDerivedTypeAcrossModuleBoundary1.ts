@@ -17,7 +17,7 @@
 ////var /*2*/n3 = new N.D2();
 
 goTo.marker('1');
-verify.quickInfoIs('(var) n2: N.D2<number>');
+verify.quickInfoIs('var n2: N.D2<number>');
 
 goTo.marker('2')
-verify.quickInfoIs('(var) n3: N.D2<{}>');
+verify.quickInfoIs('var n3: N.D2<{}>');

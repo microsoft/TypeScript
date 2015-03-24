@@ -10,7 +10,7 @@
 ////export var Y = 1;
 
 goTo.marker("1");
-verify.quickInfoIs("(var) A.Y: number");
+verify.quickInfoIs("var A.Y: number");
 
 goTo.marker("2");
-verify.quickInfoIs("(var) I: number");
+verify.quickInfoIs("var I: number");

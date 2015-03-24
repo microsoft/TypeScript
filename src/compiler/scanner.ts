@@ -256,6 +256,11 @@ module ts {
         return tokenStrings[t];
     }
 
+    /* @internal */
+    export function stringToToken(s: string): SyntaxKind {
+        return textToToken[s];
+    }
+
     export function computeLineStarts(text: string): number[] {
         let result: number[] = new Array();
         let pos = 0;

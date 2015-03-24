@@ -22,5 +22,5 @@ edit.backspace(1);
 edit.insert('a');
 verify.quickInfoIs("(property) B<string>.bar: string", undefined);
 goTo.marker('2');
-verify.quickInfoIs("(var) r4: string", undefined);
+verify.quickInfoIs("var r4: string", undefined);
 verify.numberOfErrorsInCurrentFile(0);

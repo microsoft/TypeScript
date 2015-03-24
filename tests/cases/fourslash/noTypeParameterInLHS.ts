@@ -6,6 +6,6 @@
 ////var /*2*/c: C<I>;
 
 goTo.marker('1');
-verify.quickInfoIs('(var) i: I<any>');
+verify.quickInfoIs('var i: I<any>');
 goTo.marker('2');
-verify.quickInfoIs('(var) c: C<any>');
+verify.quickInfoIs('var c: C<any>');

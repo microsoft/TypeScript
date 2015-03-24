@@ -9,7 +9,7 @@
 
 goTo.marker("1");
 verify.verifyQuickInfoDisplayParts("function", "", { start: test.markerByName('1').position, length: "foo".length },
-    [{ text: "(", kind: "punctuation" }, { text: "function", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "function", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "foo", kind: "functionName" }, { text: "(", kind: "punctuation" }, 
         { text: "param", kind: "parameterName" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" },
         { text: ",", kind: "punctuation" }, { text: " ", kind: "space" }, 

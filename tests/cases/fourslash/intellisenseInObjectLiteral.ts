@@ -9,4 +9,4 @@
 //// }
 
 goTo.marker();
-verify.quickInfoIs("(var) x: number", "");
+verify.quickInfoIs("var x: number", "");

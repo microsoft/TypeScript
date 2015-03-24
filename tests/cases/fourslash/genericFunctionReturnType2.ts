@@ -15,10 +15,10 @@ goTo.marker('1');
 verify.currentSignatureHelpIs('foo(x: number): (a: number) => number');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r: (a: number) => number');
+verify.quickInfoIs('var r: (a: number) => number');
 
 goTo.marker('3');
 verify.currentSignatureHelpIs('r(a: number): number');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) r2: number');
+verify.quickInfoIs('var r2: number');

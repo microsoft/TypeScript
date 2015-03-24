@@ -418,7 +418,10 @@ module ts {
 
             function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
                 // Add the empty lines in between texts
-                while (blankLineCount--) docComments.push(textPart(""));
+                while (blankLineCount--) {
+                    docComments.push(textPart(""));
+                }
+
                 docComments.push(textPart(text));
             }
 
@@ -3069,12 +3072,14 @@ module ts {
             typeResolver: TypeChecker, location: Node,
             // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
             semanticMeaning = getMeaningFromLocation(location)) {
+
             let displayParts: SymbolDisplayPart[] = [];
             let documentation: SymbolDisplayPart[];
             let symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
             let hasAddedSymbolInfo: boolean;
             let type: Type;
+
             // Class at constructor site need to be shown as constructor apart from property,method, vars
             if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
                 // If it is accessor they are allowed only if location is at name of the accessor
@@ -3126,9 +3131,7 @@ module ts {
                             }
                             else if (symbolFlags & SymbolFlags.Alias) {
                                 symbolKind = ScriptElementKind.alias;
-                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                                displayParts.push(textPart(symbolKind));
-                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                                pushTypePart(symbolKind);
                                 displayParts.push(spacePart());
                                 if (useConstructSignatures) {
                                     displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -3364,11 +3367,24 @@ module ts {
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
                 addNewLineIfDisplayPartsExist();
                 if (symbolKind) {
-                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(textPart(symbolKind));
-                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    pushTypePart(symbolKind);
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
+                }
+            }
+
+            function pushTypePart(symbolKind: string) {
+                if (symbolKind === ScriptElementKind.variableElement ||
+                    symbolKind === ScriptElementKind.functionElement ||
+                    symbolKind === ScriptElementKind.letElement ||
+                    symbolKind === ScriptElementKind.constElement ||
+                    symbolKind === ScriptElementKind.constructorImplementationElement) {
+                    displayParts.push(textOrKeywordPart(symbolKind));
+                }
+                else {
+                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    displayParts.push(textOrKeywordPart(symbolKind));
+                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
             }
 
