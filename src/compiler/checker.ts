@@ -9320,7 +9320,7 @@ module ts {
                 let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorFunctionSignatures.length === 0) {
                     if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                        error(expressionForError, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
                     }
                     return undefined;
                 }
@@ -9338,7 +9338,7 @@ module ts {
                 let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorNextFunctionSignatures.length === 0) {
                     if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
+                        error(expressionForError, Diagnostics.An_iterator_must_have_a_next_method);
                     }
                     return undefined;
                 }
