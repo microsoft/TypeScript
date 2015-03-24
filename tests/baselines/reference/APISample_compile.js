@@ -1475,6 +1475,7 @@ declare module "typescript" {
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
     let version: string;
+    function findConfigFile(searchPath: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
