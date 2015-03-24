@@ -5913,7 +5913,7 @@ module ts {
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
             let arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
             if (languageVersion >= ScriptTarget.ES6) {
-                // Check for iterable, not yet implemented
+                return checkIteratedType(arrayOrIterableType, node.expression) || unknownType;
             }
 
             if (isArrayLikeType(arrayOrIterableType)) {
