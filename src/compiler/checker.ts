@@ -5911,12 +5911,17 @@ module ts {
         }
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
-            let type = checkExpressionCached(node.expression, contextualMapper);
-            if (!isArrayLikeType(type)) {
-                error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
-                return unknownType;
+            let arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
+            if (languageVersion >= ScriptTarget.ES6) {
+                // Check for iterable, not yet implemented
             }
-            return type;
+
+            if (isArrayLikeType(arrayOrIterableType)) {
+                return getIndexTypeOfType(arrayOrIterableType, IndexKind.Number);
+            }
+
+            error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(arrayOrIterableType));
+            return unknownType;
         }
 
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
@@ -5924,18 +5929,13 @@ module ts {
             if (!elements.length) {
                 return createArrayType(undefinedType);
             }
-            let hasSpreadElement: boolean = false;
+            let hasSpreadElement = false;
             let elementTypes: Type[] = [];
-            forEach(elements, e => {
+            for (let e of elements) {
                 let type = checkExpression(e, contextualMapper);
-                if (e.kind === SyntaxKind.SpreadElementExpression) {
-                    elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
-                    hasSpreadElement = true;
-                }
-                else {
-                    elementTypes.push(type);
-                }
-            });
+                elementTypes.push(type);
+                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
+            }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
@@ -6558,7 +6558,7 @@ module ts {
             for (let i = 0; i < args.length; i++) {
                 let arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
-                    let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    let paramType = getTypeAtPosition(signature, i);
                     let argType: Type;
                     if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
                         argType = globalTemplateStringsArrayType;
@@ -6581,7 +6581,7 @@ module ts {
                     // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
                         let arg = args[i];
-                        let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                        let paramType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
@@ -6614,7 +6614,7 @@ module ts {
                 let arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
-                    let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    let paramType = getTypeAtPosition(signature, i);
                     // A tagged template expression provides a special first argument, and string literals get string literal types
                     // unless we're reporting errors
                     let argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression ? globalTemplateStringsArrayType :
@@ -7088,14 +7088,9 @@ module ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
-            if (pos >= 0) {
-                return signature.hasRestParameter ?
-                    pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                    pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
-            }
             return signature.hasRestParameter ?
-                getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) :
-                anyArrayType;
+                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
