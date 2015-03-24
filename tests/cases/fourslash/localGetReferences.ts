@@ -223,7 +223,7 @@ verify.referencesCountIs(7);
 
 // References to unresolved symbol.
 goTo.marker("12");
-verify.referencesCountIs(1);
+verify.referencesCountIs(0);
 
 // References to no context.
 goTo.marker("13");

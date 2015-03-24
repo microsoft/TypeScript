@@ -17,4 +17,4 @@
 
 // "any" should not be highlighted
 goTo.marker();
-verify.occurrencesAtPositionCount(1);
+verify.occurrencesAtPositionCount(0);

@@ -127,6 +127,12 @@ module ts {
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
+        
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { definition: <encoded>; references: <encoded>[] }[]
+         */
+        findReferences(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -560,16 +566,19 @@ module ts {
 
         /// GET REFERENCES
 
-        /**
-         * Return references to a symbol at the requested position.
-         * References are separated by "\n".
-         * Each reference is a "fileindex min lim" sub-string.
-         */
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getReferencesAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getReferencesAtPosition(fileName, position);
+                });
+        }
+
+        public findReferences(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "findReferences('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.findReferences(fileName, position);
                 });
         }
 
