@@ -4713,10 +4713,7 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitDeclarationName(node);
-                        if (!(member.flags & NodeFlags.Static)) {
-                            write(".prototype");
-                        }
+                        emitClassMemberPrefix(node, member);
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
@@ -4734,10 +4731,7 @@ module ts {
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitDeclarationName(node);
-                            if (!(member.flags & NodeFlags.Static)) {
-                                write(".prototype");
-                            }
+                            emitClassMemberPrefix(node, member);
                             write(", ");
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
@@ -5011,6 +5005,7 @@ module ts {
                     // begin the IIFE
                     write("() => {");
 
+                    // keep our generated state private
                     var saveTempCount = tempCount;
                     var saveTempVariables = tempVariables;
                     var saveTempParameters = tempParameters;
@@ -5057,7 +5052,13 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
                 scopeEmitEnd();
 
-                // For a decorated class, we need to assign its name (if it has one).
+                // For a decorated class, we need to assign its name (if it has one). This is because we emit
+                // the class as a class expression to avoid the double-binding of the identifier:
+                //
+                //   let C = class {
+                //   }
+                //   Object.defineProperty(C, "name", { value: "C", configurable: true });
+                //
                 if ((node.name || !(node.flags & NodeFlags.Default)) && thisNodeIsDecorated) {
                     writeLine();
                     write("Object.defineProperty(");
@@ -5308,9 +5309,8 @@ module ts {
 
                     default:
                         return;
-                }
+                }                
 
-                let name = member.name;
                 let decorators = getDecoratorsOfMember(node, member);
                 if (!decorators || decorators.length === 0) {
                     return;
@@ -5318,9 +5318,11 @@ module ts {
 
                 emitStart(member);
                 emitDecorateStart(decorators);
+                emitStart(member.name);
                 emitClassMemberPrefix(node, member);
                 write(", ");
-                emitExpressionForPropertyName(name);
+                emitExpressionForPropertyName(member.name);
+                emitEnd(member.name);
                 write(");");
                 emitEnd(member);
                 writeLine();
@@ -5332,8 +5334,7 @@ module ts {
                     emitDecoratorsOfParameters(constructor);
                 }
 
-                let decorators = node.decorators;
-                if (!decorators || decorators.length === 0) {
+                if (!nodeIsDecorated(node)) {
                     return;
                 }
                 
