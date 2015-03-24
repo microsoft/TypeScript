@@ -2450,9 +2450,7 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number) {
-            synchronizeHostData();
-
+        function getCompletionSymbols(fileName: string, position: number): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node }{
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
@@ -2492,8 +2490,8 @@ module ts {
 
             // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
             // other wise, it is a request for all visible symbols in the scope, and the node is the current location
-            let node: Node;
-            let isRightOfDot: boolean;
+            let node = currentToken;
+            let isRightOfDot = false;
             if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = (<PropertyAccessExpression>previousToken.parent).expression;
                 isRightOfDot = true;
@@ -2502,30 +2500,17 @@ module ts {
                 node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
             }
-            else {
-                node = currentToken;
-                isRightOfDot = false;
-            }
-
-            // Clear the current activeCompletionSession for this session
-            activeCompletionSession = {
-                fileName: fileName,
-                position: position,
-                entries: [],
-                symbols: {},
-                typeChecker: typeInfoResolver
-            };
-            log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
             let location = getTouchingPropertyName(sourceFile, position);
             // Populate the completion list
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
+            let symbols: Symbol[];
 
             if (isRightOfDot) {
                 // Right of dot member completion list
-                let symbols: Symbol[] = [];
+                symbols = [];
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
 
@@ -2556,8 +2541,6 @@ module ts {
                         }
                     });
                 }
-
-                getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
@@ -2574,8 +2557,7 @@ module ts {
                     let contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
                     if (contextualTypeMembers && contextualTypeMembers.length > 0) {
                         // Add filtered items to the completion list
-                        let filteredMembers = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
-                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                        symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
                 }
                 else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
@@ -2587,8 +2569,7 @@ module ts {
                         let importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
                         let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
-                        let filteredExports = filterModuleExports(exports, importDeclaration);
-                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                        symbols = filterModuleExports(exports, importDeclaration);
                     }
                 }
                 else {
@@ -2599,24 +2580,13 @@ module ts {
                     /// TODO filter meaning based on the current context
                     let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    let symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
-
-                    getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
             }
 
-            // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
-            }
             log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return {
-                isMemberCompletion,
-                isNewIdentifierLocation,
-                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
-                entries: activeCompletionSession.entries
-            };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location };
 
             /**
              * Finds the first node that "embraces" the position, so that one may
@@ -2628,21 +2598,6 @@ module ts {
                     scope = scope.parent;
                 }
                 return scope;
-            }
-
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                let start = new Date().getTime();
-                forEach(symbols, symbol => {
-                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
-                    if (entry) {
-                        let id = escapeIdentifier(entry.name);
-                        if (!lookUp(session.symbols, id)) {
-                            session.entries.push(entry);
-                            session.symbols[id] = symbol;
-                        }
-                    }
-                });
-                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2698,7 +2653,7 @@ module ts {
 
                         case SyntaxKind.EqualsToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration // let x = a|
-                            || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+                                || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
 
                         case SyntaxKind.TemplateHead:
                             return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
@@ -2815,7 +2770,7 @@ module ts {
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
                                 (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                 previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
+                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
 
                         case SyntaxKind.LessThanToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
@@ -2928,6 +2883,57 @@ module ts {
                 });
 
                 return filteredMembers;
+            }
+        }
+
+        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
+            synchronizeHostData();
+            
+            let result = getCompletionSymbols(fileName, position);
+            if (!result) {
+                return undefined;
+            }
+
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = result;
+            if (!symbols || symbols.length === 0) {
+                return undefined;
+            }
+
+            // Clear the current activeCompletionSession for this session
+            activeCompletionSession = {
+                fileName: fileName,
+                position: position,
+                entries: [],
+                symbols: {},
+                typeChecker: typeInfoResolver
+            };
+
+            getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+
+            // Add keywords if this is not a member completion list
+            if (!isMemberCompletion) {
+                addRange(activeCompletionSession.entries, keywordCompletions);
+            }
+
+            return {
+                isMemberCompletion,
+                isNewIdentifierLocation,
+                entries: activeCompletionSession.entries
+            };
+
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+                let start = new Date().getTime();
+                forEach(symbols, symbol => {
+                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
+                    if (entry) {
+                        let id = escapeIdentifier(entry.name);
+                        if (!lookUp(session.symbols, id)) {
+                            session.entries.push(entry);
+                            session.symbols[id] = symbol;
+                        }
+                    }
+                });
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
         }
 
