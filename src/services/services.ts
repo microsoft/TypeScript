@@ -2666,7 +2666,7 @@ module ts {
 
                         case SyntaxKind.EqualsToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration // let x = a|
-                                || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+                                || containingNodeKind === SyntaxKind.BinaryExpression;   // x = a|
 
                         case SyntaxKind.TemplateHead:
                             return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
