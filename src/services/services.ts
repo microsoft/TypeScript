@@ -2948,6 +2948,9 @@ module ts {
 
                 // Find the symbol with the matching entry name.
                 let target = program.getCompilerOptions().target;
+                // We don't need to perform character checks here because we're only comparing the 
+                // name against 'entryName' (which is known to be good), not building a new 
+                // completion entry.
                 let symbol = forEach(symbols, s => getCompletionEntryDisplayName(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
 
                 if (symbol) {
