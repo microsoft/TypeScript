@@ -1322,7 +1322,7 @@ module ts {
                 } : undefined;
             }
 
-            function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult: SymbolAccessiblityResult) {
+            function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult: SymbolAccessiblityResult): DiagnosticMessage {
                 switch (node.parent.kind) {
                     case SyntaxKind.Constructor:
                         return symbolAccesibilityResult.errorModuleName ?
@@ -1422,15 +1422,19 @@ module ts {
                         // Example:
                         //      original: function foo([a, [[b]], c] = [1,[["string"]], 3]) {}
                         //      emit    : declare function foo([a, [[b]], c]: [number, [[string]], number]): void;
-                        //      original with rest: function foo([a ...c]) {}
-                        //      emit              : declare function foo([a, c]): void;
+                        //      original with rest: function foo([a, ...c]) {}
+                        //      emit              : declare function foo([a, ...c]): void;
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
                     else {
+                        Debug.assert(bindingElement.name.kind === SyntaxKind.Identifier);
                         // If the node is just an identifier, we will simply emit the text associated with the node's name
                         // Example:
                         //      original: function foo({y = 10, x}) {}
                         //      emit    : declare function foo({y, x}: {number, any}): void;
+                        if (bindingElement.dotDotDotToken) {
+                            write("...");
+                        }
                         writeTextOfNode(currentSourceFile, bindingElement.name);
                     }
                 }
