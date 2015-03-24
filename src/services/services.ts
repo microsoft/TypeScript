@@ -2443,8 +2443,8 @@ module ts {
             };
         }
 
-        function getCompletionData(fileName: string, position: number, symbolName?: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node } {
-            let result = getCompletionSymbolsWorker(fileName, position, symbolName);
+        function getCompletionData(fileName: string, position: number, symbolName?: string) {
+            let result = getCompletionDataWorker(fileName, position, symbolName);
             if (!result) {
                 return undefined;
             }
@@ -2457,7 +2457,7 @@ module ts {
             return result;
         }
 
-        function getCompletionSymbolsWorker(fileName: string, position: number, symbolName: string): { symbols: Symbol[], isMemberCompletion: boolean, isNewIdentifierLocation: boolean, location: Node }{
+        function getCompletionDataWorker(fileName: string, position: number, symbolName: string) {
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
@@ -2590,8 +2590,8 @@ module ts {
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     
                     // Filter down to the symbol that matches the symbolName if we were given one.
-                    let predicate: (s: Symbol) => boolean = symbolName 
-                        ? s => getValidCompletionEntryDisplayName(s, target) === symbolName
+                    let predicate = symbolName !== undefined
+                        ? (s: Symbol) => getValidCompletionEntryDisplayName(s, target) === symbolName
                         : undefined;
                     symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings, predicate);
                 }
