@@ -22314,7 +22314,7 @@ var ts;
     }
     function getDefaultCompilerOptions() {
         return {
-            target: 2 /* Latest */,
+            target: 1 /* ES5 */,
             module: 0 /* None */
         };
     }
@@ -26275,3 +26275,4 @@ var TypeScript;
         Services.TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
     })(Services = TypeScript.Services || (TypeScript.Services = {}));
 })(TypeScript || (TypeScript = {}));
+var toolsVersion = "1.4";

@@ -17988,7 +17988,7 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    var version = "1.4.2.0";
+    var version = "1.4.3.0";
     function validateLocaleAndSetLanguage(locale, errors) {
         var matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
         if (!matchResult) {
