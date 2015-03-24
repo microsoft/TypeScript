@@ -14,13 +14,13 @@ export = m;
 var m;
 (function (m) {
     var c;
-    (function (_c) {
+    (function (c_1) {
         var c = (function () {
             function c() {
             }
             return c;
         })();
-        _c.c = c;
+        c_1.c = c;
     })(c = m.c || (m.c = {}));
     m.a;
 })(m || (m = {}));

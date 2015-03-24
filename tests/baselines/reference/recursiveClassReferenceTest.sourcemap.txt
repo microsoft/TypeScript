@@ -139,7 +139,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >        ^^^^
 3 >            ^^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^^^^->
+5 >                  ^^^^^^^^^^^^->
 1 >.
 2 >        
 3 >            Thing
@@ -159,16 +159,16 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(13, 18) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
 4 >Emitted(13, 19) Source(42, 2) + SourceIndex(0) name (Sample.Actions)
 ---
->>>        (function (_Thing_1) {
+>>>        (function (Thing_1) {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
-3 >                   ^^^^^^^^
+3 >                   ^^^^^^^
 1->
 2 >        
 3 >                   Thing
 1->Emitted(14, 9) Source(32, 23) + SourceIndex(0) name (Sample.Actions)
 2 >Emitted(14, 20) Source(32, 23) + SourceIndex(0) name (Sample.Actions)
-3 >Emitted(14, 28) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
+3 >Emitted(14, 27) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
 ---
 >>>            var Find;
 1 >^^^^^^^^^^^^
@@ -365,7 +365,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                ^^^^^^^^^^^^^^^^^^^^
 3 >                                    ^^^^^^^^^^^^^^^^^^
 4 >                                                      ^
-5 >                                                       ^^^^^^^->
+5 >                                                       ^^^^^->
 1->
 2 >                StartFindAction
 3 >                                     implements Sample.Thing.IAction {
@@ -383,16 +383,16 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(28, 55) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 4 >Emitted(28, 56) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 ---
->>>            })(Find = _Thing_1.Find || (_Thing_1.Find = {}));
+>>>            })(Find = Thing_1.Find || (Thing_1.Find = {}));
 1->^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^^^^
 5 >                   ^^^
-6 >                      ^^^^^^^^^^^^^
-7 >                                   ^^^^^
-8 >                                        ^^^^^^^^^^^^^
-9 >                                                     ^^^^^^^^
+6 >                      ^^^^^^^^^^^^
+7 >                                  ^^^^^
+8 >                                       ^^^^^^^^^^^^
+9 >                                                   ^^^^^^^^
 1->
   >
 2 >            }
@@ -400,28 +400,28 @@ sourceFile:recursiveClassReferenceTest.ts
 4 >               Find
 5 >                   
 6 >                      Find
-7 >                                   
-8 >                                        Find
-9 >                                                      {
-  >                                                     	export class StartFindAction implements Sample.Thing.IAction {
-  >                                                     		
-  >                                                     		public getId() { return "yo"; }
-  >                                                     		
-  >                                                     		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                                     
-  >                                                     			return true;
-  >                                                     		}
-  >                                                     	}
-  >                                                     }
+7 >                                  
+8 >                                       Find
+9 >                                                    {
+  >                                                   	export class StartFindAction implements Sample.Thing.IAction {
+  >                                                   		
+  >                                                   		public getId() { return "yo"; }
+  >                                                   		
+  >                                                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                                   
+  >                                                   			return true;
+  >                                                   		}
+  >                                                   	}
+  >                                                   }
 1->Emitted(29, 13) Source(42, 1) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 2 >Emitted(29, 14) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 3 >Emitted(29, 16) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
 4 >Emitted(29, 20) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
 5 >Emitted(29, 23) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
-6 >Emitted(29, 36) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
-7 >Emitted(29, 41) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
-8 >Emitted(29, 54) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
-9 >Emitted(29, 62) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing)
+6 >Emitted(29, 35) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
+7 >Emitted(29, 40) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
+8 >Emitted(29, 52) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
+9 >Emitted(29, 60) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing)
 ---
 >>>        })(Thing = Actions.Thing || (Actions.Thing = {}));
 1 >^^^^^^^^

@@ -33,17 +33,17 @@ var m;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
 //// [client.js]
-var _server = require("server");
-exports.c = _server.c;
-var _server_1 = require("server");
-exports.c2 = _server_1.c;
-var _server_2 = require("server");
-exports.i = _server_2.i;
-exports.instantiatedModule = _server_2.m;
-var _server_3 = require("server");
-exports.uninstantiated = _server_3.uninstantiated;
-var _server_4 = require("server");
-exports.x = _server_4.x;
+var server_1 = require("server");
+exports.c = server_1.c;
+var server_2 = require("server");
+exports.c2 = server_2.c;
+var server_3 = require("server");
+exports.i = server_3.i;
+exports.instantiatedModule = server_3.m;
+var server_4 = require("server");
+exports.uninstantiated = server_4.uninstantiated;
+var server_5 = require("server");
+exports.x = server_5.x;
 
 
 //// [server.d.ts]

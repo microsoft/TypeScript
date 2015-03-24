@@ -34,28 +34,28 @@ var y = 20;
 var x = 10;
 var y = 20;
 {
-    var _x = 1;
-    var _y = 2;
-    console.log(_x);
-    switch (_x) {
+    var x_1 = 1;
+    var y_1 = 2;
+    console.log(x_1);
+    switch (x_1) {
         case 10:
-            var _x_1 = 20;
+            var x_2 = 20;
     }
-    switch (_y) {
+    switch (y_1) {
         case 10:
-            var _y_1 = 20;
+            var y_2 = 20;
     }
 }
 {
-    var _x_2 = 1;
-    var _y_2 = 2;
-    console.log(_x_2);
-    switch (_x_2) {
+    var x_3 = 1;
+    var y_3 = 2;
+    console.log(x_3);
+    switch (x_3) {
         case 10:
-            var _x_3 = 20;
+            var x_4 = 20;
     }
-    switch (_y_2) {
+    switch (y_3) {
         case 10:
-            var _y_3 = 20;
+            var y_4 = 20;
     }
 }
