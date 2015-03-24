@@ -11,9 +11,9 @@ function foo() {
 //// [letShadowedByNameInNestedScope.js]
 var x;
 function foo() {
-    var x_1 = 0;
+    var x = 0;
     (function () {
         var _x = 1;
-        console.log(x_1);
+        console.log(x);
     })();
 }
