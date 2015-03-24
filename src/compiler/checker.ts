@@ -11142,7 +11142,7 @@ module ts {
                 // If this is es6 or higher, just use the name of the export
                 // no need to qualify it.
                 if (languageVersion >= ScriptTarget.ES6) {
-                    return symbolName;
+                    return undefined;
                 }
                 else {
                     return "exports." + symbolName;
