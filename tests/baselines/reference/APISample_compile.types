@@ -2632,12 +2632,15 @@ declare module "typescript" {
 >Signature : Signature
 >Type : Type
 
-        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
->getSymbolsInScope : (location: Node, meaning: SymbolFlags) => Symbol[]
+        getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[];
+>getSymbolsInScope : (location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean) => Symbol[]
 >location : Node
 >Node : Node
 >meaning : SymbolFlags
 >SymbolFlags : SymbolFlags
+>predicate : (symbol: Symbol) => boolean
+>symbol : Symbol
+>Symbol : Symbol
 >Symbol : Symbol
 
         getSymbolAtLocation(node: Node): Symbol;

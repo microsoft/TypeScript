@@ -1409,14 +1409,6 @@ module ts {
 
     /// Language Service
 
-    interface CompletionSession {
-        fileName: string;           // the file where the completion was requested
-        position: number;           // position in the file where the completion was requested
-        entries: CompletionEntry[]; // entries for this completion
-        symbols: Map<Symbol>;       // symbols by entry name map
-        typeChecker: TypeChecker;   // the typeChecker used to generate this completion
-    }
-
     interface FormattingOptions {
         useTabs: boolean;
         spacesPerTab: number;
@@ -2180,7 +2172,6 @@ module ts {
         let typeInfoResolver: TypeChecker;
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
-        let activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
@@ -2918,41 +2909,32 @@ module ts {
                 return undefined;
             }
 
-            // Clear the current activeCompletionSession for this session
-            activeCompletionSession = {
-                fileName: fileName,
-                position: position,
-                entries: [],
-                symbols: {},
-                typeChecker: typeInfoResolver
-            };
-
-            getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+            var entries = getCompletionEntriesFromSymbols(symbols);
 
             // Add keywords if this is not a member completion list
             if (!isMemberCompletion) {
-                addRange(activeCompletionSession.entries, keywordCompletions);
+                addRange(entries, keywordCompletions);
             }
 
-            return {
-                isMemberCompletion,
-                isNewIdentifierLocation,
-                entries: activeCompletionSession.entries
-            };
+            return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
                 let start = new Date().getTime();
+                var entries: CompletionEntry[] = [];
+                var nameToSymbol: Map<Symbol> = {};
+
                 forEach(symbols, symbol => {
-                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
+                    let entry = createCompletionEntry(symbol, typeInfoResolver, location);
                     if (entry) {
                         let id = escapeIdentifier(entry.name);
-                        if (!lookUp(session.symbols, id)) {
-                            session.entries.push(entry);
-                            session.symbols[id] = symbol;
+                        if (!lookUp(nameToSymbol, id)) {
+                            entries.push(entry);
+                            nameToSymbol[id] = symbol;
                         }
                     }
                 });
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                return entries;
             }
         }
 
@@ -2962,7 +2944,7 @@ module ts {
             // Look up a completion symbol with this name.
             let result = getCompletionSymbols(fileName, position, entryName);
             if (result) {
-                let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = result;
+                let { symbols, location } = result;
                 if (symbols && symbols.length > 0) {
                     let symbol = symbols[0];
                     let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
@@ -2975,7 +2957,8 @@ module ts {
                     };
                 }
             }
-
+            
+            // Didn't find a symbol with this name.  See if we can find a keyword instead.
             let keywordCompletion = filter(keywordCompletions, c => c.name === entryName);
             if (keywordCompletion) {
                 return {
