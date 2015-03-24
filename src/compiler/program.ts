@@ -10,6 +10,22 @@ module ts {
     /** The version of the TypeScript compiler release */
     export let version = "1.5.0.0";
 
+    export function findConfigFile(searchPath: string): string {
+        var fileName = "tsconfig.json";
+        while (true) {
+            if (sys.fileExists(fileName)) {
+                return fileName;
+            }
+            var parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+            fileName = "../" + fileName;
+        }
+        return undefined;
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
@@ -87,6 +103,11 @@ module ts {
 
     export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
         let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+
+        if (program.getCompilerOptions().declaration) {
+            diagnostics.concat(program.getDeclarationDiagnostics());
+        }
+
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 

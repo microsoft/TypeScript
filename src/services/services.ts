@@ -940,6 +940,7 @@ module ts {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
 
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -1043,6 +1044,11 @@ module ts {
         name: string;
         containerKind: string;
         containerName: string;
+    }
+
+    export interface ReferencedSymbol {
+        definition: DefinitionInfo;
+        references: ReferenceEntry[];
     }
 
     export enum SymbolDisplayPartKind {
@@ -2383,7 +2389,7 @@ module ts {
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
-            return semanticDiagnostics.concat(declarationDiagnostics);
+            return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -3461,6 +3467,17 @@ module ts {
             };
         }
 
+        function createDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+            return {
+                fileName: node.getSourceFile().fileName,
+                textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                kind: symbolKind,
+                name: symbolName,
+                containerKind: undefined,
+                containerName
+            };
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -3476,7 +3493,7 @@ module ts {
             if (isJumpStatementTarget(node)) {
                 let labelName = (<Identifier>node).text;
                 let label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
             }
 
             /// Triple slash reference comments
@@ -3507,14 +3524,13 @@ module ts {
             // If this is an alias, and the request came at the declaration location
             // get the aliased symbol instead. This allows for goto def on an import e.g.
             //   import {A, B} from "mod";
-            // to jump to the implementation directelly.
+            // to jump to the implementation directly.
             if (symbol.flags & SymbolFlags.Alias) {
                 let declaration = symbol.declarations[0];
                 if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
                     symbol = typeInfoResolver.getAliasedSymbol(symbol);
                 }
             }
-
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
             // using go-to-definition at such position should go to the variable declaration of the property value rather than
@@ -3532,7 +3548,7 @@ module ts {
                 let shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 let shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
                 return map(shorthandDeclarations,
-                    declaration => getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+                    declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
             let result: DefinitionInfo[] = [];
@@ -3546,46 +3562,11 @@ module ts {
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
                 // Just add all the declarations. 
                 forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
                 });
             }
 
             return result;
-
-            function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-                return {
-                    fileName: node.getSourceFile().fileName,
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
-                    kind: symbolKind,
-                    name: symbolName,
-                    containerKind: undefined,
-                    containerName
-                };
-            }
-
-            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                let declarations: Declaration[] = [];
-                let definition: Declaration;
-
-                forEach(signatureDeclarations, d => {
-                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
-                        declarations.push(d);
-                        if ((<FunctionLikeDeclaration>d).body) definition = d;
-                    }
-                });
-
-                if (definition) {
-                    result.push(getDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
-                    return true;
-                }
-
-                return false;
-            }
 
             function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
                 // Applicable only if we are in a new expression, or we are on a constructor declaration
@@ -3607,6 +3588,30 @@ module ts {
                 }
                 return false;
             }
+
+            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                let declarations: Declaration[] = [];
+                let definition: Declaration;
+
+                forEach(signatureDeclarations, d => {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+                        declarations.push(d);
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+                    }
+                });
+
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         /// References and Occurrences
@@ -3622,7 +3627,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false);
+                return convertReferences(getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false));
             }
 
             switch (node.kind) {
@@ -3922,7 +3927,7 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
+            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): ReferenceEntry[] {
                 let keywords: Node[] = [];
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
@@ -4045,7 +4050,7 @@ module ts {
                 }
             }
 
-            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node) {
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): ReferenceEntry[] {
                 let container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
@@ -4150,15 +4155,36 @@ module ts {
             }
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            return findReferences(fileName, position, findInStrings, findInComments);
+        function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[]{
+            if (!referenceSymbols) {
+                return undefined;
+            }
+
+            let referenceEntries: ReferenceEntry[] = [];
+            for (let referenceSymbol of referenceSymbols) {
+                addRange(referenceEntries, referenceSymbol.references);
+            }
+            return referenceEntries;
+        }
+
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[]{
+            var referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            return convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            return findReferences(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+
+            // Only include referenced symbols that have a valid definition.
+            return filter(referencedSymbols, rs => !!rs.definition);
+        }
+
+        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -4181,14 +4207,14 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
                     let labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                     // if we have a label definition, look within its statement for references, if not, then
-                    // the label is undefined, just return a set of one for the current node.
-                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntryFromNode(node)];
+                    // the label is undefined and we have no results..
+                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : undefined;
                 }
                 else {
                     // it is a label definition and not a target, search within the parent labeledStatement
@@ -4208,9 +4234,8 @@ module ts {
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
-                // Even if we did not find a symbol, we have an identifier, so there is at least
-                // one reference that we know of. return that instead of undefined.
-                return [getReferenceEntryFromNode(node)];
+                // Can't have references to something that we have no symbol for.
+                return undefined;
             }
 
             let declarations = symbol.declarations;
@@ -4220,7 +4245,7 @@ module ts {
                 return undefined;
             }
 
-            let result: ReferenceEntry[];
+            let result: ReferencedSymbol[];
 
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
@@ -4232,15 +4257,18 @@ module ts {
             // otherwise we'll need to search globally (i.e. include each file).
             let scope = getSymbolScope(symbol);
 
+            // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
+            let symbolToIndex: number[] = [];
+
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
                 if (searchOnlyInCurrentFile) {
                     Debug.assert(sourceFiles.length === 1);
                     result = [];
-                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                 }
                 else {
                     let internedName = getInternedName(symbol, node, declarations)
@@ -4251,13 +4279,31 @@ module ts {
 
                         if (lookUp(nameTable, internedName)) {
                             result = result || [];
-                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                         }
                     });
                 }
             }
 
             return result;
+
+            function getDefinition(symbol: Symbol): DefinitionInfo {
+                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), typeInfoResolver, node);
+                let name = map(info.displayParts, p => p.text).join("");
+                let declarations = symbol.declarations;
+                if (!declarations || declarations.length === 0) {
+                    return undefined;
+                }
+
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    name,
+                    kind: info.symbolKind,
+                    fileName: declarations[0].getSourceFile().fileName,
+                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                };
+            }
 
             function isImportOrExportSpecifierName(location: Node): boolean {
                 return location.parent &&
@@ -4416,8 +4462,8 @@ module ts {
                 return positions;
             }
 
-            function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferenceEntry[] {
-                let result: ReferenceEntry[] = [];
+            function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferencedSymbol[] {
+                let references: ReferenceEntry[] = [];
                 let sourceFile = container.getSourceFile();
                 let labelName = targetLabel.text;
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
@@ -4432,10 +4478,20 @@ module ts {
                     // Only pick labels that are either the target label, or have a target that is the target label
                     if (node === targetLabel ||
                         (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
-                        result.push(getReferenceEntryFromNode(node));
+                        references.push(getReferenceEntryFromNode(node));
                     }
                 });
-                return result;
+
+                var definition: DefinitionInfo = {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: targetLabel.getSourceFile().fileName,
+                    kind: ScriptElementKind.label,
+                    name: labelName,
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                }
+
+                return [{ definition, references }];
             }
 
             function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
@@ -4475,7 +4531,9 @@ module ts {
                 searchMeaning: SemanticMeaning,
                 findInStrings: boolean,
                 findInComments: boolean,
-                result: ReferenceEntry[]): void {
+                result: ReferencedSymbol[],
+                symbolToIndex: number[]): void {
+
                 let sourceFile = container.getSourceFile();
                 let tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
 
@@ -4495,10 +4553,18 @@ module ts {
                             // for.
                             if ((findInStrings && isInString(position)) ||
                                 (findInComments && isInComment(position))) {
+
+                                // In the case where we're looking inside comments/strings, we don't have
+                                // an actual definition.  So just use 'undefined' here.  Features like
+                                // 'Rename' won't care (as they ignore the definitions), and features like
+                                // 'FindReferences' will just filter out these results.
                                 result.push({
-                                    fileName: sourceFile.fileName,
-                                    textSpan: createTextSpan(position, searchText.length),
-                                    isWriteAccess: false
+                                    definition: undefined,
+                                    references: [{
+                                        fileName: sourceFile.fileName,
+                                        textSpan: createTextSpan(position, searchText.length),
+                                        isWriteAccess: false
+                                    }]
                                 });
                             }
                             return;
@@ -4512,8 +4578,11 @@ module ts {
                         if (referenceSymbol) {
                             let referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             let shorthandValueSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
-                                result.push(getReferenceEntryFromNode(referenceLocation));
+                            var relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+
+                            if (relatedSymbol) {
+                                var referencedSymbol = getReferencedSymbol(relatedSymbol);
+                                referencedSymbol.references.push(getReferenceEntryFromNode(referenceLocation));
                             }
                             /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
                              * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
@@ -4522,10 +4591,29 @@ module ts {
                              * position of property accessing, the referenceEntry of such position will be handled in the first case.
                              */
                             else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                                result.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
+                                var referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
+                                referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
                         }
                     });
+                }
+
+                return;
+
+                function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
+                    var symbolId = getSymbolId(symbol);
+                    var index = symbolToIndex[symbolId];
+                    if (index === undefined) {
+                        index = result.length;
+                        symbolToIndex[symbolId] = index;
+
+                        result.push({
+                            definition: getDefinition(symbol),
+                            references: []
+                        });
+                    }
+
+                    return result[index];
                 }
 
                 function isInString(position: number) {
@@ -4555,7 +4643,7 @@ module ts {
                 }
             }
 
-            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
+            function getReferencesForSuperKeyword(superKeyword: Node): ReferencedSymbol[] {
                 let searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
@@ -4578,7 +4666,7 @@ module ts {
                         return undefined;
                 }
 
-                let result: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
                 let sourceFile = searchSpaceNode.getSourceFile();
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
@@ -4597,14 +4685,15 @@ module ts {
                     // Now make sure the owning class is the same as the search-space
                     // and has the same static qualifier as the original 'super's owner.
                     if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
-                        result.push(getReferenceEntryFromNode(node));
+                        references.push(getReferenceEntryFromNode(node));
                     }
                 });
 
-                return result;
+                var definition = getDefinition(searchSpaceNode.symbol);
+                return [{ definition, references }];
             }
 
-            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferencedSymbol[] {
                 let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
                 // Whether 'this' occurs in a static context within a class.
@@ -4639,22 +4728,32 @@ module ts {
                         return undefined;
                 }
 
-                let result: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
                 let possiblePositions: number[];
                 if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
                     forEach(sourceFiles, sourceFile => {
                         possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
-                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
+                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, references);
                     });
                 }
                 else {
                     let sourceFile = searchSpaceNode.getSourceFile();
                     possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
-                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
+                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
-                return result;
+                return [{
+                    definition: {
+                        containerKind: "",
+                        containerName: "",
+                        fileName: node.getSourceFile().fileName,
+                        kind: ScriptElementKind.variableElement,
+                        name: "this",
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                    },
+                    references: references
+                }];
 
                 function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
                     forEach(possiblePositions, position => {
@@ -4777,16 +4876,18 @@ module ts {
                 }
             }
 
-            function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): Symbol {
                 if (searchSymbols.indexOf(referenceSymbol) >= 0) {
-                    return true;
+                    return referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
-                if (isImportOrExportSpecifierImportSymbol(referenceSymbol) &&
-                    searchSymbols.indexOf(typeInfoResolver.getAliasedSymbol(referenceSymbol)) >= 0) {
-                    return true;
+                if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
+                    var aliasedSymbol = typeInfoResolver.getAliasedSymbol(referenceSymbol);
+                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
+                        return aliasedSymbol;
+                    }
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the 
@@ -4794,7 +4895,7 @@ module ts {
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
                     return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
-                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0);
+                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
                 }
 
@@ -4803,7 +4904,7 @@ module ts {
                 return forEach(typeInfoResolver.getRootSymbols(referenceSymbol), rootSymbol => {
                     // if it is in the list, then we are done
                     if (searchSymbols.indexOf(rootSymbol) >= 0) {
-                        return true;
+                        return rootSymbol;
                     }
 
                     // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
@@ -4811,10 +4912,10 @@ module ts {
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         let result: Symbol[] = [];
                         getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
-                        return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                        return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
-                    return false;
+                    return undefined;
                 });
             }
 
@@ -5770,6 +5871,7 @@ module ts {
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
             getReferencesAtPosition,
+            findReferences,
             getOccurrencesAtPosition,
             getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition,

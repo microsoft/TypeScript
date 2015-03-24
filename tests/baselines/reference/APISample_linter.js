@@ -1506,6 +1506,7 @@ declare module "typescript" {
 declare module "typescript" {
     /** The version of the TypeScript compiler release */
     let version: string;
+    function findConfigFile(searchPath: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
@@ -1620,6 +1621,7 @@ declare module "typescript" {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
@@ -1705,6 +1707,10 @@ declare module "typescript" {
         name: string;
         containerKind: string;
         containerName: string;
+    }
+    interface ReferencedSymbol {
+        definition: DefinitionInfo;
+        references: ReferenceEntry[];
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,
