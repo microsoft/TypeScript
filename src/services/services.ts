@@ -2464,12 +2464,12 @@ module ts {
 
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
-            log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionData: Get current token: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
             let insideComment = isInsideComment(sourceFile, currentToken, position);
-            log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
                 log("Returning an empty list because completion was inside a comment.");
@@ -2480,14 +2480,14 @@ module ts {
             // Note: previousToken can be undefined if we are the beginning of the file
             start = new Date().getTime();
             let previousToken = findPrecedingToken(position, sourceFile);
-            log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
             if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
                 let start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
@@ -2594,7 +2594,7 @@ module ts {
                 }
             }
 
-            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return { symbols, isMemberCompletion, isNewIdentifierLocation, location };
 

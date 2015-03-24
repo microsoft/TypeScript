@@ -10611,7 +10611,6 @@ module ts {
                 if (symbol.flags & meaning) {
                     let id = symbol.name;
                     if (!isReservedMemberName(id) && !hasProperty(symbols, id)) {
-                        // If no predicate was supplied, then just add the symbol as is.
                         symbols[id] = symbol;
                     }
                 }
