@@ -2,7 +2,7 @@ tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassC
 
 
 ==== tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassConstructorParameter4.ts (1 errors) ====
-    declare function dec(target: Function, parameterIndex: number): void;
+    declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
     
     class C {
         constructor(public @dec p: number) {}

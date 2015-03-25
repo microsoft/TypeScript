@@ -6,22 +6,22 @@ class C {
 }
 
 //// [decoratorOnClassMethod4.js]
-var __decorate = this.__decorate || function (decorators, target, key) {
-    var kind = key == null ? 0 : typeof key == "number" ? 1 : 2, result = target;
-    if (kind == 2) result = Object.getOwnPropertyDescriptor(target, typeof key == "symbol" ? key : key = String(key));
+var __decorate = this.__decorate || function (decorators, target, key, value) {
+    var kind = typeof (arguments.length == 2 ? value = target : value);
     for (var i = decorators.length - 1; i >= 0; --i) {
         var decorator = decorators[i];
-        result = (kind == 0 ? decorator(result) : kind == 1 ? decorator(target, key) : decorator(target, key, result)) || result;
-    }
-    if (kind == 2 && result) Object.defineProperty(target, key, result);
-    if (kind == 0) return result;
-};
-let C = () => {
-    class C {
-        [_a = "method"]() {
+        switch (kind) {
+            case "function": value = decorator(value) || value; break;
+            case "number": decorator(target, key, value); break;
+            case "undefined": decorator(target, key); break;
+            case "object": value = decorator(target, key, value) || value; break;
         }
     }
-    __decorate([dec], C.prototype, _a);
-    return C;
-    var _a;
-}();
+    return value;
+};
+class C {
+    [_a = "method"]() {
+    }
+}
+Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
+var _a;

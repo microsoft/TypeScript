@@ -1,14 +1,8 @@
 === tests/cases/conformance/decorators/class/property/decoratorOnClassProperty2.ts ===
-declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
->dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->T : T
+declare function dec(target: any, propertyKey: string): void;
+>dec : (target: any, propertyKey: string) => void
 >target : any
 >propertyKey : string
->descriptor : TypedPropertyDescriptor<T>
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
 
 class C {
 >C : C

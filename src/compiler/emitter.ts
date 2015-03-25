@@ -2532,7 +2532,6 @@ module ts {
                     //
                     // The emit for the decorated computed property decorator is:
                     //
-                    //   _a = typeof _a == "symbol" ? _a : String(_a);
                     //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
                     //
                     if (nodeIsDecorated(node.parent)) {
@@ -4887,83 +4886,76 @@ module ts {
             }
             
             function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
-                if (isES6ModuleMemberDeclaration(node)) {
-                    write("export ");
+                let thisNodeIsDecorated = nodeIsDecorated(node);
+                if (thisNodeIsDecorated) {
+                    // To preserve the correct runtime semantics when decorators are applied to the class,
+                    // the emit needs to follow one of the following rules:
+                    //
+                    // * For a local class declaration:
+                    //
+                    //     @dec class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let C = class {
+                    //     };
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //
+                    // * For an exported class declaration:
+                    //
+                    //     @dec export class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     export let C = class {
+                    //     };
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //
+                    // * For a default export of a class declaration with a name:
+                    //
+                    //     @dec default export class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let C = class {
+                    //     }
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //     export default C;
+                    //
+                    // * For a default export of a class declaration without a name:
+                    //
+                    //     @dec default export class {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let _default = class {
+                    //     }
+                    //     _default = __decorate([dec], _default);
+                    //     export default _default;
+                    //
 
+                    if (isES6ModuleMemberDeclaration(node) && !(node.flags & NodeFlags.Default)) {
+                        write("export ");
+                    }
+
+                    write("let ");
+                    emitDeclarationName(node);
+                    write(" = ");
+                }
+                else if (isES6ModuleMemberDeclaration(node)) {                    
+                    write("export ");
                     if (node.flags & NodeFlags.Default) {
                         write("default ");
                     }
                 }
-
-                let thisNodeIsDecorated = nodeIsDecorated(node);
-                let thisNodeOrChildrenAreDecorated = nodeOrChildIsDecorated(node);                
-                if (thisNodeOrChildrenAreDecorated) {
-                    // When decorations are applied to a class, they may need to introduce new
-                    // temporary variables or even replace the class constructor. As such, we
-                    // need to ensure all decorators are applied before the declaration is
-                    // visible, and avoid unnecessarily leaking internal temporary state to the
-                    // module or global scope. 
-                    //
-                    // We also may need to alias the class declaration to avoid a pitfall in 
-                    // ES6 classes due to the fact that the class identifier is doubly-bound both
-                    // in its outer scope and its class body. A class decorator could replace the 
-                    // class constructor. In that case, we need to emit the class as a class expression
-                    // without an identifier, and assign that name later using Object.defineProperty 
-                    // (since the `name` property of a class/function is `writable:false` but 
-                    // `configurable:true`).
-                    // 
-                    //
-                    // Given the class:
-                    //
-                    //   @dec 
-                    //   class C {
-                    //     static x() {}
-                    //     y() { C.x(); }
-                    //   }
-                    //
-                    // The ES6 emit for the is:
-                    //
-                    //   let C = () => {
-                    //       let C = class {
-                    //           static x() {}
-                    //           y() { C.x(); }
-                    //       }
-                    //       Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //       C = __decorate([dec], C);
-                    //       return C;
-                    //   }();
-                    //
-
-                    // if this is not an export, emit the name
-                    if (!(node.flags & NodeFlags.Default)) {
-                        write("let ");
-                        emitDeclarationName(node);
-                        write(" = ");
-                    }
-
-                    // begin the IIFE
-                    write("() => {");
-
-                    // keep our generated state private
-                    var saveTempCount = tempCount;
-                    var saveTempVariables = tempVariables;
-                    var saveTempParameters = tempParameters;
-                    var saveGeneratedComputedPropertyNames = generatedComputedPropertyNames;
-                    tempCount = 0;
-                    tempVariables = undefined;
-                    tempParameters = undefined;
-                    generatedComputedPropertyNames = undefined;
-
-                    increaseIndent();
-                    writeLine();
-
-                    if (thisNodeIsDecorated) {
-                        write("let ");
-                        emitDeclarationName(node);
-                        write(" = ");
-                    }
-                }
-
+                
                 write("class");
                 
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
@@ -4996,14 +4988,17 @@ module ts {
                 //   }
                 //   Object.defineProperty(C, "name", { value: "C", configurable: true });
                 //
-                if ((node.name || !(node.flags & NodeFlags.Default)) && thisNodeIsDecorated) {
-                    writeLine();
-                    write("Object.defineProperty(");
-                    emitDeclarationName(node);
-                    write(", \"name\", { value: \"");
-                    emitDeclarationName(node);
-                    write("\", configurable: true });");
-                    writeLine();
+                if (thisNodeIsDecorated) {
+                    write(";");
+                    if (node.name) {
+                        writeLine();
+                        write("Object.defineProperty(");
+                        emitDeclarationName(node);
+                        write(", \"name\", { value: \"");
+                        emitDeclarationName(node);
+                        write("\", configurable: true });");
+                        writeLine();
+                    }
                 }
 
                 // Emit static property assignment. Because classDeclaration is lexically evaluated,
@@ -5013,35 +5008,24 @@ module ts {
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
                 writeLine();
                 emitMemberAssignments(node, NodeFlags.Static);
+                emitDecoratorsOfClass(node);
 
-                if (thisNodeOrChildrenAreDecorated) {
-                    writeLine();
-                    emitDecoratorsOfClass(node);
-
-                    write("return ");
-                    emitDeclarationName(node);
-                    write(";");
-
-                    emitTempDeclarations(/*newLine*/ true);
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
-                    tempParameters = saveTempParameters;
-                    generatedComputedPropertyNames = saveGeneratedComputedPropertyNames;
-
-                    decreaseIndent();
-                    writeLine();
-                    write("}();");
-                }
-
-                // If this is an exported class, but not on the top level (i.e. on an internal
-                // module), export it
                 if (!isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                    // If this is an exported class, but not on the top level (i.e. on an internal
+                    // module), export it
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
                     emitDeclarationName(node);
                     emitEnd(node);
+                    write(";");
+                }
+                else if (isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
+                    // if this is a top level default export of decorated class, write the export after the declaration.
+                    writeLine();
+                    write("export default ");
+                    emitDeclarationName(node);
                     write(";");
                 }
             }
@@ -5152,15 +5136,14 @@ module ts {
                 //
                 // The emit for the class is:
                 //
-                //   C = __decorate([dec], C, void 0, C);
+                //   C = __decorate([dec], C);
                 //
 
+                writeLine();
                 emitStart(node);
                 emitDeclarationName(node);
                 write(" = ");
                 emitDecorateStart(node.decorators);
-                emitDeclarationName(node);
-                write(", void 0, ");
                 emitDeclarationName(node);
                 write(");");
                 emitEnd(node);
@@ -5236,6 +5219,7 @@ module ts {
                     //   __decorate([dec], C.prototype, "prop");
                     //
 
+                    writeLine();
                     emitStart(member);
                     if (member.kind !== SyntaxKind.PropertyDeclaration) {
                         write("Object.defineProperty(");
@@ -5286,7 +5270,7 @@ module ts {
                     //
                     // The emit for a constructor is:
                     //
-                    //   __decorate([dec], C.prototype, void 0, 0);
+                    //   __decorate([dec], C, void 0, 0);
                     //
                     // The emit for a parameter is:
                     //
@@ -5297,16 +5281,18 @@ module ts {
                     //   __decorate([dec], C.prototype, "accessor", 0);
                     //
 
+                    writeLine();
                     emitStart(parameter);
                     emitDecorateStart(parameter.decorators);
                     emitStart(parameter.name);
-                    emitClassMemberPrefix(node, member);
-                    write(", ");
 
                     if (member.kind === SyntaxKind.Constructor) {
-                        write("void 0");
+                        emitDeclarationName(node);
+                        write(", void 0");
                     }
                     else {
+                        emitClassMemberPrefix(node, member);
+                        write(", ");
                         emitExpressionForPropertyName(member.name);
                     }
 
@@ -6028,17 +6014,17 @@ module ts {
                 if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
                     writeHelper(`
 var __decorate = this.__decorate || function (decorators, target, key, value) {
-    var kind = typeof value;
+    var kind = typeof (arguments.length == 2 ? value = target : value);
     for (var i = decorators.length - 1; i >= 0; --i) {
         var decorator = decorators[i];
         switch (kind) {
-            case "object": value = decorator(target, key, value) || value; break;
+            case "function": value = decorator(value) || value; break;
             case "number": decorator(target, key, value); break;
-            case "function": target = decorator(target) || target; break;
             case "undefined": decorator(target, key); break;
+            case "object": value = decorator(target, key, value) || value; break;
         }
     }
-    return value || target;
+    return value;
 };`);
                     decorateEmitted = true;
                 }

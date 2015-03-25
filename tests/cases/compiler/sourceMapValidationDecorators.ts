@@ -2,10 +2,10 @@
 // @target: es5
 declare function ClassDecorator1(target: Function): void;
 declare function ClassDecorator2(x: number): (target: Function) => void;
-declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void;
-declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor: PropertyDescriptor) => void;
-declare function ParameterDecorator1(target: Function, paramIndex: number): void;
-declare function ParameterDecorator2(x: number): (target: Function, paramIndex: number) => void;
+declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
+declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
+declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
+declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
 
 @ClassDecorator1
 @ClassDecorator2(10)
@@ -47,12 +47,10 @@ class Greeter {
         return this.greeting;
     }
 
-    @PropertyDecorator1
-    @PropertyDecorator2(90)
     set greetings(
       @ParameterDecorator1 
       @ParameterDecorator2(90) 
       greetings: string) {
         this.greeting = greetings;
-    }
+    }    
 }
