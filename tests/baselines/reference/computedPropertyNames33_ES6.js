@@ -13,15 +13,12 @@ class C<T> {
 function foo() {
     return '';
 }
-var C = (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+class C {
+    bar() {
         var obj = {
             [foo()]() {
             }
         };
         return 0;
-    };
-    return C;
-})();
+    }
+}

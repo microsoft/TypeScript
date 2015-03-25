@@ -12,11 +12,8 @@ class StringIterator {
 var v;
 for (v of new StringIterator) {
 } // Should fail
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype[Symbol.iterator] = function () {
+class StringIterator {
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

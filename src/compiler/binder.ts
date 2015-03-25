@@ -346,13 +346,14 @@ module ts {
                 }
                 else {
                     bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
-                    if (state === ModuleInstanceState.ConstEnumOnly) {
-                        // mark value module as module that contains only enums
-                        node.symbol.constEnumOnlyModule = true;
+                    let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                    if (node.symbol.constEnumOnlyModule === undefined) {
+                        // non-merged case - use the current state
+                        node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
                     }
-                    else if (node.symbol.constEnumOnlyModule) {
-                        // const only value module was merged with instantiated module - reset flag
-                        node.symbol.constEnumOnlyModule = false;
+                    else {
+                        // merged case: module is const enum only if all its pieces are non-instantiated or const enum
+                        node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
                     }
                 }
             }
@@ -529,7 +530,7 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                    if ((<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
                     }

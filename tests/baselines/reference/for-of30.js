@@ -19,18 +19,17 @@ class StringIterator {
 //// [for-of30.js]
 for (var v of new StringIterator) {
 }
-var StringIterator = (function () {
-    function StringIterator() {
+class StringIterator {
+    constructor() {
         this.return = 0;
     }
-    StringIterator.prototype.next = function () {
+    next() {
         return {
             done: false,
             value: ""
         };
-    };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

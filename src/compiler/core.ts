@@ -122,8 +122,10 @@ module ts {
     }
 
     export function addRange<T>(to: T[], from: T[]): void {
-        for (let v of from) {
-            to.push(v);
+        if (to && from) {
+            for (let v of from) {
+                to.push(v);
+            }
         }
     } 
 
@@ -158,6 +160,39 @@ module ts {
         }
 
         return ~low;
+    }
+
+    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var count = array.length;
+            if (count > 0) {
+                var pos = 0;
+                var result = arguments.length <= 2 ? array[pos++] : initial;
+                while (pos < count) {
+                    result = f(<U>result, array[pos++]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
+    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var pos = array.length - 1;
+            if (pos >= 0) {
+                var result = arguments.length <= 2 ? array[pos--] : initial;
+                while (pos >= 0) {
+                    result = f(<U>result, array[pos--]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
     }
 
     let hasOwnProperty = Object.prototype.hasOwnProperty;

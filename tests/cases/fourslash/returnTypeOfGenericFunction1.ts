@@ -7,4 +7,4 @@
 ////var /**/y = x.map(s => s.length);
 
 goTo.marker();
-verify.quickInfoIs('(var) y: number[]');
+verify.quickInfoIs('var y: number[]');

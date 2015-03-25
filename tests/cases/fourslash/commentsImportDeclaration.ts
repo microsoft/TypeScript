@@ -34,18 +34,18 @@ goTo.marker('6');
 verify.memberListContains("m1", "module extMod.m1");
 
 goTo.marker('7');
-verify.memberListContains("b", "(var) extMod.m1.b: number", "b's comment");
-verify.memberListContains("fooExport", "(function) extMod.m1.fooExport(): number", "exported function");
+verify.memberListContains("b", "var extMod.m1.b: number", "b's comment");
+verify.memberListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
 verify.memberListContains("m2", "module extMod.m1.m2");
 
 goTo.marker('8');
 verify.currentSignatureHelpDocCommentIs("exported function");
 goTo.marker('8q');
-verify.quickInfoIs("(function) extMod.m1.fooExport(): number", "exported function");
+verify.quickInfoIs("function extMod.m1.fooExport(): number", "exported function");
 
 goTo.marker('9');
-verify.quickInfoIs("(var) newVar: extMod.m1.m2.c", "");
+verify.quickInfoIs("var newVar: extMod.m1.m2.c", "");
 
 goTo.marker('10');
-verify.memberListContains("c", "(constructor) extMod.m1.m2.c(): extMod.m1.m2.c", "");
-verify.memberListContains("i", "(var) extMod.m1.m2.i: extMod.m1.m2.c", "i");
+verify.memberListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
+verify.memberListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");

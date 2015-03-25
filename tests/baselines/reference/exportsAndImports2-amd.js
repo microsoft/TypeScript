@@ -19,12 +19,12 @@ define(["require", "exports"], function (require, exports) {
     exports.y = "y";
 });
 //// [t2.js]
-define(["require", "exports", "./t1"], function (require, exports, _t1) {
-    exports.y = _t1.x;
-    exports.x = _t1.y;
+define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    exports.y = t1_1.x;
+    exports.x = t1_1.y;
 });
 //// [t3.js]
-define(["require", "exports", "./t1"], function (require, exports, _t1) {
-    exports.y = _t1.x;
-    exports.x = _t1.y;
+define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    exports.y = t1_1.x;
+    exports.x = t1_1.y;
 });

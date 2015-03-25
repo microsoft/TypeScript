@@ -22,13 +22,13 @@
 ////var /*5*/c3 = [a2, b2, i];
 
 goTo.marker('1');
-verify.quickInfoIs('(var) c: {\n    name: string;\n    age: number;\n}[]');
+verify.quickInfoIs('var c: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) c1: {\n    name: string;\n    age: number;\n}[]');
+verify.quickInfoIs('var c1: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) c2: ({\n\
+verify.quickInfoIs('var c2: ({\n\
     name: string;\n\
     age: number;\n\
     address: string;\n\
@@ -39,8 +39,8 @@ verify.quickInfoIs('(var) c2: ({\n\
 })[]');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) c2a: {\n    name: string;\n    age: number;\n}[]');
+verify.quickInfoIs('var c2a: {\n    name: string;\n    age: number;\n}[]');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) c3: I[]');
+verify.quickInfoIs('var c3: I[]');
 

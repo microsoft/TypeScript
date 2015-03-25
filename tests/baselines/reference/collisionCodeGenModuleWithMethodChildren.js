@@ -34,37 +34,37 @@ module M { // Shouldnt bn _M
 
 //// [collisionCodeGenModuleWithMethodChildren.js]
 var M;
-(function (_M) {
-    _M.x = 3;
+(function (M_1) {
+    M_1.x = 3;
     var c = (function () {
         function c() {
         }
         c.prototype.fn = function (M, p) {
-            if (p === void 0) { p = _M.x; }
+            if (p === void 0) { p = M_1.x; }
         };
         return c;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_1) {
+(function (M_2) {
     var d = (function () {
         function d() {
         }
         d.prototype.fn2 = function () {
             var M;
-            var p = _M_1.x;
+            var p = M_2.x;
         };
         return d;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_2) {
+(function (M_3) {
     var e = (function () {
         function e() {
         }
         e.prototype.fn3 = function () {
             function M() {
-                var p = _M_2.x;
+                var p = M_3.x;
             }
         };
         return e;

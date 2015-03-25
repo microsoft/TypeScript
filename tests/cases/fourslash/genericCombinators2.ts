@@ -95,40 +95,40 @@ goTo.marker('8b');
 verify.quickInfoIs('(parameter) y: any'); // Specialized to any because no type argument was specified
 
 goTo.marker('9');
-verify.quickInfoIs('(var) r1a: Collection<number, string>');
+verify.quickInfoIs('var r1a: Collection<number, string>');
 goTo.marker('10');
-verify.quickInfoIs('(var) r1b: Collection<number, string>');
+verify.quickInfoIs('var r1b: Collection<number, string>');
 goTo.marker('11');
-verify.quickInfoIs('(var) r2a: Collection<Collection<number, number>, number>');
+verify.quickInfoIs('var r2a: Collection<Collection<number, number>, number>');
 goTo.marker('12');
-verify.quickInfoIs('(var) r2b: Collection<Collection<number, number>, number>');
+verify.quickInfoIs('var r2b: Collection<Collection<number, number>, number>');
 goTo.marker('13');
-verify.quickInfoIs('(var) r3a: Collection<number, {}>');
+verify.quickInfoIs('var r3a: Collection<number, {}>');
 goTo.marker('14');
-verify.quickInfoIs('(var) r3b: Collection<number, {}>');
+verify.quickInfoIs('var r3b: Collection<number, {}>');
 goTo.marker('15');
-verify.quickInfoIs('(var) r4a: Collection<number, any>');
+verify.quickInfoIs('var r4a: Collection<number, any>');
 
 goTo.marker('17');
-verify.quickInfoIs('(var) r5a: Collection<T, V>'); // This is actually due to an error because toFixed does not return a Date
+verify.quickInfoIs('var r5a: Collection<T, V>'); // This is actually due to an error because toFixed does not return a Date
 
 goTo.marker('18');
-verify.quickInfoIs('(var) r5b: Collection<number, Date>');
+verify.quickInfoIs('var r5b: Collection<number, Date>');
 
 goTo.marker('19');
-verify.quickInfoIs('(var) r6a: Collection<Collection<number, number>, Date>');
+verify.quickInfoIs('var r6a: Collection<Collection<number, number>, Date>');
 
 goTo.marker('20');
-verify.quickInfoIs('(var) r6b: Collection<Collection<number, number>, Date>');
+verify.quickInfoIs('var r6b: Collection<Collection<number, number>, Date>');
 
 goTo.marker('21');
-verify.quickInfoIs('(var) r7a: Collection<T, V>'); // This call is an error because y.foo() does not return a string
+verify.quickInfoIs('var r7a: Collection<T, V>'); // This call is an error because y.foo() does not return a string
 
 goTo.marker('22');
-verify.quickInfoIs('(var) r7b: Collection<T, V>'); // This call is an error because y.foo() does not return a string
+verify.quickInfoIs('var r7b: Collection<T, V>'); // This call is an error because y.foo() does not return a string
 
 goTo.marker('23');
-verify.quickInfoIs('(var) r8a: Collection<number, string>');
+verify.quickInfoIs('var r8a: Collection<number, string>');
 
 verify.errorExistsBetweenMarkers('error1', 'error2');
 verify.errorExistsBetweenMarkers('17error1', '17error2');

@@ -51,19 +51,19 @@ define(["require", "exports"], function (require, exports) {
     exports.z = z;
 });
 //// [t4.js]
-define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, _t1, _t2, _t3) {
+define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
-    __export(_t1);
-    __export(_t2);
-    __export(_t3);
+    __export(t1_1);
+    __export(t2_1);
+    __export(t3_1);
 });
 //// [main.js]
-define(["require", "exports", "./t4"], function (require, exports, _t4) {
-    _t4.default;
-    _t4.x;
-    _t4.y;
-    _t4.z;
-    _t4.foo;
+define(["require", "exports", "./t4"], function (require, exports, t4_1) {
+    t4_1.default;
+    t4_1.x;
+    t4_1.y;
+    t4_1.z;
+    t4_1.foo;
 });

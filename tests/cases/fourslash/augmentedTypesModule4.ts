@@ -7,7 +7,7 @@
 ////var /*4*/r2 = m3d./*3*/
 
 goTo.marker('1');
-verify.quickInfoIs('(var) r: m3d');
+verify.quickInfoIs('var r: m3d');
 
 goTo.marker('2');
 verify.completionListContains('foo');
@@ -18,4 +18,4 @@ verify.completionListContains('y');
 edit.insert('y;');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) r2: number');
+verify.quickInfoIs('var r2: number');

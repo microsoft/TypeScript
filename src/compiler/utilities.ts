@@ -1,4 +1,4 @@
-/// <reference path="types.ts" />
+/// <reference path="binder.ts" />
 
 module ts {
     export interface ReferencePathMatchResult {
@@ -361,16 +361,16 @@ module ts {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
-    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile) {
-        sourceFileOfNode = sourceFileOfNode || getSourceFileOfNode(node);
-
+    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                // e.g.:     (
-                //            /** blah */ a,
-                //            /** blah */ b);
+
+            // e.g.:     (
+            //            /** blah */ a,
+            //            /** blah */ b);
+            return concatenate(
+                getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
                 getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
         }
         else {
@@ -573,6 +573,83 @@ module ts {
         
         // Will either be a CallExpression or NewExpression.
         return (<CallExpression>node).expression;
+    }
+
+    export function nodeCanBeDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                // classes are valid targets
+                return true;
+
+            case SyntaxKind.PropertyDeclaration:
+                // property declarations are valid if their parent is a class declaration.
+                return node.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.Parameter:
+                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                // if this method has a body and its parent is a class declaration, this is a valid target.
+                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+        }
+
+        return false;
+    }
+
+    export function nodeIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.Parameter:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.GetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+        }
+
+        return false;
+    }
+    
+    export function childIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
+        }
+
+        return false;
+    }
+
+    export function nodeOrChildIsDecorated(node: Node): boolean {
+        return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
     export function isExpression(node: Node): boolean {
@@ -808,6 +885,20 @@ module ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isClassElement(n: Node): boolean {
+        switch (n.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.IndexSignature:
                 return true;
             default:
                 return false;
@@ -1229,28 +1320,6 @@ module ts {
         return node;
     }
 
-    export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
-        // First try '_name'
-        if (baseName.charCodeAt(0) !== CharacterCodes._) {
-            baseName = "_" + baseName;
-            if (!isExistingName(baseName)) {
-                return baseName;
-            }
-        }
-        // Find the first unique '_name_n', where n is a positive number
-        if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
-            baseName += "_";
-        }
-        let i = 1;
-        while (true) {
-            let name = baseName + i;
-            if (!isExistingName(name)) {
-                return name;
-            }
-            i++;
-        }
-    }
-
     // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
@@ -1381,4 +1450,322 @@ module ts {
             s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
             s;
     }
+
+    export interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+    }
+
+    let indentStrings: string[] = ["", "    "];
+    export function getIndentString(level: number) {
+        if (indentStrings[level] === undefined) {
+            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        }
+        return indentStrings[level];
+    }
+
+    export function getIndentSize() {
+        return indentStrings[1].length;
+    }
+
+    export function createTextWriter(newLine: String): EmitTextWriter {
+        let output = "";
+        let indent = 0;
+        let lineStart = true;
+        let lineCount = 0;
+        let linePos = 0;
+
+        function write(s: string) {
+            if (s && s.length) {
+                if (lineStart) {
+                    output += getIndentString(indent);
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function rawWrite(s: string) {
+            if (s !== undefined) {
+                if (lineStart) {
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function writeLiteral(s: string) {
+            if (s && s.length) {
+                write(s);
+                let lineStartsOfS = computeLineStarts(s);
+                if (lineStartsOfS.length > 1) {
+                    lineCount = lineCount + lineStartsOfS.length - 1;
+                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                }
+            }
+        }
+
+        function writeLine() {
+            if (!lineStart) {
+                output += newLine;
+                lineCount++;
+                linePos = output.length;
+                lineStart = true;
+            }
+        }
+
+        function writeTextOfNode(sourceFile: SourceFile, node: Node) {
+            write(getSourceTextOfNodeFromSourceFile(sourceFile, node));
+        }
+
+        return {
+            write,
+            rawWrite,
+            writeTextOfNode,
+            writeLiteral,
+            writeLine,
+            increaseIndent: () => indent++,
+            decreaseIndent: () => indent--,
+            getIndent: () => indent,
+            getTextPos: () => output.length,
+            getLine: () => lineCount + 1,
+            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getText: () => output,
+        };
+    }
+
+    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+        let compilerOptions = host.getCompilerOptions();
+        let emitOutputFilePathWithoutExtension: string;
+        if (compilerOptions.outDir) {
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+        }
+        else {
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+        }
+
+        return emitOutputFilePathWithoutExtension + extension;
+    }
+
+    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
+        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
+        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
+        return combinePaths(newDirPath, sourceFilePath);
+    }
+
+    export function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
+        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
+        });
+    }
+
+    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
+        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    }
+
+    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+        return forEach(node.members, member => {
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
+                return <ConstructorDeclaration>member;
+            }
+        });
+    }
+
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        if (!isDeclarationFile(sourceFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
+        let firstAccessor: AccessorDeclaration;
+        let secondAccessor: AccessorDeclaration;
+        let getAccessor: AccessorDeclaration;
+        let setAccessor: AccessorDeclaration;
+        if (hasDynamicName(accessor)) {
+            firstAccessor = accessor;
+            if (accessor.kind === SyntaxKind.GetAccessor) {
+                getAccessor = accessor;
+            }
+            else if (accessor.kind === SyntaxKind.SetAccessor) {
+                setAccessor = accessor;
+            }
+            else {
+                Debug.fail("Accessor has wrong kind");
+            }
+        }
+        else {
+            forEach(declarations, (member: Declaration) => {
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    let memberName = getPropertyNameForPropertyNameNode(member.name);
+                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    if (memberName === accessorName) {
+                        if (!firstAccessor) {
+                            firstAccessor = <AccessorDeclaration>member;
+                        }
+                        else if (!secondAccessor) {
+                            secondAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            getAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            setAccessor = <AccessorDeclaration>member;
+                        }
+                    }
+                }
+            });
+        }
+        return {
+            firstAccessor,
+            secondAccessor,
+            getAccessor,
+            setAccessor
+        };
+    }
+
+    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+        // If the leading comments start on different line than the start of node, write new line
+        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
+            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+            writer.writeLine();
+        }
+    }
+
+    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+        let emitLeadingSpace = !trailingSeparator;
+        forEach(comments, comment => {
+            if (emitLeadingSpace) {
+                writer.write(" ");
+                emitLeadingSpace = false;
+            }
+            writeComment(currentSourceFile, writer, comment, newLine);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else if (trailingSeparator) {
+                writer.write(" ");
+            }
+            else {
+                // Emit leading space to separate comment during next comment emit
+                emitLeadingSpace = true;
+            }
+        });
+    }
+
+    export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+            let lineCount = getLineStarts(currentSourceFile).length;
+            let firstCommentLineIndent: number;
+            for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                let nextLineStart = (currentLine + 1) === lineCount
+                    ? currentSourceFile.text.length + 1
+                    : getStartPositionOfLine(currentLine + 1, currentSourceFile);
+
+                if (pos !== comment.pos) {
+                    // If we are not emitting first line, we need to write the spaces to adjust the alignment
+                    if (firstCommentLineIndent === undefined) {
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
+                    }
+
+                    // These are number of spaces writer is going to write at current indent
+                    let currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+
+                    // Number of spaces we want to be writing
+                    // eg: Assume writer indent
+                    // module m {
+                    //         /* starts at character 9 this is line 1
+                    //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                    //   More left indented comment */                            --2  = 8 - 8 + 2
+                    //     class c { }
+                    // }
+                    // module m {
+                    //     /* this is line 1 -- Assume current writer indent 8
+                    //      * line                                                --3 = 8 - 4 + 5
+                    //            More right indented comment */                  --4 = 8 - 4 + 11
+                    //     class c { }
+                    // }
+                    let spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    if (spacesToEmit > 0) {
+                        let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                        let indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                        // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                        writer.rawWrite(indentSizeSpaceString);
+
+                        // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                        while (numberOfSingleSpacesToEmit) {
+                            writer.rawWrite(" ");
+                            numberOfSingleSpacesToEmit--;
+                        }
+                    }
+                    else {
+                        // No spaces to emit write empty string
+                        writer.rawWrite("");
+                    }
+                }
+
+                // Write the comment line text
+                writeTrimmedCurrentLine(pos, nextLineStart);
+
+                pos = nextLineStart;
+            }
+        }
+        else {
+            // Single line comment of style //....
+            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+        }
+
+        function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+            let end = Math.min(comment.end, nextLineStart - 1);
+            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            if (currentLineText) {
+                // trimmed forward and ending spaces text
+                writer.write(currentLineText);
+                if (end !== comment.end) {
+                    writer.writeLine();
+                }
+            }
+            else {
+                // Empty string - make sure we write empty line
+                writer.writeLiteral(newLine);
+            }
+        }
+
+        function calculateIndent(pos: number, end: number) {
+            let currentLineIndent = 0;
+            for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
+                if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                    // Tabs = TabSize = indent size and go to next tabStop
+                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                }
+                else {
+                    // Single space
+                    currentLineIndent++;
+                }
+            }
+
+            return currentLineIndent;
+        }
+    }
+
 }

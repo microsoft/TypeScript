@@ -259,30 +259,25 @@ var m;
     lable: let l2 = 0;
 })(m || (m = {}));
 // methods
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         let l = 0;
         n = l;
     }
-    C.prototype.method = function () {
+    method() {
         let l = 0;
         n = l;
-    };
-    Object.defineProperty(C.prototype, "v", {
-        get: function () {
-            let l = 0;
-            n = l;
-            return n;
-        },
-        set: function (value) {
-            let l = 0;
-            n = l;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    }
+    get v() {
+        let l = 0;
+        n = l;
+        return n;
+    }
+    set v(value) {
+        let l = 0;
+        n = l;
+    }
+}
 // object literals
 var o = {
     f() {

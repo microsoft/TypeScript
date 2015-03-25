@@ -8,11 +8,8 @@ class C {
 }
 
 //// [symbolProperty42.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype[Symbol.iterator] = function (x) {
+class C {
+    [Symbol.iterator](x) {
         return undefined;
-    };
-    return C;
-})();
+    }
+}
