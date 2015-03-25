@@ -428,7 +428,35 @@ module ts.server {
         }
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
-            throw new Error("Not Implemented Yet.");
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.SignatureHelpRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset
+            };
+            
+            var request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
+            var response = this.processResponse<protocol.SignatureHelpResponse>(request);
+            
+            if (!response.body) {
+                return undefined;
+            }
+            var helpItems: protocol.SignatureHelpItems = response.body;
+            var span = helpItems.applicableSpan;
+            var start = this.lineOffsetToPosition(fileName, span.start);
+            var end = this.lineOffsetToPosition(fileName, span.end);
+            
+            var result: SignatureHelpItems = {
+                items: helpItems.items,
+                applicableSpan: {
+                    start: start,
+                    length: end - start
+                },
+                selectedItemIndex: helpItems.selectedItemIndex,
+                argumentIndex: helpItems.argumentIndex,
+                argumentCount: helpItems.argumentCount,                
+            }
+            return result;
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {

@@ -593,7 +593,7 @@ module ts.server {
             }
             
             var span = helpItems.applicableSpan;
-            var result:protocol.SignatureHelpItems = {
+            var result: protocol.SignatureHelpItems = {
                 items: helpItems.items,
                 applicableSpan: {
                     start: compilerService.host.positionToLineOffset(file, span.start),

@@ -644,7 +644,7 @@ declare module ts.server.protocol {
         separatorDisplayParts: SymbolDisplayPart[];
         
         /**
-         * The signatiure helps items for the parameters. 
+         * The signature helps items for the parameters. 
          */        
         parameters: SignatureHelpParameter[];
                 
@@ -655,17 +655,17 @@ declare module ts.server.protocol {
     }
     
     /**
-     * Signation help items found in the response of a signature help request.
+     * Signature help items found in the response of a signature help request.
      */
     export interface SignatureHelpItems {
       
         /**
-         * The signaure help items.    
+         * The signature help items.    
          */        
         items: SignatureHelpItem[];
                 
         /**
-         * @steveluc
+         * The span for which signature help should appear on a signature 
          */        
         applicableSpan: TextSpan;
                 
@@ -680,7 +680,7 @@ declare module ts.server.protocol {
         argumentIndex: number;
         
         /**
-         * The argument counts
+         * The argument count
          */        
         argumentCount: number;
     }
