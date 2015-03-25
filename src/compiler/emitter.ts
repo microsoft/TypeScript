@@ -2707,7 +2707,7 @@ module ts {
                 generatedBlockScopeNames[variableId] = generatedName;
             }
 
-            function isES6ModuleMemberDeclaration(node: Node) {
+            function isES6ExportedDeclaration(node: Node) {
                 return !!(node.flags & NodeFlags.Export) &&
                     languageVersion >= ScriptTarget.ES6 &&
                     node.parent.kind === SyntaxKind.SourceFile;
@@ -2866,7 +2866,7 @@ module ts {
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
-                    if (isES6ModuleMemberDeclaration(node)) {
+                    if (isES6ExportedDeclaration(node)) {
                         write("export ");
                         if (node.flags & NodeFlags.Default) {
                             write("default ");
@@ -2949,7 +2949,7 @@ module ts {
                     emitExpressionFunctionBody(node, <Expression>node.body);
                 }
 
-                if (!isES6ModuleMemberDeclaration(node)) {
+                if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
 
@@ -3372,7 +3372,7 @@ module ts {
             }
 
             function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
-                if (isES6ModuleMemberDeclaration(node)) {
+                if (isES6ExportedDeclaration(node)) {
                     write("export ");
 
                     if (node.flags & NodeFlags.Default) {
@@ -3411,7 +3411,7 @@ module ts {
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (!isES6ModuleMemberDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                if (!isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Export)) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -3485,7 +3485,7 @@ module ts {
                     return;
                 }
 
-                if (!(node.flags & NodeFlags.Export) || isES6ModuleMemberDeclaration(node)) {
+                if (!(node.flags & NodeFlags.Export) || isES6ExportedDeclaration(node)) {
                     emitStart(node);
                     write("var ");
                     emit(node.name);
@@ -3512,7 +3512,7 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (isES6ModuleMemberDeclaration(node)) {
+                if (isES6ExportedDeclaration(node)) {
                     emitES6NamedExportForDeclaration(node);
                 }
                 else if (node.flags & NodeFlags.Export) {
@@ -3619,7 +3619,7 @@ module ts {
                 }
                 write(")(");
                 // write moduleDecl = containingModule.m only if it is not exported es6 module member
-                if ((node.flags & NodeFlags.Export) && !isES6ModuleMemberDeclaration(node)) {
+                if ((node.flags & NodeFlags.Export) && !isES6ExportedDeclaration(node)) {
                     emit(node.name);
                     write(" = ");
                 }
@@ -3628,7 +3628,7 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (isES6ModuleMemberDeclaration(node)) {
+                if (isES6ExportedDeclaration(node)) {
                     emitES6NamedExportForDeclaration(node);
                 }
                 else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
@@ -3820,7 +3820,7 @@ module ts {
                     (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
-                    if (isES6ModuleMemberDeclaration(node)) {
+                    if (isES6ExportedDeclaration(node)) {
                         write("export ");
                         write("var ");
                     }
