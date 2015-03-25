@@ -115,11 +115,17 @@ module ts {
         let globalIterableType: ObjectType;
 
         let anyArrayType: Type;
-
+        let globalTypedPropertyDescriptorType: ObjectType;
+        let globalClassDecoratorType: ObjectType;
+        let globalParameterDecoratorType: ObjectType;
+        let globalPropertyDecoratorType: ObjectType;
+        let globalMethodDecoratorType: ObjectType;
+        
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let stringLiteralTypes: Map<StringLiteralType> = {};
         let emitExtends = false;
+        let emitDecorate = false;
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
@@ -326,6 +332,7 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
+            let grandparent: Node;
 
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
@@ -391,7 +398,7 @@ module ts {
                     //   }
                     //
                     case SyntaxKind.ComputedPropertyName:
-                        let grandparent = location.parent.parent;
+                        grandparent = location.parent.parent;
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
@@ -421,6 +428,28 @@ module ts {
                         if (id && name === id.text) {
                             result = location.symbol;
                             break loop;
+                        }
+                        break;
+                    case SyntaxKind.Decorator:
+                        // Decorators are resolved at the class declaration. Resolving at the parameter 
+                        // or member would result in looking up locals in the method.
+                        //
+                        //   function y() {}
+                        //   class C {
+                        //       method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
+                        //   }
+                        //
+                        if (location.parent && location.parent.kind === SyntaxKind.Parameter) {
+                            location = location.parent;
+                        }
+                        //
+                        //   function y() {}
+                        //   class C {
+                        //       @y method(x, y) {} // <-- decorator y should be resolved at the class declaration, not the method.
+                        //   }
+                        //
+                        if (location.parent && isClassElement(location.parent)) {
+                            location = location.parent;
                         }
                         break;
                 }
@@ -7947,7 +7976,7 @@ module ts {
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
 
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
 
             checkVariableLikeDeclaration(node);
             let func = getContainingFunction(node);
@@ -8049,7 +8078,7 @@ module ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
         }
@@ -8186,6 +8215,10 @@ module ts {
             }
 
             checkFunctionLikeDeclaration(node);
+        }
+
+        function checkMissingDeclaration(node: Node) {
+            checkDecorators(node);
         }
 
         function checkTypeReference(node: TypeReferenceNode) {
@@ -8579,6 +8612,60 @@ module ts {
             }
         }
 
+        /** Check a decorator */
+        function checkDecorator(node: Decorator): void {
+            let expression: Expression = node.expression;
+            let exprType = checkExpression(expression);
+
+            switch (node.parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    let classSymbol = getSymbolOfNode(node.parent);
+                    let classConstructorType = getTypeOfSymbol(classSymbol);
+                    let classDecoratorType = instantiateSingleCallFunctionType(globalClassDecoratorType, [classConstructorType]);
+                    checkTypeAssignableTo(exprType, classDecoratorType, node);
+                    break;
+
+                case SyntaxKind.PropertyDeclaration:
+                    checkTypeAssignableTo(exprType, globalPropertyDecoratorType, node);
+                    break;
+
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    let methodType = getTypeOfNode(node.parent);
+                    let methodDecoratorType = instantiateSingleCallFunctionType(globalMethodDecoratorType, [methodType]);
+                    checkTypeAssignableTo(exprType, methodDecoratorType, node);
+                    break;
+
+                case SyntaxKind.Parameter:
+                    checkTypeAssignableTo(exprType, globalParameterDecoratorType, node);
+                    break;
+            }
+        }
+
+        /** Check the decorators of a node */
+        function checkDecorators(node: Node): void {
+            if (!node.decorators) {
+                return;
+            }            
+
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.Parameter:
+                    emitDecorate = true;
+                    break;
+
+                default:
+                    return;
+            }
+
+            forEach(node.decorators, checkDecorator);
+        }
+
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
                 checkFunctionLikeDeclaration(node) ||
@@ -8593,6 +8680,7 @@ module ts {
         }
 
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
+            checkDecorators(node);
             checkSignatureDeclaration(node);
 
             // Do not use hasDynamicName here, because that returns false for well known symbols.
@@ -8875,6 +8963,7 @@ module ts {
 
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
+            checkDecorators(node);
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
             // Do not use hasDynamicName here, because that returns false for well known symbols.
@@ -8947,7 +9036,7 @@ module ts {
 
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
-            checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
+            checkGrammarDecorators(node) || checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
 
             forEach(node.declarationList.declarations, checkSourceElement);
         }
@@ -9578,7 +9667,7 @@ module ts {
         function checkClassDeclaration(node: ClassDeclaration) {
             // Grammar checking
             checkGrammarClassDeclarationHeritageClauses(node);
-
+            checkDecorators(node);
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -9783,7 +9872,7 @@ module ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
@@ -9820,7 +9909,7 @@ module ts {
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
@@ -10002,7 +10091,7 @@ module ts {
             }
 
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -10068,7 +10157,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking
-                if (!checkGrammarModifiers(node)) {
+                if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
                     if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -10163,7 +10252,7 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
@@ -10185,7 +10274,7 @@ module ts {
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            checkGrammarModifiers(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
                 if (node.flags & NodeFlags.Export) {
@@ -10216,7 +10305,7 @@ module ts {
         }
 
         function checkExportDeclaration(node: ExportDeclaration) {
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
             if (!node.moduleSpecifier || checkExternalImportOrExportDeclaration(node)) {
@@ -10240,7 +10329,7 @@ module ts {
                 return;
             }
             // Grammar checking
-            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
             if (node.expression) {
@@ -10418,6 +10507,8 @@ module ts {
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
+                case SyntaxKind.MissingDeclaration:
+                    return checkMissingDeclaration(node);
             }
         }
 
@@ -10542,6 +10633,10 @@ module ts {
 
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
+                }
+
+                if (emitDecorate) {
+                    links.flags |= NodeCheckFlags.EmitDecorate;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;
@@ -11189,6 +11284,20 @@ module ts {
             return undefined;
         }
 
+        function instantiateSingleCallFunctionType(functionType: Type, typeArguments: Type[]): Type {
+            if (functionType === unknownType) {
+                return unknownType;
+            }
+
+            let signature = getSingleCallSignature(functionType);
+            if (!signature) {
+                return unknownType;
+            }
+            
+            let instantiatedSignature = getSignatureInstantiation(signature, typeArguments);
+            return getOrCreateTypeFromSignature(instantiatedSignature);
+        }
+
         function createResolver(): EmitResolver {
             return {
                 getExpressionNameSubstitution,
@@ -11238,6 +11347,11 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+            globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
+            globalClassDecoratorType = getGlobalType("ClassDecorator");
+            globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
+            globalMethodDecoratorType = getGlobalType("MethodDecorator");
+            globalParameterDecoratorType = getGlobalType("ParameterDecorator");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
@@ -11262,6 +11376,25 @@ module ts {
 
 
         // GRAMMAR CHECKING
+        function checkGrammarDecorators(node: Node): boolean {
+            if (!node.decorators) {
+                return false;
+            }
+            if (!nodeCanBeDecorated(node)) {
+                return grammarErrorOnNode(node, Diagnostics.Decorators_are_not_valid_here);
+            }
+            else if (languageVersion < ScriptTarget.ES5) {
+                return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
+            }
+            else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
+                let accessors = mergeAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
+                if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
+                    return grammarErrorOnNode(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
+                }
+            }
+            return false;
+        }
+
         function checkGrammarModifiers(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
@@ -11458,7 +11591,7 @@ module ts {
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
             let file = getSourceFileOfNode(node);
-            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters, file) ||
+            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters, file) ||
                 checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
         }
 
@@ -11515,7 +11648,7 @@ module ts {
 
         function checkGrammarIndexSignature(node: SignatureDeclaration) {
             // Prevent cascading error by short-circuit
-            checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node) || checkGrammarForIndexSignatureModifier(node);
+            return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node) || checkGrammarForIndexSignatureModifier(node);
         }
 
         function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
@@ -11564,7 +11697,7 @@ module ts {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
 
-            if (!checkGrammarModifiers(node) && node.heritageClauses) {
+            if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && node.heritageClauses) {
                 for (let heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {

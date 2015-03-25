@@ -6,7 +6,7 @@ export default class {
 
 
 //// [es6ExportDefaultClassDeclaration2.js]
-export default class  {
+export default class {
     method() {
     }
 }
