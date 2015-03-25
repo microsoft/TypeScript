@@ -5,6 +5,7 @@
 export var a = 10;
 export var x = a;
 export var m = a;
+export default {};
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.ts]
 import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
@@ -25,6 +26,7 @@ var x1: number = m;
 export var a = 10;
 export var x = a;
 export var m = a;
+export default {};
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
 import { a } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
 var x1 = a;
@@ -43,4 +45,5 @@ var x1 = m;
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
+export default : {};
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]

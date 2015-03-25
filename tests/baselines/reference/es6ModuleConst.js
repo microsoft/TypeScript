@@ -21,14 +21,13 @@ export const a = "hello";
 export const x = a, y = x;
 const b = y;
 const c = b, d = c;
-var m1;
+export var m1;
 (function (m1) {
     m1.k = a;
     m1.l = b, m1.m = m1.k;
     const n = m1.k;
     const o = n, p = m1.k;
 })(m1 || (m1 = {}));
-export { m1 };
 var m2;
 (function (m2) {
     m2.k = a;

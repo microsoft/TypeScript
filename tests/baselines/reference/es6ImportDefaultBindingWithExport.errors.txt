@@ -5,7 +5,7 @@ tests/cases/compiler/client.ts(3,1): error TS1191: An import declaration cannot 
 ==== tests/cases/compiler/server.ts (0 errors) ====
     
     var a = 10;
-    export = a;
+    export default a;
     
 ==== tests/cases/compiler/client.ts (2 errors) ====
     export import defaultBinding from "server";

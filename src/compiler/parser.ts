@@ -4968,29 +4968,30 @@ module ts {
         function parseImportOrExportSpecifier(kind: SyntaxKind): ImportOrExportSpecifier {
             let node = <ImportSpecifier>createNode(kind);
             // ImportSpecifier:
-            //  ImportedBinding
-            //  IdentifierName as ImportedBinding
-            let isFirstIdentifierNameNotAnIdentifier = isKeyword(token) && !isIdentifier();
-            let start = scanner.getTokenPos();
+            //   BindingIdentifier
+            //   IdentifierName as BindingIdentifier
+            // ExportSpecififer:
+            //   IdentifierName
+            //   IdentifierName as IdentifierName
+            let checkIdentifierIsKeyword = isKeyword(token) && !isIdentifier();
+            let checkIdentifierStart = scanner.getTokenPos();
+            let checkIdentifierEnd = scanner.getTextPos();
             let identifierName = parseIdentifierName();
             if (token === SyntaxKind.AsKeyword) {
                 node.propertyName = identifierName;
                 parseExpected(SyntaxKind.AsKeyword);
-                if (isIdentifier()) {
-                    node.name = parseIdentifierName();
-                }
-                else {
-                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                }
+                checkIdentifierIsKeyword = isKeyword(token) && !isIdentifier();
+                checkIdentifierStart = scanner.getTokenPos();
+                checkIdentifierEnd = scanner.getTextPos();
+                node.name = parseIdentifierName();
             }
             else {
                 node.name = identifierName;
-                if (isFirstIdentifierNameNotAnIdentifier) {
-                    // Report error identifier expected
-                    parseErrorAtPosition(start, identifierName.end - start, Diagnostics.Identifier_expected);
-                }
             }
-
+            if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
+                // Report error identifier expected
+                parseErrorAtPosition(checkIdentifierStart, checkIdentifierEnd - checkIdentifierStart, Diagnostics.Identifier_expected);
+            }
             return finishNode(node);
         }
 

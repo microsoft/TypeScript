@@ -3,7 +3,7 @@
 //// [server.ts]
 
 var a = 10;
-export = a;
+export default a;
 
 //// [client.ts]
 export import defaultBinding1, { } from "server";
@@ -22,25 +22,25 @@ export var x1: number = defaultBinding6;
 
 //// [server.js]
 var a = 10;
-module.exports = a;
+exports.default = a;
 //// [client.js]
-var defaultBinding1 = require("server");
-exports.x1 = defaultBinding1;
-var defaultBinding2 = require("server");
-exports.x1 = defaultBinding2;
-var defaultBinding3 = require("server");
-exports.x1 = defaultBinding3;
-var defaultBinding4 = require("server");
-exports.x1 = defaultBinding4;
-var defaultBinding5 = require("server");
-exports.x1 = defaultBinding5;
-var defaultBinding6 = require("server");
-exports.x1 = defaultBinding6;
+var server_1 = require("server");
+exports.x1 = server_1.default;
+var server_2 = require("server");
+exports.x1 = server_2.default;
+var server_3 = require("server");
+exports.x1 = server_3.default;
+var server_4 = require("server");
+exports.x1 = server_4.default;
+var server_5 = require("server");
+exports.x1 = server_5.default;
+var server_6 = require("server");
+exports.x1 = server_6.default;
 
 
 //// [server.d.ts]
 declare var a: number;
-export = a;
+export default a;
 //// [client.d.ts]
 export declare var x1: number;
 export declare var x1: number;

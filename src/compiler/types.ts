@@ -310,6 +310,7 @@ module ts {
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
         OctalLiteral =      0x00004000,
+        ExportContext =     0x00008000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
@@ -1219,8 +1220,8 @@ module ts {
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
         getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
-        hasExportDefaultValue(node: SourceFile): boolean;
-        isReferencedAliasDeclaration(node: Node): boolean;
+        isValueAliasDeclaration(node: Node): boolean;
+        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;

@@ -1,4 +1,3 @@
-tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
 tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(3,27): error TS2305: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'a'.
 tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(5,27): error TS2305: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'a'.
 tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(7,27): error TS2305: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'x'.
@@ -7,12 +6,10 @@ tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(9,27):
 tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(11,27): error TS2305: Module '"tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'm'.
 
 
-==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0.ts (1 errors) ====
+==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_0.ts (0 errors) ====
     
     var a = 10;
-    export = a;
-    ~~~~~~~~~~~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
+    export default a;
     
 ==== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1_1.ts (6 errors) ====
     import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";

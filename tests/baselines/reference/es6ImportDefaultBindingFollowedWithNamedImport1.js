@@ -3,7 +3,7 @@
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_0.ts]
 
 var a = 10;
-export = a;
+export default a;
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_1.ts]
 import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
@@ -40,5 +40,5 @@ var x1 = defaultBinding6;
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_0.d.ts]
 declare var a: number;
-export = a;
+export default a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1_1.d.ts]
