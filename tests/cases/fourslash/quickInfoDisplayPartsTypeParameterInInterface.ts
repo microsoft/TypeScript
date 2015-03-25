@@ -154,7 +154,7 @@ function verifyMethodDisplay(name: string, interfaceName: string,
 function verifyInterfaceVar(name: string, typeDisplay: ts.SymbolDisplayPart[]) {
     goToMarker();
     verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "var", kind: "keyword" },
             { text: " ", kind: "space" }, { text: name, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }].concat(typeDisplay),
         []);

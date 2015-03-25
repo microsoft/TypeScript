@@ -11,5 +11,5 @@
 ////y.length;
 
 goTo.marker();
-verify.quickInfoIs('(var) y: Date[]');
+verify.quickInfoIs('var y: Date[]');
 verify.numberOfErrorsInCurrentFile(0);

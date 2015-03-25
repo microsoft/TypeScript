@@ -11,4 +11,4 @@
 ////var /**/b = new f.A();
 
 goTo.marker();
-verify.quickInfoIs('(var) b: f.A');
+verify.quickInfoIs('var b: f.A');
