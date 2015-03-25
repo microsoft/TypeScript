@@ -472,12 +472,6 @@ declare module "typescript" {
         _accessorDeclarationBrand: any;
         body: Block;
     }
-    interface MergedAccessorDeclarations {
-        getAccessor: AccessorDeclaration;
-        setAccessor: AccessorDeclaration;
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration;
-    }
     interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
         _indexSignatureDeclarationBrand: any;
     }

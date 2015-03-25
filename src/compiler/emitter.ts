@@ -21,7 +21,6 @@ module ts {
 
     // flag enum used to request and track usages of few dedicated temp variables
     // enum values are used to set/check bit values and thus should not have bit collisions.
-            let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
     const enum TempVariableKind {
         auto = 0,
         _i = 1,
@@ -1497,7 +1496,7 @@ module ts {
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        let { firstAccessor, getAccessor, setAccessor } = mergeAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
+                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
 
                         // Only emit the first accessor.
                         if (firstAccessor !== property) {
@@ -3327,7 +3326,7 @@ module ts {
                         emitTrailingComments(member);
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
-                        let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
@@ -3815,7 +3814,7 @@ module ts {
 
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
-                            let accessors = mergeAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                            let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                             if (member !== accessors.firstAccessor) {
                                 // skip the second accessor as we processed it with the first.
                                 return;

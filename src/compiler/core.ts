@@ -162,9 +162,9 @@ module ts {
         return ~low;
     }
 
-    export function foldLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function foldLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function foldLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
             var count = array.length;
             if (count > 0) {
@@ -179,9 +179,9 @@ module ts {
         return initial;
     }
 
-    export function foldRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function foldRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function foldRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
         if (array) {
             var pos = array.length - 1;
             if (pos >= 0) {

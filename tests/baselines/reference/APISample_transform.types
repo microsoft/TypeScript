@@ -1537,25 +1537,6 @@ declare module "typescript" {
 >body : Block
 >Block : Block
     }
-    interface MergedAccessorDeclarations {
->MergedAccessorDeclarations : MergedAccessorDeclarations
-
-        getAccessor: AccessorDeclaration;
->getAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        setAccessor: AccessorDeclaration;
->setAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        firstAccessor: AccessorDeclaration;
->firstAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        secondAccessor: AccessorDeclaration;
->secondAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-    }
     interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
 >IndexSignatureDeclaration : IndexSignatureDeclaration
 >SignatureDeclaration : SignatureDeclaration
