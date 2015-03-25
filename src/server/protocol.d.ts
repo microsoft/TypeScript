@@ -417,6 +417,23 @@ declare module ts.server.protocol {
     }
 
     /**
+     * Format options
+     */
+    export interface FormatOptions {
+        /** Number of spaces for each tab */
+        tabSize: number;
+        
+        /** Number of spaces to indent during formatting */
+        indentSize: number;
+        
+        /** The new line character to be used */
+        newLineCharacter: string;
+        
+        /** Whether tabs should be converted to spaces */
+        convertTabsToSpaces: boolean;        
+    }
+
+    /**
       * Arguments for format messages.
       */
     export interface FormatRequestArgs extends FileLocationRequestArgs {
@@ -429,6 +446,11 @@ declare module ts.server.protocol {
           * Character offset on last line of range for which to format text in file.
           */
         endOffset: number;
+        
+        /**
+         * Additional format options used for this format request.
+         */
+        options?: FormatOptions;
     }
 
     /**
@@ -482,6 +504,11 @@ declare module ts.server.protocol {
           * Key pressed (';', '\n', or '}').
           */
         key: string;
+        
+        /**
+         * Additional format options used for this format request.
+         */
+        options?: FormatOptions;
     }
 
     /**
@@ -592,7 +619,124 @@ declare module ts.server.protocol {
         body?: CompletionEntryDetails[];
     }
 
+
     /**
+     * Signature help information for a single parameter    
+     */    
+    interface SignatureHelpParameter {
+        
+        /**
+         * The parameter's name
+         */        
+        name: string;
+                
+        /**
+          * Documentation of the parameter.
+          */
+        documentation: SymbolDisplayPart[];
+                
+        /**
+          * Display parts of the parameter.
+          */
+        displayParts: SymbolDisplayPart[];
+                
+        /**
+         * Whether the parameter is optional or not.         
+         */        
+        isOptional: boolean;
+    }
+        
+    /**
+     * Represents a single signature to show in signature help.    
+     */    
+    interface SignatureHelpItem {
+      
+        /**
+         * Whether the signature accepts a variable number of arguments. 
+         */        
+        isVariadic: boolean;
+        
+        /**
+         * The prefix display parts.
+         */        
+        prefixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The suffix disaply parts.
+         */        
+        suffixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The separator display parts.
+         */        
+        separatorDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The signatiure helps items for the parameters. 
+         */        
+        parameters: SignatureHelpParameter[];
+                
+        /**
+         * The signature's documentation
+         */
+        documentation: SymbolDisplayPart[];
+    }
+    
+    /**
+     * Signation help items found in the response of a signature help request.
+     */
+    interface SignatureHelpItems {
+      
+        /**
+         * The signaure help items.    
+         */        
+        items: SignatureHelpItem[];
+                
+        /**
+         * @steveluc
+         */        
+        applicableSpan: TextSpan;
+                
+        /**
+         * The item selected in the set of available help items. 
+         */        
+        selectedItemIndex: number;
+                
+        /**
+         * The argument selected in the set of parameters.
+         */        
+        argumentIndex: number;
+        
+        /**
+         * The argument counts
+         */        
+        argumentCount: number;
+    }
+
+    /**
+     * Arguments of a signature help request.
+     */
+    export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+      
+    }
+    
+    /**
+      * Signature help request; value of command field is "signatureHelp".
+      * Given a file location (file, line, col), return the signature 
+      * help.
+      */
+    export interface SignatureHelpRequest extends FileLocationRequest {
+        arguments: SignatureHelpRequestArgs;
+    }
+
+    /**
+     * Repsonse object for a SignatureHelpRequest.
+     */  
+    export interface SignatureHelpResponse extends Response {
+        body?: SignatureHelpItems;
+    }
+  
+     /**
       * Arguments for geterr messages.
       */
     export interface GeterrRequestArgs {

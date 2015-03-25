@@ -377,7 +377,11 @@ module ts.server {
         }
         return copiedList;
     }
-
+    
+    function isUndefined(obj: any): boolean {
+        return typeof (obj) === 'undefined';
+    }
+    
     interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
@@ -413,14 +417,34 @@ module ts.server {
             }
         }
         
-        getFormatCodeOptions(file?: string) {
+        getFormatCodeOptions(file?: string, formatOptions?: protocol.FormatOptions) {
+            var result: ts.FormatCodeOptions = null;
             if (file) {
                 var info = this.filenameToScriptInfo[file];                
                 if (info) {
-                    return info.formatCodeOptions;
+                    result = info.formatCodeOptions;
                 }
             }
-            return this.hostConfiguration.formatCodeOptions;
+            if (!result) {
+                result = this.hostConfiguration.formatCodeOptions;
+            }
+            
+            if (formatOptions) {
+                result = ts.clone(result);
+                if (!isUndefined(formatOptions.tabSize)) {
+                    result.TabSize = formatOptions.tabSize;
+                }
+                if (!isUndefined(formatOptions.indentSize)) {
+                    result.IndentSize = formatOptions.indentSize;
+                }
+                if (!isUndefined(formatOptions.convertTabsToSpaces)) {
+                    result.ConvertTabsToSpaces = formatOptions.convertTabsToSpaces;
+                }
+                if (!isUndefined(formatOptions.newLineCharacter)) {
+                    result.NewLineCharacter = formatOptions.newLineCharacter;
+                }
+            }
+            return result;
         }
 
         watchedFileChanged(fileName: string) {
