@@ -12,7 +12,7 @@ if (true) {
 
 //// [shadowingViaLocalValueOrBindingElement.js]
 if (true) {
-    var _x;
+    var x_1;
     if (true) {
         var x = 0; // Error
         var _a = ({

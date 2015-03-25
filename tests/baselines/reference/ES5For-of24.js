@@ -12,5 +12,5 @@ var a = [
 ];
 for (var _i = 0; _i < a.length; _i++) {
     var v = a[_i];
-    var _a = 0;
+    var a_1 = 0;
 }

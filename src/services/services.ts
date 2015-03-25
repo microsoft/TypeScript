@@ -2565,9 +2565,9 @@ module ts {
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget): string {
+        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
             let displayName = symbol.getName();
-            if (displayName && displayName.length > 0) {
+            if (displayName) {
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2575,31 +2575,18 @@ module ts {
                     // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
                     return undefined;
                 }
-
-                if (displayName && displayName.length >= 2 &&
-                    firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
-                    (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                    // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                    displayName = displayName.substring(1, displayName.length - 1);
-                }
-
-                let isValid = isIdentifierStart(displayName.charCodeAt(0), target);
-                for (let i = 1, n = displayName.length; isValid && i < n; i++) {
-                    isValid = isIdentifierPart(displayName.charCodeAt(i), target);
-                }
-
-                if (isValid) {
-                    return unescapeIdentifier(displayName);
-                }
             }
 
-            return undefined;
+            return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
         }
 
-        function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
+        function getCompletionEntryDisplayName(displayName: string, target: ScriptTarget, performCharacterChecks: boolean): string {
+            if (!displayName) {
+                return undefined;
+            }
+
             let firstCharCode = displayName.charCodeAt(0);
-            if (displayName && displayName.length >= 2 &&
+            if (displayName.length >= 2 &&
                 firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                 (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                 // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
@@ -2607,19 +2594,30 @@ module ts {
                 displayName = displayName.substring(1, displayName.length - 1);
             }
 
-            let isValid = isIdentifierStart(displayName.charCodeAt(0), target);
-            for (let i = 1, n = displayName.length; isValid && i < n; i++) {
-                isValid = isIdentifierPart(displayName.charCodeAt(i), target);
+            if (!displayName) {
+                return undefined;
             }
 
-            return isValid ? unescapeIdentifier(displayName) : undefined;
+            if (performCharacterChecks) {
+                if (!isIdentifierStart(displayName.charCodeAt(0), target)) {
+                    return undefined;
+                }
+
+                for (let i = 1, n = displayName.length; i < n; i++) {
+                    if (!isIdentifierPart(displayName.charCodeAt(i), target)) {
+                        return undefined;
+                    }
+                }
+            }
+
+            return unescapeIdentifier(displayName);
         }
 
         function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getValidCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target);
+            let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
             if (!displayName) {
                 return undefined;
             }
@@ -2640,37 +2638,18 @@ module ts {
             };
         }
 
-        // If symbolName is undefined, all symbols at the specified are returned.  If symbolName 
-        // is not undefined, then the first symbol with that name at the specified position
-        // will be returned.  Calling without symbolName is useful when you want the entire
-        // list of symbols (like for getCompletionsAtPosition).  Calling with a symbolName is
-        // useful when you want information about a single symbol (like for getCompletionEntryDetails).
-        function getCompletionData(fileName: string, position: number, symbolName?: string) {
-            let result = getCompletionDataWorker(fileName, position, symbolName);
-            if (!result) {
-                return undefined;
-            }
-
-            if (result.symbols && symbolName) {
-                var target = program.getCompilerOptions().target;
-                result.symbols = filter(result.symbols, s => getValidCompletionEntryDisplayNameForSymbol(s, target) === symbolName);
-            }
-
-            return result;
-        }
-
-        function getCompletionDataWorker(fileName: string, position: number, symbolName: string) {
+        function getCompletionData(fileName: string, position: number) {
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
-            log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionData: Get current token: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
             let insideComment = isInsideComment(sourceFile, currentToken, position);
-            log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
                 log("Returning an empty list because completion was inside a comment.");
@@ -2681,14 +2660,14 @@ module ts {
             // Note: previousToken can be undefined if we are the beginning of the file
             start = new Date().getTime();
             let previousToken = findPrecedingToken(position, sourceFile);
-            log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
             if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
                 let start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
@@ -2731,8 +2710,7 @@ module ts {
                 }
             }
 
-            // Add keywords if this is not a member completion list
-            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot };
 
@@ -2808,12 +2786,7 @@ module ts {
                     /// TODO filter meaning based on the current context
                     let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    
-                    // Filter down to the symbol that matches the symbolName if we were given one.
-                    let predicate = symbolName !== undefined
-                        ? (s: Symbol) => getValidCompletionEntryDisplayNameForSymbol(s, target) === symbolName
-                        : undefined;
-                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings, predicate);
+                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
 
                 return true;
@@ -3160,7 +3133,7 @@ module ts {
 
                 var target = program.getCompilerOptions().target;
                 for (let name in allIdentifiers) {
-                    let displayName = getValidCompletionEntryDisplayName(name, target);
+                    let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
                     if (displayName) {
                         // Use '1' so that all javascript identifier entries sort after Symbol entries.
                         entries.push({
@@ -3201,12 +3174,19 @@ module ts {
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             synchronizeHostData();
 
-            // Look up a completion symbol with this name.
-            let completionData = getCompletionData(fileName, position, entryName);
+            // Compute all the completion symbols again.
+            let completionData = getCompletionData(fileName, position);
             if (completionData) {
                 let { symbols, location } = completionData;
-                if (symbols && symbols.length > 0) {
-                    let symbol = symbols[0];
+
+                // Find the symbol with the matching entry name.
+                let target = program.getCompilerOptions().target;
+                // We don't need to perform character checks here because we're only comparing the 
+                // name against 'entryName' (which is known to be good), not building a new 
+                // completion entry.
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+
+                if (symbol) {
                     let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
                     return {
                         name: entryName,

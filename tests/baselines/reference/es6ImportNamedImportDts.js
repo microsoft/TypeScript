@@ -132,27 +132,27 @@ var aaaa1 = (function () {
 })();
 exports.aaaa1 = aaaa1;
 //// [client.js]
-var _server_1 = require("server");
-exports.xxxx = new _server_1.a();
-var _server_2 = require("server");
-exports.xxxx1 = new _server_2.a11();
-var _server_3 = require("server");
-exports.xxxx2 = new _server_3.x();
-exports.xxxx3 = new _server_3.a12();
-var _server_4 = require("server");
-exports.xxxx4 = new _server_4.x11();
-var _server_5 = require("server");
-exports.xxxx5 = new _server_5.m();
-var _server_6 = require("server");
-exports.xxxx6 = new _server_6.a1();
-exports.xxxx7 = new _server_6.x1();
-var _server_7 = require("server");
-exports.xxxx8 = new _server_7.a111();
-exports.xxxx9 = new _server_7.x111();
-var _server_8 = require("server");
-exports.z111 = new _server_8.z1();
-var _server_9 = require("server");
-exports.z2 = new _server_9.z2(); // z2 shouldn't give redeclare error
+var server_1 = require("server");
+exports.xxxx = new server_1.a();
+var server_2 = require("server");
+exports.xxxx1 = new server_2.a11();
+var server_3 = require("server");
+exports.xxxx2 = new server_3.x();
+exports.xxxx3 = new server_3.a12();
+var server_4 = require("server");
+exports.xxxx4 = new server_4.x11();
+var server_5 = require("server");
+exports.xxxx5 = new server_5.m();
+var server_6 = require("server");
+exports.xxxx6 = new server_6.a1();
+exports.xxxx7 = new server_6.x1();
+var server_7 = require("server");
+exports.xxxx8 = new server_7.a111();
+exports.xxxx9 = new server_7.x111();
+var server_8 = require("server");
+exports.z111 = new server_8.z1();
+var server_9 = require("server");
+exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
 
 
 //// [server.d.ts]

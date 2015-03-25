@@ -2632,15 +2632,12 @@ declare module "typescript" {
 >Signature : Signature
 >Type : Type
 
-        getSymbolsInScope(location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean): Symbol[];
->getSymbolsInScope : (location: Node, meaning: SymbolFlags, predicate?: (symbol: Symbol) => boolean) => Symbol[]
+        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+>getSymbolsInScope : (location: Node, meaning: SymbolFlags) => Symbol[]
 >location : Node
 >Node : Node
 >meaning : SymbolFlags
 >SymbolFlags : SymbolFlags
->predicate : (symbol: Symbol) => boolean
->symbol : Symbol
->Symbol : Symbol
 >Symbol : Symbol
 
         getSymbolAtLocation(node: Node): Symbol;
@@ -3006,15 +3003,17 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: Node): string;
+        hasGlobalName(name: string): boolean;
+>hasGlobalName : (name: string) => boolean
+>name : string
+
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
+>getExpressionNameSubstitution : (node: Identifier, getGeneratedNameForNode: (node: Node) => string) => string
+>node : Identifier
+>Identifier : Identifier
 >getGeneratedNameForNode : (node: Node) => string
 >node : Node
 >Node : Node
-
-        getExpressionNameSubstitution(node: Identifier): string;
->getExpressionNameSubstitution : (node: Identifier) => string
->node : Identifier
->Identifier : Identifier
 
         hasExportDefaultValue(node: SourceFile): boolean;
 >hasExportDefaultValue : (node: SourceFile) => boolean
@@ -3112,8 +3111,8 @@ declare module "typescript" {
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
-        isUnknownIdentifier(location: Node, name: string): boolean;
->isUnknownIdentifier : (location: Node, name: string) => boolean
+        resolvesToSomeValue(location: Node, name: string): boolean;
+>resolvesToSomeValue : (location: Node, name: string) => boolean
 >location : Node
 >Node : Node
 >name : string

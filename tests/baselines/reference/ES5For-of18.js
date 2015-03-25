@@ -13,6 +13,6 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     v;
 }
 for (var _b = 0, _c = []; _b < _c.length; _b++) {
-    var _v = _c[_b];
-    _v;
+    var v = _c[_b];
+    v;
 }
