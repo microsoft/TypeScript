@@ -3706,7 +3706,7 @@ module ts {
                             }
                             else {
                                 write("{ ");
-                                emitExportOrImportSpecifierList((<NamedImports>node.importClause.namedBindings).elements);
+                                emitExportOrImportSpecifierList((<NamedImports>node.importClause.namedBindings).elements, resolver.isReferencedAliasDeclaration);
                                 write(" }");
                             }
                             emitEnd(node.importClause.namedBindings);
@@ -3917,7 +3917,7 @@ module ts {
                         if (node.exportClause) {
                             // export { x, y, ... }
                             write("{ ");
-                            emitExportOrImportSpecifierList(node.exportClause.elements);
+                            emitExportOrImportSpecifierList(node.exportClause.elements, resolver.isValueAliasDeclaration);
                             write(" }");
                         }
                         else {
@@ -3933,12 +3933,12 @@ module ts {
                 }
             }
 
-            function emitExportOrImportSpecifierList(specifiers: ImportOrExportSpecifier[]) {
+            function emitExportOrImportSpecifierList(specifiers: ImportOrExportSpecifier[], shouldEmit: (node: Node) => boolean) {
                 Debug.assert(languageVersion >= ScriptTarget.ES6);
 
                 let needsComma = false;
                 for (let specifier of specifiers) {
-                    if (resolver.isValueAliasDeclaration(specifier)) {
+                    if (shouldEmit(specifier)) {
                         if (needsComma) {
                             write(", ");
                         }
