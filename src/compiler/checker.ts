@@ -3408,6 +3408,10 @@ module ts {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
+        function createIterableType(elementType: Type): Type {
+            return globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [elementType]) : emptyObjectType;
+        }
+
         function createArrayType(elementType: Type): Type {
             // globalArrayType will be undefined if we get here during creation of the Array type. This for example happens if
             // user code augments the Array type with call or construct signatures that have an array type as the return type.
@@ -9268,10 +9272,7 @@ module ts {
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (expressionForError && iteratedType) {
-                let completeIterableType = globalIterableType !== emptyObjectType
-                    ? createTypeReference(<GenericType>globalIterableType, [iteratedType])
-                    : emptyObjectType;
-                checkTypeAssignableTo(iterable, completeIterableType, expressionForError);
+                checkTypeAssignableTo(iterable, createIterableType(iteratedType), expressionForError);
             }
 
             return iteratedType;
