@@ -2043,15 +2043,20 @@ module ts {
                 }
             }
             else {
-                // In a ES3/ES5, we must be destructuring an array type. However, ES6 supports destructuring
-                // an iterator into an array pattern, so we suppress this error. If the parentType is not an iterator,
-                // there will be an error in checkIteratedType.
+                // This elementType will be used if the specific property corresponding to this index is not
+                // present (aka the tuple element property). This call also checks that the parentType is in
+                // fact an iterable or array (depending on target language).
+                let elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
                 if (!declaration.dotDotDotToken) {
+                    if (elementType.flags & TypeFlags.Any) {
+                        return elementType;
+                    }
+
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     let propName = "" + indexOf(pattern.elements, declaration);
                     type = isTupleLikeType(parentType)
                         ? getTypeOfPropertyOfType(parentType, propName)
-                        : checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
+                        : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
                             error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), (<TupleType>parentType).elementTypes.length, pattern.elements.length);
@@ -2064,7 +2069,7 @@ module ts {
                 }
                 else {
                     // Rest element has an array type with the same element type as the parent type
-                    type = createArrayType(checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false));
+                    type = createArrayType(elementType);
                 }
             }
             return type;
@@ -7551,11 +7556,10 @@ module ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            // TODOO(andersh): Allow iterable source type in ES6
-            if (!isArrayLikeType(sourceType)) {
-                error(node, Diagnostics.Type_0_is_not_an_array_type, typeToString(sourceType));
-                return sourceType;
-            }
+            // This elementType will be used if the specific property corresponding to this index is not
+            // present (aka the tuple element property). This call also checks that the parentType is in
+            // fact an iterable or array (depending on target language).
+            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false);
             let elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 let e = elements[i];
@@ -7563,8 +7567,9 @@ module ts {
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
                         let propName = "" + i;
                         let type = sourceType.flags & TypeFlags.Any ? sourceType :
-                            isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
-                                getIndexTypeOfType(sourceType, IndexKind.Number);
+                            isTupleLikeType(sourceType)
+                                ? getTypeOfPropertyOfType(sourceType, propName)
+                                : elementType;
                         if (type) {
                             checkDestructuringAssignment(e, type, contextualMapper);
                         }
