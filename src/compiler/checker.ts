@@ -74,7 +74,10 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfExternalModule,
+            getExportsOfImportDeclaration,
+            getExportsOfModule(moduleSymbol: Symbol): Symbol[] {
+                return mapToArray(getExportsOfModule(moduleSymbol));
+            }
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -794,6 +797,7 @@ module ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
+            // TODO (drosen): Why do we not use getExportsOfModule for exteral modules as weel?
             return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports;
         }
 
@@ -2921,7 +2925,7 @@ module ts {
             return result;
         }
 
-        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[]{
+        function getExportsOfImportDeclaration(node: ImportDeclaration): Symbol[] {
             if (!node.moduleSpecifier) {
                 return emptyArray;
             }

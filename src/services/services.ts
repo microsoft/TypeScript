@@ -2533,8 +2533,10 @@ module ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        forEachValue(symbol.exports, symbol => {
-                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        let exportedMembers = typeInfoResolver.getExportsOfModule(symbol);
+                        forEach(exportedMembers, symbol => {
+                            if (!(symbol.flags & SymbolFlags.ExportStar)
+                                && typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2577,7 +2579,8 @@ module ts {
                     if (showCompletionsInImportsClause(previousToken)) {
                         let importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
-                        let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
+
+                        let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
                         symbols = filterModuleExports(exports, importDeclaration);
                     }
                 }
