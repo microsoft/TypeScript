@@ -7584,7 +7584,7 @@ module ts {
                     }
                     else {
                         if (i === elements.length - 1) {
-                            checkReferenceAssignment((<SpreadElementExpression>e).expression, sourceType, contextualMapper);
+                            checkReferenceAssignment((<SpreadElementExpression>e).expression, createArrayType(elementType), contextualMapper);
                         }
                         else {
                             error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
