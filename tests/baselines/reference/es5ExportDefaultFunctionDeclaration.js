@@ -10,4 +10,4 @@ module.exports = f;
 
 
 //// [es5ExportDefaultFunctionDeclaration.d.ts]
-export declare function f(): void;
+export default function f(): void;

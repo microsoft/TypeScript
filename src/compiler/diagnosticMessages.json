@@ -1382,7 +1382,11 @@
     },
     "Type '{0}' is not an array type or a string type.": {
         "category": "Error",
-        "code": 2461
+        "code": 2495
+    },
+    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+        "category": "Error",
+        "code": 2496
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1660,6 +1664,10 @@
     "Exported type alias '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4081
+    },
+    "Default export of the module has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4082
     },
     "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",
@@ -1969,9 +1977,5 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
-    },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
-        "category": "Error",
-        "code": 9002
     }
 }

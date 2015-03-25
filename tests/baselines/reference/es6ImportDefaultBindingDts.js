@@ -27,3 +27,6 @@ exports.x = new defaultBinding();
 declare class c {
 }
 export = c;
+//// [client.d.ts]
+import defaultBinding from "server";
+export declare var x: defaultBinding;

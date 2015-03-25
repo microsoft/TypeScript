@@ -1,0 +1,18 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass13.ts ===
+declare function dec<T>(target: T): T;
+>dec : <T>(target: T) => T
+>T : T
+>target : T
+>T : T
+>T : T
+
+module Outer {
+>Outer : typeof Outer
+
+  @dec
+>dec : unknown
+
+  export class C {
+>C : C
+  }
+}

@@ -5,7 +5,22 @@ module ts {
     let nextNodeId = 1;
     let nextMergeId = 1;
 
+    // @internal
+    export function getNodeId(node: Node): number {
+        if (!node.id) node.id = nextNodeId++;
+        return node.id;
+    }
+
     /* @internal */ export let checkTime = 0;
+
+    /* @internal */
+    export function getSymbolId(symbol: Symbol): number {
+        if (!symbol.id) {
+            symbol.id = nextSymbolId++;
+        }
+
+        return symbol.id;
+    }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         let Symbol = objectAllocator.getSymbolConstructor();
@@ -256,13 +271,13 @@ module ts {
 
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
-            if (!symbol.id) symbol.id = nextSymbolId++;
-            return symbolLinks[symbol.id] || (symbolLinks[symbol.id] = {});
+            var id = getSymbolId(symbol);
+            return symbolLinks[id] || (symbolLinks[id] = {});
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            if (!node.id) node.id = nextNodeId++;
-            return nodeLinks[node.id] || (nodeLinks[node.id] = {});
+            let nodeId = getNodeId(node);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
         function getSourceFile(node: Node): SourceFile {
@@ -317,7 +332,6 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
-            let grandparent: Node;
 
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
@@ -383,7 +397,7 @@ module ts {
                     //   }
                     //
                     case SyntaxKind.ComputedPropertyName:
-                        grandparent = location.parent.parent;
+                        let grandparent = location.parent.parent;
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
@@ -539,6 +553,19 @@ module ts {
                 node.kind === SyntaxKind.ImportSpecifier ||
                 node.kind === SyntaxKind.ExportSpecifier ||
                 node.kind === SyntaxKind.ExportAssignment;
+        }
+
+        function getAnyImportSyntax(node: Node): AnyImportSyntax {
+            if (isAliasSymbolDeclaration(node)) {
+                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    return <ImportEqualsDeclaration>node;
+                }
+
+                while (node.kind !== SyntaxKind.ImportDeclaration) {
+                    node = node.parent;
+                }
+                return <ImportDeclaration>node;
+            }
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
@@ -1151,7 +1178,7 @@ module ts {
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
-            let aliasesToMakeVisible: ImportEqualsDeclaration[];
+            let aliasesToMakeVisible: AnyImportSyntax[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
@@ -1161,17 +1188,19 @@ module ts {
                 if (!isDeclarationVisible(declaration)) {
                     // Mark the unexported alias as visible if its parent is visible
                     // because these kind of aliases can be used to name types in declaration file
-                    if (declaration.kind === SyntaxKind.ImportEqualsDeclaration &&
-                        !(declaration.flags & NodeFlags.Export) &&
-                        isDeclarationVisible(<Declaration>declaration.parent)) {
+
+                    var anyImportSyntax = getAnyImportSyntax(declaration);
+                    if (anyImportSyntax &&
+                        !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
+                        isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
                         getNodeLinks(declaration).isVisible = true;
                         if (aliasesToMakeVisible) {
-                            if (!contains(aliasesToMakeVisible, declaration)) {
-                                aliasesToMakeVisible.push(<ImportEqualsDeclaration>declaration);
+                            if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
+                                aliasesToMakeVisible.push(anyImportSyntax);
                             }
                         }
                         else {
-                            aliasesToMakeVisible = [<ImportEqualsDeclaration>declaration];
+                            aliasesToMakeVisible = [anyImportSyntax];
                         }
                         return true;
                     }
@@ -1795,8 +1824,15 @@ module ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
-                    case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
+                        return isDeclarationVisible(<Declaration>node.parent.parent);
+                    case SyntaxKind.VariableDeclaration:
+                        if (isBindingPattern(node.name) &&
+                            !(<BindingPattern>node.name).elements.length) {
+                            // If the binding pattern is empty, this variable declaration is not visible
+                            return false;
+                        }
+                        // Otherwise fall through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -1808,7 +1844,7 @@ module ts {
                         // If the node is not exported or it is not ambient module element (except import declaration)
                         if (!(getCombinedNodeFlags(node) & NodeFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
-                            return isGlobalSourceFile(parent) || isUsedInExportAssignment(node);
+                            return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
                         return isDeclarationVisible(<Declaration>parent);
@@ -1841,6 +1877,8 @@ module ts {
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
+                    // Default binding, import specifier and namespace import is visible 
+                    // only on demand so by default it is not visible
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.ImportSpecifier:
@@ -1863,6 +1901,40 @@ module ts {
                     links.isVisible = !!determineIfDeclarationIsVisible();
                 }
                 return links.isVisible;
+            }
+        }
+
+        function collectLinkedAliases(node: Identifier): Node[]{
+            var exportSymbol: Symbol;
+            if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
+                exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, node);
+            }
+            else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
+                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent);
+            }
+            var result: Node[] = [];
+            if (exportSymbol) {
+                buildVisibleNodeList(exportSymbol.declarations);
+            }
+            return result;
+
+            function buildVisibleNodeList(declarations: Declaration[]) {
+                forEach(declarations, declaration => {
+                    getNodeLinks(declaration).isVisible = true;
+                    var resultNode = getAnyImportSyntax(declaration) || declaration;
+                    if (!contains(result, resultNode)) {
+                        result.push(resultNode);
+                    }
+
+                    if (isInternalModuleImportEqualsDeclaration(declaration)) {
+                        // Add the referenced top container visible
+                        var internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
+                        var firstIdentifier = getFirstIdentifier(internalModuleReference);
+                        var importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
+                            Diagnostics.Cannot_find_name_0, firstIdentifier);
+                        buildVisibleNodeList(importSymbol.declarations);
+                    }
+                });
             }
         }
 
@@ -7210,7 +7282,6 @@ module ts {
                     case SyntaxKind.ElementAccessExpression: {
                         let index = (<ElementAccessExpression>n).argumentExpression;
                         let symbol = findSymbol((<ElementAccessExpression>n).expression);
-
                         if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
                             let name = (<LiteralExpression>index).text;
                             let prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
@@ -7225,14 +7296,37 @@ module ts {
                 }
             }
 
+            function isImportedNameFromExternalModule(n: Node): boolean {
+                switch (n.kind) {
+                    case SyntaxKind.ElementAccessExpression:
+                    case SyntaxKind.PropertyAccessExpression: {
+                        // all bindings for external module should be immutable
+                        // so attempt to use a.b or a[b] as lhs will always fail
+                        // no matter what b is
+                        let symbol = findSymbol((<PropertyAccessExpression | ElementAccessExpression>n).expression);
+                        return symbol && symbol.flags & SymbolFlags.Alias && isExternalModuleSymbol(resolveAlias(symbol));
+                    }
+                    case SyntaxKind.ParenthesizedExpression:
+                        return isImportedNameFromExternalModule((<ParenthesizedExpression>n).expression);
+                    default:
+                        return false;
+                }
+            }
+
             if (!isReferenceOrErrorExpression(n)) {
                 error(n, invalidReferenceMessage);
                 return false;
             }
+
             if (isConstVariableReference(n)) {
                 error(n, constantVariableMessage);
                 return false;
             }
+
+            if (isImportedNameFromExternalModule(n)) {
+                error(n, invalidReferenceMessage);
+            }
+
             return true;
         }
 
@@ -9836,7 +9930,7 @@ module ts {
                     }
                     let initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(initializer, enumIsConst);
+                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
                         if (autoValue === undefined) {
                             if (enumIsConst) {
                                 error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
@@ -9871,7 +9965,7 @@ module ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
-            function getConstantValueForEnumMemberInitializer(initializer: Expression, enumIsConst: boolean): number {
+            function getConstantValueForEnumMemberInitializer(initializer: Expression): number {
                 return evalConstant(initializer);
 
                 function evalConstant(e: Node): number {
@@ -9884,14 +9978,10 @@ module ts {
                             switch ((<PrefixUnaryExpression>e).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
-                                case SyntaxKind.TildeToken: return enumIsConst ? ~value : undefined;
+                                case SyntaxKind.TildeToken: return ~value;
                             }
                             return undefined;
                         case SyntaxKind.BinaryExpression:
-                            if (!enumIsConst) {
-                                return undefined;
-                            }
-
                             let left = evalConstant((<BinaryExpression>e).left);
                             if (left === undefined) {
                                 return undefined;
@@ -9917,14 +10007,10 @@ module ts {
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
                         case SyntaxKind.ParenthesizedExpression:
-                            return enumIsConst ? evalConstant((<ParenthesizedExpression>e).expression) : undefined;
+                            return evalConstant((<ParenthesizedExpression>e).expression);
                         case SyntaxKind.Identifier:
                         case SyntaxKind.ElementAccessExpression:
                         case SyntaxKind.PropertyAccessExpression:
-                            if (!enumIsConst) {
-                                return undefined;
-                            }
-
                             let member = initializer.parent;
                             let currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             let enumType: Type;
@@ -9937,19 +10023,37 @@ module ts {
                                 propertyName = (<Identifier>e).text;
                             }
                             else {
+                                let expression: Expression;
                                 if (e.kind === SyntaxKind.ElementAccessExpression) {
                                     if ((<ElementAccessExpression>e).argumentExpression === undefined ||
                                         (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
                                         return undefined;
                                     }
-                                    enumType = getTypeOfNode((<ElementAccessExpression>e).expression);
+                                    expression = (<ElementAccessExpression>e).expression;
                                     propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
                                 }
                                 else {
-                                    enumType = getTypeOfNode((<PropertyAccessExpression>e).expression);
+                                    expression = (<PropertyAccessExpression>e).expression;
                                     propertyName = (<PropertyAccessExpression>e).name.text;
                                 }
-                                if (enumType !== currentType) {
+
+                                // expression part in ElementAccess\PropertyAccess should be either identifier or dottedName
+                                var current = expression;
+                                while (current) {
+                                    if (current.kind === SyntaxKind.Identifier) {
+                                        break;
+                                    }
+                                    else if (current.kind === SyntaxKind.PropertyAccessExpression) {
+                                        current = (<ElementAccessExpression>current).expression;
+                                    }
+                                    else {
+                                        return undefined;
+                                    }
+                                }
+
+                                enumType = checkExpression(expression);
+                                // allow references to constant members of other enums
+                                if (!(enumType.symbol && (enumType.symbol.flags & SymbolFlags.Enum))) {
                                     return undefined;
                                 }
                             }
@@ -9957,10 +10061,12 @@ module ts {
                             if (propertyName === undefined) {
                                 return undefined;
                             }
+
                             let property = getPropertyOfObjectType(enumType, propertyName);
                             if (!property || !(property.flags & SymbolFlags.EnumMember)) {
                                 return undefined;
                             }
+
                             let propertyDecl = property.valueDeclaration;
                             // self references are illegal
                             if (member === propertyDecl) {
@@ -9971,6 +10077,7 @@ module ts {
                             if (!isDefinedBefore(propertyDecl, member)) {
                                 return undefined;
                             }
+
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
@@ -10978,134 +11085,7 @@ module ts {
             return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
         }
 
-        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
-            while (node) {
-                if (node === ancestor) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
-        function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
-                    // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        function getGeneratedNamesForSourceFile(sourceFile: SourceFile): Map<string> {
-            let links = getNodeLinks(sourceFile);
-            let generatedNames = links.generatedNames;
-            if (!generatedNames) {
-                generatedNames = links.generatedNames = {};
-                generateNames(sourceFile);
-            }
-            return generatedNames;
-
-            function generateNames(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ClassDeclaration:
-                        generateNameForFunctionOrClassDeclaration(<Declaration>node);
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        generateNameForModuleOrEnum(<ModuleDeclaration>node);
-                        generateNames((<ModuleDeclaration>node).body);
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        generateNameForModuleOrEnum(<EnumDeclaration>node);
-                        break;
-                    case SyntaxKind.ImportDeclaration:
-                        generateNameForImportDeclaration(<ImportDeclaration>node);
-                        break;
-                    case SyntaxKind.ExportDeclaration:
-                        generateNameForExportDeclaration(<ExportDeclaration>node);
-                        break;
-                    case SyntaxKind.ExportAssignment:
-                        generateNameForExportAssignment(<ExportAssignment>node);
-                        break;
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleBlock:
-                        forEach((<SourceFile | ModuleBlock>node).statements, generateNames);
-                        break;
-                }
-            }
-
-            function isExistingName(name: string) {
-                return hasProperty(globals, name) ||  hasProperty(sourceFile.identifiers, name) || hasProperty(generatedNames, name);
-            }
-
-            function makeUniqueName(baseName: string): string {
-                let name = generateUniqueName(baseName, isExistingName);
-                return generatedNames[name] = name;
-            }
-
-            function assignGeneratedName(node: Node, name: string) {
-                getNodeLinks(node).generatedName = unescapeIdentifier(name);
-            }
-
-            function generateNameForFunctionOrClassDeclaration(node: Declaration) {
-                if (!node.name) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
-
-            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                if (node.name.kind === SyntaxKind.Identifier) {
-                    let name = node.name.text;
-                    // Use module/enum name itself if it is unique, otherwise make a unique variation
-                    assignGeneratedName(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
-                }
-            }
-
-            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
-                let expr = getExternalModuleName(node);
-                let baseName = expr.kind === SyntaxKind.StringLiteral ?
-                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
-                assignGeneratedName(node, makeUniqueName(baseName));
-            }
-
-            function generateNameForImportDeclaration(node: ImportDeclaration) {
-                if (node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportAssignment(node: ExportAssignment) {
-                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
-        }
-
-        function getGeneratedNameForNode(node: Node) {
-            let links = getNodeLinks(node);
-            if (!links.generatedName) {
-                getGeneratedNamesForSourceFile(getSourceFile(node));
-            }
-            return links.generatedName;
-        }
-
-        function getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string {
-            return getGeneratedNameForNode(container);
-        }
-
-        function getLocalNameForImportDeclaration(node: ImportDeclaration): string {
-            return getGeneratedNameForNode(node);
-        }
-
-        function getAliasNameSubstitution(symbol: Symbol): string {
+        function getAliasNameSubstitution(symbol: Symbol, getGeneratedNameForNode: (Node: Node) => string): string {
             let declaration = getDeclarationOfAliasSymbol(symbol);
             if (declaration && declaration.kind === SyntaxKind.ImportSpecifier) {
                 let moduleName = getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent);
@@ -11114,7 +11094,7 @@ module ts {
             }
         }
 
-        function getExportNameSubstitution(symbol: Symbol, location: Node): string {
+        function getExportNameSubstitution(symbol: Symbol, location: Node, getGeneratedNameForNode: (Node: Node) => string): string {
             if (isExternalModuleSymbol(symbol.parent)) {
                 var symbolName = unescapeIdentifier(symbol.name);
                 // If this is es6 or higher, just use the name of the export
@@ -11136,24 +11116,24 @@ module ts {
             }
         }
 
-        function getExpressionNameSubstitution(node: Identifier): string {
+        function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
             let symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
                 // Whan an identifier resolves to a parented symbol, it references an exported entity from
                 // another declaration of the same internal module.
                 if (symbol.parent) {
-                    return getExportNameSubstitution(symbol, node.parent);
+                    return getExportNameSubstitution(symbol, node.parent, getGeneratedNameForNode);
                 }
                 // If we reference an exported entity within the same module declaration, then whether
                 // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
                 // kinds that we do NOT prefix.
                 let exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
                 if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                    return getExportNameSubstitution(exportSymbol, node.parent);
+                    return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
                 }
                 // Named imports from ES6 import declarations are rewritten
                 if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
-                    return getAliasNameSubstitution(symbol);
+                    return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
                 }
             }
         }
@@ -11227,10 +11207,9 @@ module ts {
 
             let symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
-                let declaration = symbol.valueDeclaration;
-                let constantValue: number;
-                if (declaration.kind === SyntaxKind.EnumMember) {
-                    return getEnumMemberValue(<EnumMember>declaration);
+                // inline property\index accesses only for const enums
+                if (isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
+                    return getEnumMemberValue(<EnumMember>symbol.valueDeclaration);
                 }
             }
 
@@ -11252,10 +11231,18 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function isUnknownIdentifier(location: Node, name: string): boolean {
-            Debug.assert(!nodeIsSynthesized(location), "isUnknownIdentifier called with a synthesized location");
-            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined) &&
-                !hasProperty(getGeneratedNamesForSourceFile(getSourceFile(location)), name);
+        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+            var type = getTypeOfExpression(expr);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+        }
+
+        function hasGlobalName(name: string): boolean {
+            return hasProperty(globals, name);
+        }
+
+        function resolvesToSomeValue(location: Node, name: string): boolean {
+            Debug.assert(!nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
+            return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
@@ -11299,8 +11286,8 @@ module ts {
 
         function createResolver(): EmitResolver {
             return {
-                getGeneratedNameForNode,
                 getExpressionNameSubstitution,
+                hasGlobalName,
                 hasExportDefaultValue,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
@@ -11309,10 +11296,12 @@ module ts {
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
+                writeTypeOfExpression,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
-                isUnknownIdentifier,
+                resolvesToSomeValue,
+                collectLinkedAliases,
                 getBlockScopedVariableId,
             };
         }
@@ -11384,7 +11373,7 @@ module ts {
                 return grammarErrorOnNode(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
-                let accessors = mergeAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
+                let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
                 if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
                     return grammarErrorOnNode(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                 }
@@ -12274,8 +12263,8 @@ module ts {
         }
 
         function checkGrammarTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
-            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces, and imports:
-            // categories:
+            // A declare modifier is required for any top level .d.ts declaration except export=, export default,
+            // interfaces and imports categories:
             //
             //  DeclarationElement:
             //     ExportAssignment
@@ -12289,7 +12278,8 @@ module ts {
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ExportDeclaration ||
                 node.kind === SyntaxKind.ExportAssignment ||
-                (node.flags & NodeFlags.Ambient)) {
+                (node.flags & NodeFlags.Ambient) ||
+                (node.flags & (NodeFlags.Export | NodeFlags.Default))) {
 
                 return false;
             }

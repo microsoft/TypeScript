@@ -39,8 +39,6 @@ for (var i = 1; i <= test.markers().length; i++) {
             verify.occurrencesAtPositionCount(8);
             break;
         case 4:
-        case 5:
-        case 8:
             verify.occurrencesAtPositionCount(1);
             break;
         case 6:
@@ -48,6 +46,8 @@ for (var i = 1; i <= test.markers().length; i++) {
         case 9:
             verify.occurrencesAtPositionCount(8);
             break;
+        case 5:
+        case 8:
         case 10:
         case 11:
         case 12:

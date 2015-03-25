@@ -330,6 +330,9 @@ module Harness.LanguageService {
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
         }
+        findReferences(fileName: string, position: number): ts.ReferencedSymbol[] {
+            return unwrapJSONCallResult(this.shim.findReferences(fileName, position));
+        }
         getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
         }

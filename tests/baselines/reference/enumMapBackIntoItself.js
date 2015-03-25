@@ -16,7 +16,7 @@ var TShirtSize;
     TShirtSize[TShirtSize["Medium"] = 1] = "Medium";
     TShirtSize[TShirtSize["Large"] = 2] = "Large";
 })(TShirtSize || (TShirtSize = {}));
-var mySize = 2 /* Large */;
+var mySize = TShirtSize.Large;
 var test = TShirtSize[mySize];
 // specifically checking output here, bug was that test used to be undefined at runtime
 test + '';

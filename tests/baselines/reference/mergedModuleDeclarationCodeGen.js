@@ -19,10 +19,10 @@ export module X {
 var X;
 (function (X) {
     var Y;
-    (function (_Y) {
+    (function (Y_1) {
         var A = (function () {
             function A(Y) {
-                new _Y.B();
+                new Y_1.B();
             }
             return A;
         })();

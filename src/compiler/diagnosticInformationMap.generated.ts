@@ -347,7 +347,8 @@ module ts {
         Cannot_redeclare_identifier_0_in_catch_clause: { code: 2492, category: DiagnosticCategory.Error, key: "Cannot redeclare identifier '{0}' in catch clause" },
         Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2: { code: 2493, category: DiagnosticCategory.Error, key: "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'." },
         Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher: { code: 2494, category: DiagnosticCategory.Error, key: "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher." },
-        Type_0_is_not_an_array_type_or_a_string_type: { code: 2461, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type or a string type." },
+        Type_0_is_not_an_array_type_or_a_string_type: { code: 2495, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type or a string type." },
+        The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 2496, category: DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -417,6 +418,7 @@ module ts {
         Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2: { code: 4077, category: DiagnosticCategory.Error, key: "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'." },
         Parameter_0_of_exported_function_has_or_is_using_private_name_1: { code: 4078, category: DiagnosticCategory.Error, key: "Parameter '{0}' of exported function has or is using private name '{1}'." },
         Exported_type_alias_0_has_or_is_using_private_name_1: { code: 4081, category: DiagnosticCategory.Error, key: "Exported type alias '{0}' has or is using private name '{1}'." },
+        Default_export_of_the_module_has_or_is_using_private_name_0: { code: 4082, category: DiagnosticCategory.Error, key: "Default export of the module has or is using private name '{0}'." },
         Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher: { code: 4091, category: DiagnosticCategory.Error, key: "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
@@ -494,6 +496,5 @@ module ts {
         You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library: { code: 8001, category: DiagnosticCategory.Error, key: "You cannot rename elements that are defined in the standard TypeScript library." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
-        The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 9002, category: DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." },
     };
 }

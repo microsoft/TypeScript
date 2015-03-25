@@ -542,14 +542,6 @@ module ts {
         body: Block;
     }
 
-    // A merged view of get/set accessors
-    export interface MergedAccessorDeclarations {
-        getAccessor: AccessorDeclaration;
-        setAccessor: AccessorDeclaration;
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration;
-    }
-
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
         _indexSignatureDeclarationBrand: any;
     }
@@ -1024,14 +1016,14 @@ module ts {
         getSourceFiles(): SourceFile[];
 
         /**
-         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
-         * the javascript and declaration files will be produced for all the files in this program.
-         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
+         * the JavaScript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the JavaScript and declaration for that
          * specific file will be generated.
          *
          * If writeFile is not specified then the writeFile callback from the compiler host will be
-         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
-         * will be invoked when writing the javascript and declaration files.
+         * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the JavaScript and declaration files.
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
 
@@ -1208,9 +1200,11 @@ module ts {
         CannotBeNamed
     }
 
+    export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
+
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: ImportEqualsDeclaration[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -1220,21 +1214,23 @@ module ts {
     }
 
     export interface EmitResolver {
-        getGeneratedNameForNode(node: Node): string;
-        getExpressionNameSubstitution(node: Identifier): string;
+        hasGlobalName(name: string): boolean;
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
         hasExportDefaultValue(node: SourceFile): boolean;
         isReferencedAliasDeclaration(node: Node): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
+        collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        isUnknownIdentifier(location: Node, name: string): boolean;
+        resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
     }
 

@@ -8,4 +8,4 @@ export default (1 + 2);
 
 
 //// [es6ExportDefaultExpression.d.ts]
-export default (1 + 2);
+export default : number;

@@ -1587,25 +1587,6 @@ declare module "typescript" {
 >body : Block
 >Block : Block
     }
-    interface MergedAccessorDeclarations {
->MergedAccessorDeclarations : MergedAccessorDeclarations
-
-        getAccessor: AccessorDeclaration;
->getAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        setAccessor: AccessorDeclaration;
->setAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        firstAccessor: AccessorDeclaration;
->firstAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-
-        secondAccessor: AccessorDeclaration;
->secondAccessor : AccessorDeclaration
->AccessorDeclaration : AccessorDeclaration
-    }
     interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
 >IndexSignatureDeclaration : IndexSignatureDeclaration
 >SignatureDeclaration : SignatureDeclaration
@@ -2630,14 +2611,14 @@ declare module "typescript" {
 >SourceFile : SourceFile
 
         /**
-         * Emits the javascript and declaration files.  If targetSourceFile is not specified, then
-         * the javascript and declaration files will be produced for all the files in this program.
-         * If targetSourceFile is specified, then only the javascript and declaration for that
+         * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
+         * the JavaScript and declaration files will be produced for all the files in this program.
+         * If targetSourceFile is specified, then only the JavaScript and declaration for that
          * specific file will be generated.
          *
          * If writeFile is not specified then the writeFile callback from the compiler host will be
-         * used for writing the javascript and declaration files.  Otherwise, the writeFile parameter
-         * will be invoked when writing the javascript and declaration files.
+         * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
+         * will be invoked when writing the JavaScript and declaration files.
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
 >emit : (targetSourceFile?: SourceFile, writeFile?: WriteFileCallback) => EmitResult
@@ -3160,6 +3141,11 @@ declare module "typescript" {
         CannotBeNamed = 2,
 >CannotBeNamed : SymbolAccessibility
     }
+    type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+>ImportEqualsDeclaration : ImportEqualsDeclaration
+
     interface SymbolVisibilityResult {
 >SymbolVisibilityResult : SymbolVisibilityResult
 
@@ -3167,9 +3153,9 @@ declare module "typescript" {
 >accessibility : SymbolAccessibility
 >SymbolAccessibility : SymbolAccessibility
 
-        aliasesToMakeVisible?: ImportEqualsDeclaration[];
->aliasesToMakeVisible : ImportEqualsDeclaration[]
->ImportEqualsDeclaration : ImportEqualsDeclaration
+        aliasesToMakeVisible?: AnyImportSyntax[];
+>aliasesToMakeVisible : (ImportEqualsDeclaration | ImportDeclaration)[]
+>AnyImportSyntax : ImportEqualsDeclaration | ImportDeclaration
 
         errorSymbolName?: string;
 >errorSymbolName : string
@@ -3188,15 +3174,17 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: Node): string;
+        hasGlobalName(name: string): boolean;
+>hasGlobalName : (name: string) => boolean
+>name : string
+
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
+>getExpressionNameSubstitution : (node: Identifier, getGeneratedNameForNode: (node: Node) => string) => string
+>node : Identifier
+>Identifier : Identifier
 >getGeneratedNameForNode : (node: Node) => string
 >node : Node
 >Node : Node
-
-        getExpressionNameSubstitution(node: Identifier): string;
->getExpressionNameSubstitution : (node: Identifier) => string
->node : Identifier
->Identifier : Identifier
 
         hasExportDefaultValue(node: SourceFile): boolean;
 >hasExportDefaultValue : (node: SourceFile) => boolean
@@ -3224,6 +3212,12 @@ declare module "typescript" {
 >node : Declaration
 >Declaration : Declaration
 
+        collectLinkedAliases(node: Identifier): Node[];
+>collectLinkedAliases : (node: Identifier) => Node[]
+>node : Identifier
+>Identifier : Identifier
+>Node : Node
+
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
 >isImplementationOfOverload : (node: FunctionLikeDeclaration) => boolean
 >node : FunctionLikeDeclaration
@@ -3245,6 +3239,17 @@ declare module "typescript" {
 >writeReturnTypeOfSignatureDeclaration : (signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
 >signatureDeclaration : SignatureDeclaration
 >SignatureDeclaration : SignatureDeclaration
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+
+        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+>writeTypeOfExpression : (expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
+>expr : Expression
+>Expression : Expression
 >enclosingDeclaration : Node
 >Node : Node
 >flags : TypeFormatFlags
@@ -3277,8 +3282,8 @@ declare module "typescript" {
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
-        isUnknownIdentifier(location: Node, name: string): boolean;
->isUnknownIdentifier : (location: Node, name: string) => boolean
+        resolvesToSomeValue(location: Node, name: string): boolean;
+>resolvesToSomeValue : (location: Node, name: string) => boolean
 >location : Node
 >Node : Node
 >name : string
@@ -4907,10 +4912,15 @@ declare module "typescript" {
     let version: string;
 >version : string
 
-    function createCompilerHost(options: CompilerOptions): CompilerHost;
->createCompilerHost : (options: CompilerOptions) => CompilerHost
+    function findConfigFile(searchPath: string): string;
+>findConfigFile : (searchPath: string) => string
+>searchPath : string
+
+    function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
+>createCompilerHost : (options: CompilerOptions, setParentNodes?: boolean) => CompilerHost
 >options : CompilerOptions
 >CompilerOptions : CompilerOptions
+>setParentNodes : boolean
 >CompilerHost : CompilerHost
 
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
@@ -5324,6 +5334,12 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
+>findReferences : (fileName: string, position: number) => ReferencedSymbol[]
+>fileName : string
+>position : number
+>ReferencedSymbol : ReferencedSymbol
+
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
 >getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
@@ -5594,6 +5610,17 @@ declare module "typescript" {
 
         containerName: string;
 >containerName : string
+    }
+    interface ReferencedSymbol {
+>ReferencedSymbol : ReferencedSymbol
+
+        definition: DefinitionInfo;
+>definition : DefinitionInfo
+>DefinitionInfo : DefinitionInfo
+
+        references: ReferenceEntry[];
+>references : ReferenceEntry[]
+>ReferenceEntry : ReferenceEntry
     }
     enum SymbolDisplayPartKind {
 >SymbolDisplayPartKind : SymbolDisplayPartKind
