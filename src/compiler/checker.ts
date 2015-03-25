@@ -2043,8 +2043,10 @@ module ts {
                 }
             }
             else {
-                // For an array binding element the specified or inferred type of the parent must be an array-like type
-                if (!isArrayLikeType(parentType)) {
+                // In a ES3/ES5, we must be destructuring an array type. However, ES6 supports destructuring
+                // an iterator into an array pattern, so we suppress this error. If the parentType is not an iterator,
+                // there will be an error in checkIteratedType.
+                if (languageVersion < ScriptTarget.ES6 && !isArrayLikeType(parentType)) {
                     error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                     return unknownType;
                 }
@@ -5925,16 +5927,7 @@ module ts {
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
             let arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
-            if (languageVersion >= ScriptTarget.ES6) {
-                return checkIteratedType(arrayOrIterableType, node.expression) || unknownType;
-            }
-
-            if (isArrayLikeType(arrayOrIterableType)) {
-                return getIndexTypeOfType(arrayOrIterableType, IndexKind.Number);
-            }
-
-            error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(arrayOrIterableType));
-            return unknownType;
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
 
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
@@ -9267,9 +9260,24 @@ module ts {
 
         function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
             let expressionType = getTypeOfExpression(rhsExpression);
-            return languageVersion >= ScriptTarget.ES6
-                ? checkIteratedType(expressionType, rhsExpression)
-                : checkElementTypeOfArrayOrString(expressionType, rhsExpression);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+        }
+
+        function checkIteratedTypeOrElementType(inputType: Type, expressionForError: Expression, allowStringInput: boolean): Type {
+            if (languageVersion >= ScriptTarget.ES6) {
+                return checkIteratedType(inputType, expressionForError) || anyType;
+            }
+
+            if (allowStringInput) {
+                return checkElementTypeOfArrayOrString(inputType, expressionForError);
+            }
+            
+            if (isArrayLikeType(inputType)) {
+                return getIndexTypeOfType(inputType, IndexKind.Number);
+            }
+
+            error(expressionForError, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            return unknownType;
         }
 
         /**
