@@ -7,6 +7,15 @@ module ts {
 
     /* @internal */ export let checkTime = 0;
 
+    /* @internal */
+    export function getSymbolId(symbol: Symbol): number {
+        if (!symbol.id) {
+            symbol.id = nextSymbolId++;
+        }
+
+        return symbol.id;
+    }
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         let Symbol = objectAllocator.getSymbolConstructor();
         let Type = objectAllocator.getTypeConstructor();
@@ -250,8 +259,8 @@ module ts {
 
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
-            if (!symbol.id) symbol.id = nextSymbolId++;
-            return symbolLinks[symbol.id] || (symbolLinks[symbol.id] = {});
+            var id = getSymbolId(symbol);
+            return symbolLinks[id] || (symbolLinks[id] = {});
         }
 
         function getNodeLinks(node: Node): NodeLinks {

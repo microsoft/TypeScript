@@ -6,4 +6,4 @@
 ////a[/*1*/"blah"];
 
 goTo.marker("1");
-verify.referencesCountIs(1);
+verify.referencesCountIs(0);

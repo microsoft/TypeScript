@@ -4886,6 +4886,10 @@ declare module "typescript" {
     let version: string;
 >version : string
 
+    function findConfigFile(searchPath: string): string;
+>findConfigFile : (searchPath: string) => string
+>searchPath : string
+
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
 >createCompilerHost : (options: CompilerOptions, setParentNodes?: boolean) => CompilerHost
 >options : CompilerOptions
@@ -5304,6 +5308,12 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
+>findReferences : (fileName: string, position: number) => ReferencedSymbol[]
+>fileName : string
+>position : number
+>ReferencedSymbol : ReferencedSymbol
+
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
 >getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
@@ -5574,6 +5584,17 @@ declare module "typescript" {
 
         containerName: string;
 >containerName : string
+    }
+    interface ReferencedSymbol {
+>ReferencedSymbol : ReferencedSymbol
+
+        definition: DefinitionInfo;
+>definition : DefinitionInfo
+>DefinitionInfo : DefinitionInfo
+
+        references: ReferenceEntry[];
+>references : ReferenceEntry[]
+>ReferenceEntry : ReferenceEntry
     }
     enum SymbolDisplayPartKind {
 >SymbolDisplayPartKind : SymbolDisplayPartKind
