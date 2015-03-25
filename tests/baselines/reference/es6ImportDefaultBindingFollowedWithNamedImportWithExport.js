@@ -30,13 +30,13 @@ define(["require", "exports"], function (require, exports) {
     exports.default = {};
 });
 //// [client.js]
-define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, _server_1, _server_2, _server_3, _server_4, _server_5) {
-    exports.x1 = _server_1.a;
-    exports.x1 = _server_2.a;
-    exports.x1 = _server_3.x;
-    exports.x1 = _server_3.a;
-    exports.x1 = _server_4.x;
-    exports.x1 = _server_5.m;
+define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
+    exports.x1 = server_1.a;
+    exports.x1 = server_2.a;
+    exports.x1 = server_3.x;
+    exports.x1 = server_3.a;
+    exports.x1 = server_4.x;
+    exports.x1 = server_5.m;
 });
 
 

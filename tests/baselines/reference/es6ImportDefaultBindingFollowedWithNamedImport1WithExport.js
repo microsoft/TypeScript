@@ -24,18 +24,18 @@ export var x1: number = defaultBinding6;
 var a = 10;
 exports.default = a;
 //// [client.js]
-var _server = require("server");
-exports.x1 = _server.default;
-var _server_1 = require("server");
-exports.x1 = _server_1.default;
-var _server_2 = require("server");
-exports.x1 = _server_2.default;
-var _server_3 = require("server");
-exports.x1 = _server_3.default;
-var _server_4 = require("server");
-exports.x1 = _server_4.default;
-var _server_5 = require("server");
-exports.x1 = _server_5.default;
+var server_1 = require("server");
+exports.x1 = server_1.default;
+var server_2 = require("server");
+exports.x1 = server_2.default;
+var server_3 = require("server");
+exports.x1 = server_3.default;
+var server_4 = require("server");
+exports.x1 = server_4.default;
+var server_5 = require("server");
+exports.x1 = server_5.default;
+var server_6 = require("server");
+exports.x1 = server_6.default;
 
 
 //// [server.d.ts]

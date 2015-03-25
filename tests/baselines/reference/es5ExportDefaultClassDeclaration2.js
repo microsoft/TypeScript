@@ -6,14 +6,14 @@ export default class {
 
 
 //// [es5ExportDefaultClassDeclaration2.js]
-var _default = (function () {
-    function _default() {
+var default_1 = (function () {
+    function default_1() {
     }
-    _default.prototype.method = function () {
+    default_1.prototype.method = function () {
     };
-    return _default;
+    return default_1;
 })();
-exports.default = _default;
+exports.default = default_1;
 
 
 //// [es5ExportDefaultClassDeclaration2.d.ts]

@@ -13,8 +13,8 @@ var x: number = defaultBinding;
 var a = 10;
 exports.default = a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
-var _es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0 = require("es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"), nameSpaceBinding = _es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0;
-var x = _es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.default;
+var es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = require("es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"), nameSpaceBinding = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1;
+var x = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1.default;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.d.ts]

@@ -12,6 +12,14 @@ module ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    // flag enum used to request and track usages of few dedicated temp variables
+    // enum values are used to set/check bit values and thus should not have bit collisions.
+    const enum TempVariableKind {
+        auto = 0,
+        _i = 1,
+        _n = 2,
+    }
+
     // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
@@ -53,6 +61,26 @@ module ts {
             sourceMaps: sourceMapDataList
         };
 
+        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+            while (node) {
+                if (node === ancestor) return true;
+                node = node.parent;
+            }
+            return false;
+        }
+
+        function isUniqueLocalName(name: string, container: Node): boolean {
+            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+                if (node.locals && hasProperty(node.locals, name)) {
+                    // We conservatively include alias symbols to cover cases where they're emitted as locals
+                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             let writer = createTextWriter(newLine);
             let write = writer.write;
@@ -64,16 +92,18 @@ module ts {
 
             let currentSourceFile: SourceFile;
 
-            let lastFrame: ScopeFrame;
-            let currentScopeNames: Map<string>;
-
-            let generatedBlockScopeNames: string[];
+            let generatedNameSet: Map<string>;
+            let nodeToGeneratedName: string[];
+            let blockScopedVariableToGeneratedName: string[];
+            let computedPropertyNamesToGeneratedNames: string[];
 
             let extendsEmitted = false;
+            let decorateEmitted = false;
             let tempCount = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
+            let predefinedTempsInUse = TempVariableKind.auto;
             let exportSpecifiers: Map<ExportSpecifier[]>;
             let exportEquals: ExportAssignment;
             let hasExportStars: boolean;
@@ -138,81 +168,197 @@ module ts {
                 emit(sourceFile);
             }
 
-            // enters the new lexical environment
-            // return value should be passed to matching call to exitNameScope.
-            function enterNameScope(): boolean {
-                let names = currentScopeNames;
-                currentScopeNames = undefined;
-                if (names) {
-                    lastFrame = { names, previous: lastFrame };
-                    return true;
+            function generateNameForNode(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                        generateNameForFunctionOrClassDeclaration(<Declaration>node);
+                        break;
+                    case SyntaxKind.ModuleDeclaration:
+                        generateNameForModuleOrEnum(<ModuleDeclaration>node);
+                        generateNameForNode((<ModuleDeclaration>node).body);
+                        break;
+                    case SyntaxKind.EnumDeclaration:
+                        generateNameForModuleOrEnum(<EnumDeclaration>node);
+                        break;
+                    case SyntaxKind.ImportDeclaration:
+                        generateNameForImportDeclaration(<ImportDeclaration>node);
+                        break;
+                    case SyntaxKind.ExportDeclaration:
+                        generateNameForExportDeclaration(<ExportDeclaration>node);
+                        break;
+                    case SyntaxKind.ExportAssignment:
+                        generateNameForExportAssignment(<ExportAssignment>node);
+                        break;
+                    case SyntaxKind.SourceFile:
+                    case SyntaxKind.ModuleBlock:
+                        forEach((<SourceFile | ModuleBlock>node).statements, generateNameForNode);
+                        break;
                 }
-                return false;
             }
 
-            function exitNameScope(popFrame: boolean): void {
-                if (popFrame) {
-                    currentScopeNames = lastFrame.names;
-                    lastFrame = lastFrame.previous;
+            function isUniqueName(name: string): boolean {
+                return !resolver.hasGlobalName(name) &&
+                    !hasProperty(currentSourceFile.identifiers, name) &&
+                    (!generatedNameSet || !hasProperty(generatedNameSet, name))
+            }
+
+            // in cases like
+            // for (var x of []) {
+            //     _i;
+            // }
+            // we should be able to detect if let _i was shadowed by some temp variable that was allocated in scope
+            function nameConflictsWithSomeTempVariable(name: string): boolean {
+                // temp variable names always start with '_'
+                if (name.length < 2 || name.charCodeAt(0) !== CharacterCodes._) {
+                    return false;
+                }
+
+                if (name === "_i") {
+                    return !!(predefinedTempsInUse & TempVariableKind._i);
+                }
+
+                if (name === "_n") {
+                    return !!(predefinedTempsInUse & TempVariableKind._n);
+                }
+
+                if (name.length === 2 && name.charCodeAt(1) >= CharacterCodes.a && name.charCodeAt(1) <= CharacterCodes.z) {
+                    // handles _a .. _z
+                    let n = name.charCodeAt(1) - CharacterCodes.a;
+                    return n < tempCount;
                 }
                 else {
-                    currentScopeNames = undefined;
+                    // handles _1, _2...
+                    let n = +name.substring(1);
+                    return !isNaN(n) && n >= 0 && n < (tempCount - 26);
                 }
             }
 
-            function generateUniqueNameForLocation(location: Node, baseName: string): string {
-                let name: string
-                // first try to check if base name can be used as is
-                if (!isExistingName(location, baseName)) {
-                    name = baseName;
-                }
-                else {
-                    name = generateUniqueName(baseName, n => isExistingName(location, n));
-                }
-
-                return recordNameInCurrentScope(name);
-            }
-
-            function recordNameInCurrentScope(name: string): string {
-                if (!currentScopeNames) {
-                    currentScopeNames = {};
-                }
-
-                return currentScopeNames[name] = name;
-            }
-
-            function isExistingName(location: Node, name: string) {
-                // check if resolver is aware of this name (if name was seen during the typecheck)
-                if (!resolver.isUnknownIdentifier(location, name)) {
-                    return true;
-                }
-
-                // check if name is present in generated names that were introduced by the emitter
-                if (currentScopeNames && hasProperty(currentScopeNames, name)) {
-                    return true;
-                }
-
-                // check generated names in outer scopes
-                // let x;
-                // function foo() {
-                //    let x; // 1
-                //    function bar() {
-                //        {
-                //            let x; // 2
-                //        }
-                //        console.log(x); // 3
-                //    }
-                //}
-                // here both x(1) and x(2) should be renamed and their names should be different
-                // so x in (3) will refer to x(1)
-                let frame = lastFrame;
-                while (frame) {
-                    if (hasProperty(frame.names, name)) {
-                        return true;
+            // This function generates a name using the following pattern:
+            // _a .. _h, _j ... _z, _0, _1, ...
+            // It is guaranteed that generated name will not shadow any existing user-defined names,
+            // however it can hide another name generated by this function higher in the scope.
+            // NOTE: names generated by 'makeTempVariableName' and 'makeUniqueName' will never conflict.
+            // see comment for 'makeTempVariableName' for more information.
+            function makeTempVariableName(location: Node, tempVariableKind: TempVariableKind): string {
+                let tempName: string;
+                if (tempVariableKind !== TempVariableKind.auto && !(predefinedTempsInUse & tempVariableKind)) {
+                    tempName = tempVariableKind === TempVariableKind._i ? "_i" : "_n";
+                    if (!resolver.resolvesToSomeValue(location, tempName)) {
+                        predefinedTempsInUse |= tempVariableKind;
+                        return tempName;
                     }
-                    frame = frame.previous;
                 }
-                return false;
+
+                do {
+                    // Note: we avoid generating _i and _n as those are common names we want in other places.
+                    var char = CharacterCodes.a + tempCount;
+                    if (char !== CharacterCodes.i && char !== CharacterCodes.n) {
+                        if (tempCount < 26) {
+                            tempName = "_" + String.fromCharCode(char);
+                        }
+                        else {
+                            tempName = "_" + (tempCount - 26);
+                        }
+                    }
+
+                    tempCount++;
+                }
+                while (resolver.resolvesToSomeValue(location, tempName));
+
+                return tempName;
+            }
+
+            // Generates a name that is unique within current file and does not collide with
+            // any names in global scope.
+            // NOTE: names generated by 'makeTempVariableName' and 'makeUniqueName' will never conflict
+            // because of the way how these names are generated
+            // - makeUniqueName builds a name by picking a base name (which should not be empty string)
+            //   and appending suffix '_<number>'
+            // - makeTempVariableName creates a name using the following pattern:
+            //   _a .. _h, _j ... _z, _0, _1, ...
+            // This means that names from 'makeTempVariableName' will have only one underscore at the beginning
+            // and names from 'makeUniqieName' will have at least one underscore in the middle 
+            // so they will never collide.
+            function makeUniqueName(baseName: string): string {
+                Debug.assert(!!baseName);
+
+                // Find the first unique 'name_n', where n is a positive number
+                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+                    baseName += "_";
+                }
+
+                let i = 1;
+                let generatedName: string;
+                while (true) {
+                    generatedName = baseName + i;
+                    if (isUniqueName(generatedName)) {
+                        break;
+                    }
+                    i++;
+                }
+
+                if (!generatedNameSet) {
+                    generatedNameSet = {};
+                }
+                return generatedNameSet[generatedName] = generatedName;
+            }
+
+            function renameNode(node: Node, name: string): string {
+                var nodeId = getNodeId(node);
+
+                if (!nodeToGeneratedName) {
+                    nodeToGeneratedName = [];
+                }
+
+                return nodeToGeneratedName[nodeId] = unescapeIdentifier(name);
+            }
+
+            function generateNameForFunctionOrClassDeclaration(node: Declaration) {
+                if (!node.name) {
+                    renameNode(node, makeUniqueName("default"));
+                }
+            }
+
+            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    let name = node.name.text;
+                    // Use module/enum name itself if it is unique, otherwise make a unique variation
+                    renameNode(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
+                }
+            }
+
+            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
+                let expr = getExternalModuleName(node);
+                let baseName = expr.kind === SyntaxKind.StringLiteral ?
+                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+                renameNode(node, makeUniqueName(baseName));
+            }
+
+            function generateNameForImportDeclaration(node: ImportDeclaration) {
+                if (node.importClause) {
+                    generateNameForImportOrExportDeclaration(node);
+                }
+            }
+
+            function generateNameForExportDeclaration(node: ExportDeclaration) {
+                if (node.moduleSpecifier) {
+                    generateNameForImportOrExportDeclaration(node);
+                }
+            }
+
+            function generateNameForExportAssignment(node: ExportAssignment) {
+                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
+                    renameNode(node, makeUniqueName("default"));
+                }
+            }
+
+            function getGeneratedNameForNode(node: Node) {
+                let nodeId = getNodeId(node);
+                if (!nodeToGeneratedName || !nodeToGeneratedName[nodeId]) {
+                    generateNameForNode(node);
+                }
+                return nodeToGeneratedName ? nodeToGeneratedName[nodeId] : undefined;
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -579,32 +725,10 @@ module ts {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
-            // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
-            // name should be one that is appropriate for a for loop variable.
-            function createTempVariable(location: Node, preferredName?: string): Identifier {
-                for (var name = preferredName; !name || isExistingName(location, name); tempCount++) {
-                    // _a .. _h, _j ... _z, _0, _1, ...
-
-                    // Note: we avoid generating _i and _n as those are common names we want in other places.
-                    var char = CharacterCodes.a + tempCount;
-                    if (char === CharacterCodes.i || char === CharacterCodes.n) {
-                        continue;
-                    }
-
-                    if (tempCount < 26) {
-                        name = "_" + String.fromCharCode(char);
-                    }
-                    else {
-                        name = "_" + (tempCount - 26);
-                    }
-                }
-                
-                // This is necessary so that a name generated via renameNonTopLevelLetAndConst will see the name
-                // we just generated.
-                recordNameInCurrentScope(name);
-
+            // Create a temporary variable with a unique unused name.
+            function createTempVariable(location: Node, tempVariableKind = TempVariableKind.auto): Identifier {
                 let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                result.text = name;
+                result.text = makeTempVariableName(location, tempVariableKind);
                 return result;
             }
 
@@ -615,8 +739,8 @@ module ts {
                 tempVariables.push(name);
             }
 
-            function createAndRecordTempVariable(location: Node, preferredName?: string): Identifier {
-                let temp = createTempVariable(location, preferredName);
+            function createAndRecordTempVariable(location: Node, tempVariableKind?: TempVariableKind): Identifier {
+                let temp = createTempVariable(location, tempVariableKind);
                 recordTempDeclaration(temp);
 
                 return temp;
@@ -1030,6 +1154,38 @@ module ts {
                     emitLiteral(<LiteralExpression>node);
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
+                    // if this is a decorated computed property, we will need to capture the result
+                    // of the property expression so that we can apply decorators later. This is to ensure 
+                    // we don't introduce unintended side effects:
+                    //
+                    //   class C {
+                    //     [_a = x]() { }
+                    //   }
+                    //
+                    // The emit for the decorated computed property decorator is:
+                    //
+                    //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
+                    //
+                    if (nodeIsDecorated(node.parent)) {
+                        if (!computedPropertyNamesToGeneratedNames) {
+                            computedPropertyNamesToGeneratedNames = [];
+                        }
+
+                        let generatedName = computedPropertyNamesToGeneratedNames[node.id];
+                        if (generatedName) {
+                            // we have already generated a variable for this node, write that value instead.
+                            write(generatedName);
+                            return;
+                        }
+
+                        let generatedVariable = createTempVariable(node);
+                        generatedName = generatedVariable.text;
+                        recordTempDeclaration(generatedVariable);
+                        computedPropertyNamesToGeneratedNames[node.id] = generatedName;
+                        write(generatedName);
+                        write(" = ");
+                    }
+
                     emit((<ComputedPropertyName>node).expression);
                 }
                 else {
@@ -1084,7 +1240,7 @@ module ts {
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                let substitution = resolver.getExpressionNameSubstitution(node);
+                let substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
                 if (substitution) {
                     write(substitution);
                 }
@@ -1094,7 +1250,7 @@ module ts {
             }
 
             function getGeneratedNameForIdentifier(node: Identifier): string {
-                if (nodeIsSynthesized(node) || !generatedBlockScopeNames) {
+                if (nodeIsSynthesized(node) || !blockScopedVariableToGeneratedName) {
                     return undefined;
                 }
 
@@ -1103,7 +1259,7 @@ module ts {
                     return undefined;
                 }
 
-                return generatedBlockScopeNames[variableId];
+                return blockScopedVariableToGeneratedName[variableId];
             }
 
             function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
@@ -1331,7 +1487,7 @@ module ts {
                         // manage by just emitting strings (which is a lot more performant).
                         //let prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
                         //return createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
-                        return createIdentifier(resolver.getExpressionNameSubstitution((<ShorthandPropertyAssignment>property).name));
+                        return createIdentifier(resolver.getExpressionNameSubstitution((<ShorthandPropertyAssignment>property).name, getGeneratedNameForNode));
 
                     case SyntaxKind.MethodDeclaration:
                         return createFunctionExpression((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
@@ -1504,7 +1660,7 @@ module ts {
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
                 write("[");
-                emit(node.expression);
+                emitExpressionForPropertyName(node);
                 write("]");
             }
 
@@ -1545,7 +1701,7 @@ module ts {
                         emitExpressionIdentifier(node.name);
                     }
                 }
-                else if (resolver.getExpressionNameSubstitution(node.name)) {
+                else if (resolver.getExpressionNameSubstitution(node.name, getGeneratedNameForNode)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -2078,10 +2234,10 @@ module ts {
                 //
                 // we don't want to emit a temporary variable for the RHS, just use it directly.
                 let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
-                let counter = createTempVariable(node, /*preferredName*/ "_i");
+                let counter = createTempVariable(node, TempVariableKind._i);
                 let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(node);
 
-                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, /*preferredName:*/ "_n") : undefined;
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, TempVariableKind._n) : undefined;
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -2322,7 +2478,7 @@ module ts {
 
             function emitContainingModuleName(node: Node) {
                 let container = getContainingModule(node);
-                write(container ? resolver.getGeneratedNameForNode(container) : "exports");
+                write(container ? getGeneratedNameForNode(container) : "exports");
             }
 
             function emitModuleMemberName(node: Declaration) {
@@ -2330,7 +2486,7 @@ module ts {
                 if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
                     if (container) {
-                        write(resolver.getGeneratedNameForNode(container));
+                        write(getGeneratedNameForNode(container));
                         write(".");
                     }
                     else if (languageVersion < ScriptTarget.ES6) {
@@ -2689,9 +2845,14 @@ module ts {
 
                 // here it is known that node is a block scoped variable
                 let list = getAncestor(node, SyntaxKind.VariableDeclarationList);
-                if (list.parent.kind === SyntaxKind.VariableStatement && list.parent.parent.kind === SyntaxKind.SourceFile) {
-                    // do not rename variables that are defined on source file level
-                    return;
+                if (list.parent.kind === SyntaxKind.VariableStatement) {
+                    let isSourceFileLevelBinding = list.parent.parent.kind === SyntaxKind.SourceFile;
+                    let isModuleLevelBinding = list.parent.parent.kind === SyntaxKind.ModuleBlock;
+                    let isFunctionLevelBinding =
+                        list.parent.parent.kind === SyntaxKind.Block && isFunctionLike(list.parent.parent.parent);
+                    if (isSourceFileLevelBinding || isModuleLevelBinding || isFunctionLevelBinding) {
+                        return;
+                    }
                 }
 
                 let blockScopeContainer = getEnclosingBlockScopeContainer(node);
@@ -2699,12 +2860,19 @@ module ts {
                     ? blockScopeContainer
                     : blockScopeContainer.parent;
 
-                let generatedName = generateUniqueNameForLocation(parent, (<Identifier>node).text);
-                let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
-                if (!generatedBlockScopeNames) {
-                    generatedBlockScopeNames = [];
+                var hasConflictsInEnclosingScope =
+                    resolver.resolvesToSomeValue(parent, (<Identifier>node).text) ||
+                    nameConflictsWithSomeTempVariable((<Identifier>node).text);
+
+                if (hasConflictsInEnclosingScope) {
+                    let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
+                    if (!blockScopedVariableToGeneratedName) {
+                        blockScopedVariableToGeneratedName = [];
+                    }
+
+                    let generatedName = makeUniqueName((<Identifier>node).text);
+                    blockScopedVariableToGeneratedName[variableId] = generatedName;
                 }
-                generatedBlockScopeNames[variableId] = generatedName;
             }
 
             function isES6ExportedDeclaration(node: Node) {
@@ -2786,7 +2954,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
-                    let tempName = createTempVariable(node, /*preferredName:*/ "_i").text;
+                    let tempName = createTempVariable(node, TempVariableKind._i).text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -2836,7 +3004,7 @@ module ts {
                     emitNodeWithoutSourceMap(node.name);
                 }
                 else {
-                    write(resolver.getGeneratedNameForNode(node));
+                    write(getGeneratedNameForNode(node));
                 }
             }
 
@@ -2922,11 +3090,12 @@ module ts {
                 let saveTempCount = tempCount;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
+                let savePredefinedTempsInUse = predefinedTempsInUse;
+
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-
-                let popFrame = enterNameScope()
+                predefinedTempsInUse = TempVariableKind.auto;
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (shouldEmitAsArrowFunction(node)) {
@@ -2953,8 +3122,7 @@ module ts {
                     emitExportMemberAssignment(node);
                 }
 
-                exitNameScope(popFrame);
-
+                predefinedTempsInUse = savePredefinedTempsInUse;
                 tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
@@ -3155,10 +3323,7 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitDeclarationName(node);
-                        if (!(member.flags & NodeFlags.Static)) {
-                            write(".prototype");
-                        }
+                        emitClassMemberPrefix(node, member);
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
@@ -3176,10 +3341,7 @@ module ts {
                             emitStart(member);
                             write("Object.defineProperty(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitDeclarationName(node);
-                            if (!(member.flags & NodeFlags.Static)) {
-                                write(".prototype");
-                            }
+                            emitClassMemberPrefix(node, member);
                             write(", ");
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
@@ -3251,11 +3413,12 @@ module ts {
                 let saveTempCount = tempCount;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
+                let savePredefinedTempsInUse = predefinedTempsInUse;
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
+                predefinedTempsInUse = TempVariableKind.auto;
 
-                let popFrame = enterNameScope();
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -3364,32 +3527,105 @@ module ts {
                     emitTrailingComments(ctor);
                 }
 
-                exitNameScope(popFrame);
-
+                predefinedTempsInUse = savePredefinedTempsInUse;
                 tempCount = saveTempCount;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
             }
 
+            function emitClassDeclaration(node: ClassDeclaration) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    emitClassDeclarationBelowES6(<ClassDeclaration>node);
+                }
+                else {
+                    emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
+                }
+            }
+            
             function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
-                if (isES6ExportedDeclaration(node)) {
-                    write("export ");
+                let thisNodeIsDecorated = nodeIsDecorated(node);
+                if (thisNodeIsDecorated) {
+                    // To preserve the correct runtime semantics when decorators are applied to the class,
+                    // the emit needs to follow one of the following rules:
+                    //
+                    // * For a local class declaration:
+                    //
+                    //     @dec class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let C = class {
+                    //     };
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //
+                    // * For an exported class declaration:
+                    //
+                    //     @dec export class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     export let C = class {
+                    //     };
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //
+                    // * For a default export of a class declaration with a name:
+                    //
+                    //     @dec default export class C {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let C = class {
+                    //     }
+                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                    //     C = __decorate([dec], C);
+                    //     export default C;
+                    //
+                    // * For a default export of a class declaration without a name:
+                    //
+                    //     @dec default export class {
+                    //     }
+                    //
+                    //   The emit should be:
+                    //
+                    //     let _default = class {
+                    //     }
+                    //     _default = __decorate([dec], _default);
+                    //     export default _default;
+                    //
+                    if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
+                        write("export ");
+                    }
 
+                    write("let ");
+                    emitDeclarationName(node);
+                    write(" = ");
+                }
+                else if (isES6ExportedDeclaration(node)) {                    
+                    write("export ");
                     if (node.flags & NodeFlags.Default) {
                         write("default ");
                     }
                 }
 
-                write("class ");
-                // check if this is an "export default class" as it may not have a name
-                if (node.name || !(node.flags & NodeFlags.Default)) {
+                write("class");
+
+                // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
+                if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
+                    write(" ");
                     emitDeclarationName(node);
                 }
+
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write(" extends ");
                     emit(baseTypeNode.typeName);
                 }
+
                 write(" {");
                 increaseIndent();
                 scopeEmitStart(node);
@@ -3401,6 +3637,26 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
                 scopeEmitEnd();
 
+                // For a decorated class, we need to assign its name (if it has one). This is because we emit
+                // the class as a class expression to avoid the double-binding of the identifier:
+                //
+                //   let C = class {
+                //   }
+                //   Object.defineProperty(C, "name", { value: "C", configurable: true });
+                //
+                if (thisNodeIsDecorated) {
+                    write(";");
+                    if (node.name) {
+                        writeLine();
+                        write("Object.defineProperty(");
+                        emitDeclarationName(node);
+                        write(", \"name\", { value: \"");
+                        emitDeclarationName(node);
+                        write("\", configurable: true });");
+                        writeLine();
+                    }
+                }
+
                 // Emit static property assignment. Because classDeclaration is lexically evaluated,
                 // it is safe to emit static property assignment after classDeclaration
                 // From ES6 specification:
@@ -3408,6 +3664,7 @@ module ts {
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
                 writeLine();
                 emitMemberAssignments(node, NodeFlags.Static);
+                emitDecoratorsOfClass(node);
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
@@ -3418,6 +3675,13 @@ module ts {
                     write(" = ");
                     emitDeclarationName(node);
                     emitEnd(node);
+                    write(";");
+                }
+                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
+                    // if this is a top level default export of decorated class, write the export after the declaration.
+                    writeLine();
+                    write("export default ");
+                    emitDeclarationName(node);
                     write(";");
                 }
             }
@@ -3431,6 +3695,14 @@ module ts {
                     write("_super");
                 }
                 write(") {");
+                let saveTempCount = tempCount;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
+                let saveComputedPropertyNamesToGeneratedNames = computedPropertyNamesToGeneratedNames;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+                computedPropertyNamesToGeneratedNames = undefined;
                 increaseIndent();
                 scopeEmitStart(node);
                 if (baseTypeNode) {
@@ -3446,11 +3718,18 @@ module ts {
                 emitMemberFunctionsForES5AndLower(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
+                emitDecoratorsOfClass(node);
+                writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
                     emitDeclarationName(node);
                 });
                 write(";");
+                emitTempDeclarations(/*newLine*/ true);
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+                computedPropertyNamesToGeneratedNames = saveComputedPropertyNamesToGeneratedNames;
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -3468,6 +3747,225 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
+            }
+
+            function emitClassMemberPrefix(node: ClassDeclaration, member: Node) {
+                emitDeclarationName(node);
+                if (!(member.flags & NodeFlags.Static)) {
+                    write(".prototype");
+                }
+            }
+            
+            function emitDecoratorsOfClass(node: ClassDeclaration) {
+                if (languageVersion < ScriptTarget.ES5) {
+                    return;
+                }
+
+                emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
+                emitDecoratorsOfMembers(node, NodeFlags.Static);
+                emitDecoratorsOfConstructor(node);
+            }
+
+            function emitDecoratorsOfConstructor(node: ClassDeclaration) {
+                let constructor = getFirstConstructorWithBody(node);
+                if (constructor) {
+                    emitDecoratorsOfParameters(node, constructor);
+                }
+
+                if (!nodeIsDecorated(node)) {
+                    return;
+                }
+
+                // Emit the call to __decorate. Given the class:
+                //
+                //   @dec
+                //   class C {
+                //   }
+                //
+                // The emit for the class is:
+                //
+                //   C = __decorate([dec], C);
+                //
+
+                writeLine();
+                emitStart(node);
+                emitDeclarationName(node);
+                write(" = ");
+                emitDecorateStart(node.decorators);
+                emitDeclarationName(node);
+                write(");");
+                emitEnd(node);
+                writeLine();
+            }
+
+            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {
+                forEach(node.members, member => {
+                    if ((member.flags & NodeFlags.Static) !== staticFlag) {
+                        return;
+                    }
+
+                    let decorators: NodeArray<Decorator>;
+                    switch (member.kind) {
+                        case SyntaxKind.MethodDeclaration:
+                            // emit decorators of the method's parameters
+                            emitDecoratorsOfParameters(node, <MethodDeclaration>member);
+                            decorators = member.decorators;
+                            break;
+
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                            if (member !== accessors.firstAccessor) {
+                                // skip the second accessor as we processed it with the first.
+                                return;
+                            }
+
+                            if (accessors.setAccessor) {
+                                // emit decorators of the set accessor parameter
+                                emitDecoratorsOfParameters(node, <AccessorDeclaration>accessors.setAccessor);
+                            }
+
+                            // get the decorators from the first decorated accessor.
+                            decorators = accessors.firstAccessor.decorators;
+                            if (!decorators && accessors.secondAccessor) {
+                                decorators = accessors.secondAccessor.decorators;
+                            }
+                            break;
+
+                        case SyntaxKind.PropertyDeclaration:
+                            decorators = member.decorators;
+                            break;
+
+                        default:
+                            // Constructor cannot be decorated, and its parameters are handled in emitDecoratorsOfConstructor
+                            // Other members (i.e. IndexSignature) cannot be decorated.
+                            return;
+                    }
+
+                    if (!decorators) {
+                        return;
+                    }
+
+                    // Emit the call to __decorate. Given the following:
+                    //
+                    //   class C {
+                    //     @dec method() {}
+                    //     @dec get accessor() {}
+                    //     @dec prop;
+                    //   }
+                    //
+                    // The emit for a method is:
+                    //
+                    //   Object.defineProperty(C.prototype, "method", __decorate([dec], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+                    // 
+                    // The emit for an accessor is:
+                    //
+                    //   Object.defineProperty(C.prototype, "accessor", __decorate([dec], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+                    //
+                    // The emit for a property is:
+                    //
+                    //   __decorate([dec], C.prototype, "prop");
+                    //
+
+                    writeLine();
+                    emitStart(member);
+                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                        write("Object.defineProperty(");
+                        emitStart(member.name);
+                        emitClassMemberPrefix(node, member);
+                        write(", ");
+                        emitExpressionForPropertyName(member.name);
+                        emitEnd(member.name);
+                        write(", ");
+                    }
+
+                    emitDecorateStart(decorators);
+                    emitStart(member.name);
+                    emitClassMemberPrefix(node, member);
+                    write(", ");
+                    emitExpressionForPropertyName(member.name);
+                    emitEnd(member.name);
+
+                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                        write(", Object.getOwnPropertyDescriptor(");
+                        emitStart(member.name);
+                        emitClassMemberPrefix(node, member);
+                        write(", ");
+                        emitExpressionForPropertyName(member.name);
+                        emitEnd(member.name);
+                        write("))");
+                    }
+
+                    write(");");
+                    emitEnd(member);
+                    writeLine();
+                });
+            }
+            
+            function emitDecoratorsOfParameters(node: ClassDeclaration, member: FunctionLikeDeclaration) {
+                forEach(member.parameters, (parameter, parameterIndex) => {
+                    if (!nodeIsDecorated(parameter)) {
+                        return;
+                    }
+
+                    // Emit the decorators for a parameter. Given the following:
+                    //
+                    //   class C {
+                    //     constructor(@dec p) { }
+                    //     method(@dec p) { }
+                    //     set accessor(@dec value) { }
+                    //   }
+                    //
+                    // The emit for a constructor is:
+                    //
+                    //   __decorate([dec], C, void 0, 0);
+                    //
+                    // The emit for a parameter is:
+                    //
+                    //   __decorate([dec], C.prototype, "method", 0);
+                    //
+                    // The emit for an accessor is:
+                    //
+                    //   __decorate([dec], C.prototype, "accessor", 0);
+                    //
+
+                    writeLine();
+                    emitStart(parameter);
+                    emitDecorateStart(parameter.decorators);
+                    emitStart(parameter.name);
+
+                    if (member.kind === SyntaxKind.Constructor) {
+                        emitDeclarationName(node);
+                        write(", void 0");
+                    }
+                    else {
+                        emitClassMemberPrefix(node, member);
+                        write(", ");
+                        emitExpressionForPropertyName(member.name);
+                    }
+
+                    write(", ");
+                    write(String(parameterIndex));
+                    emitEnd(parameter.name);
+                    write(");");
+                    emitEnd(parameter);
+                    writeLine();
+                });
+            }
+
+            function emitDecorateStart(decorators: Decorator[]): void {
+                write("__decorate([");
+                let decoratorCount = decorators.length;
+                for (let i = 0; i < decoratorCount; i++) {
+                    if (i > 0) {
+                        write(", ");
+                    }
+                    let decorator = decorators[i];
+                    emitStart(decorator);
+                    emit(decorator.expression);
+                    emitEnd(decorator);
+                }
+                write("], ");
             }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -3499,7 +3997,7 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getGeneratedNameForNode(node));
+                write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") {");
                 increaseIndent();
@@ -3533,9 +4031,9 @@ module ts {
             function emitEnumMember(node: EnumMember) {
                 let enumParent = <EnumDeclaration>node.parent;
                 emitStart(node);
-                write(resolver.getGeneratedNameForNode(enumParent));
+                write(getGeneratedNameForNode(enumParent));
                 write("[");
-                write(resolver.getGeneratedNameForNode(enumParent));
+                write(getGeneratedNameForNode(enumParent));
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
@@ -3591,19 +4089,20 @@ module ts {
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
-                write(resolver.getGeneratedNameForNode(node));
+                write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     let saveTempCount = tempCount;
                     let saveTempVariables = tempVariables;
+                    let savePredefinedTempsInUse = predefinedTempsInUse;
                     tempCount = 0;
                     tempVariables = undefined;
-                    let popFrame = enterNameScope();
+                    predefinedTempsInUse = TempVariableKind.auto;
 
                     emit(node.body);
 
-                    exitNameScope(popFrame);
+                    predefinedTempsInUse = savePredefinedTempsInUse;
                     tempCount = saveTempCount;
                     tempVariables = saveTempVariables;
                 }
@@ -3741,7 +4240,7 @@ module ts {
                             let isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
                                 write("var ");
-                                write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                                write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
                         }
@@ -3751,7 +4250,7 @@ module ts {
                             write(", ");
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
-                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                            write(getGeneratedNameForNode(<ImportDeclaration>node));
                         }
                         write(";");
                         emitEnd(node);
@@ -3770,7 +4269,7 @@ module ts {
                             write("var ");
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
-                            write(resolver.getGeneratedNameForNode(<ImportDeclaration>node));
+                            write(getGeneratedNameForNode(<ImportDeclaration>node));
                             write(";");
                         }
                         emitExportImportAssignments(node);
@@ -3811,7 +4310,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
-                        let generatedName = resolver.getGeneratedNameForNode(node);
+                        let generatedName = getGeneratedNameForNode(node);
                         if (node.exportClause) {
                             // export { x, y, ... } from "foo"
                             if (compilerOptions.module !== ModuleKind.AMD) {
@@ -4033,7 +4532,7 @@ module ts {
                         emit(namespaceDeclaration.name);
                     }
                     else {
-                        write(resolver.getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
+                        write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
                     }
                 }
                 for (let amdDependency of node.amdDependencies) {
@@ -4102,6 +4601,17 @@ module ts {
                 return statements.length;
             }
 
+            function writeHelper(text: string): void {
+                let lines = text.split(/\r\n|\r|\n/g);
+                for (let i = 0; i < lines.length; ++i) {
+                    let line = lines[i];
+                    if (line.length) {
+                        writeLine();
+                        write(line);
+                    }
+                }
+            }
+
             function emitSourceFileNode(node: SourceFile) {
                 // Start new file on new line
                 writeLine();
@@ -4127,6 +4637,23 @@ module ts {
                     writeLine();
                     write("};");
                     extendsEmitted = true;
+                }
+                if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
+                    writeHelper(`
+var __decorate = this.__decorate || function (decorators, target, key, value) {
+    var kind = typeof (arguments.length == 2 ? value = target : value);
+    for (var i = decorators.length - 1; i >= 0; --i) {
+        var decorator = decorators[i];
+        switch (kind) {
+            case "function": value = decorator(value) || value; break;
+            case "number": decorator(target, key, value); break;
+            case "undefined": decorator(target, key); break;
+            case "object": value = decorator(target, key, value) || value; break;
+        }
+    }
+    return value;
+};`);
+                    decorateEmitted = true;
                 }
                 if (isExternalModule(node)) {
                     if (languageVersion >= ScriptTarget.ES6) {
@@ -4347,7 +4874,7 @@ module ts {
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
-                        return languageVersion < ScriptTarget.ES6 ? emitClassDeclarationBelowES6(<ClassDeclaration>node) : emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
+                        return emitClassDeclaration(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:

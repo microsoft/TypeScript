@@ -17,10 +17,10 @@ export { x as y, y as x };
 exports.x = "x";
 exports.y = "y";
 //// [t2.js]
-var _t1 = require("./t1");
-exports.y = _t1.x;
-exports.x = _t1.y;
+var t1_1 = require("./t1");
+exports.y = t1_1.x;
+exports.x = t1_1.y;
 //// [t3.js]
-var _t1 = require("./t1");
-exports.y = _t1.x;
-exports.x = _t1.y;
+var t1_1 = require("./t1");
+exports.y = t1_1.x;
+exports.x = t1_1.y;

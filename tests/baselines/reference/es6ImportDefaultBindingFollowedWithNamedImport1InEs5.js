@@ -24,18 +24,18 @@ var x: number = defaultBinding6;
 var a = 10;
 exports.default = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.js]
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.default;
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1.default;
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2.default;
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3.default;
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4.default;
-var _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
-var x = _es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_3.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_4.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
+var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
+var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.d.ts]

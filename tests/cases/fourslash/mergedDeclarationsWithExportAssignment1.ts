@@ -25,11 +25,11 @@ goTo.marker('2');
 verify.completionListContains('Foo');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) z: Foo');
+verify.quickInfoIs('var z: Foo');
 
 goTo.marker('4');
 verify.completionListContains('x');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) r2: number');
+verify.quickInfoIs('var r2: number');
 

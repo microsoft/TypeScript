@@ -12,14 +12,14 @@ verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("1").
 
 goTo.marker('2');
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("2").position, length: "cInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 
 goTo.marker('3');
 verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName("3").position, length: "c".length },
-    [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "constructor", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" },
         { text: "(", kind: "punctuation" }, { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
@@ -27,7 +27,7 @@ verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName
 
 goTo.marker('4');
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("4").position, length: "cVal".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "cVal", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" },
         { text: "typeof", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],

@@ -17,8 +17,8 @@ define(["require", "exports"], function (require, exports) {
     exports.default = a;
 });
 //// [es6ImportDefaultBindingAmd_1.js]
-define(["require", "exports", "es6ImportDefaultBindingAmd_0"], function (require, exports, _es6ImportDefaultBindingAmd_0) {
-    var x = _es6ImportDefaultBindingAmd_0.default;
+define(["require", "exports", "es6ImportDefaultBindingAmd_0"], function (require, exports, es6ImportDefaultBindingAmd_0_1) {
+    var x = es6ImportDefaultBindingAmd_0_1.default;
 });
 
 

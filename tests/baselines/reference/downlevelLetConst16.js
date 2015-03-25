@@ -236,29 +236,29 @@ use(x);
 use(y);
 use(z);
 function foo1() {
-    var _x = 1;
-    use(_x);
-    var _y = ([
+    var x = 1;
+    use(x);
+    var y = ([
         1
     ])[0];
-    use(_y);
-    var _z = ({
+    use(y);
+    var z = ({
         a: 1
     }).a;
-    use(_z);
+    use(z);
 }
 function foo2() {
     {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x_1 = 1;
+        use(x_1);
+        var y_1 = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y_1);
+        var z_1 = ({
             a: 1
         }).a;
-        use(_z);
+        use(z_1);
     }
     use(x);
 }
@@ -266,29 +266,29 @@ var A = (function () {
     function A() {
     }
     A.prototype.m1 = function () {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x = 1;
+        use(x);
+        var y = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y);
+        var z = ({
             a: 1
         }).a;
-        use(_z);
+        use(z);
     };
     A.prototype.m2 = function () {
         {
-            var _x = 1;
-            use(_x);
-            var _y = ([
+            var x_2 = 1;
+            use(x_2);
+            var y_2 = ([
                 1
             ])[0];
-            use(_y);
-            var _z = ({
+            use(y_2);
+            var z_2 = ({
                 a: 1
             }).a;
-            use(_z);
+            use(z_2);
         }
         use(x);
     };
@@ -298,200 +298,200 @@ var B = (function () {
     function B() {
     }
     B.prototype.m1 = function () {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x = 1;
+        use(x);
+        var y = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y);
+        var z = ({
             a: 1
         }).a;
-        use(_z);
+        use(z);
     };
     B.prototype.m2 = function () {
         {
-            var _x = 1;
-            use(_x);
-            var _y = ([
+            var x_3 = 1;
+            use(x_3);
+            var y_3 = ([
                 1
             ])[0];
-            use(_y);
-            var _z = ({
+            use(y_3);
+            var z_3 = ({
                 a: 1
             }).a;
-            use(_z);
+            use(z_3);
         }
         use(x);
     };
     return B;
 })();
 function bar1() {
-    var _x = 1;
-    use(_x);
-    var _y = ([
+    var x = 1;
+    use(x);
+    var y = ([
         1
     ])[0];
-    use(_y);
-    var _z = ({
+    use(y);
+    var z = ({
         a: 1
     }).a;
-    use(_z);
+    use(z);
 }
 function bar2() {
     {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x_4 = 1;
+        use(x_4);
+        var y_4 = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y_4);
+        var z_4 = ({
             a: 1
         }).a;
-        use(_z);
+        use(z_4);
     }
     use(x);
 }
 var M1;
 (function (M1) {
-    var _x = 1;
-    use(_x);
-    var _y = ([
+    var x = 1;
+    use(x);
+    var y = ([
         1
     ])[0];
-    use(_y);
-    var _z = ({
+    use(y);
+    var z = ({
         a: 1
     }).a;
-    use(_z);
+    use(z);
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
     {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x_5 = 1;
+        use(x_5);
+        var y_5 = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y_5);
+        var z_5 = ({
             a: 1
         }).a;
-        use(_z);
+        use(z_5);
     }
     use(x);
 })(M2 || (M2 = {}));
 var M3;
 (function (M3) {
-    var _x = 1;
-    use(_x);
-    var _y = ([
+    var x = 1;
+    use(x);
+    var y = ([
         1
     ])[0];
-    use(_y);
-    var _z = ({
+    use(y);
+    var z = ({
         a: 1
     }).a;
-    use(_z);
+    use(z);
 })(M3 || (M3 = {}));
 var M4;
 (function (M4) {
     {
-        var _x = 1;
-        use(_x);
-        var _y = ([
+        var x_6 = 1;
+        use(x_6);
+        var y_6 = ([
             1
         ])[0];
-        use(_y);
-        var _z = ({
+        use(y_6);
+        var z_6 = ({
             a: 1
         }).a;
-        use(_z);
+        use(z_6);
     }
     use(x);
     use(y);
     use(z);
 })(M4 || (M4 = {}));
 function foo3() {
-    for (var _x = void 0;;) {
-        use(_x);
+    for (var x_7 = void 0;;) {
+        use(x_7);
     }
-    for (var _y = ([])[0];;) {
-        use(_y);
+    for (var y_7 = ([])[0];;) {
+        use(y_7);
     }
-    for (var _z = ({
+    for (var z_7 = ({
         a: 1
     }).a;;) {
-        use(_z);
+        use(z_7);
     }
     use(x);
 }
 function foo4() {
-    for (var _x = 1;;) {
-        use(_x);
+    for (var x_8 = 1;;) {
+        use(x_8);
     }
-    for (var _y = ([])[0];;) {
-        use(_y);
+    for (var y_8 = ([])[0];;) {
+        use(y_8);
     }
-    for (var _z = ({
+    for (var z_8 = ({
         a: 1
     }).a;;) {
-        use(_z);
+        use(z_8);
     }
     use(x);
 }
 function foo5() {
-    for (var _x in []) {
-        use(_x);
+    for (var x_9 in []) {
+        use(x_9);
     }
     use(x);
 }
 function foo6() {
-    for (var _x in []) {
-        use(_x);
+    for (var x_10 in []) {
+        use(x_10);
     }
     use(x);
 }
 function foo7() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i];
-        use(_x);
+        var x_11 = _a[_i];
+        use(x_11);
     }
     use(x);
 }
 function foo8() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i][0];
-        use(_x);
+        var x_12 = _a[_i][0];
+        use(x_12);
     }
     use(x);
 }
 function foo9() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i].a;
-        use(_x);
+        var x_13 = _a[_i].a;
+        use(x_13);
     }
     use(x);
 }
 function foo10() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i];
-        use(_x);
+        var x_14 = _a[_i];
+        use(x_14);
     }
     use(x);
 }
 function foo11() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i][0];
-        use(_x);
+        var x_15 = _a[_i][0];
+        use(x_15);
     }
     use(x);
 }
 function foo12() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var _x = _a[_i].a;
-        use(_x);
+        var x_16 = _a[_i].a;
+        use(x_16);
     }
     use(x);
 }

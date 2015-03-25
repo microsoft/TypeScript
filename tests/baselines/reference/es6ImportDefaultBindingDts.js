@@ -19,8 +19,8 @@ var c = (function () {
 })();
 exports.default = c;
 //// [client.js]
-var _server = require("server");
-exports.x = new _server.default();
+var server_1 = require("server");
+exports.x = new server_1.default();
 
 
 //// [server.d.ts]

@@ -639,6 +639,18 @@
         "category": "Error",
         "code": 1204
     },
+    "Decorators are only available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1205
+    },
+    "Decorators are not valid here.": {
+        "category": "Error",
+        "code": 1206
+    },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

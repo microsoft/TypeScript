@@ -16,19 +16,19 @@
 
 
 goTo.marker("1");
-verify.quickInfoIs('(var) p1: IPromise<number>');
+verify.quickInfoIs('var p1: IPromise<number>');
 
 goTo.marker("2");
 verify.quickInfoIs('(parameter) xx: number');
 
 goTo.marker("3");
-verify.quickInfoIs('(var) p2: IPromise<string>');
+verify.quickInfoIs('var p2: IPromise<string>');
 
 goTo.marker("4");
 verify.quickInfoIs('(parameter) xx: number');
 
 goTo.marker("5");
-verify.quickInfoIs('(var) p3: IPromise<string>');
+verify.quickInfoIs('var p3: IPromise<string>');
 
 goTo.marker("6");
 verify.quickInfoIs('(parameter) xx: string');

@@ -65,20 +65,20 @@ define(["require", "exports"], function (require, exports) {
     exports.a1 = exports.a;
 });
 //// [t2.js]
-define(["require", "exports", "./t1"], function (require, exports, _t1) {
-    exports.v = _t1.v1;
-    exports.f = _t1.f1;
-    exports.C = _t1.C1;
-    exports.E = _t1.E1;
-    exports.M = _t1.M1;
-    exports.a = _t1.a1;
+define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    exports.v = t1_1.v1;
+    exports.f = t1_1.f1;
+    exports.C = t1_1.C1;
+    exports.E = t1_1.E1;
+    exports.M = t1_1.M1;
+    exports.a = t1_1.a1;
 });
 //// [t3.js]
-define(["require", "exports", "./t1"], function (require, exports, _t1) {
-    exports.v = _t1.v1;
-    exports.f = _t1.f1;
-    exports.C = _t1.C1;
-    exports.E = _t1.E1;
-    exports.M = _t1.M1;
-    exports.a = _t1.a1;
+define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    exports.v = t1_1.v1;
+    exports.f = t1_1.f1;
+    exports.C = t1_1.C1;
+    exports.E = t1_1.E1;
+    exports.M = t1_1.M1;
+    exports.a = t1_1.a1;
 });

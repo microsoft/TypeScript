@@ -65,7 +65,7 @@ function verifyEnumDeclaration(enumName: string, instanceName: string, isConst?:
         marker++;
         goTo.marker(marker.toString());
         verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(marker.toString()).position, length: instanceName.length },
-            [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+            [{ text: "var", kind: "keyword" },
                 { text: " ", kind: "space" }, { text: instanceName, kind: "localName" }, { text: ":", kind: "punctuation" },
                 { text: " ", kind: "space" }, { text: enumName, kind: "enumName" }],
             []);

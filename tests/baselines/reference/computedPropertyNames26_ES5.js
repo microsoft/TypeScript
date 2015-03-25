@@ -35,5 +35,5 @@ var C = (function (_super) {
         _a)[0]] = function () {
     };
     return C;
+    var _a;
 })(Base);
-var _a;

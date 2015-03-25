@@ -21,17 +21,17 @@
 ////}
 
 goTo.marker('1');
-verify.completionListContains('meX', '(var) mod1.meX: number');
-verify.completionListContains('meFunc', '(function) mod1.meFunc(): void');
+verify.completionListContains('meX', 'var mod1.meX: number');
+verify.completionListContains('meFunc', 'function mod1.meFunc(): void');
 verify.completionListContains('meClass', 'class mod1.meClass');
 verify.completionListContains('meMod', 'module mod1.meMod');
 verify.completionListContains('meInt', 'interface mod1.meInt');
 
 goTo.marker('2');
-verify.completionListContains('meX', '(var) mod1.meX: number');
-verify.completionListContains('meFunc', '(function) mod1.meFunc(): void');
+verify.completionListContains('meX', 'var mod1.meX: number');
+verify.completionListContains('meFunc', 'function mod1.meFunc(): void');
 verify.completionListContains('meClass', 'class mod1.meClass');
 verify.completionListContains('meMod', 'module mod1.meMod');
 
 goTo.marker('3');
-verify.completionListContains('iMex', '(var) mod1.meMod.iMex: number');
+verify.completionListContains('iMex', 'var mod1.meMod.iMex: number');

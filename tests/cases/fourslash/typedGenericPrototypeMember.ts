@@ -7,7 +7,7 @@
 ////var /*2*/y = C.prototype; // Quick Info for y is C<{}>
 
 goTo.marker('1');
-verify.quickInfoIs('(var) x: C<any>');
+verify.quickInfoIs('var x: C<any>');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) y: C<any>');
+verify.quickInfoIs('var y: C<any>');

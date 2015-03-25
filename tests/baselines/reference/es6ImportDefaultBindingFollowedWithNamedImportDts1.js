@@ -27,18 +27,18 @@ var a = (function () {
 })();
 exports.default = a;
 //// [client.js]
-var _server = require("server");
-exports.x1 = new _server.default();
-var _server_1 = require("server");
-exports.x2 = new _server_1.default();
-var _server_2 = require("server");
-exports.x3 = new _server_2.default();
-var _server_3 = require("server");
-exports.x4 = new _server_3.default();
-var _server_4 = require("server");
-exports.x5 = new _server_4.default();
-var _server_5 = require("server");
-exports.x6 = new _server_5.default();
+var server_1 = require("server");
+exports.x1 = new server_1.default();
+var server_2 = require("server");
+exports.x2 = new server_2.default();
+var server_3 = require("server");
+exports.x3 = new server_3.default();
+var server_4 = require("server");
+exports.x4 = new server_4.default();
+var server_5 = require("server");
+exports.x5 = new server_5.default();
+var server_6 = require("server");
+exports.x6 = new server_6.default();
 
 
 //// [server.d.ts]

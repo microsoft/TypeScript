@@ -8,10 +8,10 @@
 ////var /*3*/r3 = < <T>(x: <A>(y: A) => A) => T>a;
 
 goTo.marker('1');
-verify.quickInfoIs('(var) r: <T>(x: T) => T');
+verify.quickInfoIs('var r: <T>(x: T) => T');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r2: <T>(x: T) => T');
+verify.quickInfoIs('var r2: <T>(x: T) => T');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) r3: <T>(x: <A>(y: A) => A) => T');
+verify.quickInfoIs('var r3: <T>(x: <A>(y: A) => A) => T');

@@ -1,4 +1,4 @@
-/// <reference path="types.ts" />
+/// <reference path="binder.ts" />
 
 module ts {
     export interface ReferencePathMatchResult {
@@ -575,6 +575,83 @@ module ts {
         return (<CallExpression>node).expression;
     }
 
+    export function nodeCanBeDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                // classes are valid targets
+                return true;
+
+            case SyntaxKind.PropertyDeclaration:
+                // property declarations are valid if their parent is a class declaration.
+                return node.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.Parameter:
+                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                // if this method has a body and its parent is a class declaration, this is a valid target.
+                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+        }
+
+        return false;
+    }
+
+    export function nodeIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.Parameter:
+                if (node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.GetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
+                    return true;
+                }
+
+                return false;
+        }
+
+        return false;
+    }
+    
+    export function childIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
+        }
+
+        return false;
+    }
+
+    export function nodeOrChildIsDecorated(node: Node): boolean {
+        return nodeIsDecorated(node) || childIsDecorated(node);
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
@@ -808,6 +885,20 @@ module ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.ExportAssignment:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isClassElement(n: Node): boolean {
+        switch (n.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.IndexSignature:
                 return true;
             default:
                 return false;
@@ -1229,28 +1320,6 @@ module ts {
         return node;
     }
 
-    export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
-        // First try '_name'
-        if (baseName.charCodeAt(0) !== CharacterCodes._) {
-            baseName = "_" + baseName;
-            if (!isExistingName(baseName)) {
-                return baseName;
-            }
-        }
-        // Find the first unique '_name_n', where n is a positive number
-        if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
-            baseName += "_";
-        }
-        let i = 1;
-        while (true) {
-            let name = baseName + i;
-            if (!isExistingName(name)) {
-                return name;
-            }
-            i++;
-        }
-    }
-
     // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
@@ -1524,6 +1593,7 @@ module ts {
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
         let firstAccessor: AccessorDeclaration;
+        let secondAccessor: AccessorDeclaration;
         let getAccessor: AccessorDeclaration;
         let setAccessor: AccessorDeclaration;
         if (hasDynamicName(accessor)) {
@@ -1548,6 +1618,9 @@ module ts {
                         if (!firstAccessor) {
                             firstAccessor = <AccessorDeclaration>member;
                         }
+                        else if (!secondAccessor) {
+                            secondAccessor = <AccessorDeclaration>member;
+                        }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
                             getAccessor = <AccessorDeclaration>member;
@@ -1562,6 +1635,7 @@ module ts {
         }
         return {
             firstAccessor,
+            secondAccessor,
             getAccessor,
             setAccessor
         };

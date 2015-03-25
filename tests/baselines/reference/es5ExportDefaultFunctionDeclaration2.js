@@ -6,7 +6,7 @@ export default function () { }
 //// [es5ExportDefaultFunctionDeclaration2.js]
 function () {
 }
-exports.default = _default;
+exports.default = default_1;
 
 
 //// [es5ExportDefaultFunctionDeclaration2.d.ts]
