@@ -2486,7 +2486,7 @@ module ts {
 
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
-            if (contextToken && position <= contextToken.end && contextToken.kind === SyntaxKind.Identifier) {
+            if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
                 let start = new Date().getTime();
                 contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
