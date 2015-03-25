@@ -44,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
     exports.default = "hello";
 });
 //// [t3.js]
-define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, _t1, c, _t1_2, e2, _t1_4) {
+define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, _t1, c, _t1_2, _t1_3, _t1_4) {
     exports.a = a;
     a.default;
     exports.b = _t1.default;
@@ -53,6 +53,7 @@ define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], f
     c.default;
     exports.d = _t1_2.default;
     _t1_2.default;
+    var e2 = _t1_3;
     exports.e1 = _t1_3.default;
     exports.e2 = e2;
     _t1_3.default;
