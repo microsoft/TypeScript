@@ -63,11 +63,11 @@ export { M };
 var M;
 (function (M) {
     // Reexports
-    M.v = M.M_V;
-    M.c = M.M_C;
-    M.m = M.M_M;
-    M.f = M.M_F;
-    M.e = M.M_E;
-    M.a = M.M_A;
+    export { M_V as v };
+    export { M_C as c };
+    export { M_M as m };
+    export { M_F as f };
+    export { M_E as e };
+    export { M_A as a };
 })(M || (M = {}));
 export { M };

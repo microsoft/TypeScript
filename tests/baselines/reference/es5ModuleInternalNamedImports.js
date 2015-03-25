@@ -61,11 +61,5 @@ define(["require", "exports"], function (require, exports) {
         // alias
         M.M_A = M_M;
         // Reexports
-        M.v = M.M_V;
-        M.c = M_C;
-        M.m = M_M;
-        M.f = M_F;
-        M.e = M_E;
-        M.a = M.M_A;
     })(M = exports.M || (exports.M = {}));
 });

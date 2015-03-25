@@ -10236,6 +10236,11 @@ module ts {
                     // export { x, y }
                     // export { x, y } from "foo"
                     forEach(node.exportClause.elements, checkExportSpecifier);
+
+                    let inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
+                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
+                        error(node, Diagnostics.Export_declarations_are_not_permitted_in_an_internal_module);
+                    }
                 }
                 else {
                     // export * from "foo"

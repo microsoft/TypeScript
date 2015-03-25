@@ -3838,35 +3838,7 @@ module ts {
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                if (node.parent.kind !== SyntaxKind.SourceFile) {
-                    // internal module
-                    if (node.exportClause) {
-                        // export { x, y, ... }
-                        for (let specifier of node.exportClause.elements) {
-                            if (resolver.isValueAliasDeclaration(specifier)) {
-                                writeLine();
-                                emitStart(specifier);
-                                emitContainingModuleName(specifier);
-                                write(".");
-                                emitNodeWithoutSourceMap(specifier.name);
-                                write(" = ");
-
-                                var name = specifier.propertyName || specifier.name;
-                                var generatedName = getGeneratedNameForIdentifier(name);
-                                if (generatedName) {
-                                    write(generatedName);
-                                }
-                                else {
-                                    emitExpressionIdentifier(name);
-                                }
-
-                                write(";");
-                                emitEnd(specifier);
-                            }
-                        }
-                    }
-                }
-                else if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
                         let generatedName = resolver.getGeneratedNameForNode(node);

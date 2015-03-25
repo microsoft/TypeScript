@@ -22,5 +22,4 @@ var x = 0;
 var M;
 (function (M) {
     M.v;
-    M.x = M.x;
 })(M = exports.M || (exports.M = {}));
