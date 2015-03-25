@@ -2153,7 +2153,16 @@ module ts {
                     hasSpreadElement = true;
                 }
             });
-            return !elementTypes.length ? anyArrayType : hasSpreadElement ? createArrayType(getUnionType(elementTypes)) : createTupleType(elementTypes);
+            if (!elementTypes.length) {
+                return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
+            }
+            else if (hasSpreadElement) {
+                var unionOfElements = getUnionType(elementTypes);
+                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
+            }
+
+            // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
+            return createTupleType(elementTypes);
         }
 
         // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
