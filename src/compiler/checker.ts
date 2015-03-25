@@ -2046,14 +2046,12 @@ module ts {
                 // In a ES3/ES5, we must be destructuring an array type. However, ES6 supports destructuring
                 // an iterator into an array pattern, so we suppress this error. If the parentType is not an iterator,
                 // there will be an error in checkIteratedType.
-                if (languageVersion < ScriptTarget.ES6 && !isArrayLikeType(parentType)) {
-                    error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
-                    return unknownType;
-                }
                 if (!declaration.dotDotDotToken) {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     let propName = "" + indexOf(pattern.elements, declaration);
-                    type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+                    type = isTupleLikeType(parentType)
+                        ? getTypeOfPropertyOfType(parentType, propName)
+                        : checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
                     if (!type) {
                         if (isTupleType(parentType)) {
                             error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), (<TupleType>parentType).elementTypes.length, pattern.elements.length);
@@ -2066,7 +2064,7 @@ module ts {
                 }
                 else {
                     // Rest element has an array type with the same element type as the parent type
-                    type = createArrayType(getIndexTypeOfType(parentType, IndexKind.Number));
+                    type = createArrayType(checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false));
                 }
             }
             return type;
@@ -9263,38 +9261,38 @@ module ts {
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, expressionForError: Expression, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
             if (languageVersion >= ScriptTarget.ES6) {
-                return checkIteratedType(inputType, expressionForError) || anyType;
+                return checkIteratedType(inputType, errorNode) || anyType;
             }
 
             if (allowStringInput) {
-                return checkElementTypeOfArrayOrString(inputType, expressionForError);
+                return checkElementTypeOfArrayOrString(inputType, errorNode);
             }
             
             if (isArrayLikeType(inputType)) {
                 return getIndexTypeOfType(inputType, IndexKind.Number);
             }
 
-            error(expressionForError, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
             return unknownType;
         }
 
         /**
-         * When expressionForError is undefined, it means we should not report any errors.
+         * When errorNode is undefined, it means we should not report any errors.
          */
-        function checkIteratedType(iterable: Type, expressionForError: Expression): Type {
+        function checkIteratedType(iterable: Type, errorNode: Node): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
-            let iteratedType = getIteratedType(iterable, expressionForError);
+            let iteratedType = getIteratedType(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
-            if (expressionForError && iteratedType) {
-                checkTypeAssignableTo(iterable, createIterableType(iteratedType), expressionForError);
+            if (errorNode && iteratedType) {
+                checkTypeAssignableTo(iterable, createIterableType(iteratedType), errorNode);
             }
 
             return iteratedType;
 
-            function getIteratedType(iterable: Type, expressionForError: Expression) {
+            function getIteratedType(iterable: Type, errorNode: Node) {
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
                 // must have the following structure (annotated with the names of the variables below):
                 //
@@ -9332,8 +9330,8 @@ module ts {
 
                 let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorFunctionSignatures.length === 0) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
                     }
                     return undefined;
                 }
@@ -9350,8 +9348,8 @@ module ts {
 
                 let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorNextFunctionSignatures.length === 0) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.An_iterator_must_have_a_next_method);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
                     }
                     return undefined;
                 }
@@ -9363,8 +9361,8 @@ module ts {
 
                 let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
                 if (!iteratorNextValue) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
                     }
                     return undefined;
                 }
@@ -9390,7 +9388,7 @@ module ts {
          *   1. Some constituent is neither a string nor an array.
          *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
          */
-        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
+        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node): Type {
             Debug.assert(languageVersion < ScriptTarget.ES6);
 
             // After we remove all types that are StringLike, we will know if there was a string constituent
@@ -9401,7 +9399,7 @@ module ts {
             let reportedError = false;
             if (hasStringConstituent) {
                 if (languageVersion < ScriptTarget.ES5) {
-                    error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                    error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
                     reportedError = true;
                 }
 
@@ -9421,7 +9419,7 @@ module ts {
                     let diagnostic = hasStringConstituent
                         ? Diagnostics.Type_0_is_not_an_array_type
                         : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                    error(expressionForError, diagnostic, typeToString(arrayType));
+                    error(errorNode, diagnostic, typeToString(arrayType));
                 }
                 return hasStringConstituent ? stringType : unknownType;
             }
