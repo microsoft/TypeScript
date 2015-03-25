@@ -11128,6 +11128,12 @@ module ts {
         }
 
         function getAliasNameSubstitution(symbol: Symbol): string {
+            // If this is es6 or higher, just use the name of the export
+            // no need to qualify it.
+            if (languageVersion >= ScriptTarget.ES6) {
+                return undefined;
+            }
+
             let node = getDeclarationOfAliasSymbol(symbol);
             if (node) {
                 if (node.kind === SyntaxKind.ImportClause) {
@@ -11143,15 +11149,12 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                var symbolName = unescapeIdentifier(symbol.name);
                 // If this is es6 or higher, just use the name of the export
                 // no need to qualify it.
                 if (languageVersion >= ScriptTarget.ES6) {
                     return undefined;
                 }
-                else {
-                    return "exports." + symbolName;
-                }
+                return "exports." + unescapeIdentifier(symbol.name);
             }
             let node = location;
             let containerSymbol = getParentOfSymbol(symbol);
@@ -11179,7 +11182,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
+                if (symbol.flags & SymbolFlags.Alias) {
                     return getAliasNameSubstitution(symbol);
                 }
             }
