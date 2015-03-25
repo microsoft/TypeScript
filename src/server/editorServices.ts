@@ -443,11 +443,14 @@ module ts.server {
                 }
             }
             else {
+                if (args.hostInfo !== undefined) {
+                    this.hostConfiguration.hostInfo = args.hostInfo;
+                    this.log("Host information " + args.hostInfo, "Info");                    
+                }
                 if (args.formatOptions) {
                     mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);                    
+                    this.log("Format host information updated", "Info");
                 }
-                this.hostConfiguration.hostInfo = args.hostInfo;
-                this.log("Host information " + args.hostInfo, "Info");
             }
         }
 
