@@ -3757,10 +3757,6 @@ module ts {
             }
             
             function emitDecoratorsOfClass(node: ClassDeclaration) {
-                if (languageVersion < ScriptTarget.ES5) {
-                    return;
-                }
-
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
                 emitDecoratorsOfConstructor(node);
