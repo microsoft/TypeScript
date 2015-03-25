@@ -397,12 +397,9 @@ module ts.server {
             };
         }
 
-        openClientFile(fileName: string, tabSize?: number, indentSize?: number) {
+        openClientFile(fileName: string) {
             var file = ts.normalizePath(fileName);
-            var info = this.projectService.openClientFile(file);
-            if (info) {
-                info.setFormatOptions(tabSize, indentSize);
-            }
+            this.projectService.openClientFile(file);
         }
 
         getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -759,7 +756,7 @@ module ts.server {
                     }
                     case CommandNames.Open: {
                         var openArgs = <protocol.OpenRequestArgs>request.arguments;
-                        this.openClientFile(openArgs.file,openArgs.tabSize, openArgs.indentSize);
+                        this.openClientFile(openArgs.file);
                         responseRequired = false;
                         break;
                     }
