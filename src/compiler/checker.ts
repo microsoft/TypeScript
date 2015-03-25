@@ -11220,13 +11220,18 @@ module ts {
             return isConstEnumSymbol(s) || s.constEnumOnlyModule;
         }
 
-        function isReferencedAliasDeclaration(node: Node): boolean {
+        function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
             if (isAliasSymbolDeclaration(node)) {
                 let symbol = getSymbolOfNode(node);
                 if (getSymbolLinks(symbol).referenced) {
                     return true;
                 }
             }
+
+            if (checkChildren) {
+                return forEachChild(node, node => isReferencedAliasDeclaration(node, checkChildren));
+            }
+            return false;
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {

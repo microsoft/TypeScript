@@ -3290,10 +3290,11 @@ declare module "typescript" {
 >node : Node
 >Node : Node
 
-        isReferencedAliasDeclaration(node: Node): boolean;
->isReferencedAliasDeclaration : (node: Node) => boolean
+        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
+>isReferencedAliasDeclaration : (node: Node, checkChildren?: boolean) => boolean
 >node : Node
 >Node : Node
+>checkChildren : boolean
 
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
 >isTopLevelValueImportEqualsWithEntityName : (node: ImportEqualsDeclaration) => boolean

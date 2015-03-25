@@ -1011,7 +1011,7 @@ declare module "typescript" {
         getGeneratedNameForNode(node: Node): string;
         getExpressionNameSubstitution(node: Identifier): string;
         isValueAliasDeclaration(node: Node): boolean;
-        isReferencedAliasDeclaration(node: Node): boolean;
+        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;

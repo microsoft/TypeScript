@@ -2717,7 +2717,7 @@ module ts {
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStartOfVariableDeclarationList(node.declarationList);
                 }
-                else if (languageVersion >= ScriptTarget.ES6 && node.parent.kind === SyntaxKind.SourceFile) {
+                else if (isES6ExportedDeclaration(node)) {
                     // Exported ES6 module member
                     write("export ");
                     emitStartOfVariableDeclarationList(node.declarationList);
@@ -3686,8 +3686,8 @@ module ts {
 
                 // ES6 import
                 if (node.importClause) {
-                    let shouldEmitDefaultBindings = hasReferencedDefaultName(node.importClause);
-                    let shouldEmitNamedBindings = hasReferencedNamedBindings(node.importClause);
+                    let shouldEmitDefaultBindings = resolver.isReferencedAliasDeclaration(node.importClause);
+                    let shouldEmitNamedBindings = node.importClause.namedBindings && resolver.isReferencedAliasDeclaration(node.importClause.namedBindings, /* checkChildren */ true);
                     if (shouldEmitDefaultBindings || shouldEmitNamedBindings) {
                         write("import ");
                         emitStart(node.importClause);
@@ -3723,27 +3723,6 @@ module ts {
                     write("import ");
                     emit(node.moduleSpecifier);
                     write(";");
-                }
-            }
-
-            function hasReferencedDefaultName(importClause: ImportClause) {
-                // If the default import is used, the mark will be on the importClause, 
-                // as the alias declaration.
-                // If there are other named bindings on the import clause, we will
-                // will mark either the namedBindings(import * as n) or the NamedImport
-                // in the case of import {a}
-                return resolver.isReferencedAliasDeclaration(importClause);
-            }
-
-            function hasReferencedNamedBindings(importClause: ImportClause) {
-                if (importClause && importClause.namedBindings) {
-                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                        return resolver.isReferencedAliasDeclaration(importClause.namedBindings);
-                    }
-                    else {
-                        return forEach((<NamedImports>importClause.namedBindings).elements,
-                            namedImport => resolver.isReferencedAliasDeclaration(namedImport));
-                    }
                 }
             }
 
@@ -3961,8 +3940,7 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!(<ImportDeclaration>node).importClause ||
-                                hasReferencedDefaultName((<ImportDeclaration>node).importClause) ||
-                                hasReferencedNamedBindings((<ImportDeclaration>node).importClause)) {
+                                resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
                                 // import "mod"
                                 // import x from "mod" where x is referenced
                                 // import * as x from "mod" where x is referenced
