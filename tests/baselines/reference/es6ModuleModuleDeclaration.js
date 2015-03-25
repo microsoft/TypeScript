@@ -25,7 +25,7 @@ module m2 {
 }
 
 //// [es6ModuleModuleDeclaration.js]
-var m1;
+export var m1;
 (function (m1) {
     m1.a = 10;
     var b = 10;
@@ -40,7 +40,6 @@ var m1;
         var y = 10;
     })(innerNonExportedModule = m1.innerNonExportedModule || (m1.innerNonExportedModule = {}));
 })(m1 || (m1 = {}));
-export { m1 };
 var m2;
 (function (m2) {
     m2.a = 10;

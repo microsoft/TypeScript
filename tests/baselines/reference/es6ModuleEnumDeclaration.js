@@ -46,13 +46,12 @@ module m2 {
 }
 
 //// [es6ModuleEnumDeclaration.js]
-var e1;
+export var e1;
 (function (e1) {
     e1[e1["a"] = 0] = "a";
     e1[e1["b"] = 1] = "b";
     e1[e1["c"] = 2] = "c";
 })(e1 || (e1 = {}));
-export { e1 };
 var e2;
 (function (e2) {
     e2[e2["x"] = 0] = "x";
@@ -61,7 +60,7 @@ var e2;
 })(e2 || (e2 = {}));
 var x = e1.a;
 var y = e2.x;
-var m1;
+export var m1;
 (function (m1) {
     (function (e3) {
         e3[e3["a"] = 0] = "a";
@@ -80,7 +79,6 @@ var m1;
     var x2 = e3.a;
     var y2 = e4.x;
 })(m1 || (m1 = {}));
-export { m1 };
 var m2;
 (function (m2) {
     (function (e5) {

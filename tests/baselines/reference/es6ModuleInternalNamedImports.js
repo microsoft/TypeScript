@@ -33,7 +33,7 @@ export module M {
 
 
 //// [es6ModuleInternalNamedImports.js]
-var M;
+export var M;
 (function (M) {
     // variable
     M.M_V = 0;
@@ -64,4 +64,3 @@ var M;
     export { M_E as e };
     export { M_A as a };
 })(M || (M = {}));
-export { M };

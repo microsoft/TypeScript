@@ -35,7 +35,7 @@ export module M {
 
 
 //// [es6ModuleInternalNamedImports2.js]
-var M;
+export var M;
 (function (M) {
     // variable
     M.M_V = 0;
@@ -59,8 +59,7 @@ var M;
     // alias
     M.M_A = M_M;
 })(M || (M = {}));
-export { M };
-var M;
+export var M;
 (function (M) {
     // Reexports
     export { M_V as v };
@@ -70,4 +69,3 @@ var M;
     export { M_E as e };
     export { M_A as a };
 })(M || (M = {}));
-export { M };

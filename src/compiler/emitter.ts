@@ -3487,6 +3487,9 @@ module ts {
 
                 if (!(node.flags & NodeFlags.Export) || isES6ExportedDeclaration(node)) {
                     emitStart(node);
+                    if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                    }
                     write("var ");
                     emit(node.name);
                     emitEnd(node);
@@ -3512,10 +3515,7 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (isES6ExportedDeclaration(node)) {
-                    emitES6NamedExportForDeclaration(node);
-                }
-                else if (node.flags & NodeFlags.Export) {
+                if (!isES6ExportedDeclaration(node) && node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
                     write("var ");
@@ -3580,6 +3580,9 @@ module ts {
                 }
 
                 emitStart(node);
+                if (isES6ExportedDeclaration(node)) {
+                    write("export ");
+                }
                 write("var ");
                 emit(node.name);
                 write(";");
@@ -3628,21 +3631,9 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (isES6ExportedDeclaration(node)) {
-                    emitES6NamedExportForDeclaration(node);
-                }
-                else if (languageVersion < ScriptTarget.ES6 && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
-            }
-
-            function emitES6NamedExportForDeclaration(node: Declaration) {
-                writeLine();
-                emitStart(node);
-                write("export { ");
-                emit(node.name);
-                write(" };");
-                emitEnd(node);
             }
 
             function emitRequire(moduleName: Expression) {
