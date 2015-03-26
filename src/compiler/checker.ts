@@ -9346,6 +9346,12 @@ module ts {
                     return undefined;
                 }
 
+                // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
+                // then just grab its type argument.
+                if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
+                    return (<GenericType>iterable).typeArguments[0];
+                }
+
                 let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
                 if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
                     return undefined;
