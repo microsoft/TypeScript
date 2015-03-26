@@ -1127,7 +1127,6 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
-        getExportsOfImportDeclaration(node: ImportDeclaration): Symbol[];
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.

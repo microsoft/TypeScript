@@ -74,7 +74,6 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfImportDeclaration,
             getExportsOfModule: moduleSymbol => symbolsToArray(getExportsOfModule(moduleSymbol)),
         };
 

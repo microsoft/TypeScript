@@ -2581,8 +2581,16 @@ module ts {
                         let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
 
-                        let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
-                        symbols = filterModuleExports(exports, importDeclaration);
+                        let exports: Symbol[];
+                        if (importDeclaration.moduleSpecifier) {
+                            let moduleSpecifierSymbol = typeInfoResolver.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                            if (moduleSpecifierSymbol) {
+                                exports = typeInfoResolver.getExportsOfModule(moduleSpecifierSymbol);
+                            }
+                        }
+
+                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
                 }
                 else {
