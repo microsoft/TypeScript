@@ -751,6 +751,26 @@ module ts.server {
             return info;
         }
 
+        // This is different from the method the compiler uses because
+        // the compiler can assume it will always start searching in the
+        // current directory (the directory in which tsc was invoked).
+        // The server must start searching from the directory containing
+        // the newly opened file.
+        findConfigFile(searchPath: string): string {
+            while (true) {
+                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (sys.fileExists(fileName)) {
+                    return fileName;
+                }
+                var parentPath = ts.getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    break;
+                }
+                searchPath = parentPath;
+            }
+            return undefined;
+        }
+
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
@@ -758,7 +778,13 @@ module ts.server {
 
         openClientFile(fileName: string) {
             var searchPath = ts.normalizePath(getDirectoryPath(fileName));
-            var configFileName = ts.findConfigFile(searchPath);
+            this.log("Search path: " + searchPath,"Info");
+            var configFileName = this.findConfigFile(searchPath);
+            if (configFileName) {
+                this.log("Config file name: " + configFileName, "Info");
+            } else {
+                this.log("no config file");
+            }
             if (configFileName) {
                 configFileName = getAbsolutePath(configFileName, searchPath);
             }
