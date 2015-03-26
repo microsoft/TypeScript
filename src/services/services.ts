@@ -2535,10 +2535,9 @@ module ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        let exportedMembers = typeInfoResolver.getExportsOfModule(symbol);
-                        forEach(exportedMembers, symbol => {
-                            if (!(symbol.flags & SymbolFlags.ExportStar)
-                                && typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        let exportedSymbols = typeInfoResolver.getExportsOfModule(symbol);
+                        forEach(exportedSymbols, symbol => {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });

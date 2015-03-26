@@ -75,9 +75,7 @@ module ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfImportDeclaration,
-            getExportsOfModule(moduleSymbol: Symbol): Symbol[] {
-                return mapToArray(getExportsOfModule(moduleSymbol));
-            }
+            getExportsOfModule: moduleSymbol => symbolsToArray(getExportsOfModule(moduleSymbol)),
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
