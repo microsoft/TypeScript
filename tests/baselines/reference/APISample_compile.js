@@ -964,13 +964,9 @@ declare module "typescript" {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
-<<<<<<< HEAD
-=======
-        getClassDeclarationVariableId(node: Identifier): number;
-        serializeTypeOfNode(node: Node): string | string[];
-        serializeParameterTypesOfNode(node: Node): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node): string | string[];
->>>>>>> Updated baselines
+        serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+        serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
+        serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,

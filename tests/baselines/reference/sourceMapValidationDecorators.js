@@ -68,6 +68,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { return function() { } };
 var Greeter = (function () {
     function Greeter(greeting) {
         var b = [];
@@ -93,15 +94,15 @@ var Greeter = (function () {
         configurable: true
     });
     Greeter.x1 = 10;
-    Object.defineProperty(Greeter.prototype, "greet", __decorate([PropertyDecorator1, PropertyDecorator2(40)], Greeter.prototype, "greet", Object.getOwnPropertyDescriptor(Greeter.prototype, "greet")));
-    __decorate([PropertyDecorator1, PropertyDecorator2(50)], Greeter.prototype, "x");
-    __decorate([ParameterDecorator1, ParameterDecorator2(70)], Greeter.prototype, "fn", 0);
-    __decorate([ParameterDecorator1, ParameterDecorator2(90)], Greeter.prototype, "greetings", 0);
-    Object.defineProperty(Greeter.prototype, "greetings", __decorate([PropertyDecorator1, PropertyDecorator2(80)], Greeter.prototype, "greetings", Object.getOwnPropertyDescriptor(Greeter.prototype, "greetings")));
-    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
-    __decorate([ParameterDecorator1, ParameterDecorator2(20)], Greeter, void 0, 0);
-    __decorate([ParameterDecorator1, ParameterDecorator2(30)], Greeter, void 0, 1);
-    Greeter = __decorate([ClassDecorator1, ClassDecorator2(10)], Greeter);
+    Object.defineProperty(Greeter.prototype, "greet", __decorate([PropertyDecorator1, PropertyDecorator2(40), __metadata('design:type', Function), __metadata('design:paramtypes', []), __metadata('design:returntype', Object)], Greeter.prototype, "greet", Object.getOwnPropertyDescriptor(Greeter.prototype, "greet")));
+    __decorate([PropertyDecorator1, PropertyDecorator2(50), __metadata('design:type', String)], Greeter.prototype, "x");
+    __decorate([ParameterDecorator1, ParameterDecorator2(70), __metadata('design:type', Number)], Greeter.prototype, "fn", 0);
+    __decorate([ParameterDecorator1, ParameterDecorator2(90), __metadata('design:type', String)], Greeter.prototype, "greetings", 0);
+    Object.defineProperty(Greeter.prototype, "greetings", __decorate([PropertyDecorator1, PropertyDecorator2(80), __metadata('design:type', Object)], Greeter.prototype, "greetings", Object.getOwnPropertyDescriptor(Greeter.prototype, "greetings")));
+    __decorate([PropertyDecorator1, PropertyDecorator2(60), __metadata('design:type', Number)], Greeter, "x1");
+    __decorate([ParameterDecorator1, ParameterDecorator2(20), __metadata('design:type', String)], Greeter, void 0, 0);
+    __decorate([ParameterDecorator1, ParameterDecorator2(30), __metadata('design:type', Array)], Greeter, void 0, 1);
+    Greeter = __decorate([ClassDecorator1, ClassDecorator2(10), __metadata('design:paramtypes', [String, String])], Greeter);
     return Greeter;
 })();
 //# sourceMappingURL=sourceMapValidationDecorators.js.map

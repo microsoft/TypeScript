@@ -3970,16 +3970,16 @@ module ts {
                 write("], ");
             }
 
-            function formatPathSegment(location: Node, path: string[], index: number): string {
+            function serializeTypeNameSegment(location: Node, path: string[], index: number): string {
                 switch (index) {
                     case 0:
                         return `typeof ${path[index]} !== 'undefined' && ${path[index]}`;
                     case 1:
-                        return `${formatPathSegment(location, path, index - 1) }.${path[index]}`;
+                        return `${serializeTypeNameSegment(location, path, index - 1) }.${path[index]}`;
                     default:
                         let temp = createTempVariable(location);
                         recordTempDeclaration(temp);
-                        return `(${temp.text} = ${formatPathSegment(location, path, index - 1) }) && ${temp.text}.${path[index]}`;
+                        return `(${temp.text} = ${serializeTypeNameSegment(location, path, index - 1) }) && ${temp.text}.${path[index]}`;
                 }
             }
 
@@ -4052,7 +4052,7 @@ module ts {
                 }
                 else {
                     Debug.assert(name.length > 0, "Invalid type name path for serialization");
-                    write(`(${formatPathSegment(location, name, name.length - 1) }) || Object`);
+                    write(`(${serializeTypeNameSegment(location, name, name.length - 1) }) || Object`);
                 }
             }
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -4740,7 +4740,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
-var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };`);
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { return function() { } };`);
                     decorateEmitted = true;
                 }
                 if (isExternalModule(node)) {
