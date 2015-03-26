@@ -33,8 +33,7 @@ define(["require", "exports"], function (require, exports) {
         function List() {
             _super.apply(this, arguments);
         }
-        List.prototype.Bar = function () {
-        };
+        List.prototype.Bar = function () { };
         return List;
     })(Collection);
     exports.List = List;

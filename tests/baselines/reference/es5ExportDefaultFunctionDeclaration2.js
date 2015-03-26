@@ -4,8 +4,7 @@ export default function () { }
 
 
 //// [es5ExportDefaultFunctionDeclaration2.js]
-function () {
-}
+function () { }
 exports.default = default_1;
 
 

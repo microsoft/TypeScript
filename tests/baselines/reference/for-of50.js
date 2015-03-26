@@ -6,12 +6,7 @@ for (const [k, v] of map) {
 }
 
 //// [for-of50.js]
-var map = new Map([
-    [
-        "",
-        true
-    ]
-]);
+var map = new Map([["", true]]);
 for (const [k, v] of map) {
     k;
     v;

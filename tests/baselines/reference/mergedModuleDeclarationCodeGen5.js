@@ -25,11 +25,9 @@ var M;
     (function (buz) {
         var plop;
         (function (plop) {
-            function doom() {
-            }
+            function doom() { }
             plop.doom = doom;
-            function M() {
-            }
+            function M() { }
             plop.M = M;
         })(plop = buz.plop || (buz.plop = {}));
     })(buz = M_1.buz || (M_1.buz = {}));
@@ -40,10 +38,8 @@ var M;
     (function (buz_1) {
         var plop;
         (function (plop_1) {
-            function gunk() {
-            }
-            function buz() {
-            }
+            function gunk() { }
+            function buz() { }
             var fudge = (function () {
                 function fudge() {
                 }

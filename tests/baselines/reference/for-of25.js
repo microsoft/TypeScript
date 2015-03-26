@@ -10,8 +10,7 @@ class StringIterator {
 
 //// [for-of25.js]
 var x;
-for (var v of new StringIterator) {
-}
+for (var v of new StringIterator) { }
 class StringIterator {
     [Symbol.iterator]() {
         return x;

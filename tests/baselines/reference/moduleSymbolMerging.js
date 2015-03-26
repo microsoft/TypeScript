@@ -22,9 +22,7 @@ var A;
 })(A || (A = {}));
 var B;
 (function (B) {
-    function f() {
-        return null;
-    }
+    function f() { return null; }
     B.f = f;
 })(B || (B = {}));
 

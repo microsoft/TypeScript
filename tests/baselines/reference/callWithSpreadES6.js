@@ -73,11 +73,7 @@ obj.foo(1, 2, ...a, "abc");
 xa[1].foo(1, 2, "abc");
 xa[1].foo(1, 2, ...a);
 xa[1].foo(1, 2, ...a, "abc");
-xa[1].foo(...[
-    1,
-    2,
-    "abc"
-]);
+xa[1].foo(...[1, 2, "abc"]);
 class C {
     constructor(x, y, ...z) {
         this.foo(x, y);

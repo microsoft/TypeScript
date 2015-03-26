@@ -53,9 +53,5 @@ var i;
 var d1 = i || moduleA;
 var d2 = i || moduleA;
 var d2 = moduleA || i;
-var e = null || {
-    x: moduleA
-};
-var f = null ? {
-    x: moduleA
-} : null;
+var e = null || { x: moduleA };
+var f = null ? { x: moduleA } : null;

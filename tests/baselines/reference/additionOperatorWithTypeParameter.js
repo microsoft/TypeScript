@@ -74,7 +74,6 @@ function foo(t, u) {
     var r16 = t + undefined;
     var r17 = t + t;
     var r18 = t + u;
-    var r19 = t + (function () {
-    });
+    var r19 = t + (function () { });
     var r20 = t + [];
 }

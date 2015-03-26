@@ -63,15 +63,9 @@ var r = true ? 1 : 2;
 var r3 = true ? 1 : {};
 var r4 = true ? a : b; // typeof a
 var r5 = true ? b : a; // typeof b
-var r6 = true ? function (x) {
-} : function (x) {
-}; // returns number => void
-var r7 = true ? function (x) {
-} : function (x) {
-};
-var r8 = true ? function (x) {
-} : function (x) {
-}; // returns Object => void
+var r6 = true ? function (x) { } : function (x) { }; // returns number => void
+var r7 = true ? function (x) { } : function (x) { };
+var r8 = true ? function (x) { } : function (x) { }; // returns Object => void
 var r10 = true ? derived : derived2; // no error since we use the contextual type in BCT
 var r11 = true ? base : derived2;
 function foo5(t, u) {

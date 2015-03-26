@@ -38,10 +38,7 @@ var Root;
         var Utils;
         (function (Utils) {
             function mirror(p) {
-                return {
-                    x: p.y,
-                    y: p.x
-                };
+                return { x: p.y, y: p.x };
             }
             Utils.mirror = mirror;
         })(Utils = A.Utils || (A.Utils = {}));
@@ -53,10 +50,7 @@ var otherRoot;
     var A;
     (function (A) {
         // have to be fully qualified since in different root
-        A.Origin = {
-            x: 0,
-            y: 0
-        };
+        A.Origin = { x: 0, y: 0 };
         var Utils;
         (function (Utils) {
             var Plane = (function () {

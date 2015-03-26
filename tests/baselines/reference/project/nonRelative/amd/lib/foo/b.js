@@ -1,5 +1,4 @@
 define(["require", "exports"], function (require, exports) {
-    function hello() {
-    }
+    function hello() { }
     exports.hello = hello;
 });

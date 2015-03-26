@@ -41,15 +41,11 @@ void M.n;
 //// [voidOperatorWithBooleanType.js]
 // void  operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;
@@ -61,10 +57,7 @@ var objA = new A();
 var ResultIsAny1 = void BOOLEAN;
 // boolean type literal
 var ResultIsAny2 = void true;
-var ResultIsAny3 = void {
-    x: true,
-    y: false
-};
+var ResultIsAny3 = void { x: true, y: false };
 // boolean type expressions
 var ResultIsAny4 = void objA.a;
 var ResultIsAny5 = void M.n;

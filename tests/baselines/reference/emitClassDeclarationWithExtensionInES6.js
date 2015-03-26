@@ -25,12 +25,10 @@ class D extends C {
 
 //// [emitClassDeclarationWithExtensionInES6.js]
 class B {
-    baz(a, y = 10) {
-    }
+    baz(a, y = 10) { }
 }
 class C extends B {
-    foo() {
-    }
+    foo() { }
     baz(a, y) {
         super.baz(a, y);
     }

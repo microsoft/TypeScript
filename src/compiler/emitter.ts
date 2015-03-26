@@ -88,7 +88,6 @@ module ts {
             let writeLine = writer.writeLine;
             let increaseIndent = writer.increaseIndent;
             let decreaseIndent = writer.decreaseIndent;
-            let preserveNewLines = compilerOptions.preserveNewLines || false;
 
             let currentSourceFile: SourceFile;
 
@@ -799,7 +798,7 @@ module ts {
 
                 increaseIndent();
 
-                if (preserveNewLines && nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -810,7 +809,7 @@ module ts {
 
                 for (let i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
-                        if (preserveNewLines && nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
                             write(", ");
                         }
                         else {
@@ -828,7 +827,7 @@ module ts {
 
                 decreaseIndent();
 
-                if (preserveNewLines && nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
+                if (nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -1727,7 +1726,7 @@ module ts {
             // If the code is not indented, an optional valueToWriteWhenNotIndenting will be 
             // emitted instead.
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
-                let realNodesAreOnDifferentLines = preserveNewLines && !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
+                let realNodesAreOnDifferentLines = !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
                 // Always use a newline for synthesized code if the synthesizer desires it.
                 let synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
@@ -2035,7 +2034,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
-                if (preserveNewLines && isSingleLineEmptyBlock(node)) {
+                if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -2419,7 +2418,7 @@ module ts {
                     write("default:");
                 }
 
-                if (preserveNewLines && node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
+                if (node.statements.length === 1 && nodeStartPositionsAreOnSameLine(node, node.statements[0])) {
                     write(" ");
                     emit(node.statements[0]);
                 }
@@ -3169,7 +3168,7 @@ module ts {
 
                 // If we didn't have to emit any preamble code, then attempt to keep the arrow
                 // function on one line.
-                if (preserveNewLines && !preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
+                if (!preambleEmitted && nodeStartPositionsAreOnSameLine(node, body)) {
                     write(" ");
                     emitStart(body);
                     write("return ");
@@ -3217,7 +3216,7 @@ module ts {
 
                 let preambleEmitted = writer.getTextPos() !== initialTextPos;
 
-                if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
+                if (!preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
                     for (let statement of body.statements) {
                         write(" ");
                         emit(statement);

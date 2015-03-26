@@ -27,9 +27,7 @@ var A = (function () {
     function A() {
         this.x = 1;
     }
-    A.prototype.foo = function () {
-        return 1;
-    };
+    A.prototype.foo = function () { return 1; };
     return A;
 })();
 var C = (function () {

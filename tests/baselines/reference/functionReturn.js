@@ -15,16 +15,12 @@ function f5(): string {
 }
 
 //// [functionReturn.js]
-function f0() {
-}
+function f0() { }
 function f1() {
     var n = f0();
 }
-function f2() {
-}
-function f3() {
-    return;
-}
+function f2() { }
+function f3() { return; }
 function f4() {
     return '';
     return;

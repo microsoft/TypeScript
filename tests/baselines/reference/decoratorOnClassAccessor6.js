@@ -14,5 +14,4 @@ var C = (function () {
 public;
 set;
 accessor(value, number);
-{
-}
+{ }

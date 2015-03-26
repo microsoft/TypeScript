@@ -3,5 +3,4 @@ module.module { }
 
 //// [parser521128.js]
 module.module;
-{
-}
+{ }

@@ -2,6 +2,4 @@
 var v = { "" };
 
 //// [parserShorthandPropertyAssignment3.js]
-var v = {
-    "": 
-};
+var v = { "":  };

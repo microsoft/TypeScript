@@ -50,9 +50,7 @@ s = f2();
 n = f2();
 // Contextually type the default arg with the type annotation
 var f3 = function (a) {
-    if (a === void 0) { a = function (s) {
-        return s;
-    }; }
+    if (a === void 0) { a = function (s) { return s; }; }
 };
 // Type check using the function's contextual type
 var f4 = function (a) {
@@ -60,9 +58,7 @@ var f4 = function (a) {
 };
 // Contextually type the default arg using the function's contextual type
 var f5 = function (a) {
-    if (a === void 0) { a = function (s) {
-        return s;
-    }; }
+    if (a === void 0) { a = function (s) { return s; }; }
 };
 var U;
 (function (U) {

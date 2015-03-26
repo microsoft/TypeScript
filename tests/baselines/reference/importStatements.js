@@ -52,10 +52,7 @@ var C;
 (function (C) {
     var m;
     var p;
-    var p = {
-        x: 0,
-        y: 0
-    };
+    var p = { x: 0, y: 0 };
 })(C || (C = {}));
 // code gen expected
 var D;

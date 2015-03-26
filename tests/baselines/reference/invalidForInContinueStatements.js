@@ -59,8 +59,7 @@ THREE: for (var x in {}) {
 // continue forward
 for (var x in {}) {
     continue FIVE;
-    FIVE: for (var x in {}) {
-    }
+    FIVE: for (var x in {}) { }
 }
 // label on non-loop statement
 NINE: var y = 12;
