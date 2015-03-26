@@ -772,7 +772,7 @@ module ts {
                 let sourceFile = this;
                 let namedDeclarations: Declaration[] = [];
 
-                forEachChild(sourceFile, function visit(node: Node): void {
+                forEachChild(sourceFile, function visitNode(node: Node): void {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.MethodDeclaration:
@@ -796,7 +796,7 @@ module ts {
                                     namedDeclarations.push(functionDeclaration);
                                 }
 
-                                forEachChild(node, visit);
+                                forEachChild(node, visitNode);
                             }
                             break;
 
@@ -824,12 +824,12 @@ module ts {
                         case SyntaxKind.ObjectBindingPattern:
                         case SyntaxKind.ArrayBindingPattern:
                         case SyntaxKind.ModuleBlock:
-                            forEachChild(node, visit);
+                            forEachChild(node, visitNode);
                             break;
 
                         case SyntaxKind.Block:
                             if (isFunctionBlock(node)) {
-                                forEachChild(node, visit);
+                                forEachChild(node, visitNode);
                             }
                             break;
 
@@ -842,7 +842,7 @@ module ts {
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.BindingElement:
                             if (isBindingPattern((<VariableDeclaration>node).name)) {
-                                forEachChild((<VariableDeclaration>node).name, visit);
+                                forEachChild((<VariableDeclaration>node).name, visitNode);
                                 break;
                             }
                         case SyntaxKind.EnumMember:
@@ -855,7 +855,7 @@ module ts {
                             // Handle named exports case e.g.:
                             //    export {a, b as B} from "mod";
                             if ((<ExportDeclaration>node).exportClause) {
-                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                                forEach((<ExportDeclaration>node).exportClause.elements, visitNode);
                             }
                             break;
 
@@ -876,7 +876,7 @@ module ts {
                                         namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
                                     }
                                     else {
-                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                        forEach((<NamedImports>importClause.namedBindings).elements, visitNode);
                                     }
                                 }
                             }
