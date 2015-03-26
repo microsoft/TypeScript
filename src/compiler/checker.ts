@@ -6239,7 +6239,7 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[]): InferenceContext {
+        function inferTypeArguments(signature: Signature, callNode: CallLikeExpression, args: Expression[], excludeArgument: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
             var inferenceMapper = createInferenceMapper(context);
@@ -6281,9 +6281,9 @@ module ts {
             // Inference has failed if the inferenceFailureType type is in list of inferences
             context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
 
-            // Wipe out the inferenceFailureType from the array so that error recovery can work properly
             for (var i = 0; i < inferredTypes.length; i++) {
                 if (inferredTypes[i] === inferenceFailureType) {
+                    // Wipe out the inferenceFailureType from the array so that error recovery can work properly
                     inferredTypes[i] = unknownType;
                 }
             }
@@ -6529,33 +6529,48 @@ module ts {
 
                     var originalCandidate = candidates[i];
                     var inferenceResult: InferenceContext;
+                    var typeArgumentTypes: Type[];
 
                     while (true) {
                         var candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            var typeArgumentTypes: Type[];
                             var typeArgumentsAreValid: boolean;
                             if (typeArguments) {
                                 typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
-                                inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
-                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
+                                inferenceResult = inferTypeArguments(candidate, node, args, excludeArgument);
                                 typeArgumentTypes = inferenceResult.inferredTypes;
+                                typeArgumentsAreValid = inferenceResult.failedTypeParameterIndex < 0;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
+
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
+
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
+
+                            // Check for type arguments inferred as '{}'.
+                            if (originalCandidate.typeParameters && inferenceResult) {
+                                for (var i = 0, len = typeArgumentTypes.length; i < len; i++) {
+                                    
+                                    if (typeArgumentTypes[i] === emptyObjectType && getInferenceCandidates(inferenceResult, i).length === 0) {
+                                        error(node, Diagnostics.Type_parameter_0_was_inferred_to_have_type,
+                                            typeToString(originalCandidate.typeParameters[i]));
+                                    }
+                                }
+                            }
+
                             return candidate;
                         }
+
                         excludeArgument[index] = false;
                     }
 

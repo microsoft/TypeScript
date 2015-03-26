@@ -159,7 +159,7 @@ module ts {
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
+    export function hasProperty(map: Map<any>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 

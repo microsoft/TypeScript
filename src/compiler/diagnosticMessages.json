@@ -617,7 +617,7 @@
     },
     "Unterminated Unicode escape sequence.": {
         "category": "Error",
-        "code":  1199
+        "code": 1199
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1912,6 +1912,10 @@
     "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.": {
         "category": "Error",
         "code": 7024
+    },
+    "Type parameter '{0}' was inferred to have type '{}'.": {
+        "category": "Error",
+        "code": 7025
     },
     "You cannot rename this element.": {
         "category": "Error",
