@@ -7,4 +7,4 @@
 
 goTo.marker();
 // Completion list shouldn't be present in argument name position
-verify.completionListIsEmpty();
+verify.not.completionListIsEmpty();
