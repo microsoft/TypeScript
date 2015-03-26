@@ -4,7 +4,7 @@ export default (1 + 2);
 
 
 //// [es5ExportDefaultExpression.js]
-module.exports = (1 + 2);
+exports.default = (1 + 2);
 
 
 //// [es5ExportDefaultExpression.d.ts]

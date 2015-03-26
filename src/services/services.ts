@@ -2476,36 +2476,38 @@ module ts {
                 return undefined;
             }
 
-            // The decision to provide completion depends on the previous token, so find it
-            // Note: previousToken can be undefined if we are the beginning of the file
             start = new Date().getTime();
             let previousToken = findPrecedingToken(position, sourceFile);
             log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
-            // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
-            // Skip this partial identifier to the previous token
-            if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+            // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
+            // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
+            let contextToken = previousToken;
+
+            // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
+            // Skip this partial identifier and adjust the contextToken to the token that precedes it.
+            if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
                 let start = new Date().getTime();
-                previousToken = findPrecedingToken(previousToken.pos, sourceFile);
+                contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
-            if (previousToken && isCompletionListBlocker(previousToken)) {
+            if (contextToken && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
             // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
-            // other wise, it is a request for all visible symbols in the scope, and the node is the current location
+            // otherwise, it is a request for all visible symbols in the scope, and the node is the current location
             let node = currentToken;
             let isRightOfDot = false;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = (<PropertyAccessExpression>previousToken.parent).expression;
+            if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>contextToken.parent).expression;
                 isRightOfDot = true;
             }
-            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
-                node = (<QualifiedName>previousToken.parent).left;
+            else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
             }
 
@@ -2554,7 +2556,7 @@ module ts {
                 }
             }
             else {
-                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
+                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -2571,13 +2573,13 @@ module ts {
                         symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
                 }
-                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
                     // cursor is in import clause
                     // try to show exported member for imported module
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(previousToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                    if (showCompletionsInImportsClause(contextToken)) {
+                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
 
                         let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
@@ -2585,14 +2587,46 @@ module ts {
                     }
                 }
                 else {
-                    // Get scope members
+                    // Get all entities in the current scope.
                     isMemberCompletion = false;
-                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+
+                    if (previousToken !== contextToken) {
+                        Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+                    }
+                    // We need to find the node that will give us an appropriate scope to begin
+                    // aggregating completion candidates. This is achieved in 'getScopeNode'
+                    // by finding the first node that encompasses a position, accounting for whether a node
+                    // is "complete" to decide whether a position belongs to the node.
+                    // 
+                    // However, at the end of an identifier, we are interested in the scope of the identifier
+                    // itself, but fall outside of the identifier. For instance:
+                    // 
+                    //      xyz => x$
+                    //
+                    // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
+                    // so 'xyz' is not returned in our results.
+                    //
+                    // We define 'adjustedPosition' so that we may appropriately account for
+                    // being at the end of an identifier. The intention is that if requesting completion
+                    // at the end of an identifier, it should be effectively equivalent to requesting completion
+                    // anywhere inside/at the beginning of the identifier. So in the previous case, the
+                    // 'adjustedPosition' will work as if requesting completion in the following:
+                    //
+                    //      xyz => $x
+                    //
+                    // If previousToken !== contextToken, then
+                    //   - 'contextToken' was adjusted to the token prior to 'previousToken'
+                    //      because we were at the end of an identifier.
+                    //   - 'previousToken' is defined.
+                    let adjustedPosition = previousToken !== contextToken ?
+                        previousToken.getStart() :
+                        position;
+
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
 
                     /// TODO filter meaning based on the current context
-                    let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    
                     symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
             }

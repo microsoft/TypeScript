@@ -10,5 +10,4 @@ import a = require("server");
 
 //// [server.js]
 var a = 10;
-export default a;
 //// [client.js]

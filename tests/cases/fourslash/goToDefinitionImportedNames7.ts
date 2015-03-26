@@ -8,7 +8,7 @@
 /////*classDefinition*/class Class {
 ////    private f;
 ////}
-////export = Class;
+////export default Class;
 
 goTo.file("b.ts");
 

@@ -3,7 +3,7 @@
 
 // @filename: server.ts
 class a { }
-export = a;
+export default a;
 
 // @filename: client.ts
 import defaultBinding, * as nameSpaceBinding from "server";

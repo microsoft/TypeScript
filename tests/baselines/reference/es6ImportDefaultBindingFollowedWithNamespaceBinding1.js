@@ -3,7 +3,7 @@
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts]
 
 var a = 10;
-export = a;
+export default a;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts]
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
@@ -19,5 +19,5 @@ var x = defaultBinding;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.d.ts]
 declare var a: number;
-export = a;
+export default a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.d.ts]

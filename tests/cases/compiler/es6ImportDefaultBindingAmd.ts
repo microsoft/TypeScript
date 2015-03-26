@@ -3,7 +3,7 @@
 
 // @filename: es6ImportDefaultBindingAmd_0.ts
 var a = 10;
-export = a;
+export default a;
 
 // @filename: es6ImportDefaultBindingAmd_1.ts
 import defaultBinding from "es6ImportDefaultBindingAmd_0";

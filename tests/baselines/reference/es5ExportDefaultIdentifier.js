@@ -9,7 +9,7 @@ export default f;
 function f() {
 }
 exports.f = f;
-module.exports = f;
+exports.default = f;
 
 
 //// [es5ExportDefaultIdentifier.d.ts]

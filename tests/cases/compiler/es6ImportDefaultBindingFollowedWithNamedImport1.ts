@@ -3,7 +3,7 @@
 
 // @filename: es6ImportDefaultBindingFollowedWithNamedImport1_0.ts
 var a = 10;
-export = a;
+export default a;
 
 // @filename: es6ImportDefaultBindingFollowedWithNamedImport1_1.ts
 import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";

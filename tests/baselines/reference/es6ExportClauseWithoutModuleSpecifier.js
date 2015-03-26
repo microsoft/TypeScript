@@ -23,17 +23,15 @@ export { x } from "server";
 //// [server.js]
 export class c {
 }
-var m;
+export var m;
 (function (m) {
     m.x = 10;
 })(m || (m = {}));
-export { m };
 export var x = 10;
 //// [client.js]
 export { c } from "server";
 export { c as c2 } from "server";
-export { i, m as instantiatedModule } from "server";
-export { uninstantiated } from "server";
+export { m as instantiatedModule } from "server";
 export { x } from "server";
 
 

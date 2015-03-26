@@ -3,7 +3,7 @@
 //// [es6ImportDefaultBindingMergeErrors_0.ts]
 
 var a = 10;
-export = a;
+export default a;
 
 //// [es6ImportDefaultBindingMergeErrors_1.ts]
 import defaultBinding from "es6ImportDefaultBindingMergeErrors_0";
@@ -18,8 +18,8 @@ import defaultBinding3 from "es6ImportDefaultBindingMergeErrors_0"; // SHould be
 
 //// [es6ImportDefaultBindingMergeErrors_0.js]
 var a = 10;
-module.exports = a;
+exports.default = a;
 //// [es6ImportDefaultBindingMergeErrors_1.js]
-var defaultBinding = require("es6ImportDefaultBindingMergeErrors_0");
-var x = defaultBinding;
+var es6ImportDefaultBindingMergeErrors_0_1 = require("es6ImportDefaultBindingMergeErrors_0");
+var x = es6ImportDefaultBindingMergeErrors_0_1.default;
 var defaultBinding2 = "hello world";

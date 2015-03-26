@@ -5,6 +5,7 @@
 export var a = 10;
 export var x = a;
 export var m = a;
+export default {};
 
 //// [client.ts]
 export import defaultBinding1, { } from "server";
@@ -26,6 +27,7 @@ define(["require", "exports"], function (require, exports) {
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
+    exports.default = {};
 });
 //// [client.js]
 define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
@@ -42,6 +44,7 @@ define(["require", "exports", "server", "server", "server", "server", "server"],
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
+export default : {};
 //// [client.d.ts]
 export declare var x1: number;
 export declare var x1: number;

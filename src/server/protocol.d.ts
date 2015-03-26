@@ -593,6 +593,122 @@ declare module ts.server.protocol {
     }
 
     /**
+     * Signature help information for a single parameter    
+     */    
+    export interface SignatureHelpParameter {
+        
+        /**
+         * The parameter's name
+         */        
+        name: string;
+                
+        /**
+          * Documentation of the parameter.
+          */
+        documentation: SymbolDisplayPart[];
+                
+        /**
+          * Display parts of the parameter.
+          */
+        displayParts: SymbolDisplayPart[];
+                
+        /**
+         * Whether the parameter is optional or not.         
+         */        
+        isOptional: boolean;
+    }
+        
+    /**
+     * Represents a single signature to show in signature help.    
+     */    
+    export interface SignatureHelpItem {
+      
+        /**
+         * Whether the signature accepts a variable number of arguments. 
+         */        
+        isVariadic: boolean;
+        
+        /**
+         * The prefix display parts.
+         */        
+        prefixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The suffix disaply parts.
+         */        
+        suffixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The separator display parts.
+         */        
+        separatorDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The signature helps items for the parameters. 
+         */        
+        parameters: SignatureHelpParameter[];
+                
+        /**
+         * The signature's documentation
+         */
+        documentation: SymbolDisplayPart[];
+    }
+    
+    /**
+     * Signature help items found in the response of a signature help request.
+     */
+    export interface SignatureHelpItems {
+      
+        /**
+         * The signature help items.    
+         */        
+        items: SignatureHelpItem[];
+                
+        /**
+         * The span for which signature help should appear on a signature 
+         */        
+        applicableSpan: TextSpan;
+                
+        /**
+         * The item selected in the set of available help items. 
+         */        
+        selectedItemIndex: number;
+                
+        /**
+         * The argument selected in the set of parameters.
+         */        
+        argumentIndex: number;
+        
+        /**
+         * The argument count
+         */        
+        argumentCount: number;
+    }
+
+    /**
+     * Arguments of a signature help request.
+     */
+    export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+      
+    }
+    
+    /**
+      * Signature help request; value of command field is "signatureHelp".
+      * Given a file location (file, line, col), return the signature 
+      * help.
+      */
+    export interface SignatureHelpRequest extends FileLocationRequest {
+        arguments: SignatureHelpRequestArgs;
+    }
+
+    /**
+     * Repsonse object for a SignatureHelpRequest.
+     */  
+    export interface SignatureHelpResponse extends Response {
+        body?: SignatureHelpItems;
+    }
+    
+    /**
       * Arguments for geterr messages.
       */
     export interface GeterrRequestArgs {

@@ -3,7 +3,7 @@
 //// [server.ts]
 
 class a { }
-export = a;
+export default a;
 
 //// [client.ts]
 import defaultBinding, * as nameSpaceBinding from "server";
@@ -16,18 +16,19 @@ define(["require", "exports"], function (require, exports) {
         }
         return a;
     })();
-    return a;
+    exports.default = a;
 });
 //// [client.js]
-define(["require", "exports", "server"], function (require, exports, defaultBinding) {
-    exports.x = new defaultBinding();
+define(["require", "exports", "server"], function (require, exports, server_1) {
+    var nameSpaceBinding = server_1;
+    exports.x = new server_1.default();
 });
 
 
 //// [server.d.ts]
 declare class a {
 }
-export = a;
+export default a;
 //// [client.d.ts]
 import defaultBinding from "server";
 export declare var x: defaultBinding;
