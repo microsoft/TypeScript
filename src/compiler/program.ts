@@ -10,6 +10,7 @@ module ts {
     /** The version of the TypeScript compiler release */
     export let version = "1.5.0.0";
 
+    export var supportedExtensions = [".ts", ".d.ts", ".es6", ".js"];
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
         while (true) {
@@ -303,7 +304,7 @@ module ts {
             }
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !fileExtensionIs(host.getCanonicalFileName(fileName), ".ts")) {
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
                 else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
@@ -317,7 +318,7 @@ module ts {
                 if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                 }
-                else if (!findSourceFile(fileName + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(fileName + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
                     diagnostic = Diagnostics.File_0_not_found;
                     fileName += ".ts";
                 }
@@ -408,8 +409,8 @@ module ts {
                         if (moduleNameText) {
                             let searchPath = basePath;
                             while (true) {
-                                let searchName = normalizePath(combinePaths(searchPath, moduleNameText));
-                                if (findModuleSourceFile(searchName + ".ts", moduleNameExpr) || findModuleSourceFile(searchName + ".d.ts", moduleNameExpr)) {
+                                var searchName = normalizePath(combinePaths(searchPath, moduleNameText));
+                                if (forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr))) {
                                     break;
                                 }
                                 let parentPath = getDirectoryPath(searchPath);
@@ -438,10 +439,7 @@ module ts {
                                 // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
                                 // only through top - level external module names. Relative external module names are not permitted.
                                 let searchName = normalizePath(combinePaths(basePath, moduleName));
-                                let tsFile = findModuleSourceFile(searchName + ".ts", nameLiteral);
-                                if (!tsFile) {
-                                    findModuleSourceFile(searchName + ".d.ts", nameLiteral);
-                                }
+                                forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, nameLiteral));
                             }
                         }
                     });

@@ -5039,6 +5039,9 @@ declare module "typescript" {
     let version: string;
 >version : string
 
+    var supportedExtensions: string[];
+>supportedExtensions : string[]
+
     function findConfigFile(searchPath: string): string;
 >findConfigFile : (searchPath: string) => string
 >searchPath : string

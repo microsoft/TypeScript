@@ -627,11 +627,8 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
-    let supportedExtensions = [".d.ts", ".ts", ".js"];
-
     export function removeFileExtension(path: string): string {
         for (let ext of supportedExtensions) {
-
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
             }
