@@ -21,7 +21,7 @@ sourceFile:sourceMapValidationDecorators.ts
 >>>    }
 >>>    return value;
 >>>};
->>>var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };
+>>>var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { return function() { } };
 >>>var Greeter = (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->

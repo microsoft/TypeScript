@@ -68,7 +68,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     }
     return value;
 };
-var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function (metadataKey, metadataValue) { return function() { } };
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { return function() { } };
 var Greeter = (function () {
     function Greeter(greeting) {
         var b = [];
