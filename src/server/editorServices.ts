@@ -1,5 +1,7 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
+/// <reference path="protocol.d.ts" />
+/// <reference path="session.ts" />
 /// <reference path="node.d.ts" />
 
 module ts.server {
@@ -16,6 +18,16 @@ module ts.server {
 
     var lineCollectionCapacity = 4;
 
+    function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        Object.keys(formatOptions).forEach((key) => {
+            var codeKey = key.charAt(0).toUpperCase() + key.substring(1);
+            if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
+                formatCodeOptions[codeKey] = formatOptions[key];
+            }
+        });
+    }
+
     class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
@@ -27,12 +39,9 @@ module ts.server {
             this.svc = ScriptVersionCache.fromString(content);
         }
 
-        setFormatOptions(tabSize?: number, indentSize?: number) {
-            if (tabSize) {
-                this.formatCodeOptions.TabSize = tabSize;
-            }
-            if (indentSize) {
-                this.formatCodeOptions.IndentSize = indentSize;
+        setFormatOptions(formatOptions: protocol.FormatOptions): void {
+            if (formatOptions) {
+                mergeFormatOptions(this.formatCodeOptions, formatOptions);
             }
         }
 
@@ -448,15 +457,19 @@ module ts.server {
             if (args.file) {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
-                    info.setFormatOptions(args.tabSize, args.indentSize);
-                    this.log("Host configuration update for file " + args.file + " tab size " + args.tabSize);
+                    info.setFormatOptions(args.formatOptions);  
+                    this.log("Host configuration update for file " + args.file);
                 }
             }
             else {
-                this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
-                this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
-                this.hostConfiguration.hostInfo = args.hostInfo;
-                this.log("Host information " + args.hostInfo, "Info");
+                if (args.hostInfo !== undefined) {
+                    this.hostConfiguration.hostInfo = args.hostInfo;
+                    this.log("Host information " + args.hostInfo, "Info");                    
+                }
+                if (args.formatOptions) {
+                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);                    
+                    this.log("Format host information updated", "Info");
+                }
             }
         }
 
