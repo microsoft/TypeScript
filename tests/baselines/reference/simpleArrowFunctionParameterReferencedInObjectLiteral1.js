@@ -5,8 +5,6 @@
 //// [simpleArrowFunctionParameterReferencedInObjectLiteral1.js]
 [].map(function () {
     return [].map(function (p) {
-        return ({
-            X: p
-        });
+        return ({ X: p });
     });
 });

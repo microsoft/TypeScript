@@ -81,12 +81,8 @@ switch (x) {
     case /[a-z]/:
     case []:
     case {}:
-    case {
-        id: 12
-    }:
-    case [
-        'a'
-    ]:
+    case { id: 12 }:
+    case ['a']:
     case typeof x:
     case typeof M:
     case M.fn(1):
@@ -113,10 +109,7 @@ var D = (function (_super) {
 })(C);
 switch (new C()) {
     case new D():
-    case {
-        id: 12,
-        name: ''
-    }:
+    case { id: 12, name: '' }:
     case new C():
 }
 switch ('') {
@@ -139,13 +132,9 @@ switch ([]) {
 }
 switch ({}) {
 }
-switch ({
-    id: 12
-}) {
+switch ({ id: 12 }) {
 }
-switch ([
-    'a'
-]) {
+switch (['a']) {
 }
 switch (function (x) {
     return '';

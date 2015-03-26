@@ -54,10 +54,7 @@ var c;
 var d;
 var r = foo(c, d);
 var r2 = foo(d, c); // error because C does not extend D
-var r3 = foo(c, {
-    x: '',
-    foo: c
-});
+var r3 = foo(c, { x: '', foo: c });
 var r4 = foo(null, null);
 var r5 = foo({}, null);
 var r6 = foo(null, {});

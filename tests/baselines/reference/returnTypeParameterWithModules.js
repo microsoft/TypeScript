@@ -18,12 +18,7 @@ module M2 {
 var M1;
 (function (M1) {
     function reduce(ar, f, e) {
-        return Array.prototype.reduce.apply(ar, e ? [
-            f,
-            e
-        ] : [
-            f
-        ]);
+        return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
     }
     M1.reduce = reduce;
     ;

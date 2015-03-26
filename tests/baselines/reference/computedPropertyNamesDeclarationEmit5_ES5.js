@@ -11,19 +11,11 @@ var v = (_a = {},
     _a["" + ""] = 0,
     _a["" + ""] = function () {
     },
-    _a["" + ""] = Object.defineProperty({
-        get: function () {
+    _a["" + ""] = Object.defineProperty({ get: function () {
             return 0;
-        },
-        enumerable: true,
-        configurable: true
-    }),
-    _a["" + ""] = Object.defineProperty({
-        set: function (x) {
-        },
-        enumerable: true,
-        configurable: true
-    }),
+        }, enumerable: true, configurable: true }),
+    _a["" + ""] = Object.defineProperty({ set: function (x) {
+        }, enumerable: true, configurable: true }),
     _a);
 var _a;
 

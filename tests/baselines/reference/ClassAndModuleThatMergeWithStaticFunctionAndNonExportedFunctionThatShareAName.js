@@ -29,10 +29,7 @@ var Point = (function () {
         this.y = y;
     }
     Point.Origin = function () {
-        return {
-            x: 0,
-            y: 0
-        };
+        return { x: 0, y: 0 };
     };
     return Point;
 })();
@@ -50,10 +47,7 @@ var A;
             this.y = y;
         }
         Point.Origin = function () {
-            return {
-                x: 0,
-                y: 0
-            };
+            return { x: 0, y: 0 };
         };
         return Point;
     })();

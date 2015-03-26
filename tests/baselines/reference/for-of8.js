@@ -4,7 +4,5 @@ for (var v of [0]) { }
 
 //// [for-of8.js]
 v;
-for (var v of [
-    0
-]) {
+for (var v of [0]) {
 }

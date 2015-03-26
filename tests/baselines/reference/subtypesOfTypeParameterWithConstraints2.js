@@ -242,12 +242,8 @@ function f9(x) {
     var r5 = true ? x : /1/; // ok
 }
 function f10(x) {
-    var r6 = true ? {
-        foo: 1
-    } : x; // ok
-    var r6 = true ? x : {
-        foo: 1
-    }; // ok
+    var r6 = true ? { foo: 1 } : x; // ok
+    var r6 = true ? x : { foo: 1 }; // ok
 }
 function f11(x) {
     var r7 = true ? function () {

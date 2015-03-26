@@ -93,9 +93,7 @@ for (var aClass = new C();;) {
 }
 for (var aGenericClass = new D();;) {
 }
-for (var anObjectLiteral = {
-    id: 12
-};;) {
+for (var anObjectLiteral = { id: 12 };;) {
 }
 for (var anOtherObjectLiteral = new C();;) {
 }

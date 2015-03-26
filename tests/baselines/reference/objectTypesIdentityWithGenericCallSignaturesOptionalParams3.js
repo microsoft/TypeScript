@@ -131,11 +131,9 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = {
-    foo: function (x, y) {
+var b = { foo: function (x, y) {
         return x;
-    }
-};
+    } };
 function foo1(x) {
 }
 function foo1b(x) {

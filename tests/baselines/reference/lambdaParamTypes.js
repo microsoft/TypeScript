@@ -24,16 +24,7 @@ thing.doSomething((x, y) => y.name.toExponential(0));
 
 
 //// [lambdaParamTypes.js]
-var thing = create([
-    {
-        name: "bob",
-        id: 24
-    },
-    {
-        name: "doug",
-        id: 32
-    }
-]);
+var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 // Below should all be OK
 thing.doSomething(function (x, y) {
     return x.name.charAt(0);

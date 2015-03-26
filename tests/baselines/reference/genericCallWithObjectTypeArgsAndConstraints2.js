@@ -63,14 +63,8 @@ function f(x) {
     var r;
     return r;
 }
-var r = f({
-    foo: new Base(),
-    bar: new Derived()
-});
-var r2 = f({
-    foo: new Derived(),
-    bar: new Derived()
-});
+var r = f({ foo: new Base(), bar: new Derived() });
+var r2 = f({ foo: new Derived(), bar: new Derived() });
 function f2(x) {
     var r;
     return r;

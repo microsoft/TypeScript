@@ -42,13 +42,8 @@ new (<any>A());
 //// [castExpressionParentheses.js]
 // parentheses should be omitted
 // literals
-{
-    a: 0
-};
-[
-    1,
-    3,
-];
+{ a: 0 };
+[1, 3,];
 "string";
 23.0;
 /regexp/g;

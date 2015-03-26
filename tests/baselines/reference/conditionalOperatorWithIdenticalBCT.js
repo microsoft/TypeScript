@@ -86,19 +86,9 @@ true ? x : a;
 var result1 = true ? x : a;
 //Expr1 and Expr2 are literals
 true ? {} : 1;
-true ? {
-    a: 1
-} : {
-    a: 2,
-    b: 'string'
-};
+true ? { a: 1 } : { a: 2, b: 'string' };
 var result2 = true ? {} : 1;
-var result3 = true ? {
-    a: 1
-} : {
-    a: 2,
-    b: 'string'
-};
+var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
 //Contextually typed
 var resultIsX1 = true ? x : a;
 var result4 = true ? function (m) {
@@ -112,19 +102,9 @@ true ? a : x;
 var result5 = true ? a : x;
 //Expr1 and Expr2 are literals
 true ? 1 : {};
-true ? {
-    a: 2,
-    b: 'string'
-} : {
-    a: 1
-};
+true ? { a: 2, b: 'string' } : { a: 1 };
 var result6 = true ? 1 : {};
-var result7 = true ? {
-    a: 2,
-    b: 'string'
-} : {
-    a: 1
-};
+var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
 //Contextually typed
 var resultIsX2 = true ? x : a;
 var result8 = true ? function (m) {

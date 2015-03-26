@@ -32,16 +32,7 @@ var n = [[]] || [];
 for (n[idx++] in m);
 
 //// [noImplicitAnyForIn.js]
-var x = [
-    [
-        1,
-        2,
-        3
-    ],
-    [
-        "hello"
-    ]
-];
+var x = [[1, 2, 3], ["hello"]];
 for (var i in x) {
     for (var j in x[i]) {
         //Should yield an implicit 'any' error
@@ -59,16 +50,8 @@ for (var a in x) {
     var c = a || b;
 }
 var idx = 0;
-var m = [
-    1,
-    2,
-    3,
-    4,
-    5
-];
+var m = [1, 2, 3, 4, 5];
 // Should yield an implicit 'any' error.
-var n = [
-    []
-] || [];
+var n = [[]] || [];
 for (n[idx++] in m)
     ;

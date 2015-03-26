@@ -26,11 +26,7 @@ interface String{
     length: number;
 }
 */
-var lengths = [
-    "a",
-    "b",
-    "c"
-].map(function (x) {
+var lengths = ["a", "b", "c"].map(function (x) {
     return x.length;
 });
 

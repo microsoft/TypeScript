@@ -158,26 +158,16 @@ var Errors;
     var r1 = foo2(function (x) {
         return null;
     }); // any
-    var r1a = [
-        function (x) {
-            return [
-                ''
-            ];
-        },
-        function (x) {
+    var r1a = [function (x) {
+            return [''];
+        }, function (x) {
             return null;
-        }
-    ];
-    var r1b = [
-        function (x) {
+        }];
+    var r1b = [function (x) {
             return null;
-        },
-        function (x) {
-            return [
-                ''
-            ];
-        }
-    ];
+        }, function (x) {
+            return [''];
+        }];
     var r2arg = function (x) {
         return function (r) {
             return null;
@@ -189,14 +179,8 @@ var Errors;
         };
     };
     var r2 = foo7(r2arg); // any
-    var r2a = [
-        r2arg2,
-        r2arg
-    ];
-    var r2b = [
-        r2arg,
-        r2arg2
-    ];
+    var r2a = [r2arg2, r2arg];
+    var r2b = [r2arg, r2arg2];
     var r3arg = function (x, y) {
         return function (r) {
             return null;
@@ -208,14 +192,8 @@ var Errors;
         };
     };
     var r3 = foo8(r3arg); // any
-    var r3a = [
-        r3arg2,
-        r3arg
-    ];
-    var r3b = [
-        r3arg,
-        r3arg2
-    ];
+    var r3a = [r3arg2, r3arg];
+    var r3b = [r3arg, r3arg2];
     var r4arg = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -231,14 +209,8 @@ var Errors;
         return null;
     };
     var r4 = foo10(r4arg); // any
-    var r4a = [
-        r4arg2,
-        r4arg
-    ];
-    var r4b = [
-        r4arg,
-        r4arg2
-    ];
+    var r4a = [r4arg2, r4arg];
+    var r4b = [r4arg, r4arg2];
     var r5arg = function (x, y) {
         return null;
     };
@@ -246,14 +218,8 @@ var Errors;
         return null;
     };
     var r5 = foo11(r5arg); // any
-    var r5a = [
-        r5arg2,
-        r5arg
-    ];
-    var r5b = [
-        r5arg,
-        r5arg2
-    ];
+    var r5a = [r5arg2, r5arg];
+    var r5b = [r5arg, r5arg2];
     var r6arg = function (x, y) {
         return null;
     };
@@ -261,14 +227,8 @@ var Errors;
         return null;
     };
     var r6 = foo12(r6arg); // (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
-    var r6a = [
-        r6arg2,
-        r6arg
-    ];
-    var r6b = [
-        r6arg,
-        r6arg2
-    ];
+    var r6a = [r6arg2, r6arg];
+    var r6b = [r6arg, r6arg2];
     var r7arg = function (x) {
         return null;
     };
@@ -276,26 +236,14 @@ var Errors;
         return 1;
     };
     var r7 = foo15(r7arg); // any
-    var r7a = [
-        r7arg2,
-        r7arg
-    ];
-    var r7b = [
-        r7arg,
-        r7arg2
-    ];
+    var r7a = [r7arg2, r7arg];
+    var r7b = [r7arg, r7arg2];
     var r7arg3 = function (x) {
         return 1;
     };
     var r7c = foo15(r7arg3); // (x: { a: string; b: number }) => number): number;
-    var r7d = [
-        r7arg2,
-        r7arg3
-    ];
-    var r7e = [
-        r7arg3,
-        r7arg2
-    ];
+    var r7d = [r7arg2, r7arg3];
+    var r7e = [r7arg3, r7arg2];
     var r8arg = function (x) {
         return null;
     };
@@ -308,9 +256,7 @@ var Errors;
 var WithGenericSignaturesInBaseType;
 (function (WithGenericSignaturesInBaseType) {
     var r2arg2 = function (x) {
-        return [
-            ''
-        ];
+        return [''];
     };
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
     var r3arg2 = function (x) {

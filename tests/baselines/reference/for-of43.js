@@ -6,12 +6,7 @@ for (var {x: a = "", y: b = true} of array) {
 }
 
 //// [for-of43.js]
-var array = [
-    {
-        x: "",
-        y: 0
-    }
-];
+var array = [{ x: "", y: 0 }];
 for (var { x: a = "", y: b = true } of array) {
     a;
     b;

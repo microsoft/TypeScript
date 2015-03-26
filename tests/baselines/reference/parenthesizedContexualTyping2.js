@@ -132,19 +132,13 @@ var lambda2 = (function (x) {
     x(undefined);
     return x;
 });
-var obj1 = {
-    x: function (x) {
+var obj1 = { x: function (x) {
         return (x, undefined);
-    },
-    y: function (y) {
+    }, y: function (y) {
         return (y, undefined);
-    }
-};
-var obj2 = ({
-    x: function (x) {
+    } };
+var obj2 = ({ x: function (x) {
         return (x, undefined);
-    },
-    y: function (y) {
+    }, y: function (y) {
         return (y, undefined);
-    }
-});
+    } });

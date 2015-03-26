@@ -7,7 +7,4 @@ foo({ name?, id? });
 function foo(obj) {
 }
 var name, id;
-foo({
-    name: name,
-    id: id
-});
+foo({ name: name, id: id });

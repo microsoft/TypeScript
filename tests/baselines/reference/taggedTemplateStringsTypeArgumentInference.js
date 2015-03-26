@@ -212,22 +212,10 @@ function someGenerics9(strs, a, b, c) {
 }
 var a9a = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, '', 0, []));
 var a9a;
-var a9e = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, undefined, {
-    x: 6,
-    z: new Date()
-}, {
-    x: 6,
-    y: ''
-}));
+var a9e = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, undefined, { x: 6, z: new Date() }, { x: 6, y: '' }));
 var a9e;
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type
-var a9d = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, {
-    x: 3
-}, {
-    x: 6
-}, {
-    x: 6
-}));
+var a9d = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, { x: 3 }, { x: 6 }, { x: 6 }));
 var a9d;
 // Generic tag with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;

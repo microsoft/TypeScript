@@ -63,16 +63,10 @@ module.exports = x;
 var x = true;
 module.exports = x;
 //// [expArray.js]
-var x = [
-    1,
-    2
-];
+var x = [1, 2];
 module.exports = x;
 //// [expObject.js]
-var x = {
-    answer: 42,
-    when: 1776
-};
+var x = { answer: 42, when: 1776 };
 module.exports = x;
 //// [expAny.js]
 var x;

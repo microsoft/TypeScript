@@ -260,36 +260,14 @@ new x(null, null, null);
 var someGenerics9;
 var a9a = new someGenerics9('', 0, []);
 var a9a;
-var a9b = new someGenerics9({
-    a: 0
-}, {
-    b: ''
-}, null);
+var a9b = new someGenerics9({ a: 0 }, { b: '' }, null);
 var a9b;
-var a9e = new someGenerics9(undefined, {
-    x: 6,
-    z: window
-}, {
-    x: 6,
-    y: ''
-});
+var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9e;
-var a9f = new someGenerics9(undefined, {
-    x: 6,
-    z: window
-}, {
-    x: 6,
-    y: ''
-});
+var a9f = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9f;
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
-var a9d = new someGenerics9({
-    x: 3
-}, {
-    x: 6
-}, {
-    x: 6
-});
+var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 var a9d;
 // Generic call with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;

@@ -74,9 +74,7 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = {
-    foo: ''
-};
+var b = { foo: '' };
 function foo2(x) {
 }
 function foo3(x) {

@@ -38,17 +38,11 @@ var C = (function () {
     });
     return C;
 })();
-var o1 = {
-    get Foo() {
+var o1 = { get Foo() {
         return 0;
-    },
-    set Foo(val) {
-    }
-}; // ok - types agree (inference)
-var o2 = {
-    get Foo() {
+    }, set Foo(val) {
+    } }; // ok - types agree (inference)
+var o2 = { get Foo() {
         return 0;
-    },
-    set Foo(val) {
-    }
-}; // ok - types agree
+    }, set Foo(val) {
+    } }; // ok - types agree

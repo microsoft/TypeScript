@@ -71,9 +71,7 @@ var D = (function (_super) {
     return D;
 })(C);
 function fn10() {
-    return {
-        id: 12
-    };
+    return { id: 12 };
 }
 function fn11() {
     return new C();

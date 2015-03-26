@@ -40,11 +40,7 @@ var C = (function (_super) {
     }
     return C;
 })(A);
-var xs = [
-    function (x) {
-    },
-    function (x) {
-    },
-    function (x) {
-    }
-];
+var xs = [function (x) {
+    }, function (x) {
+    }, function (x) {
+    }];

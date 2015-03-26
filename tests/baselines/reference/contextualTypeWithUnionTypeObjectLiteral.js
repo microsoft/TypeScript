@@ -79,9 +79,7 @@ var objStrOrNum3 = {
 var objStrOrNum4 = {
     prop: strOrNumber
 };
-var objStrOrNum5 = {
-    prop: strOrNumber
-};
+var objStrOrNum5 = { prop: strOrNumber };
 var objStrOrNum6 = {
     prop: strOrNumber,
     anotherP: str

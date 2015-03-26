@@ -253,36 +253,14 @@ function someGenerics9(a, b, c) {
 }
 var a9a = someGenerics9('', 0, []);
 var a9a;
-var a9b = someGenerics9({
-    a: 0
-}, {
-    b: ''
-}, null);
+var a9b = someGenerics9({ a: 0 }, { b: '' }, null);
 var a9b;
-var a9e = someGenerics9(undefined, {
-    x: 6,
-    z: window
-}, {
-    x: 6,
-    y: ''
-});
+var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9e;
-var a9f = someGenerics9(undefined, {
-    x: 6,
-    z: window
-}, {
-    x: 6,
-    y: ''
-});
+var a9f = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9f;
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
-var a9d = someGenerics9({
-    x: 3
-}, {
-    x: 6
-}, {
-    x: 6
-});
+var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 var a9d;
 // Generic call with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;

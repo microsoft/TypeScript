@@ -6,7 +6,5 @@ var s = map("", () => { return { x: identity }; });
 
 //// [inferentialTypingWithFunctionTypeNested.js]
 var s = map("", function () {
-    return {
-        x: identity
-    };
+    return { x: identity };
 });

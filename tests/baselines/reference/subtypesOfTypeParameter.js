@@ -175,12 +175,8 @@ function f2(x, y) {
     var r4 = true ? x : new Date();
     var r5 = true ? /1/ : x;
     var r5 = true ? x : /1/;
-    var r6 = true ? {
-        foo: 1
-    } : x;
-    var r6 = true ? x : {
-        foo: 1
-    };
+    var r6 = true ? { foo: 1 } : x;
+    var r6 = true ? x : { foo: 1 };
     var r7 = true ? function () {
     } : x;
     var r7 = true ? x : function () {

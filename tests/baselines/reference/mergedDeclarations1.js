@@ -18,10 +18,7 @@ var b = point.equals(p1, p2);
 
 //// [mergedDeclarations1.js]
 function point(x, y) {
-    return {
-        x: x,
-        y: y
-    };
+    return { x: x, y: y };
 }
 var point;
 (function (point) {

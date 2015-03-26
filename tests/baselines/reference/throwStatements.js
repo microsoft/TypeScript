@@ -131,9 +131,7 @@ var aClass = new C();
 throw aClass;
 var aGenericClass = new D();
 throw aGenericClass;
-var anObjectLiteral = {
-    id: 12
-};
+var anObjectLiteral = { id: 12 };
 throw anObjectLiteral;
 var aFunction = F;
 throw aFunction;
@@ -165,17 +163,9 @@ throw function () {
 throw function (x) {
     return 42;
 };
-throw {
-    x: 12,
-    y: 13
-};
+throw { x: 12, y: 13 };
 throw [];
-throw [
-    'a',
-    [
-        'b'
-    ]
-];
+throw ['a', ['b']];
 throw /[a-z]/;
 throw new Date();
 throw new C();

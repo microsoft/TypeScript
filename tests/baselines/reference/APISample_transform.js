@@ -2054,11 +2054,7 @@ function transform(contents, compilerOptions) {
             return files[fileName] !== undefined ? ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: function (name, text, writeByteOrderMark) {
-            outputs.push({
-                name: name,
-                text: text,
-                writeByteOrderMark: writeByteOrderMark
-            });
+            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
         },
         getDefaultLibFileName: function () {
             return "lib.d.ts";
@@ -2077,9 +2073,7 @@ function transform(contents, compilerOptions) {
         }
     };
     // Create a program from inputs
-    var program = ts.createProgram([
-        "file.ts"
-    ], compilerOptions, compilerHost);
+    var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
     // Query for early errors
     var errors = ts.getPreEmitDiagnostics(program);
     var emitResult = program.emit();

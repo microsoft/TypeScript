@@ -87,40 +87,22 @@ M.y = 3; // OK
 M.y = ''; // Error
 (M).y = ''; // Error
 (M.y) = ''; // Error
-M = {
-    y: 3
-}; // Error
-(M) = {
-    y: 3
-}; // Error
+M = { y: 3 }; // Error
+(M) = { y: 3 }; // Error
 var M2;
 (function (M2) {
     var M3;
     (function (M3) {
         M3.x;
     })(M3 = M2.M3 || (M2.M3 = {}));
-    M3 = {
-        x: 3
-    }; // Error
+    M3 = { x: 3 }; // Error
 })(M2 || (M2 = {}));
-M2.M3 = {
-    x: 3
-}; // OK
-(M2).M3 = {
-    x: 3
-}; // OK
-(M2.M3) = {
-    x: 3
-}; // OK
-M2.M3 = {
-    x: ''
-}; // Error
-(M2).M3 = {
-    x: ''
-}; // Error
-(M2.M3) = {
-    x: ''
-}; // Error
+M2.M3 = { x: 3 }; // OK
+(M2).M3 = { x: 3 }; // OK
+(M2.M3) = { x: 3 }; // OK
+M2.M3 = { x: '' }; // Error
+(M2).M3 = { x: '' }; // Error
+(M2.M3) = { x: '' }; // Error
 function fn() {
 }
 fn = function () {

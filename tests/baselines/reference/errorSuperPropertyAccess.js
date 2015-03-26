@@ -277,7 +277,4 @@ var SomeDerived3 = (function (_super) {
     return SomeDerived3;
 })(SomeBase);
 // In object literal
-var obj = {
-    n: _super.wat,
-    p: _super.foo.call(this)
-};
+var obj = { n: _super.wat, p: _super.foo.call(this) };

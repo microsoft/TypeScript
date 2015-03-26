@@ -16,9 +16,7 @@ var X = (function () {
     function X() {
     }
     X.prototype.f = function (t) {
-        return {
-            a: t
-        };
+        return { a: t };
     };
     return X;
 })();
