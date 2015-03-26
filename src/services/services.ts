@@ -1395,6 +1395,7 @@ module ts {
 
     export interface CompletionInfo {
         isMemberCompletion: boolean;
+        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
         entries: CompletionEntry[];
     }
 
@@ -2239,6 +2240,14 @@ module ts {
             return useCaseSensitivefilenames ? filename : filename.toLowerCase();
         }
 
+        function getValidSourceFile(fileName: string): SourceFile {
+            var sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
+            if (!sourceFile) {
+                throw new Error("Could not find file: '" + fileName + "'.");
+            }
+            return sourceFile;
+        }
+
         function getSourceFile(filename: string): SourceFile {
             return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
@@ -2497,13 +2506,13 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(filename: string, position: number) {
+        function getCompletionsAtPosition(fileName: string, position: number) {
             synchronizeHostData();
 
-            filename = normalizeSlashes(filename);
+            fileName = normalizeSlashes(fileName);
 
             var syntacticStart = new Date().getTime();
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = getValidSourceFile(fileName);
 
             var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
@@ -2513,7 +2522,7 @@ module ts {
             // Completion not allowed inside comments, bail out if this is the case
             var insideComment = isInsideComment(sourceFile, currentToken, position);
             host.log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
-            
+
             if (insideComment) {
                 host.log("Returning an empty list because completion was inside a comment.");
                 return undefined;
@@ -2558,7 +2567,7 @@ module ts {
 
             // Clear the current activeCompletionSession for this session
             activeCompletionSession = {
-                filename: filename,
+                filename: fileName,
                 position: position,
                 entries: [],
                 symbols: {},
@@ -2573,6 +2582,7 @@ module ts {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
                 var isMemberCompletion = true;
+                var isNewIdentifierLocation = false;
 
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
@@ -2609,6 +2619,7 @@ module ts {
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
+                    isNewIdentifierLocation = true;
 
                     var contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
@@ -2625,6 +2636,7 @@ module ts {
                 else {
                     // Get scope members
                     isMemberCompletion = false;
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
 
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
@@ -2642,6 +2654,8 @@ module ts {
 
             return {
                 isMemberCompletion,
+                isNewIdentifierLocation,
+                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
                 entries: activeCompletionSession.entries
             };
 
@@ -2667,6 +2681,59 @@ module ts {
                     isRightOfIllegalDot(previousToken);
                 host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
+                if (previousToken) {
+                    var containingNodeKind = previousToken.parent.kind;
+                    switch (previousToken.kind) {
+                        case SyntaxKind.CommaToken:
+                            return containingNodeKind === SyntaxKind.CallExpression                         // func( a, |
+                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |   public, protected, private keywords are allowed here, so show completion
+                                || containingNodeKind === SyntaxKind.NewExpression                          // new C(a, |
+                                || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression;                      // var x = (a, |
+
+              
+                        case SyntaxKind.OpenParenToken:
+                            return containingNodeKind === SyntaxKind.CallExpression               // func( |
+                                || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
+                                || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression;     // var x = (a|
+
+                        case SyntaxKind.OpenBracketToken:
+                            return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
+
+                        case SyntaxKind.ModuleKeyword:                               // module | 
+                            return true;
+
+                        case SyntaxKind.DotToken:
+                            return containingNodeKind === SyntaxKind.ModuleDeclaration; // module A.|
+
+                        case SyntaxKind.OpenBraceToken:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
+
+                        case SyntaxKind.EqualsToken:
+                            return containingNodeKind === SyntaxKind.VariableDeclaration // var x = a|
+                                || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+
+                        case SyntaxKind.TemplateHead:
+                            return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
+
+                        case SyntaxKind.TemplateMiddle:
+                            return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
+                    }
+
+                    // Previous token may have been a keyword that was converted to an identifier.
+                    switch (previousToken.getText()) {
+                        case "public":
+                        case "protected":
+                        case "private":
+                            return true;
+                    }
+                }
+
+                return false;
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
@@ -2713,8 +2780,6 @@ module ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.CallSignature:
@@ -2733,28 +2798,36 @@ module ts {
                             return containingNodeKind === SyntaxKind.VariableDeclaration ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
                                 containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
-                                isFunction(containingNodeKind);
+                                isFunction(containingNodeKind) ||
+                                containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration;         // interface A<T, |
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface a { |
+                                containingNodeKind === SyntaxKind.TypeLiteral;                // var x : { |
 
-                        case SyntaxKind.SemicolonToken:
-                            return containingNodeKind === SyntaxKind.Property &&
-                                previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
+                        case SyntaxKind.LessThanToken:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
+                                isFunction(containingNodeKind);
+
+                        case SyntaxKind.DotDotDotToken:
+                            return containingNodeKind === SyntaxKind.Parameter ||
+                                containingNodeKind === SyntaxKind.Constructor;
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.StaticKeyword:
-                        case SyntaxKind.DotDotDotToken:
+                        case SyntaxKind.ProtectedKeyword:
                             return containingNodeKind === SyntaxKind.Parameter;
 
                         case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.ModuleKeyword:
                         case SyntaxKind.EnumKeyword:
                         case SyntaxKind.InterfaceKeyword:
                         case SyntaxKind.FunctionKeyword:
@@ -2762,6 +2835,9 @@ module ts {
                         case SyntaxKind.GetKeyword:
                         case SyntaxKind.SetKeyword:
                         case SyntaxKind.ImportKeyword:
+                        case SyntaxKind.LetKeyword:
+                        case SyntaxKind.ConstKeyword:
+                        case SyntaxKind.YieldKeyword:
                             return true;
                     }
 
@@ -2770,10 +2846,12 @@ module ts {
                         case "class":
                         case "interface":
                         case "enum":
-                        case "module":
                         case "function":
                         case "var":
-                            // TODO: add let and const
+                        case "static":
+                        case "let":
+                        case "const":
+                        case "yield":
                             return true;
                     }
                 }
