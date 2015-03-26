@@ -92,8 +92,8 @@ module ts {
 
             let currentSourceFile: SourceFile;
 
-            let generatedNameSet: Map<string>;
-            let nodeToGeneratedName: string[];
+            let generatedNameSet: Map<string> = {};
+            let nodeToGeneratedName: string[] = [];
             let blockScopedVariableToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
 
@@ -170,7 +170,7 @@ module ts {
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
                     !hasProperty(currentSourceFile.identifiers, name) &&
-                    (!generatedNameSet || !hasProperty(generatedNameSet, name))
+                    !hasProperty(generatedNameSet, name);
             }
 
             // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -186,11 +186,13 @@ module ts {
                 }
                 while (true) {
                     let count = tempFlags & TempFlags.CountMask;
-                    let ch = CharacterCodes.a + count;
-                    let name = count < 26 ? "_" + String.fromCharCode(ch) : "_" + (count - 26);
                     tempFlags++;
-                    if (ch !== CharacterCodes.i && ch !== CharacterCodes.n && isUniqueName(name)) {
-                        return name;
+                    // Skip over 'i' and 'n'
+                    if (count !== 8 && count !== 13) {
+                        let name = count < 26 ? "_" + String.fromCharCode(CharacterCodes.a + count) : "_" + (count - 26);
+                        if (isUniqueName(name)) {
+                            return name;
+                        }
                     }
                 }
             }
@@ -208,14 +210,14 @@ module ts {
                 while (true) {
                     let generatedName = baseName + i;
                     if (isUniqueName(generatedName)) {
-                        return (generatedNameSet || (generatedNameSet = {}))[generatedName] = generatedName;
+                        return generatedNameSet[generatedName] = generatedName;
                     }
                     i++;
                 }
             }
 
             function assignGeneratedName(node: Node, name: string) {
-                (nodeToGeneratedName || (nodeToGeneratedName = []))[getNodeId(node)] = unescapeIdentifier(name);
+                nodeToGeneratedName[getNodeId(node)] = unescapeIdentifier(name);
             }
 
             function generateNameForFunctionOrClassDeclaration(node: Declaration) {
@@ -284,10 +286,10 @@ module ts {
 
             function getGeneratedNameForNode(node: Node) {
                 let nodeId = getNodeId(node);
-                if (!nodeToGeneratedName || !nodeToGeneratedName[nodeId]) {
+                if (!nodeToGeneratedName[nodeId]) {
                     generateNameForNode(node);
                 }
-                return nodeToGeneratedName ? nodeToGeneratedName[nodeId] : undefined;
+                return nodeToGeneratedName[nodeId];
             }
 
             function initializeEmitterWithSourceMaps() {
