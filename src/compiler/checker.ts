@@ -3001,17 +3001,6 @@ module ts {
             return result;
         }
 
-        function getExportsOfImportDeclaration(node: ImportDeclaration): Symbol[] {
-            if (!node.moduleSpecifier) {
-                return emptyArray;
-            }
-            let module = resolveExternalModuleName(node, node.moduleSpecifier);
-            if (!module) {
-                return emptyArray;
-            }
-            return symbolsToArray(getExportsOfModule(module));
-        }
-
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
