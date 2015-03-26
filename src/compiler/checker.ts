@@ -2169,7 +2169,7 @@ module ts {
                     //     function fun(...[a, ...b]) { }
                     //
                     // Normally, in ES6, the implied type of an array binding pattern with a rest element is
-                    // an iterable. However, there is a requirement in our grammar checker that all rest
+                    // an iterable. However, there is a requirement in our type system that all rest
                     // parameters be array types. To satisfy this, we have an exception to the rule that
                     // says the type of an array binding pattern with a rest element is an array type
                     // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
