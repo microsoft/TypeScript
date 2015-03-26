@@ -713,8 +713,14 @@ module ts {
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportAssignment | ExportSpecifier) {
             let symbol = getSymbolOfNode(node);
             let target = resolveAlias(symbol);
-            if (target && target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target)) {
-                markAliasSymbolAsReferenced(symbol);
+            if (target) {
+                let markAlias =
+                    (target === unknownSymbol && compilerOptions.separateCompilation) ||
+                    (target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target));
+
+                if (markAlias) {
+                    markAliasSymbolAsReferenced(symbol);
+                }
             }
         }
 
@@ -9745,7 +9751,9 @@ module ts {
 
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
+            }
 
+            if (type.baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.typeName);
             }
@@ -11264,11 +11272,16 @@ module ts {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
-            return isAliasResolvedToValue(getSymbolOfNode(node));
+
+            var isValue = isAliasResolvedToValue(getSymbolOfNode(node));
+            return isValue && node.moduleReference && !nodeIsMissing(node.moduleReference);
         }
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
             let target = resolveAlias(symbol);
+            if (target === unknownSymbol && compilerOptions.separateCompilation) {
+                return true;
+            }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
             return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
         }

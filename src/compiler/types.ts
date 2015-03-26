@@ -1587,6 +1587,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        separateCompilation?: boolean;
         /* @internal */ stripInternal?: boolean;
         /* @internal */ preserveNewLines?: boolean;
         /* @internal */ cacheDownlevelForOfLength?: boolean;
