@@ -2162,8 +2162,26 @@ module ts {
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
             }
             else if (hasSpreadElement) {
-                var unionOfElements = getUnionType(elementTypes);
-                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
+                let unionOfElements = getUnionType(elementTypes);
+                if (languageVersion >= ScriptTarget.ES6) {
+                    // If the user has something like:
+                    //
+                    //     function fun(...[a, ...b]) { }
+                    //
+                    // Normally, in ES6, the implied type of an array binding pattern with a rest element is
+                    // an iterable. However, there is a requirement in our grammar checker that all rest
+                    // parameters be array types. To satisfy this, we have an exception to the rule that
+                    // says the type of an array binding pattern with a rest element is an array type
+                    // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
+                    // iterable argument, but within the function it will be an array.
+                    let parent = pattern.parent;
+                    let isRestParameter = parent.kind === SyntaxKind.Parameter &&
+                        pattern === (<ParameterDeclaration>parent).name &&
+                        (<ParameterDeclaration>parent).dotDotDotToken !== undefined;
+                    return isRestParameter ? createArrayType(unionOfElements) : createIterableType(unionOfElements);
+                }
+
+                return createArrayType(unionOfElements);
             }
 
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
