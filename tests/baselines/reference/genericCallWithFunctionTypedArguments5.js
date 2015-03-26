@@ -27,40 +27,28 @@ var r7 = foo({ cb: () => '' }); // string
 function foo(arg) {
     return arg.cb(null);
 }
-var arg = {
-    cb: function (x) {
+var arg = { cb: function (x) {
         return '';
-    }
-};
+    } };
 var r = foo(arg); // {}
 // more args not allowed
-var r2 = foo({
-    cb: function (x, y) {
+var r2 = foo({ cb: function (x, y) {
         return '';
-    }
-}); // error
-var r3 = foo({
-    cb: function (x, y) {
+    } }); // error
+var r3 = foo({ cb: function (x, y) {
         return '';
-    }
-}); // error
+    } }); // error
 function foo2(arg) {
     return arg.cb(null, null);
 }
 // fewer args ok
 var r4 = foo(arg); // {}
-var r5 = foo({
-    cb: function (x) {
+var r5 = foo({ cb: function (x) {
         return '';
-    }
-}); // {}
-var r6 = foo({
-    cb: function (x) {
+    } }); // {}
+var r6 = foo({ cb: function (x) {
         return '';
-    }
-}); // string
-var r7 = foo({
-    cb: function () {
+    } }); // string
+var r7 = foo({ cb: function () {
         return '';
-    }
-}); // string
+    } }); // string

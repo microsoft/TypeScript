@@ -97,13 +97,7 @@ for (var x in {}) {
 }
 for (var x in []) {
 }
-for (var x in [
-    1,
-    2,
-    3,
-    4,
-    5
-]) {
+for (var x in [1, 2, 3, 4, 5]) {
 }
 function fn() {
 }

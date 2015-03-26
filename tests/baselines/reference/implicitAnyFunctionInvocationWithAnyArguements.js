@@ -38,10 +38,7 @@ var newC2 = new C(<any>[], null)
 //// [implicitAnyFunctionInvocationWithAnyArguements.js]
 // this should be errors
 var arg0 = null; // error at "arg0"
-var anyArray = [
-    null,
-    undefined
-]; // error at array literal
+var anyArray = [null, undefined]; // error at array literal
 var objL; // error at "y,z"
 var funcL;
 function temp1(arg1) {
@@ -70,10 +67,7 @@ function noError(variable, array) {
 }
 noError(null, []);
 noError(undefined, []);
-noError(null, [
-    null,
-    undefined
-]);
+noError(null, [null, undefined]);
 noError(undefined, anyArray);
 var C = (function () {
     function C(emtpyArray, variable) {

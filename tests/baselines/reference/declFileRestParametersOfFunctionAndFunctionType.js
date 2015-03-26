@@ -26,9 +26,7 @@ function f4() {
 function f5() {
 }
 var f6 = function () {
-    return [
-        10
-    ];
+    return [10];
 };
 
 

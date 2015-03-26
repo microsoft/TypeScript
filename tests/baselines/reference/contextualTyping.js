@@ -271,19 +271,11 @@ var c3t7 = function (n) {
 var c3t8 = function (n) {
     return n;
 };
-var c3t9 = [
-    [],
-    []
-];
-var c3t10 = [
-    ({}),
-    ({})
-];
-var c3t11 = [
-    function (n, s) {
+var c3t9 = [[], []];
+var c3t10 = [({}), ({})];
+var c3t11 = [function (n, s) {
         return s;
-    }
-];
+    }];
 var c3t12 = {
     foo: ({})
 };
@@ -319,9 +311,7 @@ c6t5 = function (n) {
 };
 // CONTEXT: Array index assignment
 var c7t2;
-c7t2[0] = ({
-    n: 1
-});
+c7t2[0] = ({ n: 1 });
 var objc8 = ({});
 objc8.t1 = (function (s) {
     return s;
@@ -345,19 +335,11 @@ objc8.t7 = function (n) {
 objc8.t8 = function (n) {
     return n;
 };
-objc8.t9 = [
-    [],
-    []
-];
-objc8.t10 = [
-    ({}),
-    ({})
-];
-objc8.t11 = [
-    function (n, s) {
+objc8.t9 = [[], []];
+objc8.t10 = [({}), ({})];
+objc8.t11 = [function (n, s) {
         return s;
-    }
-];
+    }];
 objc8.t12 = {
     foo: ({})
 };
@@ -415,19 +397,11 @@ var c12t7 = function (n) {
 var c12t8 = function (n) {
     return n;
 };
-var c12t9 = [
-    [],
-    []
-];
-var c12t10 = [
-    ({}),
-    ({})
-];
-var c12t11 = [
-    function (n, s) {
+var c12t9 = [[], []];
+var c12t10 = [({}), ({})];
+var c12t11 = [function (n, s) {
         return s;
-    }
-];
+    }];
 var c12t12 = {
     foo: ({})
 };

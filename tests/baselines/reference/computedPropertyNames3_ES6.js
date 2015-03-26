@@ -19,10 +19,7 @@ class C {
     }
     get [delete id]() {
     }
-    set [[
-        0,
-        1
-    ]](v) {
+    set [[0, 1]](v) {
     }
     static get [""]() {
     }

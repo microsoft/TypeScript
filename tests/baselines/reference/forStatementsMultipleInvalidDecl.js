@@ -120,22 +120,11 @@ for (var f = function (x) {
 }
 for (var arr;;) {
 }
-for (var arr = [
-    1,
-    2,
-    3,
-    4
-];;) {
+for (var arr = [1, 2, 3, 4];;) {
 }
-for (var arr = [
-    new C(),
-    new C2(),
-    new D()
-];;) {
+for (var arr = [new C(), new C2(), new D()];;) {
 }
-for (var arr2 = [
-    new D()
-];;) {
+for (var arr2 = [new D()];;) {
 }
 for (var arr2 = new Array();;) {
 }

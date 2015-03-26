@@ -8,16 +8,8 @@ for ([k = "", v = false] of map) {
 
 //// [for-of45.js]
 var k, v;
-var map = new Map([
-    [
-        "",
-        true
-    ]
-]);
-for ([
-    k = "",
-    v = false
-] of map) {
+var map = new Map([["", true]]);
+for ([k = "", v = false] of map) {
     k;
     v;
 }

@@ -85,9 +85,7 @@ var aVoid = undefined;
 var anInterface = new C();
 var aClass = new C();
 var aGenericClass = new D();
-var anObjectLiteral = {
-    id: 12
-};
+var anObjectLiteral = { id: 12 };
 var anOtherObjectLiteral = new C();
 var aFunction = F;
 var anOtherFunction = F;

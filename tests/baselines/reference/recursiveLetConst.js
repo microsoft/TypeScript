@@ -35,8 +35,6 @@ let z0 = () => z0;
 let z1 = function () {
     return z1;
 };
-let z2 = {
-    f() {
+let z2 = { f() {
         return z2;
-    }
-};
+    } };

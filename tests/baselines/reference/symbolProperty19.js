@@ -9,13 +9,9 @@ var str = i[Symbol.toStringTag]();
 
 //// [symbolProperty19.js]
 var i = {
-    [Symbol.iterator]: {
-        p: null
-    },
+    [Symbol.iterator]: { p: null },
     [Symbol.toStringTag]() {
-        return {
-            p: undefined
-        };
+        return { p: undefined };
     }
 };
 var it = i[Symbol.iterator];

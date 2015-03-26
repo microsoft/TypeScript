@@ -799,7 +799,7 @@ module ts {
 
                 increaseIndent();
 
-                if (preserveNewLines && nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
+                if (nodeStartPositionsAreOnSameLine(parent, nodes[0])) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }
@@ -810,7 +810,7 @@ module ts {
 
                 for (let i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
-                        if (preserveNewLines && nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
+                        if (nodeEndIsOnSameLineAsNodeStart(nodes[i - 1], nodes[i])) {
                             write(", ");
                         }
                         else {
@@ -828,7 +828,7 @@ module ts {
 
                 decreaseIndent();
 
-                if (preserveNewLines && nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
+                if (nodeEndPositionsAreOnSameLine(parent, lastOrUndefined(nodes))) {
                     if (spacesBetweenBraces) {
                         write(" ");
                     }

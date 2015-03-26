@@ -48,30 +48,15 @@ function declSpace() {
 }
 for (var p;;) {
 }
-for (var p = {
-    x: 1,
-    y: 2
-};;) {
+for (var p = { x: 1, y: 2 };;) {
 }
-for (var p = {
-    x: 0,
-    y: undefined
-};;) {
+for (var p = { x: 0, y: undefined };;) {
 }
-for (var p = {
-    x: 1,
-    y: undefined
-};;) {
+for (var p = { x: 1, y: undefined };;) {
 }
-for (var p = {
-    x: 1,
-    y: 2
-};;) {
+for (var p = { x: 1, y: 2 };;) {
 }
-for (var p = {
-    x: 0,
-    y: undefined
-};;) {
+for (var p = { x: 0, y: undefined };;) {
 }
 for (var p;;) {
 }
@@ -93,10 +78,7 @@ for (var fn;;) {
 }
 for (var a;;) {
 }
-for (var a = [
-    'a',
-    'b'
-];;) {
+for (var a = ['a', 'b'];;) {
 }
 for (var a = [];;) {
 }

@@ -104,9 +104,7 @@ var aVoid = 9.9;
 var anInterface = new D();
 var aClass = new D();
 var aGenericClass = new C();
-var anObjectLiteral = {
-    id: 'a string'
-};
+var anObjectLiteral = { id: 'a string' };
 var anOtherObjectLiteral = new C();
 var aFunction = F2;
 var anOtherFunction = F2;

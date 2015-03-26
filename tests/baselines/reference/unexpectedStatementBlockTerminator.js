@@ -19,8 +19,5 @@ var Bar = (function () {
     return Bar;
 })();
 function Goo() {
-    return {
-        a: 1,
-        b: 2
-    };
+    return { a: 1, b: 2 };
 }

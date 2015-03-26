@@ -54,26 +54,11 @@ function declSpace() {
     var x = 'this is a string';
 }
 var p;
-var p = {
-    x: 1,
-    y: 2
-};
-var p = {
-    x: 0,
-    y: undefined
-};
-var p = {
-    x: 1,
-    y: undefined
-};
-var p = {
-    x: 1,
-    y: 2
-};
-var p = {
-    x: 0,
-    y: undefined
-};
+var p = { x: 1, y: 2 };
+var p = { x: 0, y: undefined };
+var p = { x: 1, y: undefined };
+var p = { x: 1, y: 2 };
+var p = { x: 0, y: undefined };
 var p;
 var fn = function (s) {
     return 42;
@@ -86,10 +71,7 @@ var fn;
 var fn = null;
 var fn;
 var a;
-var a = [
-    'a',
-    'b'
-];
+var a = ['a', 'b'];
 var a = [];
 var a = [];
 var a = new Array();

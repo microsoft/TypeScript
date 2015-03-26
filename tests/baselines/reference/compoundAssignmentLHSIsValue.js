@@ -192,14 +192,8 @@ value;
 }
 value;
 // array literals
-[
-    '',
-    ''
-] *= value;
-[
-    '',
-    ''
-] += value;
+['', ''] *= value;
+['', ''] += value;
 // super
 var Derived = (function (_super) {
     __extends(Derived, _super);

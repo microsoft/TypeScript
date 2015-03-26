@@ -55,23 +55,17 @@ for (var x = 1;;) {
     })();
 }
 for (var x = void 0;;) {
-    ({
-        foo: function () {
+    ({ foo: function () {
             x;
-        }
-    });
+        } });
 }
 for (var x = void 0;;) {
-    ({
-        get foo() {
+    ({ get foo() {
             return x;
-        }
-    });
+        } });
 }
 for (var x = void 0;;) {
-    ({
-        set foo(v) {
+    ({ set foo(v) {
             x;
-        }
-    });
+        } });
 }

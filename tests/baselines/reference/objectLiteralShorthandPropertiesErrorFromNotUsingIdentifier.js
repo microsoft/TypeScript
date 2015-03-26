@@ -37,13 +37,7 @@ var y = {
 };
 var x = {
     a: .b,
-    a: [
-        "ss"
-    ],
-    a: [
-        1
-    ]
+    a: ["ss"],
+    a: [1]
 };
-var v = {
-    class: 
-}; // error
+var v = { class:  }; // error

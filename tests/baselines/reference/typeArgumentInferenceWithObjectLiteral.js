@@ -66,44 +66,29 @@ var E2;
     E2[E2["X"] = 0] = "X";
 })(E2 || (E2 = {}));
 var v1;
-var v1 = f1({
-    w: function (x) {
+var v1 = f1({ w: function (x) {
         return x;
-    },
-    r: function () {
+    }, r: function () {
         return 0;
-    }
-}, 0);
-var v1 = f1({
-    w: function (x) {
+    } }, 0);
+var v1 = f1({ w: function (x) {
         return x;
-    },
-    r: function () {
+    }, r: function () {
         return 0;
-    }
-}, E1.X);
-var v1 = f1({
-    w: function (x) {
+    } }, E1.X);
+var v1 = f1({ w: function (x) {
         return x;
-    },
-    r: function () {
+    }, r: function () {
         return E1.X;
-    }
-}, 0);
+    } }, 0);
 var v2;
-var v2 = f1({
-    w: function (x) {
+var v2 = f1({ w: function (x) {
         return x;
-    },
-    r: function () {
+    }, r: function () {
         return E1.X;
-    }
-}, E1.X);
-var v3 = f1({
-    w: function (x) {
+    } }, E1.X);
+var v3 = f1({ w: function (x) {
         return x;
-    },
-    r: function () {
+    }, r: function () {
         return E1.X;
-    }
-}, E2.X); // Error
+    } }, E2.X); // Error

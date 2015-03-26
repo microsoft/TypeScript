@@ -20,39 +20,21 @@ function map(xs, f) {
     });
     return ys;
 }
-var r0 = map([
-    1,
-    ""
-], function (x) {
+var r0 = map([1, ""], function (x) {
     return x.toString();
 });
-var r5 = map([
-    1,
-    ""
-], function (x) {
+var r5 = map([1, ""], function (x) {
     return x.toString();
 });
-var r6 = map([
-    1,
-    ""
-], function (x) {
+var r6 = map([1, ""], function (x) {
     return x.toString();
 });
-var r7 = map([
-    1,
-    ""
-], function (x) {
+var r7 = map([1, ""], function (x) {
     return x.toString();
 }); // error
-var r7b = map([
-    1,
-    ""
-], function (x) {
+var r7b = map([1, ""], function (x) {
     return x.toString();
 }); // error
-var r8 = map([
-    1,
-    ""
-], function (x) {
+var r8 = map([1, ""], function (x) {
     return x.toString();
 });

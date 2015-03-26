@@ -107,17 +107,13 @@ var D = (function () {
 })();
 var E = (function () {
     function E() {
-        return {
-            foo: 1
-        };
+        return { foo: 1 };
     }
     return E;
 })();
 var F = (function () {
     function F() {
-        return {
-            foo: 1
-        }; //error
+        return { foo: 1 }; //error
     }
     return F;
 })();

@@ -95,11 +95,9 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = {
-    new: function (x) {
+var b = { new: function (x) {
         return null;
-    }
-}; // not a construct signature, function called new
+    } }; // not a construct signature, function called new
 function foo1b(x) {
 }
 function foo1c(x) {

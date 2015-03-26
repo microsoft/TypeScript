@@ -2,7 +2,5 @@
 var v = { set foo() { } }
 
 //// [parserAccessors8.js]
-var v = {
-    set foo() {
-    }
-};
+var v = { set foo() {
+    } };

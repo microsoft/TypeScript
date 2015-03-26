@@ -9,8 +9,4 @@ var x = foo([{a:'s'}]);
 function foo(bar) {
     return bar;
 }
-var x = foo([
-    {
-        a: 's'
-    }
-]);
+var x = foo([{ a: 's' }]);

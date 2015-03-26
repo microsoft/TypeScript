@@ -20,9 +20,7 @@ class B {
 var A = (function () {
     function A(x) {
         this.a = x;
-        this.b = {
-            p: x
-        };
+        this.b = { p: x };
         this.c = function () {
             return x;
         };
@@ -32,9 +30,7 @@ var A = (function () {
 var B = (function () {
     function B() {
         this.a = x;
-        this.b = {
-            p: x
-        };
+        this.b = { p: x };
         this.c = function () {
             return x;
         };

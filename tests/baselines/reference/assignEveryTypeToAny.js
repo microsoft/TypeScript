@@ -91,16 +91,12 @@ var h;
 x = h;
 var i;
 x = i;
-x = {
-    f: function () {
+x = { f: function () {
         return 1;
-    }
-};
-x = {
-    f: function (x) {
+    } };
+x = { f: function (x) {
         return x;
-    }
-};
+    } };
 function j(a) {
     x = a;
 }

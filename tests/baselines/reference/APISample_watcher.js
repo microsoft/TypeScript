@@ -2080,9 +2080,7 @@ function watch(rootFileNames, options) {
     var files = {};
     // initialize the list of files
     rootFileNames.forEach(function (fileName) {
-        files[fileName] = {
-            version: 0
-        };
+        files[fileName] = { version: 0 };
     });
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost = {
@@ -2115,10 +2113,7 @@ function watch(rootFileNames, options) {
         // First time around, emit all files
         emitFile(fileName);
         // Add a watch on the file to handle next change
-        fs.watchFile(fileName, {
-            persistent: true,
-            interval: 250
-        }, function (curr, prev) {
+        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
             // Check timestamp
             if (+curr.mtime <= +prev.mtime) {
                 return;
@@ -2160,6 +2155,4 @@ var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileN
     return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts";
 });
 // Start the watcher
-watch(currentDirectoryFiles, {
-    module: 1 /* CommonJS */
-});
+watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });

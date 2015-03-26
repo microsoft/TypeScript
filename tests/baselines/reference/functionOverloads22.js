@@ -6,9 +6,5 @@ function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
 
 //// [functionOverloads22.js]
 function foo(bar) {
-    return [
-        {
-            a: ""
-        }
-    ];
+    return [{ a: "" }];
 }

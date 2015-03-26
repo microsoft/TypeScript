@@ -175,9 +175,7 @@ var PB = (function (_super) {
     return PB;
 })(B);
 var a;
-var b = {
-    foo: null
-};
+var b = { foo: null };
 function foo1(x) {
 }
 function foo1b(x) {

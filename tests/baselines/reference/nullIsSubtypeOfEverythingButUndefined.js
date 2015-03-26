@@ -108,12 +108,8 @@ var r4 = true ? new Date() : null;
 var r4 = true ? null : new Date();
 var r5 = true ? /1/ : null;
 var r5 = true ? null : /1/;
-var r6 = true ? {
-    foo: 1
-} : null;
-var r6 = true ? null : {
-    foo: 1
-};
+var r6 = true ? { foo: 1 } : null;
+var r6 = true ? null : { foo: 1 };
 var r7 = true ? function () {
 } : null;
 var r7 = true ? null : function () {

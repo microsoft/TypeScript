@@ -17,13 +17,9 @@ defineMyProperty2({}, "name", { get: function () { return 5; } });
 
 
 //// [optionalAccessorsInInterface1.js]
-defineMyProperty({}, "name", {
-    get: function () {
+defineMyProperty({}, "name", { get: function () {
         return 5;
-    }
-});
-defineMyProperty2({}, "name", {
-    get: function () {
+    } });
+defineMyProperty2({}, "name", { get: function () {
         return 5;
-    }
-});
+    } });

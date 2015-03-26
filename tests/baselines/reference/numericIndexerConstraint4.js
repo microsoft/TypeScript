@@ -30,6 +30,4 @@ var B = (function (_super) {
     }
     return B;
 })(A);
-var x = {
-    data: new B()
-};
+var x = { data: new B() };

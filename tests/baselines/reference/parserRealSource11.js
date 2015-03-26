@@ -2491,14 +2491,8 @@ var TypeScript;
         };
         AST.prototype.print = function (context) {
             context.startLine();
-            var lineCol = {
-                line: -1,
-                col: -1
-            };
-            var limLineCol = {
-                line: -1,
-                col: -1
-            };
+            var lineCol = { line: -1, col: -1 };
+            var limLineCol = { line: -1, col: -1 };
             if (context.parser !== null) {
                 context.parser.getSourceLineCol(lineCol, this.minChar);
                 context.parser.getSourceLineCol(limLineCol, this.limChar);
@@ -4697,9 +4691,7 @@ var TypeScript;
                     }
                 }
                 else {
-                    this.text = [
-                        (this.content.replace(/^\s+|\s+$/g, ''))
-                    ];
+                    this.text = [(this.content.replace(/^\s+|\s+$/g, ''))];
                 }
             }
             return this.text;

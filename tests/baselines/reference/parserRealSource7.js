@@ -962,11 +962,7 @@ var TypeScript;
         var importDecl = ast;
         var isExported = hasFlag(importDecl.varFlags, VarFlags.Exported);
         // REVIEW: technically, this call isn't strictly necessary, since we'll find the type during the call to resolveTypeMembers
-        var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, {
-            topLevelScope: scopeChain,
-            members: null,
-            tcContext: context
-        });
+        var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context });
         var isGlobal = context.scopeChain.container == context.checker.gloMod;
         if (aliasedModSymbol) {
             var aliasedModType = aliasedModSymbol.getType();

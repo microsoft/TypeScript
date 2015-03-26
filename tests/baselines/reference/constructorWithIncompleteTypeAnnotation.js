@@ -360,15 +360,11 @@ var BasicFeatures = (function () {
         var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = {
-            "var": number = 42,
-            equals: function (x) {
+        var objLit = { "var": number = 42, equals: function (x) {
                 return x["var"] === 42;
-            },
-            instanceof: function () {
+            }, instanceof: function () {
                 return 'objLit{42}';
-            }
-        };
+            } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
@@ -414,10 +410,7 @@ var BasicFeatures = (function () {
             default:
                 break;
         }
-        for (var x in {
-            x: 0,
-            y: 1
-        }) {
+        for (var x in { x: 0, y: 1 }) {
             !;
             try {
                 throw null;
@@ -452,9 +445,7 @@ var BasicFeatures = (function () {
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
         //anonymous type
-        var anony = {
-            a: new CLASS()
-        };
+        var anony = { a: new CLASS() };
         retVal += anony.a.d();
         return retVal;
     };
@@ -463,13 +454,7 @@ var BasicFeatures = (function () {
     ///// </summary>
     ///// <returns></returns>
     BasicFeatures.prototype.OPERATOR = function () {
-        var a = [
-            1,
-            2,
-            3,
-            4,
-            5,
-        ]; /*[] bug*/ // YES []
+        var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
         var i = a[1]; /*[]*/
         i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
         var b = true && false || true ^ false; /*& | ^*/

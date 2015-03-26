@@ -64,9 +64,7 @@ var a = {
     c: true,
     d: {},
     e: null,
-    f: [
-        1
-    ],
+    f: [1],
     g: {},
     h: function (x) {
         return 1;

@@ -5,11 +5,8 @@ function foo(param: {():number; (i:number):number; }[]) { }; foo([function(){ret
 function foo(param) {
 }
 ;
-foo([
-    function () {
+foo([function () {
         return 1;
-    },
-    function () {
+    }, function () {
         return "foo";
-    }
-]);
+    }]);

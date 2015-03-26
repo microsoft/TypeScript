@@ -42,9 +42,7 @@ var r6 = null + c;
 // other cases
 var r7 = null + d;
 var r8 = null + true;
-var r9 = null + {
-    a: ''
-};
+var r9 = null + { a: '' };
 var r10 = null + foo();
 var r11 = null + (function () {
 });

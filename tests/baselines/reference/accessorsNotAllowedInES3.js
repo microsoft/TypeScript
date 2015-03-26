@@ -19,8 +19,6 @@ var C = (function () {
     });
     return C;
 })();
-var y = {
-    get foo() {
+var y = { get foo() {
         return 3;
-    }
-};
+    } };

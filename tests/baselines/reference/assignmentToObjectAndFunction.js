@@ -30,9 +30,7 @@ module bad {
 var badFundule: Function = bad; // error
 
 //// [assignmentToObjectAndFunction.js]
-var errObj = {
-    toString: 0
-}; // Error, incompatible toString
+var errObj = { toString: 0 }; // Error, incompatible toString
 var goodObj = {
     toString: function (x) {
         return "";

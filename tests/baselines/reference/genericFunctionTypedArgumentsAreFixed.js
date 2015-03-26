@@ -5,6 +5,4 @@ map((a) => a.length, [1]);
 //// [genericFunctionTypedArgumentsAreFixed.js]
 map(function (a) {
     return a.length;
-}, [
-    1
-]);
+}, [1]);

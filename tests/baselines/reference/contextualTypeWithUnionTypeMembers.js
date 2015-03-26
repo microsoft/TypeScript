@@ -169,10 +169,7 @@ var i1Ori2 = {
     },
     propertyOnlyInI2: "Hello"
 };
-var arrayI1OrI2 = [
-    i1,
-    i2,
-    {
+var arrayI1OrI2 = [i1, i2, {
         commonPropertyType: "hello",
         commonMethodType: function (a) {
             return a;
@@ -197,8 +194,7 @@ var arrayI1OrI2 = [
             return a;
         },
         propertyOnlyInI2: "Hello"
-    },
-    {
+    }, {
         commonPropertyType: "hello",
         commonMethodType: function (a) {
             return a;
@@ -214,8 +210,7 @@ var arrayI1OrI2 = [
             return a;
         },
         propertyOnlyInI2: "Hello"
-    }
-];
+    }];
 var i11;
 var i21;
 var i11Ori21 = i11;
@@ -236,24 +231,18 @@ var i11Ori21 = {
     },
     commonPropertyDifferentType: 10
 };
-var arrayOrI11OrI21 = [
-    i11,
-    i21,
-    i11 || i21,
-    {
+var arrayOrI11OrI21 = [i11, i21, i11 || i21, {
         // Like i1
         commonMethodDifferentReturnType: function (a, b) {
             var z = a.charAt(b);
             return z;
         },
         commonPropertyDifferentType: "hello"
-    },
-    {
+    }, {
         // Like i2
         commonMethodDifferentReturnType: function (a, b) {
             var z = a.charCodeAt(b);
             return z;
         },
         commonPropertyDifferentType: 10
-    }
-];
+    }];
