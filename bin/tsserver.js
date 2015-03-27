@@ -19746,17 +19746,16 @@ var ts;
             var decreaseIndent = writer.decreaseIndent;
             var preserveNewLines = compilerOptions.preserveNewLines || false;
             var currentSourceFile;
-            var generatedNameSet;
-            var nodeToGeneratedName;
+            var generatedNameSet = {};
+            var nodeToGeneratedName = [];
             var blockScopedVariableToGeneratedName;
             var computedPropertyNamesToGeneratedNames;
             var extendsEmitted = false;
             var decorateEmitted = false;
-            var tempCount = 0;
+            var tempFlags = 0;
             var tempVariables;
             var tempParameters;
             var externalImports;
-            var predefinedTempsInUse = 0;
             var exportSpecifiers;
             var exportEquals;
             var hasExportStars;
@@ -19790,6 +19789,78 @@ var ts;
                 currentSourceFile = sourceFile;
                 emit(sourceFile);
             }
+            function isUniqueName(name) {
+                return !resolver.hasGlobalName(name) &&
+                    !ts.hasProperty(currentSourceFile.identifiers, name) &&
+                    !ts.hasProperty(generatedNameSet, name);
+            }
+            function makeTempVariableName(flags) {
+                if (flags && !(tempFlags & flags)) {
+                    var name = flags === 268435456 ? "_i" : "_n";
+                    if (isUniqueName(name)) {
+                        tempFlags |= flags;
+                        return name;
+                    }
+                }
+                while (true) {
+                    var count = tempFlags & 268435455;
+                    tempFlags++;
+                    if (count !== 8 && count !== 13) {
+                        var name_12 = count < 26 ? "_" + String.fromCharCode(97 + count) : "_" + (count - 26);
+                        if (isUniqueName(name_12)) {
+                            return name_12;
+                        }
+                    }
+                }
+            }
+            function makeUniqueName(baseName) {
+                if (baseName.charCodeAt(baseName.length - 1) !== 95) {
+                    baseName += "_";
+                }
+                var i = 1;
+                while (true) {
+                    var generatedName = baseName + i;
+                    if (isUniqueName(generatedName)) {
+                        return generatedNameSet[generatedName] = generatedName;
+                    }
+                    i++;
+                }
+            }
+            function assignGeneratedName(node, name) {
+                nodeToGeneratedName[ts.getNodeId(node)] = ts.unescapeIdentifier(name);
+            }
+            function generateNameForFunctionOrClassDeclaration(node) {
+                if (!node.name) {
+                    assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
+            function generateNameForModuleOrEnum(node) {
+                if (node.name.kind === 65) {
+                    var name_13 = node.name.text;
+                    assignGeneratedName(node, isUniqueLocalName(name_13, node) ? name_13 : makeUniqueName(name_13));
+                }
+            }
+            function generateNameForImportOrExportDeclaration(node) {
+                var expr = ts.getExternalModuleName(node);
+                var baseName = expr.kind === 8 ?
+                    ts.escapeIdentifier(ts.makeIdentifierFromModuleName(expr.text)) : "module";
+                assignGeneratedName(node, makeUniqueName(baseName));
+            }
+            function generateNameForImportDeclaration(node) {
+                if (node.importClause) {
+                    generateNameForImportOrExportDeclaration(node);
+                }
+            }
+            function generateNameForExportDeclaration(node) {
+                if (node.moduleSpecifier) {
+                    generateNameForImportOrExportDeclaration(node);
+                }
+            }
+            function generateNameForExportAssignment(node) {
+                if (node.expression && node.expression.kind !== 65) {
+                    assignGeneratedName(node, makeUniqueName("default"));
+                }
+            }
             function generateNameForNode(node) {
                 switch (node.kind) {
                     case 197:
@@ -19812,123 +19883,14 @@ var ts;
                     case 211:
                         generateNameForExportAssignment(node);
                         break;
-                    case 224:
-                    case 203:
-                        ts.forEach(node.statements, generateNameForNode);
-                        break;
-                }
-            }
-            function isUniqueName(name) {
-                return !resolver.hasGlobalName(name) &&
-                    !ts.hasProperty(currentSourceFile.identifiers, name) &&
-                    (!generatedNameSet || !ts.hasProperty(generatedNameSet, name));
-            }
-            function nameConflictsWithSomeTempVariable(name) {
-                if (name.length < 2 || name.charCodeAt(0) !== 95) {
-                    return false;
-                }
-                if (name === "_i") {
-                    return !!(predefinedTempsInUse & 1);
-                }
-                if (name === "_n") {
-                    return !!(predefinedTempsInUse & 2);
-                }
-                if (name.length === 2 && name.charCodeAt(1) >= 97 && name.charCodeAt(1) <= 122) {
-                    var n = name.charCodeAt(1) - 97;
-                    return n < tempCount;
-                }
-                else {
-                    var n = +name.substring(1);
-                    return !isNaN(n) && n >= 0 && n < (tempCount - 26);
-                }
-            }
-            function makeTempVariableName(location, tempVariableKind) {
-                var tempName;
-                if (tempVariableKind !== 0 && !(predefinedTempsInUse & tempVariableKind)) {
-                    tempName = tempVariableKind === 1 ? "_i" : "_n";
-                    if (!resolver.resolvesToSomeValue(location, tempName)) {
-                        predefinedTempsInUse |= tempVariableKind;
-                        return tempName;
-                    }
-                }
-                do {
-                    var char = 97 + tempCount;
-                    if (char !== 105 && char !== 110) {
-                        if (tempCount < 26) {
-                            tempName = "_" + String.fromCharCode(char);
-                        }
-                        else {
-                            tempName = "_" + (tempCount - 26);
-                        }
-                    }
-                    tempCount++;
-                } while (resolver.resolvesToSomeValue(location, tempName));
-                return tempName;
-            }
-            function makeUniqueName(baseName) {
-                ts.Debug.assert(!!baseName);
-                if (baseName.charCodeAt(baseName.length - 1) !== 95) {
-                    baseName += "_";
-                }
-                var i = 1;
-                var generatedName;
-                while (true) {
-                    generatedName = baseName + i;
-                    if (isUniqueName(generatedName)) {
-                        break;
-                    }
-                    i++;
-                }
-                if (!generatedNameSet) {
-                    generatedNameSet = {};
-                }
-                return generatedNameSet[generatedName] = generatedName;
-            }
-            function renameNode(node, name) {
-                var nodeId = ts.getNodeId(node);
-                if (!nodeToGeneratedName) {
-                    nodeToGeneratedName = [];
-                }
-                return nodeToGeneratedName[nodeId] = ts.unescapeIdentifier(name);
-            }
-            function generateNameForFunctionOrClassDeclaration(node) {
-                if (!node.name) {
-                    renameNode(node, makeUniqueName("default"));
-                }
-            }
-            function generateNameForModuleOrEnum(node) {
-                if (node.name.kind === 65) {
-                    var name_12 = node.name.text;
-                    renameNode(node, isUniqueLocalName(name_12, node) ? name_12 : makeUniqueName(name_12));
-                }
-            }
-            function generateNameForImportOrExportDeclaration(node) {
-                var expr = ts.getExternalModuleName(node);
-                var baseName = expr.kind === 8 ?
-                    ts.escapeIdentifier(ts.makeIdentifierFromModuleName(expr.text)) : "module";
-                renameNode(node, makeUniqueName(baseName));
-            }
-            function generateNameForImportDeclaration(node) {
-                if (node.importClause) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-            function generateNameForExportDeclaration(node) {
-                if (node.moduleSpecifier) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-            function generateNameForExportAssignment(node) {
-                if (node.expression && node.expression.kind !== 65) {
-                    renameNode(node, makeUniqueName("default"));
                 }
             }
             function getGeneratedNameForNode(node) {
                 var nodeId = ts.getNodeId(node);
-                if (!nodeToGeneratedName || !nodeToGeneratedName[nodeId]) {
+                if (!nodeToGeneratedName[nodeId]) {
                     generateNameForNode(node);
                 }
-                return nodeToGeneratedName ? nodeToGeneratedName[nodeId] : undefined;
+                return nodeToGeneratedName[nodeId];
             }
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir;
@@ -20054,8 +20016,8 @@ var ts;
                         if (scopeName) {
                             var parentIndex = getSourceMapNameIndex();
                             if (parentIndex !== -1) {
-                                var name_13 = node.name;
-                                if (!name_13 || name_13.kind !== 127) {
+                                var name_14 = node.name;
+                                if (!name_14 || name_14.kind !== 127) {
                                     scopeName = "." + scopeName;
                                 }
                                 scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
@@ -20082,9 +20044,9 @@ var ts;
                         node.kind === 198 ||
                         node.kind === 201) {
                         if (node.name) {
-                            var name_14 = node.name;
-                            scopeName = name_14.kind === 127
-                                ? ts.getTextOfNode(name_14)
+                            var name_15 = node.name;
+                            scopeName = name_15.kind === 127
+                                ? ts.getTextOfNode(name_15)
                                 : node.name.text;
                         }
                         recordScopeNameStart(scopeName);
@@ -20191,10 +20153,9 @@ var ts;
             function writeJavaScriptFile(emitOutput, writeByteOrderMark) {
                 ts.writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
-            function createTempVariable(location, tempVariableKind) {
-                if (tempVariableKind === void 0) { tempVariableKind = 0; }
+            function createTempVariable(flags) {
                 var result = ts.createSynthesizedNode(65);
-                result.text = makeTempVariableName(location, tempVariableKind);
+                result.text = makeTempVariableName(flags);
                 return result;
             }
             function recordTempDeclaration(name) {
@@ -20203,8 +20164,8 @@ var ts;
                 }
                 tempVariables.push(name);
             }
-            function createAndRecordTempVariable(location, tempVariableKind) {
-                var temp = createTempVariable(location, tempVariableKind);
+            function createAndRecordTempVariable(flags) {
+                var temp = createTempVariable(flags);
                 recordTempDeclaration(temp);
                 return temp;
             }
@@ -20396,7 +20357,7 @@ var ts;
                 write("]");
             }
             function emitDownlevelTaggedTemplate(node) {
-                var tempVariable = createAndRecordTempVariable(node);
+                var tempVariable = createAndRecordTempVariable(0);
                 write("(");
                 emit(tempVariable);
                 write(" = ");
@@ -20519,7 +20480,7 @@ var ts;
                             write(generatedName);
                             return;
                         }
-                        var generatedVariable = createTempVariable(node);
+                        var generatedVariable = createTempVariable(0);
                         generatedName = generatedVariable.text;
                         recordTempDeclaration(generatedVariable);
                         computedPropertyNamesToGeneratedNames[node.id] = generatedName;
@@ -20739,7 +20700,7 @@ var ts;
                 return emit(parenthesizedObjectLiteral);
             }
             function createDownlevelObjectLiteralWithComputedProperties(originalObjectLiteral, firstComputedPropertyIndex) {
-                var tempVar = createAndRecordTempVariable(originalObjectLiteral);
+                var tempVar = createAndRecordTempVariable(0);
                 var initialObjectLiteral = ts.createSynthesizedNode(154);
                 initialObjectLiteral.properties = originalObjectLiteral.properties.slice(0, firstComputedPropertyIndex);
                 initialObjectLiteral.flags |= 512;
@@ -20806,8 +20767,8 @@ var ts;
             }
             function createNodeArray() {
                 var elements = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    elements[_i - 0] = arguments[_i];
+                for (var _a = 0; _a < arguments.length; _a++) {
+                    elements[_a - 0] = arguments[_a];
                 }
                 var result = elements;
                 result.pos = -1;
@@ -20999,7 +20960,7 @@ var ts;
                     emit(node);
                     return node;
                 }
-                var temp = createAndRecordTempVariable(node);
+                var temp = createAndRecordTempVariable(0);
                 write("(");
                 emit(temp);
                 write(" = ");
@@ -21368,9 +21329,9 @@ var ts;
                 write(" ");
                 endPos = emitToken(16, endPos);
                 var rhsIsIdentifier = node.expression.kind === 65;
-                var counter = createTempVariable(node, 1);
-                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(node);
-                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(node, 2) : undefined;
+                var counter = createTempVariable(268435456);
+                var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(0);
+                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(536870912) : undefined;
                 emitStart(node.expression);
                 write("var ");
                 emitNodeWithoutSourceMap(counter);
@@ -21429,7 +21390,7 @@ var ts;
                         }
                     }
                     else {
-                        emitNodeWithoutSourceMap(createTempVariable(node));
+                        emitNodeWithoutSourceMap(createTempVariable(0));
                         write(" = ");
                         emitNodeWithoutSourceMap(rhsIterationValue);
                     }
@@ -21604,8 +21565,8 @@ var ts;
             }
             function emitExportMemberAssignments(name) {
                 if (!exportEquals && exportSpecifiers && ts.hasProperty(exportSpecifiers, name.text)) {
-                    for (var _i = 0, _a = exportSpecifiers[name.text], _n = _a.length; _i < _n; _i++) {
-                        var specifier = _a[_i];
+                    for (var _a = 0, _b = exportSpecifiers[name.text], _c = _b.length; _a < _c; _a++) {
+                        var specifier = _b[_a];
                         writeLine();
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
@@ -21644,7 +21605,7 @@ var ts;
                 }
                 function ensureIdentifier(expr) {
                     if (expr.kind !== 65) {
-                        var identifier = createTempVariable(lowestNonSynthesizedAncestor || root);
+                        var identifier = createTempVariable(0);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
                         }
@@ -21700,8 +21661,8 @@ var ts;
                     if (properties.length !== 1) {
                         value = ensureIdentifier(value);
                     }
-                    for (var _i = 0, _n = properties.length; _i < _n; _i++) {
-                        var p = properties[_i];
+                    for (var _a = 0, _b = properties.length; _a < _b; _a++) {
+                        var p = properties[_a];
                         if (p.kind === 221 || p.kind === 222) {
                             var propName = (p.name);
                             emitDestructuringAssignment(p.initializer || propName, createPropertyAccess(value, propName));
@@ -21869,9 +21830,7 @@ var ts;
                 var parent = blockScopeContainer.kind === 224
                     ? blockScopeContainer
                     : blockScopeContainer.parent;
-                var hasConflictsInEnclosingScope = resolver.resolvesToSomeValue(parent, node.text) ||
-                    nameConflictsWithSomeTempVariable(node.text);
-                if (hasConflictsInEnclosingScope) {
+                if (resolver.resolvesToSomeValue(parent, node.text)) {
                     var variableId = resolver.getBlockScopedVariableId(node);
                     if (!blockScopedVariableToGeneratedName) {
                         blockScopedVariableToGeneratedName = [];
@@ -21902,12 +21861,12 @@ var ts;
             function emitParameter(node) {
                 if (languageVersion < 2) {
                     if (ts.isBindingPattern(node.name)) {
-                        var name_15 = createTempVariable(node);
+                        var name_16 = createTempVariable(0);
                         if (!tempParameters) {
                             tempParameters = [];
                         }
-                        tempParameters.push(name_15);
-                        emit(name_15);
+                        tempParameters.push(name_16);
+                        emit(name_16);
                     }
                     else {
                         emit(node.name);
@@ -21954,7 +21913,7 @@ var ts;
                 if (languageVersion < 2 && ts.hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = createTempVariable(node, 1).text;
+                    var tempName = createTempVariable(268435456).text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -22066,14 +22025,12 @@ var ts;
                 emitSignatureParameters(node);
             }
             function emitSignatureAndBody(node) {
-                var saveTempCount = tempCount;
+                var saveTempFlags = tempFlags;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
-                var savePredefinedTempsInUse = predefinedTempsInUse;
-                tempCount = 0;
+                tempFlags = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-                predefinedTempsInUse = 0;
                 if (shouldEmitAsArrowFunction(node)) {
                     emitSignatureParametersForArrow(node);
                     write(" =>");
@@ -22093,8 +22050,7 @@ var ts;
                 if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
-                predefinedTempsInUse = savePredefinedTempsInUse;
-                tempCount = saveTempCount;
+                tempFlags = saveTempFlags;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
             }
@@ -22162,8 +22118,8 @@ var ts;
                 decreaseIndent();
                 var preambleEmitted = writer.getTextPos() !== initialTextPos;
                 if (preserveNewLines && !preambleEmitted && nodeEndIsOnSameLineAsNodeStart(body, body)) {
-                    for (var _i = 0, _a = body.statements, _n = _a.length; _i < _n; _i++) {
-                        var statement = _a[_i];
+                    for (var _a = 0, _b = body.statements, _c = _b.length; _a < _c; _a++) {
+                        var statement = _b[_a];
                         write(" ");
                         emit(statement);
                     }
@@ -22318,8 +22274,8 @@ var ts;
                 });
             }
             function emitMemberFunctionsForES6AndHigher(node) {
-                for (var _i = 0, _a = node.members, _n = _a.length; _i < _n; _i++) {
-                    var member = _a[_i];
+                for (var _a = 0, _b = node.members, _c = _b.length; _a < _c; _a++) {
+                    var member = _b[_a];
                     if ((member.kind === 134 || node.kind === 133) && !member.body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
@@ -22344,14 +22300,12 @@ var ts;
                 }
             }
             function emitConstructor(node, baseTypeNode) {
-                var saveTempCount = tempCount;
+                var saveTempFlags = tempFlags;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
-                var savePredefinedTempsInUse = predefinedTempsInUse;
-                tempCount = 0;
+                tempFlags = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-                predefinedTempsInUse = 0;
                 var hasInstancePropertyWithInitializer = false;
                 ts.forEach(node.members, function (member) {
                     if (member.kind === 135 && !member.body) {
@@ -22440,8 +22394,7 @@ var ts;
                 if (ctor) {
                     emitTrailingComments(ctor);
                 }
-                predefinedTempsInUse = savePredefinedTempsInUse;
-                tempCount = saveTempCount;
+                tempFlags = saveTempFlags;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
             }
@@ -22529,11 +22482,11 @@ var ts;
                     write("_super");
                 }
                 write(") {");
-                var saveTempCount = tempCount;
+                var saveTempFlags = tempFlags;
                 var saveTempVariables = tempVariables;
                 var saveTempParameters = tempParameters;
                 var saveComputedPropertyNamesToGeneratedNames = computedPropertyNamesToGeneratedNames;
-                tempCount = 0;
+                tempFlags = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
@@ -22560,7 +22513,7 @@ var ts;
                 });
                 write(";");
                 emitTempDeclarations(true);
-                tempCount = saveTempCount;
+                tempFlags = saveTempFlags;
                 tempVariables = saveTempVariables;
                 tempParameters = saveTempParameters;
                 computedPropertyNamesToGeneratedNames = saveComputedPropertyNamesToGeneratedNames;
@@ -22827,15 +22780,12 @@ var ts;
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === 203) {
-                    var saveTempCount = tempCount;
+                    var saveTempFlags = tempFlags;
                     var saveTempVariables = tempVariables;
-                    var savePredefinedTempsInUse = predefinedTempsInUse;
-                    tempCount = 0;
+                    tempFlags = 0;
                     tempVariables = undefined;
-                    predefinedTempsInUse = 0;
                     emit(node.body);
-                    predefinedTempsInUse = savePredefinedTempsInUse;
-                    tempCount = saveTempCount;
+                    tempFlags = saveTempFlags;
                     tempVariables = saveTempVariables;
                 }
                 else {
@@ -23027,8 +22977,8 @@ var ts;
                                 emitRequire(ts.getExternalModuleName(node));
                                 write(";");
                             }
-                            for (var _i = 0, _a = node.exportClause.elements, _n = _a.length; _i < _n; _i++) {
-                                var specifier = _a[_i];
+                            for (var _a = 0, _b = node.exportClause.elements, _c = _b.length; _a < _c; _a++) {
+                                var specifier = _b[_a];
                                 if (resolver.isValueAliasDeclaration(specifier)) {
                                     writeLine();
                                     emitStart(specifier);
@@ -23082,8 +23032,8 @@ var ts;
             function emitExportOrImportSpecifierList(specifiers, shouldEmit) {
                 ts.Debug.assert(languageVersion >= 2);
                 var needsComma = false;
-                for (var _i = 0, _n = specifiers.length; _i < _n; _i++) {
-                    var specifier = specifiers[_i];
+                for (var _a = 0, _b = specifiers.length; _a < _b; _a++) {
+                    var specifier = specifiers[_a];
                     if (shouldEmit(specifier)) {
                         if (needsComma) {
                             write(", ");
@@ -23129,8 +23079,8 @@ var ts;
                 exportSpecifiers = {};
                 exportEquals = undefined;
                 hasExportStars = false;
-                for (var _i = 0, _a = sourceFile.statements, _n = _a.length; _i < _n; _i++) {
-                    var node = _a[_i];
+                for (var _a = 0, _b = sourceFile.statements, _c = _b.length; _a < _c; _a++) {
+                    var node = _b[_a];
                     switch (node.kind) {
                         case 206:
                             if (!node.importClause ||
@@ -23154,10 +23104,10 @@ var ts;
                                 }
                             }
                             else {
-                                for (var _b = 0, _c = node.exportClause.elements, _d = _c.length; _b < _d; _b++) {
-                                    var specifier = _c[_b];
-                                    var name_16 = (specifier.propertyName || specifier.name).text;
-                                    (exportSpecifiers[name_16] || (exportSpecifiers[name_16] = [])).push(specifier);
+                                for (var _d = 0, _e = node.exportClause.elements, _f = _e.length; _d < _f; _d++) {
+                                    var specifier = _e[_d];
+                                    var name_17 = (specifier.propertyName || specifier.name).text;
+                                    (exportSpecifiers[name_17] || (exportSpecifiers[name_17] = [])).push(specifier);
                                 }
                             }
                             break;
@@ -23203,8 +23153,8 @@ var ts;
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                for (var _i = 0, _n = externalImports.length; _i < _n; _i++) {
-                    var importNode = externalImports[_i];
+                for (var _a = 0, _b = externalImports.length; _a < _b; _a++) {
+                    var importNode = externalImports[_a];
                     write(", ");
                     var moduleName = ts.getExternalModuleName(importNode);
                     if (moduleName.kind === 8) {
@@ -23214,15 +23164,15 @@ var ts;
                         write("\"\"");
                     }
                 }
-                for (var _a = 0, _b = node.amdDependencies, _c = _b.length; _a < _c; _a++) {
-                    var amdDependency = _b[_a];
+                for (var _c = 0, _d = node.amdDependencies, _e = _d.length; _c < _e; _c++) {
+                    var amdDependency = _d[_c];
                     var text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
                 }
                 write("], function (require, exports");
-                for (var _d = 0, _e = externalImports.length; _d < _e; _d++) {
-                    var importNode = externalImports[_d];
+                for (var _f = 0, _g = externalImports.length; _f < _g; _f++) {
+                    var importNode = externalImports[_f];
                     write(", ");
                     var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
                     if (namespaceDeclaration && !isDefaultImport(importNode)) {
@@ -23232,8 +23182,8 @@ var ts;
                         write(getGeneratedNameForNode(importNode));
                     }
                 }
-                for (var _f = 0, _g = node.amdDependencies, _h = _g.length; _f < _h; _f++) {
-                    var amdDependency = _g[_f];
+                for (var _h = 0, _j = node.amdDependencies, _k = _j.length; _h < _k; _h++) {
+                    var amdDependency = _j[_h];
                     if (amdDependency.name) {
                         write(", ");
                         write(amdDependency.name);
@@ -24953,9 +24903,9 @@ var ts;
                     case 195:
                     case 152:
                         var variableDeclarationNode;
-                        var name_17;
+                        var name_18;
                         if (node.kind === 152) {
-                            name_17 = node.name;
+                            name_18 = node.name;
                             variableDeclarationNode = node;
                             while (variableDeclarationNode && variableDeclarationNode.kind !== 195) {
                                 variableDeclarationNode = variableDeclarationNode.parent;
@@ -24965,16 +24915,16 @@ var ts;
                         else {
                             ts.Debug.assert(!ts.isBindingPattern(node.name));
                             variableDeclarationNode = node;
-                            name_17 = node.name;
+                            name_18 = node.name;
                         }
                         if (ts.isConst(variableDeclarationNode)) {
-                            return createItem(node, getTextOfNode(name_17), ts.ScriptElementKind.constElement);
+                            return createItem(node, getTextOfNode(name_18), ts.ScriptElementKind.constElement);
                         }
                         else if (ts.isLet(variableDeclarationNode)) {
-                            return createItem(node, getTextOfNode(name_17), ts.ScriptElementKind.letElement);
+                            return createItem(node, getTextOfNode(name_18), ts.ScriptElementKind.letElement);
                         }
                         else {
-                            return createItem(node, getTextOfNode(name_17), ts.ScriptElementKind.variableElement);
+                            return createItem(node, getTextOfNode(name_18), ts.ScriptElementKind.variableElement);
                         }
                     case 135:
                         return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -27042,9 +26992,9 @@ var ts;
             }
             Rules.prototype.getRuleName = function (rule) {
                 var o = this;
-                for (var name_18 in o) {
-                    if (o[name_18] === rule) {
-                        return name_18;
+                for (var name_19 in o) {
+                    if (o[name_19] === rule) {
+                        return name_19;
                     }
                 }
                 throw new Error("Unknown rule");
@@ -32044,17 +31994,17 @@ var ts;
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
-                    var name_19 = node.text;
+                    var name_20 = node.text;
                     if (contextualType) {
                         if (contextualType.flags & 16384) {
-                            var unionProperty = contextualType.getProperty(name_19);
+                            var unionProperty = contextualType.getProperty(name_20);
                             if (unionProperty) {
                                 return [unionProperty];
                             }
                             else {
                                 var result_3 = [];
                                 ts.forEach(contextualType.types, function (t) {
-                                    var symbol = t.getProperty(name_19);
+                                    var symbol = t.getProperty(name_20);
                                     if (symbol) {
                                         result_3.push(symbol);
                                     }
@@ -32063,7 +32013,7 @@ var ts;
                             }
                         }
                         else {
-                            var symbol_1 = contextualType.getProperty(name_19);
+                            var symbol_1 = contextualType.getProperty(name_20);
                             if (symbol_1) {
                                 return [symbol_1];
                             }
