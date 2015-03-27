@@ -37,11 +37,13 @@ tests/*.js
 tests/*.js.map
 tests/*.d.ts
 *.config
+
 scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
 scripts/*.js.map
+tests/baselines/local/projectOutput/
 coverage/
 internal/
 **/.DS_Store
