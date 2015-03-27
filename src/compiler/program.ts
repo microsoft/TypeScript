@@ -26,7 +26,11 @@ module ts {
         return undefined;
     }
 
-    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
+    /**
+     * @param setParentNodes Whether or not parent references should be set on nodes.
+     *                       This is useful when one desires parent references, but the semantic information of binding is unnecessary.
+     */
+    export function createCompilerHost(options: CompilerOptions, setParentNodes = true): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
 
