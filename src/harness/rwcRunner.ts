@@ -32,7 +32,7 @@ module RWC {
             };
             var baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             var currentDirectory: string;
-            var useDefaultLibFile: boolean;
+            var useCustomLibraryFile: boolean;
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -44,10 +44,10 @@ module RWC {
                 baselineOpts = undefined;
                 baseName = undefined;
                 currentDirectory = undefined;
-                // useDefaultLibFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
-                // or to use lib.d.ts inside the json object. If the flag is true or undefine, use the build/local/lib.d.ts
-                // otherwise use the lib.d.ts from the json object.
-                useDefaultLibFile = undefined;
+                // useCustomLibraryFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
+                // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
+                // otherwise use the lib.d.ts from built/local
+                useCustomLibraryFile = undefined;
             });
 
             it('can compile', () => {
@@ -56,10 +56,7 @@ module RWC {
 
                 var ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
                 currentDirectory = ioLog.currentDirectory;
-                useDefaultLibFile = ioLog.useDefaultLibFile;
-                if (useDefaultLibFile === undefined) {
-                    useDefaultLibFile = true;
-                }
+                useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments);
                     assert.equal(opts.errors.length, 0);
@@ -78,32 +75,33 @@ module RWC {
                     });
 
                     // Add files to compilation
-                    ts.forEach(ioLog.filesRead, fileRead => {
+                    for(let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
                         var resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
-                        var inInputList = ts.forEach(inputFiles, inputFile=> inputFile.unitName === resolvedPath);
+                        var inInputList = ts.forEach(inputFiles, inputFile => inputFile.unitName === resolvedPath);
 
                         if (!Harness.isLibraryFile(fileRead.path)) {
-                            if (!inInputList) {
-                                otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                            if (inInputList) {
+                                continue;
                             }
+                            otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
                         else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)){
                             if (!inInputList) {
-                                // If useDefaultLibFile is true, we will use built/local/lib.d.ts
-                                // instead of the provided lib.d.ts from json object.
+                                // If useCustomLibraryFile is true, we will use lib.d.ts from json object
+                                // otherwise use the lib.d.ts from built/local
                                 // Majority of RWC code will be using built/local/lib.d.ts instead of
                                 // lib.d.ts inside json file. However, some RWC cases will still use
                                 // their own version of lib.d.ts because they have customized lib.d.ts
-                                if (useDefaultLibFile) {
-                                    inputFiles.push(Harness.getDefaultLibraryFile());
+                                if (useCustomLibraryFile) {
+                                    inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                                 }
                                 else {
-                                    inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                                    inputFiles.push(Harness.getDefaultLibraryFile());
                                 }
                             }
                         }
-                    });
+                    }
 
                     // do not use lib since we already read it in above
                     opts.options.noLib = true;
@@ -140,7 +138,10 @@ module RWC {
 
             it('has the expected declaration file content', () => {
                 Harness.Baseline.runBaseline('has the expected declaration file content', baseName + '.d.ts', () => {
-                    if (!compilerResult.declFilesCode.length) {                        return null;                    }
+                    if (!compilerResult.declFilesCode.length) {
+                        return null;
+                    }
+
                     return Harness.Compiler.collateOutputs(compilerResult.declFilesCode);
                 }, false, baselineOpts);
             });
