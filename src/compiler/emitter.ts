@@ -2440,11 +2440,11 @@ module ts {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
-                    if (node.name) {
-                        emitModuleMemberName(node);
+                    if (node.flags & NodeFlags.Default) {
+                        write("exports.default");
                     }
                     else {
-                        write("exports.default");
+                        emitModuleMemberName(node);
                     }
                     write(" = ");
                     emitDeclarationName(node);
