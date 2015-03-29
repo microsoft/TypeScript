@@ -14,9 +14,7 @@ define(["require", "exports"], function (require, exports) {
         function DbSet() {
         }
         Object.defineProperty(DbSet.prototype, "entityType", {
-            get: function () {
-                return this._entityType;
-            } // used to ICE without return type annotation
+            get: function () { return this._entityType; } // used to ICE without return type annotation
             ,
             enumerable: true,
             configurable: true

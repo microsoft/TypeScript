@@ -75,10 +75,8 @@ module m {
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
-var f1 = function () {
-};
-var f2 = function (x, y) {
-};
+var f1 = function () { };
+var f2 = function (x, y) { };
 var f3 = function (x, y) {
     var rest = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -134,25 +132,19 @@ var f13 = function (a) {
     return a;
 };
 // Should be valid.
-var f14 = function () {
-};
+var f14 = function () { };
 // Should be valid.
-var f15 = function (a) {
-    return a;
-};
+var f15 = function (a) { return a; };
 // Should be valid.
 var f16 = function (a, b) {
     if (b === void 0) { b = 10; }
     return a + b;
 };
-function foo(func) {
-}
+function foo(func) { }
 foo(function () {
     return true;
 });
-foo(function () {
-    return false;
-});
+foo(function () { return false; });
 var m;
 (function (m) {
     var City = (function () {

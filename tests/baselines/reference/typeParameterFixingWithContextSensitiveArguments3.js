@@ -8,15 +8,6 @@ var a: A, b: B;
 var d = f(a, b, u2 => u2.b, t2 => t2);
 
 //// [typeParameterFixingWithContextSensitiveArguments3.js]
-function f(t1, u1, pf1, pf2) {
-    return [
-        t1,
-        pf2(t1)
-    ];
-}
+function f(t1, u1, pf1, pf2) { return [t1, pf2(t1)]; }
 var a, b;
-var d = f(a, b, function (u2) {
-    return u2.b;
-}, function (t2) {
-    return t2;
-});
+var d = f(a, b, function (u2) { return u2.b; }, function (t2) { return t2; });

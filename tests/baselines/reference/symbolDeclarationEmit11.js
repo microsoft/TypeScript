@@ -8,13 +8,9 @@ class C {
 
 //// [symbolDeclarationEmit11.js]
 class C {
-    static [Symbol.toPrimitive]() {
-    }
-    static get [Symbol.isRegExp]() {
-        return "";
-    }
-    static set [Symbol.isRegExp](x) {
-    }
+    static [Symbol.toPrimitive]() { }
+    static get [Symbol.isRegExp]() { return ""; }
+    static set [Symbol.isRegExp](x) { }
 }
 C[Symbol.iterator] = 0;
 

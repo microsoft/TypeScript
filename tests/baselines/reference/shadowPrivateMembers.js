@@ -13,8 +13,7 @@ var __extends = this.__extends || function (d, b) {
 var base = (function () {
     function base() {
     }
-    base.prototype.n = function () {
-    };
+    base.prototype.n = function () { };
     return base;
 })();
 var derived = (function (_super) {
@@ -22,7 +21,6 @@ var derived = (function (_super) {
     function derived() {
         _super.apply(this, arguments);
     }
-    derived.prototype.n = function () {
-    };
+    derived.prototype.n = function () { };
     return derived;
 })(base);

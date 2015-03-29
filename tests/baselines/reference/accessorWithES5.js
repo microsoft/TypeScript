@@ -44,11 +44,8 @@ var D = (function () {
     return D;
 })();
 var x = {
-    get a() {
-        return 1;
-    }
+    get a() { return 1; }
 };
 var y = {
-    set b(v) {
-    }
+    set b(v) { }
 };

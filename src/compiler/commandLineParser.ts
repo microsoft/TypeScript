@@ -141,12 +141,6 @@ module ts {
             experimental: true
         },
         {
-            name: "preserveNewLines",
-            type: "boolean",
-            description: Diagnostics.Preserve_new_lines_when_emitting_code,
-            experimental: true
-        },
-        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },

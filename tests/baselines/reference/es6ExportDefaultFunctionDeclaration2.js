@@ -4,8 +4,7 @@ export default function () { }
 
 
 //// [es6ExportDefaultFunctionDeclaration2.js]
-export default function () {
-}
+export default function () { }
 
 
 //// [es6ExportDefaultFunctionDeclaration2.d.ts]

@@ -17,8 +17,7 @@ module m_private {
 //// [importAliasAnExternalModuleInsideAnInternalModule_file0.js]
 var m;
 (function (m) {
-    function foo() {
-    }
+    function foo() { }
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]

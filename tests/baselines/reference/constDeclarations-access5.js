@@ -73,11 +73,9 @@ m.x--;
 m["x"] = 0;
 // OK
 var a = m.x + 1;
-function f(v) {
-}
+function f(v) { }
 f(m.x);
-if (m.x) {
-}
+if (m.x) { }
 m.x;
 (m.x);
 -m.x;

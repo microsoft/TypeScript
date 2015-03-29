@@ -88,14 +88,8 @@ condAny ? exprString1 : exprBoolean1; // union
 null ? exprAny1 : exprAny2;
 null ? exprBoolean1 : exprBoolean2;
 undefined ? exprNumber1 : exprNumber2;
-[
-    null,
-    undefined
-] ? exprString1 : exprString2;
-[
-    null,
-    undefined
-] ? exprIsObject1 : exprIsObject2;
+[null, undefined] ? exprString1 : exprString2;
+[null, undefined] ? exprIsObject1 : exprIsObject2;
 undefined ? exprString1 : exprBoolean1; // union
 //Cond is an any type expression
 x.doSomeThing() ? exprAny1 : exprAny2;
@@ -114,20 +108,11 @@ var resultIsStringOrBoolean1 = condAny ? exprString1 : exprBoolean1; // union
 var resultIsAny2 = null ? exprAny1 : exprAny2;
 var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
 var resultIsNumber2 = undefined ? exprNumber1 : exprNumber2;
-var resultIsString2 = [
-    null,
-    undefined
-] ? exprString1 : exprString2;
-var resultIsObject2 = [
-    null,
-    undefined
-] ? exprIsObject1 : exprIsObject2;
+var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
+var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean2 = null ? exprString1 : exprBoolean1; // union
 var resultIsStringOrBoolean3 = undefined ? exprString1 : exprBoolean1; // union
-var resultIsStringOrBoolean4 = [
-    null,
-    undefined
-] ? exprString1 : exprBoolean1; // union
+var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; // union
 var resultIsAny3 = x.doSomeThing() ? exprAny1 : exprAny2;
 var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
 var resultIsNumber3 = x(x) ? exprNumber1 : exprNumber2;

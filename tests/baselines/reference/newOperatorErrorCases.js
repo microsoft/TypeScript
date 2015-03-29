@@ -65,7 +65,5 @@ var c1 = new T;
 var c1;
 var c2 = new T(); // Parse error
 // Construct expression of non-void returning function
-function fnNumber() {
-    return 32;
-}
+function fnNumber() { return 32; }
 var s = new fnNumber(); // Error

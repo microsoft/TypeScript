@@ -8,7 +8,5 @@ module M {
 var M;
 (function (M) {
     var _this = this;
-    var f = function () {
-        _this.window;
-    };
+    var f = function () { _this.window; };
 })(M || (M = {}));

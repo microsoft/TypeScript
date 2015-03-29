@@ -51,8 +51,7 @@ define(["require", "exports"], function (require, exports) {
             var x;
         })(M_M = M.M_M || (M.M_M = {}));
         // function
-        function M_F() {
-        }
+        function M_F() { }
         M.M_F = M_F;
         // enum
         (function (M_E) {

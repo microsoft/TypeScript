@@ -62,11 +62,9 @@ x--;
 ++((x));
 // OK
 var a = x + 1;
-function f(v) {
-}
+function f(v) { }
 f(x);
-if (x) {
-}
+if (x) { }
 x;
 (x);
 -x;

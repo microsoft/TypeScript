@@ -2,6 +2,4 @@
 var foo = <{ id: number;}> ({id:4});
 
 //// [contextualTyping34.js]
-var foo = ({
-    id: 4
-});
+var foo = ({ id: 4 });

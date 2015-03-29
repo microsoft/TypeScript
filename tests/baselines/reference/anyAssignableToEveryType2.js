@@ -146,8 +146,7 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-function f() {
-}
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;

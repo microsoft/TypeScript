@@ -248,9 +248,7 @@ var SplatMonster = (function () {
     };
     return SplatMonster;
 })();
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var PrototypeMonster = (function () {
     function PrototypeMonster() {
         this.age = 1;
@@ -302,10 +300,8 @@ var Visibility = (function () {
         this.x = 1;
         this.y = 2;
     }
-    Visibility.prototype.foo = function () {
-    };
-    Visibility.prototype.bar = function () {
-    };
+    Visibility.prototype.foo = function () { };
+    Visibility.prototype.bar = function () { };
     return Visibility;
 })();
 var BaseClassWithConstructor = (function () {

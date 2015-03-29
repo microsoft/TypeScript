@@ -42,10 +42,7 @@ objA.a++, M.n++;
 //// [incrementOperatorWithNumberType.js]
 // ++ operator on number type
 var NUMBER;
-var NUMBER1 = [
-    1,
-    2
-];
+var NUMBER1 = [1, 2];
 var A = (function () {
     function A() {
     }

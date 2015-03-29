@@ -5,7 +5,5 @@ _this = 10; // Error
 
 //// [collisionThisExpressionAndAmbientVarInGlobal.js]
 var _this = this;
-var f = function () {
-    return _this;
-};
+var f = function () { return _this; };
 _this = 10; // Error
