@@ -254,7 +254,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --stripInternal"
         }
 
-        options += " --cacheDownlevelForOfLength --preserveNewLines";
+        options += " --preserveNewLines";
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");

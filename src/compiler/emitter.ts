@@ -2168,8 +2168,6 @@ module ts {
                 let counter = createTempVariable(TempFlags._i);
                 let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(TempFlags.Auto);
 
-                var cachedLength = compilerOptions.cacheDownlevelForOfLength ? createTempVariable(TempFlags._n) : undefined;
-
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
                 emitStart(node.expression);
@@ -2190,14 +2188,6 @@ module ts {
                     emitEnd(node.expression);
                 }
 
-                if (cachedLength) {
-                    write(", ");
-                    emitNodeWithoutSourceMap(cachedLength);
-                    write(" = ");
-                    emitNodeWithoutSourceMap(rhsReference);
-                    write(".length");
-                }
-
                 write("; ");
                 
                 // _i < _a.length;
@@ -2205,13 +2195,8 @@ module ts {
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
 
-                if (cachedLength) {
-                    emitNodeWithoutSourceMap(cachedLength);
-                }
-                else {
-                    emitNodeWithoutSourceMap(rhsReference);
-                    write(".length");
-                }
+                emitNodeWithoutSourceMap(rhsReference);
+                write(".length");
 
                 emitEnd(node.initializer);
                 write("; ");

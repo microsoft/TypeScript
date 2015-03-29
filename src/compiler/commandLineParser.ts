@@ -147,12 +147,6 @@ module ts {
             experimental: true
         },
         {
-            name: "cacheDownlevelForOfLength",
-            type: "boolean",
-            description: "Cache length access when downlevel emitting for-of statements",
-            experimental: true,
-        },
-        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
