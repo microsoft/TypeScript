@@ -1699,6 +1699,14 @@ module Harness {
         return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
     }
 
+    export function getDefaultLibraryFile(): { unitName: string, content: string } {
+        var libFile = Harness.userSpecifiedroot + Harness.libFolder + "/" + "lib.d.ts";
+        return {
+            unitName: libFile,
+            content: IO.readFile(libFile)
+        }
+    }
+
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
 
