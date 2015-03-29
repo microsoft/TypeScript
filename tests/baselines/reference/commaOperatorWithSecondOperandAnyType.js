@@ -59,14 +59,8 @@ var resultIsAny5 = (OBJECT, ANY);
 var x;
 1, ANY;
 ++NUMBER, ANY;
-"string", [
-    null,
-    1
-];
-"string".charAt(0), [
-    null,
-    1
-];
+"string", [null, 1];
+"string".charAt(0), [null, 1];
 true, x("any");
 !BOOLEAN, x.doSomeThing();
 var resultIsAny6 = (1, ANY);

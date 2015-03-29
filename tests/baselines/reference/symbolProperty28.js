@@ -13,9 +13,7 @@ var obj = c[Symbol.toStringTag]().x;
 //// [symbolProperty28.js]
 class C1 {
     [Symbol.toStringTag]() {
-        return {
-            x: ""
-        };
+        return { x: "" };
     }
 }
 class C2 extends C1 {

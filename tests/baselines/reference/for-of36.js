@@ -5,10 +5,7 @@ for (var v of tuple) {
 }
 
 //// [for-of36.js]
-var tuple = [
-    "",
-    true
-];
+var tuple = ["", true];
 for (var v of tuple) {
     v;
 }

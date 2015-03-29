@@ -6,11 +6,8 @@ class C {
 
 //// [symbolDeclarationEmit13.js]
 class C {
-    get [Symbol.isRegExp]() {
-        return "";
-    }
-    set [Symbol.toStringTag](x) {
-    }
+    get [Symbol.isRegExp]() { return ""; }
+    set [Symbol.toStringTag](x) { }
 }
 
 

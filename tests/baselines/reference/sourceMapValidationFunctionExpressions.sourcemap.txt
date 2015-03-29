@@ -104,7 +104,7 @@ sourceFile:sourceMapValidationFunctionExpressions.ts
 4 >      ^^^^^^^
 5 >             ^
 6 >              ^
-7 >               ^^^^^^^^^^^^^^^^^^^->
+7 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >greet
@@ -119,43 +119,41 @@ sourceFile:sourceMapValidationFunctionExpressions.ts
 5 >Emitted(6, 15) Source(6, 15) + SourceIndex(0)
 6 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
 ---
->>>var incrGreetings = function () {
+>>>var incrGreetings = function () { return greetings++; };
 1->
 2 >^^^^
 3 >    ^^^^^^^^^^^^^
 4 >                 ^^^
-5 >                    ^^^^->
+5 >                    ^^^^^^^^^^^^^^
+6 >                                  ^^^^^^^
+7 >                                         ^^^^^^^^^
+8 >                                                  ^^
+9 >                                                    ^^
+10>                                                      ^
+11>                                                       ^
+12>                                                        ^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    incrGreetings
 4 >                  = 
+5 >                    () => 
+6 >                                  
+7 >                                         greetings
+8 >                                                  ++
+9 >                                                    
+10>                                                      greetings++
+11>                                                       ;
 1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
 3 >Emitted(7, 18) Source(7, 18) + SourceIndex(0)
 4 >Emitted(7, 21) Source(7, 21) + SourceIndex(0)
----
->>>    return greetings++;
-1->^^^^^^^^^^^
-2 >           ^^^^^^^^^
-3 >                    ^^
-1->() => 
-2 >           greetings
-3 >                    ++
-1->Emitted(8, 12) Source(7, 27) + SourceIndex(0)
-2 >Emitted(8, 21) Source(7, 36) + SourceIndex(0)
-3 >Emitted(8, 23) Source(7, 38) + SourceIndex(0)
----
->>>};
-1 >
-2 >^
-3 > ^
-4 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >greetings++
-3 > ;
-1 >Emitted(9, 1) Source(7, 27) + SourceIndex(0)
-2 >Emitted(9, 2) Source(7, 38) + SourceIndex(0)
-3 >Emitted(9, 3) Source(7, 39) + SourceIndex(0)
+5 >Emitted(7, 35) Source(7, 27) + SourceIndex(0)
+6 >Emitted(7, 42) Source(7, 27) + SourceIndex(0)
+7 >Emitted(7, 51) Source(7, 36) + SourceIndex(0)
+8 >Emitted(7, 53) Source(7, 38) + SourceIndex(0)
+9 >Emitted(7, 55) Source(7, 27) + SourceIndex(0)
+10>Emitted(7, 56) Source(7, 38) + SourceIndex(0)
+11>Emitted(7, 57) Source(7, 39) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map

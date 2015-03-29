@@ -13,7 +13,6 @@ var C = (function () {
     C.prototype.bar = function () {
         return 0;
     };
-    C.prototype[this.bar()] = function () {
-    };
+    C.prototype[this.bar()] = function () { };
     return C;
 })();

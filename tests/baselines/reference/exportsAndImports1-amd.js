@@ -38,8 +38,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 define(["require", "exports"], function (require, exports) {
     var v = 1;
     exports.v = v;
-    function f() {
-    }
+    function f() { }
     exports.f = f;
     var C = (function () {
         function C() {

@@ -76,10 +76,8 @@ var T;
     })(); // error
     var w;
     var f;
-    function f() {
-    } //error
-    function f2() {
-    }
+    function f() { } //error
+    function f2() { }
     var f2; // error
     var i;
     var C = (function () {
@@ -87,17 +85,14 @@ var T;
         }
         return C;
     })();
-    function C() {
-    } // error
-    function C2() {
-    }
+    function C() { } // error
+    function C2() { }
     var C2 = (function () {
         function C2() {
         }
         return C2;
     })(); // error
-    function fi() {
-    }
+    function fi() { }
     var cli = (function () {
         function cli() {
         }

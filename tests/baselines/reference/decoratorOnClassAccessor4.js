@@ -23,8 +23,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "accessor", {
-        set: function (value) {
-        },
+        set: function (value) { },
         enumerable: true,
         configurable: true
     });

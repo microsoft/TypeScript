@@ -5,7 +5,5 @@ function foo(): number { }
 
 //// [conflictingTypeAnnotatedVar.js]
 var foo;
-function foo() {
-}
-function foo() {
-}
+function foo() { }
+function foo() { }

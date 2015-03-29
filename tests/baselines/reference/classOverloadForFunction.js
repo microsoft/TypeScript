@@ -10,5 +10,4 @@ var foo = (function () {
     return foo;
 })();
 ;
-function foo() {
-}
+function foo() { }

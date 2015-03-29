@@ -106,8 +106,7 @@ var C = (function () {
         get: function () {
             return '';
         },
-        set: function (v) {
-        } // ok
+        set: function (v) { } // ok
         ,
         enumerable: true,
         configurable: true
@@ -115,8 +114,7 @@ var C = (function () {
     C.prototype.foo = function () {
         return '';
     };
-    C.foo = function () {
-    }; // ok
+    C.foo = function () { }; // ok
     Object.defineProperty(C, "X", {
         get: function () {
             return 1;
@@ -131,8 +129,7 @@ var a;
 var b = {
     a: '',
     b: 1,
-    c: function () {
-    },
+    c: function () { },
     "d": '',
     "e": 1,
     1.0: '',
@@ -143,8 +140,7 @@ var b = {
     get X() {
         return '';
     },
-    set X(v) {
-    },
+    set X(v) { },
     foo: function () {
         return '';
     }

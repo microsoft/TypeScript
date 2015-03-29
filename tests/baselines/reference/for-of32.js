@@ -2,5 +2,4 @@
 for (var v of v) { }
 
 //// [for-of32.js]
-for (var v of v) {
-}
+for (var v of v) { }

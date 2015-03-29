@@ -20,8 +20,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     return value;
 };
 class C {
-    [_a = "method"]() {
-    }
+    [_a = "method"]() { }
 }
 Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
 var _a;

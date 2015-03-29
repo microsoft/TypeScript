@@ -13,10 +13,8 @@ class C {
     constructor() {
         this.interface = 10;
     }
-    implements() {
-    }
-    foo(arguments) {
-    }
+    implements() { }
+    foo(arguments) { }
     bar(eval) {
         arguments = "hello";
     }

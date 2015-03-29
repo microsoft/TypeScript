@@ -5,6 +5,5 @@ class C {
 
 //// [parserComputedPropertyName40.js]
 class C {
-    [a ? "" : ""]() {
-    }
+    [a ? "" : ""]() { }
 }

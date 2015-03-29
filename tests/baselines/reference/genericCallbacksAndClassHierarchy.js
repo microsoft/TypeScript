@@ -56,13 +56,11 @@ var M;
         function D() {
         }
         D.prototype._subscribe = function (viewModel) {
-            var f = function (newValue) {
-            };
+            var f = function (newValue) { };
             var v = viewModel.value;
             // both of these should work
             v.subscribe(f);
-            v.subscribe(function (newValue) {
-            });
+            v.subscribe(function (newValue) { });
         };
         return D;
     })();

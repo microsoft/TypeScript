@@ -9,18 +9,14 @@ class C {
 var C = (function () {
     function C() {
     }
-    C["" + ""] = function () {
-    };
+    C["" + ""] = function () { };
     Object.defineProperty(C, "" + "", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "" + "", {
-        set: function (x) {
-        },
+        set: function (x) { },
         enumerable: true,
         configurable: true
     });

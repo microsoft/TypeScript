@@ -47,17 +47,11 @@ var A;
     var Utils;
     (function (Utils) {
         function mirror(p) {
-            return {
-                x: p.y,
-                y: p.x
-            };
+            return { x: p.y, y: p.x };
         }
         Utils.mirror = mirror;
     })(Utils = A.Utils || (A.Utils = {}));
-    A.Origin = {
-        x: 0,
-        y: 0
-    };
+    A.Origin = { x: 0, y: 0 };
 })(A || (A = {}));
 //// [part2.js]
 var A;
@@ -84,7 +78,4 @@ var o = A.Origin;
 var o = A.Utils.mirror(o);
 var p;
 var p;
-var p = new A.Utils.Plane(o, {
-    x: 1,
-    y: 1
-});
+var p = new A.Utils.Plane(o, { x: 1, y: 1 });

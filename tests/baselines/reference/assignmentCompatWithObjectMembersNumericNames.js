@@ -61,12 +61,8 @@ var s2;
 var t2;
 var a;
 var b;
-var a2 = {
-    1.0: ''
-};
-var b2 = {
-    1: ''
-};
+var a2 = { 1.0: '' };
+var b2 = { 1: '' };
 s = t;
 t = s;
 s = s2;

@@ -37,8 +37,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 var v = 1;
 exports.v = v;
-function f() {
-}
+function f() { }
 exports.f = f;
 var C = (function () {
     function C() {

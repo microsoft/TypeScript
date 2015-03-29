@@ -16,16 +16,12 @@ module M {
 var M;
 (function (M) {
     class C {
-        [Symbol.toPrimitive](x) {
-        }
+        [Symbol.toPrimitive](x) { }
         [Symbol.isConcatSpreadable]() {
             return undefined;
         }
-        get [Symbol.isRegExp]() {
-            return undefined;
-        }
-        set [Symbol.isRegExp](x) {
-        }
+        get [Symbol.isRegExp]() { return undefined; }
+        set [Symbol.isRegExp](x) { }
     }
     M.C = C;
 })(M || (M = {}));

@@ -37,8 +37,7 @@ define(["require", "exports"], function (require, exports) {
 //// [t2.js]
 define(["require", "exports"], function (require, exports) {
     exports.default = "hello";
-    function foo() {
-    }
+    function foo() { }
     exports.foo = foo;
 });
 //// [t3.js]

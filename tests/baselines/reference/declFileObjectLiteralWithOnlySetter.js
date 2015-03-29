@@ -13,9 +13,7 @@ point./*2*/x = 30;
 function makePoint(x) {
     return {
         b: 10,
-        set x(a) {
-            this.b = a;
-        }
+        set x(a) { this.b = a; }
     };
 }
 ;

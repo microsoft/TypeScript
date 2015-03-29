@@ -141,12 +141,6 @@ module ts {
             experimental: true
         },
         {
-            name: "preserveNewLines",
-            type: "boolean",
-            description: Diagnostics.Preserve_new_lines_when_emitting_code,
-            experimental: true
-        },
-        {
             name: "cacheDownlevelForOfLength",
             type: "boolean",
             description: "Cache length access when downlevel emitting for-of statements",

@@ -18,9 +18,4 @@ var Bar = (function () {
     }
     return Bar;
 })();
-function Goo() {
-    return {
-        a: 1,
-        b: 2
-    };
-}
+function Goo() { return { a: 1, b: 2 }; }

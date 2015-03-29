@@ -6,9 +6,7 @@ class B { static NOT_NULL = new B(); }
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () {
-        return B.NULL;
-    };
+    A.prototype.foo = function () { return B.NULL; };
     return A;
 })();
 var B = (function () {
