@@ -349,6 +349,13 @@ module ts {
                             }
                             result = undefined;
                         }
+                        else if (location.kind === SyntaxKind.SourceFile) {
+                            result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & SymbolFlags.ModuleMember);
+                            if (result && (result.flags & meaning) && result.valueDeclaration && (result.valueDeclaration.flags & NodeFlags.Default) && result.valueDeclaration.localSymbol.name === name) {
+                                break loop;
+                            }
+                            result = undefined;
+                        }
                         break;
                     case SyntaxKind.EnumDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
