@@ -993,7 +993,18 @@ module ts {
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {
-                emitCommaList(bindingPattern.elements, emitBindingElement);
+                // Only select non-omitted expression from the bindingPattern's elements.
+                // We have to do this to avoid emitting trailing commas.
+                // For example:
+                //      original: var [, c,,] = [ 2,3,4]
+                //      emitted: declare var c: number; // instead of declare var c:number, ;
+                let elements: Node[] = [];
+                for (let element of bindingPattern.elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression){
+                        elements.push(element);
+                    }
+                }
+                emitCommaList(elements, emitBindingElement);
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
