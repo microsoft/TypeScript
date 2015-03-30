@@ -19,28 +19,16 @@ function baz(_a) {
     var ;
 }
 function baz1(_a) {
-    var _b = _a === void 0 ? [
-        1,
-        2,
-        3
-    ] : _a;
+    var _b = _a === void 0 ? [1, 2, 3] : _a;
 }
 function baz2(_a) {
-    var _b = (_a === void 0 ? [
-        [
-            1,
-            2,
-            3
-        ]
-    ] : _a)[0];
+    var _b = (_a === void 0 ? [[1, 2, 3]] : _a)[0];
 }
 function baz3(_a) {
     var ;
 }
 function baz4(_a) {
-    var _b = _a === void 0 ? {
-        x: 10
-    } : _a;
+    var _b = _a === void 0 ? { x: 10 } : _a;
 }
 
 

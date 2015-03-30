@@ -16,13 +16,7 @@ function bar(_a) {
     var z = _a[0];
 }
 function bar1(_a) {
-    var _b = _a === void 0 ? [
-        1,
-        3,
-        4,
-        6,
-        7
-    ] : _a, z = _b[0];
+    var _b = _a === void 0 ? [1, 3, 4, 6, 7] : _a, z = _b[0];
 }
 function bar2(_a) {
     var z = _a[2];
