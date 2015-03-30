@@ -1387,7 +1387,11 @@ module ts {
                 }
                 else if (bindingPattern.kind === SyntaxKind.ArrayBindingPattern) {
                     write("[");
-                    emitCommaList(bindingPattern.elements, emitBindingElement);
+                    let elements = bindingPattern.elements;
+                    emitCommaList(elements, emitBindingElement);
+                    if (elements && elements.hasTrailingComma) {
+                        write(", ");
+                    }
                     write("]");
                 }
             }
@@ -1402,40 +1406,51 @@ module ts {
                     } : undefined;
                 }
 
-                if (bindingElement.propertyName) {
-                    // bindingElement has propertyName property in the following case:
-                    //      { y: [a,b,c] ...} -> bindingPattern will have a property called propertyName for "y"
-                    // We have to explicitly emit the propertyName before descending into its binding elements.
+                if (bindingElement.kind === SyntaxKind.OmittedExpression) {
+                    // If bindingElement is an omittedExpression (i.e. containing elision),
+                    // we will emit blank space (although this may differ from users' original code,
+                    // it allows emitSeparatedList to write separator appropriately)
                     // Example:
-                    //      original: function foo({y: [a,b,c]}) {}
-                    //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
-                    writeTextOfNode(currentSourceFile, bindingElement.propertyName);
-                    write(": ");
-
-                    // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
-                    emitBindingPattern(<BindingPattern>bindingElement.name);
+                    //      original: function foo([, x, ,]) {}
+                    //      emit    : function foo([ , x,  , ]) {}
+                    write(" ");
                 }
-                else if (bindingElement.name) {
-                    if (isBindingPattern(bindingElement.name)) {
-                        // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
-                        // In the case of rest element, we will omit rest element.
+                else if (bindingElement.kind === SyntaxKind.BindingElement) {
+                    if (bindingElement.propertyName) {
+                        // bindingElement has propertyName property in the following case:
+                        //      { y: [a,b,c] ...} -> bindingPattern will have a property called propertyName for "y"
+                        // We have to explicitly emit the propertyName before descending into its binding elements.
                         // Example:
-                        //      original: function foo([a, [[b]], c] = [1,[["string"]], 3]) {}
-                        //      emit    : declare function foo([a, [[b]], c]: [number, [[string]], number]): void;
-                        //      original with rest: function foo([a, ...c]) {}
-                        //      emit              : declare function foo([a, ...c]): void;
+                        //      original: function foo({y: [a,b,c]}) {}
+                        //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
+                        writeTextOfNode(currentSourceFile, bindingElement.propertyName);
+                        write(": ");
+
+                        // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
-                    else {
-                        Debug.assert(bindingElement.name.kind === SyntaxKind.Identifier);
-                        // If the node is just an identifier, we will simply emit the text associated with the node's name
-                        // Example:
-                        //      original: function foo({y = 10, x}) {}
-                        //      emit    : declare function foo({y, x}: {number, any}): void;
-                        if (bindingElement.dotDotDotToken) {
-                            write("...");
+                    else if (bindingElement.name) {
+                        if (isBindingPattern(bindingElement.name)) {
+                            // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
+                            // In the case of rest element, we will omit rest element.
+                            // Example:
+                            //      original: function foo([a, [[b]], c] = [1,[["string"]], 3]) {}
+                            //      emit    : declare function foo([a, [[b]], c]: [number, [[string]], number]): void;
+                            //      original with rest: function foo([a, ...c]) {}
+                            //      emit              : declare function foo([a, ...c]): void;
+                            emitBindingPattern(<BindingPattern>bindingElement.name);
                         }
-                        writeTextOfNode(currentSourceFile, bindingElement.name);
+                        else {
+                            Debug.assert(bindingElement.name.kind === SyntaxKind.Identifier);
+                            // If the node is just an identifier, we will simply emit the text associated with the node's name
+                            // Example:
+                            //      original: function foo({y = 10, x}) {}
+                            //      emit    : declare function foo({y, x}: {number, any}): void;
+                            if (bindingElement.dotDotDotToken) {
+                                write("...");
+                            }
+                            writeTextOfNode(currentSourceFile, bindingElement.name);
+                        }
                     }
                 }
             } 
