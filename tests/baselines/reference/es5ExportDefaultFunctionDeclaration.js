@@ -4,14 +4,8 @@ export default function f() { }
 
 
 //// [es5ExportDefaultFunctionDeclaration.js]
-<<<<<<< HEAD
-function f() {
-}
-exports.default = f;
-=======
 function f() { }
-exports.f = f;
->>>>>>> master
+exports.default = f;
 
 
 //// [es5ExportDefaultFunctionDeclaration.d.ts]
