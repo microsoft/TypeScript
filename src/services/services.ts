@@ -1384,6 +1384,8 @@ module ts {
         static constElement = "const";
 
         static letElement = "let";
+
+        static stringElement = "string";
     }
 
     export class ScriptElementKindModifier {
@@ -2492,6 +2494,11 @@ module ts {
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
+            // Check of this is an external module name completion location
+            if (isExternalModuleName(previousToken)) {
+                return getExternalModulecompletions(previousToken);
+            }
+
             // Check if this is a valid completion location
             if (contextToken && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
@@ -2927,6 +2934,63 @@ module ts {
                 });
 
                 return filteredMembers;
+            }
+
+            function isExternalModuleName(token: Node): boolean {
+                if (token && token.parent && token.kind === SyntaxKind.StringLiteral && isInStringOrRegularExpressionOrTemplateLiteral(token)) {
+                    return token.parent.kind === SyntaxKind.ImportDeclaration ||
+                        token.parent.kind === SyntaxKind.ExportDeclaration ||
+                        token.parent.kind === SyntaxKind.ExternalModuleReference;
+                }
+                return false;
+            }
+
+            function getExternalModulecompletions(location: Node): CompletionInfo {
+                var entries: CompletionEntry[] = [];
+                var currentSourceFile = location.getSourceFile();
+                var currentDirectoryPath = getDirectoryPath(normalizePath(currentSourceFile.fileName));
+                var isInAmbientContext = ts.isInAmbientContext(location);
+
+                forEach(program.getSourceFiles(), sourceFile => {
+                    if (isExternalModule(sourceFile)) {
+                        // Only consider these if current request is not in an ambient context,
+                        // and in a diffrent file
+                        if (!isInAmbientContext && sourceFile !== currentSourceFile) {
+                            var relativeModuleName = removeFileExtension(getRelativePathToDirectoryOrUrl(currentDirectoryPath,
+                                sourceFile.fileName, "", getCanonicalFileName, /*isAbsolutePathAnUrl*/ true));
+                            if (relativeModuleName.charCodeAt(0) !== CharacterCodes.dot && relativeModuleName.charCodeAt(1) !== CharacterCodes.slash) {
+                                // always make files relative
+                                relativeModuleName = "./" + relativeModuleName;
+                            }
+                            entries.push({
+                                name: relativeModuleName,
+                                kind: ScriptElementKind.stringElement,
+                                kindModifiers: ScriptElementKindModifier.none,
+                            });
+                        }
+                    }
+                    else {
+                        // Look for ambient external module declarations
+                        forEachChild(sourceFile, child => {
+                            if (child.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>child).name.kind === SyntaxKind.StringLiteral) {
+                                if (sourceFile !== currentSourceFile || location.pos > child.end || location.end < child.pos) {
+                                    entries.push({
+                                        kind: ScriptElementKind.stringElement,
+                                        kindModifiers: ScriptElementKindModifier.ambientModifier,
+                                        name: (<ModuleDeclaration>child).name.text
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+                return {
+                    isMemberCompletion: true,
+                    isNewIdentifierLocation: true,
+                    isBuilder: true,
+                    entries
+                };
             }
         }
 
