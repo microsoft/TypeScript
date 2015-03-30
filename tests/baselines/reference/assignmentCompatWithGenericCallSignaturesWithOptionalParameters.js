@@ -138,60 +138,24 @@ var ClassTypeParam;
         function Base() {
             var _this = this;
             this.init = function () {
-                _this.a = function () {
-                    return null;
-                }; // ok, same T of required params
-                _this.a = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a = function (x) {
-                    return null;
-                }; // error, too many required params
-                _this.a2 = function () {
-                    return null;
-                }; // ok, same T of required params
-                _this.a2 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a2 = function (x) {
-                    return null;
-                }; // ok, same number of params
-                _this.a3 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a3 = function (x) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a3 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a3 = function (x, y) {
-                    return null;
-                }; // error, too many required params
-                _this.a4 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a4 = function (x, y) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a4 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a4 = function (x, y) {
-                    return null;
-                }; // ok, same number of params
-                _this.a5 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a5 = function (x, y) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a5 = function (x) {
-                    return null;
-                }; // ok, all present params match
-                _this.a5 = function (x, y) {
-                    return null;
-                }; // ok, same number of params
+                _this.a = function () { return null; }; // ok, same T of required params
+                _this.a = function (x) { return null; }; // ok, same T of required params
+                _this.a = function (x) { return null; }; // error, too many required params
+                _this.a2 = function () { return null; }; // ok, same T of required params
+                _this.a2 = function (x) { return null; }; // ok, same T of required params
+                _this.a2 = function (x) { return null; }; // ok, same number of params
+                _this.a3 = function () { return null; }; // ok, fewer required params
+                _this.a3 = function (x) { return null; }; // ok, fewer required params
+                _this.a3 = function (x) { return null; }; // ok, same T of required params
+                _this.a3 = function (x, y) { return null; }; // error, too many required params
+                _this.a4 = function () { return null; }; // ok, fewer required params
+                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
+                _this.a4 = function (x) { return null; }; // ok, same T of required params
+                _this.a4 = function (x, y) { return null; }; // ok, same number of params
+                _this.a5 = function () { return null; }; // ok, fewer required params
+                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
+                _this.a5 = function (x) { return null; }; // ok, all present params match
+                _this.a5 = function (x, y) { return null; }; // ok, same number of params
             };
         }
         return Base;
@@ -246,60 +210,24 @@ var GenericSignaturesValid;
         function Base2() {
             var _this = this;
             this.init = function () {
-                _this.a = function () {
-                    return null;
-                }; // ok, same T of required params
-                _this.a = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a = function (x) {
-                    return null;
-                }; // error, too many required params
-                _this.a2 = function () {
-                    return null;
-                }; // ok, same T of required params
-                _this.a2 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a2 = function (x) {
-                    return null;
-                }; // ok, same number of params
-                _this.a3 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a3 = function (x) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a3 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a3 = function (x, y) {
-                    return null;
-                }; // error, too many required params
-                _this.a4 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a4 = function (x, y) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a4 = function (x) {
-                    return null;
-                }; // ok, same T of required params
-                _this.a4 = function (x, y) {
-                    return null;
-                }; // ok, same number of params
-                _this.a5 = function () {
-                    return null;
-                }; // ok, fewer required params
-                _this.a5 = function (x, y) {
-                    return null;
-                }; // ok, fewer required params
-                _this.a5 = function (x) {
-                    return null;
-                }; // ok, all present params match
-                _this.a5 = function (x, y) {
-                    return null;
-                }; // ok, same number of params
+                _this.a = function () { return null; }; // ok, same T of required params
+                _this.a = function (x) { return null; }; // ok, same T of required params
+                _this.a = function (x) { return null; }; // error, too many required params
+                _this.a2 = function () { return null; }; // ok, same T of required params
+                _this.a2 = function (x) { return null; }; // ok, same T of required params
+                _this.a2 = function (x) { return null; }; // ok, same number of params
+                _this.a3 = function () { return null; }; // ok, fewer required params
+                _this.a3 = function (x) { return null; }; // ok, fewer required params
+                _this.a3 = function (x) { return null; }; // ok, same T of required params
+                _this.a3 = function (x, y) { return null; }; // error, too many required params
+                _this.a4 = function () { return null; }; // ok, fewer required params
+                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
+                _this.a4 = function (x) { return null; }; // ok, same T of required params
+                _this.a4 = function (x, y) { return null; }; // ok, same number of params
+                _this.a5 = function () { return null; }; // ok, fewer required params
+                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
+                _this.a5 = function (x) { return null; }; // ok, all present params match
+                _this.a5 = function (x, y) { return null; }; // ok, same number of params
             };
         }
         return Base2;

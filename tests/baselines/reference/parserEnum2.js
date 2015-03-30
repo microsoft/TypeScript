@@ -12,7 +12,7 @@
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";
     SignatureFlags[SignatureFlags["IsIndexer"] = 1] = "IsIndexer";
-    SignatureFlags[SignatureFlags["IsStringIndexer"] = 1 << 1] = "IsStringIndexer";
-    SignatureFlags[SignatureFlags["IsNumberIndexer"] = 1 << 2] = "IsNumberIndexer";
+    SignatureFlags[SignatureFlags["IsStringIndexer"] = 2] = "IsStringIndexer";
+    SignatureFlags[SignatureFlags["IsNumberIndexer"] = 4] = "IsNumberIndexer";
 })(exports.SignatureFlags || (exports.SignatureFlags = {}));
 var SignatureFlags = exports.SignatureFlags;

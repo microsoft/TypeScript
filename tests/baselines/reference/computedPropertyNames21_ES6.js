@@ -7,13 +7,9 @@ class C {
 }
 
 //// [computedPropertyNames21_ES6.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+class C {
+    bar() {
         return 0;
-    };
-    C.prototype[this.bar()] = function () {
-    };
-    return C;
-})();
+    }
+    [this.bar()]() { }
+}

@@ -68,8 +68,7 @@ var A2 = (function () {
     }
     return A2;
 })();
-function f() {
-}
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;

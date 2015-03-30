@@ -1008,10 +1008,6 @@ module Harness {
                             options.outDir = setting.value;
                             break;
 
-                        case 'preservenewlines':
-                            options.preserveNewLines = !!setting.value;
-                            break;
-
                         case 'sourceroot':
                             options.sourceRoot = setting.value;
                             break;
@@ -1465,7 +1461,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "preservenewlines", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1701,6 +1697,14 @@ module Harness {
 
     export function isLibraryFile(filePath: string): boolean {
         return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
+    }
+
+    export function getDefaultLibraryFile(): { unitName: string, content: string } {
+        var libFile = Harness.userSpecifiedroot + Harness.libFolder + "/" + "lib.d.ts";
+        return {
+            unitName: libFile,
+            content: IO.readFile(libFile)
+        }
     }
 
     if (Error) (<any>Error).stackTraceLimit = 1;

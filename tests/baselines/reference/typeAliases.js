@@ -119,11 +119,8 @@ var E;
 (function (E) {
     E[E["x"] = 10] = "x";
 })(E || (E = {}));
-f15(10 /* x */).toLowerCase();
+f15(E.x).toLowerCase();
 var x;
 f16(x);
-var y = [
-    "1",
-    false
-];
+var y = ["1", false];
 y[0].toLowerCase();

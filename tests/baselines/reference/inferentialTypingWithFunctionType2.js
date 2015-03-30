@@ -8,8 +8,4 @@ var x = [1, 2, 3].map(identity)[0];
 function identity(a) {
     return a;
 }
-var x = [
-    1,
-    2,
-    3
-].map(identity)[0];
+var x = [1, 2, 3].map(identity)[0];

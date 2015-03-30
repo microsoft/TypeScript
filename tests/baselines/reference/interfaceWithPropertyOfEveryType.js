@@ -48,8 +48,7 @@ var C = (function () {
     }
     return C;
 })();
-function f1() {
-}
+function f1() { }
 var M;
 (function (M) {
     M.y = 1;
@@ -64,20 +63,14 @@ var a = {
     c: true,
     d: {},
     e: null,
-    f: [
-        1
-    ],
+    f: [1],
     g: {},
-    h: function (x) {
-        return 1;
-    },
-    i: function (x) {
-        return x;
-    },
+    h: function (x) { return 1; },
+    i: function (x) { return x; },
     j: null,
     k: new C(),
     l: f1,
     m: M,
     n: {},
-    o: 0 /* A */
+    o: E.A
 };

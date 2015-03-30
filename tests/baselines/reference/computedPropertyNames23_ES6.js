@@ -9,15 +9,9 @@ class C {
 }
 
 //// [computedPropertyNames23_ES6.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+class C {
+    bar() {
         return 0;
-    };
-    C.prototype[{
-        [this.bar()]: 1
-    }[0]] = function () {
-    };
-    return C;
-})();
+    }
+    [{ [this.bar()]: 1 }[0]]() { }
+}

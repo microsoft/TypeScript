@@ -5,6 +5,4 @@ function foo() { return null; }
 
 //// [ambientClassOverloadForFunction.js]
 ;
-function foo() {
-    return null;
-}
+function foo() { return null; }

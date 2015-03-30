@@ -108,22 +108,12 @@ var r4 = true ? new Date() : null;
 var r4 = true ? null : new Date();
 var r5 = true ? /1/ : null;
 var r5 = true ? null : /1/;
-var r6 = true ? {
-    foo: 1
-} : null;
-var r6 = true ? null : {
-    foo: 1
-};
-var r7 = true ? function () {
-} : null;
-var r7 = true ? null : function () {
-};
-var r8 = true ? function (x) {
-    return x;
-} : null;
-var r8b = true ? null : function (x) {
-    return x;
-}; // type parameters not identical across declarations
+var r6 = true ? { foo: 1 } : null;
+var r6 = true ? null : { foo: 1 };
+var r7 = true ? function () { } : null;
+var r7 = true ? null : function () { };
+var r8 = true ? function (x) { return x; } : null;
+var r8b = true ? null : function (x) { return x; }; // type parameters not identical across declarations
 var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;
@@ -149,10 +139,9 @@ var E;
 })(E || (E = {}));
 var r13 = true ? E : null;
 var r13 = true ? null : E;
-var r14 = true ? 0 /* A */ : null;
-var r14 = true ? null : 0 /* A */;
-function f() {
-}
+var r14 = true ? E.A : null;
+var r14 = true ? null : E.A;
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;

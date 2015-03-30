@@ -16,7 +16,7 @@ verify.numberOfErrorsInCurrentFile(0);
 goTo.marker("1");
 edit.backspace(1);
 edit.insert(" ");
-verify.quickInfoIs("(var) M.C.C: typeof M.C");
+verify.quickInfoIs("var M.C.C: typeof M.C");
 
 // Verify there are no errors
 verify.numberOfErrorsInCurrentFile(0);

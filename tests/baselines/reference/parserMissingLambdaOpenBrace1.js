@@ -16,9 +16,7 @@ var C = (function () {
         var _this = this;
         return fromDoWhile(function (test) {
             var index = 0;
-            return _this.doWhile(function (item, i) {
-                return filter(item, i) ? test(item, index++) : true;
-            });
+            return _this.doWhile(function (item, i) { return filter(item, i) ? test(item, index++) : true; });
         });
     };
     return C;

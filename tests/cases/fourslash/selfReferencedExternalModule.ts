@@ -6,4 +6,4 @@
 
 goTo.marker();
 verify.completionListContains("A", "import A = require('app')");
-verify.completionListContains("I", "(var) I: number");
+verify.completionListContains("I", "var I: number");

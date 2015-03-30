@@ -44,16 +44,16 @@ module M {
 
 //// [collisionCodeGenModuleWithModuleChildren.js]
 var M;
-(function (_M) {
-    _M.x = 3;
+(function (M_1) {
+    M_1.x = 3;
     var m1;
     (function (m1) {
         var M = 10;
-        var p = _M.x;
+        var p = M_1.x;
     })(m1 || (m1 = {}));
 })(M || (M = {}));
 var M;
-(function (_M_1) {
+(function (M_2) {
     var m2;
     (function (m2) {
         var M = (function () {
@@ -61,17 +61,17 @@ var M;
             }
             return M;
         })();
-        var p = _M_1.x;
+        var p = M_2.x;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
 var M;
-(function (_M_2) {
+(function (M_3) {
     var m3;
     (function (m3) {
         function M() {
         }
-        var p = _M_2.x;
+        var p = M_3.x;
         var p2 = M();
     })(m3 || (m3 = {}));
 })(M || (M = {}));
@@ -84,12 +84,12 @@ var M;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
 var M;
-(function (_M_3) {
+(function (M_4) {
     var m4;
     (function (m4) {
         var M;
         (function (M) {
-            var p = _M_3.x;
+            var p = M_4.x;
         })(M || (M = {}));
     })(m4 || (m4 = {}));
 })(M || (M = {}));

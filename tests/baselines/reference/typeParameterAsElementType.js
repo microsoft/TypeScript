@@ -7,8 +7,5 @@ function fee<T>() {
 //// [typeParameterAsElementType.js]
 function fee() {
     var t;
-    var arr = [
-        t,
-        ""
-    ];
+    var arr = [t, ""];
 }

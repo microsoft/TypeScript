@@ -82,10 +82,7 @@ var M2;
         function Point() {
         }
         Point.Origin = function () {
-            return {
-                x: 0,
-                y: 0
-            };
+            return { x: 0, y: 0 };
         };
         return Point;
     })();
@@ -115,7 +112,7 @@ var m3 = M3;
 var a3;
 var a3 = m3.Color;
 var a3 = M3.Color;
-var blue = 0 /* Blue */;
+var blue = a3.Blue;
 var p3;
-var p3 = 1 /* Red */;
-var p3 = 0 /* Blue */;
+var p3 = M3.Color.Red;
+var p3 = m3.Color.Blue;

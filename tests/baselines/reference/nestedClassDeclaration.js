@@ -30,13 +30,11 @@ var C2 = (function () {
     }
     return C2;
 })();
-function foo() {
-}
+function foo() { }
 var C3 = (function () {
     function C3() {
     }
     return C3;
 })();
 var x = {
-    class: C4
-}, _a = void 0;
+    class: C4 }, _a = void 0;

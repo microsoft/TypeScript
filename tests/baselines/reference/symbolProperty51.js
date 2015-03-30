@@ -10,11 +10,7 @@ module M {
 //// [symbolProperty51.js]
 var M;
 (function (M) {
-    var C = (function () {
-        function C() {
-        }
-        C.prototype[Symbol.iterator] = function () {
-        };
-        return C;
-    })();
+    class C {
+        [Symbol.iterator]() { }
+    }
 })(M || (M = {}));

@@ -2,13 +2,31 @@
 /// <reference path="emitter.ts" />
 
 module ts {
+    /* @internal */ export let programTime = 0;
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
+    /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export let version = "1.5.0.0";
+    export let version = "1.5.0";
 
-    export function createCompilerHost(options: CompilerOptions): CompilerHost {
+    export function findConfigFile(searchPath: string): string {
+        var fileName = "tsconfig.json";
+        while (true) {
+            if (sys.fileExists(fileName)) {
+                return fileName;
+            }
+            var parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+            fileName = "../" + fileName;
+        }
+        return undefined;
+    }
+
+    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
 
@@ -36,33 +54,34 @@ module ts {
                 }
                 text = "";
             }
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
+        }
 
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+        function directoryExists(directoryPath: string): boolean {
+            if (hasProperty(existingDirectories, directoryPath)) {
+                return true;
+            }
+            if (sys.directoryExists(directoryPath)) {
+                existingDirectories[directoryPath] = true;
+                return true;
+            }
+            return false;
+        }
+
+        function ensureDirectoriesExist(directoryPath: string) {
+            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                let parentDirectory = getDirectoryPath(directoryPath);
+                ensureDirectoriesExist(parentDirectory);
+                sys.createDirectory(directoryPath);
+            }
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-            function directoryExists(directoryPath: string): boolean {
-                if (hasProperty(existingDirectories, directoryPath)) {
-                    return true;
-                }
-                if (sys.directoryExists(directoryPath)) {
-                    existingDirectories[directoryPath] = true;
-                    return true;
-                }
-                return false;
-            }
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                    let parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    sys.createDirectory(directoryPath);
-                }
-            }
-
             try {
+                var start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
                 sys.writeFile(fileName, data, writeByteOrderMark);
+                ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -84,6 +103,11 @@ module ts {
 
     export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
         let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+
+        if (program.getCompilerOptions().declaration) {
+            diagnostics.concat(program.getDeclarationDiagnostics());
+        }
+
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
@@ -120,16 +144,19 @@ module ts {
         let diagnostics = createDiagnosticCollection();
         let seenNoDefaultLib = options.noLib;
         let commonSourceDirectory: string;
-        host = host || createCompilerHost(options);
+        let diagnosticsProducingTypeChecker: TypeChecker;
+        let noDiagnosticsTypeChecker: TypeChecker;
 
+        let start = new Date().getTime();
+
+        host = host || createCompilerHost(options);
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
         verifyCompilerOptions();
 
-        let diagnosticsProducingTypeChecker: TypeChecker;
-        let noDiagnosticsTypeChecker: TypeChecker;
+        programTime += new Date().getTime() - start;
 
         program = {
             getSourceFile: getSourceFile,
@@ -170,11 +197,6 @@ module ts {
 
         function getTypeChecker() {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
-        }
-
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
-            let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(targetSourceFile);
-            return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback): EmitResult {
@@ -226,6 +248,10 @@ module ts {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile);
         }
 
+        function getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile);
+        }
+
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return sourceFile.parseDiagnostics;
         }
@@ -239,6 +265,15 @@ module ts {
             let programDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
 
             return bindDiagnostics.concat(checkDiagnostics).concat(programDiagnostics);
+        }
+
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            if (!isDeclarationFile(sourceFile)) {
+                let resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+                // Don't actually write any files since we're just getting diagnostics.
+                var writeFile: WriteFileCallback = () => { };
+                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
+            }
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -430,11 +465,20 @@ module ts {
                 return;
             }
 
+            let languageVersion = options.target || ScriptTarget.ES3;
+
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModuleSourceFile && !options.module) {
-                // We cannot use createDiagnosticFromNode because nodes do not have parents yet       
-                let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                if (!options.module && languageVersion < ScriptTarget.ES6) {
+                    // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
+                    let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                }
+            }
+
+            // Cannot specify module gen target when in es6 or above
+            if (options.module && languageVersion >= ScriptTarget.ES6) {
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourcRoot

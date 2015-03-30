@@ -7,4 +7,4 @@
 ////var f/*A*/ff = new Foo();
 
 goTo.marker('A');
-verify.quickInfoIs('(var) fff: Foo');
+verify.quickInfoIs('var fff: Foo');

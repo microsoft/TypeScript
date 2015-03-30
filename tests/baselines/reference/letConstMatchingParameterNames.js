@@ -19,8 +19,8 @@ function a() {
 var parent = true;
 var parent2 = true;
 function a() {
-    var _parent = 1;
-    var _parent2 = 2;
+    var parent = 1;
+    var parent2 = 2;
     function b(parent, parent2) {
         use(parent);
         use(parent2);

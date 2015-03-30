@@ -12,4 +12,4 @@ verify.completionListContains('I');
 verify.not.completionListContains('foo');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r: number');
+verify.quickInfoIs('var r: number');

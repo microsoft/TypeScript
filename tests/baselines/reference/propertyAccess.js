@@ -176,28 +176,15 @@ var Compass;
     Compass[Compass["East"] = 2] = "East";
     Compass[Compass["West"] = 3] = "West";
 })(Compass || (Compass = {}));
-var numIndex = {
-    3: 'three',
-    'three': 'three'
-};
-var strIndex = {
-    'N': 0 /* North */,
-    'E': 2 /* East */
-};
+var numIndex = { 3: 'three', 'three': 'three' };
+var strIndex = { 'N': Compass.North, 'E': Compass.East };
 var bothIndex;
-function noIndex() {
-}
+function noIndex() { }
 var obj = {
     10: 'ten',
     x: 'hello',
     y: 32,
-    z: {
-        n: 'world',
-        m: 15,
-        o: function () {
-            return false;
-        }
-    },
+    z: { n: 'world', m: 15, o: function () { return false; } },
     'literal property': 100
 };
 var anyVar = {};
@@ -229,7 +216,7 @@ var gg;
 var hh = numIndex[3.0];
 var hh;
 // Bracket notation property access using enum value on type with numeric index signature
-var ii = numIndex[1 /* South */];
+var ii = numIndex[Compass.South];
 var ii;
 // Bracket notation property access using value of type 'any' on type with numeric index signature
 var jj = numIndex[anyVar];
@@ -248,7 +235,7 @@ var mm2;
 var nn = strIndex[10];
 var nn;
 // Bracket notation property access using enum value on type with string index signature and no numeric index signature
-var oo = strIndex[2 /* East */];
+var oo = strIndex[Compass.East];
 var oo;
 // Bracket notation property access using value of type 'any' on type with string index signature and no numeric index signature
 var pp = strIndex[null];
@@ -260,7 +247,7 @@ var qq;
 var rr = noIndex['zzzz'];
 var rr;
 // Bracket notation property access using enum value on type with no index signatures
-var ss = noIndex[1 /* South */];
+var ss = noIndex[Compass.South];
 var ss;
 // Bracket notation property access using value of type 'any' on type with no index signatures
 var tt = noIndex[null];
@@ -271,7 +258,7 @@ var uu = noIndex[someObject]; // Error
 var vv = noIndex[32];
 var vv;
 // Bracket notation property access using enum value on type with numeric index signature and string index signature
-var ww = bothIndex[2 /* East */];
+var ww = bothIndex[Compass.East];
 var ww;
 // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
 var xx = bothIndex[null];

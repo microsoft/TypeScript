@@ -123,7 +123,7 @@ module ts {
                 case SyntaxKind.ExportDeclaration:
                     return "__export";
                 case SyntaxKind.ExportAssignment:
-                    return "default";
+                    return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
@@ -188,14 +188,6 @@ module ts {
             return symbol;
         }
 
-        function isAmbientContext(node: Node): boolean {
-            while (node) {
-                if (node.flags & NodeFlags.Ambient) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             let hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
             if (symbolKind & SymbolFlags.Alias) {
@@ -218,7 +210,7 @@ module ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || isAmbientContext(container)) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
                     let exportKind = (symbolKind & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolKind & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
                         (symbolKind & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
@@ -311,7 +303,39 @@ module ts {
             bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
+        function isAmbientContext(node: Node): boolean {
+            while (node) {
+                if (node.flags & NodeFlags.Ambient) return true;
+                node = node.parent;
+            }
+            return false;
+        }
+
+        function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
+            var body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
+            if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
+                for (let stat of (<Block>body).statements) {
+                    if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
+            // A declaration source file or ambient module declaration that contains no export declarations (but possibly regular
+            // declarations with export modifiers) is an export context in which declarations are implicitly exported.
+            if (isAmbientContext(node) && !hasExportDeclarations(node)) {
+                node.flags |= NodeFlags.ExportContext;
+            }
+            else {
+                node.flags &= ~NodeFlags.ExportContext;
+            }
+        }
+
         function bindModuleDeclaration(node: ModuleDeclaration) {
+            setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
@@ -322,13 +346,14 @@ module ts {
                 }
                 else {
                     bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
-                    if (state === ModuleInstanceState.ConstEnumOnly) {
-                        // mark value module as module that contains only enums
-                        node.symbol.constEnumOnlyModule = true;
+                    let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                    if (node.symbol.constEnumOnlyModule === undefined) {
+                        // non-merged case - use the current state
+                        node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
                     }
-                    else if (node.symbol.constEnumOnlyModule) {
-                        // const only value module was merged with instantiated module - reset flag
-                        node.symbol.constEnumOnlyModule = false;
+                    else {
+                        // merged case: module is const enum only if all its pieces are non-instantiated or const enum
+                        node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
                     }
                 }
             }
@@ -505,17 +530,18 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                    if ((<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
                     }
                     else {
                         // An export default clause with an expression exports a value
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
                     }
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
+                    setExportContextFlag(<SourceFile>node);
                     if (isExternalModule(<SourceFile>node)) {
                         bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).fileName) + '"', /*isBlockScopeContainer*/ true);
                         break;

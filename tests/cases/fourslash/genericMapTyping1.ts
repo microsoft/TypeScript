@@ -22,22 +22,22 @@
 
 verify.numberOfErrorsInCurrentFile(0);
 goTo.marker('1');
-verify.quickInfoIs('(var) bb: number[]');
+verify.quickInfoIs('var bb: number[]');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) cc: number[]');
+verify.quickInfoIs('var cc: number[]');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) dd: number[]');
+verify.quickInfoIs('var dd: number[]');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) bbb: any[]');
+verify.quickInfoIs('var bbb: any[]');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) ccc: any[]');
+verify.quickInfoIs('var ccc: any[]');
 
 goTo.marker('6');
-verify.quickInfoIs('(var) ddd: any[]');
+verify.quickInfoIs('var ddd: any[]');
 
 goTo.marker('7');
 verify.quickInfoIs('(parameter) xx: string');

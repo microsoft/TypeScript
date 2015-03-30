@@ -13,16 +13,12 @@ class StringIterator {
 
 //// [for-of26.js]
 var x;
-for (var v of new StringIterator) {
-}
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype.next = function () {
+for (var v of new StringIterator) { }
+class StringIterator {
+    next() {
         return x;
-    };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

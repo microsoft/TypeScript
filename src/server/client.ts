@@ -46,21 +46,21 @@ module ts.server {
             return lineMap;
         }
 
-        private lineColToPosition(fileName: string, lineCol: protocol.Location): number {
-            return ts.computePositionOfLineAndCharacter(this.getLineMap(fileName), lineCol.line - 1, lineCol.col - 1);
+        private lineOffsetToPosition(fileName: string, lineOffset: protocol.Location): number {
+            return ts.computePositionOfLineAndCharacter(this.getLineMap(fileName), lineOffset.line - 1, lineOffset.offset - 1);
         }
 
-        private positionToOneBasedLineCol(fileName: string, position: number): protocol.Location {
-            var lineCol = ts.computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
+        private positionToOneBasedLineOffset(fileName: string, position: number): protocol.Location {
+            var lineOffset = ts.computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
             return {
-                line: lineCol.line + 1,
-                col: lineCol.character + 1
+                line: lineOffset.line + 1,
+                offset: lineOffset.character + 1
             };
         }
 
         private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): ts.TextChange {
-            var start = this.lineColToPosition(fileName, codeEdit.start);
-            var end = this.lineColToPosition(fileName, codeEdit.end);
+            var start = this.lineOffsetToPosition(fileName, codeEdit.start);
+            var end = this.lineOffsetToPosition(fileName, codeEdit.end);
 
             return {
                 span: ts.createTextSpanFromBounds(start, end),
@@ -134,15 +134,15 @@ module ts.server {
             // clear the line map after an edit
             this.lineMaps[fileName] = undefined;
 
-            var lineCol = this.positionToOneBasedLineCol(fileName, start);
-            var endLineCol = this.positionToOneBasedLineCol(fileName, end);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, start);
+            var endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
 
             var args: protocol.ChangeRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
-                endLine: endLineCol.line,
-                endCol: endLineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+                endLine: endLineOffset.line,
+                endOffset: endLineOffset.offset,
                 insertString: newText
             };
 
@@ -150,18 +150,18 @@ module ts.server {
         }
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col
+                line: lineOffset.line,
+                offset: lineOffset.offset
             };
 
             var request = this.processRequest<protocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
             var response = this.processResponse<protocol.QuickInfoResponse>(request);
 
-            var start = this.lineColToPosition(fileName, response.body.start);
-            var end = this.lineColToPosition(fileName, response.body.end);
+            var start = this.lineOffsetToPosition(fileName, response.body.start);
+            var end = this.lineOffsetToPosition(fileName, response.body.end);
 
             return {
                 kind: response.body.kind,
@@ -173,11 +173,11 @@ module ts.server {
         }
         
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.CompletionsRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
                 prefix: undefined
             };
 
@@ -194,11 +194,11 @@ module ts.server {
         }
      
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.CompletionDetailsRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
                 entryNames: [entryName]
             };
 
@@ -219,8 +219,8 @@ module ts.server {
 
             return response.body.map(entry => {
                 var fileName = entry.file;
-                var start = this.lineColToPosition(fileName, entry.start);
-                var end = this.lineColToPosition(fileName, entry.end);
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
                 
                 return {
                     name: entry.name,
@@ -237,14 +237,14 @@ module ts.server {
         }
 
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
-            var startLineCol = this.positionToOneBasedLineCol(fileName, start);
-            var endLineCol = this.positionToOneBasedLineCol(fileName, end);
+            var startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
+            var endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
             var args: protocol.FormatRequestArgs = {
                 file: fileName,
-                line: startLineCol.line,
-                col: startLineCol.col,
-                endLine: endLineCol.line,
-                endCol: endLineCol.col,
+                line: startLineOffset.line,
+                offset: startLineOffset.offset,
+                endLine: endLineOffset.line,
+                endOffset: endLineOffset.offset,
             };
 
             // TODO: handle FormatCodeOptions
@@ -259,11 +259,11 @@ module ts.server {
         }
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FormatOnKeyRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
                 key: key
             };
 
@@ -275,11 +275,11 @@ module ts.server {
         }
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
             };
 
             var request = this.processRequest<protocol.DefinitionRequest>(CommandNames.Definition, args);
@@ -287,8 +287,8 @@ module ts.server {
 
             return response.body.map(entry => {
                 var fileName = entry.file;
-                var start = this.lineColToPosition(fileName, entry.start);
-                var end = this.lineColToPosition(fileName, entry.end);
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     containerKind: "",
                     containerName: "",
@@ -300,12 +300,17 @@ module ts.server {
             });
         }
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            // Not yet implemented.
+            return [];
+        }
+
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
             };
 
             var request = this.processRequest<protocol.ReferencesRequest>(CommandNames.References, args);
@@ -313,8 +318,8 @@ module ts.server {
 
             return response.body.refs.map(entry => {
                 var fileName = entry.file;
-                var start = this.lineColToPosition(fileName, entry.start);
-                var end = this.lineColToPosition(fileName, entry.end);
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
@@ -340,11 +345,11 @@ module ts.server {
         }
 
         getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.RenameRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
                 findInStrings,
                 findInComments
             };
@@ -355,8 +360,8 @@ module ts.server {
             response.body.locs.map((entry: protocol.SpanGroup) => {
                 var fileName = entry.file;
                 entry.locs.map((loc: protocol.TextSpan) => {
-                    var start = this.lineColToPosition(fileName, loc.start);
-                    var end = this.lineColToPosition(fileName, loc.end);
+                    var start = this.lineOffsetToPosition(fileName, loc.start);
+                    var end = this.lineOffsetToPosition(fileName, loc.end);
                     locations.push({
                         textSpan: ts.createTextSpanFromBounds(start, end),
                         fileName: fileName
@@ -400,7 +405,7 @@ module ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers || "",
-                spans: item.spans.map(span=> createTextSpanFromBounds(this.lineColToPosition(fileName, span.start), this.lineColToPosition(fileName, span.end))),
+                spans: item.spans.map(span=> createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
                 childItems: this.decodeNavigationBarItems(item.childItems, fileName),
                 indent: 0,
                 bolded: false,
@@ -428,7 +433,35 @@ module ts.server {
         }
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
-            throw new Error("Not Implemented Yet.");
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.SignatureHelpRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset
+            };
+            
+            var request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
+            var response = this.processResponse<protocol.SignatureHelpResponse>(request);
+            
+            if (!response.body) {
+                return undefined;
+            }
+            var helpItems: protocol.SignatureHelpItems = response.body;
+            var span = helpItems.applicableSpan;
+            var start = this.lineOffsetToPosition(fileName, span.start);
+            var end = this.lineOffsetToPosition(fileName, span.end);
+            
+            var result: SignatureHelpItems = {
+                items: helpItems.items,
+                applicableSpan: {
+                    start: start,
+                    length: end - start
+                },
+                selectedItemIndex: helpItems.selectedItemIndex,
+                argumentIndex: helpItems.argumentIndex,
+                argumentCount: helpItems.argumentCount,                
+            }
+            return result;
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
@@ -444,19 +477,19 @@ module ts.server {
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
-            var lineCol = this.positionToOneBasedLineCol(fileName, position);
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
                 file: fileName,
-                line: lineCol.line,
-                col: lineCol.col,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
             };
 
             var request = this.processRequest<protocol.BraceRequest>(CommandNames.Brace, args);
             var response = this.processResponse<protocol.BraceResponse>(request);
 
             return response.body.map(entry => {
-                var start = this.lineColToPosition(fileName, entry.start);
-                var end = this.lineColToPosition(fileName, entry.end);
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     start: start,
                     length: end - start,

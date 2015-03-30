@@ -8,16 +8,10 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES6.js]
-function foo() {
-    return '';
-}
-var C = (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+function foo() { return ''; }
+class C {
+    bar() {
         return 0;
-    };
-    C.prototype[foo()] = function () {
-    };
-    return C;
-})();
+    }
+    [foo()]() { }
+}

@@ -39,6 +39,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -57,6 +58,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -65,7 +67,7 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
-	"navigateTo.ts",
+    "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
@@ -251,8 +253,6 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         if (stripInternal) {
             options += " --stripInternal"
         }
-
-        options += " --cacheDownlevelForOfLength --preserveNewLines";
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -539,7 +539,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
@@ -718,7 +718,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath], [], /*useBuiltCompiler*/ true);
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {

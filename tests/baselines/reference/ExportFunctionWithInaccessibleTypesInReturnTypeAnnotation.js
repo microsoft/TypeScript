@@ -32,10 +32,7 @@ var A;
         return Line;
     })();
     function fromOrigin(p) {
-        return new Line({
-            x: 0,
-            y: 0
-        }, p);
+        return new Line({ x: 0, y: 0 }, p);
     }
     A.fromOrigin = fromOrigin;
 })(A || (A = {}));

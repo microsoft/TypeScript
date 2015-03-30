@@ -7,6 +7,4 @@ declare module Q {
 Q.f(function() {this;});
 
 //// [modFunctionCrash.js]
-Q.f(function () {
-    this;
-});
+Q.f(function () { this; });

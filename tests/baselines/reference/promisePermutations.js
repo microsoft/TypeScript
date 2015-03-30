@@ -251,17 +251,13 @@ var s9d = s9.then(sPromise, sPromise, sPromise); // ok
 var s9e = s9.then(nPromise, nPromise, nPromise); // ok
 var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
 var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-var r10 = testFunction10(function (x) {
-    return x;
-});
+var r10 = testFunction10(function (x) { return x; });
 var r10a = r10.then(testFunction10, testFunction10, testFunction10); // ok
 var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
 var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
 var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
 var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-var s10 = testFunction10P(function (x) {
-    return x;
-});
+var s10 = testFunction10P(function (x) { return x; });
 var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
 var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
 var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
@@ -275,13 +271,9 @@ var s11;
 var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
 var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
 var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
-var r12 = testFunction12(function (x) {
-    return x;
-});
+var r12 = testFunction12(function (x) { return x; });
 var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok
-var s12 = testFunction12(function (x) {
-    return x;
-});
+var s12 = testFunction12(function (x) { return x; });
 var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
 var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok

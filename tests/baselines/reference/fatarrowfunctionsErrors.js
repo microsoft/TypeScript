@@ -20,28 +20,19 @@ foo(function () {
     }
     return 0;
 });
-foo((1), {
-    return: 0
-});
-foo(function (x) {
-    return x;
-});
+foo((1), { return: 0 });
+foo(function (x) { return x; });
 foo(function (x) {
     if (x === void 0) { x = 0; }
     return x;
 });
 var y = x, number;
 x * x;
-false ? (function () {
-    return null;
-}) : null;
+false ? (function () { return null; }) : null;
 // missing fatarrow
-var x1 = function () {
-};
-var x2 = function (a) {
-};
-var x3 = function (a) {
-};
+var x1 = function () { };
+var x2 = function (a) { };
+var x3 = function (a) { };
 var x4 = function () {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {

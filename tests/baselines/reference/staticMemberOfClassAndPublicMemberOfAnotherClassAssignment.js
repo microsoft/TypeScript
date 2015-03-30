@@ -29,15 +29,13 @@ c = a;
 var B = (function () {
     function B() {
     }
-    B.prototype.name = function () {
-    };
+    B.prototype.name = function () { };
     return B;
 })();
 var C = (function () {
     function C() {
     }
-    C.name = function () {
-    };
+    C.name = function () { };
     return C;
 })();
 var a = new B();

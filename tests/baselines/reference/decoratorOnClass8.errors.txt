@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS2322: Type '(target: Function, paramIndex: number) => void' is not assignable to type '(target: typeof C) => void | typeof C'.
+
+
+==== tests/cases/conformance/decorators/class/decoratorOnClass8.ts (1 errors) ====
+    declare function dec(): (target: Function, paramIndex: number) => void;
+    
+    @dec()
+    ~~~~~~
+!!! error TS2322: Type '(target: Function, paramIndex: number) => void' is not assignable to type '(target: typeof C) => void | typeof C'.
+    class C {
+    }

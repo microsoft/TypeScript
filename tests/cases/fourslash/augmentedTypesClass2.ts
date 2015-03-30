@@ -7,7 +7,7 @@
 ////r./*2*/
 
 goTo.marker('1');
-verify.not.completionListContains('y', '(var) y: number');
+verify.not.completionListContains('y', 'var y: number');
 edit.backspace(4);
 goTo.marker('2');
 verify.completionListContains('foo', '(method) c5b.foo(): void');

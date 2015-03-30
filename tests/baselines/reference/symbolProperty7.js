@@ -9,18 +9,12 @@ class C {
 }
 
 //// [symbolProperty7.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[Symbol()] = 0;
     }
-    C.prototype[Symbol()] = function () {
-    };
-    Object.defineProperty(C.prototype, Symbol(), {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    [Symbol()]() { }
+    get [Symbol()]() {
+        return 0;
+    }
+}

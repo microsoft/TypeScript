@@ -54,15 +54,9 @@ var B;
 var Geometry;
 (function (Geometry) {
     var Lines = B;
-    Geometry.Origin = {
-        x: 0,
-        y: 0
-    };
+    Geometry.Origin = { x: 0, y: 0 };
     // this is valid since B.Line _is_ visible outside Geometry
-    Geometry.Unit = new Lines.Line(Geometry.Origin, {
-        x: 1,
-        y: 0
-    });
+    Geometry.Unit = new Lines.Line(Geometry.Origin, { x: 1, y: 0 });
 })(Geometry || (Geometry = {}));
 // expected to work since all are exported
 var p;

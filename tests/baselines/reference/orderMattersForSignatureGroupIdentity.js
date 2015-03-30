@@ -27,13 +27,7 @@ w({ s: "", n: 0 }).toLowerCase();
 //// [orderMattersForSignatureGroupIdentity.js]
 var v;
 var v;
-v({
-    s: "",
-    n: 0
-}).toLowerCase();
+v({ s: "", n: 0 }).toLowerCase();
 var w;
 var w;
-w({
-    s: "",
-    n: 0
-}).toLowerCase();
+w({ s: "", n: 0 }).toLowerCase();

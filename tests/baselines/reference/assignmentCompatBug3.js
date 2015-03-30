@@ -28,12 +28,8 @@ foo(x + y);
 //// [assignmentCompatBug3.js]
 function makePoint(x, y) {
     return {
-        get x() {
-            return x;
-        },
-        get y() {
-            return y;
-        },
+        get x() { return x; },
+        get y() { return y; },
         //x: "yo",
         //y: "boo",
         dist: function () {
@@ -53,8 +49,7 @@ var C = (function () {
     });
     return C;
 })();
-function foo(test) {
-}
+function foo(test) { }
 var x;
 var y;
 foo(x);

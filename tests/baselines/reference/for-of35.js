@@ -15,19 +15,15 @@ class StringIterator {
 }
 
 //// [for-of35.js]
-for (var v of new StringIterator) {
-}
-var StringIterator = (function () {
-    function StringIterator() {
-    }
-    StringIterator.prototype.next = function () {
+for (var v of new StringIterator) { }
+class StringIterator {
+    next() {
         return {
             done: true,
             value: v
         };
-    };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    }
+    [Symbol.iterator]() {
         return this;
-    };
-    return StringIterator;
-})();
+    }
+}

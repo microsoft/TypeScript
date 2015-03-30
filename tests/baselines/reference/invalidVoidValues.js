@@ -36,7 +36,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 x = E;
-x = 0 /* A */;
+x = E.A;
 var C = (function () {
     function C() {
     }
@@ -46,10 +46,7 @@ var a;
 x = a;
 var b;
 x = b;
-x = {
-    f: function () {
-    }
-};
+x = { f: function () { } };
 var M;
 (function (M) {
     M.x = 1;

@@ -9,7 +9,4 @@ process({a:true,b:"y"});
 function process(x) {
     return x.a;
 }
-process({
-    a: true,
-    b: "y"
-});
+process({ a: true, b: "y" });

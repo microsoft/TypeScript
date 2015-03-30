@@ -12,14 +12,8 @@ class C {
 var p1;
 var p2;
 var p3;
-var C = (function () {
-    function C() {
-    }
-    C.prototype[p1] = function () {
-    };
-    C.prototype[p2] = function () {
-    };
-    C.prototype[p3] = function () {
-    };
-    return C;
-})();
+class C {
+    [p1]() { }
+    [p2]() { }
+    [p3]() { }
+}

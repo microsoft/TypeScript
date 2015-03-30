@@ -11,7 +11,7 @@ verify.verifyQuickInfoDisplayParts("interface", "", { start: test.markerByName("
 
 goTo.marker('2');
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("2").position, length: "iInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "iInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "i", kind: "interfaceName" }],
     []);

@@ -587,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export or export assignment.": {
+    "External module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -617,12 +617,41 @@
     },
     "Unterminated Unicode escape sequence.": {
         "category": "Error",
-        "code":  1199
+        "code": 1199
     },
     "Line terminator not permitted before arrow.": {
         "category": "Error",
         "code": 1200
     },
+    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
+        "category": "Error",
+        "code": 1201
+    },
+    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+        "category": "Error",
+        "code": 1202
+    },
+    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+        "category": "Error",
+        "code": 1203
+    },
+    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+        "category": "Error",
+        "code": 1204
+    },
+    "Decorators are only available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1205
+    },
+    "Decorators are not valid here.": {
+        "category": "Error",
+        "code": 1206
+    },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1353,7 +1382,19 @@
     },
     "Type '{0}' is not an array type or a string type.": {
         "category": "Error",
-        "code": 2461
+        "code": 2495
+    },
+    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+        "category": "Error",
+        "code": 2496
+    },
+    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+        "category": "Error",
+        "code": 2497
+    },
+    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+        "category": "Error",
+        "code": 2498
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1631,6 +1672,10 @@
     "Exported type alias '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4081
+    },
+    "Default export of the module has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4082
     },
     "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
         "category": "Error",
@@ -1940,9 +1985,5 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
-    },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
-        "category": "Error",
-        "code": 9002
     }
 }

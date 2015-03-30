@@ -13,8 +13,8 @@ class C {
 
 //// [importAndVariableDeclarationConflict2.js]
 var m;
-(function (_m) {
-    _m.m = '';
+(function (m_1) {
+    m_1.m = '';
 })(m || (m = {}));
 var x = m.m;
 var C = (function () {
