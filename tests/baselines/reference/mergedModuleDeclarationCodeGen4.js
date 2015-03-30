@@ -27,8 +27,7 @@ var superContain;
             (function (buz) {
                 var data;
                 (function (data) {
-                    function foo() {
-                    }
+                    function foo() { }
                     data.foo = foo;
                 })(data = buz.data || (buz.data = {}));
             })(buz = my.buz || (my.buz = {}));

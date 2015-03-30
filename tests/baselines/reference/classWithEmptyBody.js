@@ -29,11 +29,8 @@ var C = (function () {
 var c;
 var o = c;
 c = 1;
-c = {
-    foo: ''
-};
-c = function () {
-};
+c = { foo: '' };
+c = function () { };
 var D = (function () {
     function D() {
         return 1;
@@ -43,8 +40,5 @@ var D = (function () {
 var d;
 var o = d;
 d = 1;
-d = {
-    foo: ''
-};
-d = function () {
-};
+d = { foo: '' };
+d = function () { };

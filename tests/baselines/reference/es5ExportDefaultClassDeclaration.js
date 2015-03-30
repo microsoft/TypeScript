@@ -9,8 +9,7 @@ export default class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function () {
-    };
+    C.prototype.method = function () { };
     return C;
 })();
 exports.default = C;

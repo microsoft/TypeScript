@@ -8,9 +8,7 @@ var x = h("", f<string>()); // Call should succeed and x should be string. All t
 
 //// [contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.js]
 function f() {
-    function g(u) {
-        return null;
-    }
+    function g(u) { return null; }
     return g;
 }
 var h;

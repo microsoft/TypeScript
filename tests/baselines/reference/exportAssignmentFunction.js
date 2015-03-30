@@ -12,9 +12,7 @@ var n: number = fooFunc();
 
 //// [exportAssignmentFunction_A.js]
 define(["require", "exports"], function (require, exports) {
-    function foo() {
-        return 0;
-    }
+    function foo() { return 0; }
     return foo;
 });
 //// [exportAssignmentFunction_B.js]

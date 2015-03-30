@@ -46,31 +46,21 @@ var C = (function () {
     function C() {
         this.fooBack = "";
         this.bazBack = "";
-        this.get = function () {
-        }; // ok
-        this.set = function () {
-        }; // ok
+        this.get = function () { }; // ok
+        this.set = function () { }; // ok
     }
     Object.defineProperty(C.prototype, "Foo", {
-        get: function () {
-            return this.fooBack;
-        } // ok
+        get: function () { return this.fooBack; } // ok
         ,
-        set: function (foo) {
-            this.fooBack = foo;
-        } // ok
+        set: function (foo) { this.fooBack = foo; } // ok
         ,
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "Bar", {
-        get: function () {
-            return C.barBack;
-        } // ok
+        get: function () { return C.barBack; } // ok
         ,
-        set: function (bar) {
-            C.barBack = bar;
-        } // ok
+        set: function (bar) { C.barBack = bar; } // ok
         ,
         enumerable: true,
         configurable: true
@@ -86,16 +76,7 @@ C.Bar = "barv";
 var baz = c.Baz;
 c.Baz = "bazv";
 // The Foo accessors' return and param types should be contextually typed to the Foo field
-var o = {
-    get Foo() {
-        return 0;
-    },
-    set Foo(val) {
-        val;
-    }
-}; // o
+var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
 var ofg = o.Foo;
 o.Foo = 0;
-var i = function (n) {
-    return n;
-};
+var i = function (n) { return n; };

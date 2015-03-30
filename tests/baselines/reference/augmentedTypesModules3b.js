@@ -22,8 +22,7 @@ module m3g { export class C { foo() { } } }
 var m3b = (function () {
     function m3b() {
     }
-    m3b.prototype.foo = function () {
-    };
+    m3b.prototype.foo = function () { };
     return m3b;
 })();
 var m3b;
@@ -33,8 +32,7 @@ var m3b;
 var m3c = (function () {
     function m3c() {
     }
-    m3c.prototype.foo = function () {
-    };
+    m3c.prototype.foo = function () { };
     return m3c;
 })();
 var m3c;
@@ -54,8 +52,7 @@ var m3g;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () {
-        };
+        C.prototype.foo = function () { };
         return C;
     })();
     m3g.C = C;

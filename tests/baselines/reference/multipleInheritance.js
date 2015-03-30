@@ -97,13 +97,9 @@ var ND = (function (_super) {
 })(N);
 var Good = (function () {
     function Good() {
-        this.f = function () {
-            return 0;
-        };
+        this.f = function () { return 0; };
     }
-    Good.prototype.g = function () {
-        return 0;
-    };
+    Good.prototype.g = function () { return 0; };
     return Good;
 })();
 var Baad = (function (_super) {
@@ -111,11 +107,7 @@ var Baad = (function (_super) {
     function Baad() {
         _super.apply(this, arguments);
     }
-    Baad.prototype.f = function () {
-        return 0;
-    };
-    Baad.prototype.g = function (n) {
-        return 0;
-    };
+    Baad.prototype.f = function () { return 0; };
+    Baad.prototype.g = function (n) { return 0; };
     return Baad;
 })(Good);

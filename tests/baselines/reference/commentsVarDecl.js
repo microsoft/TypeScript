@@ -70,9 +70,7 @@ var yy =
 /// value comment
 20;
 /** comment2 */
-var z = function (x, y) {
-    return x + y;
-};
+var z = function (x, y) { return x + y; };
 var z2;
 var x2 = z2;
 var n4;

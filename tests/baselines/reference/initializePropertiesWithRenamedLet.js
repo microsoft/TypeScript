@@ -20,27 +20,15 @@ if (true) {
 var x0;
 if (true) {
     var x0_1;
-    var obj1 = {
-        x0: x0_1
-    };
-    var obj2 = {
-        x0: x0_1
-    };
+    var obj1 = { x0: x0_1 };
+    var obj2 = { x0: x0_1 };
 }
 var x, y, z;
 if (true) {
-    var x_1 = ({
-        x: 0
-    }).x;
-    var y_1 = ({
-        y: 0
-    }).y;
+    var x_1 = ({ x: 0 }).x;
+    var y_1 = ({ y: 0 }).y;
     var z_1;
-    (_a = {
-        z: 0
-    }, z_1 = _a.z, _a);
-    (_b = {
-        z: 0
-    }, z_1 = _b.z, _b);
+    (_a = { z: 0 }, z_1 = _a.z, _a);
+    (_b = { z: 0 }, z_1 = _b.z, _b);
 }
 var _a, _b;

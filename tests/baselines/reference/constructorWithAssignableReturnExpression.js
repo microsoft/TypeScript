@@ -51,25 +51,19 @@ var D = (function () {
 })();
 var E = (function () {
     function E() {
-        return {
-            x: 1
-        };
+        return { x: 1 };
     }
     return E;
 })();
 var F = (function () {
     function F() {
-        return {
-            x: 1
-        }; // error
+        return { x: 1 }; // error
     }
     return F;
 })();
 var G = (function () {
     function G() {
-        return {
-            x: null
-        };
+        return { x: null };
     }
     return G;
 })();

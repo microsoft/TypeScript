@@ -4,7 +4,4 @@ for (v of [""].values()) { }
 
 //// [for-of13.js]
 var v;
-for (v of [
-    ""
-].values()) {
-}
+for (v of [""].values()) { }

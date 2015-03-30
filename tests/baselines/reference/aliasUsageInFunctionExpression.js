@@ -45,9 +45,5 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
 var moduleA = require("aliasUsageInFunctionExpression_moduleA");
-var f = function (x) {
-    return x;
-};
-f = function (x) {
-    return moduleA;
-};
+var f = function (x) { return x; };
+f = function (x) { return moduleA; };

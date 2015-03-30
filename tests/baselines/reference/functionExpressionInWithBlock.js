@@ -11,9 +11,7 @@ function x() {
 function x() {
     with ({}) {
         function f() {
-            (function () {
-                return this;
-            });
+            (function () { return this; });
         }
     }
 }

@@ -9,8 +9,6 @@ class C1 {
 //// [symbolProperty29.js]
 class C1 {
     [Symbol.toStringTag]() {
-        return {
-            x: ""
-        };
+        return { x: "" };
     }
 }

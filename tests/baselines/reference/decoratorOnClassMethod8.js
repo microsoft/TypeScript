@@ -22,8 +22,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function () {
-    };
+    C.prototype.method = function () { };
     Object.defineProperty(C.prototype, "method", __decorate([dec], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
     return C;
 })();

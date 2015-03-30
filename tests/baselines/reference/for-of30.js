@@ -17,8 +17,7 @@ class StringIterator {
 }
 
 //// [for-of30.js]
-for (var v of new StringIterator) {
-}
+for (var v of new StringIterator) { }
 class StringIterator {
     constructor() {
         this.return = 0;

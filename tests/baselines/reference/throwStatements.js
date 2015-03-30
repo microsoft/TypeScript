@@ -97,9 +97,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -108,9 +106,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 var aNumber = 9.9;
@@ -131,16 +127,12 @@ var aClass = new C();
 throw aClass;
 var aGenericClass = new D();
 throw aGenericClass;
-var anObjectLiteral = {
-    id: 12
-};
+var anObjectLiteral = { id: 12 };
 throw anObjectLiteral;
 var aFunction = F;
 throw aFunction;
 throw aFunction('');
-var aLambda = function (x) {
-    return 2;
-};
+var aLambda = function (x) { return 2; };
 throw aLambda;
 throw aLambda(1);
 var aModule = M;
@@ -159,23 +151,11 @@ throw false;
 throw null;
 throw undefined;
 throw 'a string';
-throw function () {
-    return 'a string';
-};
-throw function (x) {
-    return 42;
-};
-throw {
-    x: 12,
-    y: 13
-};
+throw function () { return 'a string'; };
+throw function (x) { return 42; };
+throw { x: 12, y: 13 };
 throw [];
-throw [
-    'a',
-    [
-        'b'
-    ]
-];
+throw ['a', ['b']];
 throw /[a-z]/;
 throw new Date();
 throw new C();

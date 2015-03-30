@@ -11,9 +11,7 @@ class C2 {
 //// [symbolProperty34.js]
 class C1 extends C2 {
     [Symbol.toStringTag]() {
-        return {
-            x: ""
-        };
+        return { x: "" };
     }
 }
 class C2 {
