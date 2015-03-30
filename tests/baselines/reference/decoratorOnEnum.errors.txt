@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/invalid/decoratorOnEnum.ts(4,6): error TS1206: Decorators are not valid here.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnEnum.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    enum E {
+         ~
+!!! error TS1206: Decorators are not valid here.
+    }

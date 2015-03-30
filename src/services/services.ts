@@ -418,7 +418,10 @@ module ts {
 
             function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
                 // Add the empty lines in between texts
-                while (blankLineCount--) docComments.push(textPart(""));
+                while (blankLineCount--) {
+                    docComments.push(textPart(""));
+                }
+
                 docComments.push(textPart(text));
             }
 
@@ -937,6 +940,7 @@ module ts {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
 
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -1040,6 +1044,11 @@ module ts {
         name: string;
         containerKind: string;
         containerName: string;
+    }
+
+    export interface ReferencedSymbol {
+        definition: DefinitionInfo;
+        references: ReferenceEntry[];
     }
 
     export enum SymbolDisplayPartKind {
@@ -1408,14 +1417,6 @@ module ts {
     }
 
     /// Language Service
-
-    interface CompletionSession {
-        fileName: string;           // the file where the completion was requested
-        position: number;           // position in the file where the completion was requested
-        entries: CompletionEntry[]; // entries for this completion
-        symbols: Map<Symbol>;       // symbols by entry name map
-        typeChecker: TypeChecker;   // the typeChecker used to generate this completion
-    }
 
     interface FormattingOptions {
         useTabs: boolean;
@@ -2180,7 +2181,6 @@ module ts {
         let typeInfoResolver: TypeChecker;
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
-        let activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
@@ -2389,7 +2389,7 @@ module ts {
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile);
-            return semanticDiagnostics.concat(declarationDiagnostics);
+            return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -2398,43 +2398,51 @@ module ts {
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget): string {
+        function getCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
             let displayName = symbol.getName();
-            if (displayName && displayName.length > 0) {
-                let firstCharCode = displayName.charCodeAt(0);
-                // First check of the displayName is not external module; if it is an external module, it is not valid entry
-                if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                    // If the symbol is external module, don't show it in the completion list
-                    // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
+            if (!displayName) {
+                return undefined;
+            }
+
+            let firstCharCode = displayName.charCodeAt(0);
+            // First check of the displayName is not external module; if it is an external module, it is not valid entry
+            if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                // If the symbol is external module, don't show it in the completion list
+                // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
+                return undefined;
+            }
+
+            if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+                // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                displayName = displayName.substring(1, displayName.length - 1);
+            }
+
+            if (!displayName) {
+                return undefined;
+            }
+
+            if (performCharacterChecks) {
+                if (!isIdentifierStart(displayName.charCodeAt(0), target)) {
                     return undefined;
                 }
 
-                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
-                    (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                    // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                    displayName = displayName.substring(1, displayName.length - 1);
-                }
-
-                let isValid = isIdentifierStart(displayName.charCodeAt(0), target);
-                for (let i = 1, n = displayName.length; isValid && i < n; i++) {
-                    isValid = isIdentifierPart(displayName.charCodeAt(i), target);
-                }
-
-
-                if (isValid) {
-                    return unescapeIdentifier(displayName);
+                for (let i = 1, n = displayName.length; i < n; i++) {
+                    if (!isIdentifierPart(displayName.charCodeAt(i), target)) {
+                        return undefined;
+                    }
                 }
             }
 
-            return undefined;
+            return unescapeIdentifier(displayName);
         }
 
         function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getValidCompletionEntryDisplayName(symbol, program.getCompilerOptions().target);
+            let displayName = getCompletionEntryDisplayName(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
             if (!displayName) {
                 return undefined;
             }
@@ -2450,82 +2458,70 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number) {
-            synchronizeHostData();
-
+        function getCompletionData(fileName: string, position: number) {
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
-            log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionData: Get current token: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
             let insideComment = isInsideComment(sourceFile, currentToken, position);
-            log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
                 log("Returning an empty list because completion was inside a comment.");
                 return undefined;
             }
 
-            // The decision to provide completion depends on the previous token, so find it
-            // Note: previousToken can be undefined if we are the beginning of the file
             start = new Date().getTime();
             let previousToken = findPrecedingToken(position, sourceFile);
-            log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
-            // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
-            // Skip this partial identifier to the previous token
-            if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+            // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
+            // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
+            let contextToken = previousToken;
+
+            // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
+            // Skip this partial identifier and adjust the contextToken to the token that precedes it.
+            if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
                 let start = new Date().getTime();
-                previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
+                contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
+                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
-            if (previousToken && isCompletionListBlocker(previousToken)) {
+            if (contextToken && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
             // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
-            // other wise, it is a request for all visible symbols in the scope, and the node is the current location
-            let node: Node;
-            let isRightOfDot: boolean;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = (<PropertyAccessExpression>previousToken.parent).expression;
+            // otherwise, it is a request for all visible symbols in the scope, and the node is the current location
+            let node = currentToken;
+            let isRightOfDot = false;
+            if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>contextToken.parent).expression;
                 isRightOfDot = true;
             }
-            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
-                node = (<QualifiedName>previousToken.parent).left;
+            else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
             }
-            else {
-                node = currentToken;
-                isRightOfDot = false;
-            }
-
-            // Clear the current activeCompletionSession for this session
-            activeCompletionSession = {
-                fileName: fileName,
-                position: position,
-                entries: [],
-                symbols: {},
-                typeChecker: typeInfoResolver
-            };
-            log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
             let location = getTouchingPropertyName(sourceFile, position);
-            // Populate the completion list
+            var target = program.getCompilerOptions().target;
+
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
+            let symbols: Symbol[];
 
             if (isRightOfDot) {
                 // Right of dot member completion list
-                let symbols: Symbol[] = [];
+                symbols = [];
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
 
@@ -2556,11 +2552,9 @@ module ts {
                         }
                     });
                 }
-
-                getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
+                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -2574,49 +2568,69 @@ module ts {
                     let contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
                     if (contextualTypeMembers && contextualTypeMembers.length > 0) {
                         // Add filtered items to the completion list
-                        let filteredMembers = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
-                        getCompletionEntriesFromSymbols(filteredMembers, activeCompletionSession);
+                        symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
                 }
-                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
                     // cursor is in import clause
                     // try to show exported member for imported module
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(previousToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                    if (showCompletionsInImportsClause(contextToken)) {
+                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
                         let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
-                        let filteredExports = filterModuleExports(exports, importDeclaration);
-                        getCompletionEntriesFromSymbols(filteredExports, activeCompletionSession);
+                        symbols = filterModuleExports(exports, importDeclaration);
                     }
                 }
                 else {
-                    // Get scope members
+                    // Get all entities in the current scope.
                     isMemberCompletion = false;
-                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+
+                    if (previousToken !== contextToken) {
+                        Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+                    }
+                    // We need to find the node that will give us an appropriate scope to begin
+                    // aggregating completion candidates. This is achieved in 'getScopeNode'
+                    // by finding the first node that encompasses a position, accounting for whether a node
+                    // is "complete" to decide whether a position belongs to the node.
+                    // 
+                    // However, at the end of an identifier, we are interested in the scope of the identifier
+                    // itself, but fall outside of the identifier. For instance:
+                    // 
+                    //      xyz => x$
+                    //
+                    // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
+                    // so 'xyz' is not returned in our results.
+                    //
+                    // We define 'adjustedPosition' so that we may appropriately account for
+                    // being at the end of an identifier. The intention is that if requesting completion
+                    // at the end of an identifier, it should be effectively equivalent to requesting completion
+                    // anywhere inside/at the beginning of the identifier. So in the previous case, the
+                    // 'adjustedPosition' will work as if requesting completion in the following:
+                    //
+                    //      xyz => $x
+                    //
+                    // If previousToken !== contextToken, then
+                    //   - 'contextToken' was adjusted to the token prior to 'previousToken'
+                    //      because we were at the end of an identifier.
+                    //   - 'previousToken' is defined.
+                    let adjustedPosition = previousToken !== contextToken ?
+                        previousToken.getStart() :
+                        position;
+
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
 
                     /// TODO filter meaning based on the current context
-                    let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                    let symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
-
-                    getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
+                    symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
             }
 
-            // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
-            }
-            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return {
-                isMemberCompletion,
-                isNewIdentifierLocation,
-                isBuilder: isNewIdentifierDefinitionLocation,  // temporary property used to match VS implementation
-                entries: activeCompletionSession.entries
-            };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location };
 
             /**
              * Finds the first node that "embraces" the position, so that one may
@@ -2628,21 +2642,6 @@ module ts {
                     scope = scope.parent;
                 }
                 return scope;
-            }
-
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
-                let start = new Date().getTime();
-                forEach(symbols, symbol => {
-                    let entry = createCompletionEntry(symbol, session.typeChecker, location);
-                    if (entry) {
-                        let id = escapeIdentifier(entry.name);
-                        if (!lookUp(session.symbols, id)) {
-                            session.entries.push(entry);
-                            session.symbols[id] = symbol;
-                        }
-                    }
-                });
-                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2698,7 +2697,7 @@ module ts {
 
                         case SyntaxKind.EqualsToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration // let x = a|
-                            || containingNodeKind === SyntaxKind.BinaryExpression;       // x = a|
+                                || containingNodeKind === SyntaxKind.BinaryExpression;   // x = a|
 
                         case SyntaxKind.TemplateHead:
                             return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
@@ -2815,7 +2814,7 @@ module ts {
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
                                 (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                 previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
+                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
 
                         case SyntaxKind.LessThanToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
@@ -2931,38 +2930,78 @@ module ts {
             }
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            // Note: No need to call synchronizeHostData, as we have captured all the data we need
-            //       in the getCompletionsAtPosition earlier
-            let sourceFile = getValidSourceFile(fileName);
-
-            let session = activeCompletionSession;
-
-            // Ensure that the current active completion session is still valid for this request
-            if (!session || session.fileName !== fileName || session.position !== position) {
+        function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
+            synchronizeHostData();
+            
+            let completionData = getCompletionData(fileName, position);
+            if (!completionData) {
                 return undefined;
             }
 
-            let symbol = lookUp(activeCompletionSession.symbols, escapeIdentifier(entryName));
-            if (symbol) {
-                let location = getTouchingPropertyName(sourceFile, position);
-                let completionEntry = createCompletionEntry(symbol, session.typeChecker, location);
-                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
-                //               which is permissible given that it is backwards compatible; but really we should consider
-                //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
-                //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
-                let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, session.typeChecker, location, SemanticMeaning.All);
-                return {
-                    name: entryName,
-                    kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
-                    kindModifiers: completionEntry.kindModifiers,
-                    displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
-                    documentation: displayPartsDocumentationsAndSymbolKind.documentation
-                };
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = completionData;
+            if (!symbols || symbols.length === 0) {
+                return undefined;
             }
-            else {
-                // No symbol, it is a keyword
+
+            var entries = getCompletionEntriesFromSymbols(symbols);
+
+            // Add keywords if this is not a member completion list
+            if (!isMemberCompletion) {
+                addRange(entries, keywordCompletions);
+            }
+
+            return { isMemberCompletion, isNewIdentifierLocation, entries };
+
+            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
+                let start = new Date().getTime();
+                var entries: CompletionEntry[] = [];
+                var nameToSymbol: Map<Symbol> = {};
+
+                for (let symbol of symbols) {
+                    let entry = createCompletionEntry(symbol, typeInfoResolver, location);
+                    if (entry) {
+                        let id = escapeIdentifier(entry.name);
+                        if (!lookUp(nameToSymbol, id)) {
+                            entries.push(entry);
+                            nameToSymbol[id] = symbol;
+                        }
+                    }
+                }
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                return entries;
+            }
+        }
+
+        function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
+            synchronizeHostData();
+
+            // Compute all the completion symbols again.
+            let completionData = getCompletionData(fileName, position);
+            if (completionData) {
+                let { symbols, location } = completionData;
+
+                // Find the symbol with the matching entry name.
+                let target = program.getCompilerOptions().target;
+                // We don't need to perform character checks here because we're only comparing the 
+                // name against 'entryName' (which is known to be good), not building a new 
+                // completion entry.
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayName(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+
+                if (symbol) {
+                    let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
+                    return {
+                        name: entryName,
+                        kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
+                        kindModifiers: getSymbolModifiers(symbol),
+                        displayParts: displayPartsDocumentationsAndSymbolKind.displayParts,
+                        documentation: displayPartsDocumentationsAndSymbolKind.documentation
+                    };
+                }
+            }
+            
+            // Didn't find a symbol with this name.  See if we can find a keyword instead.
+            let keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
+            if (keywordCompletion) {
                 return {
                     name: entryName,
                     kind: ScriptElementKind.keyword,
@@ -2971,6 +3010,8 @@ module ts {
                     documentation: undefined
                 };
             }
+
+            return undefined;
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
@@ -3069,12 +3110,14 @@ module ts {
             typeResolver: TypeChecker, location: Node,
             // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
             semanticMeaning = getMeaningFromLocation(location)) {
+
             let displayParts: SymbolDisplayPart[] = [];
             let documentation: SymbolDisplayPart[];
             let symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
             let hasAddedSymbolInfo: boolean;
             let type: Type;
+
             // Class at constructor site need to be shown as constructor apart from property,method, vars
             if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
                 // If it is accessor they are allowed only if location is at name of the accessor
@@ -3126,9 +3169,7 @@ module ts {
                             }
                             else if (symbolFlags & SymbolFlags.Alias) {
                                 symbolKind = ScriptElementKind.alias;
-                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                                displayParts.push(textPart(symbolKind));
-                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                                pushTypePart(symbolKind);
                                 displayParts.push(spacePart());
                                 if (useConstructSignatures) {
                                     displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -3364,11 +3405,26 @@ module ts {
             function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
                 addNewLineIfDisplayPartsExist();
                 if (symbolKind) {
-                    displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(textPart(symbolKind));
-                    displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                    pushTypePart(symbolKind);
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
+                }
+            }
+
+            function pushTypePart(symbolKind: string) {
+                switch (symbolKind) {
+                    case ScriptElementKind.variableElement:
+                    case ScriptElementKind.functionElement:
+                    case ScriptElementKind.letElement:
+                    case ScriptElementKind.constElement:
+                    case ScriptElementKind.constructorImplementationElement:
+                        displayParts.push(textOrKeywordPart(symbolKind));
+                        return;
+                    default:
+                        displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                        displayParts.push(textOrKeywordPart(symbolKind));
+                        displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                        return;
                 }
             }
 
@@ -3438,6 +3494,17 @@ module ts {
             };
         }
 
+        function createDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+            return {
+                fileName: node.getSourceFile().fileName,
+                textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                kind: symbolKind,
+                name: symbolName,
+                containerKind: undefined,
+                containerName
+            };
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -3453,7 +3520,7 @@ module ts {
             if (isJumpStatementTarget(node)) {
                 let labelName = (<Identifier>node).text;
                 let label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
             }
 
             /// Triple slash reference comments
@@ -3484,14 +3551,13 @@ module ts {
             // If this is an alias, and the request came at the declaration location
             // get the aliased symbol instead. This allows for goto def on an import e.g.
             //   import {A, B} from "mod";
-            // to jump to the implementation directelly.
+            // to jump to the implementation directly.
             if (symbol.flags & SymbolFlags.Alias) {
                 let declaration = symbol.declarations[0];
                 if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
                     symbol = typeInfoResolver.getAliasedSymbol(symbol);
                 }
             }
-
 
             // Because name in short-hand property assignment has two different meanings: property name and property value,
             // using go-to-definition at such position should go to the variable declaration of the property value rather than
@@ -3509,7 +3575,7 @@ module ts {
                 let shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 let shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
                 return map(shorthandDeclarations,
-                    declaration => getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+                    declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
             let result: DefinitionInfo[] = [];
@@ -3523,46 +3589,11 @@ module ts {
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
                 // Just add all the declarations. 
                 forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
                 });
             }
 
             return result;
-
-            function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-                return {
-                    fileName: node.getSourceFile().fileName,
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
-                    kind: symbolKind,
-                    name: symbolName,
-                    containerKind: undefined,
-                    containerName
-                };
-            }
-
-            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                let declarations: Declaration[] = [];
-                let definition: Declaration;
-
-                forEach(signatureDeclarations, d => {
-                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
-                        declarations.push(d);
-                        if ((<FunctionLikeDeclaration>d).body) definition = d;
-                    }
-                });
-
-                if (definition) {
-                    result.push(getDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
-                    return true;
-                }
-
-                return false;
-            }
 
             function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
                 // Applicable only if we are in a new expression, or we are on a constructor declaration
@@ -3584,10 +3615,50 @@ module ts {
                 }
                 return false;
             }
+
+            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                let declarations: Declaration[] = [];
+                let definition: Declaration;
+
+                forEach(signatureDeclarations, d => {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+                        declarations.push(d);
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+                    }
+                });
+
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+            
+            if (results) {
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+                // ensure the results are in the file we're interested in
+                results.forEach((value) => {
+                    let targetFile = getCanonicalFileName(normalizeSlashes(value.fileName));
+                    Debug.assert(sourceFile == targetFile, `Unexpected file in results. Found results in ${targetFile} expected only results in ${sourceFile}.`);
+                });
+            }
+
+            return results;
         }
 
         /// References and Occurrences
-        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -3599,7 +3670,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false);
+                return convertReferences(getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false));
             }
 
             switch (node.kind) {
@@ -3899,7 +3970,7 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
+            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): ReferenceEntry[] {
                 let keywords: Node[] = [];
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
@@ -4022,7 +4093,7 @@ module ts {
                 }
             }
 
-            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node) {
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): ReferenceEntry[] {
                 let container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
@@ -4127,15 +4198,36 @@ module ts {
             }
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            return findReferences(fileName, position, findInStrings, findInComments);
+        function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[]{
+            if (!referenceSymbols) {
+                return undefined;
+            }
+
+            let referenceEntries: ReferenceEntry[] = [];
+            for (let referenceSymbol of referenceSymbols) {
+                addRange(referenceEntries, referenceSymbol.references);
+            }
+            return referenceEntries;
+        }
+
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[]{
+            var referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            return convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            return findReferences(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+            return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
+
+            // Only include referenced symbols that have a valid definition.
+            return filter(referencedSymbols, rs => !!rs.definition);
+        }
+
+        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -4158,14 +4250,14 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
                     let labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                     // if we have a label definition, look within its statement for references, if not, then
-                    // the label is undefined, just return a set of one for the current node.
-                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntryFromNode(node)];
+                    // the label is undefined and we have no results..
+                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : undefined;
                 }
                 else {
                     // it is a label definition and not a target, search within the parent labeledStatement
@@ -4185,9 +4277,8 @@ module ts {
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
-                // Even if we did not find a symbol, we have an identifier, so there is at least
-                // one reference that we know of. return that instead of undefined.
-                return [getReferenceEntryFromNode(node)];
+                // Can't have references to something that we have no symbol for.
+                return undefined;
             }
 
             let declarations = symbol.declarations;
@@ -4197,7 +4288,7 @@ module ts {
                 return undefined;
             }
 
-            let result: ReferenceEntry[];
+            let result: ReferencedSymbol[];
 
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
@@ -4209,15 +4300,18 @@ module ts {
             // otherwise we'll need to search globally (i.e. include each file).
             let scope = getSymbolScope(symbol);
 
+            // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
+            let symbolToIndex: number[] = [];
+
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
                 if (searchOnlyInCurrentFile) {
                     Debug.assert(sourceFiles.length === 1);
                     result = [];
-                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                 }
                 else {
                     let internedName = getInternedName(symbol, node, declarations)
@@ -4228,13 +4322,31 @@ module ts {
 
                         if (lookUp(nameTable, internedName)) {
                             result = result || [];
-                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                         }
                     });
                 }
             }
 
             return result;
+
+            function getDefinition(symbol: Symbol): DefinitionInfo {
+                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), typeInfoResolver, node);
+                let name = map(info.displayParts, p => p.text).join("");
+                let declarations = symbol.declarations;
+                if (!declarations || declarations.length === 0) {
+                    return undefined;
+                }
+
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    name,
+                    kind: info.symbolKind,
+                    fileName: declarations[0].getSourceFile().fileName,
+                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                };
+            }
 
             function isImportOrExportSpecifierName(location: Node): boolean {
                 return location.parent &&
@@ -4393,8 +4505,8 @@ module ts {
                 return positions;
             }
 
-            function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferenceEntry[] {
-                let result: ReferenceEntry[] = [];
+            function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferencedSymbol[] {
+                let references: ReferenceEntry[] = [];
                 let sourceFile = container.getSourceFile();
                 let labelName = targetLabel.text;
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
@@ -4409,10 +4521,20 @@ module ts {
                     // Only pick labels that are either the target label, or have a target that is the target label
                     if (node === targetLabel ||
                         (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
-                        result.push(getReferenceEntryFromNode(node));
+                        references.push(getReferenceEntryFromNode(node));
                     }
                 });
-                return result;
+
+                var definition: DefinitionInfo = {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: targetLabel.getSourceFile().fileName,
+                    kind: ScriptElementKind.label,
+                    name: labelName,
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                }
+
+                return [{ definition, references }];
             }
 
             function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
@@ -4452,7 +4574,9 @@ module ts {
                 searchMeaning: SemanticMeaning,
                 findInStrings: boolean,
                 findInComments: boolean,
-                result: ReferenceEntry[]): void {
+                result: ReferencedSymbol[],
+                symbolToIndex: number[]): void {
+
                 let sourceFile = container.getSourceFile();
                 let tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
 
@@ -4472,10 +4596,18 @@ module ts {
                             // for.
                             if ((findInStrings && isInString(position)) ||
                                 (findInComments && isInComment(position))) {
+
+                                // In the case where we're looking inside comments/strings, we don't have
+                                // an actual definition.  So just use 'undefined' here.  Features like
+                                // 'Rename' won't care (as they ignore the definitions), and features like
+                                // 'FindReferences' will just filter out these results.
                                 result.push({
-                                    fileName: sourceFile.fileName,
-                                    textSpan: createTextSpan(position, searchText.length),
-                                    isWriteAccess: false
+                                    definition: undefined,
+                                    references: [{
+                                        fileName: sourceFile.fileName,
+                                        textSpan: createTextSpan(position, searchText.length),
+                                        isWriteAccess: false
+                                    }]
                                 });
                             }
                             return;
@@ -4489,8 +4621,11 @@ module ts {
                         if (referenceSymbol) {
                             let referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             let shorthandValueSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
-                                result.push(getReferenceEntryFromNode(referenceLocation));
+                            var relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+
+                            if (relatedSymbol) {
+                                var referencedSymbol = getReferencedSymbol(relatedSymbol);
+                                referencedSymbol.references.push(getReferenceEntryFromNode(referenceLocation));
                             }
                             /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
                              * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
@@ -4499,10 +4634,29 @@ module ts {
                              * position of property accessing, the referenceEntry of such position will be handled in the first case.
                              */
                             else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                                result.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
+                                var referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
+                                referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
                         }
                     });
+                }
+
+                return;
+
+                function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
+                    var symbolId = getSymbolId(symbol);
+                    var index = symbolToIndex[symbolId];
+                    if (index === undefined) {
+                        index = result.length;
+                        symbolToIndex[symbolId] = index;
+
+                        result.push({
+                            definition: getDefinition(symbol),
+                            references: []
+                        });
+                    }
+
+                    return result[index];
                 }
 
                 function isInString(position: number) {
@@ -4532,7 +4686,7 @@ module ts {
                 }
             }
 
-            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
+            function getReferencesForSuperKeyword(superKeyword: Node): ReferencedSymbol[] {
                 let searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
@@ -4555,7 +4709,7 @@ module ts {
                         return undefined;
                 }
 
-                let result: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
                 let sourceFile = searchSpaceNode.getSourceFile();
                 let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
@@ -4574,14 +4728,15 @@ module ts {
                     // Now make sure the owning class is the same as the search-space
                     // and has the same static qualifier as the original 'super's owner.
                     if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
-                        result.push(getReferenceEntryFromNode(node));
+                        references.push(getReferenceEntryFromNode(node));
                     }
                 });
 
-                return result;
+                var definition = getDefinition(searchSpaceNode.symbol);
+                return [{ definition, references }];
             }
 
-            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferencedSymbol[] {
                 let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
                 // Whether 'this' occurs in a static context within a class.
@@ -4616,22 +4771,32 @@ module ts {
                         return undefined;
                 }
 
-                let result: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
                 let possiblePositions: number[];
                 if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
                     forEach(sourceFiles, sourceFile => {
                         possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
-                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
+                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, references);
                     });
                 }
                 else {
                     let sourceFile = searchSpaceNode.getSourceFile();
                     possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
-                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
+                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
-                return result;
+                return [{
+                    definition: {
+                        containerKind: "",
+                        containerName: "",
+                        fileName: node.getSourceFile().fileName,
+                        kind: ScriptElementKind.variableElement,
+                        name: "this",
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                    },
+                    references: references
+                }];
 
                 function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
                     forEach(possiblePositions, position => {
@@ -4754,16 +4919,18 @@ module ts {
                 }
             }
 
-            function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): Symbol {
                 if (searchSymbols.indexOf(referenceSymbol) >= 0) {
-                    return true;
+                    return referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
-                if (isImportOrExportSpecifierImportSymbol(referenceSymbol) &&
-                    searchSymbols.indexOf(typeInfoResolver.getAliasedSymbol(referenceSymbol)) >= 0) {
-                    return true;
+                if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
+                    var aliasedSymbol = typeInfoResolver.getAliasedSymbol(referenceSymbol);
+                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
+                        return aliasedSymbol;
+                    }
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the 
@@ -4771,7 +4938,7 @@ module ts {
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
                     return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
-                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0);
+                        return forEach(typeInfoResolver.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
                 }
 
@@ -4780,7 +4947,7 @@ module ts {
                 return forEach(typeInfoResolver.getRootSymbols(referenceSymbol), rootSymbol => {
                     // if it is in the list, then we are done
                     if (searchSymbols.indexOf(rootSymbol) >= 0) {
-                        return true;
+                        return rootSymbol;
                     }
 
                     // Finally, try all properties with the same name in any type the containing type extended or implemented, and 
@@ -4788,10 +4955,10 @@ module ts {
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         let result: Symbol[] = [];
                         getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
-                        return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                        return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
-                    return false;
+                    return undefined;
                 });
             }
 
@@ -4914,7 +5081,6 @@ module ts {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
-
             let outputFiles: OutputFile[] = [];
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
@@ -5748,6 +5914,7 @@ module ts {
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
             getReferencesAtPosition,
+            findReferences,
             getOccurrencesAtPosition,
             getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition,

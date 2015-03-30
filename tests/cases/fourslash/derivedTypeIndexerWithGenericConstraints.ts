@@ -25,5 +25,5 @@
 ////var result2 = r2.x;
 
 goTo.marker('');
-verify.quickInfoIs('(var) r: CollectionItem');
+verify.quickInfoIs('var r: CollectionItem');
 verify.numberOfErrorsInCurrentFile(0);

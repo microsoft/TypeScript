@@ -5,12 +5,7 @@ for (var v of map) {
 }
 
 //// [for-of37.js]
-var map = new Map([
-    [
-        "",
-        true
-    ]
-]);
+var map = new Map([["", true]]);
 for (var v of map) {
     v;
 }

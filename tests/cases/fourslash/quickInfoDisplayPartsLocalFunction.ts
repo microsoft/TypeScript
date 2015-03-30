@@ -28,7 +28,7 @@ function verifyOuterFunction() {
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("function", "", { start: test.markerByName(marker.toString()).position, length: "outerFoo".length },
-        [{ text: "(", kind: "punctuation" }, { text: "function", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "function", kind: "keyword" },
             { text: " ", kind: "space" }, { text: "outerFoo", kind: "functionName" }, { text: "(", kind: "punctuation" },
             { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "void", kind: "keyword" }],
         []);

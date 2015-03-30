@@ -17,7 +17,7 @@
 
 
 goTo.marker("1");
-verify.quickInfoIs('(var) x: One | Two');
+verify.quickInfoIs('var x: One | Two');
 
 
 goTo.marker("2");

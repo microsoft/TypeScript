@@ -74,15 +74,11 @@ fn5 `${ (n) => n.substr(0) }`;
 
 
 //// [taggedTemplateStringsWithOverloadResolution3.js]
-function fn1() {
-    return null;
-}
+function fn1() { return null; }
 var s = (_a = ["", ""], _a.raw = ["", ""], fn1(_a, undefined));
 // No candidate overloads found
 (_b = ["", ""], _b.raw = ["", ""], fn1(_b, {})); // Error
-function fn2() {
-    return undefined;
-}
+function fn2() { return undefined; }
 var d1 = (_c = ["", "", ""], _c.raw = ["", "", ""], fn2(_c, 0, undefined)); // contextually typed
 var d2 = (_d = ["", "", ""], _d.raw = ["", "", ""], fn2(_d, 0, undefined)); // any
 d1.foo(); // error
@@ -91,9 +87,7 @@ d2(); // no error (typed as any)
 (_e = ["", "", ""], _e.raw = ["", "", ""], fn2(_e, 0, '')); // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
 (_f = ["", "", ""], _f.raw = ["", "", ""], fn2(_f, '', 0)); // OK
-function fn3() {
-    return null;
-}
+function fn3() { return null; }
 var s = (_g = ["", ""], _g.raw = ["", ""], fn3(_g, 3));
 var s = (_h = ["", "", "", ""], _h.raw = ["", "", "", ""], fn3(_h, '', 3, ''));
 var n = (_j = ["", "", "", ""], _j.raw = ["", "", "", ""], fn3(_j, 5, 5, 5));
@@ -104,8 +98,7 @@ var s = (_l = ["", "", "", ""], _l.raw = ["", "", "", ""], fn3(_l, '', '', ''));
 var n = (_m = ["", "", "", ""], _m.raw = ["", "", "", ""], fn3(_m, '', '', 3));
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
 (_o = [""], _o.raw = [""], fn3(_o)); // Error
-function fn4() {
-}
+function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
 (_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, '', 3));
 (_q = ["", "", ""], _q.raw = ["", "", ""], fn4(_q, 3, ''));
@@ -116,13 +109,7 @@ function fn4() {
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 (_u = ["", "", ""], _u.raw = ["", "", ""], fn4(_u, true, null));
 (_v = ["", "", ""], _v.raw = ["", "", ""], fn4(_v, null, true));
-function fn5() {
-    return undefined;
-}
-(_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) {
-    return n.toFixed();
-})); // will error; 'n' should have type 'string'.
-(_x = ["", ""], _x.raw = ["", ""], fn5(_x, function (n) {
-    return n.substr(0);
-}));
+function fn5() { return undefined; }
+(_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) { return n.toFixed(); })); // will error; 'n' should have type 'string'.
+(_x = ["", ""], _x.raw = ["", ""], fn5(_x, function (n) { return n.substr(0); }));
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;

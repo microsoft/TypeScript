@@ -17,13 +17,13 @@
 
 //// [shadowingViaLocalValue.js]
 {
-    var _x;
+    var x_1;
     {
         var x = 1;
     }
 }
 {
-    var _x1;
+    var x1_1;
     {
         for (var x1 = 0;;)
             ;

@@ -6,6 +6,7 @@
 export var a = 10;
 export var x = a;
 export var m = a;
+export default {};
 
 // @filename: es6ImportDefaultBindingFollowedWithNamedImport_1.ts
 import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport_0";

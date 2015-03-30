@@ -75,7 +75,7 @@ function verifyTypeParameter(name: string, inDisplay: ts.SymbolDisplayPart[]) {
 function verifyConstructor(name: string, optionalInstanceType?: ts.SymbolDisplayPart[],
     optionalExtends?: ts.SymbolDisplayPart[]) {
     goToMarker();
-    var constructorDisplay = [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
+    var constructorDisplay = [{ text: "constructor", kind: "keyword" },
         { text: " ", kind: "space" }];
     constructorDisplay = constructorDisplay.concat(getClassDisplay(name, optionalInstanceType, optionalExtends));
 
@@ -153,7 +153,7 @@ function verifyMethodDisplay(name: string, className: string,
 function verifyClassInstance(name: string, typeDisplay: ts.SymbolDisplayPart[]) {
     goToMarker();
     verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "var", kind: "keyword" },
             { text: " ", kind: "space" }, { text: name, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }].concat(typeDisplay),
         []);
@@ -162,7 +162,7 @@ function verifyClassInstance(name: string, typeDisplay: ts.SymbolDisplayPart[]) 
 function verifyVarTypeOf(name: string, typeOfSymbol: ts.SymbolDisplayPart) {
     goToMarker();
     verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "var", kind: "keyword" },
             { text: " ", kind: "space" }, { text: name, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: "typeof", kind: "keyword" },
             { text: " ", kind: "space" }].concat(typeOfSymbol),

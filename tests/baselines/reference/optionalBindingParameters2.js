@@ -12,13 +12,5 @@ foo({ x: false, y: 0, z: "" });
 function foo(_a) {
     var x = _a.x, y = _a.y, z = _a.z;
 }
-foo({
-    x: "",
-    y: 0,
-    z: false
-});
-foo({
-    x: false,
-    y: 0,
-    z: ""
-});
+foo({ x: "", y: 0, z: false });
+foo({ x: false, y: 0, z: "" });

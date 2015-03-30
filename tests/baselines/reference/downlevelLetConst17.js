@@ -70,54 +70,54 @@ for (const x of []) {
 //// [downlevelLetConst17.js]
 'use strict';
 var x;
-for (var _x = 10;;) {
-    use(_x);
+for (var x_1 = 10;;) {
+    use(x_1);
 }
 use(x);
-for (var _x_1 = 10;;) {
-    use(_x_1);
+for (var x_2 = 10;;) {
+    use(x_2);
 }
 for (;;) {
-    var _x_2 = 10;
-    use(_x_2);
-    _x_2 = 1;
+    var x_3 = 10;
+    use(x_3);
+    x_3 = 1;
 }
 for (;;) {
-    var _x_3 = 10;
-    use(_x_3);
+    var x_4 = 10;
+    use(x_4);
 }
-for (var _x_4 = void 0;;) {
-    use(_x_4);
-    _x_4 = 1;
+for (var x_5 = void 0;;) {
+    use(x_5);
+    x_5 = 1;
 }
 for (;;) {
-    var _x_5 = void 0;
-    use(_x_5);
-    _x_5 = 1;
+    var x_6 = void 0;
+    use(x_6);
+    x_6 = 1;
 }
 while (true) {
-    var _x_6 = void 0;
-    use(_x_6);
+    var x_7 = void 0;
+    use(x_7);
 }
 while (true) {
-    var _x_7 = true;
-    use(_x_7);
+    var x_8 = true;
+    use(x_8);
 }
 do {
-    var _x_8 = void 0;
-    use(_x_8);
+    var x_9 = void 0;
+    use(x_9);
 } while (true);
 do {
-    var _x_9 = void 0;
-    use(_x_9);
+    var x_10 = void 0;
+    use(x_10);
 } while (true);
-for (var _x_10 in []) {
-    use(_x_10);
+for (var x_11 in []) {
+    use(x_11);
 }
-for (var _x_11 in []) {
-    use(_x_11);
+for (var x_12 in []) {
+    use(x_12);
 }
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    var _x_12 = _a[_i];
-    use(_x_12);
+    var x_13 = _a[_i];
+    use(x_13);
 }

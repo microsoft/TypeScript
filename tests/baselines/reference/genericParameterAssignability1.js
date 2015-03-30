@@ -4,10 +4,6 @@ var r = <T>(x: T) => x;
 r = f; // should be allowed
 
 //// [genericParameterAssignability1.js]
-function f(x) {
-    return null;
-}
-var r = function (x) {
-    return x;
-};
+function f(x) { return null; }
+var r = function (x) { return x; };
 r = f; // should be allowed

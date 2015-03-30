@@ -3,7 +3,7 @@
 var a = 10;
 >a : number
 
-export = a;
+export default a;
 >a : number
 
 === tests/cases/compiler/es6ImportDefaultBindingAmd_1.ts ===

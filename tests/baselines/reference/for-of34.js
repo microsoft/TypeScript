@@ -12,8 +12,7 @@ class StringIterator {
 }
 
 //// [for-of34.js]
-for (var v of new StringIterator) {
-}
+for (var v of new StringIterator) { }
 class StringIterator {
     next() {
         return v;

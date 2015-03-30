@@ -132,23 +132,6 @@ module ts {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
 
-    function findConfigFile(): string {
-        var searchPath = normalizePath(sys.getCurrentDirectory());
-        var fileName = "tsconfig.json";
-        while (true) {
-            if (sys.fileExists(fileName)) {
-                return fileName;
-            }
-            var parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-            fileName = "../" + fileName;
-        }
-        return undefined;
-    }
-
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
         var configFileName: string;                 // Configuration file name (if any)
@@ -198,7 +181,8 @@ module ts {
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
-            configFileName = findConfigFile();
+            var searchPath = normalizePath(sys.getCurrentDirectory());
+            configFileName = findConfigFile(searchPath);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
@@ -292,6 +276,7 @@ module ts {
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
         function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             startTimer();
         }

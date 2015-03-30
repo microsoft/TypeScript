@@ -5,6 +5,5 @@ var v = {
 
 //// [parserAccessors10.js]
 var v = {
-    get foo() {
-    }
+    get foo() { }
 };

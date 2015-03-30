@@ -1,3 +1,2 @@
-function hello() {
-}
+function hello() { }
 exports.hello = hello;

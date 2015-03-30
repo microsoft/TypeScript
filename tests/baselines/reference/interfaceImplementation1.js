@@ -50,8 +50,7 @@ c["foo"];
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.iFn = function (n, s) {
-    };
+    C1.prototype.iFn = function (n, s) { };
     return C1;
 })();
 var C2 = (function () {

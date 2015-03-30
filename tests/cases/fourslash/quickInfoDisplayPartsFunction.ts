@@ -25,7 +25,7 @@ function verifyFunctionWithoutOverload() {
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("function", "", { start: test.markerByName(marker.toString()).position, length: "foo".length },
-        [{ text: "(", kind: "punctuation" }, { text: "function", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "function", kind: "keyword" },
             { text: " ", kind: "space" }, { text: "foo", kind: "functionName" }, { text: "(", kind: "punctuation" },
             { text: "param", kind: "parameterName" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" },
             { text: ",", kind: "punctuation" }, { text: " ", kind: "space" },
@@ -43,7 +43,7 @@ function verifyFunctionWithOverload(functionName: string, type: string, overload
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("function", "", { start: test.markerByName(marker.toString()).position, length: functionName.length },
-        [{ text: "(", kind: "punctuation" }, { text: "function", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "function", kind: "keyword" },
             { text: " ", kind: "space" }, { text: functionName, kind: "functionName" }, { text: "(", kind: "punctuation" },
             { text: "a", kind: "parameterName" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: type, kind: "keyword" },
             { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: type, kind: "keyword" },

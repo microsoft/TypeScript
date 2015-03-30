@@ -92,15 +92,9 @@ condString ? exprString1 : exprBoolean1; // union
 "  " ? exprIsObject1 : exprIsObject2;
 "hello " ? exprString1 : exprBoolean1; // union
 //Cond is a string type expression
-function foo() {
-    return "string";
-}
+function foo() { return "string"; }
 ;
-var array = [
-    "1",
-    "2",
-    "3"
-];
+var array = ["1", "2", "3"];
 typeof condString ? exprAny1 : exprAny2;
 condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 condString + "string" ? exprNumber1 : exprNumber2;

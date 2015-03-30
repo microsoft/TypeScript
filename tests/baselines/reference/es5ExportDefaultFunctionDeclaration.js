@@ -4,9 +4,8 @@ export default function f() { }
 
 
 //// [es5ExportDefaultFunctionDeclaration.js]
-function f() {
-}
-module.exports = f;
+function f() { }
+exports.default = f;
 
 
 //// [es5ExportDefaultFunctionDeclaration.d.ts]

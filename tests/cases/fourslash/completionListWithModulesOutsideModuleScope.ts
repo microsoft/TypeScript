@@ -263,8 +263,8 @@ goToMarkAndGeneralVerify('global');
 verify.completionListContains('mod1', 'module mod1');
 verify.completionListContains('mod2', 'module mod2');
 verify.completionListContains('mod3', 'module mod3');
-verify.completionListContains('shwvar', '(var) shwvar: number');
-verify.completionListContains('shwfn', '(function) shwfn(): void');
+verify.completionListContains('shwvar', 'var shwvar: number');
+verify.completionListContains('shwfn', 'function shwfn(): void');
 verify.completionListContains('shwcls', 'class shwcls');
 verify.completionListContains('shwint', 'interface shwint');
 

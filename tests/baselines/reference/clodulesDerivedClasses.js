@@ -38,9 +38,7 @@ var Shape;
 (function (Shape) {
     var Utils;
     (function (Utils) {
-        function convert() {
-            return null;
-        }
+        function convert() { return null; }
         Utils.convert = convert;
     })(Utils = Shape.Utils || (Shape.Utils = {}));
 })(Shape || (Shape = {}));

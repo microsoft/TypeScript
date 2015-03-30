@@ -14,9 +14,7 @@ lib.math.add(3, 4); // Shouldnt be error
 
 //// [exportImportMultipleFiles_math.js]
 define(["require", "exports"], function (require, exports) {
-    function add(a, b) {
-        return a + b;
-    }
+    function add(a, b) { return a + b; }
     exports.add = add;
 });
 //// [exportImportMultipleFiles_library.js]

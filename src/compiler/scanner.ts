@@ -148,6 +148,7 @@ module ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
+        "@": SyntaxKind.AtToken,
     };
 
     /*
@@ -256,6 +257,11 @@ module ts {
         return tokenStrings[t];
     }
 
+    /* @internal */
+    export function stringToToken(s: string): SyntaxKind {
+        return textToToken[s];
+    }
+
     export function computeLineStarts(text: string): number[] {
         let result: number[] = new Array();
         let pos = 0;
@@ -318,13 +324,38 @@ module ts {
     let hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {
-        return ch === CharacterCodes.space || ch === CharacterCodes.tab || ch === CharacterCodes.verticalTab || ch === CharacterCodes.formFeed ||
-            ch === CharacterCodes.nonBreakingSpace || ch === CharacterCodes.ogham || ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
-            ch === CharacterCodes.narrowNoBreakSpace || ch === CharacterCodes.mathematicalSpace || ch === CharacterCodes.ideographicSpace || ch === CharacterCodes.byteOrderMark;
+        // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
+        // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
+        return ch === CharacterCodes.space ||
+            ch === CharacterCodes.tab ||
+            ch === CharacterCodes.verticalTab ||
+            ch === CharacterCodes.formFeed ||
+            ch === CharacterCodes.nonBreakingSpace ||
+            ch === CharacterCodes.nextLine ||
+            ch === CharacterCodes.ogham ||
+            ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
+            ch === CharacterCodes.narrowNoBreakSpace ||
+            ch === CharacterCodes.mathematicalSpace ||
+            ch === CharacterCodes.ideographicSpace ||
+            ch === CharacterCodes.byteOrderMark;
     }
 
     export function isLineBreak(ch: number): boolean {
-        return ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn || ch === CharacterCodes.lineSeparator || ch === CharacterCodes.paragraphSeparator || ch === CharacterCodes.nextLine;
+        // ES5 7.3:
+        // The ECMAScript line terminator characters are listed in Table 3.
+        //     Table 3 — Line Terminator Characters
+        //     Code Unit Value     Name                    Formal Name
+        //     \u000A              Line Feed               <LF>
+        //     \u000D              Carriage Return         <CR>
+        //     \u2028              Line separator          <LS>
+        //     \u2029              Paragraph separator     <PS>
+        // Only the characters in Table 3 are treated as line terminators. Other new line or line 
+        // breaking characters are treated as white space but not as line terminators. 
+
+        return ch === CharacterCodes.lineFeed ||
+            ch === CharacterCodes.carriageReturn ||
+            ch === CharacterCodes.lineSeparator ||
+            ch === CharacterCodes.paragraphSeparator;
     }
 
     function isDigit(ch: number): boolean {
@@ -1254,6 +1285,8 @@ module ts {
                         return pos++, token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
                         return pos++, token = SyntaxKind.TildeToken;
+                    case CharacterCodes.at:
+                        return pos++, token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         let cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar)) {

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "../../built/local/tsserver.js",
+        "sourceMap": true
+    },
+    "files": [
+        "node.d.ts",
+        "editorServices.ts",
+        "protocol.d.ts",
+        "server.ts",
+        "session.ts"
+    ]
+}

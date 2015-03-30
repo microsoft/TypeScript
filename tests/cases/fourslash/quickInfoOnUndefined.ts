@@ -9,7 +9,7 @@
 ////x./*2*/undefined = 30;
 
 goTo.marker('1');
-verify.quickInfoIs('(var) undefined');
+verify.quickInfoIs('var undefined');
 
 goTo.marker('2');
 verify.quickInfoIs('(property) undefined: number');

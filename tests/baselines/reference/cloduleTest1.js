@@ -14,8 +14,7 @@
 //// [cloduleTest1.js]
 var $;
 (function ($) {
-    function ajax(options) {
-    }
+    function ajax(options) { }
     $.ajax = ajax;
 })($ || ($ = {}));
 var it = $('.foo').addClass('bar');

@@ -20,7 +20,7 @@ goTo.marker('3');
 verify.quickInfoIs("(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
 
 goTo.marker('4');
-verify.quickInfoIs("(var) x: Colors", "");
+verify.quickInfoIs("var x: Colors", "");
 
 goTo.marker('5');
 verify.completionListContains("Colors", "enum Colors", "Enum of colors");

@@ -3,7 +3,7 @@ export default class {
 }
 
 //// [declarationEmitDefaultExport2.js]
-export default class  {
+export default class {
 }
 
 

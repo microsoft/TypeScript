@@ -3,7 +3,7 @@
 
 // @filename: server.ts
 class c { }
-export = c;
+export default c;
 
 // @filename: client.ts
 import defaultBinding from "server";

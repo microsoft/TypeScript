@@ -300,22 +300,76 @@ declare module ts.server.protocol {
     }
 
     /**
+     * Editor options
+     */
+    export interface EditorOptions {
+      
+        /** Number of spaces for each tab. Default value is 4. */
+        tabSize?: number;
+        
+        /** Number of spaces to indent during formatting. Default value is 4. */
+        indentSize?: number;
+        
+        /** The new line character to be used. Default value is the OS line delimiter. */
+        newLineCharacter?: string;
+        
+        /** Whether tabs should be converted to spaces. Default value is true. */
+        convertTabsToSpaces?: boolean;        
+    }
+        
+    /**
+     * Format options
+     */
+    export interface FormatOptions extends EditorOptions {
+      
+        /** Defines space handling after a comma delimiter. Default value is true. */
+        insertSpaceAfterCommaDelimiter?: boolean;
+        
+        /** Defines space handling after a semicolon in a for statemen. Default value is true */
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        
+        /** Defines space handling after a binary operator. Default value is true. */
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        
+        /** Defines space handling after keywords in control flow statement. Default value is true. */
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        
+        /** Defines space handling after function keyword for anonymous functions. Default value is false. */
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        
+        /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        
+        /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        
+        /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        
+        /** Index operator */
+        [key:string] : string | number | boolean;
+    }
+  
+    /**
       * Information found in a configure request.
       */
     export interface ConfigureRequestArguments {
-        /** Number of spaces for each tab */
-        tabSize: number;
-        /** Number of spaces to indent during formatting */
-        indentSize: number;
+      
         /** 
           * Information about the host, for example 'Emacs 24.4' or
           * 'Sublime Text version 3075'
           */
-        hostInfo: string;
+        hostInfo?: string;
+        
         /**
           * If present, tab settings apply only to this file.
           */
         file?: string;
+        
+        /**
+         * The format options to use during formatting and other code editing features.
+         */
+        formatOptions?: FormatOptions;        
     }
 
     /**
@@ -337,10 +391,6 @@ declare module ts.server.protocol {
       *  Information found in an "open" request.
       */
     export interface OpenRequestArgs extends FileRequestArgs {
-        /** Initial tab size of file. */
-        tabSize?: number;
-        /** Number of spaces to indent during formatting */
-        indentSize?: number;
     }
 
     /**
@@ -592,6 +642,122 @@ declare module ts.server.protocol {
         body?: CompletionEntryDetails[];
     }
 
+    /**
+     * Signature help information for a single parameter    
+     */    
+    export interface SignatureHelpParameter {
+        
+        /**
+         * The parameter's name
+         */        
+        name: string;
+                
+        /**
+          * Documentation of the parameter.
+          */
+        documentation: SymbolDisplayPart[];
+                
+        /**
+          * Display parts of the parameter.
+          */
+        displayParts: SymbolDisplayPart[];
+                
+        /**
+         * Whether the parameter is optional or not.         
+         */        
+        isOptional: boolean;
+    }
+        
+    /**
+     * Represents a single signature to show in signature help.    
+     */    
+    export interface SignatureHelpItem {
+      
+        /**
+         * Whether the signature accepts a variable number of arguments. 
+         */        
+        isVariadic: boolean;
+        
+        /**
+         * The prefix display parts.
+         */        
+        prefixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The suffix disaply parts.
+         */        
+        suffixDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The separator display parts.
+         */        
+        separatorDisplayParts: SymbolDisplayPart[];
+        
+        /**
+         * The signature helps items for the parameters. 
+         */        
+        parameters: SignatureHelpParameter[];
+                
+        /**
+         * The signature's documentation
+         */
+        documentation: SymbolDisplayPart[];
+    }
+    
+    /**
+     * Signature help items found in the response of a signature help request.
+     */
+    export interface SignatureHelpItems {
+      
+        /**
+         * The signature help items.    
+         */        
+        items: SignatureHelpItem[];
+                
+        /**
+         * The span for which signature help should appear on a signature 
+         */        
+        applicableSpan: TextSpan;
+                
+        /**
+         * The item selected in the set of available help items. 
+         */        
+        selectedItemIndex: number;
+                
+        /**
+         * The argument selected in the set of parameters.
+         */        
+        argumentIndex: number;
+        
+        /**
+         * The argument count
+         */        
+        argumentCount: number;
+    }
+
+    /**
+     * Arguments of a signature help request.
+     */
+    export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+      
+    }
+    
+    /**
+      * Signature help request; value of command field is "signatureHelp".
+      * Given a file location (file, line, col), return the signature 
+      * help.
+      */
+    export interface SignatureHelpRequest extends FileLocationRequest {
+        arguments: SignatureHelpRequestArgs;
+    }
+
+    /**
+     * Repsonse object for a SignatureHelpRequest.
+     */  
+    export interface SignatureHelpResponse extends Response {
+        body?: SignatureHelpItems;
+    }
+    
     /**
       * Arguments for geterr messages.
       */

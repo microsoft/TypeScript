@@ -12,7 +12,6 @@ var M;
 (function (M) {
     var Symbol;
     class C {
-        [Symbol.iterator]() {
-        }
+        [Symbol.iterator]() { }
     }
 })(M || (M = {}));

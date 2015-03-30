@@ -21,8 +21,5 @@ class Base {
 class C extends Base {
     // Gets emitted as super, not _super, which is consistent with
     // use of super in static properties initializers.
-    [{
-        [super.bar()]: 1
-    }[0]]() {
-    }
+    [{ [super.bar()]: 1 }[0]]() { }
 }

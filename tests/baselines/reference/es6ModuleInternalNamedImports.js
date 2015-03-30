@@ -33,7 +33,7 @@ export module M {
 
 
 //// [es6ModuleInternalNamedImports.js]
-var M;
+export var M;
 (function (M) {
     // variable
     M.M_V = 0;
@@ -47,8 +47,7 @@ var M;
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
     // function
-    function M_F() {
-    }
+    function M_F() { }
     M.M_F = M_F;
     // enum
     (function (M_E) {
@@ -57,13 +56,10 @@ var M;
     // alias
     M.M_A = M_M;
     // Reexports
-    M.v = M.M_V;
-    M.i = M_I;
-    M.c = M_C;
-    M.m = M_M;
-    M.mu = M_MU;
-    M.f = M_F;
-    M.e = M_E;
-    M.a = M.M_A;
+    export { M_V as v };
+    export { M_C as c };
+    export { M_M as m };
+    export { M_F as f };
+    export { M_E as e };
+    export { M_A as a };
 })(M || (M = {}));
-export { M };

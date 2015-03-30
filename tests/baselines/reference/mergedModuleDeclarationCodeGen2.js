@@ -15,18 +15,17 @@ var my;
     (function (data) {
         var foo;
         (function (foo) {
-            function buz() {
-            }
+            function buz() { }
             foo.buz = buz;
         })(foo = data.foo || (data.foo = {}));
     })(data = my.data || (my.data = {}));
 })(my || (my = {}));
 var my;
-(function (_my) {
+(function (my_1) {
     var data;
-    (function (_data) {
+    (function (data_1) {
         function data(my) {
-            _data.foo.buz();
+            data_1.foo.buz();
         }
-    })(data = _my.data || (_my.data = {}));
+    })(data = my_1.data || (my_1.data = {}));
 })(my || (my = {}));

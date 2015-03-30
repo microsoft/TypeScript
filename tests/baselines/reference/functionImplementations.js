@@ -164,8 +164,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 // FunctionExpression with no return type annotation and no return statement returns void
-var v = function () {
-}();
+var v = function () { }();
 // FunctionExpression f with no return type annotation and directly references f in its body returns any
 var a = function f() {
     return f;
@@ -269,10 +268,7 @@ function opt1(n) {
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n) {
-    if (n === void 0) { n = {
-        x: null,
-        y: undefined
-    }; }
+    if (n === void 0) { n = { x: null, y: undefined }; }
     var m = n;
     var m;
 }

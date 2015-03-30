@@ -33,7 +33,7 @@ function verifyModule(name: string, optionalParentName?: string) {
 function verifyVar(name: string, optionalFullName?: ts.SymbolDisplayPart[], typeDisplay: ts.SymbolDisplayPart[]= [{ text: "number", kind: "keyword" }]) {
     goToMarker();
     verify.verifyQuickInfoDisplayParts("var", name === "moduleElemWithoutExport" ? "" : "export", { start: test.markerByName(marker.toString()).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "var", kind: "keyword" },
             { text: " ", kind: "space" }].concat(optionalFullName || [{ text: name, kind: "localName" }]).concat(
             { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }).concat(typeDisplay),
         []);

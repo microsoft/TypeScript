@@ -450,7 +450,7 @@ module ts {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
-    function isWord(kind: SyntaxKind): boolean {
+    export function isWord(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.Identifier || isKeyword(kind);
     }
 
@@ -609,6 +609,13 @@ module ts {
 
     export function operatorPart(kind: SyntaxKind) {
         return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
+    }
+
+    export function textOrKeywordPart(text: string) {
+        var kind = stringToToken(text);
+        return kind === undefined
+            ? textPart(text)
+            : keywordPart(kind);
     }
 
     export function textPart(text: string) {

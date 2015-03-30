@@ -7,8 +7,7 @@ class C {
 
 //// [symbolDeclarationEmit3.js]
 class C {
-    [Symbol.isRegExp](x) {
-    }
+    [Symbol.isRegExp](x) { }
 }
 
 

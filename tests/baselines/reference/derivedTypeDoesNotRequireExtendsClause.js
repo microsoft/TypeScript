@@ -49,7 +49,4 @@ var d1;
 var d2;
 b = d1;
 b = d2;
-var r = [
-    d1,
-    d2
-];
+var r = [d1, d2];

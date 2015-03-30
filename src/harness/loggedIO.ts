@@ -15,6 +15,7 @@ interface IOLog {
     arguments: string[];
     executingPath: string;
     currentDirectory: string;
+    useCustomLibraryFile?: boolean;
     filesRead: {
         path: string;
         codepage: number;

@@ -1,5 +1,7 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
+/// <reference path="protocol.d.ts" />
+/// <reference path="session.ts" />
 /// <reference path="node.d.ts" />
 
 module ts.server {
@@ -16,6 +18,16 @@ module ts.server {
 
     var lineCollectionCapacity = 4;
 
+    function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        Object.keys(formatOptions).forEach((key) => {
+            var codeKey = key.charAt(0).toUpperCase() + key.substring(1);
+            if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
+                formatCodeOptions[codeKey] = formatOptions[key];
+            }
+        });
+    }
+
     class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
@@ -27,12 +39,9 @@ module ts.server {
             this.svc = ScriptVersionCache.fromString(content);
         }
 
-        setFormatOptions(tabSize?: number, indentSize?: number) {
-            if (tabSize) {
-                this.formatCodeOptions.TabSize = tabSize;
-            }
-            if (indentSize) {
-                this.formatCodeOptions.IndentSize = indentSize;
+        setFormatOptions(formatOptions: protocol.FormatOptions): void {
+            if (formatOptions) {
+                mergeFormatOptions(this.formatCodeOptions, formatOptions);
             }
         }
 
@@ -272,14 +281,24 @@ module ts.server {
 
     export class Project {
         compilerService: CompilerService;
-        projectOptions: ProjectOptions;
         projectFilename: string;
         program: ts.Program;
         filenameToSourceFile: ts.Map<ts.SourceFile> = {};
         updateGraphSeq = 0;
+        /** Used for configured projects which may have multiple open roots */
+        openRefCount = 0;
 
-        constructor(public projectService: ProjectService) {
-            this.compilerService = new CompilerService(this);
+        constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            this.compilerService = new CompilerService(this,projectOptions && projectOptions.compilerOptions);
+        }
+
+        addOpenRef() {
+            this.openRefCount++;
+        }
+
+        deleteOpenRef() {
+            this.openRefCount--;
+            return this.openRefCount;
         }
 
         openReferencedFile(filename: string) {
@@ -297,6 +316,10 @@ module ts.server {
                     return this.getSourceFile(info);
                 }
             }
+        }
+
+        isRoot(info: ScriptInfo) {
+            return this.compilerService.host.roots.some(root => root === info);
         }
 
         removeReferencedFile(info: ScriptInfo) {
@@ -375,11 +398,16 @@ module ts.server {
 
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
-        // open, non-configured files in two lists
+        // open, non-configured root files 
         openFileRoots: ScriptInfo[] = [];
-        openFilesReferenced: ScriptInfo[] = [];
-        // projects covering open files
+        // projects built from openFileRoots
         inferredProjects: Project[] = [];
+        // projects specified by a tsconfig.json file
+        configuredProjects: Project[] = [];
+        // open files referenced by a project
+        openFilesReferenced: ScriptInfo[] = [];
+        // open files that are roots of a configured project
+        openFileRootsConfigured: ScriptInfo[] = [];
         hostConfiguration: HostConfiguration;
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
@@ -429,15 +457,19 @@ module ts.server {
             if (args.file) {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
-                    info.setFormatOptions(args.tabSize, args.indentSize);
-                    this.log("Host configuration update for file " + args.file + " tab size " + args.tabSize);
+                    info.setFormatOptions(args.formatOptions);  
+                    this.log("Host configuration update for file " + args.file);
                 }
             }
             else {
-                this.hostConfiguration.formatCodeOptions.TabSize = args.tabSize;
-                this.hostConfiguration.formatCodeOptions.IndentSize = args.indentSize;
-                this.hostConfiguration.hostInfo = args.hostInfo;
-                this.log("Host information " + args.hostInfo, "Info");
+                if (args.hostInfo !== undefined) {
+                    this.hostConfiguration.hostInfo = args.hostInfo;
+                    this.log("Host information " + args.hostInfo, "Info");                    
+                }
+                if (args.formatOptions) {
+                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);                    
+                    this.log("Format host information updated", "Info");
+                }
             }
         }
 
@@ -484,44 +516,77 @@ module ts.server {
             this.printProjects();
         }
 
-        addOpenFile(info: ScriptInfo) {
-            this.findReferencingProjects(info);
-            if (info.defaultProject) {
-                this.openFilesReferenced.push(info);
-            }
-            else {
-                // create new inferred project p with the newly opened file as root
-                info.defaultProject = this.createInferredProject(info);
-                var openFileRoots: ScriptInfo[] = [];
-                // for each inferred project root r
-                for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
-                    var r = this.openFileRoots[i];
-                    // if r referenced by the new project
-                    if (info.defaultProject.getSourceFile(r)) {
-                        // remove project rooted at r
-                        this.inferredProjects =
-                        copyListRemovingItem(r.defaultProject, this.inferredProjects);
-                        // put r in referenced open file list
-                        this.openFilesReferenced.push(r);
-                        // set default project of r to the new project 
-                        r.defaultProject = info.defaultProject;
-                    }
-                    else {
-                        // otherwise, keep r as root of inferred project
-                        openFileRoots.push(r);
-                    }
+        updateConfiguredProjectList() {
+            var configuredProjects: Project[] = [];
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                if (this.configuredProjects[i].openRefCount > 0) {
+                    configuredProjects.push(this.configuredProjects[i]);
                 }
-                this.openFileRoots = openFileRoots;
-                this.openFileRoots.push(info);
             }
+            this.configuredProjects = configuredProjects;
         }
 
+        setConfiguredProjectRoot(info: ScriptInfo) {
+             for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                 let configuredProject = this.configuredProjects[i];
+                 if (configuredProject.isRoot(info)) {
+                     info.defaultProject = configuredProject;
+                     configuredProject.addOpenRef();
+                     return true;
+                 }
+             }
+             return false;
+        }
+            
+        addOpenFile(info: ScriptInfo) {
+            if (this.setConfiguredProjectRoot(info)) {
+                this.openFileRootsConfigured.push(info);
+            }
+            else {
+                this.findReferencingProjects(info);
+                if (info.defaultProject) {
+                    this.openFilesReferenced.push(info);
+                }
+                else {
+                    // create new inferred project p with the newly opened file as root
+                    info.defaultProject = this.createInferredProject(info);
+                    var openFileRoots: ScriptInfo[] = [];
+                    // for each inferred project root r
+                    for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+                        var r = this.openFileRoots[i];
+                        // if r referenced by the new project
+                        if (info.defaultProject.getSourceFile(r)) {
+                            // remove project rooted at r
+                            this.inferredProjects =
+                            copyListRemovingItem(r.defaultProject, this.inferredProjects);
+                            // put r in referenced open file list
+                            this.openFilesReferenced.push(r);
+                            // set default project of r to the new project 
+                            r.defaultProject = info.defaultProject;
+                        }
+                        else {
+                            // otherwise, keep r as root of inferred project
+                            openFileRoots.push(r);
+                        }
+                    }
+                    this.openFileRoots = openFileRoots;
+                    this.openFileRoots.push(info);
+                }
+            }
+            this.updateConfiguredProjectList();
+        }
+
+        /**
+          * Remove this file from the set of open, non-configured files.
+          * @param info The file that has been closed or newly configured
+          * @param openedByConfig True if info has become a root of a configured project
+          */
         closeOpenFile(info: ScriptInfo) {
             var openFileRoots: ScriptInfo[] = [];
             var removedProject: Project;
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
                 // if closed file is root of project
-                if (info == this.openFileRoots[i]) {
+                if (info === this.openFileRoots[i]) {
                     // remove that project and remember it
                     removedProject = info.defaultProject;
                 }
@@ -530,9 +595,29 @@ module ts.server {
                 }
             }
             this.openFileRoots = openFileRoots;
+            if (!removedProject) {
+                var openFileRootsConfigured: ScriptInfo[] = [];
+
+                for (var i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
+                    if (info === this.openFileRootsConfigured[i]) {
+                        if (info.defaultProject.deleteOpenRef() === 0) {
+                            removedProject = info.defaultProject;
+                        }
+                    }
+                    else {
+                        openFileRootsConfigured.push(this.openFileRootsConfigured[i]);
+                    }
+                }
+
+                this.openFileRootsConfigured = openFileRootsConfigured;
+            }
             if (removedProject) {
-                // remove project from inferred projects list
-                this.inferredProjects = copyListRemovingItem(removedProject, this.inferredProjects);
+                if (removedProject.isConfiguredProject()) {
+                    this.configuredProjects = copyListRemovingItem(removedProject, this.configuredProjects);
+                }
+                else {
+                    this.inferredProjects = copyListRemovingItem(removedProject, this.inferredProjects);
+                }
                 var openFilesReferenced: ScriptInfo[] = [];
                 var orphanFiles: ScriptInfo[] = [];
                 // for all open, referenced files f
@@ -564,12 +649,20 @@ module ts.server {
             var referencingProjects: Project[] = [];
             info.defaultProject = undefined;
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
-                this.inferredProjects[i].updateGraph();
-                if (this.inferredProjects[i] != excludedProject) {
-                    if (this.inferredProjects[i].getSourceFile(info)) {
-                        info.defaultProject = this.inferredProjects[i];
-                        referencingProjects.push(this.inferredProjects[i]);
+                var inferredProject = this.inferredProjects[i];
+                inferredProject.updateGraph();
+                if (inferredProject != excludedProject) {
+                    if (inferredProject.getSourceFile(info)) {
+                        info.defaultProject = inferredProject;
+                        referencingProjects.push(inferredProject);
                     }
+                }
+            }
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                var configuredProject = this.configuredProjects[i];
+                configuredProject.updateGraph();
+                if (configuredProject.getSourceFile(info)) {
+                    info.defaultProject = configuredProject;
                 }
             }
             return referencingProjects;
@@ -671,14 +764,54 @@ module ts.server {
             return info;
         }
 
+        // This is different from the method the compiler uses because
+        // the compiler can assume it will always start searching in the
+        // current directory (the directory in which tsc was invoked).
+        // The server must start searching from the directory containing
+        // the newly opened file.
+        findConfigFile(searchPath: string): string {
+            while (true) {
+                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (sys.fileExists(fileName)) {
+                    return fileName;
+                }
+                var parentPath = ts.getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    break;
+                }
+                searchPath = parentPath;
+            }
+            return undefined;
+        }
+
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
          */
 
-        openClientFile(filename: string) {
-            // TODO: tsconfig check
-            var info = this.openFile(filename, true);
+        openClientFile(fileName: string) {
+            var searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            this.log("Search path: " + searchPath,"Info");
+            var configFileName = this.findConfigFile(searchPath);
+            if (configFileName) {
+                this.log("Config file name: " + configFileName, "Info");
+            } else {
+                this.log("no config file");
+            }
+            if (configFileName) {
+                configFileName = getAbsolutePath(configFileName, searchPath);
+            }
+            if (configFileName && (!this.configProjectIsActive(configFileName))) {
+                var configResult = this.openConfigFile(configFileName, fileName);
+                if (!configResult.success) {
+                    this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
+                }
+                else {
+                    this.log("Opened configuration file " + configFileName,"Info");
+                    this.configuredProjects.push(configResult.project);                    
+                }
+            }
+            var info = this.openFile(fileName, true);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -699,19 +832,6 @@ module ts.server {
             this.printProjects();
         }
 
-        getProjectsReferencingFile(filename: string) {
-            var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
-            if (scriptInfo) {
-                var projects: Project[] = [];
-                for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
-                    if (this.inferredProjects[i].getSourceFile(scriptInfo)) {
-                        projects.push(this.inferredProjects[i]);
-                    }
-                }
-                return projects;
-            }
-        }
-
         getProjectForFile(filename: string) {
             var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
@@ -724,9 +844,9 @@ module ts.server {
             if (scriptInfo) {
                 this.psLogger.startGroup();
                 this.psLogger.info("Projects for " + filename)
-                var projects = this.getProjectsReferencingFile(filename);
+                var projects = this.findReferencingProjects(scriptInfo);
                 for (var i = 0, len = projects.length; i < len; i++) {
-                    this.psLogger.info("Inferred Project " + i.toString());
+                    this.psLogger.info("Project " + i.toString());
                 }
                 this.psLogger.endGroup();
             }
@@ -744,18 +864,42 @@ module ts.server {
                 this.psLogger.info(project.filesToString());
                 this.psLogger.info("-----------------------------------------------");
             }
-            this.psLogger.info("Open file roots: ")
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                var project = this.configuredProjects[i];
+                project.updateGraph();
+                this.psLogger.info("Project (configured) " + (i+this.inferredProjects.length).toString());
+                this.psLogger.info(project.filesToString());
+                this.psLogger.info("-----------------------------------------------");
+            }
+            this.psLogger.info("Open file roots of inferred projects: ")
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
                 this.psLogger.info(this.openFileRoots[i].fileName);
             }
-            this.psLogger.info("Open files referenced: ")
+            this.psLogger.info("Open files referenced by inferred or configured projects: ")
             for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                this.psLogger.info(this.openFilesReferenced[i].fileName);
+                var fileInfo = this.openFilesReferenced[i].fileName;
+                if (this.openFilesReferenced[i].defaultProject.isConfiguredProject()) {
+                    fileInfo += " (configured)";
+                }
+                this.psLogger.info(fileInfo);
+            }
+            this.psLogger.info("Open file roots of configured projects: ")
+            for (var i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
+                this.psLogger.info(this.openFileRootsConfigured[i].fileName);
             }
             this.psLogger.endGroup();
         }
 
-        openConfigFile(configFilename: string): ProjectOpenResult {
+        configProjectIsActive(fileName: string) {
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                if (this.configuredProjects[i].projectFilename == fileName) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
@@ -764,33 +908,27 @@ module ts.server {
                 return { errorMsg: "tsconfig syntax error" };
             }
             else {
-                // REVIEW: specify no base path so can get absolute path below
-                var parsedCommandLine = ts.parseConfigFile(rawConfig);
-
-                if (parsedCommandLine.errors) {
-                    // TODO: gather diagnostics and transmit
+                var parsedCommandLine = ts.parseConfigFile(rawConfig, dirPath);
+                if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
                 else if (parsedCommandLine.fileNames) {
-                    var proj = this.createProject(configFilename);
+                    var projectOptions: ProjectOptions = { 
+                        files: parsedCommandLine.fileNames,
+                        compilerOptions: parsedCommandLine.options
+                    };
+                    var proj = this.createProject(configFilename, projectOptions);
                     for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
                         var rootFilename = parsedCommandLine.fileNames[i];
-                        var normRootFilename = ts.normalizePath(rootFilename);
-                        normRootFilename = getAbsolutePath(normRootFilename, dirPath);
-                        if (this.host.fileExists(normRootFilename)) {
-                            // TODO: pass true for file exiplicitly opened
-                            var info = this.openFile(normRootFilename, false);
+                        if (ts.sys.fileExists(rootFilename)) {
+                            var info = this.openFile(rootFilename, clientFileName == rootFilename);
                             proj.addRoot(info);
                         }
                         else {
                             return { errorMsg: "specified file " + rootFilename + " not found" };
                         }
                     }
-                    var projectOptions: ProjectOptions = {
-                        files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
-                    };
-                    proj.setProjectOptions(projectOptions);
+                    proj.finishGraph();
                     return { success: true, project: proj };
                 }
                 else {
@@ -799,10 +937,10 @@ module ts.server {
             }
         }
 
-        createProject(projectFilename: string) {
-            var eproj = new Project(this);
-            eproj.projectFilename = projectFilename;
-            return eproj;
+        createProject(projectFilename: string, projectOptions?: ProjectOptions) {
+            var project = new Project(this, projectOptions);
+            project.projectFilename = projectFilename;
+            return project;
         }
 
     }
@@ -811,14 +949,17 @@ module ts.server {
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
-        settings = ts.getDefaultCompilerOptions();
+        settings: ts.CompilerOptions;
         documentRegistry = ts.createDocumentRegistry();
 
-        constructor(public project: Project) {
+        constructor(public project: Project, opt?: ts.CompilerOptions) {
             this.host = new LSHost(project.projectService.host, project);
-            // override default ES6 (remove when compiler default back at ES5)
-            this.settings.target = ts.ScriptTarget.ES5;
-            this.host.setCompilationSettings(this.settings);
+            if (opt) {
+                this.setCompilerOptions(opt);
+            }
+            else {
+                this.setCompilerOptions(ts.getDefaultCompilerOptions());
+            }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
             this.classifier = ts.createClassifier();
         }

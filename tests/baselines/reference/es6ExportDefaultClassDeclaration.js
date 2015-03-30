@@ -7,8 +7,7 @@ export default class C {
 
 //// [es6ExportDefaultClassDeclaration.js]
 export default class C {
-    method() {
-    }
+    method() { }
 }
 
 

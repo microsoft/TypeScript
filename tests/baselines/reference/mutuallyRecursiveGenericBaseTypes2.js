@@ -20,9 +20,7 @@ var __extends = this.__extends || function (d, b) {
 var foo = (function () {
     function foo() {
     }
-    foo.prototype.bar = function () {
-        return null;
-    };
+    foo.prototype.bar = function () { return null; };
     return foo;
 })();
 var foo2 = (function (_super) {

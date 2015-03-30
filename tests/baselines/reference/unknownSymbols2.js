@@ -50,12 +50,8 @@ var M;
         default:
             break;
     }
-    var a = function () {
-        return asdf;
-    };
-    var b = function (asdf) {
-        return qwerty;
-    };
+    var a = function () { return asdf; };
+    var b = function (asdf) { return qwerty; };
     var N;
     (function (N) {
         var x = 1;

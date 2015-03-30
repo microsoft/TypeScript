@@ -5,6 +5,7 @@
 export var a = 10;
 export var x = a;
 export var m = a;
+export default {};
 
 // @filename: client.ts
 export import defaultBinding1, { } from "server";

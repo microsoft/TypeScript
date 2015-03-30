@@ -25,8 +25,7 @@ var C2 = (function () {
     }
     return C2;
 })();
-function foo() {
-}
+function foo() { }
 var x = 1;
 var y = 2;
 var C3 = (function () {
