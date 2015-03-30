@@ -19,8 +19,7 @@ module clodule {
 var clodule = (function () {
     function clodule() {
     }
-    clodule.fn = function (id) {
-    };
+    clodule.fn = function (id) { };
     return clodule;
 })();
 var clodule;

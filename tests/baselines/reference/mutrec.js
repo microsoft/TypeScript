@@ -43,15 +43,11 @@ g(i4);
 
 
 //// [mutrec.js]
-function f(p) {
-    return p;
-}
+function f(p) { return p; }
 ;
 var b;
 f(b);
-function g(p) {
-    return p;
-}
+function g(p) { return p; }
 ;
 var i2;
 g(i2);

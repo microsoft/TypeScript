@@ -24,35 +24,23 @@ class D {
 
 //// [emitClassDeclarationWithMethodInES6.js]
 class D {
-    foo() {
-    }
-    ["computedName"]() {
-    }
-    ["computedName"](a) {
-    }
-    ["computedName"](a) {
-        return 1;
-    }
+    foo() { }
+    ["computedName"]() { }
+    ["computedName"](a) { }
+    ["computedName"](a) { return 1; }
     bar() {
         return this._bar;
     }
     baz(a, x) {
         return "HELLO";
     }
-    static ["computedname"]() {
-    }
-    static ["computedname"](a) {
-    }
-    static ["computedname"](a) {
-        return true;
-    }
+    static ["computedname"]() { }
+    static ["computedname"](a) { }
+    static ["computedname"](a) { return true; }
     static staticMethod() {
         var x = 1 + 2;
         return x;
     }
-    static foo(a) {
-    }
-    static bar(a) {
-        return 1;
-    }
+    static foo(a) { }
+    static bar(a) { return 1; }
 }

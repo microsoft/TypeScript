@@ -136,22 +136,19 @@ function f() {
         z = 10;
     }
     switch (obj.z) {
-        case 0:
-            {
-                x++;
-                break;
-            }
-        case 1:
-            {
-                x--;
-                break;
-            }
-        default:
-            {
-                x *= 2;
-                x = 50;
-                break;
-            }
+        case 0: {
+            x++;
+            break;
+        }
+        case 1: {
+            x--;
+            break;
+        }
+        default: {
+            x *= 2;
+            x = 50;
+            break;
+        }
     }
     while (x < 10) {
         x++;

@@ -12,8 +12,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-function foo() {
-}
+function foo() { }
 var x = new foo(); // can be used as a constructor function
 var C = (function (_super) {
     __extends(C, _super);

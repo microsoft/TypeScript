@@ -28,9 +28,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        new _super.prototype(function (value) {
-            return String(value);
-        });
+        new _super.prototype(function (value) { return String(value); });
     }
     return B;
 })(A);

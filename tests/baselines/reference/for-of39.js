@@ -6,16 +6,7 @@ for (var [k, v] of map) {
 }
 
 //// [for-of39.js]
-var map = new Map([
-    [
-        "",
-        true
-    ],
-    [
-        "",
-        0
-    ]
-]);
+var map = new Map([["", true], ["", 0]]);
 for (var [k, v] of map) {
     k;
     v;

@@ -361,9 +361,7 @@ var TestRunner = (function () {
         this.tests = [];
     }
     TestRunner.arrayCompare = function (arg1, arg2) {
-        return (arg1.every(function (val, index) {
-            return val === arg2[index];
-        }));
+        return (arg1.every(function (val, index) { return val === arg2[index]; }));
     };
     TestRunner.prototype.addTest = function (test) {
         this.tests.push(test);
@@ -410,39 +408,11 @@ exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();
     // First 3 are for simple harness validation
-    testRunner.addTest(new TestCase("Basic test", function () {
-        return true;
-    }));
-    testRunner.addTest(new TestCase("Test for any error", function () {
-        throw new Error();
-        return false;
-    }, ""));
-    testRunner.addTest(new TestCase("Test RegEx error message match", function () {
-        throw new Error("Should also pass");
-        return false;
-    }, "Should [also]+ pass"));
-    testRunner.addTest(new TestCase("Test array compare true", function () {
-        return TestRunner.arrayCompare([
-            1,
-            2,
-            3
-        ], [
-            1,
-            2,
-            3
-        ]);
-    }));
-    testRunner.addTest(new TestCase("Test array compare false", function () {
-        return !TestRunner.arrayCompare([
-            3,
-            2,
-            3
-        ], [
-            1,
-            2,
-            3
-        ]);
-    }));
+    testRunner.addTest(new TestCase("Basic test", function () { return true; }));
+    testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
+    testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
+    testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
+    testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
     // File detection tests
     testRunner.addTest(new TestCase("Check file exists", function () {
         return FileManager.DirectoryManager.fileExists(TestFileDir + "\\Test.txt");
@@ -452,28 +422,38 @@ exports.tests = (function () {
     }));
     // File pattern matching tests
     testRunner.addTest(new TestCase("Check text file match", function () {
-        return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") && FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") && FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
+        return (FileManager.FileBuffer.isTextFile("C:\\somedir\\readme.txt") &&
+            FileManager.FileBuffer.isTextFile("C:\\spaces path\\myapp.str") &&
+            FileManager.FileBuffer.isTextFile("C:\\somedir\\code.js"));
     }));
     testRunner.addTest(new TestCase("Check makefile match", function () {
         return FileManager.FileBuffer.isTextFile("C:\\some dir\\makefile");
     }));
     testRunner.addTest(new TestCase("Check binary file doesn't match", function () {
-        return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") && !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
+        return (!FileManager.FileBuffer.isTextFile("C:\\somedir\\app.exe") &&
+            !FileManager.FileBuffer.isTextFile("C:\\somedir\\my lib.dll"));
     }));
     // Command-line parameter tests
     testRunner.addTest(new TestCase("Check App defaults", function () {
         var app = new App.App([]);
-        return (app.fixLines === false && app.recurse === true && app.lineEndings === "CRLF" && app.matchPattern === undefined && app.rootDirectory === ".\\" && app.encodings[0] === "ascii" && app.encodings[1] === "utf8nobom");
+        return (app.fixLines === false &&
+            app.recurse === true &&
+            app.lineEndings === "CRLF" &&
+            app.matchPattern === undefined &&
+            app.rootDirectory === ".\\" &&
+            app.encodings[0] === "ascii" &&
+            app.encodings[1] === "utf8nobom");
     }));
     testRunner.addTest(new TestCase("Check App params", function () {
-        var app = new App.App([
-            "-dir=C:\\test dir",
-            "-lineEndings=LF",
-            "-encodings=utf16be,ascii",
-            "-recurse=false",
-            "-fixlines"
-        ]);
-        return (app.fixLines === true && app.lineEndings === "LF" && app.recurse === false && app.matchPattern === undefined && app.rootDirectory === "C:\\test dir" && app.encodings[0] === "utf16be" && app.encodings[1] === "ascii" && app.encodings.length === 2);
+        var app = new App.App(["-dir=C:\\test dir", "-lineEndings=LF", "-encodings=utf16be,ascii", "-recurse=false", "-fixlines"]);
+        return (app.fixLines === true &&
+            app.lineEndings === "LF" &&
+            app.recurse === false &&
+            app.matchPattern === undefined &&
+            app.rootDirectory === "C:\\test dir" &&
+            app.encodings[0] === "utf16be" &&
+            app.encodings[1] === "ascii" &&
+            app.encodings.length === 2);
     }));
     // File BOM detection tests
     testRunner.addTest(new TestCase("Check encoding detection no BOM", function () {
@@ -507,19 +487,7 @@ exports.tests = (function () {
         for (var i = 0; i < 11; i++) {
             chars.push(fb.readByte());
         }
-        return TestRunner.arrayCompare(chars, [
-            0x54,
-            0xC3,
-            0xA8,
-            0xE1,
-            0xB4,
-            0xA3,
-            0xE2,
-            0x80,
-            0xA0,
-            0x0D,
-            0x0A
-        ]);
+        return TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]);
     }));
     testRunner.addTest(new TestCase("Check UTF8 decoding", function () {
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
@@ -527,26 +495,12 @@ exports.tests = (function () {
         for (var i = 0; i < 6; i++) {
             chars.push(fb.readUtf8CodePoint());
         }
-        return TestRunner.arrayCompare(chars, [
-            0x0054,
-            0x00E8,
-            0x1D23,
-            0x2020,
-            0x000D,
-            0x000A
-        ]);
+        return TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]);
     }));
     testRunner.addTest(new TestCase("Check UTF8 encoding", function () {
         var fb = new FileManager.FileBuffer(20);
         fb.writeUtf8Bom();
-        var chars = [
-            0x0054,
-            0x00E8,
-            0x1D23,
-            0x2020,
-            0x000D,
-            0x000A
-        ];
+        var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];
         for (var i in chars) {
             fb.writeUtf8CodePoint(chars[i]);
         }
@@ -555,22 +509,7 @@ exports.tests = (function () {
         for (var i = 0; i < 14; i++) {
             bytes.push(fb.readByte());
         }
-        var expected = [
-            0xEF,
-            0xBB,
-            0xBF,
-            0x54,
-            0xC3,
-            0xA8,
-            0xE1,
-            0xB4,
-            0xA3,
-            0xE2,
-            0x80,
-            0xA0,
-            0x0D,
-            0x0A
-        ];
+        var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];
         return TestRunner.arrayCompare(bytes, expected);
     }));
     // Test reading and writing files
@@ -578,38 +517,14 @@ exports.tests = (function () {
         var filename = TestFileDir + "\\tmpUTF16LE.txt";
         var fb = new FileManager.FileBuffer(14);
         fb.writeUtf16leBom();
-        var chars = [
-            0x0054,
-            0x00E8,
-            0x1D23,
-            0x2020,
-            0x000D,
-            0x000A
-        ];
-        chars.forEach(function (val) {
-            fb.writeUtf16CodePoint(val, false);
-        });
+        var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];
+        chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });
         fb.save(filename);
         var savedFile = new FileManager.FileBuffer(filename);
         if (savedFile.encoding !== 'utf16le') {
             throw Error("Incorrect encoding");
         }
-        var expectedBytes = [
-            0xFF,
-            0xFE,
-            0x54,
-            0x00,
-            0xE8,
-            0x00,
-            0x23,
-            0x1D,
-            0x20,
-            0x20,
-            0x0D,
-            0x00,
-            0x0A,
-            0x00
-        ];
+        var expectedBytes = [0xFF, 0xFE, 0x54, 0x00, 0xE8, 0x00, 0x23, 0x1D, 0x20, 0x20, 0x0D, 0x00, 0x0A, 0x00];
         savedFile.index = 0;
         expectedBytes.forEach(function (val) {
             var byteVal = savedFile.readByte();
@@ -639,14 +554,7 @@ exports.tests = (function () {
         for (var i = 0; i < 6; i++) {
             codePoints.push(savedFile.readUtf16CodePoint(false));
         }
-        var expectedCodePoints = [
-            0x10480,
-            0x10481,
-            0x10482,
-            0x54,
-            0x68,
-            0x69
-        ];
+        var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
         return TestRunner.arrayCompare(codePoints, expectedCodePoints);
     }));
     testRunner.addTest(new TestCase("Read non-BMP utf8 chars", function () {
@@ -658,52 +566,20 @@ exports.tests = (function () {
         for (var i = 0; i < 6; i++) {
             codePoints.push(savedFile.readUtf8CodePoint());
         }
-        var expectedCodePoints = [
-            0x10480,
-            0x10481,
-            0x10482,
-            0x54,
-            0x68,
-            0x69
-        ];
+        var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
         return TestRunner.arrayCompare(codePoints, expectedCodePoints);
     }));
     testRunner.addTest(new TestCase("Write non-BMP utf8 chars", function () {
         var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";
         var fb = new FileManager.FileBuffer(15);
-        var chars = [
-            0x10480,
-            0x10481,
-            0x10482,
-            0x54,
-            0x68,
-            0x69
-        ];
-        chars.forEach(function (val) {
-            fb.writeUtf8CodePoint(val);
-        });
+        var chars = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+        chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });
         fb.save(filename);
         var savedFile = new FileManager.FileBuffer(filename);
         if (savedFile.encoding !== 'utf8') {
             throw Error("Incorrect encoding");
         }
-        var expectedBytes = [
-            0xF0,
-            0x90,
-            0x92,
-            0x80,
-            0xF0,
-            0x90,
-            0x92,
-            0x81,
-            0xF0,
-            0x90,
-            0x92,
-            0x82,
-            0x54,
-            0x68,
-            0x69
-        ];
+        var expectedBytes = [0xF0, 0x90, 0x92, 0x80, 0xF0, 0x90, 0x92, 0x81, 0xF0, 0x90, 0x92, 0x82, 0x54, 0x68, 0x69];
         expectedBytes.forEach(function (val) {
             var byteVal = savedFile.readByte();
             if (byteVal !== val) {

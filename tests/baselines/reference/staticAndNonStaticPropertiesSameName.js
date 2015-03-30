@@ -11,9 +11,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function () {
-    };
-    C.f = function () {
-    };
+    C.prototype.f = function () { };
+    C.f = function () { };
     return C;
 })();

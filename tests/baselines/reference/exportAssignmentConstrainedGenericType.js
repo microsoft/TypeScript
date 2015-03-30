@@ -24,8 +24,5 @@ module.exports = Foo;
 //// [foo_1.js]
 var foo = require("./foo_0");
 var x = new foo(true); // Should error
-var y = new foo({
-    a: "test",
-    b: 42
-}); // Should be OK
+var y = new foo({ a: "test", b: 42 }); // Should be OK
 var z = y.test.b;

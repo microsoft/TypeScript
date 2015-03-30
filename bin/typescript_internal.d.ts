@@ -41,6 +41,10 @@ declare module "typescript" {
      */
     function lastOrUndefined<T>(array: T[]): T;
     function binarySearch(array: number[], value: number): number;
+    function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     function hasProperty<T>(map: Map<T>, key: string): boolean;
     function getProperty<T>(map: Map<T>, key: string): T;
     function isEmpty<T>(map: Map<T>): boolean;
@@ -49,7 +53,6 @@ declare module "typescript" {
     function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U;
     function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U;
     function lookUp<T>(map: Map<T>, key: string): T;
-    function mapToArray<T>(map: Map<T>): T[];
     function copyMap<T>(source: Map<T>, target: Map<T>): void;
     /**
      * Creates a map from the elements of an array.
@@ -184,7 +187,7 @@ declare module "typescript" {
     function isConst(node: Node): boolean;
     function isLet(node: Node): boolean;
     function isPrologueDirective(node: Node): boolean;
-    function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile): CommentRange[];
+    function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
     function getJsDocComments(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
     let fullTripleSlashReferencePathRegEx: RegExp;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
@@ -195,6 +198,10 @@ declare module "typescript" {
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
     function getSuperContainer(node: Node, includeFunctions: boolean): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
+    function nodeCanBeDecorated(node: Node): boolean;
+    function nodeIsDecorated(node: Node): boolean;
+    function childIsDecorated(node: Node): boolean;
+    function nodeOrChildIsDecorated(node: Node): boolean;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
     function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
@@ -211,7 +218,9 @@ declare module "typescript" {
     function isInAmbientContext(node: Node): boolean;
     function isDeclaration(node: Node): boolean;
     function isStatement(n: Node): boolean;
+    function isClassElement(n: Node): boolean;
     function isDeclarationName(name: Node): boolean;
+    function isAliasSymbolDeclaration(node: Node): boolean;
     function getClassBaseTypeNode(node: ClassDeclaration): TypeReferenceNode;
     function getClassImplementedTypeNodes(node: ClassDeclaration): NodeArray<TypeReferenceNode>;
     function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<TypeReferenceNode>;
@@ -270,7 +279,6 @@ declare module "typescript" {
     function nodeStartsNewLexicalEnvironment(n: Node): boolean;
     function nodeIsSynthesized(node: Node): boolean;
     function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node;
-    function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string;
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
@@ -278,6 +286,38 @@ declare module "typescript" {
      */
     function escapeString(s: string): string;
     function escapeNonAsciiCharacters(s: string): string;
+    interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+    }
+    function getIndentString(level: number): string;
+    function getIndentSize(): number;
+    function createTextWriter(newLine: String): EmitTextWriter;
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string): string;
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string): string;
+    function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean): void;
+    function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number): number;
+    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration;
+    function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean;
+    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+    };
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]): void;
+    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string, writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void): void;
+    function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string): void;
 }
 declare module "typescript" {
     var optionDeclarations: CommandLineOption[];
@@ -297,7 +337,10 @@ declare module "typescript" {
     function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean;
     function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number): boolean;
     function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number): boolean;
+    function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean;
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean;
     function findListItemInfo(node: Node): ListItemInfo;
+    function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean;
     function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node;
     function findContainingList(node: Node): Node;
     function getTouchingWord(sourceFile: SourceFile, position: number): Node;
@@ -320,9 +363,11 @@ declare module "typescript" {
     function getNodeModifiers(node: Node): string;
     function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node>;
     function isToken(n: Node): boolean;
+    function isWord(kind: SyntaxKind): boolean;
     function isComment(kind: SyntaxKind): boolean;
     function isPunctuation(kind: SyntaxKind): boolean;
     function isInsideTemplateLiteral(node: LiteralExpression, position: number): boolean;
+    function isAccessibilityModifier(kind: SyntaxKind): boolean;
     function compareDataObjects(dst: any, src: any): boolean;
 }
 declare module "typescript" {
@@ -333,6 +378,7 @@ declare module "typescript" {
     function keywordPart(kind: SyntaxKind): SymbolDisplayPart;
     function punctuationPart(kind: SyntaxKind): SymbolDisplayPart;
     function operatorPart(kind: SyntaxKind): SymbolDisplayPart;
+    function textOrKeywordPart(text: string): SymbolDisplayPart;
     function textPart(text: string): SymbolDisplayPart;
     function lineBreakPart(): SymbolDisplayPart;
     function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[];

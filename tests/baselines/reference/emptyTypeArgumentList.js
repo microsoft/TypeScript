@@ -3,6 +3,5 @@ function foo<T>() { }
 foo<>();
 
 //// [emptyTypeArgumentList.js]
-function foo() {
-}
+function foo() { }
 foo();

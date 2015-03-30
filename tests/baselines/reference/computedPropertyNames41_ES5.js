@@ -24,8 +24,6 @@ var C = (function () {
     function C() {
     }
     // Computed properties
-    C[""] = function () {
-        return new Foo;
-    };
+    C[""] = function () { return new Foo; };
     return C;
 })();

@@ -8,14 +8,12 @@ interface I<T extends A, T extends B> {}
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () {
-    };
+    A.prototype.foo = function () { };
     return A;
 })();
 var B = (function () {
     function B() {
     }
-    B.prototype.bar = function () {
-    };
+    B.prototype.bar = function () { };
     return B;
 })();

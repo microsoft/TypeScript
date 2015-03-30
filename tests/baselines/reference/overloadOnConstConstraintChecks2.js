@@ -35,8 +35,7 @@ var C = (function (_super) {
     function C() {
         _super.apply(this, arguments);
     }
-    C.prototype.foo = function () {
-    };
+    C.prototype.foo = function () { };
     return C;
 })(A);
 function foo(name) {

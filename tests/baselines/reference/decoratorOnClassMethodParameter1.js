@@ -22,8 +22,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function (p) {
-    };
+    C.prototype.method = function (p) { };
     __decorate([dec], C.prototype, "method", 0);
     return C;
 })();

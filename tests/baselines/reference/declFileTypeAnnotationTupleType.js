@@ -45,18 +45,9 @@ var g = (function () {
     return g;
 })();
 // Just the name
-var k = [
-    new c(),
-    new m.c()
-];
+var k = [new c(), new m.c()];
 var l = k;
-var x = [
-    new g(),
-    new m.g(),
-    function () {
-        return new c();
-    }
-];
+var x = [new g(), new m.g(), function () { return new c(); }];
 var y = x;
 
 

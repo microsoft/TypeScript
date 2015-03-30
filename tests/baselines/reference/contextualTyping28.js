@@ -2,9 +2,6 @@
 function foo(param:number[]){}; foo([1]);
 
 //// [contextualTyping28.js]
-function foo(param) {
-}
+function foo(param) { }
 ;
-foo([
-    1
-]);
+foo([1]);

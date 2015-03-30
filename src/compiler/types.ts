@@ -1589,8 +1589,6 @@ module ts {
         watch?: boolean;
         separateCompilation?: boolean;
         /* @internal */ stripInternal?: boolean;
-        /* @internal */ preserveNewLines?: boolean;
-        /* @internal */ cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
 

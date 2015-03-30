@@ -300,22 +300,76 @@ declare module ts.server.protocol {
     }
 
     /**
+     * Editor options
+     */
+    export interface EditorOptions {
+      
+        /** Number of spaces for each tab. Default value is 4. */
+        tabSize?: number;
+        
+        /** Number of spaces to indent during formatting. Default value is 4. */
+        indentSize?: number;
+        
+        /** The new line character to be used. Default value is the OS line delimiter. */
+        newLineCharacter?: string;
+        
+        /** Whether tabs should be converted to spaces. Default value is true. */
+        convertTabsToSpaces?: boolean;        
+    }
+        
+    /**
+     * Format options
+     */
+    export interface FormatOptions extends EditorOptions {
+      
+        /** Defines space handling after a comma delimiter. Default value is true. */
+        insertSpaceAfterCommaDelimiter?: boolean;
+        
+        /** Defines space handling after a semicolon in a for statemen. Default value is true */
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        
+        /** Defines space handling after a binary operator. Default value is true. */
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        
+        /** Defines space handling after keywords in control flow statement. Default value is true. */
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        
+        /** Defines space handling after function keyword for anonymous functions. Default value is false. */
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        
+        /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        
+        /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        
+        /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        
+        /** Index operator */
+        [key:string] : string | number | boolean;
+    }
+  
+    /**
       * Information found in a configure request.
       */
     export interface ConfigureRequestArguments {
-        /** Number of spaces for each tab */
-        tabSize: number;
-        /** Number of spaces to indent during formatting */
-        indentSize: number;
+      
         /** 
           * Information about the host, for example 'Emacs 24.4' or
           * 'Sublime Text version 3075'
           */
-        hostInfo: string;
+        hostInfo?: string;
+        
         /**
           * If present, tab settings apply only to this file.
           */
         file?: string;
+        
+        /**
+         * The format options to use during formatting and other code editing features.
+         */
+        formatOptions?: FormatOptions;        
     }
 
     /**
@@ -337,10 +391,6 @@ declare module ts.server.protocol {
       *  Information found in an "open" request.
       */
     export interface OpenRequestArgs extends FileRequestArgs {
-        /** Initial tab size of file. */
-        tabSize?: number;
-        /** Number of spaces to indent during formatting */
-        indentSize?: number;
     }
 
     /**

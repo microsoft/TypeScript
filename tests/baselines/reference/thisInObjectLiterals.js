@@ -24,10 +24,7 @@ var MyClass = (function () {
     }
     MyClass.prototype.fn = function () {
         //type of 'this' in an object literal is the containing scope's this
-        var t = {
-            x: this,
-            y: this.t
-        };
+        var t = { x: this, y: this.t };
         var t;
     };
     return MyClass;
