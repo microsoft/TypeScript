@@ -1638,41 +1638,37 @@ module ts {
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, syntaxErrors?: Diagnostic[]): string {
         let options = compilerOptions ? ts.clone(compilerOptions) : getDefaultCompilerOptions();
 
-        // Single file transformation is only guranteed to be correct if inside an external module.
-        // External modules have thier own scope and can not contribute to internal modules outside their
+        // Single file transformation is only guaranteed to be correct inside an external module.
+        // External modules have their own scope and cannot contribute to internal modules outside their
         // scope. 
         if (options.target !== ScriptTarget.ES6 && (!options.module || options.module === ModuleKind.None)) {
-            // add errors
+            // TODO: add errors
         }
 
-        // In sigle file transformation the compiler does not have access to declaration sites.
-        // Const enum property access will not be detected if they are not in the same file as the enum.
-        // thus they are goign to be emitted as normal propety access. To ensure correct behaviour at runtime,
-        // we need to generare the actual enum object so that the proprty accesses do not fail.
+        // In single file transformation the compiler does not have access to declaration sites.
+        // Const enum property accesses will not be detected if they are not in the same file as the enum.
+        // thus they are going to be emitted as normal propety access. To ensure correct behaviour at runtime,
+        // we need to generate the actual enum object so that the property accesses do not fail.
         options.preserveConstEnums = true;
 
         // No reason to get declarations, we are only returning javascript
         options.declaration = false;
 
-        // Filename can be non-ts file. We are not locating any modules as well, so allow
-        // non-ts extensions
+        // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 
         // enable relaxed emit rules
         options.separateCompilation = true;
 
-        // We are not resolving references or modules, or even including the library. Disabling 
+        // We are not resolving references or modules, or even including the default library. Disabling 
         // emit on error will block generating the output and has no meaningful use here.
         options.noEmitOnError = false;
 
-        // No resolution requests will be honered anyways. So do not do it
+        // No resolution requests will be honored anyways. So do not do it
         options.noResolve = true;
 
-        // TODO (vladima): add inlineSourceMap once it is checked in
-        //if (options.sourceMap) {
-        //    // We need to return a single string, so inline the sourceMap in the output
-        //    options.inlineSourceMap = true;;
-        //}
+        // TODO (vladima): this should be enabled after adding support to inlinable source maps
+        options.sourceMap = false;
 
         // Parse
         var inputFileName = fileName || "module.ts";
@@ -1690,10 +1686,8 @@ module ts {
         var compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
-                if (ts.fileExtensionIs(name, ".js")) {
-                    Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
-                    outputText = text;
-                }
+                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                outputText = text;
             },
             getDefaultLibFileName: () => "lib.d.ts",
             useCaseSensitiveFileNames: () => false,
@@ -1702,9 +1696,6 @@ module ts {
             getNewLine: () => "\r\n"
         };
 
-        // Note: The emitter needs a the checker to walk the file, so we will create a program for this
-        // though single file transformation does not really need this. First we need to drop the emitter
-        // dependcy on the checker and then implement a new resolver that does not do the full check.
         var program = ts.createProgram([inputFileName], options, compilerHost);
 
         // Emit
