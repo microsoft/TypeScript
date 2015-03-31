@@ -14,84 +14,68 @@ module ts {
         editStress("binder.ts", false);
     }
 
-    function tstTest() {
-        var fname = testDataDir + 'tst.ts';
-        var content = ts.sys.readFile(fname);
-        var lm = server.LineIndex.linesFromText(content);
-        var lines = lm.lines;
-        if (lines.length == 0) {
-            return;
-        }
-        var lineMap = lm.lineMap;
-
-        var lineIndex = new server.LineIndex();
-        lineIndex.load(lines);
-
-        var editedText = lineIndex.getText(0, content.length);
-
-        var snapshot: server.LineIndex;
-        var checkText: string;
-        var insertString: string;
-
-        // change 9 1 0 1 {"y"}
-        var pos = lineColToPosition(lineIndex, 9, 1);
-        insertString = "y";
-        checkText = editFlat(pos, 0, insertString, content);
-        snapshot = lineIndex.edit(pos, 0, insertString);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        // change 9 2 0 1 {"."}
-        var pos = lineColToPosition(snapshot, 9, 2);
-        insertString = ".";
-        checkText = editFlat(pos, 0, insertString, checkText);
-        snapshot = snapshot.edit(pos, 0, insertString);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        // change 9 3 0 1 {"\n"}
-        var pos = lineColToPosition(snapshot, 9, 3);
-        insertString = "\n";
-        checkText = editFlat(pos, 0, insertString, checkText);
-        snapshot = snapshot.edit(pos, 0, insertString);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        // change 10 1 0 10 {"\n\n\n\n\n\n\n\n\n\n"}
-        pos = lineColToPosition(snapshot, 10, 1);
-        insertString = "\n\n\n\n\n\n\n\n\n\n";
-        checkText = editFlat(pos, 0, insertString, checkText);
-        snapshot = snapshot.edit(pos, 0, insertString);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        // change 19 1 1 0
-        pos = lineColToPosition(snapshot, 19, 1);
-        checkText = editFlat(pos, 1, "", checkText);
-        snapshot = snapshot.edit(pos, 1);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        // change 18 1 1 0
-        pos = lineColToPosition(snapshot, 18, 1);
-        checkText = editFlat(pos, 1, "", checkText);
-        snapshot = snapshot.edit(pos, 1);
-        editedText = snapshot.getText(0, checkText.length);
-
-        assert.equal(editedText, checkText);
-
-        function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
-            var lineInfo = lineIndex.lineNumberToInfo(line);
-            return (lineInfo.offset + col - 1);
-        }
+    function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
+        var lineInfo = lineIndex.lineNumberToInfo(line);
+        return (lineInfo.offset + col - 1);
     }
 
-    describe('VersionCache edit', () => {
+    function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
+        let checkText = editFlat(position, deleteLength, insertString, sourceText);
+        let snapshot = lineIndex.edit(position, deleteLength, insertString);
+        let editedText = snapshot.getText(0, snapshot.getLength());
+
+        assert.equal(editedText, checkText);
+    }
+
+    describe('VersionCache TS code', () => {
+        var testContent = `/// <reference path="z.ts" />
+var x = 10;
+var y = { zebra: 12, giraffe: "ell" };
+z.a;
+class Point {
+    x: number;
+}
+k=y;
+var p:Point=new Point();
+var q:Point=<Point>p;`
+
+        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
+        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+
+        let lineIndex = new server.LineIndex();
+        lineIndex.load(lines);
+
+        function validateEditAtLineCharIndex(line: number, char: number, deleteLength: number, insertString: string): void {
+            let position = lineColToPosition(lineIndex, line, char);
+            validateEdit(lineIndex, testContent, position, deleteLength, insertString);
+        }
+
+        it('change 9 1 0 1 {"y"}', () => {
+            validateEditAtLineCharIndex(9, 1, 0, "y");
+        });
+
+        it('change 9 2 0 1 {"."}', () => {
+            validateEditAtLineCharIndex(9, 2, 0, ".");
+        });
+
+        it('change 9 3 0 1 {"\\n"}', () => {
+            validateEditAtLineCharIndex(9, 3, 0, "\n");
+        });
+
+        it('change 10 1 0 10 {"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n"}', () => {
+            validateEditAtLineCharIndex(10, 1, 0, "\n\n\n\n\n\n\n\n\n\n");
+        });
+
+        it('change 19 1 1 0', () => {
+            validateEditAtLineCharIndex(19, 1, 1, "");
+        });
+
+        it('change 18 1 1 0', () => {
+            validateEditAtLineCharIndex(18, 1, 1, "");
+        });
+    });
+
+    describe('VersionCache simple text', () => {
         let testContent = `in this story:
 the lazy brown fox
 jumped over the cow
@@ -105,84 +89,80 @@ and grew 1cm per day`;
         let lineIndex = new server.LineIndex();
         lineIndex.load(lines);
 
-        function testEdit(position: number, deleteLength: number, insertString: string): void {
-            let checkText = editFlat(position, deleteLength, insertString, testContent);
-            let snapshot = lineIndex.edit(position, deleteLength, insertString);
-            let editedText = snapshot.getText(0, snapshot.getLength());
-
-            assert.equal(editedText, checkText);
+        function validateEditAtPosition(position: number, deleteLength: number, insertString: string): void {
+            validateEdit(lineIndex, testContent, position, deleteLength, insertString);
         }
 
         it('Insert at end of file', () => {
-            testEdit(testContent.length, 0, "hmmmm...\r\n");
+            validateEditAtPosition(testContent.length, 0, "hmmmm...\r\n");
         });
 
         it('Unusual line endings merge', () => {
-            testEdit(lines[0].length - 1, lines[1].length, "");
+            validateEditAtPosition(lines[0].length - 1, lines[1].length, "");
         });
 
         it('Delete whole line and nothing but line (last line)', () => {
-            testEdit(lineMap[lineMap.length - 2], lines[lines.length - 1].length, "");
+            validateEditAtPosition(lineMap[lineMap.length - 2], lines[lines.length - 1].length, "");
         });
 
         it('Delete whole line and nothing but line (first line)', () => {
-            testEdit(0, lines[0].length, "");
+            validateEditAtPosition(0, lines[0].length, "");
         });
 
         it('Delete whole line (first line) and insert with no line breaks', () => {
-            testEdit(0, lines[0].length, "moo, moo, moo! ");
+            validateEditAtPosition(0, lines[0].length, "moo, moo, moo! ");
         });
 
         it('Delete whole line (first line) and insert with multiple line breaks', () => {
-            testEdit(0, lines[0].length, "moo, \r\nmoo, \r\nmoo! ");
+            validateEditAtPosition(0, lines[0].length, "moo, \r\nmoo, \r\nmoo! ");
         });
 
         it('Delete multiple lines and nothing but lines (first and second lines)', () => {
-            testEdit(0, lines[0].length + lines[1].length, "");
+            validateEditAtPosition(0, lines[0].length + lines[1].length, "");
         });
 
         it('Delete multiple lines and nothing but lines (second and third lines)', () => {
-            testEdit(lines[0].length, lines[1].length + lines[2].length, "");
+            validateEditAtPosition(lines[0].length, lines[1].length + lines[2].length, "");
         });
 
         it('Insert multiple line breaks', () => {
-            testEdit(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
+            validateEditAtPosition(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
         });
 
         it('Insert multiple line breaks', () => {
-            testEdit(21, 1, "cr...\r\ncr...\r\ncr");
+            validateEditAtPosition(21, 1, "cr...\r\ncr...\r\ncr");
         });
 
         it('Insert multiple line breaks with leading \\n', () => {
-            testEdit(21, 1, "\ncr...\r\ncr...\r\ncr");
+            validateEditAtPosition(21, 1, "\ncr...\r\ncr...\r\ncr");
         });
 
         it('Single line no line breaks deleted or inserted, delete 1 char', () => {
-            testEdit(21, 1, "");
+            validateEditAtPosition(21, 1, "");
         });
 
         it('Single line no line breaks deleted or inserted, insert 1 char', () => {
-            testEdit(21, 0, "b");
+            validateEditAtPosition(21, 0, "b");
         });
 
         it('Single line no line breaks deleted or inserted, delete 1, insert 2 chars', () => {
-            testEdit(21, 1, "cr");
+            validateEditAtPosition(21, 1, "cr");
         });
 
         it('Delete across line break (just the line break)', () => {
-            testEdit(21, 22, "");
+            validateEditAtPosition(21, 22, "");
         });
 
         it('Delete across line break', () => {
-            testEdit(21, 32, "");
+            validateEditAtPosition(21, 32, "");
         });
 
         it('Delete across multiple line breaks and insert no line breaks', () => {
-            testEdit(21, 42, "");
+            validateEditAtPosition(21, 42, "");
         });
 
         it('Delete across multiple line breaks and insert text', () => {
-            testEdit(21, 42, "slithery ");
+            validateEditAtPosition(21, 42, "slithery ");
         });
     });
 
@@ -365,7 +345,6 @@ and grew 1cm per day`;
     }
 
     //function edTest() {
-    //    tstTest();
     //    bigTest();
     //}
 
