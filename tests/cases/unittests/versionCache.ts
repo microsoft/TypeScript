@@ -92,14 +92,17 @@ module ts{
     }
 
     function editTest() {
-        var fname = testDataDir + 'editme';
-        var content = ts.sys.readFile(fname);
-        var lm = server.LineIndex.linesFromText(content);
-        var lines = lm.lines;
+        var content = `in this story:
+the lazy brown fox
+jumped over the cow
+that ate the grass
+that was purple at the tips
+and grew 1cm per day`;
+
+        var {lines, lineMap} = server.LineIndex.linesFromText(content);
         if (lines.length == 0) {
             return;
         }
-        var lineMap = lm.lineMap;
 
         var lineIndex = new server.LineIndex();
         lineIndex.load(lines);
@@ -420,11 +423,11 @@ module ts{
         }
     }
 
-    function edTest() {
-        editTest();
-        tstTest();
-        bigTest();
-    }
+    //function edTest() {
+    //    editTest();
+    //    tstTest();
+    //    bigTest();
+    //}
 
-    edTest();
+    //edTest();
 }
