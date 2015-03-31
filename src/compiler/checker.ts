@@ -1091,7 +1091,7 @@ module ts {
 
                 // Check if symbol is any of the alias
                 return forEachValue(symbols, symbolFromSymbolTable => {
-                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias) {
+                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias && symbolFromSymbolTable.name !== "export=") {
                         if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
                             // Is this external alias, then use it to name
                             ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
@@ -1931,6 +1931,10 @@ module ts {
                     // Source file is always visible
                     case SyntaxKind.SourceFile:
                         return true;
+
+                    // Export assignements do not create name bindings outside the module
+                    case SyntaxKind.ExportAssignment:
+                        return false;
 
                     default:
                         Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
