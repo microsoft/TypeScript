@@ -3327,6 +3327,8 @@ module ts {
             if (!links.resolvedType) {
                 let type: Type;
 
+                // We don't currently support heritage clauses with complex expressions in them.
+                // For these cases, we just set the type to be the unknownType.
                 if (node.kind !== SyntaxKind.HeritageClauseElement || isSupportedHeritageClauseElement(<HeritageClauseElement>node)) {
                     let typeNameOrExpression = node.kind === SyntaxKind.TypeReference
                         ? (<TypeReferenceNode>node).typeName
