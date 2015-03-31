@@ -4893,6 +4893,27 @@ declare module "typescript" {
 >Program : Program
 }
 declare module "typescript" {
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
+    function readConfigFile(fileName: string): any;
+>readConfigFile : (fileName: string) => any
+>fileName : string
+
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir
+      */
+    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
+>parseConfigFile : (json: any, basePath?: string) => ParsedCommandLine
+>json : any
+>basePath : string
+>ParsedCommandLine : ParsedCommandLine
+}
+declare module "typescript" {
     /** The version of the language service API */
     let servicesVersion: string;
 >servicesVersion : string
