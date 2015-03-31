@@ -1635,48 +1635,28 @@ module ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
-    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, syntaxErrors?: Diagnostic[]): string {
+    /*
+     * This function will compile source text from 'input' argument using specified compiler options.
+     * If not options are provided - it will use a set of default compiler options.
+     * Extra compiler options that will unconditionally be used bu this function are:
+     * - separateCompilation = true
+     * - allowNonTsExtensions = true
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
         let options = compilerOptions ? ts.clone(compilerOptions) : getDefaultCompilerOptions();
 
-        // Single file transformation is only guaranteed to be correct inside an external module.
-        // External modules have their own scope and cannot contribute to internal modules outside their
-        // scope. 
-        if (options.target !== ScriptTarget.ES6 && (!options.module || options.module === ModuleKind.None)) {
-            // TODO: add errors
-        }
-
-        // In single file transformation the compiler does not have access to declaration sites.
-        // Const enum property accesses will not be detected if they are not in the same file as the enum.
-        // thus they are going to be emitted as normal propety access. To ensure correct behaviour at runtime,
-        // we need to generate the actual enum object so that the property accesses do not fail.
-        options.preserveConstEnums = true;
-
-        // No reason to get declarations, we are only returning javascript
-        options.declaration = false;
+        options.separateCompilation = true;
 
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
-
-        // enable relaxed emit rules
-        options.separateCompilation = true;
-
-        // We are not resolving references or modules, or even including the default library. Disabling 
-        // emit on error will block generating the output and has no meaningful use here.
-        options.noEmitOnError = false;
-
-        // No resolution requests will be honored anyways. So do not do it
-        options.noResolve = true;
-
-        // TODO (vladima): this should be enabled after adding support to inlinable source maps
-        options.sourceMap = false;
 
         // Parse
         var inputFileName = fileName || "module.ts";
         var sourceFile = ts.createSourceFile(inputFileName, input, options.target);
 
         // Store syntactic diagnostics
-        if (syntaxErrors && sourceFile.parseDiagnostics) {
-            syntaxErrors.push(...sourceFile.parseDiagnostics);
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
         }
 
         // Output
@@ -1697,6 +1677,10 @@ module ts {
         };
 
         var program = ts.createProgram([inputFileName], options, compilerHost);
+
+        if (diagnostics) {
+            diagnostics.push(...program.getGlobalDiagnostics());
+        }
 
         // Emit
         program.emit();

@@ -716,7 +716,7 @@ module ts {
             if (target) {
                 let markAlias =
                     (target === unknownSymbol && compilerOptions.separateCompilation) ||
-                    (target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target));
+                    (target !== unknownSymbol && (target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
                 if (markAlias) {
                     markAliasSymbolAsReferenced(symbol);
@@ -10231,7 +10231,7 @@ module ts {
                 if (symbol.flags & SymbolFlags.ValueModule
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
-                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums)) {
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
                     let classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (classOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
@@ -11285,7 +11285,7 @@ module ts {
                 return true;
             }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
-            return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
+            return target !== unknownSymbol && target && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
         }
 
         function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {

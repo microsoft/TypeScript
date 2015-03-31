@@ -651,7 +651,10 @@
         "category": "Error",
         "code": 1207
     },
-
+    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1208
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1728,6 +1731,26 @@
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
+    },
+    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5043
+    },
+    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5044
+    },
+    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5045
+    },
+    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5046
+    },
+    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5047
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
