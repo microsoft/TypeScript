@@ -787,7 +787,7 @@ module ts {
 
         // Resolves a qualified name and any involved aliases
         function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags): Symbol {
-            if (getFullWidth(name) === 0) {
+            if (nodeIsMissing(name)) {
                 return undefined;
             }
 
@@ -803,7 +803,7 @@ module ts {
                 let right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
                 let namespace = resolveEntityName(left, SymbolFlags.Namespace);
-                if (!namespace || namespace === unknownSymbol || getFullWidth(right) === 0) {
+                if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
                     return undefined;
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.text, meaning);
@@ -4986,7 +4986,7 @@ module ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             let links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = (getFullWidth(node) > 0 && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node)) || unknownSymbol;
+                links.resolvedSymbol = (!nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node)) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -6484,7 +6484,7 @@ module ts {
                     let templateExpression = <TemplateExpression>tagExpression.template;
                     let lastSpan = lastOrUndefined(templateExpression.templateSpans);
                     Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = getFullWidth(lastSpan.literal) === 0 || !!lastSpan.literal.isUnterminated;
+                    callIsIncomplete = nodeIsMissing(lastSpan.literal) || !!lastSpan.literal.isUnterminated;
                 }
                 else {
                     // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
@@ -8477,7 +8477,7 @@ module ts {
             let isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
             function reportImplementationExpectedError(node: FunctionLikeDeclaration): void {
-                if (node.name && getFullWidth(node.name) === 0) {
+                if (node.name && nodeIsMissing(node.name)) {
                     return;
                 }
 
@@ -10330,7 +10330,7 @@ module ts {
 
         function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             let moduleName = getExternalModuleName(node);
-            if (getFullWidth(moduleName) !== 0 && moduleName.kind !== SyntaxKind.StringLiteral) {
+            if (!nodeIsMissing(moduleName) && moduleName.kind !== SyntaxKind.StringLiteral) {
                 error(moduleName, Diagnostics.String_literal_expected);
                 return false;
             }
@@ -11077,7 +11077,7 @@ module ts {
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
             else if (isExpression(entityName)) {
-                if (getFullWidth(entityName) === 0) {
+                if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
                 }
