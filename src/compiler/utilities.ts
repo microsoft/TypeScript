@@ -1770,7 +1770,7 @@ module ts {
         }
     }
 
-    // Returns true if this heritage clause element's expression contains something unsupported
+    // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
     export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
         return isSupportedHeritageClauseElementExpression(node.expression);
