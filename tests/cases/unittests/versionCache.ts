@@ -1,23 +1,17 @@
-/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\src\harness\harness.ts" />
 /// <reference path="..\..\..\src\server\editorServices.ts" />
 
 module ts{
-    var gloError = false;
-
     function editFlat(s: number, dl: number, nt: string, source: string) {
         return source.substring(0, s) + nt + source.substring(s + dl, source.length);
     }
 
-    var testDataDir = "../../tests/versionCacheTest/";
+    var testDataDir = "..\..\..\src\compiler";
 
     function bigTest() {
-        editStress("types.ts", false);
-        editStress("tst.ts", false);
-        editStress("client.ts", false);
-    }
-
-    function recordError() {
-        gloError = true;
+        editStress("scanner.ts", false);
+        editStress("sys.ts", false);
+        editStress("binder.ts", false);
     }
 
     function tstTest() {
@@ -45,10 +39,8 @@ module ts{
         checkText = editFlat(pos, 0, insertString, content);
         snapshot = lineIndex.edit(pos, 0, insertString);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // change 9 2 0 1 {"."}
         var pos = lineColToPosition(snapshot, 9, 2);
@@ -56,10 +48,8 @@ module ts{
         checkText = editFlat(pos, 0, insertString, checkText);
         snapshot = snapshot.edit(pos, 0, insertString);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // change 9 3 0 1 {"\n"}
         var pos = lineColToPosition(snapshot, 9, 3);
@@ -67,10 +57,8 @@ module ts{
         checkText = editFlat(pos, 0, insertString, checkText);
         snapshot = snapshot.edit(pos, 0, insertString);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // change 10 1 0 10 {"\n\n\n\n\n\n\n\n\n\n"}
         pos = lineColToPosition(snapshot, 10, 1);
@@ -78,30 +66,24 @@ module ts{
         checkText = editFlat(pos, 0, insertString, checkText);
         snapshot = snapshot.edit(pos, 0, insertString);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // change 19 1 1 0
         pos = lineColToPosition(snapshot, 19, 1);
         checkText = editFlat(pos, 1, "", checkText);
         snapshot = snapshot.edit(pos, 1);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // change 18 1 1 0
         pos = lineColToPosition(snapshot, 18, 1);
         checkText = editFlat(pos, 1, "", checkText);
         snapshot = snapshot.edit(pos, 1);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
             var lineInfo = lineIndex.lineNumberToInfo(line);
@@ -133,75 +115,59 @@ module ts{
         checkText = editFlat(content.length, 0, insertString, content);
         snapshot = lineIndex.edit(content.length, 0, insertString);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case IV: unusual line endings merge
         snapshot = lineIndex.edit(lines[0].length - 1, lines[1].length, "");
         editedText = snapshot.getText(0, content.length - lines[1].length);
         checkText = editFlat(lines[0].length - 1, lines[1].length, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case VIIa: delete whole line and nothing but line (last line)
         var llpos = lm.lineMap[lm.lineMap.length - 2];
         snapshot = lineIndex.edit(llpos, lines[lines.length - 1].length, "");
         checkText = editFlat(llpos, lines[lines.length - 1].length, "", content);
         editedText = snapshot.getText(0, checkText.length);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case VIIb: delete whole line and nothing but line (first line)
         snapshot = lineIndex.edit(0, lines[0].length, "");
         editedText = snapshot.getText(0, content.length - lines[0].length);
         checkText = editFlat(0, lines[0].length, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // and insert with no line breaks
         insertString = "moo, moo, moo! ";
         snapshot = lineIndex.edit(0, lines[0].length, insertString);
         editedText = snapshot.getText(0, content.length - lines[0].length + insertString.length);
         checkText = editFlat(0, lines[0].length, insertString, content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // and insert with multiple line breaks
         insertString = "moo, \r\nmoo, \r\nmoo! ";
         snapshot = lineIndex.edit(0, lines[0].length, insertString);
         editedText = snapshot.getText(0, content.length - lines[0].length + insertString.length);
         checkText = editFlat(0, lines[0].length, insertString, content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         snapshot = lineIndex.edit(0, lines[0].length + lines[1].length, "");
         editedText = snapshot.getText(0, content.length - (lines[0].length + lines[1].length));
         checkText = editFlat(0, lines[0].length + lines[1].length, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         snapshot = lineIndex.edit(lines[0].length, lines[1].length + lines[2].length, "");
 
         editedText = snapshot.getText(0, content.length - (lines[1].length + lines[2].length));
         checkText = editFlat(lines[0].length, lines[1].length + lines[2].length, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case VI: insert multiple line breaks
 
@@ -209,91 +175,71 @@ module ts{
         snapshot = lineIndex.edit(21, 1, insertString);
         editedText = snapshot.getText(0, content.length + insertString.length - 1);
         checkText = editFlat(21, 1, insertString, content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         insertString = "cr...\r\ncr...\r\ncr";
         snapshot = lineIndex.edit(21, 1, insertString);
         editedText = snapshot.getText(0, content.length + insertString.length - 1);
         checkText = editFlat(21, 1, insertString, content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // leading '\n'
         insertString = "\ncr...\r\ncr...\r\ncr";
         snapshot = lineIndex.edit(21, 1, insertString);
         editedText = snapshot.getText(0, content.length + insertString.length - 1);
         checkText = editFlat(21, 1, insertString, content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case I: single line no line breaks deleted or inserted
         // delete 1 char
         snapshot = lineIndex.edit(21, 1);
         editedText = snapshot.getText(0, content.length - 1);
         checkText = editFlat(21, 1, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // insert 1 char
         snapshot = lineIndex.edit(21, 0, "b");
         editedText = snapshot.getText(0, content.length + 1);
         checkText = editFlat(21, 0, "b", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // delete 1, insert 2
         snapshot = lineIndex.edit(21, 1, "cr");
         editedText = snapshot.getText(0, content.length + 1);
         checkText = editFlat(21, 1, "cr", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case II: delete across line break
         snapshot = lineIndex.edit(21, 22);
         editedText = snapshot.getText(0, content.length - 22);
         checkText = editFlat(21, 22, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         snapshot = lineIndex.edit(21, 32);
         editedText = snapshot.getText(0, content.length - 32);
         checkText = editFlat(21, 32, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         // Case III: delete across multiple line breaks and insert no line breaks
         snapshot = lineIndex.edit(21, 42);
         editedText = snapshot.getText(0, content.length - 42);
         checkText = editFlat(21, 42, "", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
 
         snapshot = lineIndex.edit(21, 42, "slithery ");
         editedText = snapshot.getText(0, content.length - 33);
         checkText = editFlat(21, 42, "slithery ", content);
-        if (editedText != checkText) {
-            recordError();
-            return;
-        }
+
+        assert.equal(editedText, checkText);
     }
 
     function editStress(fname: string, timing: boolean) {
@@ -346,10 +292,7 @@ module ts{
             var s2 = lineIndex.getText(rsa[j], la[j]);
             if (!timing) {
                 var s1 = content.substring(rsa[j], rsa[j] + la[j]);
-                if (s1 != s2) {
-                    recordError();
-                    return;
-                }
+                assert.equal(s1, s2);
             }
         }
         if (timing) {
@@ -363,10 +306,7 @@ module ts{
             var s2 = lineIndex.getText(rsa[j], las[j]);
             if (!timing) {
                 var s1 = content.substring(rsa[j], rsa[j] + las[j]);
-                if (s1 != s2) {
-                    recordError();
-                    return;
-                }
+                assert.equal(s1, s2);
             }
         }
         //        console.log("check2");
@@ -385,10 +325,7 @@ module ts{
                 var checkText = editFlat(rsa[j], las[j], insertString, content);
                 var snapText = snapshot.getText(0, checkText.length);
                 if (checkText != snapText) {
-                    if (s1 != s2) {
-                        recordError();
-                        return;
-                    }
+                    assert.equal(s1, s2);
                 }
             }
         }
@@ -413,10 +350,7 @@ module ts{
                 if (!timing) {
                     snapText = snap.getText(0, checkText.length);
                     if (checkText != snapText) {
-                        if (s1 != s2) {
-                            recordError();
-                            return;
-                        }
+                        assert.equal(s1, s2);
                     }
                 }
             }
@@ -436,10 +370,7 @@ module ts{
                 checkText = editFlat(rsa[j], la[j], insertString, content);
                 snapText = snapshot.getText(0, checkText.length);
                 if (checkText != snapText) {
-                    if (s1 != s2) {
-                        recordError();
-                        return;
-                    }
+                    assert.equal(s1, s2);
                 }
             }
         }
@@ -456,18 +387,9 @@ module ts{
         for (j = 0; j < 100000; j++) {
             var lp = lineIndex.charOffsetToLineNumberAndPos(rsa[j]);
             if (!timing) {
-                var lac = ts.getLineAndCharacterOfPosition(lineMap, rsa[j]);
-
-                if (lac.line != lp.line) {
-                    recordError();
-                    console.log("arrgh " + lac.line + " " + lp.line + " " + j);
-                    return;
-                }
-                if (lac.character != (lp.offset + 1)) {
-                    recordError();
-                    console.log("arrgh ch... " + lac.character + " " + (lp.offset + 1) + " " + j);
-                    return;
-                }
+                var lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[j]);
+                assert.equal(lac.line, lp.line, "Line number mismatch " + lac.line + " " + lp.line + " " + j);
+                assert.equal(lac.character, (lp.offset + 1), "Charachter offset mismatch " + lac.character + " " + (lp.offset + 1) + " " + j);
             }
         }
         //        console.log("check6");
@@ -489,10 +411,7 @@ module ts{
                 var lineIndexOffset = lineInfo.offset;
                 if (!timing) {
                     var lineMapOffset = lineMap[k];
-                    if (lineIndexOffset != lineMapOffset) {
-                        recordError();
-                        return;
-                    }
+                    assert.equal(lineIndexOffset, lineMapOffset);
                 }
             }
         }
@@ -504,15 +423,7 @@ module ts{
     function edTest() {
         editTest();
         tstTest();
-        if (!gloError) {
-            bigTest();
-        }
-        if (gloError) {
-            console.log(" ! Fail: versionCache");
-        }
-        else {
-            console.log("Pass");
-        }
+        bigTest();
     }
 
     edTest();
