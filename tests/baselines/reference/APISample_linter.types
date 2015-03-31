@@ -875,157 +875,160 @@ declare module "typescript" {
         HeritageClauseElement = 177,
 >HeritageClauseElement : SyntaxKind
 
-        Block = 178,
+        SemicolonClassElement = 178,
+>SemicolonClassElement : SyntaxKind
+
+        Block = 179,
 >Block : SyntaxKind
 
-        VariableStatement = 179,
+        VariableStatement = 180,
 >VariableStatement : SyntaxKind
 
-        EmptyStatement = 180,
+        EmptyStatement = 181,
 >EmptyStatement : SyntaxKind
 
-        ExpressionStatement = 181,
+        ExpressionStatement = 182,
 >ExpressionStatement : SyntaxKind
 
-        IfStatement = 182,
+        IfStatement = 183,
 >IfStatement : SyntaxKind
 
-        DoStatement = 183,
+        DoStatement = 184,
 >DoStatement : SyntaxKind
 
-        WhileStatement = 184,
+        WhileStatement = 185,
 >WhileStatement : SyntaxKind
 
-        ForStatement = 185,
+        ForStatement = 186,
 >ForStatement : SyntaxKind
 
-        ForInStatement = 186,
+        ForInStatement = 187,
 >ForInStatement : SyntaxKind
 
-        ForOfStatement = 187,
+        ForOfStatement = 188,
 >ForOfStatement : SyntaxKind
 
-        ContinueStatement = 188,
+        ContinueStatement = 189,
 >ContinueStatement : SyntaxKind
 
-        BreakStatement = 189,
+        BreakStatement = 190,
 >BreakStatement : SyntaxKind
 
-        ReturnStatement = 190,
+        ReturnStatement = 191,
 >ReturnStatement : SyntaxKind
 
-        WithStatement = 191,
+        WithStatement = 192,
 >WithStatement : SyntaxKind
 
-        SwitchStatement = 192,
+        SwitchStatement = 193,
 >SwitchStatement : SyntaxKind
 
-        LabeledStatement = 193,
+        LabeledStatement = 194,
 >LabeledStatement : SyntaxKind
 
-        ThrowStatement = 194,
+        ThrowStatement = 195,
 >ThrowStatement : SyntaxKind
 
-        TryStatement = 195,
+        TryStatement = 196,
 >TryStatement : SyntaxKind
 
-        DebuggerStatement = 196,
+        DebuggerStatement = 197,
 >DebuggerStatement : SyntaxKind
 
-        VariableDeclaration = 197,
+        VariableDeclaration = 198,
 >VariableDeclaration : SyntaxKind
 
-        VariableDeclarationList = 198,
+        VariableDeclarationList = 199,
 >VariableDeclarationList : SyntaxKind
 
-        FunctionDeclaration = 199,
+        FunctionDeclaration = 200,
 >FunctionDeclaration : SyntaxKind
 
-        ClassDeclaration = 200,
+        ClassDeclaration = 201,
 >ClassDeclaration : SyntaxKind
 
-        InterfaceDeclaration = 201,
+        InterfaceDeclaration = 202,
 >InterfaceDeclaration : SyntaxKind
 
-        TypeAliasDeclaration = 202,
+        TypeAliasDeclaration = 203,
 >TypeAliasDeclaration : SyntaxKind
 
-        EnumDeclaration = 203,
+        EnumDeclaration = 204,
 >EnumDeclaration : SyntaxKind
 
-        ModuleDeclaration = 204,
+        ModuleDeclaration = 205,
 >ModuleDeclaration : SyntaxKind
 
-        ModuleBlock = 205,
+        ModuleBlock = 206,
 >ModuleBlock : SyntaxKind
 
-        CaseBlock = 206,
+        CaseBlock = 207,
 >CaseBlock : SyntaxKind
 
-        ImportEqualsDeclaration = 207,
+        ImportEqualsDeclaration = 208,
 >ImportEqualsDeclaration : SyntaxKind
 
-        ImportDeclaration = 208,
+        ImportDeclaration = 209,
 >ImportDeclaration : SyntaxKind
 
-        ImportClause = 209,
+        ImportClause = 210,
 >ImportClause : SyntaxKind
 
-        NamespaceImport = 210,
+        NamespaceImport = 211,
 >NamespaceImport : SyntaxKind
 
-        NamedImports = 211,
+        NamedImports = 212,
 >NamedImports : SyntaxKind
 
-        ImportSpecifier = 212,
+        ImportSpecifier = 213,
 >ImportSpecifier : SyntaxKind
 
-        ExportAssignment = 213,
+        ExportAssignment = 214,
 >ExportAssignment : SyntaxKind
 
-        ExportDeclaration = 214,
+        ExportDeclaration = 215,
 >ExportDeclaration : SyntaxKind
 
-        NamedExports = 215,
+        NamedExports = 216,
 >NamedExports : SyntaxKind
 
-        ExportSpecifier = 216,
+        ExportSpecifier = 217,
 >ExportSpecifier : SyntaxKind
 
-        MissingDeclaration = 217,
+        MissingDeclaration = 218,
 >MissingDeclaration : SyntaxKind
 
-        ExternalModuleReference = 218,
+        ExternalModuleReference = 219,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 219,
+        CaseClause = 220,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 220,
+        DefaultClause = 221,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 221,
+        HeritageClause = 222,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 222,
+        CatchClause = 223,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 223,
+        PropertyAssignment = 224,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 224,
+        ShorthandPropertyAssignment = 225,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 225,
+        EnumMember = 226,
 >EnumMember : SyntaxKind
 
-        SourceFile = 226,
+        SourceFile = 227,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 227,
+        SyntaxList = 228,
 >SyntaxList : SyntaxKind
 
-        Count = 228,
+        Count = 229,
 >Count : SyntaxKind
 
         FirstAssignment = 53,
@@ -1582,6 +1585,13 @@ declare module "typescript" {
         body?: Block;
 >body : Block
 >Block : Block
+    }
+    interface SemicolonClassElement extends ClassElement {
+>SemicolonClassElement : SemicolonClassElement
+>ClassElement : ClassElement
+
+        _semicolonClassElementBrand: any;
+>_semicolonClassElementBrand : any
     }
     interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
 >AccessorDeclaration : AccessorDeclaration

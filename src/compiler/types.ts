@@ -208,6 +208,7 @@ module ts {
         // Misc
         TemplateSpan,
         HeritageClauseElement,
+        SemicolonClassElement,
         // Element
         Block,
         VariableStatement,
@@ -536,6 +537,11 @@ module ts {
 
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
+    }
+
+    // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
+    export interface SemicolonClassElement extends ClassElement {
+        _semicolonClassElementBrand: any;
     }
 
     // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a

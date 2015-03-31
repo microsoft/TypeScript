@@ -3219,7 +3219,11 @@ module ts {
 
             function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
                 forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
+                    if (member.kind === SyntaxKind.SemicolonClassElement) {
+                        writeLine();
+                        write(";");
+                    }
+                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
                             return emitOnlyPinnedOrTripleSlashComments(member);
                         }
@@ -3292,7 +3296,9 @@ module ts {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
-                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                    else if (member.kind === SyntaxKind.MethodDeclaration ||
+                             member.kind === SyntaxKind.GetAccessor ||
+                             member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -3310,6 +3316,10 @@ module ts {
                         emitSignatureAndBody(<MethodDeclaration>member);
                         emitEnd(member);
                         emitTrailingComments(member);
+                    }
+                    else if (member.kind === SyntaxKind.SemicolonClassElement) {
+                        writeLine();
+                        write(";");
                     }
                 }
             }

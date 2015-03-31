@@ -126,7 +126,6 @@ module ts {
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
             }
         }

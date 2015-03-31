@@ -1609,7 +1609,11 @@ module ts {
                 case ParsingContext.TypeMembers:
                     return isStartOfTypeMember();
                 case ParsingContext.ClassMembers:
-                    return lookAhead(isClassMemberStart);
+                    // We allow semicolons as class elements (as specified by ES6) as long as we're
+                    // not in error recovery.  If we're in error recovery, we don't want an errant
+                    // semicolon to be treated as a class member (since they're almost always used
+                    // for statements.
+                    return lookAhead(isClassMemberStart) || (token === SyntaxKind.SemicolonToken && !inErrorRecovery);
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
@@ -1996,6 +2000,7 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.SemicolonClassElement:
                         return true;
                 }
             }
@@ -4692,6 +4697,12 @@ module ts {
         }
 
         function parseClassElement(): ClassElement {
+            if (token === SyntaxKind.SemicolonToken) {
+                let result = <SemicolonClassElement>createNode(SyntaxKind.SemicolonClassElement);
+                nextToken();
+                return finishNode(result);
+            }
+
             let fullStart = getNodePos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();

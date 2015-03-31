@@ -268,57 +268,58 @@ declare module "typescript" {
         OmittedExpression = 175,
         TemplateSpan = 176,
         HeritageClauseElement = 177,
-        Block = 178,
-        VariableStatement = 179,
-        EmptyStatement = 180,
-        ExpressionStatement = 181,
-        IfStatement = 182,
-        DoStatement = 183,
-        WhileStatement = 184,
-        ForStatement = 185,
-        ForInStatement = 186,
-        ForOfStatement = 187,
-        ContinueStatement = 188,
-        BreakStatement = 189,
-        ReturnStatement = 190,
-        WithStatement = 191,
-        SwitchStatement = 192,
-        LabeledStatement = 193,
-        ThrowStatement = 194,
-        TryStatement = 195,
-        DebuggerStatement = 196,
-        VariableDeclaration = 197,
-        VariableDeclarationList = 198,
-        FunctionDeclaration = 199,
-        ClassDeclaration = 200,
-        InterfaceDeclaration = 201,
-        TypeAliasDeclaration = 202,
-        EnumDeclaration = 203,
-        ModuleDeclaration = 204,
-        ModuleBlock = 205,
-        CaseBlock = 206,
-        ImportEqualsDeclaration = 207,
-        ImportDeclaration = 208,
-        ImportClause = 209,
-        NamespaceImport = 210,
-        NamedImports = 211,
-        ImportSpecifier = 212,
-        ExportAssignment = 213,
-        ExportDeclaration = 214,
-        NamedExports = 215,
-        ExportSpecifier = 216,
-        MissingDeclaration = 217,
-        ExternalModuleReference = 218,
-        CaseClause = 219,
-        DefaultClause = 220,
-        HeritageClause = 221,
-        CatchClause = 222,
-        PropertyAssignment = 223,
-        ShorthandPropertyAssignment = 224,
-        EnumMember = 225,
-        SourceFile = 226,
-        SyntaxList = 227,
-        Count = 228,
+        SemicolonClassElement = 178,
+        Block = 179,
+        VariableStatement = 180,
+        EmptyStatement = 181,
+        ExpressionStatement = 182,
+        IfStatement = 183,
+        DoStatement = 184,
+        WhileStatement = 185,
+        ForStatement = 186,
+        ForInStatement = 187,
+        ForOfStatement = 188,
+        ContinueStatement = 189,
+        BreakStatement = 190,
+        ReturnStatement = 191,
+        WithStatement = 192,
+        SwitchStatement = 193,
+        LabeledStatement = 194,
+        ThrowStatement = 195,
+        TryStatement = 196,
+        DebuggerStatement = 197,
+        VariableDeclaration = 198,
+        VariableDeclarationList = 199,
+        FunctionDeclaration = 200,
+        ClassDeclaration = 201,
+        InterfaceDeclaration = 202,
+        TypeAliasDeclaration = 203,
+        EnumDeclaration = 204,
+        ModuleDeclaration = 205,
+        ModuleBlock = 206,
+        CaseBlock = 207,
+        ImportEqualsDeclaration = 208,
+        ImportDeclaration = 209,
+        ImportClause = 210,
+        NamespaceImport = 211,
+        NamedImports = 212,
+        ImportSpecifier = 213,
+        ExportAssignment = 214,
+        ExportDeclaration = 215,
+        NamedExports = 216,
+        ExportSpecifier = 217,
+        MissingDeclaration = 218,
+        ExternalModuleReference = 219,
+        CaseClause = 220,
+        DefaultClause = 221,
+        HeritageClause = 222,
+        CatchClause = 223,
+        PropertyAssignment = 224,
+        ShorthandPropertyAssignment = 225,
+        EnumMember = 226,
+        SourceFile = 227,
+        SyntaxList = 228,
+        Count = 229,
         FirstAssignment = 53,
         LastAssignment = 64,
         FirstReservedWord = 66,
@@ -501,6 +502,9 @@ declare module "typescript" {
     }
     interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
+    }
+    interface SemicolonClassElement extends ClassElement {
+        _semicolonClassElementBrand: any;
     }
     interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
@@ -2052,21 +2056,21 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 185 /* ForStatement */:
-            case 186 /* ForInStatement */:
-            case 184 /* WhileStatement */:
-            case 183 /* DoStatement */:
-                if (node.statement.kind !== 178 /* Block */) {
+            case 186 /* ForStatement */:
+            case 187 /* ForInStatement */:
+            case 185 /* WhileStatement */:
+            case 184 /* DoStatement */:
+                if (node.statement.kind !== 179 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 182 /* IfStatement */:
+            case 183 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 178 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 179 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 178 /* Block */ && ifStatement.elseStatement.kind !== 182 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 179 /* Block */ && ifStatement.elseStatement.kind !== 183 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
