@@ -82,8 +82,8 @@ interface ITextReader extends ITextStreamBase {
 
 declare var WScript: {
     /**
- * Outputs text to either a message box (under WScript.exe) or the command console window followed by a newline (under CScript.ext).
- */
+    * Outputs text to either a message box (under WScript.exe) or the command console window followed by a newline (under CScript.ext).
+    */
     Echo(s: any): void;
     /**
      * Exposes the write-only error output stream for the current script.
@@ -163,4 +163,4 @@ declare var WScript: {
      * @param intTime Interval (in milliseconds) to suspend script execution.
      */
     Sleep(intTime: number): void;
-}
+};
