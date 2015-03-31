@@ -91,7 +91,7 @@ module ts {
         }
     }
 
-    describe('versionCache -- Edit test', () => {
+    describe('VersionCache edit', () => {
         let testContent = `in this story:
 the lazy brown fox
 jumped over the cow
@@ -113,75 +113,75 @@ and grew 1cm per day`;
             assert.equal(editedText, checkText);
         }
 
-        it('Case VII: insert at end of file', () => {
+        it('Insert at end of file', () => {
             testEdit(testContent.length, 0, "hmmmm...\r\n");
         });
 
-        it('Case IV: unusual line endings merge', () => {
+        it('Unusual line endings merge', () => {
             testEdit(lines[0].length - 1, lines[1].length, "");
         });
 
-        it('Case VIIa: delete whole line and nothing but line (last line)', () => {
+        it('Delete whole line and nothing but line (last line)', () => {
             testEdit(lineMap[lineMap.length - 2], lines[lines.length - 1].length, "");
         });
 
-        it('Case VIIb: delete whole line and nothing but line (first line)', () => {
+        it('Delete whole line and nothing but line (first line)', () => {
             testEdit(0, lines[0].length, "");
         });
 
-        it('Case VIIc: delete whole line (first line) and insert with no line breaks', () => {
+        it('Delete whole line (first line) and insert with no line breaks', () => {
             testEdit(0, lines[0].length, "moo, moo, moo! ");
         });
 
-        it('Case VIIc: delete whole line (first line) and insert with multiple line breaks', () => {
+        it('Delete whole line (first line) and insert with multiple line breaks', () => {
             testEdit(0, lines[0].length, "moo, \r\nmoo, \r\nmoo! ");
         });
 
-        it('Case VIId: delete multiple lines and nothing but lines (first and second lines)', () => {
+        it('Delete multiple lines and nothing but lines (first and second lines)', () => {
             testEdit(0, lines[0].length + lines[1].length, "");
         });
 
-        it('Case VIIe: delete multiple lines and nothing but lines (second and third lines)', () => {
+        it('Delete multiple lines and nothing but lines (second and third lines)', () => {
             testEdit(lines[0].length, lines[1].length + lines[2].length, "");
         });
 
-        it('Case VI: insert multiple line breaks', () => {
+        it('Insert multiple line breaks', () => {
             testEdit(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
         });
 
-        it('Case VIb: insert multiple line breaks', () => {
+        it('Insert multiple line breaks', () => {
             testEdit(21, 1, "cr...\r\ncr...\r\ncr");
         });
 
-        it('Case VIc: insert multiple line breaks with leading \\n', () => {
+        it('Insert multiple line breaks with leading \\n', () => {
             testEdit(21, 1, "\ncr...\r\ncr...\r\ncr");
         });
 
-        it('Case I: single line no line breaks deleted or inserted, delete 1 char', () => {
+        it('Single line no line breaks deleted or inserted, delete 1 char', () => {
             testEdit(21, 1, "");
         });
 
-        it('Case Ib: single line no line breaks deleted or inserted, insert 1 char', () => {
+        it('Single line no line breaks deleted or inserted, insert 1 char', () => {
             testEdit(21, 0, "b");
         });
 
-        it('Case Ib: single line no line breaks deleted or inserted, delete 1, insert 2 chars', () => {
+        it('Single line no line breaks deleted or inserted, delete 1, insert 2 chars', () => {
             testEdit(21, 1, "cr");
         });
 
-        it('Case II: delete across line break (just the line break)', () => {
+        it('Delete across line break (just the line break)', () => {
             testEdit(21, 22, "");
         });
 
-        it('Case IIb: delete across line break', () => {
+        it('Delete across line break', () => {
             testEdit(21, 32, "");
         });
 
-        it('Case III: delete across multiple line breaks and insert no line breaks', () => {
+        it('Delete across multiple line breaks and insert no line breaks', () => {
             testEdit(21, 42, "");
         });
 
-        it('Case IIIb: delete across multiple line breaks and insert text', () => {
+        it('Delete across multiple line breaks and insert text', () => {
             testEdit(21, 42, "slithery ");
         });
     });
@@ -365,7 +365,6 @@ and grew 1cm per day`;
     }
 
     //function edTest() {
-    //    editTest();
     //    tstTest();
     //    bigTest();
     //}
