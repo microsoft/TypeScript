@@ -1643,7 +1643,7 @@ module ts {
      * - allowNonTsExtensions = true
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
-        let options = compilerOptions ? ts.clone(compilerOptions) : getDefaultCompilerOptions();
+        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
 
         options.separateCompilation = true;
 
@@ -1676,7 +1676,7 @@ module ts {
             getNewLine: () => "\r\n"
         };
 
-        var program = ts.createProgram([inputFileName], options, compilerHost);
+        var program = createProgram([inputFileName], options, compilerHost);
 
         if (diagnostics) {
             diagnostics.push(...program.getGlobalDiagnostics());
