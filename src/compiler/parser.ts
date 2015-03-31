@@ -237,12 +237,13 @@ module ts {
             case SyntaxKind.Decorator:
                 return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassDeclaration>node).name) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).typeParameters) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).members);
+                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
@@ -2899,6 +2900,7 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
@@ -2944,8 +2946,12 @@ module ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, neither '{' nor 'function' can start an expression statement.
-            return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && token !== SyntaxKind.AtToken && isStartOfExpression();
+            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            return token !== SyntaxKind.OpenBraceToken &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword &&
+                token !== SyntaxKind.AtToken &&
+                isStartOfExpression();
         }
 
         function parseExpression(): Expression {
@@ -3290,8 +3296,12 @@ module ts {
                 return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
             }
 
-            if (isStartOfStatement(/*inErrorRecovery:*/ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
-                // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
+            if (isStartOfStatement(/*inErrorRecovery:*/ true) &&
+                !isStartOfExpressionStatement() &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword) {
+
+                // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
                 //
                 // Here we try to recover from a potential error situation in the case where the
                 // user meant to supply a block. For example, if the user wrote:
@@ -3763,6 +3773,8 @@ module ts {
                     return parseArrayLiteralExpression();
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
+                case SyntaxKind.ClassKeyword:
+                    return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
@@ -4183,13 +4195,14 @@ module ts {
         }
 
         function isStartOfStatement(inErrorRecovery: boolean): boolean {
-            // Functions and variable statements are allowed as a statement.  But as per the grammar,
-            // they also allow modifiers.  So we have to check for those statements that might be
-            // following modifiers.This ensures that things work properly when incrementally parsing
-            // as the parser will produce the same FunctionDeclaraiton or VariableStatement if it has
-            // the same text regardless of whether it is inside a block or not.
+            // Functions, variable statements and classes are allowed as a statement.  But as per
+            // the grammar, they also allow modifiers.  So we have to check for those statements 
+            // that might be following modifiers.This ensures that things work properly when
+            // incrementally parsing as the parser will produce the same FunctionDeclaraiton, 
+            // VariableStatement or ClassDeclaration, if it has the same text regardless of whether 
+            // it is inside a block or not.
             if (isModifier(token)) {
-                let result = lookAhead(parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers);
+                let result = lookAhead(parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers);
                 if (result) {
                     return true;
                 }
@@ -4208,6 +4221,7 @@ module ts {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
                 case SyntaxKind.WhileKeyword:
@@ -4232,7 +4246,6 @@ module ts {
                     let isConstEnum = lookAhead(nextTokenIsEnumKeyword);
                     return !isConstEnum;
                 case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.TypeKeyword:
@@ -4276,6 +4289,8 @@ module ts {
                     return parseVariableStatement(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.IfKeyword:
@@ -4321,7 +4336,7 @@ module ts {
                     // Even though variable statements and function declarations cannot have decorators, 
                     // we parse them here to provide better error recovery.
                     if (isModifier(token) || token === SyntaxKind.AtToken) {
-                        let result = tryParse(parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers);
+                        let result = tryParse(parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers);
                         if (result) {
                             return result;
                         }
@@ -4331,7 +4346,7 @@ module ts {
             }
         }
 
-        function parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers(): FunctionDeclaration | VariableStatement {
+        function parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers(): FunctionDeclaration | VariableStatement | ClassDeclaration {
             let start = scanner.getStartPos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
@@ -4351,8 +4366,12 @@ module ts {
 
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement(start, decorators, modifiers);
+
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(start, decorators, modifiers);
+
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(start, decorators, modifiers);
             }
 
             return undefined;
@@ -4711,14 +4730,26 @@ module ts {
             Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
+        function parseClassExpression(): ClassExpression {
+            return <ClassExpression>parseClassDeclarationOrExpression(
+                /*fullStart:*/ scanner.getStartPos(),
+                /*decorators:*/ undefined,
+                /*modifiers:*/ undefined,
+                SyntaxKind.ClassExpression);
+        }
+
         function parseClassDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassDeclaration {
+            return <ClassDeclaration>parseClassDeclarationOrExpression(fullStart, decorators, modifiers, SyntaxKind.ClassDeclaration);
+        }
+
+        function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
             // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
             let savedStrictModeContext = inStrictModeContext();
             if (languageVersion >= ScriptTarget.ES6) {
                 setStrictModeContext(true);
             }
 
-            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
+            var node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
@@ -5327,6 +5358,7 @@ module ts {
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.RegularExpressionLiteral:

@@ -203,6 +203,7 @@ module ts {
         TemplateExpression,
         YieldExpression,
         SpreadElementExpression,
+        ClassExpression,
         OmittedExpression,
         // Misc
         TemplateSpan,
@@ -855,11 +856,17 @@ module ts {
         _moduleElementBrand: any;
     }
 
-    export interface ClassDeclaration extends Declaration, ModuleElement {
+    export interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
+    }
+
+    export interface ClassDeclaration extends ClassLikeDeclaration, Statement {
+    }
+
+    export interface ClassExpression extends ClassLikeDeclaration, PrimaryExpression {
     }
 
     export interface ClassElement extends Declaration {

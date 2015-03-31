@@ -3193,7 +3193,7 @@ module ts {
                 }
             }
 
-            function emitMemberAssignments(node: ClassDeclaration, staticFlag: NodeFlags) {
+            function emitMemberAssignments(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
                         writeLine();
@@ -3217,7 +3217,7 @@ module ts {
                 });
             }
 
-            function emitMemberFunctionsForES5AndLower(node: ClassDeclaration) {
+            function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
@@ -3287,7 +3287,7 @@ module ts {
                 });
             }
 
-            function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
+            function emitMemberFunctionsForES6AndHigher(node: ClassLikeDeclaration) {
                 for (let member of node.members) {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
@@ -3314,7 +3314,7 @@ module ts {
                 }
             }
 
-            function emitConstructor(node: ClassDeclaration, baseTypeElement: HeritageClauseElement) {
+            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -3435,82 +3435,92 @@ module ts {
                 tempParameters = saveTempParameters;
             }
 
+            function emitClassExpression(node: ClassExpression) {
+                return emitClassLikeDeclaration(node);
+            }
+
             function emitClassDeclaration(node: ClassDeclaration) {
+                return emitClassLikeDeclaration(node);
+            }
+
+            function emitClassLikeDeclaration(node: ClassLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
-                    emitClassDeclarationBelowES6(<ClassDeclaration>node);
+                    emitClassLikeDeclarationBelowES6(node);
                 }
                 else {
-                    emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
+                    emitClassLikeDeclarationForES6AndHigher(node);
                 }
             }
             
-            function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
+            function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let thisNodeIsDecorated = nodeIsDecorated(node);
-                if (thisNodeIsDecorated) {
-                    // To preserve the correct runtime semantics when decorators are applied to the class,
-                    // the emit needs to follow one of the following rules:
-                    //
-                    // * For a local class declaration:
-                    //
-                    //     @dec class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let C = class {
-                    //     };
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //
-                    // * For an exported class declaration:
-                    //
-                    //     @dec export class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     export let C = class {
-                    //     };
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //
-                    // * For a default export of a class declaration with a name:
-                    //
-                    //     @dec default export class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let C = class {
-                    //     }
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //     export default C;
-                    //
-                    // * For a default export of a class declaration without a name:
-                    //
-                    //     @dec default export class {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let _default = class {
-                    //     }
-                    //     _default = __decorate([dec], _default);
-                    //     export default _default;
-                    //
-                    if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
-                        write("export ");
-                    }
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    if (thisNodeIsDecorated) {
+                        // To preserve the correct runtime semantics when decorators are applied to the class,
+                        // the emit needs to follow one of the following rules:
+                        //
+                        // * For a local class declaration:
+                        //
+                        //     @dec class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let C = class {
+                        //     };
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //
+                        // * For an exported class declaration:
+                        //
+                        //     @dec export class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     export let C = class {
+                        //     };
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //
+                        // * For a default export of a class declaration with a name:
+                        //
+                        //     @dec default export class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let C = class {
+                        //     }
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //     export default C;
+                        //
+                        // * For a default export of a class declaration without a name:
+                        //
+                        //     @dec default export class {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let _default = class {
+                        //     }
+                        //     _default = __decorate([dec], _default);
+                        //     export default _default;
+                        //
+                        if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
+                            write("export ");
+                        }
 
-                    write("let ");
-                    emitDeclarationName(node);
-                    write(" = ");
-                }
-                else if (isES6ExportedDeclaration(node)) {                    
-                    write("export ");
-                    if (node.flags & NodeFlags.Default) {
-                        write("default ");
+                        write("let ");
+                        emitDeclarationName(node);
+                        write(" = ");
+                    }
+                    else if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                        if (node.flags & NodeFlags.Default) {
+                            write("default ");
+                        }
                     }
                 }
 
@@ -3588,10 +3598,14 @@ module ts {
                 }
             }
 
-            function emitClassDeclarationBelowES6(node: ClassDeclaration) {
-                write("var ");
-                emitDeclarationName(node);
-                write(" = (function (");
+            function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    write("var ");
+                    emitDeclarationName(node);
+                    write(" = ");
+                }
+
+                write("(function (");
                 let baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write("_super");
@@ -3641,30 +3655,35 @@ module ts {
                 if (baseTypeNode) {
                     emit(baseTypeNode.expression);
                 }
-                write(");");
+                write(")");
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    write(";");
+                }
                 emitEnd(node);
 
-                emitExportMemberAssignment(node);
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    emitExportMemberAssignment(<ClassDeclaration>node);
+                }
 
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
             }
 
-            function emitClassMemberPrefix(node: ClassDeclaration, member: Node) {
+            function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
                 emitDeclarationName(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
                 }
             }
             
-            function emitDecoratorsOfClass(node: ClassDeclaration) {
+            function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
                 emitDecoratorsOfConstructor(node);
             }
 
-            function emitDecoratorsOfConstructor(node: ClassDeclaration) {
+            function emitDecoratorsOfConstructor(node: ClassLikeDeclaration) {
                 let constructor = getFirstConstructorWithBody(node);
                 if (constructor) {
                     emitDecoratorsOfParameters(node, constructor);
@@ -3696,7 +3715,7 @@ module ts {
                 writeLine();
             }
 
-            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {
+            function emitDecoratorsOfMembers(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
                 forEach(node.members, member => {
                     if ((member.flags & NodeFlags.Static) !== staticFlag) {
                         return;
@@ -3800,7 +3819,7 @@ module ts {
                 });
             }
             
-            function emitDecoratorsOfParameters(node: ClassDeclaration, member: FunctionLikeDeclaration) {
+            function emitDecoratorsOfParameters(node: ClassLikeDeclaration, member: FunctionLikeDeclaration) {
                 forEach(member.parameters, (parameter, parameterIndex) => {
                     if (!nodeIsDecorated(parameter)) {
                         return;
@@ -4768,6 +4787,8 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
                         return emitDebuggerStatement(node);
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.ClassExpression:
+                        return emitClassExpression(<ClassExpression>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:

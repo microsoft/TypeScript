@@ -1997,5 +1997,13 @@
     "Only type references are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
+    },
+    "'class' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9003
+    },
+    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+        "category": "Error",
+        "code": 9004
     }
 }

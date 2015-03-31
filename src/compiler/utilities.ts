@@ -279,6 +279,7 @@ module ts {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
@@ -670,6 +671,7 @@ module ts {
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
@@ -942,7 +944,7 @@ module ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassBaseTypeNode(node: ClassDeclaration) {
+    export function getClassBaseTypeNode(node: ClassLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -1573,7 +1575,7 @@ module ts {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
             if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;

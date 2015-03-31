@@ -422,8 +422,15 @@ module ts {
                             result = argumentsSymbol;
                             break loop;
                         }
-                        let id = (<FunctionExpression>location).name;
-                        if (id && name === id.text) {
+                        let functionName = (<FunctionExpression>location).name;
+                        if (functionName && name === functionName.text) {
+                            result = location.symbol;
+                            break loop;
+                        }
+                        break;
+                    case SyntaxKind.ClassExpression:
+                        let className = (<ClassExpression>location).name;
+                        if (className && name === className.text) {
                             result = location.symbol;
                             break loop;
                         }
@@ -7991,6 +7998,8 @@ module ts {
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
+                case SyntaxKind.ClassExpression:
+                    return checkClassExpression(<ClassExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
@@ -9732,8 +9741,18 @@ module ts {
             }
         }
 
+        function checkClassExpression(node: ClassExpression): Type {
+            grammarErrorOnNode(node, Diagnostics.class_expressions_are_not_currently_supported);
+            forEach(node.members, checkSourceElement);
+            return unknownType;
+        }
+
         function checkClassDeclaration(node: ClassDeclaration) {
             // Grammar checking
+            if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
+                grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
+            }
+
             checkGrammarClassDeclarationHeritageClauses(node);
             checkDecorators(node);
             if (node.name) {
