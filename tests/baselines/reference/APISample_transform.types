@@ -819,157 +819,160 @@ declare module "typescript" {
         TemplateSpan = 175,
 >TemplateSpan : SyntaxKind
 
-        Block = 176,
+        HeritageClauseElement = 176,
+>HeritageClauseElement : SyntaxKind
+
+        Block = 177,
 >Block : SyntaxKind
 
-        VariableStatement = 177,
+        VariableStatement = 178,
 >VariableStatement : SyntaxKind
 
-        EmptyStatement = 178,
+        EmptyStatement = 179,
 >EmptyStatement : SyntaxKind
 
-        ExpressionStatement = 179,
+        ExpressionStatement = 180,
 >ExpressionStatement : SyntaxKind
 
-        IfStatement = 180,
+        IfStatement = 181,
 >IfStatement : SyntaxKind
 
-        DoStatement = 181,
+        DoStatement = 182,
 >DoStatement : SyntaxKind
 
-        WhileStatement = 182,
+        WhileStatement = 183,
 >WhileStatement : SyntaxKind
 
-        ForStatement = 183,
+        ForStatement = 184,
 >ForStatement : SyntaxKind
 
-        ForInStatement = 184,
+        ForInStatement = 185,
 >ForInStatement : SyntaxKind
 
-        ForOfStatement = 185,
+        ForOfStatement = 186,
 >ForOfStatement : SyntaxKind
 
-        ContinueStatement = 186,
+        ContinueStatement = 187,
 >ContinueStatement : SyntaxKind
 
-        BreakStatement = 187,
+        BreakStatement = 188,
 >BreakStatement : SyntaxKind
 
-        ReturnStatement = 188,
+        ReturnStatement = 189,
 >ReturnStatement : SyntaxKind
 
-        WithStatement = 189,
+        WithStatement = 190,
 >WithStatement : SyntaxKind
 
-        SwitchStatement = 190,
+        SwitchStatement = 191,
 >SwitchStatement : SyntaxKind
 
-        LabeledStatement = 191,
+        LabeledStatement = 192,
 >LabeledStatement : SyntaxKind
 
-        ThrowStatement = 192,
+        ThrowStatement = 193,
 >ThrowStatement : SyntaxKind
 
-        TryStatement = 193,
+        TryStatement = 194,
 >TryStatement : SyntaxKind
 
-        DebuggerStatement = 194,
+        DebuggerStatement = 195,
 >DebuggerStatement : SyntaxKind
 
-        VariableDeclaration = 195,
+        VariableDeclaration = 196,
 >VariableDeclaration : SyntaxKind
 
-        VariableDeclarationList = 196,
+        VariableDeclarationList = 197,
 >VariableDeclarationList : SyntaxKind
 
-        FunctionDeclaration = 197,
+        FunctionDeclaration = 198,
 >FunctionDeclaration : SyntaxKind
 
-        ClassDeclaration = 198,
+        ClassDeclaration = 199,
 >ClassDeclaration : SyntaxKind
 
-        InterfaceDeclaration = 199,
+        InterfaceDeclaration = 200,
 >InterfaceDeclaration : SyntaxKind
 
-        TypeAliasDeclaration = 200,
+        TypeAliasDeclaration = 201,
 >TypeAliasDeclaration : SyntaxKind
 
-        EnumDeclaration = 201,
+        EnumDeclaration = 202,
 >EnumDeclaration : SyntaxKind
 
-        ModuleDeclaration = 202,
+        ModuleDeclaration = 203,
 >ModuleDeclaration : SyntaxKind
 
-        ModuleBlock = 203,
+        ModuleBlock = 204,
 >ModuleBlock : SyntaxKind
 
-        CaseBlock = 204,
+        CaseBlock = 205,
 >CaseBlock : SyntaxKind
 
-        ImportEqualsDeclaration = 205,
+        ImportEqualsDeclaration = 206,
 >ImportEqualsDeclaration : SyntaxKind
 
-        ImportDeclaration = 206,
+        ImportDeclaration = 207,
 >ImportDeclaration : SyntaxKind
 
-        ImportClause = 207,
+        ImportClause = 208,
 >ImportClause : SyntaxKind
 
-        NamespaceImport = 208,
+        NamespaceImport = 209,
 >NamespaceImport : SyntaxKind
 
-        NamedImports = 209,
+        NamedImports = 210,
 >NamedImports : SyntaxKind
 
-        ImportSpecifier = 210,
+        ImportSpecifier = 211,
 >ImportSpecifier : SyntaxKind
 
-        ExportAssignment = 211,
+        ExportAssignment = 212,
 >ExportAssignment : SyntaxKind
 
-        ExportDeclaration = 212,
+        ExportDeclaration = 213,
 >ExportDeclaration : SyntaxKind
 
-        NamedExports = 213,
+        NamedExports = 214,
 >NamedExports : SyntaxKind
 
-        ExportSpecifier = 214,
+        ExportSpecifier = 215,
 >ExportSpecifier : SyntaxKind
 
-        MissingDeclaration = 215,
+        MissingDeclaration = 216,
 >MissingDeclaration : SyntaxKind
 
-        ExternalModuleReference = 216,
+        ExternalModuleReference = 217,
 >ExternalModuleReference : SyntaxKind
 
-        CaseClause = 217,
+        CaseClause = 218,
 >CaseClause : SyntaxKind
 
-        DefaultClause = 218,
+        DefaultClause = 219,
 >DefaultClause : SyntaxKind
 
-        HeritageClause = 219,
+        HeritageClause = 220,
 >HeritageClause : SyntaxKind
 
-        CatchClause = 220,
+        CatchClause = 221,
 >CatchClause : SyntaxKind
 
-        PropertyAssignment = 221,
+        PropertyAssignment = 222,
 >PropertyAssignment : SyntaxKind
 
-        ShorthandPropertyAssignment = 222,
+        ShorthandPropertyAssignment = 223,
 >ShorthandPropertyAssignment : SyntaxKind
 
-        EnumMember = 223,
+        EnumMember = 224,
 >EnumMember : SyntaxKind
 
-        SourceFile = 224,
+        SourceFile = 225,
 >SourceFile : SyntaxKind
 
-        SyntaxList = 225,
+        SyntaxList = 226,
 >SyntaxList : SyntaxKind
 
-        Count = 226,
+        Count = 227,
 >Count : SyntaxKind
 
         FirstAssignment = 53,
@@ -1928,6 +1931,19 @@ declare module "typescript" {
 >NodeArray : NodeArray<T>
 >Expression : Expression
     }
+    interface HeritageClauseElement extends Node {
+>HeritageClauseElement : HeritageClauseElement
+>Node : Node
+
+        expression: LeftHandSideExpression;
+>expression : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        typeArguments?: NodeArray<TypeNode>;
+>typeArguments : NodeArray<TypeNode>
+>NodeArray : NodeArray<T>
+>TypeNode : TypeNode
+    }
     interface NewExpression extends CallExpression, PrimaryExpression {
 >NewExpression : NewExpression
 >CallExpression : CallExpression
@@ -2274,10 +2290,10 @@ declare module "typescript" {
 >token : SyntaxKind
 >SyntaxKind : SyntaxKind
 
-        types?: NodeArray<TypeReferenceNode>;
->types : NodeArray<TypeReferenceNode>
+        types?: NodeArray<HeritageClauseElement>;
+>types : NodeArray<HeritageClauseElement>
 >NodeArray : NodeArray<T>
->TypeReferenceNode : TypeReferenceNode
+>HeritageClauseElement : HeritageClauseElement
     }
     interface TypeAliasDeclaration extends Declaration, ModuleElement {
 >TypeAliasDeclaration : TypeAliasDeclaration
@@ -3221,10 +3237,11 @@ declare module "typescript" {
 >SymbolFlags : SymbolFlags
 >SymbolAccessiblityResult : SymbolAccessiblityResult
 
-        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
->isEntityNameVisible : (entityName: Identifier | QualifiedName, enclosingDeclaration: Node) => SymbolVisibilityResult
->entityName : Identifier | QualifiedName
+        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+>isEntityNameVisible : (entityName: Identifier | Expression | QualifiedName, enclosingDeclaration: Node) => SymbolVisibilityResult
+>entityName : Identifier | Expression | QualifiedName
 >EntityName : Identifier | QualifiedName
+>Expression : Expression
 >enclosingDeclaration : Node
 >Node : Node
 >SymbolVisibilityResult : SymbolVisibilityResult

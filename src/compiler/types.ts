@@ -206,6 +206,7 @@ module ts {
         OmittedExpression,
         // Misc
         TemplateSpan,
+        HeritageClauseElement,
         // Element
         Block,
         VariableStatement,
@@ -728,6 +729,11 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
+    export interface HeritageClauseElement extends Node {
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export interface NewExpression extends CallExpression, PrimaryExpression { }
 
     export interface TaggedTemplateExpression extends MemberExpression {
@@ -869,7 +875,7 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<TypeReferenceNode>;
+        types?: NodeArray<HeritageClauseElement>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -1231,7 +1237,7 @@ module ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;

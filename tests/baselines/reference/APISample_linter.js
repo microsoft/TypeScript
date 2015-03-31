@@ -266,57 +266,58 @@ declare module "typescript" {
         SpreadElementExpression = 173,
         OmittedExpression = 174,
         TemplateSpan = 175,
-        Block = 176,
-        VariableStatement = 177,
-        EmptyStatement = 178,
-        ExpressionStatement = 179,
-        IfStatement = 180,
-        DoStatement = 181,
-        WhileStatement = 182,
-        ForStatement = 183,
-        ForInStatement = 184,
-        ForOfStatement = 185,
-        ContinueStatement = 186,
-        BreakStatement = 187,
-        ReturnStatement = 188,
-        WithStatement = 189,
-        SwitchStatement = 190,
-        LabeledStatement = 191,
-        ThrowStatement = 192,
-        TryStatement = 193,
-        DebuggerStatement = 194,
-        VariableDeclaration = 195,
-        VariableDeclarationList = 196,
-        FunctionDeclaration = 197,
-        ClassDeclaration = 198,
-        InterfaceDeclaration = 199,
-        TypeAliasDeclaration = 200,
-        EnumDeclaration = 201,
-        ModuleDeclaration = 202,
-        ModuleBlock = 203,
-        CaseBlock = 204,
-        ImportEqualsDeclaration = 205,
-        ImportDeclaration = 206,
-        ImportClause = 207,
-        NamespaceImport = 208,
-        NamedImports = 209,
-        ImportSpecifier = 210,
-        ExportAssignment = 211,
-        ExportDeclaration = 212,
-        NamedExports = 213,
-        ExportSpecifier = 214,
-        MissingDeclaration = 215,
-        ExternalModuleReference = 216,
-        CaseClause = 217,
-        DefaultClause = 218,
-        HeritageClause = 219,
-        CatchClause = 220,
-        PropertyAssignment = 221,
-        ShorthandPropertyAssignment = 222,
-        EnumMember = 223,
-        SourceFile = 224,
-        SyntaxList = 225,
-        Count = 226,
+        HeritageClauseElement = 176,
+        Block = 177,
+        VariableStatement = 178,
+        EmptyStatement = 179,
+        ExpressionStatement = 180,
+        IfStatement = 181,
+        DoStatement = 182,
+        WhileStatement = 183,
+        ForStatement = 184,
+        ForInStatement = 185,
+        ForOfStatement = 186,
+        ContinueStatement = 187,
+        BreakStatement = 188,
+        ReturnStatement = 189,
+        WithStatement = 190,
+        SwitchStatement = 191,
+        LabeledStatement = 192,
+        ThrowStatement = 193,
+        TryStatement = 194,
+        DebuggerStatement = 195,
+        VariableDeclaration = 196,
+        VariableDeclarationList = 197,
+        FunctionDeclaration = 198,
+        ClassDeclaration = 199,
+        InterfaceDeclaration = 200,
+        TypeAliasDeclaration = 201,
+        EnumDeclaration = 202,
+        ModuleDeclaration = 203,
+        ModuleBlock = 204,
+        CaseBlock = 205,
+        ImportEqualsDeclaration = 206,
+        ImportDeclaration = 207,
+        ImportClause = 208,
+        NamespaceImport = 209,
+        NamedImports = 210,
+        ImportSpecifier = 211,
+        ExportAssignment = 212,
+        ExportDeclaration = 213,
+        NamedExports = 214,
+        ExportSpecifier = 215,
+        MissingDeclaration = 216,
+        ExternalModuleReference = 217,
+        CaseClause = 218,
+        DefaultClause = 219,
+        HeritageClause = 220,
+        CatchClause = 221,
+        PropertyAssignment = 222,
+        ShorthandPropertyAssignment = 223,
+        EnumMember = 224,
+        SourceFile = 225,
+        SyntaxList = 226,
+        Count = 227,
         FirstAssignment = 53,
         LastAssignment = 64,
         FirstReservedWord = 66,
@@ -638,6 +639,10 @@ declare module "typescript" {
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
+    interface HeritageClauseElement extends Node {
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+    }
     interface NewExpression extends CallExpression, PrimaryExpression {
     }
     interface TaggedTemplateExpression extends MemberExpression {
@@ -749,7 +754,7 @@ declare module "typescript" {
     }
     interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<TypeReferenceNode>;
+        types?: NodeArray<HeritageClauseElement>;
     }
     interface TypeAliasDeclaration extends Declaration, ModuleElement {
         name: Identifier;
@@ -991,7 +996,7 @@ declare module "typescript" {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
@@ -2042,21 +2047,21 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 183 /* ForStatement */:
-            case 184 /* ForInStatement */:
-            case 182 /* WhileStatement */:
-            case 181 /* DoStatement */:
-                if (node.statement.kind !== 176 /* Block */) {
+            case 184 /* ForStatement */:
+            case 185 /* ForInStatement */:
+            case 183 /* WhileStatement */:
+            case 182 /* DoStatement */:
+                if (node.statement.kind !== 177 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 180 /* IfStatement */:
+            case 181 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 176 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 177 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 176 /* Block */ && ifStatement.elseStatement.kind !== 180 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 177 /* Block */ && ifStatement.elseStatement.kind !== 181 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;

@@ -15,11 +15,11 @@
 ////}
 ////
 ////(new C()).[|abc|];
-
 test.ranges().forEach(r => {
     goTo.position(r.start);
 
     test.ranges().forEach(range => {
+        debugger;
         verify.occurrencesAtPositionContains(range);
     });
     verify.occurrencesAtPositionCount(test.ranges().length);

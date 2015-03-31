@@ -7,6 +7,7 @@
 //// interface /*2*/X extends /*3*/M./*4*/I { }
 
 var c = classification;
+debugger;
 verify.semanticClassificationsAre(
     c.moduleName("M", test.marker("0").position),
     c.interfaceName("I", test.marker("1").position),

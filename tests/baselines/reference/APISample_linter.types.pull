@@ -1,8 +1,8 @@
-=== tests/cases/compiler/APISample_compile.ts ===
+=== tests/cases/compiler/APISample_linter.ts ===
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
+         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -12,78 +12,238 @@ declare var process: any;
 declare var console: any;
 >console : any
 
-declare var os: any;
->os : any
+declare var fs: any;
+>fs : any
 
 import ts = require("typescript");
 >ts : typeof ts
 
-export function compile(fileNames: string[], options: ts.CompilerOptions): void {
->compile : (fileNames: string[], options: ts.CompilerOptions) => void
->fileNames : string[]
->options : ts.CompilerOptions
+export function delint(sourceFile: ts.SourceFile) {
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
 >ts : unknown
->CompilerOptions : ts.CompilerOptions
+>SourceFile : ts.SourceFile
 
-    var program = ts.createProgram(fileNames, options);
->program : ts.Program
->ts.createProgram(fileNames, options) : ts.Program
->ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
+    delintNode(sourceFile);
+>delintNode(sourceFile) : void
+>delintNode : (node: ts.Node) => void
+>sourceFile : ts.SourceFile
+
+    function delintNode(node: ts.Node) {
+>delintNode : (node: ts.Node) => void
+>node : ts.Node
+>ts : unknown
+>Node : ts.Node
+
+        switch (node.kind) {
+>node.kind : ts.SyntaxKind
+>node : ts.Node
+>kind : ts.SyntaxKind
+
+            case ts.SyntaxKind.ForStatement:
+>ts.SyntaxKind.ForStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
 >ts : typeof ts
->createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
->fileNames : string[]
->options : ts.CompilerOptions
+>SyntaxKind : typeof ts.SyntaxKind
+>ForStatement : ts.SyntaxKind
 
-    var emitResult = program.emit();
->emitResult : ts.EmitResult
->program.emit() : ts.EmitResult
->program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
->program : ts.Program
->emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
-
-    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
->allDiagnostics : ts.Diagnostic[]
->ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics(program).concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->ts.getPreEmitDiagnostics(program) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
+            case ts.SyntaxKind.ForInStatement:
+>ts.SyntaxKind.ForInStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
 >ts : typeof ts
->getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
->program : ts.Program
->concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->emitResult.diagnostics : ts.Diagnostic[]
->emitResult : ts.EmitResult
->diagnostics : ts.Diagnostic[]
+>SyntaxKind : typeof ts.SyntaxKind
+>ForInStatement : ts.SyntaxKind
 
-    allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    }) : void
->allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->allDiagnostics : ts.Diagnostic[]
->forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    } : (diagnostic: ts.Diagnostic) => void
->diagnostic : ts.Diagnostic
+            case ts.SyntaxKind.WhileStatement:
+>ts.SyntaxKind.WhileStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>WhileStatement : ts.SyntaxKind
 
-        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+            case ts.SyntaxKind.DoStatement:
+>ts.SyntaxKind.DoStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>DoStatement : ts.SyntaxKind
+
+                if ((<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block) {
+>(<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block : boolean
+>(<ts.IterationStatement>node).statement.kind : ts.SyntaxKind
+>(<ts.IterationStatement>node).statement : ts.Statement
+>(<ts.IterationStatement>node) : ts.IterationStatement
+><ts.IterationStatement>node : ts.IterationStatement
+>ts : unknown
+>IterationStatement : ts.IterationStatement
+>node : ts.Node
+>statement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+
+                    report(node, "A looping statement's contents should be wrapped in a block body.");
+>report(node, "A looping statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+                }
+                break;
+            case ts.SyntaxKind.IfStatement:
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
+
+                var ifStatement = (<ts.IfStatement>node);
+>ifStatement : ts.IfStatement
+>(<ts.IfStatement>node) : ts.IfStatement
+><ts.IfStatement>node : ts.IfStatement
+>ts : unknown
+>IfStatement : ts.IfStatement
+>node : ts.Node
+
+                if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
+>ifStatement.thenStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.thenStatement.kind : ts.SyntaxKind
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+
+                    report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+>report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
+                }
+                if (ifStatement.elseStatement &&
+>ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
+>ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+>ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+>ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
+
+                    report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
+>report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+                }
+                break;
+
+            case ts.SyntaxKind.BinaryExpression:
+>ts.SyntaxKind.BinaryExpression : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>BinaryExpression : ts.SyntaxKind
+
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
+>op : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken : ts.Node
+>(<ts.BinaryExpression>node) : ts.BinaryExpression
+><ts.BinaryExpression>node : ts.BinaryExpression
+>ts : unknown
+>BinaryExpression : ts.BinaryExpression
+>node : ts.Node
+>operatorToken : ts.Node
+>kind : ts.SyntaxKind
+
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
+>op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+>op === ts.SyntaxKind.EqualsEqualsToken : boolean
+>op : ts.SyntaxKind
+>ts.SyntaxKind.EqualsEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>EqualsEqualsToken : ts.SyntaxKind
+>op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+>op : ts.SyntaxKind
+>ts.SyntaxKind.ExclamationEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ExclamationEqualsToken : ts.SyntaxKind
+
+                    report(node, "Use '===' and '!=='.")
+>report(node, "Use '===' and '!=='.") : void
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+                }
+                break;
+        }
+
+        ts.forEachChild(node, delintNode);
+>ts.forEachChild(node, delintNode) : void
+>ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>ts : typeof ts
+>forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>node : ts.Node
+>delintNode : (node: ts.Node) => void
+    }
+
+    function report(node: ts.Node, message: string) {
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+>ts : unknown
+>Node : ts.Node
+>message : string
+
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
 >lineChar : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->diagnostic.file : ts.SourceFile
->diagnostic : ts.Diagnostic
->file : ts.SourceFile
+>sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
+>sourceFile : ts.SourceFile
 >getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->diagnostic.start : number
->diagnostic : ts.Diagnostic
->start : number
+>node.getStart() : number
+>node.getStart : (sourceFile?: ts.SourceFile) => number
+>node : ts.Node
+>getStart : (sourceFile?: ts.SourceFile) => number
 
-        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
->console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`) : any
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
+>console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
->diagnostic.file.fileName : string
->diagnostic.file : ts.SourceFile
->diagnostic : ts.Diagnostic
->file : ts.SourceFile
+>sourceFile.fileName : string
+>sourceFile : ts.SourceFile
 >fileName : string
 >lineChar.line + 1 : number
 >lineChar.line : number
@@ -93,71 +253,57 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >lineChar.character : number
 >lineChar : ts.LineAndCharacter
 >character : number
->ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL) : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->ts : typeof ts
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->diagnostic.messageText : string | ts.DiagnosticMessageChain
->diagnostic : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
->os.EOL : any
->os : any
->EOL : any
-
-    });
-
-    var exitCode = emitResult.emitSkipped ? 1 : 0;
->exitCode : number
->emitResult.emitSkipped ? 1 : 0 : number
->emitResult.emitSkipped : boolean
->emitResult : ts.EmitResult
->emitSkipped : boolean
-
-    console.log(`Process exiting with code '${exitCode}'.`);
->console.log(`Process exiting with code '${exitCode}'.`) : any
->console.log : any
->console : any
->log : any
->exitCode : number
-
-    process.exit(exitCode);
->process.exit(exitCode) : any
->process.exit : any
->process : any
->exit : any
->exitCode : number
+>message : string
+    }
 }
 
-compile(process.argv.slice(2), {
->compile(process.argv.slice(2), {    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS}) : void
->compile : (fileNames: string[], options: ts.CompilerOptions) => void
+var fileNames = process.argv.slice(2);
+>fileNames : any
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
 >process : any
 >argv : any
 >slice : any
->{    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS} : { [x: string]: boolean | ts.ScriptTarget | ts.ModuleKind; noEmitOnError: boolean; noImplicitAny: boolean; target: ts.ScriptTarget; module: ts.ModuleKind; }
 
-    noEmitOnError: true, noImplicitAny: true,
->noEmitOnError : boolean
->noImplicitAny : boolean
+fileNames.forEach(fileName => {
+>fileNames.forEach(fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
+>fileNames.forEach : any
+>fileNames : any
+>forEach : any
+>fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
+>fileName : any
 
-    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
->target : ts.ScriptTarget
->ts.ScriptTarget.ES5 : ts.ScriptTarget
+    // Parse a file
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+>sourceFile : ts.SourceFile
+>ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>ts : typeof ts
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>fileName : any
+>fs.readFileSync(fileName).toString() : any
+>fs.readFileSync(fileName).toString : any
+>fs.readFileSync(fileName) : any
+>fs.readFileSync : any
+>fs : any
+>readFileSync : any
+>fileName : any
+>toString : any
+>ts.ScriptTarget.ES6 : ts.ScriptTarget
 >ts.ScriptTarget : typeof ts.ScriptTarget
 >ts : typeof ts
 >ScriptTarget : typeof ts.ScriptTarget
->ES5 : ts.ScriptTarget
->module : ts.ModuleKind
->ts.ModuleKind.CommonJS : ts.ModuleKind
->ts.ModuleKind : typeof ts.ModuleKind
->ts : typeof ts
->ModuleKind : typeof ts.ModuleKind
->CommonJS : ts.ModuleKind
+>ES6 : ts.ScriptTarget
+
+    // delint it
+    delint(sourceFile);
+>delint(sourceFile) : void
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
 
 });
+
 === typescript.d.ts ===
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 
@@ -3142,8 +3288,8 @@ declare module "typescript" {
 >SymbolAccessiblityResult : SymbolAccessiblityResult
 
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
->isEntityNameVisible : (entityName: Identifier | Expression | QualifiedName, enclosingDeclaration: Node) => SymbolVisibilityResult
->entityName : Identifier | Expression | QualifiedName
+>isEntityNameVisible : (entityName: Expression | Identifier | QualifiedName, enclosingDeclaration: Node) => SymbolVisibilityResult
+>entityName : Expression | Identifier | QualifiedName
 >EntityName : Identifier | QualifiedName
 >Expression : Expression
 >enclosingDeclaration : Node

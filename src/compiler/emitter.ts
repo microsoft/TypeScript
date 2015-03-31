@@ -3314,7 +3314,7 @@ module ts {
                 }
             }
 
-            function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+            function emitConstructor(node: ClassDeclaration, baseTypeElement: HeritageClauseElement) {
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -3368,7 +3368,7 @@ module ts {
                         //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
                         //      Else,
                         //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
-                        if (baseTypeNode) {
+                        if (baseTypeElement) {
                             write("(...args)");
                         }
                         else {
@@ -3387,7 +3387,7 @@ module ts {
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
-                    if (baseTypeNode) {
+                    if (baseTypeElement) {
                         var superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
@@ -3397,16 +3397,16 @@ module ts {
                     emitParameterPropertyAssignments(ctor);
                 }
                 else {
-                    if (baseTypeNode) {
+                    if (baseTypeElement) {
                         writeLine();
-                        emitStart(baseTypeNode);
+                        emitStart(baseTypeElement);
                         if (languageVersion < ScriptTarget.ES6) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
                             write("super(...args);");
                         }
-                        emitEnd(baseTypeNode);
+                        emitEnd(baseTypeElement);
                     }
                 }
                 emitMemberAssignments(node, /*staticFlag*/0);
@@ -3525,7 +3525,7 @@ module ts {
                 var baseTypeNode = getClassBaseTypeNode(node);
                 if (baseTypeNode) {
                     write(" extends ");
-                    emit(baseTypeNode.typeName);
+                    emit(baseTypeNode.expression);
                 }
 
                 write(" {");
@@ -3639,7 +3639,7 @@ module ts {
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
-                    emit(baseTypeNode.typeName);
+                    emit(baseTypeNode.expression);
                 }
                 write(");");
                 emitEnd(node);

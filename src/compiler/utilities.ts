@@ -1768,4 +1768,26 @@ module ts {
         }
     }
 
+    // Returns true if this heritage clause element's expression contains something unsupported
+    // (i.e. not a name or dotted name).
+    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
+        return isSupportedHeritageClauseElementExpression(node.expression);
+    }
+
+    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            return true;
+        }
+        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+        }
+        else {
+            return false;
+        }
+    }
+
+    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
+        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
+            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
 }

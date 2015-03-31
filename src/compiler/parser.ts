@@ -308,6 +308,9 @@ module ts {
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
+            case SyntaxKind.HeritageClauseElement:
+                return visitNode(cbNode, (<HeritageClauseElement>node).expression) ||
+                    visitNodes(cbNodes, (<HeritageClauseElement>node).typeArguments);
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
@@ -324,7 +327,7 @@ module ts {
         TypeMembers,               // Members in interface or type literal
         ClassMembers,              // Members in class declaration
         EnumMembers,               // Members in enum declaration
-        TypeReferences,            // Type references in extends or implements clause
+        HeritageClauseElement,     // Elements in a heritage clause
         VariableDeclarations,      // Variable declarations in variable statement
         ObjectBindingElements,     // Binding elements in object binding list
         ArrayBindingElements,      // Binding elements in array binding list
@@ -356,7 +359,7 @@ module ts {
             case ParsingContext.TypeMembers:              return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:             return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:              return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:           return Diagnostics.Type_reference_expected;
+            case ParsingContext.HeritageClauseElement:    return Diagnostics.Expression_expected;
             case ParsingContext.VariableDeclarations:     return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ObjectBindingElements:    return Diagnostics.Property_destructuring_pattern_expected;
             case ParsingContext.ArrayBindingElements:     return Diagnostics.Array_element_destructuring_pattern_expected;
@@ -1614,10 +1617,22 @@ module ts {
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
                     return isLiteralPropertyName();
-                case ParsingContext.TypeReferences:
-                    // We want to make sure that the "extends" in "extends foo" or the "implements" in
-                    // "implements foo" is not considered a type name.
-                    return isIdentifier() && !isNotHeritageClauseTypeName();
+                case ParsingContext.HeritageClauseElement:
+                    // If we see { } then only consume it as an expression if it is followed by , or {
+                    // That way we won't consume the body of a class in its heritage clause.
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        return lookAhead(isValidHeritageClauseObjectLiteral);
+                    }
+
+                    if (!inErrorRecovery) {
+                        return isStartOfLeftHandSideExpression() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
+                    else {
+                        // If we're in error recovery we tighten up what we're willing to match.
+                        // That way we don't treat something like "this" as a valid heritage clause
+                        // element during recovery.
+                        return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
                 case ParsingContext.VariableDeclarations:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
@@ -1641,19 +1656,42 @@ module ts {
             Debug.fail("Non-exhaustive case in 'isListElement'.");
         }
 
+        function isValidHeritageClauseObjectLiteral() {
+            Debug.assert(token === SyntaxKind.OpenBraceToken);
+            if (nextToken() === SyntaxKind.CloseBraceToken) {
+                // if we see  "extends {}" then only treat the {} as what we're extending (and not
+                // the class body) if we have:
+                //
+                //      extends {} { 
+                //      extends {},
+                //      extends {} extends
+                //      extends {} implements
+
+                let next = nextToken();
+                return next === SyntaxKind.CommaToken || next === SyntaxKind.OpenBraceToken || next === SyntaxKind.ExtendsKeyword || next === SyntaxKind.ImplementsKeyword;
+            }
+
+            return true;
+        }
+
         function nextTokenIsIdentifier() {
             nextToken();
             return isIdentifier();
         }
 
-        function isNotHeritageClauseTypeName(): boolean {
+        function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
             if (token === SyntaxKind.ImplementsKeyword ||
                 token === SyntaxKind.ExtendsKeyword) {
 
-                return lookAhead(nextTokenIsIdentifier);
+                return lookAhead(nextTokenIsStartOfExpression);
             }
 
             return false;
+        }
+
+        function nextTokenIsStartOfExpression() {
+            nextToken();
+            return isStartOfExpression();
         }
 
         // True if positioned at a list terminator
@@ -1676,7 +1714,7 @@ module ts {
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
-                case ParsingContext.TypeReferences:
+                case ParsingContext.HeritageClauseElement:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword;
                 case ParsingContext.VariableDeclarations:
                     return isVariableDeclaratorListTerminator();
@@ -1891,12 +1929,6 @@ module ts {
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // heritage clauses.
 
-                case ParsingContext.TypeReferences:
-                // This would probably be safe to reuse.  There is no speculative parsing with
-                // type names in a heritage clause.  There can be generic names in the type
-                // name list.  But because it is a type context, we never use speculative
-                // parsing on the type argument list.
-
                 case ParsingContext.TypeParameters:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // type parameters.  Note that that's because type *parameters* only occur in
@@ -1923,6 +1955,12 @@ module ts {
                 // cases.  i.e. a property assignment may end with an expression, and thus might
                 // have lookahead far beyond it's old node.
                 case ParsingContext.ObjectLiteralMembers:
+
+                // This is probably not safe to reuse.  There can be speculative parsing with
+                // type names in a heritage clause.  There can be generic names in the type
+                // name list, and there can be left hand side expressions (which can have type
+                // arguments.)
+                case ParsingContext.HeritageClauseElement:
             }
 
             return false;
@@ -2846,8 +2884,7 @@ module ts {
         }
 
         // EXPRESSIONS
-
-        function isStartOfExpression(): boolean {
+        function isStartOfLeftHandSideExpression(): boolean {
             switch (token) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -2865,6 +2902,19 @@ module ts {
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
+                case SyntaxKind.Identifier:
+                    return true;
+                default:
+                    return isIdentifier();
+            }
+        }
+
+        function isStartOfExpression(): boolean {
+            if (isStartOfLeftHandSideExpression()) {
+                return true;
+            }
+
+            switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
@@ -2875,7 +2925,6 @@ module ts {
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                 case SyntaxKind.LessThanToken:
-                case SyntaxKind.Identifier:
                 case SyntaxKind.YieldKeyword:
                     // Yield always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
@@ -3667,7 +3716,6 @@ module ts {
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
                 case SyntaxKind.SemicolonToken:                 // foo<x>;
-                case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.QuestionToken:                  // foo<x>?
                 case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
                 case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
@@ -3684,6 +3732,12 @@ module ts {
                     // expressions either.  The user is probably in the middle of a generic type. So
                     // treat it as such.
                     return true;
+
+                case SyntaxKind.CommaToken:                     // foo<x>,
+                case SyntaxKind.OpenBraceToken:                 // foo<x> {
+                    // We don't want to treat these as type arguments.  Otherwise we'll parse this
+                    // as an invocation expression.  Instead, we want to parse out the expression 
+                    // in isolation from the type arguments.
 
                 default:
                     // Anything else treat as an expression.
@@ -4714,11 +4768,21 @@ module ts {
                 let node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(ParsingContext.TypeReferences, parseTypeReference);
+                node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseHeritageClauseElement);
                 return finishNode(node);
             }
 
             return undefined;
+        }
+
+        function parseHeritageClauseElement(): HeritageClauseElement {
+            let node = <HeritageClauseElement>createNode(SyntaxKind.HeritageClauseElement);
+            node.expression = parseLeftHandSideExpressionOrHigher();
+            if (token === SyntaxKind.LessThanToken) {
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
+
+            return finishNode(node);
         }
 
         function isHeritageClause(): boolean {

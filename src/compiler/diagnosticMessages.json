@@ -1396,6 +1396,14 @@
         "category": "Error",
         "code": 2498
     },
+    "An interface can only extend a type reference.": {
+        "category": "Error",
+        "code": 2499
+    },
+    "A class can only implement type references.": {
+        "category": "Error",
+        "code": 2500
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1985,5 +1993,9 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
+    },
+    "Only type references are currently supported in a class 'extends' clauses.": {
+        "category": "Error",
+        "code": 9002
     }
 }
