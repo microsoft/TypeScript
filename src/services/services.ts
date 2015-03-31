@@ -1652,7 +1652,7 @@ module ts {
 
         // Parse
         var inputFileName = fileName || "module.ts";
-        var sourceFile = ts.createSourceFile(inputFileName, input, options.target);
+        var sourceFile = createSourceFile(inputFileName, input, options.target);
 
         // Store syntactic diagnostics
         if (diagnostics && sourceFile.parseDiagnostics) {
