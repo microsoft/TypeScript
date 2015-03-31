@@ -92,39 +92,29 @@ module ts {
     }
 
     describe('versionCache -- Edit test', () => {
-
-        var content = `in this story:
+        let testContent = `in this story:
 the lazy brown fox
 jumped over the cow
 that ate the grass
 that was purple at the tips
 and grew 1cm per day`;
 
-        var {lines, lineMap} = server.LineIndex.linesFromText(content);
-        if (lines.length == 0) {
-            return;
-        }
+        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
+        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        var lineIndex = new server.LineIndex();
+        let lineIndex = new server.LineIndex();
         lineIndex.load(lines);
 
-        var editedText = lineIndex.getText(0, content.length);
-
-        var snapshot: server.LineIndex;
-        var checkText: string;
-        var insertString: string;
-
         function testEdit(position: number, deleteLength: number, insertString: string): void {
-            var checkText = editFlat(position, deleteLength, insertString, content);
-            snapshot = lineIndex.edit(position, deleteLength, insertString);
-            var editedText = snapshot.getText(0, snapshot.getLength());
+            let checkText = editFlat(position, deleteLength, insertString, testContent);
+            let snapshot = lineIndex.edit(position, deleteLength, insertString);
+            let editedText = snapshot.getText(0, snapshot.getLength());
 
             assert.equal(editedText, checkText);
         }
-         
+
         it('Case VII: insert at end of file', () => {
-            insertString = "hmmmm...\r\n";
-            testEdit(content.length, 0, insertString);
+            testEdit(testContent.length, 0, "hmmmm...\r\n");
         });
 
         it('Case IV: unusual line endings merge', () => {
@@ -132,8 +122,7 @@ and grew 1cm per day`;
         });
 
         it('Case VIIa: delete whole line and nothing but line (last line)', () => {
-            var llpos = lineMap[lineMap.length - 2];
-            testEdit(llpos, lines[lines.length - 1].length, "");
+            testEdit(lineMap[lineMap.length - 2], lines[lines.length - 1].length, "");
         });
 
         it('Case VIIb: delete whole line and nothing but line (first line)', () => {
@@ -141,13 +130,11 @@ and grew 1cm per day`;
         });
 
         it('Case VIIc: delete whole line (first line) and insert with no line breaks', () => {
-            insertString = "moo, moo, moo! ";
-            testEdit(0, lines[0].length, insertString);
+            testEdit(0, lines[0].length, "moo, moo, moo! ");
         });
 
         it('Case VIIc: delete whole line (first line) and insert with multiple line breaks', () => {
-            insertString = "moo, \r\nmoo, \r\nmoo! ";
-            testEdit(0, lines[0].length, insertString);
+            testEdit(0, lines[0].length, "moo, \r\nmoo, \r\nmoo! ");
         });
 
         it('Case VIId: delete multiple lines and nothing but lines (first and second lines)', () => {
@@ -159,18 +146,15 @@ and grew 1cm per day`;
         });
 
         it('Case VI: insert multiple line breaks', () => {
-            insertString = "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr";
-            testEdit(21, 1, insertString);
+            testEdit(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
         });
 
         it('Case VIb: insert multiple line breaks', () => {
-            insertString = "cr...\r\ncr...\r\ncr";
-            testEdit(21, 1, insertString);
+            testEdit(21, 1, "cr...\r\ncr...\r\ncr");
         });
 
         it('Case VIc: insert multiple line breaks with leading \\n', () => {
-            insertString = "\ncr...\r\ncr...\r\ncr";
-            testEdit(21, 1, insertString);
+            testEdit(21, 1, "\ncr...\r\ncr...\r\ncr");
         });
 
         it('Case I: single line no line breaks deleted or inserted, delete 1 char', () => {
