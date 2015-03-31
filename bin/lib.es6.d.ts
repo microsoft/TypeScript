@@ -17205,7 +17205,11 @@ declare function importScripts(...urls: string[]): void;
 /// Windows Script Host APIS
 /////////////////////////////
 
-declare var ActiveXObject: { new (s: string): any; };
+
+interface ActiveXObject {
+    new (s: string): any;
+}
+declare var ActiveXObject: ActiveXObject;
 
 interface ITextWriter {
     Write(s: string): void;
