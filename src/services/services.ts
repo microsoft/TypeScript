@@ -1635,6 +1635,61 @@ module ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
+    /*
+     * This function will compile source text from 'input' argument using specified compiler options.
+     * If not options are provided - it will use a set of default compiler options.
+     * Extra compiler options that will unconditionally be used bu this function are:
+     * - separateCompilation = true
+     * - allowNonTsExtensions = true
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
+        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
+
+        options.separateCompilation = true;
+
+        // Filename can be non-ts file.
+        options.allowNonTsExtensions = true;
+
+        // Parse
+        var inputFileName = fileName || "module.ts";
+        var sourceFile = createSourceFile(inputFileName, input, options.target);
+
+        // Store syntactic diagnostics
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
+        }
+
+        // Output
+        let outputText: string;
+
+        // Create a compilerHost object to allow the compiler to read and write files
+        var compilerHost: CompilerHost = {
+            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            writeFile: (name, text, writeByteOrderMark) => {
+                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                outputText = text;
+            },
+            getDefaultLibFileName: () => "lib.d.ts",
+            useCaseSensitiveFileNames: () => false,
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => "",
+            getNewLine: () => "\r\n"
+        };
+
+        var program = createProgram([inputFileName], options, compilerHost);
+
+        if (diagnostics) {
+            diagnostics.push(...program.getGlobalDiagnostics());
+        }
+
+        // Emit
+        program.emit();
+
+        Debug.assert(outputText !== undefined, "Output generation failed");
+
+        return outputText;
+    }
+
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         let sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
@@ -3641,8 +3696,24 @@ module ts {
             }
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+            
+            if (results) {
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+                // ensure the results are in the file we're interested in
+                results.forEach((value) => {
+                    let targetFile = getCanonicalFileName(normalizeSlashes(value.fileName));
+                    Debug.assert(sourceFile == targetFile, `Unexpected file in results. Found results in ${targetFile} expected only results in ${sourceFile}.`);
+                });
+            }
+
+            return results;
+        }
+
+        /// References and Occurrences
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);

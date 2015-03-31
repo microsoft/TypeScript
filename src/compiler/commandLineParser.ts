@@ -10,10 +10,6 @@ module ts {
             type: "string",
         },
         {
-            name: "codepage",
-            type: "number",
-        },
-        {
             name: "declaration",
             shortName: "d",
             type: "boolean",
@@ -79,10 +75,6 @@ module ts {
             type: "boolean",
         },
         {
-            name: "noLibCheck",
-            type: "boolean",
-        },
-        {
             name: "noResolve",
             type: "boolean",
         },
@@ -116,6 +108,10 @@ module ts {
             name: "removeComments",
             type: "boolean",
             description: Diagnostics.Do_not_emit_comments_to_output,
+        },
+        {
+            name: "separateCompilation",
+            type: "boolean",
         },
         {
             name: "sourceMap",

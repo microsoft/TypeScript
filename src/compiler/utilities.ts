@@ -274,6 +274,13 @@ module ts {
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode = node;
         switch (node.kind) {
+            case SyntaxKind.SourceFile:
+                let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
+                if (pos === sourceFile.text.length) {
+                    // file is empty - return span for the beginning of the file
+                    return createTextSpan(0, 0);
+                }
+                return getSpanOfTokenAtPosition(sourceFile, pos);
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
             case SyntaxKind.VariableDeclaration:

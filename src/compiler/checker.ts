@@ -720,8 +720,14 @@ module ts {
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportAssignment | ExportSpecifier) {
             let symbol = getSymbolOfNode(node);
             let target = resolveAlias(symbol);
-            if (target && target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target)) {
-                markAliasSymbolAsReferenced(symbol);
+            if (target) {
+                let markAlias =
+                    (target === unknownSymbol && compilerOptions.separateCompilation) ||
+                    (target !== unknownSymbol && (target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
+
+                if (markAlias) {
+                    markAliasSymbolAsReferenced(symbol);
+                }
             }
         }
 
@@ -9789,7 +9795,9 @@ module ts {
 
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
+            }
 
+            if (type.baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10203,6 +10211,11 @@ module ts {
 
             computeEnumMemberValues(node);
 
+            let enumIsConst = isConst(node);
+            if (compilerOptions.separateCompilation && enumIsConst && isInAmbientContext(node)) {
+                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_separateCompilation_flag_is_provided);
+            }
+
             // Spec 2014 - Section 9.3:
             // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
             // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
@@ -10213,7 +10226,6 @@ module ts {
             let firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 if (enumSymbol.declarations.length > 1) {
-                    let enumIsConst = isConst(node);
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
                         if (isConstEnumDeclaration(decl) !== enumIsConst) {
@@ -10275,7 +10287,7 @@ module ts {
                 if (symbol.flags & SymbolFlags.ValueModule
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
-                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums)) {
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
                     let classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (classOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
@@ -11348,13 +11360,18 @@ module ts {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
-            return isAliasResolvedToValue(getSymbolOfNode(node));
+
+            var isValue = isAliasResolvedToValue(getSymbolOfNode(node));
+            return isValue && node.moduleReference && !nodeIsMissing(node.moduleReference);
         }
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
             let target = resolveAlias(symbol);
+            if (target === unknownSymbol && compilerOptions.separateCompilation) {
+                return true;
+            }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
-            return target !== unknownSymbol && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
+            return target !== unknownSymbol && target && target.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(target);
         }
 
         function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {
@@ -12255,9 +12272,6 @@ module ts {
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (isInAmbientContext(node)) {
-                    if (isBindingPattern(node.name)) {
-                        return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
-                    }
                     if (node.initializer) {
                         // Error on equals token which immediate precedes the initializer
                         let equalsTokenLength = "=".length;

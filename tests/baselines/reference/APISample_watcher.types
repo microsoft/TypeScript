@@ -4209,9 +4209,6 @@ declare module "typescript" {
         charset?: string;
 >charset : string
 
-        codepage?: number;
->codepage : number
-
         declaration?: boolean;
 >declaration : boolean
 
@@ -4252,9 +4249,6 @@ declare module "typescript" {
         noLib?: boolean;
 >noLib : boolean
 
-        noLibCheck?: boolean;
->noLibCheck : boolean
-
         noResolve?: boolean;
 >noResolve : boolean
 
@@ -4291,6 +4285,9 @@ declare module "typescript" {
 
         watch?: boolean;
 >watch : boolean
+
+        separateCompilation?: boolean;
+>separateCompilation : boolean
 
         [option: string]: string | number | boolean;
 >option : string
@@ -6468,6 +6465,15 @@ declare module "typescript" {
         throwIfCancellationRequested(): void;
 >throwIfCancellationRequested : () => void
     }
+    function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string;
+>transpile : (input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]) => string
+>input : string
+>compilerOptions : CompilerOptions
+>CompilerOptions : CompilerOptions
+>fileName : string
+>diagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
 >createLanguageServiceSourceFile : (fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean) => SourceFile
 >fileName : string
