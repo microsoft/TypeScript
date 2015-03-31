@@ -1268,7 +1268,6 @@ module ts {
         }
 
         function isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult {
-
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
             if (entityName.parent.kind === SyntaxKind.TypeQuery) {
