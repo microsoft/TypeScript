@@ -655,6 +655,10 @@
         "category": "Error",
         "code": 1208
     },
+    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1209
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
