@@ -114,158 +114,91 @@ and grew 1cm per day`;
         var checkText: string;
         var insertString: string;
 
-        it('Case VII: insert at end of file', () => {
-            insertString = "hmmmm...\r\n";
-            checkText = editFlat(content.length, 0, insertString, content);
-            snapshot = lineIndex.edit(content.length, 0, insertString);
-            editedText = snapshot.getText(0, checkText.length);
+        function testEdit(position: number, deleteLength: number, insertString: string): void {
+            var checkText = editFlat(position, deleteLength, insertString, content);
+            snapshot = lineIndex.edit(position, deleteLength, insertString);
+            var editedText = snapshot.getText(0, snapshot.getLength());
 
             assert.equal(editedText, checkText);
+        }
+         
+        it('Case VII: insert at end of file', () => {
+            insertString = "hmmmm...\r\n";
+            testEdit(content.length, 0, insertString);
         });
 
         it('Case IV: unusual line endings merge', () => {
-            snapshot = lineIndex.edit(lines[0].length - 1, lines[1].length, "");
-            editedText = snapshot.getText(0, content.length - lines[1].length);
-            checkText = editFlat(lines[0].length - 1, lines[1].length, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(lines[0].length - 1, lines[1].length, "");
         });
 
         it('Case VIIa: delete whole line and nothing but line (last line)', () => {
             var llpos = lineMap[lineMap.length - 2];
-            snapshot = lineIndex.edit(llpos, lines[lines.length - 1].length, "");
-            checkText = editFlat(llpos, lines[lines.length - 1].length, "", content);
-            editedText = snapshot.getText(0, checkText.length);
-
-            assert.equal(editedText, checkText);
+            testEdit(llpos, lines[lines.length - 1].length, "");
         });
 
         it('Case VIIb: delete whole line and nothing but line (first line)', () => {
-            snapshot = lineIndex.edit(0, lines[0].length, "");
-            editedText = snapshot.getText(0, content.length - lines[0].length);
-            checkText = editFlat(0, lines[0].length, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(0, lines[0].length, "");
         });
 
         it('Case VIIc: delete whole line (first line) and insert with no line breaks', () => {
             insertString = "moo, moo, moo! ";
-            snapshot = lineIndex.edit(0, lines[0].length, insertString);
-            editedText = snapshot.getText(0, content.length - lines[0].length + insertString.length);
-            checkText = editFlat(0, lines[0].length, insertString, content);
-
-            assert.equal(editedText, checkText);
+            testEdit(0, lines[0].length, insertString);
         });
 
         it('Case VIIc: delete whole line (first line) and insert with multiple line breaks', () => {
             insertString = "moo, \r\nmoo, \r\nmoo! ";
-            snapshot = lineIndex.edit(0, lines[0].length, insertString);
-            editedText = snapshot.getText(0, content.length - lines[0].length + insertString.length);
-            checkText = editFlat(0, lines[0].length, insertString, content);
-
-            assert.equal(editedText, checkText);
+            testEdit(0, lines[0].length, insertString);
         });
 
         it('Case VIId: delete multiple lines and nothing but lines (first and second lines)', () => {
-            snapshot = lineIndex.edit(0, lines[0].length + lines[1].length, "");
-            editedText = snapshot.getText(0, content.length - (lines[0].length + lines[1].length));
-            checkText = editFlat(0, lines[0].length + lines[1].length, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(0, lines[0].length + lines[1].length, "");
         });
 
         it('Case VIIe: delete multiple lines and nothing but lines (second and third lines)', () => {
-            snapshot = lineIndex.edit(lines[0].length, lines[1].length + lines[2].length, "");
-
-            editedText = snapshot.getText(0, content.length - (lines[1].length + lines[2].length));
-            checkText = editFlat(lines[0].length, lines[1].length + lines[2].length, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(lines[0].length, lines[1].length + lines[2].length, "");
         });
 
         it('Case VI: insert multiple line breaks', () => {
             insertString = "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr";
-            snapshot = lineIndex.edit(21, 1, insertString);
-            editedText = snapshot.getText(0, content.length + insertString.length - 1);
-            checkText = editFlat(21, 1, insertString, content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 1, insertString);
         });
 
         it('Case VIb: insert multiple line breaks', () => {
-
             insertString = "cr...\r\ncr...\r\ncr";
-            snapshot = lineIndex.edit(21, 1, insertString);
-            editedText = snapshot.getText(0, content.length + insertString.length - 1);
-            checkText = editFlat(21, 1, insertString, content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 1, insertString);
         });
 
         it('Case VIc: insert multiple line breaks with leading \\n', () => {
             insertString = "\ncr...\r\ncr...\r\ncr";
-            snapshot = lineIndex.edit(21, 1, insertString);
-            editedText = snapshot.getText(0, content.length + insertString.length - 1);
-            checkText = editFlat(21, 1, insertString, content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 1, insertString);
         });
 
         it('Case I: single line no line breaks deleted or inserted, delete 1 char', () => {
-            snapshot = lineIndex.edit(21, 1);
-            editedText = snapshot.getText(0, content.length - 1);
-            checkText = editFlat(21, 1, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 1, "");
         });
 
         it('Case Ib: single line no line breaks deleted or inserted, insert 1 char', () => {
-            snapshot = lineIndex.edit(21, 0, "b");
-            editedText = snapshot.getText(0, content.length + 1);
-            checkText = editFlat(21, 0, "b", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 0, "b");
         });
 
         it('Case Ib: single line no line breaks deleted or inserted, delete 1, insert 2 chars', () => {
-            snapshot = lineIndex.edit(21, 1, "cr");
-            editedText = snapshot.getText(0, content.length + 1);
-            checkText = editFlat(21, 1, "cr", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 1, "cr");
         });
 
         it('Case II: delete across line break (just the line break)', () => {
-            snapshot = lineIndex.edit(21, 22);
-            editedText = snapshot.getText(0, content.length - 22);
-            checkText = editFlat(21, 22, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 22, "");
         });
 
         it('Case IIb: delete across line break', () => {
-
-            snapshot = lineIndex.edit(21, 32);
-            editedText = snapshot.getText(0, content.length - 32);
-            checkText = editFlat(21, 32, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 32, "");
         });
 
         it('Case III: delete across multiple line breaks and insert no line breaks', () => {
-            snapshot = lineIndex.edit(21, 42);
-            editedText = snapshot.getText(0, content.length - 42);
-            checkText = editFlat(21, 42, "", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 42, "");
         });
 
         it('Case IIIb: delete across multiple line breaks and insert text', () => {
-            snapshot = lineIndex.edit(21, 42, "slithery ");
-            editedText = snapshot.getText(0, content.length - 33);
-            checkText = editFlat(21, 42, "slithery ", content);
-
-            assert.equal(editedText, checkText);
+            testEdit(21, 42, "slithery ");
         });
     });
 
