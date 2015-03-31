@@ -491,7 +491,7 @@ module ts {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_separateCompilation_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
                 }
 
-                let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) ? f : undefined);
+                let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
                     let span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
                     diagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_non_external_modules_when_the_separateCompilation_flag_is_provided));
