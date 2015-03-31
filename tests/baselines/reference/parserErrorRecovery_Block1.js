@@ -6,6 +6,7 @@ function f() {
 
 //// [parserErrorRecovery_Block1.js]
 function f() {
-    1 + ;
+    1 +
+    ;
     return;
 }

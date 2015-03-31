@@ -12,6 +12,4 @@ var _this;
     _this[_this["_thisVal1"] = 0] = "_thisVal1";
     _this[_this["_thisVal2"] = 1] = "_thisVal2";
 })(_this || (_this = {}));
-var f = function () {
-    return _this;
-};
+var f = function () { return _this; };

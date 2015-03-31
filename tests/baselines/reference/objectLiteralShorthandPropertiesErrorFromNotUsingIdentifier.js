@@ -25,10 +25,8 @@ var v = { class };  // error
 var y = {
     "stringLiteral": ,
     42: ,
-    get e() {
-    },
-    set f() {
-    },
+    get e() { },
+    set f() { },
     this: ,
     super: ,
     var: ,
@@ -37,13 +35,7 @@ var y = {
 };
 var x = {
     a: .b,
-    a: [
-        "ss"
-    ],
-    a: [
-        1
-    ]
+    a: ["ss"],
+    a: [1]
 };
-var v = {
-    class: 
-}; // error
+var v = { class:  }; // error

@@ -9,9 +9,7 @@ var Greeter = (function () {
     function Greeter() {
         var _this = this;
         this.a = 10;
-        this.returnA = function () {
-            return _this.a;
-        };
+        this.returnA = function () { return _this.a; };
     }
     return Greeter;
 })();

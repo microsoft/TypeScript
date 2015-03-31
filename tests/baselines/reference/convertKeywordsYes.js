@@ -325,8 +325,7 @@ var string = 0;
 var get = 0;
 var yield = 0;
 var declare = 0;
-function bigGeneric(c, a, b2, i, i2, l, m, n, p, p2, p3, p4, s, s2, s3, g, y, d) {
-}
+function bigGeneric(c, a, b2, i, i2, l, m, n, p, p2, p3, p4, s, s2, s3, g, y, d) { }
 var bigObject = {
     constructor: 0,
     any: 0,

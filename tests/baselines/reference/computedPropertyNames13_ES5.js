@@ -23,27 +23,16 @@ var a;
 var C = (function () {
     function C() {
     }
-    C.prototype[s] = function () {
-    };
-    C.prototype[n] = function () {
-    };
-    C[s + s] = function () {
-    };
-    C.prototype[s + n] = function () {
-    };
-    C.prototype[+s] = function () {
-    };
-    C[""] = function () {
-    };
-    C.prototype[0] = function () {
-    };
-    C.prototype[a] = function () {
-    };
-    C[true] = function () {
-    };
-    C.prototype["hello bye"] = function () {
-    };
-    C["hello " + a + " bye"] = function () {
-    };
+    C.prototype[s] = function () { };
+    C.prototype[n] = function () { };
+    C[s + s] = function () { };
+    C.prototype[s + n] = function () { };
+    C.prototype[+s] = function () { };
+    C[""] = function () { };
+    C.prototype[0] = function () { };
+    C.prototype[a] = function () { };
+    C[true] = function () { };
+    C.prototype["hello bye"] = function () { };
+    C["hello " + a + " bye"] = function () { };
     return C;
 })();

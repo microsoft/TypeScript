@@ -23,8 +23,7 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function (x) {
-    };
+    C.prototype.bar = function (x) { };
     return C;
 })();
 var D = (function (_super) {

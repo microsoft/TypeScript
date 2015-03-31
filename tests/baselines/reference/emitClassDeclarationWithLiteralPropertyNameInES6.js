@@ -22,14 +22,10 @@ class B {
         this[0o23534] = "WORLD";
         this[20] = "twenty";
     }
-    "foo"() {
-    }
-    0b1110() {
-    }
-    11() {
-    }
-    interface() {
-    }
+    "foo"() { }
+    0b1110() { }
+    11() { }
+    interface() { }
 }
 B["hi"] = 10000;
 B[22] = "twenty-two";

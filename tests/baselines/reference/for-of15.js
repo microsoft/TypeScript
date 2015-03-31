@@ -13,8 +13,7 @@ class StringIterator {
 
 //// [for-of15.js]
 var v;
-for (v of new StringIterator) {
-} // Should fail
+for (v of new StringIterator) { } // Should fail
 class StringIterator {
     next() {
         return "";

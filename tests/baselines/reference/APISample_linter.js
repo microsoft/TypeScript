@@ -1247,7 +1247,6 @@ declare module "typescript" {
     interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
-        codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
@@ -1261,7 +1260,6 @@ declare module "typescript" {
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
-        noLibCheck?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
@@ -2056,7 +2054,8 @@ function delint(sourceFile) {
                 if (ifStatement.thenStatement.kind !== 176 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
-                if (ifStatement.elseStatement && ifStatement.elseStatement.kind !== 176 /* Block */ && ifStatement.elseStatement.kind !== 180 /* IfStatement */) {
+                if (ifStatement.elseStatement &&
+                    ifStatement.elseStatement.kind !== 176 /* Block */ && ifStatement.elseStatement.kind !== 180 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;

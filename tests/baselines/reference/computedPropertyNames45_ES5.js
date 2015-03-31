@@ -33,9 +33,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "get1", {
-        get: function () {
-            return new Foo;
-        },
+        get: function () { return new Foo; },
         enumerable: true,
         configurable: true
     });
@@ -47,8 +45,7 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     Object.defineProperty(D.prototype, "set1", {
-        set: function (p) {
-        },
+        set: function (p) { },
         enumerable: true,
         configurable: true
     });

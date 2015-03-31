@@ -112,12 +112,8 @@ var Foo = (function (_super) {
         this.x = x;
         this.gar = 5;
     }
-    Foo.prototype.bar = function () {
-        return 0;
-    };
-    Foo.prototype.boo = function (x) {
-        return x;
-    };
+    Foo.prototype.bar = function () { return 0; };
+    Foo.prototype.boo = function (x) { return x; };
     Foo.statVal = 0;
     return Foo;
 })(Bar);

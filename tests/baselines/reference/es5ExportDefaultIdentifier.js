@@ -6,8 +6,7 @@ export default f;
 
 
 //// [es5ExportDefaultIdentifier.js]
-function f() {
-}
+function f() { }
 exports.f = f;
 exports.default = f;
 

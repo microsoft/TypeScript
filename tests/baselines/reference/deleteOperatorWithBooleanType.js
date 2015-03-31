@@ -41,15 +41,11 @@ delete M.n;
 //// [deleteOperatorWithBooleanType.js]
 // delete  operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;
@@ -61,10 +57,7 @@ var objA = new A();
 var ResultIsBoolean1 = delete BOOLEAN;
 // boolean type literal
 var ResultIsBoolean2 = delete true;
-var ResultIsBoolean3 = delete {
-    x: true,
-    y: false
-};
+var ResultIsBoolean3 = delete { x: true, y: false };
 // boolean type expressions
 var ResultIsBoolean4 = delete objA.a;
 var ResultIsBoolean5 = delete M.n;

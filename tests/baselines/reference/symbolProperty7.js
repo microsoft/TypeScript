@@ -13,8 +13,7 @@ class C {
     constructor() {
         this[Symbol()] = 0;
     }
-    [Symbol()]() {
-    }
+    [Symbol()]() { }
     get [Symbol()]() {
         return 0;
     }

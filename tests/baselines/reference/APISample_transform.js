@@ -1248,7 +1248,6 @@ declare module "typescript" {
     interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
-        codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
@@ -1262,7 +1261,6 @@ declare module "typescript" {
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
-        noLibCheck?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
@@ -2052,35 +2050,20 @@ function transform(contents, compilerOptions) {
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
         getSourceFile: function (fileName, target) {
-            return files[fileName] !== undefined ? ts.createSourceFile(fileName, files[fileName], target) : undefined;
+            return files[fileName] !== undefined ?
+                ts.createSourceFile(fileName, files[fileName], target) : undefined;
         },
         writeFile: function (name, text, writeByteOrderMark) {
-            outputs.push({
-                name: name,
-                text: text,
-                writeByteOrderMark: writeByteOrderMark
-            });
+            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
         },
-        getDefaultLibFileName: function () {
-            return "lib.d.ts";
-        },
-        useCaseSensitiveFileNames: function () {
-            return false;
-        },
-        getCanonicalFileName: function (fileName) {
-            return fileName;
-        },
-        getCurrentDirectory: function () {
-            return "";
-        },
-        getNewLine: function () {
-            return "\n";
-        }
+        getDefaultLibFileName: function () { return "lib.d.ts"; },
+        useCaseSensitiveFileNames: function () { return false; },
+        getCanonicalFileName: function (fileName) { return fileName; },
+        getCurrentDirectory: function () { return ""; },
+        getNewLine: function () { return "\n"; }
     };
     // Create a program from inputs
-    var program = ts.createProgram([
-        "file.ts"
-    ], compilerOptions, compilerHost);
+    var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
     // Query for early errors
     var errors = ts.getPreEmitDiagnostics(program);
     var emitResult = program.emit();
@@ -2088,7 +2071,8 @@ function transform(contents, compilerOptions) {
     return {
         outputs: outputs,
         errors: errors.map(function (e) {
-            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
+            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
+                + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
         })
     };
 }

@@ -72,36 +72,40 @@ function foo3(x) {
 }
 function foo4(x) {
     return typeof x !== "string" // string | number | boolean
-     && typeof x !== "number" // number | boolean
-     && x; // boolean
+        && typeof x !== "number" // number | boolean
+        && x; // boolean
 }
 function foo5(x) {
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     var b;
     return typeof x !== "string" // string | number | boolean
-     && ((b = x) && (typeof x !== "number" // number | boolean
-     && x)); // boolean
+        && ((b = x) && (typeof x !== "number" // number | boolean
+            && x)); // boolean
 }
 function foo6(x) {
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     return typeof x !== "string" // string | number | boolean
-     && (typeof x !== "number" // number | boolean
-     ? x // boolean
-     : x === 10); // number 
+        && (typeof x !== "number" // number | boolean
+            ? x // boolean
+            : x === 10); // number 
 }
 function foo7(x) {
     var y;
     var z;
     // Mixing typeguard narrowing
     // Assigning value to x deep inside another guard stops narrowing of type too
-    return typeof x !== "string" && ((z = x) // string | number | boolean - x changed deeper in conditional expression
-     && (typeof x === "number" ? (x = 10 && x.toString()) // number | boolean | string
-     : (y = x && x.toString()))); // number | boolean | string
+    return typeof x !== "string"
+        && ((z = x) // string | number | boolean - x changed deeper in conditional expression
+            && (typeof x === "number"
+                ? (x = 10 && x.toString()) // number | boolean | string
+                : (y = x && x.toString()))); // number | boolean | string
 }
 function foo8(x) {
     // Mixing typeguard 
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
-    return typeof x !== "string" && (x = 10) // change x - number| string
-     && (typeof x === "number" ? x // number
-     : x.length); // string
+    return typeof x !== "string"
+        && (x = 10) // change x - number| string
+        && (typeof x === "number"
+            ? x // number
+            : x.length); // string
 }

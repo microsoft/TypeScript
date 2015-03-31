@@ -115,51 +115,43 @@ var m1d;
     var I = (function () {
         function I() {
         }
-        I.prototype.foo = function () {
-        };
+        I.prototype.foo = function () { };
         return I;
     })();
     m1d.I = I;
 })(m1d || (m1d = {}));
 var m1d = 1; // error
-function m2() {
-}
+function m2() { }
 ; // ok since the module is not instantiated
 var m2a;
 (function (m2a) {
     var y = 2;
 })(m2a || (m2a = {}));
-function m2a() {
-}
+function m2a() { }
 ; // error since the module is instantiated
 var m2b;
 (function (m2b) {
     m2b.y = 2;
 })(m2b || (m2b = {}));
-function m2b() {
-}
+function m2b() { }
 ; // error since the module is instantiated
 // should be errors to have function first
-function m2c() {
-}
+function m2c() { }
 ;
 var m2c;
 (function (m2c) {
     m2c.y = 2;
 })(m2c || (m2c = {}));
-function m2f() {
-}
+function m2f() { }
 ;
-function m2g() {
-}
+function m2g() { }
 ;
 var m2g;
 (function (m2g) {
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () {
-        };
+        C.prototype.foo = function () { };
         return C;
     })();
     m2g.C = C;
@@ -176,15 +168,13 @@ var m3a;
 var m3a = (function () {
     function m3a() {
     }
-    m3a.prototype.foo = function () {
-    };
+    m3a.prototype.foo = function () { };
     return m3a;
 })(); // error, class isn't ambient or declared before the module
 var m3b = (function () {
     function m3b() {
     }
-    m3b.prototype.foo = function () {
-    };
+    m3b.prototype.foo = function () { };
     return m3b;
 })();
 var m3b;
@@ -194,8 +184,7 @@ var m3b;
 var m3c = (function () {
     function m3c() {
     }
-    m3c.prototype.foo = function () {
-    };
+    m3c.prototype.foo = function () { };
     return m3c;
 })();
 var m3c;
@@ -215,8 +204,7 @@ var m3g;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () {
-        };
+        C.prototype.foo = function () { };
         return C;
     })();
     m3g.C = C;
@@ -249,8 +237,7 @@ var m4d;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () {
-        };
+        C.prototype.foo = function () { };
         return C;
     })();
 })(m4d || (m4d = {}));

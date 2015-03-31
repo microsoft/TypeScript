@@ -165,9 +165,7 @@ function foo7(x) {
 var r7 = foo7(1);
 // object types
 function foo8(x) {
-    return {
-        x: x
-    };
+    return { x: x };
 }
 var r8 = foo8(1);
 function foo9(x) {
@@ -204,9 +202,7 @@ function foo12() {
     return i2;
 }
 var r12 = foo12();
-function m1() {
-    return 1;
-}
+function m1() { return 1; }
 var m1;
 (function (m1) {
     m1.y = 2;

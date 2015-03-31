@@ -24,8 +24,7 @@ class B {
         this.x = 10;
         this.x = 10;
     }
-    static log(a) {
-    }
+    static log(a) { }
     foo() {
         B.log(this.x);
     }

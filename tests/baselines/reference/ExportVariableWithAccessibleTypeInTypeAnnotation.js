@@ -15,8 +15,5 @@ module A {
 var A;
 (function (A) {
     // valid since Point is exported
-    A.Origin = {
-        x: 0,
-        y: 0
-    };
+    A.Origin = { x: 0, y: 0 };
 })(A || (A = {}));

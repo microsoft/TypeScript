@@ -28,7 +28,5 @@ var B;
 })(B || (B = {}));
 var C;
 (function (C) {
-    function hello() {
-        return null;
-    }
+    function hello() { return null; }
 })(C || (C = {}));

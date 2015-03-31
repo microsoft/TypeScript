@@ -9,7 +9,6 @@ function foo() {
 
 //// [noSelfOnVars.js]
 function foo() {
-    function bar() {
-    }
+    function bar() { }
     var x = bar;
 }

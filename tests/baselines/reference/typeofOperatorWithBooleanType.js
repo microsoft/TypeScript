@@ -53,15 +53,11 @@ z: typeof M.n;
 //// [typeofOperatorWithBooleanType.js]
 // typeof  operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;
@@ -73,10 +69,7 @@ var objA = new A();
 var ResultIsString1 = typeof BOOLEAN;
 // boolean type literal
 var ResultIsString2 = typeof true;
-var ResultIsString3 = typeof {
-    x: true,
-    y: false
-};
+var ResultIsString3 = typeof { x: true, y: false };
 // boolean type expressions
 var ResultIsString4 = typeof objA.a;
 var ResultIsString5 = typeof M.n;
@@ -97,10 +90,7 @@ var x;
 var r;
 z: typeof BOOLEAN;
 r: typeof foo;
-var y = {
-    a: true,
-    b: false
-};
+var y = { a: true, b: false };
 z: typeof y.a;
 z: typeof objA.a;
 z: typeof A.foo;

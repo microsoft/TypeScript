@@ -1216,7 +1216,6 @@ declare module "typescript" {
     interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
-        codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
@@ -1230,7 +1229,6 @@ declare module "typescript" {
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
-        noLibCheck?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
@@ -2022,8 +2020,6 @@ function compile(fileNames, options) {
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {
-    noEmitOnError: true,
-    noImplicitAny: true,
-    target: 1 /* ES5 */,
-    module: 1 /* CommonJS */
+    noEmitOnError: true, noImplicitAny: true,
+    target: 1 /* ES5 */, module: 1 /* CommonJS */
 });

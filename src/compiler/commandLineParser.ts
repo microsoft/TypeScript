@@ -10,10 +10,6 @@ module ts {
             type: "string",
         },
         {
-            name: "codepage",
-            type: "number",
-        },
-        {
             name: "declaration",
             shortName: "d",
             type: "boolean",
@@ -79,10 +75,6 @@ module ts {
             type: "boolean",
         },
         {
-            name: "noLibCheck",
-            type: "boolean",
-        },
-        {
             name: "noResolve",
             type: "boolean",
         },
@@ -139,18 +131,6 @@ module ts {
             type: "boolean",
             description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
             experimental: true
-        },
-        {
-            name: "preserveNewLines",
-            type: "boolean",
-            description: Diagnostics.Preserve_new_lines_when_emitting_code,
-            experimental: true
-        },
-        {
-            name: "cacheDownlevelForOfLength",
-            type: "boolean",
-            description: "Cache length access when downlevel emitting for-of statements",
-            experimental: true,
         },
         {
             name: "target",

@@ -26,8 +26,7 @@ class C extends Base {
         var _this = this;
         (() => {
             var obj = {
-                [super.bar()]() {
-                } // needs capture
+                [super.bar()]() { } // needs capture
             };
         });
         return 0;

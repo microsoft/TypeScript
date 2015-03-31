@@ -5,6 +5,5 @@ class C {
 
 //// [parserSymbolProperty7.js]
 class C {
-    [Symbol.toStringTag]() {
-    }
+    [Symbol.toStringTag]() { }
 }
