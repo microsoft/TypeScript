@@ -1585,6 +1585,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        separateCompilation?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }

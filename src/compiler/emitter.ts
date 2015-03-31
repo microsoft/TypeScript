@@ -1641,6 +1641,11 @@ module ts {
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
+                if (compilerOptions.separateCompilation) {
+                    // do not inline enum values in separate compilation mode
+                    return false;
+                }
+
                 let constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
                     write(constantValue.toString());
@@ -3872,7 +3877,7 @@ module ts {
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
                 let isConstEnum = isConst(node);
-                return !isConstEnum || compilerOptions.preserveConstEnums;
+                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.separateCompilation;
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -3964,7 +3969,7 @@ module ts {
             }
 
             function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-                return isInstantiatedModule(node, compilerOptions.preserveConstEnums);
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
