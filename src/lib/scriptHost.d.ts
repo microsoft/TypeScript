@@ -10,7 +10,13 @@ interface ActiveXObject {
 }
 declare var ActiveXObject: ActiveXObject;
 
-interface ITextStreamBase {
+interface ITextWriter {
+    Write(s: string): void;
+    WriteLine(s: string): void;
+    Close(): void;
+}
+
+interface TextStreamBase {
     /**
      * The column number of the current character position in an input stream.
      */
@@ -26,7 +32,7 @@ interface ITextStreamBase {
     Close(): void;
 }
 
-interface ITextWriter extends ITextStreamBase {
+interface TextStreamWriter extends TextStreamBase {
     /**
      * Sends a string to an output stream.
      */
@@ -41,7 +47,7 @@ interface ITextWriter extends ITextStreamBase {
     WriteLine(s: string): void;
 }
 
-interface ITextReader extends ITextStreamBase {
+interface TextStreamReader extends TextStreamBase {
     /**
      * Returns a specified number of characters from an input stream, beginning at the current pointer position.
      * Does not return until the ENTER key is pressed.
@@ -89,12 +95,12 @@ declare var WScript: {
      * Exposes the write-only error output stream for the current script.
      * Can be accessed only while using CScript.exe.
      */
-    StdErr: ITextWriter;
+    StdErr: TextStreamWriter;
     /**
      * Exposes the write-only output stream for the current script.
      * Can be accessed only while using CScript.exe.
      */
-    StdOut: ITextWriter;
+    StdOut: TextStreamWriter;
     Arguments: { length: number; Item(n: number): string; };
     /**
      *  The full path of the currently running script.
@@ -132,7 +138,7 @@ declare var WScript: {
      * Exposes the read-only input stream for the current script.
      * Can be accessed only while using CScript.exe.
      */
-    StdIn: ITextReader;
+    StdIn: TextStreamReader;
     /**
      * Windows Script Host version
      */
