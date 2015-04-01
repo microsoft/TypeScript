@@ -2598,7 +2598,8 @@ module ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        forEachValue(symbol.exports, symbol => {
+                        let exportedSymbols = typeInfoResolver.getExportsOfModule(symbol);
+                        forEach(exportedSymbols, symbol => {
                             if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
@@ -2642,8 +2643,17 @@ module ts {
                     if (showCompletionsInImportsClause(contextToken)) {
                         let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
-                        let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
-                        symbols = filterModuleExports(exports, importDeclaration);
+
+                        let exports: Symbol[];
+                        if (importDeclaration.moduleSpecifier) {
+                            let moduleSpecifierSymbol = typeInfoResolver.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                            if (moduleSpecifierSymbol) {
+                                exports = typeInfoResolver.getExportsOfModule(moduleSpecifierSymbol);
+                            }
+                        }
+
+                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
                 }
                 else {

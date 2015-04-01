@@ -74,7 +74,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfExternalModule,
+            getExportsOfModule: getExportsOfModuleAsArray,
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -896,6 +896,10 @@ module ts {
 
         function getExportAssignmentSymbol(moduleSymbol: Symbol): Symbol {
             return moduleSymbol.exports["export="];
+        }
+
+        function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
+            return symbolsToArray(getExportsOfModule(moduleSymbol));
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
@@ -3030,17 +3034,6 @@ module ts {
                 }
             }
             return result;
-        }
-
-        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[] {
-            if (!node.moduleSpecifier) {
-                return emptyArray;
-            }
-            let module = resolveExternalModuleName(node, node.moduleSpecifier);
-            if (!module) {
-                return emptyArray;
-            }
-            return symbolsToArray(getExportsOfModule(module));
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {

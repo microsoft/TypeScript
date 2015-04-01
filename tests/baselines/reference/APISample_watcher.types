@@ -2576,9 +2576,8 @@ declare module "typescript" {
 >expression : Expression
 >Expression : Expression
     }
-    interface ImportDeclaration extends Statement, ModuleElement {
+    interface ImportDeclaration extends ModuleElement {
 >ImportDeclaration : ImportDeclaration
->Statement : Statement
 >ModuleElement : ModuleElement
 
         importClause?: ImportClause;
@@ -3087,10 +3086,10 @@ declare module "typescript" {
 >Symbol : Symbol
 >Symbol : Symbol
 
-        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
->getExportsOfExternalModule : (node: ImportDeclaration) => Symbol[]
->node : ImportDeclaration
->ImportDeclaration : ImportDeclaration
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+>getExportsOfModule : (moduleSymbol: Symbol) => Symbol[]
+>moduleSymbol : Symbol
+>Symbol : Symbol
 >Symbol : Symbol
     }
     interface SymbolDisplayBuilder {
