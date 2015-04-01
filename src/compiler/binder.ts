@@ -168,7 +168,7 @@ module ts {
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
 
-            if (node.kind === SyntaxKind.ClassDeclaration && symbol.exports) {
+            if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression) && symbol.exports) {
                 // TypeScript 1.0 spec (April 2014): 8.4
                 // Every class automatically contains a static property member named 'prototype', 
                 // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
@@ -286,6 +286,7 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
                     break;
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     if (node.flags & NodeFlags.Static) {
                         declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
@@ -485,6 +486,9 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
                     break;
+                case SyntaxKind.ClassExpression:
+                    bindAnonymousDeclaration(<ClassExpression>node, SymbolFlags.Class, "__class", /*isBlockScopeContainer*/ false);
+                    break;
                 case SyntaxKind.CatchClause:
                     bindCatchVariableDeclaration(<CatchClause>node);
                     break;
@@ -584,9 +588,9 @@ module ts {
             // containing class.
             if (node.flags & NodeFlags.AccessibilityModifier &&
                 node.parent.kind === SyntaxKind.Constructor &&
-                node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                (node.parent.parent.kind === SyntaxKind.ClassDeclaration || node.parent.parent.kind === SyntaxKind.ClassExpression)) {
 
-                let classDeclaration = <ClassDeclaration>node.parent.parent;
+                let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
         }

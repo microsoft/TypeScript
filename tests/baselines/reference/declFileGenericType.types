@@ -147,14 +147,14 @@ export var g = C.F5<C.A<C.B>>();
 
 export class h extends C.A<C.B>{ }
 >h : h
->C : unknown
+>C : typeof C
 >A : C.A<T>
 >C : unknown
 >B : C.B
 
 export interface i extends C.A<C.B> { }
 >i : i
->C : unknown
+>C : typeof C
 >A : C.A<T>
 >C : unknown
 >B : C.B

@@ -3182,7 +3182,7 @@ module ts {
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
-            
+
             let completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
@@ -5182,8 +5182,8 @@ module ts {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
-                            getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
-                            forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
+                            getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
+                            forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                             forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
@@ -5192,7 +5192,7 @@ module ts {
                 }
                 return;
 
-                function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
+                function getPropertySymbolFromTypeReference(typeReference: HeritageClauseElement) {
                     if (typeReference) {
                         let type = typeInfoResolver.getTypeAtLocation(typeReference);
                         if (type) {
@@ -5449,19 +5449,44 @@ module ts {
         }
 
         function isTypeReference(node: Node): boolean {
-            if (isRightSideOfQualifiedName(node)) {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(node) ) {
                 node = node.parent;
             }
 
-            return node.parent.kind === SyntaxKind.TypeReference;
+            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.HeritageClauseElement;
         }
 
         function isNamespaceReference(node: Node): boolean {
+            return isQualifiedNameNamespaceReference(node) || isPropertyAccessNamespaceReference(node);
+        }
+
+        function isPropertyAccessNamespaceReference(node: Node): boolean {
+            let root = node;
+            let isLastClause = true;
+            if (root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                while (root.parent && root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                    root = root.parent;
+                }
+
+                isLastClause = (<PropertyAccessExpression>root).name === node;
+            }
+
+            if (!isLastClause && root.parent.kind === SyntaxKind.HeritageClauseElement && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+                let decl = root.parent.parent.parent;
+                return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
+                    (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
+            }
+
+            return false;
+        }
+
+        function isQualifiedNameNamespaceReference(node: Node): boolean {
             let root = node;
             let isLastClause = true;
             if (root.parent.kind === SyntaxKind.QualifiedName) {
-                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName) {
                     root = root.parent;
+                }
 
                 isLastClause = (<QualifiedName>root).right === node;
             }
