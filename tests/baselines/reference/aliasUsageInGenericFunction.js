@@ -52,9 +52,5 @@ var moduleA = require("aliasUsageInGenericFunction_moduleA");
 function foo(x) {
     return x;
 }
-var r = foo({
-    a: moduleA
-});
-var r2 = foo({
-    a: null
-});
+var r = foo({ a: moduleA });
+var r2 = foo({ a: null });

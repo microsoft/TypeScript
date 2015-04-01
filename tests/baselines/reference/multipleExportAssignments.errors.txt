@@ -1,5 +1,5 @@
-tests/cases/compiler/multipleExportAssignments.ts(13,1): error TS2300: Duplicate identifier 'default'.
-tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2300: Duplicate identifier 'default'.
+tests/cases/compiler/multipleExportAssignments.ts(13,1): error TS2300: Duplicate identifier 'export='.
+tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2300: Duplicate identifier 'export='.
 
 
 ==== tests/cases/compiler/multipleExportAssignments.ts (2 errors) ====
@@ -17,9 +17,9 @@ tests/cases/compiler/multipleExportAssignments.ts(14,1): error TS2300: Duplicate
     };
     export = server;
     ~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'default'.
+!!! error TS2300: Duplicate identifier 'export='.
     export = connectExport;
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'default'.
+!!! error TS2300: Duplicate identifier 'export='.
      
     

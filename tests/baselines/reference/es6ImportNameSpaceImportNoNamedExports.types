@@ -8,5 +8,5 @@ export = a;
 
 === tests/cases/compiler/es6ImportNameSpaceImportNoNamedExports_1.ts ===
 import * as nameSpaceBinding from "es6ImportNameSpaceImportNoNamedExports_0"; // error
->nameSpaceBinding : typeof nameSpaceBinding
+>nameSpaceBinding : number
 

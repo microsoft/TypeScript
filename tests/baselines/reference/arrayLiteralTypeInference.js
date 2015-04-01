@@ -78,14 +78,8 @@ var ActionB = (function (_super) {
     return ActionB;
 })(Action);
 var x1 = [
-    {
-        id: 2,
-        trueness: false
-    },
-    {
-        id: 3,
-        name: "three"
-    }
+    { id: 2, trueness: false },
+    { id: 3, name: "three" }
 ];
 var x2 = [
     new ActionA(),
@@ -97,14 +91,8 @@ var x3 = [
     new ActionB()
 ];
 var z1 = [
-    {
-        id: 2,
-        trueness: false
-    },
-    {
-        id: 3,
-        name: "three"
-    }
+    { id: 2, trueness: false },
+    { id: 3, name: "three" }
 ];
 var z2 = [
     new ActionA(),

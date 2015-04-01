@@ -6,11 +6,5 @@ var x = foo([{a:'s'}]);
 
 
 //// [functionOverloads42.js]
-function foo(bar) {
-    return bar;
-}
-var x = foo([
-    {
-        a: 's'
-    }
-]);
+function foo(bar) { return bar; }
+var x = foo([{ a: 's' }]);

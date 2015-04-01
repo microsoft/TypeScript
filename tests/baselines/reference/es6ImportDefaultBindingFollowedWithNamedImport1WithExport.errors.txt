@@ -15,7 +15,7 @@ tests/cases/compiler/client.ts(11,34): error TS2305: Module '"tests/cases/compil
 ==== tests/cases/compiler/server.ts (0 errors) ====
     
     var a = 10;
-    export = a;
+    export default a;
     
 ==== tests/cases/compiler/client.ts (12 errors) ====
     export import defaultBinding1, { } from "server";

@@ -4,8 +4,6 @@ for (v of [0]) {
 }
 
 //// [for-of6.js]
-for (v of [
-    0
-]) {
+for (v of [0]) {
     let v;
 }

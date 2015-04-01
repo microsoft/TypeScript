@@ -6,10 +6,9 @@ export default f;
 
 
 //// [es5ExportDefaultIdentifier.js]
-function f() {
-}
+function f() { }
 exports.f = f;
-module.exports = f;
+exports.default = f;
 
 
 //// [es5ExportDefaultIdentifier.d.ts]

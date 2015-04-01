@@ -24,8 +24,7 @@ var __extends = this.__extends || function (d, b) {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.foo = function () {
-    };
+    Base.prototype.foo = function () { };
     return Base;
 })();
 var Derived1 = (function (_super) {
@@ -33,8 +32,7 @@ var Derived1 = (function (_super) {
     function Derived1() {
         _super.apply(this, arguments);
     }
-    Derived1.prototype.bar = function () {
-    };
+    Derived1.prototype.bar = function () { };
     return Derived1;
 })(Base);
 var Derived2 = (function (_super) {
@@ -42,8 +40,7 @@ var Derived2 = (function (_super) {
     function Derived2() {
         _super.apply(this, arguments);
     }
-    Derived2.prototype.baz = function () {
-    };
+    Derived2.prototype.baz = function () { };
     return Derived2;
 })(Base);
 var Derived3 = (function (_super) {
@@ -51,8 +48,7 @@ var Derived3 = (function (_super) {
     function Derived3() {
         _super.apply(this, arguments);
     }
-    Derived3.prototype.biz = function () {
-    };
+    Derived3.prototype.biz = function () { };
     return Derived3;
 })(Base);
 function foo(tagName) {

@@ -12,11 +12,7 @@ module Bar {
 var Bar;
 (function (Bar) {
     Bar.a = 1;
-    function fooA() {
-        return Bar.a;
-    } // Correct: return Bar.a
+    function fooA() { return Bar.a; } // Correct: return Bar.a
     Bar.b;
-    function fooB() {
-        return Bar.b;
-    } // Incorrect: return b
+    function fooB() { return Bar.b; } // Incorrect: return b
 })(Bar || (Bar = {}));

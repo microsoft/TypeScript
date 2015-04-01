@@ -8,9 +8,7 @@ var lengths = map(myItems, x => x.length);
 
 //// [genericFunctions2.js]
 var myItems;
-var lengths = map(myItems, function (x) {
-    return x.length;
-});
+var lengths = map(myItems, function (x) { return x.length; });
 
 
 //// [genericFunctions2.d.ts]

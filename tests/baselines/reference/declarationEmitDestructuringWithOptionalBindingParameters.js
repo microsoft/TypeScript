@@ -14,8 +14,8 @@ function foo1(_a) {
 
 
 //// [declarationEmitDestructuringWithOptionalBindingParameters.d.ts]
-declare function foo(_0?: [string, number, boolean]): void;
-declare function foo1(_0?: {
+declare function foo([x, y, z]?: [string, number, boolean]): void;
+declare function foo1({x, y, z}?: {
     x: string;
     y: number;
     z: boolean;

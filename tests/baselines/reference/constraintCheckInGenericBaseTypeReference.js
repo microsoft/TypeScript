@@ -30,8 +30,7 @@ var __extends = this.__extends || function (d, b) {
 var Constraint = (function () {
     function Constraint() {
     }
-    Constraint.prototype.method = function () {
-    };
+    Constraint.prototype.method = function () { };
     return Constraint;
 })();
 var GenericBase = (function () {

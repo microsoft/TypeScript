@@ -51,8 +51,7 @@ define(["require", "exports"], function (require, exports) {
             var x;
         })(M_M = M.M_M || (M.M_M = {}));
         // function
-        function M_F() {
-        }
+        function M_F() { }
         M.M_F = M_F;
         // enum
         (function (M_E) {
@@ -61,13 +60,5 @@ define(["require", "exports"], function (require, exports) {
         // alias
         M.M_A = M_M;
         // Reexports
-        M.v = M.M_V;
-        M.i = M_I;
-        M.c = M_C;
-        M.m = M_M;
-        M.mu = M_MU;
-        M.f = M_F;
-        M.e = M_E;
-        M.a = M.M_A;
     })(M = exports.M || (exports.M = {}));
 });

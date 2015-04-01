@@ -30,10 +30,8 @@ var __extends = this.__extends || function (d, b) {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
-    };
-    C.prototype.bar = function () {
-    };
+    C.prototype.foo = function () { };
+    C.prototype.bar = function () { };
     return C;
 })();
 var Base = (function () {
@@ -49,8 +47,7 @@ var Derived = (function (_super) {
             _super.call(this);
             bar();
         }
-        try {
-        }
+        try { }
         catch (e) {
             _super.call(this);
         }

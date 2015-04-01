@@ -38,12 +38,9 @@ exports.c = server_1.c;
 var server_2 = require("server");
 exports.c2 = server_2.c;
 var server_3 = require("server");
-exports.i = server_3.i;
 exports.instantiatedModule = server_3.m;
 var server_4 = require("server");
-exports.uninstantiated = server_4.uninstantiated;
-var server_5 = require("server");
-exports.x = server_5.x;
+exports.x = server_4.x;
 
 
 //// [server.d.ts]

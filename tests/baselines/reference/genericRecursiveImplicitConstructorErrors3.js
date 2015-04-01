@@ -69,7 +69,10 @@ var TypeScript;
         };
         PullTypeSymbol.prototype.getScopedNameEx = function (scopeSymbol, useConstraintInName, getPrettyTypeName, getTypeParamMarkerInfo) {
             if (this.isArray()) {
-                var elementMemberName = this._elementType ? (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ? this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) : this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1;
+                var elementMemberName = this._elementType ?
+                    (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
+                        this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :
+                        this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1;
                 return TypeScript.MemberName.create(elementMemberName, "", "[]");
             }
         };

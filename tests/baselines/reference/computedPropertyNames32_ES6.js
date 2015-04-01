@@ -8,13 +8,10 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES6.js]
-function foo() {
-    return '';
-}
+function foo() { return ''; }
 class C {
     bar() {
         return 0;
     }
-    [foo()]() {
-    }
+    [foo()]() { }
 }

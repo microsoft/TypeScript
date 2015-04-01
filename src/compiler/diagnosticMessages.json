@@ -587,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export or export assignment.": {
+    "External module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -639,7 +639,26 @@
         "category": "Error",
         "code": 1204
     },
-
+    "Decorators are only available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1205
+    },
+    "Decorators are not valid here.": {
+        "category": "Error",
+        "code": 1206
+    },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
+    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1208
+    },
+    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1209
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1376,6 +1395,14 @@
         "category": "Error",
         "code": 2496
     },
+    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+        "category": "Error",
+        "code": 2497
+    },
+    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+        "category": "Error",
+        "code": 2498
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1708,6 +1735,26 @@
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
+    },
+    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5043
+    },
+    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5044
+    },
+    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5045
+    },
+    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5046
+    },
+    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5047
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",

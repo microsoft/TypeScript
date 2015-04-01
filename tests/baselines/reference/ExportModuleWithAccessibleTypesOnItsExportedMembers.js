@@ -38,10 +38,7 @@ var A;
             function Line(start, end) {
             }
             Line.fromOrigin = function (p) {
-                return new Line({
-                    x: 0,
-                    y: 0
-                }, p);
+                return new Line({ x: 0, y: 0 }, p);
             };
             return Line;
         })();

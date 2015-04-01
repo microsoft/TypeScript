@@ -22,9 +22,9 @@ class Foo {
 >Foo : Foo
 
     x: Foo.Bar;
->x : default.Bar
+>x : export=.Bar
 >Foo : unknown
->Bar : default.Bar
+>Bar : export=.Bar
 }
 module Foo {
 >Foo : typeof Foo

@@ -2,6 +2,4 @@
 var a = { f: a };
 
 //// [recursiveObjectLiteral.js]
-var a = {
-    f: a
-};
+var a = { f: a };

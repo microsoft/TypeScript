@@ -9,9 +9,7 @@ for (foo().x of []) {
 
 //// [ES5For-of10.js]
 function foo() {
-    return {
-        x: 0
-    };
+    return { x: 0 };
 }
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     foo().x = _a[_i];

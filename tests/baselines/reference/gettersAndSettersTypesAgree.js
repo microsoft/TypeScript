@@ -15,40 +15,22 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {
-        get: function () {
-            return "foo";
-        } // ok
+        get: function () { return "foo"; } // ok
         ,
-        set: function (foo) {
-        } // ok - type inferred from getter return statement
+        set: function (foo) { } // ok - type inferred from getter return statement
         ,
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C.prototype, "Bar", {
-        get: function () {
-            return "foo";
-        } // ok
+        get: function () { return "foo"; } // ok
         ,
-        set: function (bar) {
-        } // ok - type must be declared
+        set: function (bar) { } // ok - type must be declared
         ,
         enumerable: true,
         configurable: true
     });
     return C;
 })();
-var o1 = {
-    get Foo() {
-        return 0;
-    },
-    set Foo(val) {
-    }
-}; // ok - types agree (inference)
-var o2 = {
-    get Foo() {
-        return 0;
-    },
-    set Foo(val) {
-    }
-}; // ok - types agree
+var o1 = { get Foo() { return 0; }, set Foo(val) { } }; // ok - types agree (inference)
+var o2 = { get Foo() { return 0; }, set Foo(val) { } }; // ok - types agree

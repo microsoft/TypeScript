@@ -3,7 +3,7 @@
 class c { }
 >c : c
 
-export = c;
+export default c;
 >c : c
 
 === tests/cases/compiler/client.ts ===

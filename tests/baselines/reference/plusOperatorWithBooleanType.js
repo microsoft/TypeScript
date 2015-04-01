@@ -38,15 +38,11 @@ var ResultIsNumber7 = +A.foo();
 //// [plusOperatorWithBooleanType.js]
 // + operator on boolean type
 var BOOLEAN;
-function foo() {
-    return true;
-}
+function foo() { return true; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return false;
-    };
+    A.foo = function () { return false; };
     return A;
 })();
 var M;
@@ -58,10 +54,7 @@ var objA = new A();
 var ResultIsNumber1 = +BOOLEAN;
 // boolean type literal
 var ResultIsNumber2 = +true;
-var ResultIsNumber3 = +{
-    x: true,
-    y: false
-};
+var ResultIsNumber3 = +{ x: true, y: false };
 // boolean type expressions
 var ResultIsNumber4 = +objA.a;
 var ResultIsNumber5 = +M.n;

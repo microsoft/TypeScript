@@ -112,11 +112,7 @@ var A;
     var fn = function (s) {
         return 'hello ' + s;
     };
-    var ol = {
-        s: 'hello',
-        id: 2,
-        isvalid: true
-    };
+    var ol = { s: 'hello', id: 2, isvalid: true };
 })(A || (A = {}));
 var Y;
 (function (Y) {
@@ -170,9 +166,5 @@ var Y;
     Y.fn = function (s) {
         return 'hello ' + s;
     };
-    Y.ol = {
-        s: 'hello',
-        id: 2,
-        isvalid: true
-    };
+    Y.ol = { s: 'hello', id: 2, isvalid: true };
 })(Y || (Y = {}));

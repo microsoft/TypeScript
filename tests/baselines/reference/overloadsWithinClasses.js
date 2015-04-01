@@ -27,17 +27,14 @@ class X {
 var foo = (function () {
     function foo() {
     }
-    foo.fnOverload = function () {
-    };
-    foo.fnOverload = function (foo) {
-    }; // error
+    foo.fnOverload = function () { };
+    foo.fnOverload = function (foo) { }; // error
     return foo;
 })();
 var bar = (function () {
     function bar() {
     }
-    bar.fnOverload = function (foo) {
-    }; // no error
+    bar.fnOverload = function (foo) { }; // no error
     return bar;
 })();
 var X = (function () {

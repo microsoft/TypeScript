@@ -3,7 +3,7 @@
 //// [server.ts]
 
 class c { }
-export = c;
+export default c;
 
 //// [client.ts]
 import defaultBinding from "server";
@@ -17,16 +17,16 @@ var c = (function () {
     }
     return c;
 })();
-module.exports = c;
+exports.default = c;
 //// [client.js]
-var defaultBinding = require("server");
-exports.x = new defaultBinding();
+var server_1 = require("server");
+exports.x = new server_1.default();
 
 
 //// [server.d.ts]
 declare class c {
 }
-export = c;
+export default c;
 //// [client.d.ts]
 import defaultBinding from "server";
 export declare var x: defaultBinding;

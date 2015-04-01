@@ -23,8 +23,6 @@ a.push('Some Value');
 
 
 //// [specializeVarArgs1.js]
-function observableArray() {
-    return null;
-}
+function observableArray() { return null; }
 var a = observableArray();
 a.push('Some Value');

@@ -148,6 +148,7 @@ module ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
+        "@": SyntaxKind.AtToken,
     };
 
     /*
@@ -1284,6 +1285,8 @@ module ts {
                         return pos++, token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
                         return pos++, token = SyntaxKind.TildeToken;
+                    case CharacterCodes.at:
+                        return pos++, token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         let cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar)) {

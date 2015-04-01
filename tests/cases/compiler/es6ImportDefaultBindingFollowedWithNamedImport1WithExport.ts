@@ -3,7 +3,7 @@
 
 // @filename: server.ts
 var a = 10;
-export = a;
+export default a;
 
 // @filename: client.ts
 export import defaultBinding1, { } from "server";

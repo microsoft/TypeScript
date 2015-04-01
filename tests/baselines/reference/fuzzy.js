@@ -38,20 +38,13 @@ var M;
             this.x = x;
         }
         C.prototype.works = function () {
-            return ({
-                anything: 1
-            });
+            return ({ anything: 1 });
         };
         C.prototype.doesntWork = function () {
-            return {
-                anything: 1,
-                oneI: this
-            };
+            return { anything: 1, oneI: this };
         };
         C.prototype.worksToo = function () {
-            return ({
-                oneI: this
-            });
+            return ({ oneI: this });
         };
         return C;
     })();

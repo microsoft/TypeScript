@@ -10,8 +10,7 @@ var x = {
 //// [symbolProperty4.js]
 var x = {
     [Symbol()]: 0,
-    [Symbol()]() {
-    },
+    [Symbol()]() { },
     get [Symbol()]() {
         return 0;
     }

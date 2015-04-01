@@ -59,7 +59,4 @@ var E;
 })(E || (E = {}));
 x = E;
 x = E.A;
-x = {
-    f: function () {
-    }
-};
+x = { f: function () { } };

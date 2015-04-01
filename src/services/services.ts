@@ -1637,6 +1637,61 @@ module ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
+    /*
+     * This function will compile source text from 'input' argument using specified compiler options.
+     * If not options are provided - it will use a set of default compiler options.
+     * Extra compiler options that will unconditionally be used bu this function are:
+     * - separateCompilation = true
+     * - allowNonTsExtensions = true
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
+        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
+
+        options.separateCompilation = true;
+
+        // Filename can be non-ts file.
+        options.allowNonTsExtensions = true;
+
+        // Parse
+        var inputFileName = fileName || "module.ts";
+        var sourceFile = createSourceFile(inputFileName, input, options.target);
+
+        // Store syntactic diagnostics
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
+        }
+
+        // Output
+        let outputText: string;
+
+        // Create a compilerHost object to allow the compiler to read and write files
+        var compilerHost: CompilerHost = {
+            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            writeFile: (name, text, writeByteOrderMark) => {
+                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                outputText = text;
+            },
+            getDefaultLibFileName: () => "lib.d.ts",
+            useCaseSensitiveFileNames: () => false,
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => "",
+            getNewLine: () => "\r\n"
+        };
+
+        var program = createProgram([inputFileName], options, compilerHost);
+
+        if (diagnostics) {
+            diagnostics.push(...program.getGlobalDiagnostics());
+        }
+
+        // Emit
+        program.emit();
+
+        Debug.assert(outputText !== undefined, "Output generation failed");
+
+        return outputText;
+    }
+
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         let sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
@@ -2656,22 +2711,24 @@ module ts {
                 return undefined;
             }
 
-            // The decision to provide completion depends on the previous token, so find it
-            // Note: previousToken can be undefined if we are the beginning of the file
             start = new Date().getTime();
             let previousToken = findPrecedingToken(position, sourceFile);
             log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
-            // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
-            // Skip this partial identifier to the previous token
-            if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+            // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
+            // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
+            let contextToken = previousToken;
+
+            // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
+            // Skip this partial identifier and adjust the contextToken to the token that precedes it.
+            if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
                 let start = new Date().getTime();
-                previousToken = findPrecedingToken(previousToken.pos, sourceFile);
+                contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
-            if (previousToken && isCompletionListBlocker(previousToken)) {
+            if (contextToken && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
@@ -2681,12 +2738,12 @@ module ts {
             // visible symbols in the scope, and the node is the current location.
             let node = currentToken;
             let isRightOfDot = false;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = (<PropertyAccessExpression>previousToken.parent).expression;
+            if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>contextToken.parent).expression;
                 isRightOfDot = true;
             }
-            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
-                node = (<QualifiedName>previousToken.parent).left;
+            else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
             }
 
@@ -2749,7 +2806,7 @@ module ts {
             }
 
             function tryGetGlobalSymbols(): boolean {
-                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(previousToken);
+                let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
                     isMemberCompletion = true;
@@ -2766,25 +2823,58 @@ module ts {
                         symbols = filterContextualMembersList(contextualTypeMembers, containingObjectLiteral.properties);
                     }
                 }
-                else if (getAncestor(previousToken, SyntaxKind.ImportClause)) {
+                else if (getAncestor(contextToken, SyntaxKind.ImportClause)) {
                     // cursor is in import clause
                     // try to show exported member for imported module
                     isMemberCompletion = true;
                     isNewIdentifierLocation = true;
-                    if (showCompletionsInImportsClause(previousToken)) {
-                        let importDeclaration = <ImportDeclaration>getAncestor(previousToken, SyntaxKind.ImportDeclaration);
+                    if (showCompletionsInImportsClause(contextToken)) {
+                        let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
                         let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
                         symbols = filterModuleExports(exports, importDeclaration);
                     }
                 }
                 else {
-                    // Get scope members
+                    // Get all entities in the current scope.
                     isMemberCompletion = false;
-                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(previousToken);
+                    isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+
+                    if (previousToken !== contextToken) {
+                        Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
+                    }
+                    // We need to find the node that will give us an appropriate scope to begin
+                    // aggregating completion candidates. This is achieved in 'getScopeNode'
+                    // by finding the first node that encompasses a position, accounting for whether a node
+                    // is "complete" to decide whether a position belongs to the node.
+                    // 
+                    // However, at the end of an identifier, we are interested in the scope of the identifier
+                    // itself, but fall outside of the identifier. For instance:
+                    // 
+                    //      xyz => x$
+                    //
+                    // the cursor is outside of both the 'x' and the arrow function 'xyz => x',
+                    // so 'xyz' is not returned in our results.
+                    //
+                    // We define 'adjustedPosition' so that we may appropriately account for
+                    // being at the end of an identifier. The intention is that if requesting completion
+                    // at the end of an identifier, it should be effectively equivalent to requesting completion
+                    // anywhere inside/at the beginning of the identifier. So in the previous case, the
+                    // 'adjustedPosition' will work as if requesting completion in the following:
+                    //
+                    //      xyz => $x
+                    //
+                    // If previousToken !== contextToken, then
+                    //   - 'contextToken' was adjusted to the token prior to 'previousToken'
+                    //      because we were at the end of an identifier.
+                    //   - 'previousToken' is defined.
+                    let adjustedPosition = previousToken !== contextToken ?
+                        previousToken.getStart() :
+                        position;
+
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
 
                     /// TODO filter meaning based on the current context
-                    let scopeNode = getScopeNode(previousToken, position, sourceFile);
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
@@ -3840,8 +3930,24 @@ module ts {
             }
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+            
+            if (results) {
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+                // ensure the results are in the file we're interested in
+                results.forEach((value) => {
+                    let targetFile = getCanonicalFileName(normalizeSlashes(value.fileName));
+                    Debug.assert(sourceFile == targetFile, `Unexpected file in results. Found results in ${targetFile} expected only results in ${sourceFile}.`);
+                });
+            }
+
+            return results;
+        }
+
+        /// References and Occurrences
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
