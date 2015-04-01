@@ -191,9 +191,9 @@ module PortalFx.ViewModels.Controls.Validators {
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
 >Validator : Validator<TValue>
 >TValue : TValue
->Portal : unknown
->Controls : unknown
->Validators : unknown
+>Portal : typeof Portal
+>Controls : typeof Portal.Controls
+>Validators : typeof Portal.Controls.Validators
 >Validator : Portal.Controls.Validators.Validator<TValue>
 >TValue : TValue
 

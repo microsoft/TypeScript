@@ -15,7 +15,6 @@
 ////}
 ////
 ////(new C()).[|abc|];
-
 test.ranges().forEach(r => {
     goTo.position(r.start);
 
