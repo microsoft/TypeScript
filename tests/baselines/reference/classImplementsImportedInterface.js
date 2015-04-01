@@ -18,8 +18,7 @@ var M2;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () {
-        };
+        C.prototype.foo = function () { };
         return C;
     })();
 })(M2 || (M2 = {}));

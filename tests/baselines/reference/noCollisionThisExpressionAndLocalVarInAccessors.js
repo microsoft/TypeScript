@@ -50,23 +50,19 @@ var class1 = (function () {
     Object.defineProperty(class1.prototype, "a", {
         get: function () {
             var x2 = {
-                doStuff: function (callback) {
-                    return function () {
-                        var _this = 2;
-                        return callback(_this);
-                    };
-                }
+                doStuff: function (callback) { return function () {
+                    var _this = 2;
+                    return callback(_this);
+                }; }
             };
             return 10;
         },
         set: function (val) {
             var x2 = {
-                doStuff: function (callback) {
-                    return function () {
-                        var _this = 2;
-                        return callback(_this);
-                    };
-                }
+                doStuff: function (callback) { return function () {
+                    var _this = 2;
+                    return callback(_this);
+                }; }
             };
         },
         enumerable: true,
@@ -81,22 +77,18 @@ var class2 = (function () {
         get: function () {
             var _this = 2;
             var x2 = {
-                doStuff: function (callback) {
-                    return function () {
-                        return callback(_this);
-                    };
-                }
+                doStuff: function (callback) { return function () {
+                    return callback(_this);
+                }; }
             };
             return 10;
         },
         set: function (val) {
             var _this = 2;
             var x2 = {
-                doStuff: function (callback) {
-                    return function () {
-                        return callback(_this);
-                    };
-                }
+                doStuff: function (callback) { return function () {
+                    return callback(_this);
+                }; }
             };
         },
         enumerable: true,

@@ -1635,6 +1635,61 @@ module ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
+    /*
+     * This function will compile source text from 'input' argument using specified compiler options.
+     * If not options are provided - it will use a set of default compiler options.
+     * Extra compiler options that will unconditionally be used bu this function are:
+     * - separateCompilation = true
+     * - allowNonTsExtensions = true
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
+        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
+
+        options.separateCompilation = true;
+
+        // Filename can be non-ts file.
+        options.allowNonTsExtensions = true;
+
+        // Parse
+        var inputFileName = fileName || "module.ts";
+        var sourceFile = createSourceFile(inputFileName, input, options.target);
+
+        // Store syntactic diagnostics
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
+        }
+
+        // Output
+        let outputText: string;
+
+        // Create a compilerHost object to allow the compiler to read and write files
+        var compilerHost: CompilerHost = {
+            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            writeFile: (name, text, writeByteOrderMark) => {
+                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                outputText = text;
+            },
+            getDefaultLibFileName: () => "lib.d.ts",
+            useCaseSensitiveFileNames: () => false,
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => "",
+            getNewLine: () => "\r\n"
+        };
+
+        var program = createProgram([inputFileName], options, compilerHost);
+
+        if (diagnostics) {
+            diagnostics.push(...program.getGlobalDiagnostics());
+        }
+
+        // Emit
+        program.emit();
+
+        Debug.assert(outputText !== undefined, "Output generation failed");
+
+        return outputText;
+    }
+
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         let sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
@@ -2404,6 +2459,14 @@ module ts {
                 return undefined;
             }
 
+            // If this is the default export, get the name of the declaration if it exists
+            if (displayName === "default") {
+                let localSymbol = getLocalSymbolForExportDefault(symbol);
+                if (localSymbol && localSymbol.name) {
+                    displayName = symbol.valueDeclaration.localSymbol.name;
+                }
+            }
+
             let firstCharCode = displayName.charCodeAt(0);
             // First check of the displayName is not external module; if it is an external module, it is not valid entry
             if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2630,7 +2693,7 @@ module ts {
                         previousToken.getStart() :
                         position;
 
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
 
                     /// TODO filter meaning based on the current context
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
@@ -2942,7 +3005,7 @@ module ts {
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
-            
+
             let completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
@@ -3651,8 +3714,24 @@ module ts {
             }
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+            
+            if (results) {
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+                // ensure the results are in the file we're interested in
+                results.forEach((value) => {
+                    let targetFile = getCanonicalFileName(normalizeSlashes(value.fileName));
+                    Debug.assert(sourceFile == targetFile, `Unexpected file in results. Found results in ${targetFile} expected only results in ${sourceFile}.`);
+                });
+            }
+
+            return results;
+        }
+
+        /// References and Occurrences
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -4887,8 +4966,8 @@ module ts {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
-                            getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
-                            forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
+                            getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
+                            forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                             forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
@@ -4897,7 +4976,7 @@ module ts {
                 }
                 return;
 
-                function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
+                function getPropertySymbolFromTypeReference(typeReference: HeritageClauseElement) {
                     if (typeReference) {
                         let type = typeInfoResolver.getTypeAtLocation(typeReference);
                         if (type) {
@@ -5154,19 +5233,44 @@ module ts {
         }
 
         function isTypeReference(node: Node): boolean {
-            if (isRightSideOfQualifiedName(node)) {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(node) ) {
                 node = node.parent;
             }
 
-            return node.parent.kind === SyntaxKind.TypeReference;
+            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.HeritageClauseElement;
         }
 
         function isNamespaceReference(node: Node): boolean {
+            return isQualifiedNameNamespaceReference(node) || isPropertyAccessNamespaceReference(node);
+        }
+
+        function isPropertyAccessNamespaceReference(node: Node): boolean {
+            let root = node;
+            let isLastClause = true;
+            if (root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                while (root.parent && root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                    root = root.parent;
+                }
+
+                isLastClause = (<PropertyAccessExpression>root).name === node;
+            }
+
+            if (!isLastClause && root.parent.kind === SyntaxKind.HeritageClauseElement && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+                let decl = root.parent.parent.parent;
+                return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
+                    (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
+            }
+
+            return false;
+        }
+
+        function isQualifiedNameNamespaceReference(node: Node): boolean {
             let root = node;
             let isLastClause = true;
             if (root.parent.kind === SyntaxKind.QualifiedName) {
-                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName) {
                     root = root.parent;
+                }
 
                 isLastClause = (<QualifiedName>root).right === node;
             }

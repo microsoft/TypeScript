@@ -2,6 +2,4 @@
 var foo:{id:number;}[] = [<{id:number;}>({})];
 
 //// [contextualTyping8.js]
-var foo = [
-    ({})
-];
+var foo = [({})];

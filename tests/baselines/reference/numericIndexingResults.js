@@ -85,20 +85,14 @@ var r3 = a['3'];
 var r4 = a[1];
 var r5 = a[2];
 var r6 = a[3];
-var b = {
-    1: '',
-    "2": ''
-};
+var b = { 1: '', "2": '' };
 var r1a = b['1'];
 var r2a = b['2'];
 var r3 = b['3'];
 var r4 = b[1];
 var r5 = b[2];
 var r6 = b[3];
-var b2 = {
-    1: '',
-    "2": ''
-};
+var b2 = { 1: '', "2": '' };
 var r1b = b2['1'];
 var r2b = b2['2'];
 var r3 = b2['3'];

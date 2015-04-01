@@ -30,9 +30,7 @@ var Board = (function () {
     function Board() {
     }
     Board.prototype.allShipsSunk = function () {
-        return this.ships.every(function (val) {
-            return val.isSunk;
-        });
+        return this.ships.every(function (val) { return val.isSunk; });
     };
     return Board;
 })();

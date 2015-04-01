@@ -39,8 +39,8 @@ class a {
 var a = (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () {
-    };
+    a.prototype.pgF = function () { };
+    ;
     Object.defineProperty(a.prototype, "d", {
         get: function () {
             return 30;
@@ -52,10 +52,7 @@ var a = (function () {
     });
     Object.defineProperty(a, "p2", {
         get: function () {
-            return {
-                x: 30,
-                y: 40
-            };
+            return { x: 30, y: 40 };
         },
         enumerable: true,
         configurable: true

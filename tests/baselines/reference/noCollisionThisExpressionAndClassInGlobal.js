@@ -9,6 +9,4 @@ var _this = (function () {
     }
     return _this;
 })();
-var f = function () {
-    return _this;
-};
+var f = function () { return _this; };

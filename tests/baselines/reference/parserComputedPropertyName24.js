@@ -5,6 +5,5 @@ class C {
 
 //// [parserComputedPropertyName24.js]
 class C {
-    set [e](v) {
-    }
+    set [e](v) { }
 }

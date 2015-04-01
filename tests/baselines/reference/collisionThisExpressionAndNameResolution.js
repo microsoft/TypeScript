@@ -22,9 +22,7 @@ var Foo = (function () {
         function inner() {
             var _this = this;
             console.log(_this); // Error as this doesnt not resolve to user defined _this
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture into function inner
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture into function inner
         }
     };
     return Foo;

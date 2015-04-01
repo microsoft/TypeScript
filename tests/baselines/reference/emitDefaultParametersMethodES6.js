@@ -20,14 +20,10 @@ class E {
 class C {
     constructor(t, z, x, y = "hello") {
     }
-    foo(x, t = false) {
-    }
-    foo1(x, t = false, ...rest) {
-    }
-    bar(t = false) {
-    }
-    boo(t = false, ...rest) {
-    }
+    foo(x, t = false) { }
+    foo1(x, t = false, ...rest) { }
+    bar(t = false) { }
+    boo(t = false, ...rest) { }
 }
 class D {
     constructor(y = "hello") {

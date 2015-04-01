@@ -77,9 +77,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -88,9 +86,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 // all of these are errors
@@ -104,24 +100,11 @@ var b;
 var b = new C();
 var b = new C2();
 var f = F;
-var f = function (x) {
-    return '';
-};
+var f = function (x) { return ''; };
 var arr;
-var arr = [
-    1,
-    2,
-    3,
-    4
-];
-var arr = [
-    new C(),
-    new C2(),
-    new D()
-];
-var arr2 = [
-    new D()
-];
+var arr = [1, 2, 3, 4];
+var arr = [new C(), new C2(), new D()];
+var arr2 = [new D()];
 var arr2 = new Array();
 var m;
 var m = M.A;

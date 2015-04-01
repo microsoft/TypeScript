@@ -1008,10 +1008,6 @@ module Harness {
                             options.outDir = setting.value;
                             break;
 
-                        case 'preservenewlines':
-                            options.preserveNewLines = !!setting.value;
-                            break;
-
                         case 'sourceroot':
                             options.sourceRoot = setting.value;
                             break;
@@ -1040,17 +1036,7 @@ module Harness {
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
 
-                        case 'mapsourcefiles':
-                        case 'maproot':
-                        case 'generatedeclarationfiles':
-                        case 'gatherDiagnostics':
-                        case 'codepage':
-                        case 'createFileLog':
                         case 'filename':
-                        case 'removecomments':
-                        case 'watch':
-                        case 'allowautomaticsemicoloninsertion':
-                        case 'locale':
                             // Not supported yet
                             break;
 
@@ -1064,6 +1050,10 @@ module Harness {
 
                         case 'preserveconstenums':
                             options.preserveConstEnums = setting.value === 'true';
+                            break;
+
+                        case 'separatecompilation':
+                            options.separateCompilation = setting.value === 'true';
                             break;
 
                         case 'suppressimplicitanyindexerrors':
@@ -1465,7 +1455,12 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "preservenewlines", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
+            "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
+            "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
+            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
+            "separatecompilation"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1701,6 +1696,14 @@ module Harness {
 
     export function isLibraryFile(filePath: string): boolean {
         return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
+    }
+
+    export function getDefaultLibraryFile(): { unitName: string, content: string } {
+        var libFile = Harness.userSpecifiedroot + Harness.libFolder + "/" + "lib.d.ts";
+        return {
+            unitName: libFile,
+            content: IO.readFile(libFile)
+        }
     }
 
     if (Error) (<any>Error).stackTraceLimit = 1;

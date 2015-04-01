@@ -3,5 +3,6 @@
 = 2;
 
 //// [parserGreaterThanTokenAmbiguity19.js]
-1 >>> ;
+1 >>>
+;
 2;

@@ -3,4 +3,5 @@
 /notregexp/a.foo();
 
 //// [parserRegularExpressionDivideAmbiguity1.js]
-1 / notregexp / a.foo();
+1
+    / notregexp / a.foo();

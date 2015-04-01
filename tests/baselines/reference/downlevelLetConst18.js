@@ -33,45 +33,25 @@ for (let x; ;) {
 //// [downlevelLetConst18.js]
 'use strict';
 for (var x = void 0;;) {
-    function foo() {
-        x;
-    }
+    function foo() { x; }
     ;
 }
 for (var x = void 0;;) {
-    function foo() {
-        x;
-    }
+    function foo() { x; }
     ;
 }
 for (var x = void 0;;) {
-    (function () {
-        x;
-    })();
+    (function () { x; })();
 }
 for (var x = 1;;) {
-    (function () {
-        x;
-    })();
+    (function () { x; })();
 }
 for (var x = void 0;;) {
-    ({
-        foo: function () {
-            x;
-        }
-    });
+    ({ foo: function () { x; } });
 }
 for (var x = void 0;;) {
-    ({
-        get foo() {
-            return x;
-        }
-    });
+    ({ get foo() { return x; } });
 }
 for (var x = void 0;;) {
-    ({
-        set foo(v) {
-            x;
-        }
-    });
+    ({ set foo(v) { x; } });
 }

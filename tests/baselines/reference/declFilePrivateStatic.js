@@ -18,33 +18,25 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.a = function () {
-    };
-    C.b = function () {
-    };
+    C.a = function () { };
+    C.b = function () { };
     Object.defineProperty(C, "c", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "d", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "e", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(C, "f", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

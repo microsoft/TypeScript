@@ -8,5 +8,4 @@ class C {
 "use strict";
 class C {
 }
-(() => {
-});
+(() => { });

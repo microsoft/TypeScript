@@ -9,8 +9,7 @@ class StringIterator {
 }
 
 //// [for-of28.js]
-for (var v of new StringIterator) {
-}
+for (var v of new StringIterator) { }
 class StringIterator {
     [Symbol.iterator]() {
         return this;

@@ -9,15 +9,12 @@ var foo = (function () {
     function foo() {
     }
     Object.defineProperty(foo, "Foo", {
-        get: function () {
-            return null;
-        },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(foo, "Bar", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

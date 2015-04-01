@@ -28,12 +28,8 @@ var G = (function () {
     }
     return G;
 })();
-var result = foo(function (x) {
-    return new G(x);
-}); // x has type D, new G(x) fails, so first overload is picked.
-var result2 = foo(function (x) {
-    return new G(x);
-}); // x has type D, new G(x) fails, so first overload is picked.
+var result = foo(function (x) { return new G(x); }); // x has type D, new G(x) fails, so first overload is picked.
+var result2 = foo(function (x) { return new G(x); }); // x has type D, new G(x) fails, so first overload is picked.
 var result3 = foo(function (x) {
     var y; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
     return y;

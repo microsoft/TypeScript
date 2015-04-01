@@ -30,13 +30,13 @@ var C = (function (_super) {
     }
     return C;
 })(I); // error
-var C2 = (function () {
+var C2 = (function (_super) {
+    __extends(C2, _super);
     function C2() {
+        _super.apply(this, arguments);
     }
     return C2;
-})();
-{
-} // error
+})({ foo: string }); // error
 var x;
 var C3 = (function (_super) {
     __extends(C3, _super);
@@ -56,8 +56,7 @@ var C4 = (function (_super) {
     }
     return C4;
 })(M); // error
-function foo() {
-}
+function foo() { }
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
@@ -65,11 +64,10 @@ var C5 = (function (_super) {
     }
     return C5;
 })(foo); // error
-var C6 = (function () {
+var C6 = (function (_super) {
+    __extends(C6, _super);
     function C6() {
+        _super.apply(this, arguments);
     }
     return C6;
-})();
-[];
-{
-} // error
+})([]); // error

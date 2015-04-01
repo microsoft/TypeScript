@@ -16,32 +16,13 @@ var t4: { c: number; d: string };
 
 
 //// [typeArgInference.js]
-var o = {
-    a: 3,
-    b: "test"
-};
+var o = { a: 3, b: "test" };
 var x;
-var t1 = x.f([
-    o
-], [
-    o
-]);
+var t1 = x.f([o], [o]);
 var t1;
-var t2 = x.f([
-    o
-], [
-    o
-]);
+var t2 = x.f([o], [o]);
 var t2;
-var t3 = x.g([
-    o
-], [
-    o
-]);
+var t3 = x.g([o], [o]);
 var t3;
-var t4 = x.g([
-    o
-], [
-    o
-]);
+var t4 = x.g([o], [o]);
 var t4;

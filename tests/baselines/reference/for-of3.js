@@ -4,5 +4,4 @@ for (v++ of []) { }
 
 //// [for-of3.js]
 var v;
-for (v++ of []) {
-}
+for (v++ of []) { }

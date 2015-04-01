@@ -19,9 +19,7 @@ interface I {
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.foo = function (bar) {
-    }; // error - access modifiers do not agree
+    baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
     return baz;
 })();
-function bar(s) {
-}
+function bar(s) { }

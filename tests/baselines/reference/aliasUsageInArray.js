@@ -46,9 +46,5 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInArray_main.js]
 var moduleA = require("aliasUsageInArray_moduleA");
-var xs = [
-    moduleA
-];
-var xs2 = [
-    moduleA
-];
+var xs = [moduleA];
+var xs2 = [moduleA];
