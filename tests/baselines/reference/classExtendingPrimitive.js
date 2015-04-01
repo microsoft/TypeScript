@@ -63,13 +63,13 @@ var C5 = (function (_super) {
     }
     return C5;
 })(Null);
-var C5a = (function () {
+var C5a = (function (_super) {
+    __extends(C5a, _super);
     function C5a() {
+        _super.apply(this, arguments);
     }
     return C5a;
-})();
-null;
-{ }
+})(null);
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {

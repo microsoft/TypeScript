@@ -20,8 +20,8 @@ module X.A.B.C {
     }
     export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
 >W : W
->X : unknown
->A : unknown
+>X : typeof X
+>A : typeof A
 >C : unknown
 >Z : X.A.C.Z
     }

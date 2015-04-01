@@ -4,6 +4,7 @@
 /// <reference path="scanner.ts"/>
 
 module ts {
+    /* @internal */
     export var optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
@@ -110,6 +111,10 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "separateCompilation",
+            type: "boolean",
+        },
+        {
             name: "sourceMap",
             type: "boolean",
             description: Diagnostics.Generates_corresponding_map_file,
@@ -153,7 +158,8 @@ module ts {
             description: Diagnostics.Watch_input_files,
         }
     ];
-    
+
+    /* @internal */
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         var options: CompilerOptions = {};
         var fileNames: string[] = [];
@@ -263,6 +269,10 @@ module ts {
         }
     }
 
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
     export function readConfigFile(fileName: string): any {
         try {
             var text = sys.readFile(fileName);
@@ -272,6 +282,12 @@ module ts {
         }
     }
 
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir 
+      */
     export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];
 

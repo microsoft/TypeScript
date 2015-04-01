@@ -30,7 +30,7 @@ declare module templa.mvc {
 >templa : unknown
 >mvc : unknown
 >IModel : IModel
->mvc : unknown
+>mvc : typeof mvc
 >IController : IController<ModelType>
 >ModelType : ModelType
     }
@@ -42,7 +42,7 @@ declare module templa.mvc.composite {
 
     interface ICompositeControllerModel extends mvc.IModel {
 >ICompositeControllerModel : ICompositeControllerModel
->mvc : unknown
+>mvc : typeof mvc
 >IModel : IModel
 
         getControllers(): mvc.IController<mvc.IModel>[];
@@ -64,8 +64,8 @@ module templa.dom.mvc {
 >templa : unknown
 >mvc : unknown
 >IModel : templa.mvc.IModel
->templa : unknown
->mvc : unknown
+>templa : typeof templa
+>mvc : typeof templa.mvc
 >IController : templa.mvc.IController<ModelType>
 >ModelType : ModelType
     }
@@ -82,8 +82,8 @@ module templa.dom.mvc {
 >templa : unknown
 >mvc : unknown
 >IModel : templa.mvc.IModel
->templa : unknown
->mvc : unknown
+>templa : typeof templa
+>mvc : typeof templa.mvc
 >AbstractController : templa.mvc.AbstractController<ModelType>
 >ModelType : ModelType
 >IElementController : IElementController<ModelType>
@@ -110,9 +110,9 @@ module templa.dom.mvc.composite {
 >mvc : unknown
 >composite : unknown
 >ICompositeControllerModel : templa.mvc.composite.ICompositeControllerModel
->templa : unknown
->dom : unknown
->mvc : unknown
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
 >AbstractElementController : AbstractElementController<ModelType>
 >ModelType : ModelType
 
