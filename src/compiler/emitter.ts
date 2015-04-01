@@ -3918,7 +3918,6 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.Parameter:
                         return true;
                 }
                 return false;
