@@ -589,7 +589,7 @@ module ts {
             if (moduleSymbol.flags & SymbolFlags.Variable) {
                 let typeAnnotation = (<VariableDeclaration>moduleSymbol.valueDeclaration).type;
                 if (typeAnnotation) {
-                    return getPropertyOfType(getTypeFromNode(typeAnnotation), name);
+                    return getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name);
                 }
             }
         }
@@ -638,7 +638,7 @@ module ts {
             if (symbol.flags & SymbolFlags.Variable) {
                 var typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
                 if (typeAnnotation) {
-                    return resolveSymbol(getPropertyOfType(getTypeFromNode(typeAnnotation), name));
+                    return resolveSymbol(getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name));
                 }
             }
         }
@@ -2106,7 +2106,7 @@ module ts {
             }
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return getTypeFromNode(declaration.type);
+                return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
             }
             if (declaration.kind === SyntaxKind.Parameter) {
                 let func = <FunctionLikeDeclaration>declaration.parent;
@@ -2243,7 +2243,7 @@ module ts {
                         return links.type = checkExpression(exportAssignment.expression);
                     }
                     else if (exportAssignment.type) {
-                        return links.type = getTypeFromNode(exportAssignment.type);
+                        return links.type = getTypeFromTypeNodeOrHeritageClauseElement(exportAssignment.type);
                     }
                     else {
                         return links.type = anyType;
@@ -2275,11 +2275,11 @@ module ts {
         function getAnnotatedAccessorType(accessor: AccessorDeclaration): Type {
             if (accessor) {
                 if (accessor.kind === SyntaxKind.GetAccessor) {
-                    return accessor.type && getTypeFromNode(accessor.type);
+                    return accessor.type && getTypeFromTypeNodeOrHeritageClauseElement(accessor.type);
                 }
                 else {
                     let setterTypeAnnotation = getSetAccessorTypeAnnotationNode(accessor);
-                    return setterTypeAnnotation && getTypeFromNode(setterTypeAnnotation);
+                    return setterTypeAnnotation && getTypeFromTypeNodeOrHeritageClauseElement(setterTypeAnnotation);
                 }
             }
             return undefined;
@@ -2520,7 +2520,7 @@ module ts {
             if (!links.declaredType) {
                 links.declaredType = resolvingType;
                 let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                let type = getTypeFromNode(declaration.type);
+                let type = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
                 if (links.declaredType === resolvingType) {
                     links.declaredType = type;
                 }
@@ -3062,7 +3062,7 @@ module ts {
                     returnType = classType;
                 }
                 else if (declaration.type) {
-                    returnType = getTypeFromNode(declaration.type);
+                    returnType = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014):
@@ -3220,7 +3220,7 @@ module ts {
         function getIndexTypeOfSymbol(symbol: Symbol, kind: IndexKind): Type {
             let declaration = getIndexDeclarationOfSymbol(symbol, kind);
             return declaration
-                ? declaration.type ? getTypeFromNode(declaration.type) : anyType
+                ? declaration.type ? getTypeFromTypeNodeOrHeritageClauseElement(declaration.type) : anyType
                 : undefined;
         }
 
@@ -3231,7 +3231,7 @@ module ts {
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    type.constraint = getTypeFromNode((<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint);
+                    type.constraint = getTypeFromTypeNodeOrHeritageClauseElement((<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint);
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
@@ -3362,7 +3362,7 @@ module ts {
                             if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                                 let typeParameters = (<InterfaceType>type).typeParameters;
                                 if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromNode));
+                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNodeOrHeritageClauseElement));
                                 }
                                 else {
                                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
@@ -3456,7 +3456,7 @@ module ts {
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromNode(node.elementType));
+                links.resolvedType = createArrayType(getTypeFromTypeNodeOrHeritageClauseElement(node.elementType));
             }
             return links.resolvedType;
         }
@@ -3474,7 +3474,7 @@ module ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromNode));
+                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNodeOrHeritageClauseElement));
             }
             return links.resolvedType;
         }
@@ -3570,7 +3570,7 @@ module ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromNode), /*noSubtypeReduction*/ true);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNodeOrHeritageClauseElement), /*noSubtypeReduction*/ true);
             }
             return links.resolvedType;
         }
@@ -3602,7 +3602,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getTypeFromNode(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
+        function getTypeFromTypeNodeOrHeritageClauseElement(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                     return anyType;
@@ -3631,7 +3631,7 @@ module ts {
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return getTypeFromNode((<ParenthesizedTypeNode>node).type);
+                    return getTypeFromTypeNodeOrHeritageClauseElement((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -5632,7 +5632,7 @@ module ts {
             let declaration = <VariableLikeDeclaration>node.parent;
             if (node === declaration.initializer) {
                 if (declaration.type) {
-                    return getTypeFromNode(declaration.type);
+                    return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
@@ -5835,7 +5835,7 @@ module ts {
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
-                    return getTypeFromNode((<TypeAssertion>parent).type);
+                    return getTypeFromTypeNodeOrHeritageClauseElement((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
@@ -6636,7 +6636,7 @@ module ts {
             let typeArgumentsAreAssignable = true;
             for (let i = 0; i < typeParameters.length; i++) {
                 let typeArgNode = typeArguments[i];
-                let typeArgument = getTypeFromNode(typeArgNode);
+                let typeArgument = getTypeFromTypeNodeOrHeritageClauseElement(typeArgNode);
                 // Do not push on this array! It has a preallocated length
                 typeArgumentResultTypes[i] = typeArgument;
                 if (typeArgumentsAreAssignable /* so far */) {
@@ -7118,7 +7118,7 @@ module ts {
 
         function checkTypeAssertion(node: TypeAssertion): Type {
             let exprType = checkExpression(node.expression);
-            let targetType = getTypeFromNode(node.type);
+            let targetType = getTypeFromTypeNodeOrHeritageClauseElement(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
@@ -7297,7 +7297,7 @@ module ts {
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             if (node.type) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromNode(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
             }
 
             if (node.body) {
@@ -7307,7 +7307,7 @@ module ts {
                 else {
                     let exprType = checkExpression(<Expression>node.body);
                     if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromNode(node.type), node.body, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNodeOrHeritageClauseElement(node.type), node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -8816,7 +8816,7 @@ module ts {
 
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind)) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromNode(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
             }
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -9949,7 +9949,7 @@ module ts {
                 if (!tp1.constraint || !tp2.constraint) {
                     return false;
                 }
-                if (!isTypeIdenticalTo(getTypeFromNode(tp1.constraint), getTypeFromNode(tp2.constraint))) {
+                if (!isTypeIdenticalTo(getTypeFromTypeNodeOrHeritageClauseElement(tp1.constraint), getTypeFromTypeNodeOrHeritageClauseElement(tp2.constraint))) {
                     return false;
                 }
             }
@@ -10959,7 +10959,7 @@ module ts {
             return node.parent && node.parent.kind === SyntaxKind.HeritageClauseElement;
         }
 
-        function isTypeNodeOrStringLiteralTypeOrHeritageClauseElement(node: Node): boolean {
+        function isTypeNodeOrHeritageClauseElement(node: Node): boolean {
             if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
                 return true;
             }
@@ -11208,8 +11208,8 @@ module ts {
                 return unknownType;
             }
 
-            if (isTypeNodeOrStringLiteralTypeOrHeritageClauseElement(node)) {
-                return getTypeFromNode(<TypeNode>node);
+            if (isTypeNodeOrHeritageClauseElement(node)) {
+                return getTypeFromTypeNodeOrHeritageClauseElement(<TypeNode | HeritageClauseElement>node);
             }
 
             if (isExpression(node)) {
