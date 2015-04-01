@@ -145,7 +145,7 @@ module ts {
 
         return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
-    
+
     export function nodeIsPresent(node: Node) {
         return !nodeIsMissing(node);
     }
@@ -296,7 +296,7 @@ module ts {
                 errorNode = (<Declaration>node).name;
                 break;
         }
-        
+
         if (errorNode === undefined) {
             // If we don't have a better node, then just set the error on the first token of 
             // construct.
@@ -642,7 +642,7 @@ module ts {
 
         return false;
     }
-    
+
     export function childIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
@@ -754,7 +754,7 @@ module ts {
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
-               (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
+            (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node) {
@@ -1170,7 +1170,7 @@ module ts {
     export function createTextSpanFromBounds(start: number, end: number) {
         return createTextSpan(start, end - start);
     }
-    
+
     export function textChangeRangeNewSpan(range: TextChangeRange) {
         return createTextSpan(range.span.start, range.newLength);
     }
@@ -1444,13 +1444,13 @@ module ts {
             return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
-    
+
     function get16BitUnicodeEscapeSequence(charCode: number): string {
         let hexCharCode = charCode.toString(16).toUpperCase();
         let paddedHexCode = ("0000" + hexCharCode).slice(-4);
         return "\\u" + paddedHexCode;
     }
-    
+
     let nonAsciiCharacters = /[^\u0000-\u007F]/g;
     export function escapeNonAsciiCharacters(s: string): string {
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
@@ -1798,5 +1798,9 @@ module ts {
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
+    export function getLocalSymbolForExportDefault(symbol: Symbol) {
+            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 }

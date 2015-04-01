@@ -2459,6 +2459,14 @@ module ts {
                 return undefined;
             }
 
+            // If this is the default export, get the name of the declaration if it exists
+            if (displayName === "default") {
+                let localSymbol = getLocalSymbolForExportDefault(symbol);
+                if (localSymbol && localSymbol.name) {
+                    displayName = symbol.valueDeclaration.localSymbol.name;
+                }
+            }
+
             let firstCharCode = displayName.charCodeAt(0);
             // First check of the displayName is not external module; if it is an external module, it is not valid entry
             if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2675,7 +2683,7 @@ module ts {
                         previousToken.getStart() :
                         position;
 
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
 
                     /// TODO filter meaning based on the current context
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
