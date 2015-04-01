@@ -74,7 +74,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfModule: moduleSymbol => symbolsToArray(getExportsOfModule(moduleSymbol)),
+            getExportsOfModule: getExportsOfModuleAsArray,
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -870,6 +870,10 @@ module ts {
 
         function getExportAssignmentSymbol(moduleSymbol: Symbol): Symbol {
             return moduleSymbol.exports["export="];
+        }
+
+        function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
+            return symbolsToArray(getExportsOfModule(moduleSymbol));
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
