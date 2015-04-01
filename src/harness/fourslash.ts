@@ -116,7 +116,7 @@ module FourSlash {
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
-    var testOptMetadataNames = {
+    var metadataOptionNames = {
         baselineFile: 'BaselineFile',
         declaration: 'declaration',
         emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
@@ -132,10 +132,10 @@ module FourSlash {
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = [testOptMetadataNames.fileName, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
-    var globalMetadataNames = [testOptMetadataNames.allowNonTsExtensions, testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
-        testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
-        testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
+    var fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
+    var globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
+        metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,
+        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot]
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
         var settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -143,16 +143,16 @@ module FourSlash {
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
-                    case testOptMetadataNames.allowNonTsExtensions:
+                    case metadataOptionNames.allowNonTsExtensions:
                         settings.allowNonTsExtensions = true;
                         break;
-                    case testOptMetadataNames.declaration:
+                    case metadataOptionNames.declaration:
                         settings.declaration = true;
                         break;
-                    case testOptMetadataNames.mapRoot:
+                    case metadataOptionNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
                         break;
-                    case testOptMetadataNames.module:
+                    case metadataOptionNames.module:
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
                             case "AMD":
@@ -167,16 +167,16 @@ module FourSlash {
                                 break;
                         }
                         break;
-                    case testOptMetadataNames.out:
+                    case metadataOptionNames.out:
                         settings.out = globalOptions[prop];
                         break;
-                    case testOptMetadataNames.outDir:
+                    case metadataOptionNames.outDir:
                         settings.outDir = globalOptions[prop];
                         break;
-                    case testOptMetadataNames.sourceMap:
+                    case metadataOptionNames.sourceMap:
                         settings.sourceMap = true;
                         break;
-                    case testOptMetadataNames.sourceRoot:
+                    case metadataOptionNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
                         break;
                 }
@@ -308,7 +308,7 @@ module FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-                if (!startResolveFileRef && file.fileOptions[testOptMetadataNames.resolveReference]) {
+                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference]) {
                     startResolveFileRef = file;
                 } else if (startResolveFileRef) {
                     // If entry point for resolving file references is already specified, report duplication error
@@ -1143,7 +1143,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[testOptMetadataNames.baselineFile],
+                this.testData.globalOptions[metadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
@@ -1158,7 +1158,7 @@ module FourSlash {
             var allFourSlashFiles = this.testData.files;
             for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
                 var file = allFourSlashFiles[idx];
-                if (file.fileOptions[testOptMetadataNames.emitThisFile]) {
+                if (file.fileOptions[metadataOptionNames.emitThisFile]) {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }
@@ -1171,7 +1171,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Generate getEmitOutput baseline : " + emitFiles.join(" "),
-                this.testData.globalOptions[testOptMetadataNames.baselineFile],
+                this.testData.globalOptions[metadataOptionNames.baselineFile],
                 () => {
                     var resultString = "";
                     // Loop through all the emittedFiles and emit them one by one
@@ -1716,7 +1716,7 @@ module FourSlash {
 
             Harness.Baseline.runBaseline(
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
-                this.testData.globalOptions[testOptMetadataNames.baselineFile],
+                this.testData.globalOptions[metadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos =>
                         this.getNameOrDottedNameSpan(pos));
@@ -2292,7 +2292,7 @@ module FourSlash {
                     if (globalMetadataNamesIndex === -1) {
                         if (fileMetadataNamesIndex === -1) {
                             throw new Error('Unrecognized metadata name "' + match[1] + '". Available global metadata names are: ' + globalMetadataNames.join(', ') + '; file metadata names are: ' + fileMetadataNames.join(', '));
-                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.fileName)) {
+                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
                             // Found an @FileName directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
