@@ -159,7 +159,7 @@ and grew 1cm per day`;
     });
 
     describe('VersionCache stress test', () => {
-        const interationCount = 20;
+        const iterationCount = 20;
         //const interationCount = 20000; // uncomment for testing
 
         // Use scanner.ts, decent size, does not change frequentlly
@@ -205,7 +205,7 @@ and grew 1cm per day`;
         }
 
         it("Range (average length 1/4 file size)", () => {
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 let s2 = lineIndex.getText(rsa[i], la[i]);
                 let s1 = testContent.substring(rsa[i], rsa[i] + la[i]);
                 assert.equal(s1, s2);
@@ -213,7 +213,7 @@ and grew 1cm per day`;
         });
 
         it("Range (average length 4 chars)", () => {
-            for (let j = 0; j < interationCount; j++) {
+            for (let j = 0; j < iterationCount; j++) {
                 let s2 = lineIndex.getText(rsa[j], las[j]);
                 let s1 = testContent.substring(rsa[j], rsa[j] + las[j]);
                 assert.equal(s1, s2);
@@ -221,7 +221,7 @@ and grew 1cm per day`;
         });
 
         it("Edit (average length 4)", () => {
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + las[100000 - i]);
                 let snapshot = lineIndex.edit(rsa[i], las[i], insertString);
                 let checkText = editFlat(rsa[i], las[i], insertString, testContent);
@@ -234,7 +234,7 @@ and grew 1cm per day`;
             let svc = server.ScriptVersionCache.fromString(testContent);
             let checkText = testContent;
 
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 let insertString = testContent.substring(rsa[i], rsa[i] + las[i]);
                 svc.edit(ersa[i], elas[i], insertString);
                 checkText = editFlat(ersa[i], elas[i], insertString, checkText);
@@ -247,7 +247,7 @@ and grew 1cm per day`;
         });
 
         it("Edit (average length 1/4th file size)", () => {
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + la[100000 - i]);
                 let snapshot = lineIndex.edit(rsa[i], la[i], insertString);
                 let checkText = editFlat(rsa[i], la[i], insertString, testContent);
@@ -257,7 +257,7 @@ and grew 1cm per day`;
         });
 
         it("Line/offset from pos", () => {
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 let lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
                 let lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
                 assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
@@ -266,7 +266,7 @@ and grew 1cm per day`;
         });
 
         it("Start pos from line", () => {
-            for (let i = 0; i < interationCount; i++) {
+            for (let i = 0; i < iterationCount; i++) {
                 for (let j = 0, llen = lines.length; j < llen; j++) {
                     let lineInfo = lineIndex.lineNumberToInfo(j + 1);
                     let lineIndexOffset = lineInfo.offset;
