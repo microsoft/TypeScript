@@ -5369,12 +5369,6 @@ module ts {
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            // If the option is set to not emit on errors, and there are any errors, then we don't 
-            // want to proceed.
-            if (program.getCompilerOptions().noEmitOnError && getPreEmitDiagnostics(program).length > 0) {
-                return { outputFiles: [], emitSkipped: true };
-            }
-
             let sourceFile = getValidSourceFile(fileName);
             let outputFiles: OutputFile[] = [];
 
