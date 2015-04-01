@@ -892,11 +892,11 @@ module ts {
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            let baseTypeNode = getClassBaseTypeNode(node);
+            let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
             }
-            emitHeritageClause(getClassImplementedTypeNodes(node), /*isImplementsList*/ true);
+            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();

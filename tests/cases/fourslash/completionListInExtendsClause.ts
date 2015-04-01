@@ -17,7 +17,6 @@
 ////interface test3 extends IFoo./*3*/ {}
 
 ////interface test4 implements Foo./*4*/ {}
-debugger;
 goTo.marker("1");
 verify.not.completionListIsEmpty();
 

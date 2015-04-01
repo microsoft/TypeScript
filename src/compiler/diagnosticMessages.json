@@ -1403,11 +1403,11 @@
         "category": "Error",
         "code": 2498
     },
-    "An interface can only extend a type reference.": {
+    "An interface can only extend an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2499
     },
-    "A class can only implement type references.": {
+    "A class can only implement an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2500
     },
@@ -2021,7 +2021,7 @@
         "category": "Error",
         "code": 9001
     },
-    "Only type references are currently supported in a class 'extends' clauses.": {
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
     },

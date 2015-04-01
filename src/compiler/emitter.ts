@@ -3547,7 +3547,7 @@ module ts {
                     emitDeclarationName(node);
                 }
 
-                var baseTypeNode = getClassBaseTypeNode(node);
+                var baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write(" extends ");
                     emit(baseTypeNode.expression);
@@ -3621,7 +3621,7 @@ module ts {
                 }
 
                 write("(function (");
-                let baseTypeNode = getClassBaseTypeNode(node);
+                let baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write("_super");
                 }

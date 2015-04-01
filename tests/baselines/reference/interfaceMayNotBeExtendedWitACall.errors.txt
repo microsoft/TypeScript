@@ -1,4 +1,4 @@
-tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts(3,24): error TS2499: An interface can only extend a type reference.
+tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts(3,24): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
 
 
 ==== tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts(3,24): error TS2499: A
     
     interface blue extends color() { // error
                            ~~~~~~~
-!!! error TS2499: An interface can only extend a type reference.
+!!! error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
     
     }
     
