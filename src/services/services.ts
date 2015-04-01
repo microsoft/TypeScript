@@ -2405,8 +2405,11 @@ module ts {
             }
 
             // If this is the default export, get the name of the declaration if it exists
-            if (displayName === "default" && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) && symbol.valueDeclaration.localSymbol && symbol.valueDeclaration.localSymbol.name) {
-                displayName = symbol.valueDeclaration.localSymbol.name;
+            if (displayName === "default") {
+                let localSymbol = getLocalSymbolForExportDefault(symbol);
+                if (localSymbol && localSymbol.name) {
+                    displayName = symbol.valueDeclaration.localSymbol.name;
+                }
             }
 
             let firstCharCode = displayName.charCodeAt(0);

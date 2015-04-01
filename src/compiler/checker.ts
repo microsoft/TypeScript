@@ -351,7 +351,8 @@ module ts {
                         }
                         else if (location.kind === SyntaxKind.SourceFile) {
                             result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & SymbolFlags.ModuleMember);
-                            if (result && (result.flags & meaning) && result.valueDeclaration && (result.valueDeclaration.flags & NodeFlags.Default) && result.valueDeclaration.localSymbol.name === name) {
+                            let localSymbol = getLocalSymbolForExportDefault(result);
+                            if (result && (result.flags & meaning) && localSymbol && localSymbol.name === name) {
                                 break loop;
                             }
                             result = undefined;
