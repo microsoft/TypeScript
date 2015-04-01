@@ -111,6 +111,7 @@ var definitionsRoots = [
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
     "compiler/program.d.ts",
+    "compiler/commandLineParser.d.ts",
     "services/services.d.ts",
 ];
 
