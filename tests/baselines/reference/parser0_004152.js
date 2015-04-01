@@ -9,6 +9,7 @@ var Game = (function () {
     function Game() {
         this.position = new DisplayPosition([]);
     }
+    ;
     return Game;
 })();
 exports.Game = Game;

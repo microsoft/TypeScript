@@ -274,11 +274,19 @@ module ts {
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode = node;
         switch (node.kind) {
+            case SyntaxKind.SourceFile:
+                let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
+                if (pos === sourceFile.text.length) {
+                    // file is empty - return span for the beginning of the file
+                    return createTextSpan(0, 0);
+                }
+                return getSpanOfTokenAtPosition(sourceFile, pos);
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
@@ -670,6 +678,7 @@ module ts {
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
@@ -942,12 +951,12 @@ module ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassBaseTypeNode(node: ClassDeclaration) {
+    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
-    export function getClassImplementedTypeNodes(node: ClassDeclaration) {
+    export function getClassImplementsHeritageClauseElements(node: ClassDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
@@ -1573,7 +1582,7 @@ module ts {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
             if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
@@ -1768,7 +1777,30 @@ module ts {
         }
     }
 
+    // Returns false if this heritage clause element's expression contains something unsupported
+    // (i.e. not a name or dotted name).
+    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
+        return isSupportedHeritageClauseElementExpression(node.expression);
+    }
+
+    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            return true;
+        }
+        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+        }
+        else {
+            return false;
+        }
+    }
+
+    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
+        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
+            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 }

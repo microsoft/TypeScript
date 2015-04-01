@@ -4,6 +4,8 @@
 export var x = 1;
 
 //// [f2.ts]
+
+// all mutations below are illegal and should be fixed
 import * as stuff from 'f1';
 
 var n = 'baz';
@@ -52,6 +54,7 @@ for ((stuff[n]) of []) {}
 //// [f1.js]
 exports.x = 1;
 //// [f2.js]
+// all mutations below are illegal and should be fixed
 var stuff = require('f1');
 var n = 'baz';
 stuff.x = 0;

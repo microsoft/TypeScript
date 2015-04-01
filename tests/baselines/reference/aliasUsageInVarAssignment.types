@@ -36,7 +36,7 @@ import Backbone = require("aliasUsageInVarAssignment_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone : unknown
+>Backbone : typeof Backbone
 >Model : Backbone.Model
 
     // interesting stuff here
