@@ -6,14 +6,6 @@ module ts {
         return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
     }
 
-    var testDataDir = "..\..\..\src\compiler";
-
-    function bigTest() {
-        editStress("scanner.ts", false);
-        editStress("sys.ts", false);
-        editStress("binder.ts", false);
-    }
-
     function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
         var lineInfo = lineIndex.lineNumberToInfo(line);
         return (lineInfo.offset + col - 1);
@@ -166,29 +158,31 @@ and grew 1cm per day`;
         });
     });
 
-    function editStress(fname: string, timing: boolean) {
-        var content = ts.sys.readFile(testDataDir + fname);
-        var lm = server.LineIndex.linesFromText(content);
-        var lines = lm.lines;
-        if (lines.length == 0) {
-            return;
-        }
-        var lineMap = lm.lineMap;
+    describe('VersionCache stress test', () => {
+        const interationCount = 20;
+        //const interationCount = 20000; // uncomment for testing
 
-        var lineIndex = new server.LineIndex();
+        // Use scanner.ts, decent size, does not change frequentlly
+        let testFileName = "src/compiler/scanner.ts";
+        let testContent = Harness.IO.readFile(testFileName);
+        let totalChars = testContent.length;
+        assert.isTrue(totalChars > 0, "Failed to read test file.");
+
+        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
+        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+
+        let lineIndex = new server.LineIndex();
         lineIndex.load(lines);
-        var totalChars = content.length;
-        var rsa: number[] = [];
-        var la: number[] = [];
-        var las: number[] = [];
-        var elas: number[] = [];
-        var ersa: number[] = [];
-        var ela: number[] = [];
-        var etotalChars = totalChars;
-        var j: number;
 
-        var startTime: number;
-        for (j = 0; j < 100000; j++) {
+        let rsa: number[] = [];
+        let la: number[] = [];
+        let las: number[] = [];
+        let elas: number[] = [];
+        let ersa: number[] = [];
+        let ela: number[] = [];
+        let etotalChars = totalChars;
+
+        for (let j = 0; j < 100000; j++) {
             rsa[j] = Math.floor(Math.random() * totalChars);
             la[j] = Math.floor(Math.random() * (totalChars - rsa[j]));
             if (la[j] > 4) {
@@ -209,144 +203,77 @@ and grew 1cm per day`;
                 etotalChars += (las[j] - elas[j]);
             }
         }
-        if (timing) {
-            startTime = Date.now();
-        }
-        for (j = 0; j < 2000; j++) {
-            var s2 = lineIndex.getText(rsa[j], la[j]);
-            if (!timing) {
-                var s1 = content.substring(rsa[j], rsa[j] + la[j]);
+
+        it("Range (average length 1/4 file size)", () => {
+            for (let i = 0; i < interationCount; i++) {
+                let s2 = lineIndex.getText(rsa[i], la[i]);
+                let s1 = testContent.substring(rsa[i], rsa[i] + la[i]);
                 assert.equal(s1, s2);
             }
-        }
-        if (timing) {
-            console.log("range (average length 1/4 file size): " + ((Date.now() - startTime) / 2).toFixed(3) + " us");
-        }
-        //        console.log("check1");
-        if (timing) {
-            startTime = Date.now();
-        }
-        for (j = 0; j < 10000; j++) {
-            var s2 = lineIndex.getText(rsa[j], las[j]);
-            if (!timing) {
-                var s1 = content.substring(rsa[j], rsa[j] + las[j]);
+        });
+
+        it("Range (average length 4 chars)", () => {
+            for (let j = 0; j < interationCount; j++) {
+                let s2 = lineIndex.getText(rsa[j], las[j]);
+                let s1 = testContent.substring(rsa[j], rsa[j] + las[j]);
                 assert.equal(s1, s2);
             }
-        }
-        //        console.log("check2");
-        if (timing) {
-            console.log("range (average length 4 chars): " + ((Date.now() - startTime) / 10).toFixed(3) + " us");
-        }
+        });
 
-        if (timing) {
-            startTime = Date.now();
-        }
-        var snapshot: server.LineIndex;
-        for (j = 0; j < 2000; j++) {
-            var insertString = content.substring(rsa[100000 - j], rsa[100000 - j] + las[100000 - j]);
-            snapshot = lineIndex.edit(rsa[j], las[j], insertString);
-            if (!timing) {
-                var checkText = editFlat(rsa[j], las[j], insertString, content);
-                var snapText = snapshot.getText(0, checkText.length);
-                if (checkText != snapText) {
-                    assert.equal(s1, s2);
+        it("Edit (average length 4)", () => {
+            for (let i = 0; i < interationCount; i++) {
+                let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + las[100000 - i]);
+                let snapshot = lineIndex.edit(rsa[i], las[i], insertString);
+                let checkText = editFlat(rsa[i], las[i], insertString, testContent);
+                let snapText = snapshot.getText(0, checkText.length);
+                assert.equal(checkText, snapText);
+            }
+        });
+
+        it("Edit ScriptVersionCache ", () => {
+            let svc = server.ScriptVersionCache.fromString(testContent);
+            let checkText = testContent;
+
+            for (let i = 0; i < interationCount; i++) {
+                let insertString = testContent.substring(rsa[i], rsa[i] + las[i]);
+                svc.edit(ersa[i], elas[i], insertString);
+                checkText = editFlat(ersa[i], elas[i], insertString, checkText);
+                if (0 == (i % 4)) {
+                    let snap = svc.getSnapshot();
+                    let snapText = snap.getText(0, checkText.length);
+                    assert.equal(checkText, snapText);
                 }
             }
-        }
-        //        console.log("check3");
-        if (timing) {
-            console.log("edit (average length 4): " + ((Date.now() - startTime) / 2).toFixed(3) + " us");
-        }
+        });
 
-        var svc = server.ScriptVersionCache.fromString(content);
-        checkText = content;
-        if (timing) {
-            startTime = Date.now();
-        }
-        for (j = 0; j < 2000; j++) {
-            insertString = content.substring(rsa[j], rsa[j] + las[j]);
-            svc.edit(ersa[j], elas[j], insertString);
-            if (!timing) {
-                checkText = editFlat(ersa[j], elas[j], insertString, checkText);
+        it("Edit (average length 1/4th file size)", () => {
+            for (let i = 0; i < interationCount; i++) {
+                let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + la[100000 - i]);
+                let snapshot = lineIndex.edit(rsa[i], la[i], insertString);
+                let checkText = editFlat(rsa[i], la[i], insertString, testContent);
+                let snapText = snapshot.getText(0, checkText.length);
+                assert.equal(checkText, snapText);
             }
-            if (0 == (j % 4)) {
-                var snap = svc.getSnapshot();
-                if (!timing) {
-                    snapText = snap.getText(0, checkText.length);
-                    if (checkText != snapText) {
-                        assert.equal(s1, s2);
-                    }
-                }
+        });
+
+        it("Line/offset from pos", () => {
+            for (let i = 0; i < interationCount; i++) {
+                let lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
+                let lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
+                assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
+                assert.equal(lac.character, (lp.offset), "Charachter offset mismatch " + lac.character + " " + lp.offset + " " + i);
             }
-        }
-        if (timing) {
-            console.log("edit ScriptVersionCache: " + ((Date.now() - startTime) / 2).toFixed(3) + " us");
-        }
+        });
 
-        //        console.log("check4");
-        if (timing) {
-            startTime = Date.now();
-        }
-        for (j = 0; j < 5000; j++) {
-            insertString = content.substring(rsa[100000 - j], rsa[100000 - j] + la[100000 - j]);
-            snapshot = lineIndex.edit(rsa[j], la[j], insertString);
-            if (!timing) {
-                checkText = editFlat(rsa[j], la[j], insertString, content);
-                snapText = snapshot.getText(0, checkText.length);
-                if (checkText != snapText) {
-                    assert.equal(s1, s2);
-                }
-            }
-        }
-        if (timing) {
-            console.log("edit (average length 1/4th file size): " + ((Date.now() - startTime) / 5).toFixed(3) + " us");
-        }
-
-        var t: ts.LineAndCharacter;
-        var errorCount = 0;
-        if (timing) {
-            startTime = Date.now();
-        }
-        //        console.log("check5");
-        for (j = 0; j < 100000; j++) {
-            var lp = lineIndex.charOffsetToLineNumberAndPos(rsa[j]);
-            if (!timing) {
-                var lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[j]);
-                assert.equal(lac.line, lp.line, "Line number mismatch " + lac.line + " " + lp.line + " " + j);
-                assert.equal(lac.character, (lp.offset + 1), "Charachter offset mismatch " + lac.character + " " + (lp.offset + 1) + " " + j);
-            }
-        }
-        //        console.log("check6");
-        if (timing) {
-            console.log("line/offset from pos: " + ((Date.now() - startTime) / 100).toFixed(3) + " us");
-        }
-
-        if (timing) {
-            startTime = Date.now();
-        }
-
-        var outer = 1;
-        if (timing) {
-            outer = 100;
-        }
-        for (var ko = 0; ko < outer; ko++) {
-            for (var k = 0, llen = lines.length; k < llen; k++) {
-                var lineInfo = lineIndex.lineNumberToInfo(k + 1);
-                var lineIndexOffset = lineInfo.offset;
-                if (!timing) {
-                    var lineMapOffset = lineMap[k];
+        it("Start pos from line", () => {
+            for (let i = 0; i < interationCount; i++) {
+                for (let j = 0, llen = lines.length; j < llen; j++) {
+                    let lineInfo = lineIndex.lineNumberToInfo(j + 1);
+                    let lineIndexOffset = lineInfo.offset;
+                    let lineMapOffset = lineMap[j];
                     assert.equal(lineIndexOffset, lineMapOffset);
                 }
             }
-        }
-        if (timing) {
-            console.log("start pos from line: " + (((Date.now() - startTime) / lines.length) * 10).toFixed(3) + " us");
-        }
-    }
-
-    //function edTest() {
-    //    bigTest();
-    //}
-
-    //edTest();
+        });
+    });
 }
