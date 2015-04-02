@@ -2472,41 +2472,41 @@ module ts {
 
             return diagnostics;
 
-            function walk(node: Node) {
+            function walk(node: Node): boolean {
                 if (!node) {
-                    return;
+                    return false;
                 }
 
                 switch (node.kind) {
                     case SyntaxKind.ImportEqualsDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.ExportAssignment:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.ClassDeclaration:
                         let classDeclaration = <ClassDeclaration>node;
                         if (checkModifiers(classDeclaration.modifiers) ||
                             checkTypeParameters(classDeclaration.typeParameters)) {
-                            return;
+                            return true;
                         }
                         break;
                     case SyntaxKind.HeritageClause:
                         let heritageClause = <HeritageClause>node;
                         if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript));
-                            return;
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
+                            return true;
                         }
                         break;
                     case SyntaxKind.InterfaceDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.ModuleDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.TypeAliasDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
@@ -2520,19 +2520,19 @@ module ts {
                         if (checkModifiers(functionDeclaration.modifiers) ||
                             checkTypeParameters(functionDeclaration.typeParameters) ||
                             checkTypeAnnotation(functionDeclaration.type)) {
-                            return;
+                            return true;
                         }
                         break;
                     case SyntaxKind.VariableStatement:
                         let variableStatement = <VariableStatement>node;
                         if (checkModifiers(variableStatement.modifiers)) {
-                            return;
+                            return true;
                         }
                         break;
                     case SyntaxKind.VariableDeclaration:
                         let variableDeclaration = <VariableDeclaration>node;
                         if (checkTypeAnnotation(variableDeclaration.type)) {
-                            return;
+                            return true;
                         }
                         break;
                     case SyntaxKind.CallExpression:
@@ -2541,8 +2541,8 @@ module ts {
                         if (expression.typeArguments && expression.typeArguments.length > 0) {
                             let start = expression.typeArguments.pos;
                             diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
-                                Diagnostics.type_arguments_can_only_be_used_in_TypeScript));
-                            return;
+                                Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
+                            return true;
                         }
                         break;
                     case SyntaxKind.Parameter:
@@ -2550,37 +2550,40 @@ module ts {
                         if (parameter.modifiers) {
                             let start = parameter.modifiers.pos;
                             diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
-                                Diagnostics.parameter_modifiers_can_only_be_used_in_TypeScript));
-                            return;
+                                Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
+                            return true;
                         }
                         if (parameter.questionToken) {
-                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics.can_only_be_used_in_TypeScript));
-                            return;
+                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics.can_only_be_used_in_a_ts_file));
+                            return true;
                         }
                         if (parameter.type) {
-                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_TypeScript));
-                            return;
+                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                            return true;
                         }
                         break;
                     case SyntaxKind.PropertyDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_TypeScript));
-                        return
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.EnumDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
                     case SyntaxKind.TypeAssertionExpression:
                         let typeAssertionExpression = <TypeAssertion>node;
-                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_TypeScript));
-                        return;
+                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.Decorator:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
+                        return true;
                 }
 
-                forEachChild(node, walk);
+                return forEachChild(node, walk);
             }
 
             function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
                 if (typeParameters) {
                     let start = typeParameters.pos;
-                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_TypeScript));
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                     return true;
                 }
                 return false;
@@ -2588,7 +2591,7 @@ module ts {
 
             function checkTypeAnnotation(type: TypeNode): boolean {
                 if (type) {
-                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_TypeScript));
+                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
                     return true;
                 }
 
@@ -2603,7 +2606,7 @@ module ts {
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
                             case SyntaxKind.DeclareKeyword:
-                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_TypeScript, tokenToString(modifier.kind)));
+                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
                                 return true;
 
                             // These are all legal modifiers.

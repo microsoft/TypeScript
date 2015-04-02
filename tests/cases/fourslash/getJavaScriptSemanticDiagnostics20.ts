@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'type assertion expressions' can only be used in TypeScript.",
+    "message": "'type assertion expressions' can only be used in a .ts file.",
     "start": 9,
     "length": 6,
     "category": "error",

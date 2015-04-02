@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'types' can only be used in TypeScript.",
+    "message": "'types' can only be used in a .ts file.",
     "start": 14,
     "length": 6,
     "category": "error",

@@ -2017,65 +2017,69 @@
         "category": "Error",
         "code": 8001
     },
-    "'import ... =' can only be used in TypeScript.": {
+    "'import ... =' can only be used in a .ts file.": {
         "category": "Error",
         "code":  8002
     },
-    "'export=' can only be used in TypeScript.": {
+    "'export=' can only be used in a .ts file.": {
         "category": "Error",
         "code":  8003
     },
-    "'type parameter declarations' can only be used in TypeScript.": {
+    "'type parameter declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code":  8004
     },
-    "'implements clauses' can only be used in TypeScript.": {
+    "'implements clauses' can only be used in a .ts file.": {
         "category": "Error",
         "code":  8005
     },
-    "'interface declarations' can only be used in TypeScript.": {
+    "'interface declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8006
     },
-    "'module declarations' can only be used in TypeScript.": {
+    "'module declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8007
     },
-    "'type aliases' can only be used in TypeScript.": {
+    "'type aliases' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8008
     },
-    "'{0}' can only be used in TypeScript.": {
+    "'{0}' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8009
     },
-    "'types' can only be used in TypeScript.": {
+    "'types' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8010
     },
-    "'type arguments' can only be used in TypeScript.": {
+    "'type arguments' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8011
     },
-    "'parameter modifiers' can only be used in TypeScript.": {
+    "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
     },
-    "'?' can only be used in TypeScript.": {
+    "'?' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8013
     },
-    "'property declarations' can only be used in TypeScript.": {
+    "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8014
     },
-    "'enum declarations' can only be used in TypeScript.": {
+    "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8015
     },
-    "'type assertion expressions' can only be used in TypeScript.": {
+    "'type assertion expressions' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8016
+    },
+    "'decorators' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8017
     },
 
     "'yield' expressions are not currently supported.": {

@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'?' can only be used in TypeScript.",
+    "message": "'?' can only be used in a .ts file.",
     "start": 12,
     "length": 1,
     "category": "error",

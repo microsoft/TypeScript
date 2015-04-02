@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'module declarations' can only be used in TypeScript.",
+    "message": "'module declarations' can only be used in a .ts file.",
     "start": 7,
     "length": 1,
     "category": "error",

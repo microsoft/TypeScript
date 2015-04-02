@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'enum declarations' can only be used in TypeScript.",
+    "message": "'enum declarations' can only be used in a .ts file.",
     "start": 5,
     "length": 1,
     "category": "error",

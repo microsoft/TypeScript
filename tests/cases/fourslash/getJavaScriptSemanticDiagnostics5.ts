@@ -6,7 +6,7 @@
 
 verify.getSemanticDiagnostics(`[
   {
-    "message": "'implements clauses' can only be used in TypeScript.",
+    "message": "'implements clauses' can only be used in a .ts file.",
     "start": 8,
     "length": 12,
     "category": "error",
