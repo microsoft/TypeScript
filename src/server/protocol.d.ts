@@ -406,6 +406,13 @@ declare module ts.server.protocol {
     }
 
     /**
+      *  Exit request; value of command field is "exit".  Ask the server process
+      *  to exit.
+      */
+    export interface ExitRequest extends Request {
+    }
+
+    /**
       * Close request; value of command field is "close". Notify the
       * server that the client has closed a previously open file.  If
       * file is still referenced by open files, the server will resume
