@@ -3675,6 +3675,9 @@ declare module "typescript" {
 
         EmitDecorate = 512,
 >EmitDecorate : NodeCheckFlags
+
+        EmitParam = 1024,
+>EmitParam : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks
@@ -4189,6 +4192,9 @@ declare module "typescript" {
 
         separateCompilation?: boolean;
 >separateCompilation : boolean
+
+        emitDecoratorMetadata?: boolean;
+>emitDecoratorMetadata : boolean
 
         [option: string]: string | number | boolean;
 >option : string

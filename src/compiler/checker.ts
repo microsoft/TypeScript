@@ -126,6 +126,7 @@ module ts {
         let stringLiteralTypes: Map<StringLiteralType> = {};
         let emitExtends = false;
         let emitDecorate = false;
+        let emitParam = false;
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
@@ -8810,6 +8811,10 @@ module ts {
             }
 
             emitDecorate = true;
+            if (node.kind === SyntaxKind.Parameter) {
+                emitParam = true;
+            }
+
             forEach(node.decorators, checkDecorator);
         }
 
@@ -10821,6 +10826,10 @@ module ts {
 
                 if (emitDecorate) {
                     links.flags |= NodeCheckFlags.EmitDecorate;
+                }
+
+                if (emitParam) {
+                    links.flags |= NodeCheckFlags.EmitParam;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;

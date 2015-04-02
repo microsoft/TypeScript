@@ -1118,6 +1118,7 @@ declare module "typescript" {
         EnumValuesComputed = 128,
         BlockScopedBindingInLoop = 256,
         EmitDecorate = 512,
+        EmitParam = 1024,
     }
     interface NodeLinks {
         resolvedType?: Type;
@@ -1290,6 +1291,7 @@ declare module "typescript" {
         version?: boolean;
         watch?: boolean;
         separateCompilation?: boolean;
+        emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
