@@ -8747,6 +8747,9 @@ module ts {
 
         /** Checks a type reference node as an expression. */
         function checkTypeNodeAsExpression(node: TypeNode | LiteralExpression) {
+            // When we are emitting type metadata for decorators, we need to try to check the type
+            // as if it were an expression so that we can emit the type in a value position when we 
+            // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let type = getTypeFromTypeNodeOrHeritageClauseElement(node);
                 let shouldCheckIfUnknownType = type === unknownType && compilerOptions.separateCompilation;
@@ -8785,29 +8788,35 @@ module ts {
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
                 return;
-            }            
+            }
 
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    var constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
-                    if (constructor) {
-                        checkParameterTypeAnnotationsAsExpressions(constructor);
-                    }
-                    break;
+            // skip this check for nodes that cannot have decorators. These should have already had an error reported by
+            // checkGrammarDecorators.
+            if (!nodeCanBeDecorated(node)) {
+                return;
+            }
 
-                case SyntaxKind.MethodDeclaration:
-                    checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                    // fall-through
+            if (compilerOptions.emitDecoratorMetadata) {
+                // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        var constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
+                        if (constructor) {
+                            checkParameterTypeAnnotationsAsExpressions(constructor);
+                        }
+                        break;
 
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.Parameter:
-                    checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
-                    break;
+                    case SyntaxKind.MethodDeclaration:
+                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
+                        // fall-through
 
-                default:
-                    return;
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.Parameter:
+                        checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
+                        break;
+                }
             }
 
             emitDecorate = true;
@@ -11510,7 +11519,7 @@ module ts {
             return undefined;
         }
 
-        /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
+        /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the __metadata decorator. */
         function serializeEntityName(node: EntityName, getGeneratedNameForNode: (Node: Node) => string, fallbackPath?: string[]): string {
             if (node.kind === SyntaxKind.Identifier) {
                 var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
@@ -11531,7 +11540,7 @@ module ts {
             }
         }
 
-        /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
+        /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
         function serializeTypeReferenceNode(node: TypeReferenceNode, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
             // serialization of a TypeReferenceNode uses the following rules:
             //
@@ -11578,7 +11587,7 @@ module ts {
             return "Object";
         }
 
-        /** Serializes a TypeNode to an appropriate JS constructor value. Used by the `@type`, `@paramtypes`, and `@returntype` decorators. */
+        /** Serializes a TypeNode to an appropriate JS constructor value. Used by the __metadata decorator. */
         function serializeTypeNode(node: TypeNode | LiteralExpression, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
             // serialization of a TypeNode uses the following rules:
             //
@@ -11623,11 +11632,11 @@ module ts {
             return "Object";
         }
 
-        /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the `@type` and `@paramtypes` decorators. */
+        /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
         function serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
             // serialization of the type of a declaration uses the following rules:
             //
-            // * The serialized type of a ClassDeclaration is the class name (see serializeEntityName).
+            // * The serialized type of a ClassDeclaration is "Function"
             // * The serialized type of a ParameterDeclaration is the serialized type of its type annotation.
             // * The serialized type of a PropertyDeclaration is the serialized type of its type annotation.
             // * The serialized type of an AccessorDeclaration is the serialized type of the return type annotation of its getter or parameter type annotation of its setter.
@@ -11648,7 +11657,7 @@ module ts {
             return "void 0";
         }
         
-        /** Serializes the parameter types of a function or the constructor of a class. Used by the `@paramtypes` decorator. */
+        /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
         function serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[] {
             // serialization of parameter types uses the following rules:
             //
@@ -11695,7 +11704,7 @@ module ts {
             return emptyArray;
         }
 
-        /** Serializes the return type of function. Used by the `@returntype` decorator. */
+        /** Serializes the return type of function. Used by the __metadata decorator for a method. */
         function serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
             if (node && isFunctionLike(node)) {
                 return serializeTypeNode((<FunctionLikeDeclaration>node).type, getGeneratedNameForNode);

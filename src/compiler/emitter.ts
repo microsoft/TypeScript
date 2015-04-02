@@ -796,27 +796,34 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitList(nodes: Node[], start: number, count: number, multiLine: boolean, trailingComma: boolean) {
+            function emitList<TNode extends Node>(nodes: TNode[], start: number, count: number, multiLine: boolean, trailingComma: boolean, leadingComma?: boolean, noTrailingNewLine?: boolean, emitNode?: (node: TNode) => void): number {
+                if (!emitNode) {
+                    emitNode = emit;
+                }
+
                 for (let i = 0; i < count; i++) {
                     if (multiLine) {
-                        if (i) {
+                        if (i || leadingComma) {
                             write(",");
                         }
                         writeLine();
                     }
                     else {
-                        if (i) {
+                        if (i || leadingComma) {
                             write(", ");
                         }
                     }
-                    emit(nodes[start + i]);
+                    emitNode(nodes[start + i]);
+                    leadingComma = true;
                 }
                 if (trailingComma) {
                     write(",");
                 }
-                if (multiLine) {
+                if (multiLine && !noTrailingNewLine) {
                     writeLine();
                 }
+
+                return count;
             }
 
             function emitCommaList(nodes: Node[]) {
@@ -3752,10 +3759,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 increaseIndent();
                 writeLine();
 
-                let writeComma = false;
-                writeComma = emitDecoratorArray(decorators, writeComma);
-                writeComma = emitDecoratorsOfParameters(constructor, writeComma);
-                emitSerializedTypeMetadata(node, writeComma);
+                let decoratorCount = decorators ? decorators.length : 0;
+                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
+                    emitStart(decorator);
+                    emit(decorator.expression);
+                    emitEnd(decorator);
+                });
+
+                argumentsWritten += emitDecoratorsOfParameters(constructor, /*leadingComma*/ argumentsWritten > 0);
+                emitSerializedTypeMetadata(node, /*leadingComma*/ argumentsWritten >= 0);
 
                 decreaseIndent();
                 writeLine();
@@ -3861,10 +3873,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     increaseIndent();
                     writeLine();
 
-                    let writeComma = false;
-                    writeComma = emitDecoratorArray(decorators, writeComma);
-                    writeComma = emitDecoratorsOfParameters(functionLikeMember, writeComma);
-                    emitSerializedTypeMetadata(member, writeComma);
+                    let decoratorCount = decorators ? decorators.length : 0;
+                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
+                        emitStart(decorator);
+                        emit(decorator.expression);
+                        emitEnd(decorator);
+                    });
+
+                    argumentsWritten += emitDecoratorsOfParameters(functionLikeMember, argumentsWritten > 0);
+                    emitSerializedTypeMetadata(member, argumentsWritten > 0);
 
                     decreaseIndent();
                     writeLine();
@@ -3892,45 +3909,32 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, writeComma: boolean): boolean {
+            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, leadingComma: boolean): number {
+                let argumentsWritten = 0;
                 if (node) {
                     let parameterIndex = 0;
                     for (let parameter of node.parameters) {
                         if (nodeIsDecorated(parameter)) {
-                            writeComma = emitDecoratorArray(parameter.decorators, writeComma, `__param(${parameterIndex}, `, ")");
+                            let decorators = parameter.decorators;
+                            argumentsWritten += emitList(decorators, 0, decorators.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ leadingComma, /*noTrailingNewLine*/ true, decorator => {
+                                emitStart(decorator);
+                                write(`__param(${parameterIndex}, `);
+                                emit(decorator.expression);
+                                write(")");
+                                emitEnd(decorator);
+                            });
+                            leadingComma = true;
                         }
                         ++parameterIndex;
                     }
                 }
-                return writeComma;
-            }
-
-            function emitDecoratorArray(decorators: NodeArray<Decorator>, writeComma: boolean, prefix?: string, postfix?: string): boolean {
-                if (decorators) {
-                    let decoratorCount = decorators ? decorators.length : 0;
-                    for (let i = 0; i < decoratorCount; i++) {
-                        if (writeComma) {
-                            write(",");
-                        }
-                        writeLine();
-
-                        let decorator = decorators[i];
-                        emitStart(decorator);
-                        write(prefix);
-                        emit(decorator.expression);
-                        write(postfix);
-                        emitEnd(decorator);
-                        writeComma = true;
-                    }
-                }
-                return writeComma;
+                return argumentsWritten;
             }
 
             function shouldEmitTypeMetadata(node: Declaration): boolean {
-                if (!compilerOptions.emitDecoratorMetadata) {
-                    return false;
-                }
-
+                // This method determines whether to emit the "design:type" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
@@ -3943,10 +3947,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
-                if (!compilerOptions.emitDecoratorMetadata) {
-                    return false;
-                }
-
+                // This method determines whether to emit the "design:returntype" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
                         return true;
@@ -3955,10 +3958,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function shouldEmitParamTypesMetadata(node: Declaration): boolean {
-                if (!compilerOptions.emitDecoratorMetadata) {
-                    return false;
-                }
-
+                // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.MethodDeclaration:
@@ -3968,50 +3970,57 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return false;
             }
 
-            function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): void {
-                if (shouldEmitTypeMetadata(node)) {
-                    var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
-                    if (serializedType) {
-                        if (writeComma) {
-                            write(", ");
-                        }
-                        writeLine();
-                        write("__metadata('design:type', ");
-                        emitSerializedType(node, serializedType);
-                        write(")");
-                        writeComma = true;
-                    }
-                }
-                if (shouldEmitParamTypesMetadata(node)) {
-                    var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
-                    if (serializedTypes) {
-                        if (writeComma) {
-                            write(", ");
-                        }
-                        writeLine();
-                        write("__metadata('design:paramtypes', [");
-                        for (var i = 0; i < serializedTypes.length; ++i) {
-                            if (i > 0) {
+            function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
+                // This method emits the serialized type metadata for a decorator target.
+                // The caller should have already tested whether the node has decorators.
+                let argumentsWritten = 0;
+                if (compilerOptions.emitDecoratorMetadata) {
+                    if (shouldEmitTypeMetadata(node)) {
+                        var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
+                        if (serializedType) {
+                            if (writeComma) {
                                 write(", ");
                             }
-                            emitSerializedType(node, serializedTypes[i]);
+                            writeLine();
+                            write("__metadata('design:type', ");
+                            emitSerializedType(node, serializedType);
+                            write(")");
+                            argumentsWritten++;
                         }
-                        write("])");
-                        writeComma = true;
+                    }
+                    if (shouldEmitParamTypesMetadata(node)) {
+                        var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
+                        if (serializedTypes) {
+                            if (writeComma || argumentsWritten) {
+                                write(", ");
+                            }
+                            writeLine();
+                            write("__metadata('design:paramtypes', [");
+                            for (var i = 0; i < serializedTypes.length; ++i) {
+                                if (i > 0) {
+                                    write(", ");
+                                }
+                                emitSerializedType(node, serializedTypes[i]);
+                            }
+                            write("])");
+                            argumentsWritten++;
+                        }
+                    }
+                    if (shouldEmitReturnTypeMetadata(node)) {
+                        var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
+                        if (serializedType) {
+                            if (writeComma || argumentsWritten) {
+                                write(", ");
+                            }
+                            writeLine();
+                            write("__metadata('design:returntype', ");
+                            emitSerializedType(node, serializedType);
+                            write(")");
+                            argumentsWritten++;
+                        }
                     }
                 }
-                if (shouldEmitReturnTypeMetadata(node)) {
-                    var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
-                    if (serializedType) {
-                        if (writeComma) {
-                            write(", ");
-                        }
-                        writeLine();
-                        write("__metadata('design:returntype', ");
-                        emitSerializedType(node, serializedType);
-                        write(")");
-                    }
-                }
+                return argumentsWritten;
             }
 
             function serializeTypeNameSegment(location: Node, path: string[], index: number): string {
