@@ -3238,26 +3238,25 @@ module ts {
 
             function getJavaScriptCompletionEntries(): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
-                let allIdentifiers: Map<string> = {};
+                let allNames: Map<string> = {};
+                let target = program.getCompilerOptions().target;
 
                 for (let sourceFile of program.getSourceFiles()) {
                     let nameTable = getNameTable(sourceFile);
                     for (let name in nameTable) {
-                        allIdentifiers[name] = name;
-                    }
-                }
-
-                var target = program.getCompilerOptions().target;
-                for (let name in allIdentifiers) {
-                    let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
-                    if (displayName) {
-                        // Use '1' so that all javascript identifier entries sort after Symbol entries.
-                        entries.push({
-                            name: displayName,
-                            kind: ScriptElementKind.warning,
-                            kindModifiers: "",
-                            sortText: "1"
-                        });
+                        if (!allNames[name]) {
+                            allNames[name] = name;
+                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                            if (displayName) {
+                                let entry = {
+                                    name: displayName,
+                                    kind: ScriptElementKind.warning,
+                                    kindModifiers: "",
+                                    sortText: "1"
+                                };
+                                entries.push(entry);
+                            }
+                        }
                     }
                 }
 
