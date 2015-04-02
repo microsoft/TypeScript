@@ -505,66 +505,81 @@ var bigModule;
         }
         return constructor;
     })();
-    var implements = (function () {
-        function implements() {
+    var  = (function () {
+        function () {
         }
-        return implements;
+        return ;
     })();
-    var interface = (function () {
-        function interface() {
+    var  = (function () {
+        function () {
         }
-        return interface;
+        return ;
     })();
-    var let = (function () {
-        function let() {
+    interface;
+    { }
+    var  = (function () {
+        function () {
         }
-        return let;
+        return ;
     })();
+    var _a = void 0;
     var module = (function () {
         function module() {
         }
         return module;
     })();
-    var package = (function () {
-        function package() {
+    var  = (function () {
+        function () {
         }
-        return package;
+        return ;
     })();
-    var private = (function () {
-        function private() {
+    package;
+    { }
+    var  = (function () {
+        function () {
         }
-        return private;
+        return ;
     })();
-    var protected = (function () {
-        function protected() {
+    private;
+    { }
+    var  = (function () {
+        function () {
         }
-        return protected;
+        return ;
     })();
-    var public = (function () {
-        function public() {
+    protected;
+    { }
+    var  = (function () {
+        function () {
         }
-        return public;
+        return ;
     })();
+    public;
+    { }
     var set = (function () {
         function set() {
         }
         return set;
     })();
-    var static = (function () {
-        function static() {
+    var  = (function () {
+        function () {
         }
-        return static;
+        return ;
     })();
+    static;
+    { }
     var get = (function () {
         function get() {
         }
         return get;
     })();
-    var yield = (function () {
-        function yield() {
+    var  = (function () {
+        function () {
         }
-        return yield;
+        return ;
     })();
+    yield;
+    { }
     var declare = (function () {
         function declare() {
         }
