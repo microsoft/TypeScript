@@ -42,13 +42,14 @@ n=XDate.UTC(1964,2,1);
 //// [externModule.js]
 declare;
 module;
-{ }
-var XDate = (function () {
-    function XDate() {
-    }
-    return XDate;
-})();
-exports.XDate = XDate;
+{
+    var XDate = (function () {
+        function XDate() {
+        }
+        return XDate;
+    })();
+    exports.XDate = XDate;
+}
 var d = new XDate();
 d.getDay();
 d = new XDate(1978, 2);

@@ -8,7 +8,7 @@ module M {
 
     class D extends M.C {
 >D : D
->M : unknown
+>M : typeof M
 >C : C
     }
 }

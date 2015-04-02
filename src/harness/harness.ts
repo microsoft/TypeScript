@@ -1036,17 +1036,7 @@ module Harness {
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
 
-                        case 'mapsourcefiles':
-                        case 'maproot':
-                        case 'generatedeclarationfiles':
-                        case 'gatherDiagnostics':
-                        case 'codepage':
-                        case 'createFileLog':
                         case 'filename':
-                        case 'removecomments':
-                        case 'watch':
-                        case 'allowautomaticsemicoloninsertion':
-                        case 'locale':
                             // Not supported yet
                             break;
 
@@ -1060,6 +1050,10 @@ module Harness {
 
                         case 'preserveconstenums':
                             options.preserveConstEnums = setting.value === 'true';
+                            break;
+
+                        case 'separatecompilation':
+                            options.separateCompilation = setting.value === 'true';
                             break;
 
                         case 'suppressimplicitanyindexerrors':
@@ -1461,7 +1455,12 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
+            "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
+            "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
+            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
+            "separatecompilation"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

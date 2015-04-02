@@ -314,12 +314,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName | HeritageClauseElement, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName) {
+        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName | HeritageClauseElement) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -329,6 +329,8 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
+                case SyntaxKind.HeritageClauseElement:
+                    return emitHeritageClauseElement(<HeritageClauseElement>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -350,11 +352,9 @@ module ts {
                     return emitEntityName(<Identifier>type);
                 case SyntaxKind.QualifiedName:
                     return emitEntityName(<QualifiedName>type);
-                default:
-                    Debug.fail("Unknown type annotation: " + type.kind);
             }
 
-            function emitEntityName(entityName: EntityName) {
+            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
                 let visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -362,15 +362,28 @@ module ts {
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
 
-                function writeEntityName(entityName: EntityName) {
+                function writeEntityName(entityName: EntityName | Expression) {
                     if (entityName.kind === SyntaxKind.Identifier) {
                         writeTextOfNode(currentSourceFile, entityName);
                     }
                     else {
-                        let qualifiedName = <QualifiedName>entityName;
-                        writeEntityName(qualifiedName.left);
+                        let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                        let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                        writeEntityName(left);
                         write(".");
-                        writeTextOfNode(currentSourceFile, qualifiedName.right);
+                        writeTextOfNode(currentSourceFile, right);
+                    }
+                }
+            }
+
+            function emitHeritageClauseElement(node: HeritageClauseElement) {
+                if (isSupportedHeritageClauseElement(node)) {
+                    Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
+                    emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
+                    if (node.typeArguments) {
+                        write("<");
+                        emitCommaList(node.typeArguments, emitType);
+                        write(">");
                     }
                 }
             }
@@ -827,14 +840,16 @@ module ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: HeritageClauseElement[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: TypeReferenceNode) {
-                emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+            function emitTypeOfTypeReference(node: HeritageClauseElement) {
+                if (isSupportedHeritageClauseElement(node)) {
+                    emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+                }
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;
@@ -877,11 +892,11 @@ module ts {
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            let baseTypeNode = getClassBaseTypeNode(node);
+            let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
             }
-            emitHeritageClause(getClassImplementedTypeNodes(node), /*isImplementsList*/ true);
+            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
