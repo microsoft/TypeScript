@@ -5853,6 +5853,9 @@ declare module "typescript" {
 
         kindModifiers: string;
 >kindModifiers : string
+
+        sortText: string;
+>sortText : string
     }
     interface CompletionEntryDetails {
 >CompletionEntryDetails : CompletionEntryDetails
@@ -6121,6 +6124,9 @@ declare module "typescript" {
 
         static unknown: string;
 >unknown : string
+
+        static warning: string;
+>warning : string
 
         static keyword: string;
 >keyword : string
