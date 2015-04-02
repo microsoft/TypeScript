@@ -439,6 +439,10 @@ module FourSlashInterface {
             displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
+
+        public getSemanticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSemanticDiagnostics(expected);
+        }
     }
 
     export class edit {
