@@ -5,7 +5,6 @@ tests/cases/conformance/decorators/invalid/decoratorOnVar.ts(3,1): error TS1206:
     declare function dec<T>(target: T): T;
     
     @dec
-    ~~~~
-    var x: number;
-    ~~~~~~~~~~~~~~
+    ~
 !!! error TS1206: Decorators are not valid here.
+    var x: number;
