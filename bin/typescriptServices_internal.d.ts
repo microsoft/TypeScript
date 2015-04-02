@@ -221,9 +221,9 @@ declare module ts {
     function isClassElement(n: Node): boolean;
     function isDeclarationName(name: Node): boolean;
     function isAliasSymbolDeclaration(node: Node): boolean;
-    function getClassBaseTypeNode(node: ClassDeclaration): TypeReferenceNode;
-    function getClassImplementedTypeNodes(node: ClassDeclaration): NodeArray<TypeReferenceNode>;
-    function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<TypeReferenceNode>;
+    function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration): HeritageClauseElement;
+    function getClassImplementsHeritageClauseElements(node: ClassDeclaration): NodeArray<HeritageClauseElement>;
+    function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<HeritageClauseElement>;
     function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind): HeritageClause;
     function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference): SourceFile;
     function getAncestor(node: Node, kind: SyntaxKind): Node;
@@ -307,7 +307,7 @@ declare module ts {
     function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string): string;
     function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean): void;
     function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number): number;
-    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration;
+    function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration;
     function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean;
     function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): {
         firstAccessor: AccessorDeclaration;
@@ -318,11 +318,22 @@ declare module ts {
     function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]): void;
     function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string, writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void): void;
     function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string): void;
+    function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean;
+    function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean;
+    function getLocalSymbolForExportDefault(symbol: Symbol): Symbol;
 }
 declare module ts {
-    var optionDeclarations: CommandLineOption[];
-    function parseCommandLine(commandLine: string[]): ParsedCommandLine;
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
     function readConfigFile(fileName: string): any;
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir
+      */
     function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module ts {

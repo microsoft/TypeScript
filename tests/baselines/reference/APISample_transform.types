@@ -2403,9 +2403,8 @@ declare module "typescript" {
 >expression : Expression
 >Expression : Expression
     }
-    interface ImportDeclaration extends Statement, ModuleElement {
+    interface ImportDeclaration extends ModuleElement {
 >ImportDeclaration : ImportDeclaration
->Statement : Statement
 >ModuleElement : ModuleElement
 
         importClause?: ImportClause;
@@ -2914,10 +2913,10 @@ declare module "typescript" {
 >Symbol : Symbol
 >Symbol : Symbol
 
-        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
->getExportsOfExternalModule : (node: ImportDeclaration) => Symbol[]
->node : ImportDeclaration
->ImportDeclaration : ImportDeclaration
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+>getExportsOfModule : (moduleSymbol: Symbol) => Symbol[]
+>moduleSymbol : Symbol
+>Symbol : Symbol
 >Symbol : Symbol
     }
     interface SymbolDisplayBuilder {
@@ -4933,6 +4932,27 @@ declare module "typescript" {
 >host : CompilerHost
 >CompilerHost : CompilerHost
 >Program : Program
+}
+declare module "typescript" {
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
+    function readConfigFile(fileName: string): any;
+>readConfigFile : (fileName: string) => any
+>fileName : string
+
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir
+      */
+    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
+>parseConfigFile : (json: any, basePath?: string) => ParsedCommandLine
+>json : any
+>basePath : string
+>ParsedCommandLine : ParsedCommandLine
 }
 declare module "typescript" {
     /** The version of the language service API */

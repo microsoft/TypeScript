@@ -74,7 +74,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfExternalModule,
+            getExportsOfModule: getExportsOfModuleAsArray,
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -345,6 +345,14 @@ module ts {
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
                             if (result.flags & meaning || !(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
+                                break loop;
+                            }
+                            result = undefined;
+                        }
+                        else if (location.kind === SyntaxKind.SourceFile) {
+                            result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & SymbolFlags.ModuleMember);
+                            let localSymbol = getLocalSymbolForExportDefault(result);
+                            if (result && (result.flags & meaning) && localSymbol && localSymbol.name === name) {
                                 break loop;
                             }
                             result = undefined;
@@ -890,6 +898,10 @@ module ts {
             return moduleSymbol.exports["export="];
         }
 
+        function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
+            return symbolsToArray(getExportsOfModule(moduleSymbol));
+        }
+
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
             return symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) : symbol.exports || emptySymbols;
         }
@@ -1109,7 +1121,7 @@ module ts {
 
                 // Check if symbol is any of the alias
                 return forEachValue(symbols, symbolFromSymbolTable => {
-                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias) {
+                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias && symbolFromSymbolTable.name !== "export=") {
                         if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
                             // Is this external alias, then use it to name
                             ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
@@ -1949,6 +1961,10 @@ module ts {
                     // Source file is always visible
                     case SyntaxKind.SourceFile:
                         return true;
+
+                    // Export assignements do not create name bindings outside the module
+                    case SyntaxKind.ExportAssignment:
+                        return false;
 
                     default:
                         Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
@@ -3018,17 +3034,6 @@ module ts {
                 }
             }
             return result;
-        }
-
-        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[] {
-            if (!node.moduleSpecifier) {
-                return emptyArray;
-            }
-            let module = resolveExternalModuleName(node, node.moduleSpecifier);
-            if (!module) {
-                return emptyArray;
-            }
-            return symbolsToArray(getExportsOfModule(module));
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -9753,6 +9758,10 @@ module ts {
             // Grammar checking
             if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
                 grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
+            }
+
+            if (!node.name && !(node.flags & NodeFlags.Default)) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
 
             checkGrammarClassDeclarationHeritageClauses(node);

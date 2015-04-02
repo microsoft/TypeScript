@@ -196,59 +196,62 @@ declare module "typescript" {
         TemplateExpression = 171,
         YieldExpression = 172,
         SpreadElementExpression = 173,
-        OmittedExpression = 174,
-        TemplateSpan = 175,
-        Block = 176,
-        VariableStatement = 177,
-        EmptyStatement = 178,
-        ExpressionStatement = 179,
-        IfStatement = 180,
-        DoStatement = 181,
-        WhileStatement = 182,
-        ForStatement = 183,
-        ForInStatement = 184,
-        ForOfStatement = 185,
-        ContinueStatement = 186,
-        BreakStatement = 187,
-        ReturnStatement = 188,
-        WithStatement = 189,
-        SwitchStatement = 190,
-        LabeledStatement = 191,
-        ThrowStatement = 192,
-        TryStatement = 193,
-        DebuggerStatement = 194,
-        VariableDeclaration = 195,
-        VariableDeclarationList = 196,
-        FunctionDeclaration = 197,
-        ClassDeclaration = 198,
-        InterfaceDeclaration = 199,
-        TypeAliasDeclaration = 200,
-        EnumDeclaration = 201,
-        ModuleDeclaration = 202,
-        ModuleBlock = 203,
-        CaseBlock = 204,
-        ImportEqualsDeclaration = 205,
-        ImportDeclaration = 206,
-        ImportClause = 207,
-        NamespaceImport = 208,
-        NamedImports = 209,
-        ImportSpecifier = 210,
-        ExportAssignment = 211,
-        ExportDeclaration = 212,
-        NamedExports = 213,
-        ExportSpecifier = 214,
-        MissingDeclaration = 215,
-        ExternalModuleReference = 216,
-        CaseClause = 217,
-        DefaultClause = 218,
-        HeritageClause = 219,
-        CatchClause = 220,
-        PropertyAssignment = 221,
-        ShorthandPropertyAssignment = 222,
-        EnumMember = 223,
-        SourceFile = 224,
-        SyntaxList = 225,
-        Count = 226,
+        ClassExpression = 174,
+        OmittedExpression = 175,
+        TemplateSpan = 176,
+        HeritageClauseElement = 177,
+        SemicolonClassElement = 178,
+        Block = 179,
+        VariableStatement = 180,
+        EmptyStatement = 181,
+        ExpressionStatement = 182,
+        IfStatement = 183,
+        DoStatement = 184,
+        WhileStatement = 185,
+        ForStatement = 186,
+        ForInStatement = 187,
+        ForOfStatement = 188,
+        ContinueStatement = 189,
+        BreakStatement = 190,
+        ReturnStatement = 191,
+        WithStatement = 192,
+        SwitchStatement = 193,
+        LabeledStatement = 194,
+        ThrowStatement = 195,
+        TryStatement = 196,
+        DebuggerStatement = 197,
+        VariableDeclaration = 198,
+        VariableDeclarationList = 199,
+        FunctionDeclaration = 200,
+        ClassDeclaration = 201,
+        InterfaceDeclaration = 202,
+        TypeAliasDeclaration = 203,
+        EnumDeclaration = 204,
+        ModuleDeclaration = 205,
+        ModuleBlock = 206,
+        CaseBlock = 207,
+        ImportEqualsDeclaration = 208,
+        ImportDeclaration = 209,
+        ImportClause = 210,
+        NamespaceImport = 211,
+        NamedImports = 212,
+        ImportSpecifier = 213,
+        ExportAssignment = 214,
+        ExportDeclaration = 215,
+        NamedExports = 216,
+        ExportSpecifier = 217,
+        MissingDeclaration = 218,
+        ExternalModuleReference = 219,
+        CaseClause = 220,
+        DefaultClause = 221,
+        HeritageClause = 222,
+        CatchClause = 223,
+        PropertyAssignment = 224,
+        ShorthandPropertyAssignment = 225,
+        EnumMember = 226,
+        SourceFile = 227,
+        SyntaxList = 228,
+        Count = 229,
         FirstAssignment = 53,
         LastAssignment = 64,
         FirstReservedWord = 66,
@@ -432,6 +435,9 @@ declare module "typescript" {
     interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
     }
+    interface SemicolonClassElement extends ClassElement {
+        _semicolonClassElementBrand: any;
+    }
     interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
         body: Block;
@@ -570,6 +576,10 @@ declare module "typescript" {
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
+    interface HeritageClauseElement extends Node {
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+    }
     interface NewExpression extends CallExpression, PrimaryExpression {
     }
     interface TaggedTemplateExpression extends MemberExpression {
@@ -664,11 +674,15 @@ declare module "typescript" {
     interface ModuleElement extends Node {
         _moduleElementBrand: any;
     }
-    interface ClassDeclaration extends Declaration, ModuleElement {
+    interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
+    }
+    interface ClassDeclaration extends ClassLikeDeclaration, Statement {
+    }
+    interface ClassExpression extends ClassLikeDeclaration, PrimaryExpression {
     }
     interface ClassElement extends Declaration {
         _classElementBrand: any;
@@ -681,7 +695,7 @@ declare module "typescript" {
     }
     interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<TypeReferenceNode>;
+        types?: NodeArray<HeritageClauseElement>;
     }
     interface TypeAliasDeclaration extends Declaration, ModuleElement {
         name: Identifier;
@@ -923,7 +937,7 @@ declare module "typescript" {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
@@ -1179,7 +1193,6 @@ declare module "typescript" {
     interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
-        codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
         emitBOM?: boolean;
@@ -1193,7 +1206,6 @@ declare module "typescript" {
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
-        noLibCheck?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
@@ -1206,6 +1218,7 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        separateCompilation?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1453,6 +1466,20 @@ declare module "typescript" {
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
+}
+declare module "typescript" {
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
+    function readConfigFile(fileName: string): any;
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir
+      */
+    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module "typescript" {
     /** The version of the language service API */
@@ -1947,6 +1974,7 @@ declare module "typescript" {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
+    function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string;
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
     let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;

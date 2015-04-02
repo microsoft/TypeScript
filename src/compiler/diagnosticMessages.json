@@ -659,6 +659,10 @@
         "category": "Error",
         "code": 1209
     },
+    "A class declaration without the 'default' modifier must have a name": {
+        "category": "Error",
+        "code": 1210
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

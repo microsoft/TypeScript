@@ -730,7 +730,7 @@ module ts {
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
-        public amdDependencies: {name: string; path: string}[];
+        public amdDependencies: { name: string; path: string }[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
@@ -769,125 +769,130 @@ module ts {
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
-                let sourceFile = this;
-                let namedDeclarations: Declaration[] = [];
-
-                forEachChild(sourceFile, function visit(node: Node): void {
-                    switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                            let functionDeclaration = <FunctionLikeDeclaration>node;
-
-                            if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
-                                let lastDeclaration = namedDeclarations.length > 0 ?
-                                    namedDeclarations[namedDeclarations.length - 1] :
-                                    undefined;
-
-                                // Check whether this declaration belongs to an "overload group".
-                                if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
-                                    // Overwrite the last declaration if it was an overload
-                                    // and this one is an implementation.
-                                    if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
-                                        namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
-                                    }
-                                }
-                                else {
-                                    namedDeclarations.push(functionDeclaration);
-                                }
-
-                                forEachChild(node, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.TypeAliasDeclaration:
-                        case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ExportSpecifier:
-                        case SyntaxKind.ImportSpecifier:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ImportClause:
-                        case SyntaxKind.NamespaceImport:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                        case SyntaxKind.TypeLiteral:
-                            if ((<Declaration>node).name) {
-                                namedDeclarations.push(<Declaration>node);
-                            }
-                        // fall through
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.VariableStatement:
-                        case SyntaxKind.VariableDeclarationList:
-                        case SyntaxKind.ObjectBindingPattern:
-                        case SyntaxKind.ArrayBindingPattern:
-                        case SyntaxKind.ModuleBlock:
-                            forEachChild(node, visit);
-                            break;
-
-                        case SyntaxKind.Block:
-                            if (isFunctionBlock(node)) {
-                                forEachChild(node, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.Parameter:
-                            // Only consider properties defined as constructor parameters
-                            if (!(node.flags & NodeFlags.AccessibilityModifier)) {
-                                break;
-                            }
-                        // fall through
-                        case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.BindingElement:
-                            if (isBindingPattern((<VariableDeclaration>node).name)) {
-                                forEachChild((<VariableDeclaration>node).name, visit);
-                                break;
-                            }
-                        case SyntaxKind.EnumMember:
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                            namedDeclarations.push(<Declaration>node);
-                            break;
-                        
-                        case SyntaxKind.ExportDeclaration:
-                            // Handle named exports case e.g.:
-                            //    export {a, b as B} from "mod";
-                            if ((<ExportDeclaration>node).exportClause) {
-                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.ImportDeclaration:
-                            let importClause = (<ImportDeclaration>node).importClause;
-                            if (importClause) {
-                                // Handle default import case e.g.:
-                                //    import d from "mod";
-                                if (importClause.name) {
-                                    namedDeclarations.push(importClause);
-                                }
-
-                                // Handle named bindings in imports e.g.:
-                                //    import * as NS from "mod";
-                                //    import {a, b as B} from "mod";
-                                if (importClause.namedBindings) {
-                                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                        namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
-                                    }
-                                    else {
-                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                });
-
-                this.namedDeclarations = namedDeclarations;
+                this.namedDeclarations = this.computeNamedDeclarations();
             }
 
             return this.namedDeclarations;
+        }
+
+        private computeNamedDeclarations() {
+            let namedDeclarations: Declaration[] = [];
+
+            forEachChild(this, visit);
+
+            return namedDeclarations;
+
+            function visit(node: Node): void {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        let functionDeclaration = <FunctionLikeDeclaration>node;
+
+                        if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
+                            let lastDeclaration = namedDeclarations.length > 0 ?
+                                namedDeclarations[namedDeclarations.length - 1] :
+                                undefined;
+
+                            // Check whether this declaration belongs to an "overload group".
+                            if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                // Overwrite the last declaration if it was an overload
+                                // and this one is an implementation.
+                                if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
+                                    namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                }
+                            }
+                            else {
+                                namedDeclarations.push(functionDeclaration);
+                            }
+
+                            forEachChild(node, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.TypeLiteral:
+                        if ((<Declaration>node).name) {
+                            namedDeclarations.push(<Declaration>node);
+                        }
+                    // fall through
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                    case SyntaxKind.ModuleBlock:
+                        forEachChild(node, visit);
+                        break;
+
+                    case SyntaxKind.Block:
+                        if (isFunctionBlock(node)) {
+                            forEachChild(node, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.Parameter:
+                        // Only consider properties defined as constructor parameters
+                        if (!(node.flags & NodeFlags.AccessibilityModifier)) {
+                            break;
+                        }
+                    // fall through
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                        if (isBindingPattern((<VariableDeclaration>node).name)) {
+                            forEachChild((<VariableDeclaration>node).name, visit);
+                            break;
+                        }
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                        namedDeclarations.push(<Declaration>node);
+                        break;
+
+                    case SyntaxKind.ExportDeclaration:
+                        // Handle named exports case e.g.:
+                        //    export {a, b as B} from "mod";
+                        if ((<ExportDeclaration>node).exportClause) {
+                            forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.ImportDeclaration:
+                        let importClause = (<ImportDeclaration>node).importClause;
+                        if (importClause) {
+                            // Handle default import case e.g.:
+                            //    import d from "mod";
+                            if (importClause.name) {
+                                namedDeclarations.push(importClause);
+                            }
+
+                            // Handle named bindings in imports e.g.:
+                            //    import * as NS from "mod";
+                            //    import {a, b as B} from "mod";
+                            if (importClause.namedBindings) {
+                                if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                }
+                                else {
+                                    forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
         }
     }
 
@@ -2623,6 +2628,14 @@ module ts {
         function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
             let displayName = symbol.getName();
             if (displayName) {
+                // If this is the default export, get the name of the declaration if it exists
+                if (displayName === "default") {
+                    let localSymbol = getLocalSymbolForExportDefault(symbol);
+                    if (localSymbol && localSymbol.name) {
+                        displayName = symbol.valueDeclaration.localSymbol.name;
+                    }
+                }
+
                 let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
@@ -2786,7 +2799,8 @@ module ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        forEachValue(symbol.exports, symbol => {
+                        let exportedSymbols = typeInfoResolver.getExportsOfModule(symbol);
+                        forEach(exportedSymbols, symbol => {
                             if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
@@ -2831,8 +2845,17 @@ module ts {
                     if (showCompletionsInImportsClause(contextToken)) {
                         let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
-                        let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
-                        symbols = filterModuleExports(exports, importDeclaration);
+
+                        let exports: Symbol[];
+                        if (importDeclaration.moduleSpecifier) {
+                            let moduleSpecifierSymbol = typeInfoResolver.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                            if (moduleSpecifierSymbol) {
+                                exports = typeInfoResolver.getExportsOfModule(moduleSpecifierSymbol);
+                            }
+                        }
+
+                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
                 }
                 else {
@@ -2872,7 +2895,7 @@ module ts {
                         previousToken.getStart() :
                         position;
 
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
 
                     /// TODO filter meaning based on the current context
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
