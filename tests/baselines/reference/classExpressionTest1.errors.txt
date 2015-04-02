@@ -1,10 +1,10 @@
-tests/cases/compiler/classExpressionTest1.ts(2,11): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/compiler/classExpressionTest1.ts(2,5): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
 
 
 ==== tests/cases/compiler/classExpressionTest1.ts (1 errors) ====
     function M() {
         class C<X> {
-              ~
+        ~~~~~
 !!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
             f<T>() {
                 var t: T;
