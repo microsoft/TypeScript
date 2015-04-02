@@ -1,17 +1,5 @@
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+
+/// <reference path='services.ts' />
 
 module ts {
     export module OutliningElementsCollector {
@@ -31,6 +19,53 @@ module ts {
                 }
             }
 
+            function addOutliningSpanComments(commentSpan: CommentRange, autoCollapse: boolean) {
+                if (commentSpan) {
+                    let span: OutliningSpan = {
+                        textSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
+                        hintSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
+                        bannerText: collapseText,
+                        autoCollapse: autoCollapse
+                    };
+                    elements.push(span);
+                }
+            }
+
+            function addOutliningForLeadingCommentsForNode(n: Node) {
+                let comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);                		
+                
+                // if we found comments
+                if (comments) {
+                    let firstSingleLineCommentStart = -1;
+                    let lastSingleLineCommentEnd = -1;
+                    let isFirstSingleLineComment = true;
+                    let singleLineCommentCount = 0;
+
+                    for (let i = 0; i < comments.length; i++) {
+                        let currentComment = comments[i];
+
+                        if (currentComment.kind == SyntaxKind.SingleLineCommentTrivia) {
+                            if (isFirstSingleLineComment) {
+                                firstSingleLineCommentStart = currentComment.pos;
+                            }
+
+                            lastSingleLineCommentEnd = currentComment.end;
+                            singleLineCommentCount++;
+                        }                 
+
+                        if (currentComment.kind == SyntaxKind.MultiLineCommentTrivia)
+                        {
+                            // add the block
+                            addOutliningSpanComments(currentComment, false);
+
+                            // see if we have multiple single line ones
+                        }
+
+                        
+                    }
+                }
+            }
+
             function autoCollapse(node: Node) {
                 return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
             }
@@ -41,6 +76,8 @@ module ts {
                 if (depth > maxDepth) {
                     return;
                 }
+
+                addOutliningForLeadingCommentsForNode(n);
                 switch (n.kind) {
                     case SyntaxKind.Block:
                         if (!isFunctionBlock(n)) {
@@ -93,7 +130,7 @@ module ts {
                             });
                             break;
                         }
-                        // Fallthrough.
+                    // Fallthrough.
 
                     case SyntaxKind.ModuleBlock: {
                         let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
@@ -115,6 +152,9 @@ module ts {
                         let openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
                         let closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
                         addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
+                        break;
+                    case SyntaxKind.Constructor:
+                        //    addOutliningForLeadingCommentsForNode(n);
                         break;
                 }
                 depth++;
