@@ -262,6 +262,7 @@ module ts {
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
                         generateNameForFunctionOrClassDeclaration(<Declaration>node);
                         break;
                     case SyntaxKind.ModuleDeclaration:
