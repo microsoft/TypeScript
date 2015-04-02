@@ -969,7 +969,7 @@ module ts {
         kind: SyntaxKind;
     }
 
-    //* Source files are declarations when they are external modules.
+    // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;

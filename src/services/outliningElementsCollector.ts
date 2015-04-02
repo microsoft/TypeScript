@@ -32,9 +32,8 @@ module ts {
             }
 
             function addOutliningForLeadingCommentsForNode(n: Node) {
-                let comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);                		
-                
-                // if we found comments
+                let comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
+
                 if (comments) {
                     let firstSingleLineCommentStart = -1;
                     let lastSingleLineCommentEnd = -1;
@@ -44,25 +43,42 @@ module ts {
                     for (let i = 0; i < comments.length; i++) {
                         let currentComment = comments[i];
 
-                        if (currentComment.kind == SyntaxKind.SingleLineCommentTrivia) {
+                        // For single line comments, combine consecutive ones (2 or more) into
+                        // a single span from the start of the first till the end of the last
+                        if (currentComment.kind === SyntaxKind.SingleLineCommentTrivia) {
                             if (isFirstSingleLineComment) {
                                 firstSingleLineCommentStart = currentComment.pos;
                             }
-
+                            isFirstSingleLineComment = false;
                             lastSingleLineCommentEnd = currentComment.end;
                             singleLineCommentCount++;
-                        }                 
-
-                        if (currentComment.kind == SyntaxKind.MultiLineCommentTrivia)
-                        {
-                            // add the block
+                        }
+                        else {
+                            combineAndAddMultipleSingleLineComments(singleLineCommentCount, firstSingleLineCommentStart, lastSingleLineCommentEnd);
                             addOutliningSpanComments(currentComment, false);
 
-                            // see if we have multiple single line ones
+                            singleLineCommentCount = 0;
+                            lastSingleLineCommentEnd = -1;
+                            isFirstSingleLineComment = true;
                         }
-
-                        
                     }
+
+                    combineAndAddMultipleSingleLineComments(singleLineCommentCount, firstSingleLineCommentStart, lastSingleLineCommentEnd);
+                }
+            }
+
+            function combineAndAddMultipleSingleLineComments(count: number, start: number, end: number) {
+                
+                // Only outline spans of two or more consecutive single line comments
+                if (count > 1) {
+
+                    let multipleSingleLineComments = {
+                        pos: start,
+                        end: end,
+                        kind: SyntaxKind.SingleLineCommentTrivia
+                    }
+
+                    addOutliningSpanComments(multipleSingleLineComments, false);
                 }
             }
 
@@ -152,9 +168,6 @@ module ts {
                         let openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
                         let closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
                         addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
-                        break;
-                    case SyntaxKind.Constructor:
-                        //    addOutliningForLeadingCommentsForNode(n);
                         break;
                 }
                 depth++;
