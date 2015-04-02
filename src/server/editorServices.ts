@@ -1466,6 +1466,10 @@ module ts.server {
             return accum;
         }
 
+        getLength(): number {
+            return this.root.charCount();
+        }
+
         every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number) {
             if (!rangeEnd) {
                 rangeEnd = this.root.charCount();
