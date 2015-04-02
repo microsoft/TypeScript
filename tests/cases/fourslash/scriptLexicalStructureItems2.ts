@@ -8,5 +8,5 @@ edit.insertLine("module A");
 edit.insert("export class ");
 
 // should not crash
-verify.getScriptLexicalStructureListCount(1);
+verify.getScriptLexicalStructureListCount(2);
 
