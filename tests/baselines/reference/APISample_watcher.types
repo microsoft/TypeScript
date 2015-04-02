@@ -18,7 +18,7 @@ declare var fs: any;
 declare var path: any;
 >path : any
 
-import ts = require("typescript");
+import * as ts from "typescript";
 >ts : typeof ts
 
 function watch(rootFileNames: string[], options: ts.CompilerOptions) {
@@ -28,7 +28,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >ts : unknown
 >CompilerOptions : ts.CompilerOptions
 
-    var files: ts.Map<{ version: number }> = {};
+    const files: ts.Map<{ version: number }> = {};
 >files : ts.Map<{ version: number; }>
 >ts : unknown
 >Map : ts.Map<T>
@@ -55,7 +55,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     });
 
     // Create the language service host to allow the LS to communicate with the host
-    var servicesHost: ts.LanguageServiceHost = {
+    const servicesHost: ts.LanguageServiceHost = {
 >servicesHost : ts.LanguageServiceHost
 >ts : unknown
 >LanguageServiceHost : ts.LanguageServiceHost
@@ -143,7 +143,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     };
 
     // Create the language service files
-    var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
+    const services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
 >services : ts.LanguageService
 >ts.createLanguageService(servicesHost, ts.createDocumentRegistry()) : ts.LanguageService
 >ts.createLanguageService : (host: ts.LanguageServiceHost, documentRegistry?: ts.DocumentRegistry) => ts.LanguageService
@@ -225,7 +225,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >emitFile : (fileName: string) => void
 >fileName : string
 
-        var output = services.getEmitOutput(fileName);
+        let output = services.getEmitOutput(fileName);
 >output : ts.EmitOutput
 >services.getEmitOutput(fileName) : ts.EmitOutput
 >services.getEmitOutput : (fileName: string) => ts.EmitOutput
@@ -289,7 +289,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >logErrors : (fileName: string) => void
 >fileName : string
 
-        var allDiagnostics = services.getCompilerOptionsDiagnostics()
+        let allDiagnostics = services.getCompilerOptionsDiagnostics()
 >allDiagnostics : ts.Diagnostic[]
 >services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName))            .concat(services.getSemanticDiagnostics(fileName)) : ts.Diagnostic[]
 >services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName))            .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
@@ -317,20 +317,31 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fileName : string
 
         allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        }) : void
+>allDiagnostics.forEach(diagnostic => {            let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");            if (diagnostic.file) {                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);            }            else {                console.log(`  Error: ${message}`);            }        }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {            if (diagnostic.file) {                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);            }            else {                console.log(`  Error: ${diagnostic.messageText}`);            }        } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {            let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");            if (diagnostic.file) {                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);                console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);            }            else {                console.log(`  Error: ${message}`);            }        } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
+
+            let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+>message : string
+>ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n") : string
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>ts : typeof ts
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>diagnostic.messageText : string | ts.DiagnosticMessageChain
+>diagnostic : ts.Diagnostic
+>messageText : string | ts.DiagnosticMessageChain
 
             if (diagnostic.file) {
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
 
-                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
->lineChar : ts.LineAndCharacter
+                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+>line : number
+>character : number
 >diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
 >diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.file : ts.SourceFile
@@ -341,8 +352,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >start : number
 
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
->console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`) : any
+                console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+>console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
@@ -351,38 +362,26 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
 >fileName : string
->lineChar.line + 1 : number
->lineChar.line : number
->lineChar : ts.LineAndCharacter
+>line + 1 : number
 >line : number
->lineChar.character + 1 : number
->lineChar.character : number
->lineChar : ts.LineAndCharacter
+>character + 1 : number
 >character : number
->ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n") : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->ts : typeof ts
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->diagnostic.messageText : string | ts.DiagnosticMessageChain
->diagnostic : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
+>message : string
             }
             else {
-                console.log(`  Error: ${diagnostic.messageText}`);
->console.log(`  Error: ${diagnostic.messageText}`) : any
+                console.log(`  Error: ${message}`);
+>console.log(`  Error: ${message}`) : any
 >console.log : any
 >console : any
 >log : any
->diagnostic.messageText : string | ts.DiagnosticMessageChain
->diagnostic : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
+>message : string
             }
         });
     }
 }
 
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).
+const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 >currentDirectoryFiles : any
 >fs.readdirSync(process.cwd()).    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts") : any
 >fs.readdirSync(process.cwd()).    filter : any

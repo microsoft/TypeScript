@@ -56,15 +56,16 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >diagnostics : ts.Diagnostic[]
 
     allDiagnostics.forEach(diagnostic => {
->allDiagnostics.forEach(diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    }) : void
+>allDiagnostics.forEach(diagnostic => {        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');        console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);    }) : void
 >allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
 >allDiagnostics : ts.Diagnostic[]
 >forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void
->diagnostic => {        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);    } : (diagnostic: ts.Diagnostic) => void
+>diagnostic => {        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');        console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);    } : (diagnostic: ts.Diagnostic) => void
 >diagnostic : ts.Diagnostic
 
-        var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
->lineChar : ts.LineAndCharacter
+        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+>line : number
+>character : number
 >diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
 >diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >diagnostic.file : ts.SourceFile
@@ -75,8 +76,18 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >diagnostic : ts.Diagnostic
 >start : number
 
-        console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`);
->console.log(`${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL)}`) : any
+        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+>message : string
+>ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n') : string
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>ts : typeof ts
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
+>diagnostic.messageText : string | ts.DiagnosticMessageChain
+>diagnostic : ts.Diagnostic
+>messageText : string | ts.DiagnosticMessageChain
+
+        console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+>console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
@@ -85,24 +96,11 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >diagnostic : ts.Diagnostic
 >file : ts.SourceFile
 >fileName : string
->lineChar.line + 1 : number
->lineChar.line : number
->lineChar : ts.LineAndCharacter
+>line + 1 : number
 >line : number
->lineChar.character + 1 : number
->lineChar.character : number
->lineChar : ts.LineAndCharacter
+>character + 1 : number
 >character : number
->ts.flattenDiagnosticMessageText(diagnostic.messageText, os.EOL) : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->ts : typeof ts
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->diagnostic.messageText : string | ts.DiagnosticMessageChain
->diagnostic : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
->os.EOL : any
->os : any
->EOL : any
+>message : string
 
     });
 

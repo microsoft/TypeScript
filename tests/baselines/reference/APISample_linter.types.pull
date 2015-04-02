@@ -12,10 +12,10 @@ declare var process: any;
 declare var console: any;
 >console : any
 
-declare var fs: any;
->fs : any
+declare var readFileSync: any;
+>readFileSync : any
 
-import ts = require("typescript");
+import * as ts from "typescript";
 >ts : typeof ts
 
 export function delint(sourceFile: ts.SourceFile) {
@@ -91,6 +91,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >node : ts.Node
                 }
                 break;
+
             case ts.SyntaxKind.IfStatement:
 >ts.SyntaxKind.IfStatement : ts.SyntaxKind
 >ts.SyntaxKind : typeof ts.SyntaxKind
@@ -98,7 +99,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >SyntaxKind : typeof ts.SyntaxKind
 >IfStatement : ts.SyntaxKind
 
-                var ifStatement = (<ts.IfStatement>node);
+                let ifStatement = (<ts.IfStatement>node);
 >ifStatement : ts.IfStatement
 >(<ts.IfStatement>node) : ts.IfStatement
 ><ts.IfStatement>node : ts.IfStatement
@@ -127,13 +128,13 @@ export function delint(sourceFile: ts.SourceFile) {
 >thenStatement : ts.Statement
                 }
                 if (ifStatement.elseStatement &&
->ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
+>ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
 >ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
 >ifStatement.elseStatement : ts.Statement
 >ifStatement : ts.IfStatement
 >elseStatement : ts.Statement
 
-                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
 >ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
 >ifStatement.elseStatement.kind : ts.SyntaxKind
 >ifStatement.elseStatement : ts.Statement
@@ -145,6 +146,8 @@ export function delint(sourceFile: ts.SourceFile) {
 >ts : typeof ts
 >SyntaxKind : typeof ts.SyntaxKind
 >Block : ts.SyntaxKind
+
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
 >ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
 >ifStatement.elseStatement.kind : ts.SyntaxKind
 >ifStatement.elseStatement : ts.Statement
@@ -173,7 +176,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >SyntaxKind : typeof ts.SyntaxKind
 >BinaryExpression : ts.SyntaxKind
 
-                var op = (<ts.BinaryExpression>node).operatorToken.kind;
+                let op = (<ts.BinaryExpression>node).operatorToken.kind;
 >op : ts.SyntaxKind
 >(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
 >(<ts.BinaryExpression>node).operatorToken : ts.Node
@@ -185,8 +188,8 @@ export function delint(sourceFile: ts.SourceFile) {
 >operatorToken : ts.Node
 >kind : ts.SyntaxKind
 
-                if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
->op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
+>op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken : boolean
 >op === ts.SyntaxKind.EqualsEqualsToken : boolean
 >op : ts.SyntaxKind
 >ts.SyntaxKind.EqualsEqualsToken : ts.SyntaxKind
@@ -194,7 +197,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >ts : typeof ts
 >SyntaxKind : typeof ts.SyntaxKind
 >EqualsEqualsToken : ts.SyntaxKind
->op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+>op == ts.SyntaxKind.ExclamationEqualsToken : boolean
 >op : ts.SyntaxKind
 >ts.SyntaxKind.ExclamationEqualsToken : ts.SyntaxKind
 >ts.SyntaxKind : typeof ts.SyntaxKind
@@ -226,8 +229,9 @@ export function delint(sourceFile: ts.SourceFile) {
 >Node : ts.Node
 >message : string
 
-        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
->lineChar : ts.LineAndCharacter
+        let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+>line : number
+>character : number
 >sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
 >sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >sourceFile : ts.SourceFile
@@ -237,27 +241,23 @@ export function delint(sourceFile: ts.SourceFile) {
 >node : ts.Node
 >getStart : (sourceFile?: ts.SourceFile) => number
 
-        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
->console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`) : any
+        console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
+>console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
 >sourceFile.fileName : string
 >sourceFile : ts.SourceFile
 >fileName : string
->lineChar.line + 1 : number
->lineChar.line : number
->lineChar : ts.LineAndCharacter
+>line + 1 : number
 >line : number
->lineChar.character + 1 : number
->lineChar.character : number
->lineChar : ts.LineAndCharacter
+>character + 1 : number
 >character : number
 >message : string
     }
 }
 
-var fileNames = process.argv.slice(2);
+const fileNames = process.argv.slice(2);
 >fileNames : any
 >process.argv.slice(2) : any
 >process.argv.slice : any
@@ -267,26 +267,24 @@ var fileNames = process.argv.slice(2);
 >slice : any
 
 fileNames.forEach(fileName => {
->fileNames.forEach(fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
+>fileNames.forEach(fileName => {    // Parse a file    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
 >fileNames.forEach : any
 >fileNames : any
 >forEach : any
->fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
+>fileName => {    // Parse a file    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
 >fileName : any
 
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 >sourceFile : ts.SourceFile
->ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
+>ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
 >ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
 >ts : typeof ts
 >createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
 >fileName : any
->fs.readFileSync(fileName).toString() : any
->fs.readFileSync(fileName).toString : any
->fs.readFileSync(fileName) : any
->fs.readFileSync : any
->fs : any
+>readFileSync(fileName).toString() : any
+>readFileSync(fileName).toString : any
+>readFileSync(fileName) : any
 >readFileSync : any
 >fileName : any
 >toString : any
@@ -303,7 +301,6 @@ fileNames.forEach(fileName => {
 >sourceFile : ts.SourceFile
 
 });
-
 === typescript.d.ts ===
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 

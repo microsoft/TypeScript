@@ -6,242 +6,29 @@
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
-declare var process: any;
->process : any
-
 declare var console: any;
 >console : any
 
-declare var fs: any;
->fs : any
-
-declare var path: any;
->path : any
-
-declare var os: any;
->os : any
-
-import ts = require("typescript");
+import * as ts from "typescript";
 >ts : typeof ts
 
-function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
->transform : (contents: string, compilerOptions?: ts.CompilerOptions) => { outputs: any[]; errors: string[]; }
->contents : string
->compilerOptions : ts.CompilerOptions
->ts : unknown
->CompilerOptions : ts.CompilerOptions
->{} : { [x: string]: undefined; }
-
-    // Sources
-    var files = {
->files : { "file.ts": string; "lib.d.ts": any; }
->{        "file.ts": contents,        "lib.d.ts": fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString()    } : { "file.ts": string; "lib.d.ts": any; }
-
-        "file.ts": contents,
->contents : string
-
-        "lib.d.ts": fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString()
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString() : any
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString : any
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)) : any
->fs.readFileSync : any
->fs : any
->readFileSync : any
->ts.getDefaultLibFilePath(compilerOptions) : string
->ts.getDefaultLibFilePath : (options: ts.CompilerOptions) => string
->ts : typeof ts
->getDefaultLibFilePath : (options: ts.CompilerOptions) => string
->compilerOptions : ts.CompilerOptions
->toString : any
-
-    };
-
-    // Generated outputs
-    var outputs = [];
->outputs : any[]
->[] : undefined[]
-
-    // Create a compilerHost object to allow the compiler to read and write files
-    var compilerHost = {
->compilerHost : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
->{        getSourceFile: (fileName, target) => {            return files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined;        },        writeFile: (name, text, writeByteOrderMark) => {            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });        },        getDefaultLibFileName: () => "lib.d.ts",        useCaseSensitiveFileNames: () => false,        getCanonicalFileName: (fileName) => fileName,        getCurrentDirectory: () => "",        getNewLine: () => "\n"    } : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
-
-        getSourceFile: (fileName, target) => {
->getSourceFile : (fileName: any, target: any) => ts.SourceFile
->(fileName, target) => {            return files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined;        } : (fileName: any, target: any) => ts.SourceFile
->fileName : any
->target : any
-
-            return files[fileName] !== undefined ?
->files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined : ts.SourceFile
->files[fileName] !== undefined : boolean
->files[fileName] : any
->files : { "file.ts": string; "lib.d.ts": any; }
->fileName : any
->undefined : undefined
-
-                ts.createSourceFile(fileName, files[fileName], target) : undefined;
->ts.createSourceFile(fileName, files[fileName], target) : ts.SourceFile
->ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
->ts : typeof ts
->createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
->fileName : any
->files[fileName] : any
->files : { "file.ts": string; "lib.d.ts": any; }
->fileName : any
->target : any
->undefined : undefined
-
-        },
-        writeFile: (name, text, writeByteOrderMark) => {
->writeFile : (name: any, text: any, writeByteOrderMark: any) => void
->(name, text, writeByteOrderMark) => {            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });        } : (name: any, text: any, writeByteOrderMark: any) => void
->name : any
->text : any
->writeByteOrderMark : any
-
-            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
->outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark }) : number
->outputs.push : (...items: any[]) => number
->outputs : any[]
->push : (...items: any[]) => number
->{ name: name, text: text, writeByteOrderMark: writeByteOrderMark } : { name: any; text: any; writeByteOrderMark: any; }
->name : any
->name : any
->text : any
->text : any
->writeByteOrderMark : any
->writeByteOrderMark : any
-
-        },
-        getDefaultLibFileName: () => "lib.d.ts",
->getDefaultLibFileName : () => string
->() => "lib.d.ts" : () => string
-
-        useCaseSensitiveFileNames: () => false,
->useCaseSensitiveFileNames : () => boolean
->() => false : () => boolean
-
-        getCanonicalFileName: (fileName) => fileName,
->getCanonicalFileName : (fileName: any) => any
->(fileName) => fileName : (fileName: any) => any
->fileName : any
->fileName : any
-
-        getCurrentDirectory: () => "",
->getCurrentDirectory : () => string
->() => "" : () => string
-
-        getNewLine: () => "\n"
->getNewLine : () => string
->() => "\n" : () => string
-
-    };
-
-    // Create a program from inputs
-    var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
->program : ts.Program
->ts.createProgram(["file.ts"], compilerOptions, compilerHost) : ts.Program
->ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
->ts : typeof ts
->createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
->["file.ts"] : string[]
->compilerOptions : ts.CompilerOptions
->compilerHost : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
-
-    // Query for early errors
-    var errors = ts.getPreEmitDiagnostics(program);
->errors : ts.Diagnostic[]
->ts.getPreEmitDiagnostics(program) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
->ts : typeof ts
->getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
->program : ts.Program
-
-    var emitResult = program.emit();
->emitResult : ts.EmitResult
->program.emit() : ts.EmitResult
->program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
->program : ts.Program
->emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
-
-    errors = errors.concat(emitResult.diagnostics);
->errors = errors.concat(emitResult.diagnostics) : ts.Diagnostic[]
->errors : ts.Diagnostic[]
->errors.concat(emitResult.diagnostics) : ts.Diagnostic[]
->errors.concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->errors : ts.Diagnostic[]
->concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->emitResult.diagnostics : ts.Diagnostic[]
->emitResult : ts.EmitResult
->diagnostics : ts.Diagnostic[]
-
-    return {
->{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
-
-        outputs: outputs,
->outputs : any[]
->outputs : any[]
-
-        errors: errors.map(function (e) {
->errors : string[]
->errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
->errors.map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->errors : ts.Diagnostic[]
->map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
->e : ts.Diagnostic
-
-            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " : string
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) : string
->e.file.fileName + "(" : string
->e.file.fileName : string
->e.file : ts.SourceFile
->e : ts.Diagnostic
->file : ts.SourceFile
->fileName : string
->(e.file.getLineAndCharacterOfPosition(e.start).line + 1) : number
->e.file.getLineAndCharacterOfPosition(e.start).line + 1 : number
->e.file.getLineAndCharacterOfPosition(e.start).line : number
->e.file.getLineAndCharacterOfPosition(e.start) : ts.LineAndCharacter
->e.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->e.file : ts.SourceFile
->e : ts.Diagnostic
->file : ts.SourceFile
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->e.start : number
->e : ts.Diagnostic
->start : number
->line : number
-
-                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
->ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->ts : typeof ts
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->e.messageText : string | ts.DiagnosticMessageChain
->e : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
->os.EOL : any
->os : any
->EOL : any
-
-        })
-    };
-}
-
-// Calling our transform function using a simple TypeScript variable declarations, 
-// and loading the default library like:
-var source = "var x: number  = 'string'";
+const source = "let x: string  = 'string'";
 >source : string
 
-var result = transform(source);
->result : { outputs: any[]; errors: string[]; }
->transform(source) : { outputs: any[]; errors: string[]; }
->transform : (contents: string, compilerOptions?: ts.CompilerOptions) => { outputs: any[]; errors: string[]; }
+let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
+>result : string
+>ts.transpile(source, { module: ts.ModuleKind.CommonJS }) : string
+>ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string
+>ts : typeof ts
+>transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string
 >source : string
+>{ module: ts.ModuleKind.CommonJS } : { [x: string]: ts.ModuleKind; module: ts.ModuleKind; }
+>module : ts.ModuleKind
+>ts.ModuleKind.CommonJS : ts.ModuleKind
+>ts.ModuleKind : typeof ts.ModuleKind
+>ts : typeof ts
+>ModuleKind : typeof ts.ModuleKind
+>CommonJS : ts.ModuleKind
 
 console.log(JSON.stringify(result));
 >console.log(JSON.stringify(result)) : any
@@ -252,7 +39,7 @@ console.log(JSON.stringify(result));
 >JSON.stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
 >JSON : JSON
 >stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
->result : { outputs: any[]; errors: string[]; }
+>result : string
 
 === typescript.d.ts ===
 /*! *****************************************************************************

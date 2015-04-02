@@ -8,61 +8,12 @@
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
-declare var process: any;
 declare var console: any;
-declare var fs: any;
-declare var path: any;
-declare var os: any;
 
-import ts = require("typescript");
+import * as ts from "typescript";
 
-function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
-    // Sources
-    var files = {
-        "file.ts": contents,
-        "lib.d.ts": fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString()
-    };
+const source = "let x: string  = 'string'";
 
-    // Generated outputs
-    var outputs = [];
-
-    // Create a compilerHost object to allow the compiler to read and write files
-    var compilerHost = {
-        getSourceFile: (fileName, target) => {
-            return files[fileName] !== undefined ?
-                ts.createSourceFile(fileName, files[fileName], target) : undefined;
-        },
-        writeFile: (name, text, writeByteOrderMark) => {
-            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
-        },
-        getDefaultLibFileName: () => "lib.d.ts",
-        useCaseSensitiveFileNames: () => false,
-        getCanonicalFileName: (fileName) => fileName,
-        getCurrentDirectory: () => "",
-        getNewLine: () => "\n"
-    };
-
-    // Create a program from inputs
-    var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
-
-    // Query for early errors
-    var errors = ts.getPreEmitDiagnostics(program);
-    var emitResult = program.emit();
-
-    errors = errors.concat(emitResult.diagnostics);
-
-    return {
-        outputs: outputs,
-        errors: errors.map(function (e) {
-            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
-                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
-        })
-    };
-}
-
-// Calling our transform function using a simple TypeScript variable declarations, 
-// and loading the default library like:
-var source = "var x: number  = 'string'";
-var result = transform(source);
+let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 
 console.log(JSON.stringify(result));
