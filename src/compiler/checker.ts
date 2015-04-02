@@ -9757,12 +9757,11 @@ module ts {
         function checkClassDeclaration(node: ClassDeclaration) {
             // Grammar checking
             if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                grammarErrorOnFirstToken(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
+                grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
             }
 
-            // node.flags & NodeFlags.Default || kind === SyntaxKind.ClassExpression
             if (!node.name && !(node.flags & NodeFlags.Default)) {
-                grammarErrorOnNode(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
+                grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
 
             checkGrammarClassDeclarationHeritageClauses(node);
