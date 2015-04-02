@@ -659,6 +659,10 @@
         "category": "Error",
         "code": 1209
     },
+    "A class declaration without the 'default' modifier must have a name": {
+        "category": "Error",
+        "code": 1210
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1403,6 +1407,14 @@
         "category": "Error",
         "code": 2498
     },
+    "An interface can only extend an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2499
+    },
+    "A class can only implement an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2500
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2005,6 +2017,71 @@
         "category": "Error",
         "code": 8001
     },
+    "'import ... =' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8002
+    },
+    "'export=' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8003
+    },
+    "'type parameter declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8004
+    },
+    "'implements clauses' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8005
+    },
+    "'interface declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8006
+    },
+    "'module declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'type aliases' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8008
+    },
+    "'{0}' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8009
+    },
+    "'types' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8010
+    },
+    "'type arguments' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8011
+    },
+    "'parameter modifiers' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8012
+    },
+    "'?' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
+    "'property declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8014
+    },
+    "'enum declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8015
+    },
+    "'type assertion expressions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8016
+    },
+    "'decorators' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8017
+    },
+
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000
@@ -2012,5 +2089,17 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
+    },
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
+        "category": "Error",
+        "code": 9002
+    },
+    "'class' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9003
+    },
+    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+        "category": "Error",
+        "code": 9004
     }
 }

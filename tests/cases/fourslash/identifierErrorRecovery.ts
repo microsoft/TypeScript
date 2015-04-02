@@ -8,7 +8,7 @@
 
 verify.errorExistsBetweenMarkers("1", "2");
 verify.errorExistsBetweenMarkers("3", "4");
-verify.numberOfErrorsInCurrentFile(2);
+verify.numberOfErrorsInCurrentFile(3);
 goTo.eof();
 verify.completionListContains("foo");
 verify.completionListContains("bar");

@@ -7,7 +7,7 @@
 //// declare module 'https' {
 //// }
 //// /*2*/
-
+debugger;
 goTo.marker("1");
 verify.not.completionListContains("http");
 goTo.marker("2");

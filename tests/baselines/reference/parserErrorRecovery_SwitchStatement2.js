@@ -11,11 +11,11 @@ var C = (function () {
     function C() {
         switch (e) {
         }
+        var D = (function () {
+            function D() {
+            }
+            return D;
+        })();
     }
     return C;
-})();
-var D = (function () {
-    function D() {
-    }
-    return D;
 })();
