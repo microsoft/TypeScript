@@ -1,108 +1,70 @@
-//// [tests/cases/compiler/APISample_watcher.ts] ////
+//// [tests/cases/compiler/APISample_linter.ts] ////
 
-//// [APISample_watcher.ts]
+//// [APISample_linter.ts]
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
 declare var process: any;
 declare var console: any;
 declare var fs: any;
-declare var path: any;
 
 import ts = require("typescript");
 
-function watch(rootFileNames: string[], options: ts.CompilerOptions) {
-    var files: ts.Map<{ version: number }> = {};
+export function delint(sourceFile: ts.SourceFile) {
+    delintNode(sourceFile);
 
-    // initialize the list of files
-    rootFileNames.forEach(fileName => {
-        files[fileName] = { version: 0 };
-    });
-
-    // Create the language service host to allow the LS to communicate with the host
-    var servicesHost: ts.LanguageServiceHost = {
-        getScriptFileNames: () => rootFileNames,
-        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
-        getScriptSnapshot: (fileName) => {
-            if (!fs.existsSync(fileName)) {
-                return undefined;
-            }
-
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
-        },
-        getCurrentDirectory: () => process.cwd(),
-        getCompilationSettings: () => options,
-        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
-    };
-
-    // Create the language service files
-    var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
-
-    // Now let's watch the files
-    rootFileNames.forEach(fileName => {
-        // First time around, emit all files
-        emitFile(fileName);
-
-        // Add a watch on the file to handle next change
-        fs.watchFile(fileName,
-            { persistent: true, interval: 250 },
-            (curr, prev) => {
-                // Check timestamp
-                if (+curr.mtime <= +prev.mtime) {
-                    return;
+    function delintNode(node: ts.Node) {
+        switch (node.kind) {
+            case ts.SyntaxKind.ForStatement:
+            case ts.SyntaxKind.ForInStatement:
+            case ts.SyntaxKind.WhileStatement:
+            case ts.SyntaxKind.DoStatement:
+                if ((<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block) {
+                    report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
+                break;
+            case ts.SyntaxKind.IfStatement:
+                var ifStatement = (<ts.IfStatement>node);
+                if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
+                    report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+                }
+                if (ifStatement.elseStatement &&
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+                    report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
+                }
+                break;
 
-                // Update the version to signal a change in the file
-                files[fileName].version++;
+            case ts.SyntaxKind.BinaryExpression:
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
 
-                // write the changes to disk
-                emitFile(fileName);
-            });
-    });
-
-    function emitFile(fileName: string) {
-        var output = services.getEmitOutput(fileName);
-
-        if (!output.emitSkipped) {
-            console.log(`Emitting ${fileName}`);
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
+                    report(node, "Use '===' and '!=='.")
+                }
+                break;
         }
-        else {
-            console.log(`Emitting ${fileName} failed`);
-            logErrors(fileName);
-        }
 
-        output.outputFiles.forEach(o => {
-            fs.writeFileSync(o.name, o.text, "utf8");
-        });
+        ts.forEachChild(node, delintNode);
     }
 
-    function logErrors(fileName: string) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics()
-            .concat(services.getSyntacticDiagnostics(fileName))
-            .concat(services.getSemanticDiagnostics(fileName));
-
-        allDiagnostics.forEach(diagnostic => {
-            if (diagnostic.file) {
-                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
-            }
-            else {
-                console.log(`  Error: ${diagnostic.messageText}`);
-            }
-        });
+    function report(node: ts.Node, message: string) {
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
     }
 }
 
-// Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
+var fileNames = process.argv.slice(2);
+fileNames.forEach(fileName => {
+    // Parse a file
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 
-// Start the watcher
-watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
+    // delint it
+    delint(sourceFile);
+});
+
 //// [typescript.d.ts]
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 
@@ -865,7 +827,6 @@ declare module "typescript" {
     }
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
-        kind: SyntaxKind;
     }
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
@@ -2100,81 +2061,54 @@ declare module "typescript" {
 }
 
 
-//// [APISample_watcher.js]
+//// [APISample_linter.js]
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 var ts = require("typescript");
-function watch(rootFileNames, options) {
-    var files = {};
-    // initialize the list of files
-    rootFileNames.forEach(function (fileName) {
-        files[fileName] = { version: 0 };
-    });
-    // Create the language service host to allow the LS to communicate with the host
-    var servicesHost = {
-        getScriptFileNames: function () { return rootFileNames; },
-        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
-        getScriptSnapshot: function (fileName) {
-            if (!fs.existsSync(fileName)) {
-                return undefined;
-            }
-            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
-        },
-        getCurrentDirectory: function () { return process.cwd(); },
-        getCompilationSettings: function () { return options; },
-        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); }
-    };
-    // Create the language service files
-    var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
-    // Now let's watch the files
-    rootFileNames.forEach(function (fileName) {
-        // First time around, emit all files
-        emitFile(fileName);
-        // Add a watch on the file to handle next change
-        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
-            // Check timestamp
-            if (+curr.mtime <= +prev.mtime) {
-                return;
-            }
-            // Update the version to signal a change in the file
-            files[fileName].version++;
-            // write the changes to disk
-            emitFile(fileName);
-        });
-    });
-    function emitFile(fileName) {
-        var output = services.getEmitOutput(fileName);
-        if (!output.emitSkipped) {
-            console.log("Emitting " + fileName);
+function delint(sourceFile) {
+    delintNode(sourceFile);
+    function delintNode(node) {
+        switch (node.kind) {
+            case 186 /* ForStatement */:
+            case 187 /* ForInStatement */:
+            case 185 /* WhileStatement */:
+            case 184 /* DoStatement */:
+                if (node.statement.kind !== 179 /* Block */) {
+                    report(node, "A looping statement's contents should be wrapped in a block body.");
+                }
+                break;
+            case 183 /* IfStatement */:
+                var ifStatement = node;
+                if (ifStatement.thenStatement.kind !== 179 /* Block */) {
+                    report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+                }
+                if (ifStatement.elseStatement &&
+                    ifStatement.elseStatement.kind !== 179 /* Block */ && ifStatement.elseStatement.kind !== 183 /* IfStatement */) {
+                    report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
+                }
+                break;
+            case 169 /* BinaryExpression */:
+                var op = node.operatorToken.kind;
+                if (op === 28 /* EqualsEqualsToken */ || op === 29 /* ExclamationEqualsToken */) {
+                    report(node, "Use '===' and '!=='.");
+                }
+                break;
         }
-        else {
-            console.log("Emitting " + fileName + " failed");
-            logErrors(fileName);
-        }
-        output.outputFiles.forEach(function (o) {
-            fs.writeFileSync(o.name, o.text, "utf8");
-        });
+        ts.forEachChild(node, delintNode);
     }
-    function logErrors(fileName) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics()
-            .concat(services.getSyntacticDiagnostics(fileName))
-            .concat(services.getSemanticDiagnostics(fileName));
-        allDiagnostics.forEach(function (diagnostic) {
-            if (diagnostic.file) {
-                var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                console.log("  Error " + diagnostic.file.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
-            }
-            else {
-                console.log("  Error: " + diagnostic.messageText);
-            }
-        });
+    function report(node, message) {
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(sourceFile.fileName + " (" + (lineChar.line + 1) + "," + (lineChar.character + 1) + "): " + message);
     }
 }
-// Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
-// Start the watcher
-watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });
+exports.delint = delint;
+var fileNames = process.argv.slice(2);
+fileNames.forEach(function (fileName) {
+    // Parse a file
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), 2 /* ES6 */, true);
+    // delint it
+    delint(sourceFile);
+});

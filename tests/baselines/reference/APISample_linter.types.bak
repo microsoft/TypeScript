@@ -1,8 +1,8 @@
-=== tests/cases/compiler/APISample_transform.ts ===
+=== tests/cases/compiler/APISample_linter.ts ===
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
+         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -15,244 +15,294 @@ declare var console: any;
 declare var fs: any;
 >fs : any
 
-declare var path: any;
->path : any
-
-declare var os: any;
->os : any
-
 import ts = require("typescript");
 >ts : typeof ts
 
-function transform(contents: string, compilerOptions: ts.CompilerOptions = {}) {
->transform : (contents: string, compilerOptions?: ts.CompilerOptions) => { outputs: any[]; errors: string[]; }
->contents : string
->compilerOptions : ts.CompilerOptions
+export function delint(sourceFile: ts.SourceFile) {
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
 >ts : unknown
->CompilerOptions : ts.CompilerOptions
->{} : { [x: string]: undefined; }
+>SourceFile : ts.SourceFile
 
-    // Sources
-    var files = {
->files : { "file.ts": string; "lib.d.ts": any; }
->{        "file.ts": contents,        "lib.d.ts": fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString()    } : { "file.ts": string; "lib.d.ts": any; }
+    delintNode(sourceFile);
+>delintNode(sourceFile) : void
+>delintNode : (node: ts.Node) => void
+>sourceFile : ts.SourceFile
 
-        "file.ts": contents,
->contents : string
+    function delintNode(node: ts.Node) {
+>delintNode : (node: ts.Node) => void
+>node : ts.Node
+>ts : unknown
+>Node : ts.Node
 
-        "lib.d.ts": fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString()
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString() : any
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)).toString : any
->fs.readFileSync(ts.getDefaultLibFilePath(compilerOptions)) : any
->fs.readFileSync : any
->fs : any
->readFileSync : any
->ts.getDefaultLibFilePath(compilerOptions) : string
->ts.getDefaultLibFilePath : (options: ts.CompilerOptions) => string
+        switch (node.kind) {
+>node.kind : ts.SyntaxKind
+>node : ts.Node
+>kind : ts.SyntaxKind
+
+            case ts.SyntaxKind.ForStatement:
+>ts.SyntaxKind.ForStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
 >ts : typeof ts
->getDefaultLibFilePath : (options: ts.CompilerOptions) => string
->compilerOptions : ts.CompilerOptions
->toString : any
+>SyntaxKind : typeof ts.SyntaxKind
+>ForStatement : ts.SyntaxKind
 
-    };
+            case ts.SyntaxKind.ForInStatement:
+>ts.SyntaxKind.ForInStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ForInStatement : ts.SyntaxKind
 
-    // Generated outputs
-    var outputs = [];
->outputs : any[]
->[] : undefined[]
+            case ts.SyntaxKind.WhileStatement:
+>ts.SyntaxKind.WhileStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>WhileStatement : ts.SyntaxKind
 
-    // Create a compilerHost object to allow the compiler to read and write files
-    var compilerHost = {
->compilerHost : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
->{        getSourceFile: (fileName, target) => {            return files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined;        },        writeFile: (name, text, writeByteOrderMark) => {            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });        },        getDefaultLibFileName: () => "lib.d.ts",        useCaseSensitiveFileNames: () => false,        getCanonicalFileName: (fileName) => fileName,        getCurrentDirectory: () => "",        getNewLine: () => "\n"    } : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
+            case ts.SyntaxKind.DoStatement:
+>ts.SyntaxKind.DoStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>DoStatement : ts.SyntaxKind
 
-        getSourceFile: (fileName, target) => {
->getSourceFile : (fileName: any, target: any) => ts.SourceFile
->(fileName, target) => {            return files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined;        } : (fileName: any, target: any) => ts.SourceFile
+                if ((<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block) {
+>(<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block : boolean
+>(<ts.IterationStatement>node).statement.kind : ts.SyntaxKind
+>(<ts.IterationStatement>node).statement : ts.Statement
+>(<ts.IterationStatement>node) : ts.IterationStatement
+><ts.IterationStatement>node : ts.IterationStatement
+>ts : unknown
+>IterationStatement : ts.IterationStatement
+>node : ts.Node
+>statement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+
+                    report(node, "A looping statement's contents should be wrapped in a block body.");
+>report(node, "A looping statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+                }
+                break;
+            case ts.SyntaxKind.IfStatement:
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
+
+                var ifStatement = (<ts.IfStatement>node);
+>ifStatement : ts.IfStatement
+>(<ts.IfStatement>node) : ts.IfStatement
+><ts.IfStatement>node : ts.IfStatement
+>ts : unknown
+>IfStatement : ts.IfStatement
+>node : ts.Node
+
+                if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
+>ifStatement.thenStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.thenStatement.kind : ts.SyntaxKind
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+
+                    report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+>report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
+                }
+                if (ifStatement.elseStatement &&
+>ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
+>ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+>ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
+>ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
+
+                    report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
+>report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.") : void
+>report : (node: ts.Node, message: string) => void
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+                }
+                break;
+
+            case ts.SyntaxKind.BinaryExpression:
+>ts.SyntaxKind.BinaryExpression : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>BinaryExpression : ts.SyntaxKind
+
+                var op = (<ts.BinaryExpression>node).operatorToken.kind;
+>op : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken : ts.Node
+>(<ts.BinaryExpression>node) : ts.BinaryExpression
+><ts.BinaryExpression>node : ts.BinaryExpression
+>ts : unknown
+>BinaryExpression : ts.BinaryExpression
+>node : ts.Node
+>operatorToken : ts.Node
+>kind : ts.SyntaxKind
+
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
+>op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+>op === ts.SyntaxKind.EqualsEqualsToken : boolean
+>op : ts.SyntaxKind
+>ts.SyntaxKind.EqualsEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>EqualsEqualsToken : ts.SyntaxKind
+>op === ts.SyntaxKind.ExclamationEqualsToken : boolean
+>op : ts.SyntaxKind
+>ts.SyntaxKind.ExclamationEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ExclamationEqualsToken : ts.SyntaxKind
+
+                    report(node, "Use '===' and '!=='.")
+>report(node, "Use '===' and '!=='.") : void
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+                }
+                break;
+        }
+
+        ts.forEachChild(node, delintNode);
+>ts.forEachChild(node, delintNode) : void
+>ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>ts : typeof ts
+>forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>node : ts.Node
+>delintNode : (node: ts.Node) => void
+    }
+
+    function report(node: ts.Node, message: string) {
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+>ts : unknown
+>Node : ts.Node
+>message : string
+
+        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+>lineChar : ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
+>sourceFile : ts.SourceFile
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
+>node.getStart() : number
+>node.getStart : (sourceFile?: ts.SourceFile) => number
+>node : ts.Node
+>getStart : (sourceFile?: ts.SourceFile) => number
+
+        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
+>console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`) : any
+>console.log : any
+>console : any
+>log : any
+>sourceFile.fileName : string
+>sourceFile : ts.SourceFile
+>fileName : string
+>lineChar.line + 1 : number
+>lineChar.line : number
+>lineChar : ts.LineAndCharacter
+>line : number
+>lineChar.character + 1 : number
+>lineChar.character : number
+>lineChar : ts.LineAndCharacter
+>character : number
+>message : string
+    }
+}
+
+var fileNames = process.argv.slice(2);
+>fileNames : any
+>process.argv.slice(2) : any
+>process.argv.slice : any
+>process.argv : any
+>process : any
+>argv : any
+>slice : any
+
+fileNames.forEach(fileName => {
+>fileNames.forEach(fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
+>fileNames.forEach : any
+>fileNames : any
+>forEach : any
+>fileName => {    // Parse a file    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
 >fileName : any
->target : any
 
-            return files[fileName] !== undefined ?
->files[fileName] !== undefined ?                ts.createSourceFile(fileName, files[fileName], target) : undefined : ts.SourceFile
->files[fileName] !== undefined : boolean
->files[fileName] : any
->files : { "file.ts": string; "lib.d.ts": any; }
->fileName : any
->undefined : undefined
-
-                ts.createSourceFile(fileName, files[fileName], target) : undefined;
->ts.createSourceFile(fileName, files[fileName], target) : ts.SourceFile
+    // Parse a file
+    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+>sourceFile : ts.SourceFile
+>ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
 >ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
 >ts : typeof ts
 >createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
 >fileName : any
->files[fileName] : any
->files : { "file.ts": string; "lib.d.ts": any; }
+>fs.readFileSync(fileName).toString() : any
+>fs.readFileSync(fileName).toString : any
+>fs.readFileSync(fileName) : any
+>fs.readFileSync : any
+>fs : any
+>readFileSync : any
 >fileName : any
->target : any
->undefined : undefined
-
-        },
-        writeFile: (name, text, writeByteOrderMark) => {
->writeFile : (name: any, text: any, writeByteOrderMark: any) => void
->(name, text, writeByteOrderMark) => {            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });        } : (name: any, text: any, writeByteOrderMark: any) => void
->name : any
->text : any
->writeByteOrderMark : any
-
-            outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark });
->outputs.push({ name: name, text: text, writeByteOrderMark: writeByteOrderMark }) : number
->outputs.push : (...items: any[]) => number
->outputs : any[]
->push : (...items: any[]) => number
->{ name: name, text: text, writeByteOrderMark: writeByteOrderMark } : { name: any; text: any; writeByteOrderMark: any; }
->name : any
->name : any
->text : any
->text : any
->writeByteOrderMark : any
->writeByteOrderMark : any
-
-        },
-        getDefaultLibFileName: () => "lib.d.ts",
->getDefaultLibFileName : () => string
->() => "lib.d.ts" : () => string
-
-        useCaseSensitiveFileNames: () => false,
->useCaseSensitiveFileNames : () => boolean
->() => false : () => boolean
-
-        getCanonicalFileName: (fileName) => fileName,
->getCanonicalFileName : (fileName: any) => any
->(fileName) => fileName : (fileName: any) => any
->fileName : any
->fileName : any
-
-        getCurrentDirectory: () => "",
->getCurrentDirectory : () => string
->() => "" : () => string
-
-        getNewLine: () => "\n"
->getNewLine : () => string
->() => "\n" : () => string
-
-    };
-
-    // Create a program from inputs
-    var program = ts.createProgram(["file.ts"], compilerOptions, compilerHost);
->program : ts.Program
->ts.createProgram(["file.ts"], compilerOptions, compilerHost) : ts.Program
->ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
+>toString : any
+>ts.ScriptTarget.ES6 : ts.ScriptTarget
+>ts.ScriptTarget : typeof ts.ScriptTarget
 >ts : typeof ts
->createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program
->["file.ts"] : string[]
->compilerOptions : ts.CompilerOptions
->compilerHost : { getSourceFile: (fileName: any, target: any) => ts.SourceFile; writeFile: (name: any, text: any, writeByteOrderMark: any) => void; getDefaultLibFileName: () => string; useCaseSensitiveFileNames: () => boolean; getCanonicalFileName: (fileName: any) => any; getCurrentDirectory: () => string; getNewLine: () => string; }
+>ScriptTarget : typeof ts.ScriptTarget
+>ES6 : ts.ScriptTarget
 
-    // Query for early errors
-    var errors = ts.getPreEmitDiagnostics(program);
->errors : ts.Diagnostic[]
->ts.getPreEmitDiagnostics(program) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
->ts : typeof ts
->getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[]
->program : ts.Program
+    // delint it
+    delint(sourceFile);
+>delint(sourceFile) : void
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
 
-    var emitResult = program.emit();
->emitResult : ts.EmitResult
->program.emit() : ts.EmitResult
->program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
->program : ts.Program
->emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult
-
-    errors = errors.concat(emitResult.diagnostics);
->errors = errors.concat(emitResult.diagnostics) : ts.Diagnostic[]
->errors : ts.Diagnostic[]
->errors.concat(emitResult.diagnostics) : ts.Diagnostic[]
->errors.concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->errors : ts.Diagnostic[]
->concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }
->emitResult.diagnostics : ts.Diagnostic[]
->emitResult : ts.EmitResult
->diagnostics : ts.Diagnostic[]
-
-    return {
->{        outputs: outputs,        errors: errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        })    } : { outputs: any[]; errors: string[]; }
-
-        outputs: outputs,
->outputs : any[]
->outputs : any[]
-
-        errors: errors.map(function (e) {
->errors : string[]
->errors.map(function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        }) : string[]
->errors.map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->errors : ts.Diagnostic[]
->map : <U>(callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => U, thisArg?: any) => U[]
->function (e) {            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);        } : (e: ts.Diagnostic) => string
->e : ts.Diagnostic
-
-            return e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): "                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) + "): " : string
->e.file.fileName + "(" + (e.file.getLineAndCharacterOfPosition(e.start).line + 1) : string
->e.file.fileName + "(" : string
->e.file.fileName : string
->e.file : ts.SourceFile
->e : ts.Diagnostic
->file : ts.SourceFile
->fileName : string
->(e.file.getLineAndCharacterOfPosition(e.start).line + 1) : number
->e.file.getLineAndCharacterOfPosition(e.start).line + 1 : number
->e.file.getLineAndCharacterOfPosition(e.start).line : number
->e.file.getLineAndCharacterOfPosition(e.start) : ts.LineAndCharacter
->e.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->e.file : ts.SourceFile
->e : ts.Diagnostic
->file : ts.SourceFile
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
->e.start : number
->e : ts.Diagnostic
->start : number
->line : number
-
-                                   + ts.flattenDiagnosticMessageText(e.messageText, os.EOL);
->ts.flattenDiagnosticMessageText(e.messageText, os.EOL) : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->ts : typeof ts
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string
->e.messageText : string | ts.DiagnosticMessageChain
->e : ts.Diagnostic
->messageText : string | ts.DiagnosticMessageChain
->os.EOL : any
->os : any
->EOL : any
-
-        })
-    };
-}
-
-// Calling our transform function using a simple TypeScript variable declarations, 
-// and loading the default library like:
-var source = "var x: number  = 'string'";
->source : string
-
-var result = transform(source);
->result : { outputs: any[]; errors: string[]; }
->transform(source) : { outputs: any[]; errors: string[]; }
->transform : (contents: string, compilerOptions?: ts.CompilerOptions) => { outputs: any[]; errors: string[]; }
->source : string
-
-console.log(JSON.stringify(result));
->console.log(JSON.stringify(result)) : any
->console.log : any
->console : any
->log : any
->JSON.stringify(result) : string
->JSON.stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
->JSON : JSON
->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
->result : { outputs: any[]; errors: string[]; }
+});
 
 === typescript.d.ts ===
 /*! *****************************************************************************
@@ -2515,10 +2565,6 @@ declare module "typescript" {
 
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
-
-        kind: SyntaxKind;
->kind : SyntaxKind
->SyntaxKind : SyntaxKind
     }
     interface SourceFile extends Declaration {
 >SourceFile : SourceFile
