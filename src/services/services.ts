@@ -2284,8 +2284,6 @@ module ts {
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
 
-        // this checker is used to answer all LS questions except errors 
-        let typeInfoResolver: TypeChecker;
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
@@ -2367,8 +2365,10 @@ module ts {
             }
 
             program = newProgram;
-            typeInfoResolver = program.getTypeChecker();
 
+            // Make sure all the nodes in the program are both bound, and have their parent 
+            // pointers set property.
+            program.getTypeChecker();
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
@@ -2452,15 +2452,8 @@ module ts {
             return program;
         }
 
-        /**
-         * Clean up any semantic caches that are not needed. 
-         * The host can call this method if it wants to jettison unused memory.
-         * We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
-         */
         function cleanupSemanticCache(): void {
-            if (program) {
-                typeInfoResolver = program.getTypeChecker();
-            }
+            // TODO: Should we jettison the program (or it's type checker) here?
         }
 
         function dispose(): void {
@@ -2728,32 +2721,8 @@ module ts {
             return unescapeIdentifier(displayName);
         }
 
-        function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
-            // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
-            // We would like to only show things that can be added after a dot, so for instance numeric properties can
-            // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
-            if (!displayName) {
-                return undefined;
-            }
-
-            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 
-            // 'getSymbolKind' which is permissible given that it is backwards compatible; but 
-            // really we should consider passing the meaning for the node so that we don't report
-            // that a suggestion for a value is an interface.  We COULD also just do what 
-            // 'getSymbolModifiers' does, which is to use the first declaration.
-
-            // Use a 'sortText' of 0' so that all symbol completion entries come before any other
-            // entries (like JavaScript identifier entries).
-            return {
-                name: displayName,
-                kind: getSymbolKind(symbol, typeChecker, location),
-                kindModifiers: getSymbolModifiers(symbol),
-                sortText: "0",
-            };
-        }
-
         function getCompletionData(fileName: string, position: number) {
+            let typeInfoResolver = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
 
@@ -3307,6 +3276,31 @@ module ts {
                 return entries;
             }
 
+            function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {
+                // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
+                // We would like to only show things that can be added after a dot, so for instance numeric properties can
+                // not be accessed with a dot (a.1 <- invalid)
+                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
+                if (!displayName) {
+                    return undefined;
+                }
+
+                // TODO(drosen): Right now we just permit *all* semantic meanings when calling 
+                // 'getSymbolKind' which is permissible given that it is backwards compatible; but 
+                // really we should consider passing the meaning for the node so that we don't report
+                // that a suggestion for a value is an interface.  We COULD also just do what 
+                // 'getSymbolModifiers' does, which is to use the first declaration.
+
+                // Use a 'sortText' of 0' so that all symbol completion entries come before any other
+                // entries (like JavaScript identifier entries).
+                return {
+                    name: displayName,
+                    kind: getSymbolKind(symbol, location),
+                    kindModifiers: getSymbolModifiers(symbol),
+                    sortText: "0",
+                };
+            }
+
             function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
                 let start = new Date().getTime();
                 var entries: CompletionEntry[] = [];
@@ -3314,7 +3308,7 @@ module ts {
                 if (symbols) {
                     var nameToSymbol: Map<Symbol> = {};
                     for (let symbol of symbols) {
-                        let entry = createCompletionEntry(symbol, typeInfoResolver, location);
+                        let entry = createCompletionEntry(symbol, location);
                         if (entry) {
                             let id = escapeIdentifier(entry.name);
                             if (!lookUp(nameToSymbol, id)) {
@@ -3346,7 +3340,7 @@ module ts {
                 let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
 
                 if (symbol) {
-                    let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
+                    let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
                     return {
                         name: entryName,
                         kind: displayPartsDocumentationsAndSymbolKind.symbolKind,
@@ -3373,7 +3367,7 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location: Node): string {
+        function getSymbolKind(symbol: Symbol, location: Node): string {
             let flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -3382,7 +3376,7 @@ module ts {
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
 
-            let result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, typeResolver, location);
+            let result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, location);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
@@ -3393,7 +3387,9 @@ module ts {
             return result;
         }
 
-        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, typeResolver: TypeChecker, location: Node) {
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, location: Node) {
+            let typeResolver = program.getTypeChecker();
+
             if (typeResolver.isUndefinedSymbol(symbol)) {
                 return ScriptElementKind.variableElement;
             }
@@ -3421,7 +3417,7 @@ module ts {
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
                     // If union property is result of union of non method (property/accessors/variables), it is labeled as property
-                    let unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    let unionPropertyKind = forEach(typeResolver.getRootSymbols(symbol), rootSymbol => {
                         let rootSymbolFlags = rootSymbol.getFlags();
                         if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                             return ScriptElementKind.memberVariableElement;
@@ -3431,7 +3427,7 @@ module ts {
                     if (!unionPropertyKind) {
                         // If this was union of all methods, 
                         //make sure it has call signatures before we can label it as method
-                        let typeOfUnionProperty = typeInfoResolver.getTypeOfSymbolAtLocation(symbol, location);
+                        let typeOfUnionProperty = typeResolver.getTypeOfSymbolAtLocation(symbol, location);
                         if (typeOfUnionProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
@@ -3464,15 +3460,16 @@ module ts {
                 : ScriptElementKindModifier.none;
         }
 
+        // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
         function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-            typeResolver: TypeChecker, location: Node,
-            // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
-            semanticMeaning = getMeaningFromLocation(location)) {
+            location: Node, semanticMeaning = getMeaningFromLocation(location)) {
+
+            let typeResolver = program.getTypeChecker();
 
             let displayParts: SymbolDisplayPart[] = [];
             let documentation: SymbolDisplayPart[];
             let symbolFlags = symbol.flags;
-            let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
+            let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
             let type: Type;
 
@@ -3738,7 +3735,7 @@ module ts {
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol, typeResolver, location);
+                    symbolKind = getSymbolKind(symbol, location);
                 }
             }
 
@@ -3817,6 +3814,7 @@ module ts {
                 return undefined;
             }
 
+            let typeInfoResolver = program.getTypeChecker();
             let symbol = typeInfoResolver.getSymbolAtLocation(node);
             if (!symbol) {
                 // Try getting just type at this position and show
@@ -3842,7 +3840,7 @@ module ts {
                 return undefined;
             }
 
-            let displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), typeInfoResolver, node);
+            let displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), node);
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
@@ -3898,6 +3896,7 @@ module ts {
                 return undefined;
             }
 
+            let typeInfoResolver = program.getTypeChecker();
             let symbol = typeInfoResolver.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
@@ -3929,7 +3928,7 @@ module ts {
                 }
 
                 let shorthandDeclarations = shorthandSymbol.getDeclarations();
-                let shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
+                let shorthandSymbolKind = getSymbolKind(shorthandSymbol, node);
                 let shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 let shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
                 return map(shorthandDeclarations,
@@ -3939,7 +3938,7 @@ module ts {
             let result: DefinitionInfo[] = [];
             let declarations = symbol.getDeclarations();
             let symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            let symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
+            let symbolKind = getSymbolKind(symbol, node);
             let containerSymbol = symbol.parent;
             let containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
 
@@ -4609,6 +4608,8 @@ module ts {
         }
 
         function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
+            let typeInfoResolver = program.getTypeChecker();
+
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -4689,7 +4690,7 @@ module ts {
             return result;
 
             function getDefinition(symbol: Symbol): DefinitionInfo {
-                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), typeInfoResolver, node);
+                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 let name = map(info.displayParts, p => p.text).join("");
                 let declarations = symbol.declarations;
                 if (!declarations || declarations.length === 0) {
@@ -5615,7 +5616,7 @@ module ts {
 
             let sourceFile = getValidSourceFile(fileName);
 
-            return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
+            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, cancellationToken);
         }
 
         /// Syntactic features
@@ -5696,6 +5697,7 @@ module ts {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
+            let typeInfoResolver = program.getTypeChecker();
 
             let result: ClassifiedSpan[] = [];
             processNode(sourceFile);
@@ -6230,6 +6232,7 @@ module ts {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
+            let typeInfoResolver = program.getTypeChecker();
 
             let node = getTouchingWord(sourceFile, position);
 
@@ -6252,7 +6255,7 @@ module ts {
                             }
                         }
 
-                        let kind = getSymbolKind(symbol, typeInfoResolver, node);
+                        let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
                                 canRename: true,

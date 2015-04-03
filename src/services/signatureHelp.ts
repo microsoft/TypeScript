@@ -178,7 +178,9 @@ module ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+        let typeInfoResolver = program.getTypeChecker();
+
         // Decide whether to show signature help
         let startingToken = findTokenOnLeftOfPosition(sourceFile, position);
         if (!startingToken) {
