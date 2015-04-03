@@ -12441,7 +12441,15 @@ module ts {
                 let identifier = <Identifier>name;
                 if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
                     let nameText = declarationNameToString(identifier);
-                    return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+
+                    // We are checking if this parameter's name is of method or constructor so that we can give more explicit errors because
+                    // invalid usage error particularly of "arguments" is very common mistake
+                    if (contextNode && (contextNode.parent.kind === SyntaxKind.MethodDeclaration || contextNode.parent.kind === SyntaxKind.Constructor)) {
+                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_because_class_definition_is_considered_a_strict_mode_code, nameText);
+                    }
+                    else {
+                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+                    }
                 }
             }
         }

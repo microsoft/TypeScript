@@ -659,6 +659,10 @@
         "category": "Error",
         "code": 1209
     },
+    "Invalid use of '{0}' because class definition is considered a strict mode code ": {
+        "category": "Error",
+        "code":  1210
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
