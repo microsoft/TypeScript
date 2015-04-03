@@ -1,6 +1,3 @@
-
-/// <reference path='services.ts' />
-
 module ts {
     export module OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
