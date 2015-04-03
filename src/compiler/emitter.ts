@@ -3216,22 +3216,30 @@ module ts {
                 }
             }
 
-            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration) {
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: Identifier, isExpression?: boolean) {
                 writeLine();
                 emitLeadingComments(property);
                 emitStart(property);
                 emitStart(property.name);
-                if (property.flags & NodeFlags.Static) {
-                    emitDeclarationName(node);
+                if (receiver) {
+                    emit(receiver);
                 }
                 else {
-                    write("this");
+                    if (property.flags & NodeFlags.Static) {
+                        emitDeclarationName(node);
+                    }
+                    else {
+                        write("this");
+                    }
                 }
                 emitMemberAccessForPropertyName(property.name);
                 emitEnd(property.name);
                 write(" = ");
                 emit(property.initializer);
-                write(";");
+                if (!isExpression) {
+                    write(";");
+                }
+
                 emitEnd(property);
                 emitTrailingComments(property);
             }
@@ -3351,6 +3359,14 @@ module ts {
                 tempVariables = undefined;
                 tempParameters = undefined;
 
+                emitConstructorWorker(node, baseTypeElement);
+
+                tempFlags = saveTempFlags;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -3458,10 +3474,6 @@ module ts {
                 if (ctor) {
                     emitTrailingComments(ctor);
                 }
-
-                tempFlags = saveTempFlags;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
             }
 
             function emitClassExpression(node: ClassExpression) {
@@ -3553,6 +3565,29 @@ module ts {
                     }
                 }
 
+                // If the class has static properties, and it's a class expression, then we'll need
+                // to specialize the emit a bit.  for a class expression of the form: 
+                //
+                //      class C { static a = 1; static b = 2; ... } 
+                //
+                // We'll emit:
+                //
+                //      (_temp = class C { ... }, _temp.a = 1, _temp.b = 2, _temp)
+                //
+                // This keeps the expression as an expression, while ensuring that the static parts
+                // of it have been initialized by the time it is used.
+                let staticProperties = getInitializedProperties(node, /*static:*/ true);
+                let isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
+                let tempVariable: Identifier;
+
+                if (isClassExpressionWithStaticProperties) {
+                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    increaseIndent();
+                    emit(tempVariable);
+                    write(" = ")
+                }
+
                 write("class");
 
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
@@ -3603,9 +3638,24 @@ module ts {
                 // From ES6 specification:
                 //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-                writeLine();
-                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
-                emitDecoratorsOfClass(node);
+
+                if (isClassExpressionWithStaticProperties) {
+                    for (var property of staticProperties) {
+                        write(",");
+                        writeLine();
+                        emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                    }
+                    write(",");
+                    writeLine();
+                    emit(tempVariable);
+                    decreaseIndent();
+                    write(")");
+                }
+                else {
+                    writeLine();
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node);
+                }
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
