@@ -1594,7 +1594,6 @@ declare module "typescript" {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
-        getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;

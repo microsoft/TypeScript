@@ -5114,10 +5114,6 @@ declare module "typescript" {
     interface SourceFile {
 >SourceFile : SourceFile
 
-        getNamedDeclarations(): Declaration[];
->getNamedDeclarations : () => Declaration[]
->Declaration : Declaration
-
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
 >getLineAndCharacterOfPosition : (pos: number) => LineAndCharacter
 >pos : number

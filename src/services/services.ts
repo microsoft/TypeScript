@@ -63,7 +63,8 @@ module ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot;
         /* @internal */ nameTable: Map<string>;
 
-        getNamedDeclarations(): Declaration[];
+        /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
+
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
@@ -749,7 +750,7 @@ module ts {
         public identifiers: Map<string>;
         public nameTable: Map<string>;
 
-        private namedDeclarations: Declaration[];
+        private namedDeclarations: Map<Declaration[]>;
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
@@ -767,7 +768,7 @@ module ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations() {
+        public getNamedDeclarations(): Map<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -775,12 +776,57 @@ module ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations() {
-            let namedDeclarations: Declaration[] = [];
+        private computeNamedDeclarations(): Map<Declaration[]> {
+            let result: Map<Declaration[]> = {};
 
             forEachChild(this, visit);
 
-            return namedDeclarations;
+            return result;
+
+            function addDeclaration(declaration: Declaration) {
+                let name = getDeclarationName(declaration);
+                if (name) {
+                    let declarations = getDeclarations(name);
+                    declarations.push(declaration);
+                }
+            }
+
+            function getDeclarations(name: string) {
+                return getProperty(result, name) || (result[name] = []);
+            }
+
+            function getDeclarationName(declaration: Declaration) {
+                if (declaration.name) {
+                    let result = getTextOfIdentifierOrLiteral(declaration.name);
+                    if (result !== undefined) {
+                        return result;
+                    }
+
+                    if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
+                        let expr = (<ComputedPropertyName>declaration.name).expression;
+                        if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                            return (<PropertyAccessExpression>expr).name.text;
+                        }
+
+                        return getTextOfIdentifierOrLiteral(expr);
+                    }
+                }
+
+                return undefined;
+            }
+
+            function getTextOfIdentifierOrLiteral(node: Node) {
+                if (node) {
+                    if (node.kind === SyntaxKind.Identifier ||
+                        node.kind === SyntaxKind.StringLiteral ||
+                        node.kind === SyntaxKind.NumericLiteral) {
+
+                        return (<Identifier | LiteralExpression>node).text;
+                    }
+                }
+
+                return undefined;
+            }
 
             function visit(node: Node): void {
                 switch (node.kind) {
@@ -788,22 +834,22 @@ module ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         let functionDeclaration = <FunctionLikeDeclaration>node;
+                        let declarationName = getDeclarationName(functionDeclaration);
 
-                        if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
-                            let lastDeclaration = namedDeclarations.length > 0 ?
-                                namedDeclarations[namedDeclarations.length - 1] :
-                                undefined;
+                        if (declarationName) {
+                            let declarations = getDeclarations(declarationName);
+                            let lastDeclaration = lastOrUndefined(declarations);
 
                             // Check whether this declaration belongs to an "overload group".
-                            if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                            if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
                                 // Overwrite the last declaration if it was an overload
                                 // and this one is an implementation.
                                 if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
-                                    namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                    declarations[declarations.length - 1] = functionDeclaration;
                                 }
                             }
                             else {
-                                namedDeclarations.push(functionDeclaration);
+                                declarations.push(functionDeclaration);
                             }
 
                             forEachChild(node, visit);
@@ -824,10 +870,8 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
-                        if ((<Declaration>node).name) {
-                            namedDeclarations.push(<Declaration>node);
-                        }
-                    // fall through
+                        addDeclaration(<Declaration>node);
+                        // fall through
                     case SyntaxKind.Constructor:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.VariableDeclarationList:
@@ -858,7 +902,7 @@ module ts {
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
-                        namedDeclarations.push(<Declaration>node);
+                        addDeclaration(<Declaration>node);
                         break;
 
                     case SyntaxKind.ExportDeclaration:
@@ -875,7 +919,7 @@ module ts {
                             // Handle default import case e.g.:
                             //    import d from "mod";
                             if (importClause.name) {
-                                namedDeclarations.push(importClause);
+                                addDeclaration(importClause);
                             }
 
                             // Handle named bindings in imports e.g.:
@@ -883,7 +927,7 @@ module ts {
                             //    import {a, b as B} from "mod";
                             if (importClause.namedBindings) {
                                 if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                    namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                    addDeclaration(<NamespaceImport>importClause.namedBindings);
                                 }
                                 else {
                                     forEach((<NamedImports>importClause.namedBindings).elements, visit);
