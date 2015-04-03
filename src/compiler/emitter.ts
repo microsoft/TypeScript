@@ -3199,28 +3199,41 @@ module ts {
                 }
             }
 
-            function emitMemberAssignments(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
-                forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
-                        writeLine();
-                        emitLeadingComments(member);
-                        emitStart(member);
-                        emitStart((<PropertyDeclaration>member).name);
-                        if (staticFlag) {
-                            emitDeclarationName(node);
-                        }
-                        else {
-                            write("this");
-                        }
-                        emitMemberAccessForPropertyName((<PropertyDeclaration>member).name);
-                        emitEnd((<PropertyDeclaration>member).name);
-                        write(" = ");
-                        emit((<PropertyDeclaration>member).initializer);
-                        write(";");
-                        emitEnd(member);
-                        emitTrailingComments(member);
+            function getInitializedProperties(node: ClassLikeDeclaration, static: boolean) {
+                let properties: PropertyDeclaration[] = [];
+                for (let member of node.members) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && static === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
+                        properties.push(<PropertyDeclaration>member);
                     }
-                });
+                }
+
+                return properties;
+            }
+
+            function emitPropertyDeclarations(node: ClassLikeDeclaration, properties: PropertyDeclaration[]) {
+                for (let property of properties) {
+                    emitPropertyDeclaration(node, property);
+                }
+            }
+
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration) {
+                writeLine();
+                emitLeadingComments(property);
+                emitStart(property);
+                emitStart(property.name);
+                if (property.flags & NodeFlags.Static) {
+                    emitDeclarationName(node);
+                }
+                else {
+                    write("this");
+                }
+                emitMemberAccessForPropertyName(property.name);
+                emitEnd(property.name);
+                write(" = ");
+                emit(property.initializer);
+                write(";");
+                emitEnd(property);
+                emitTrailingComments(property);
             }
 
             function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
@@ -3425,7 +3438,7 @@ module ts {
                         emitEnd(baseTypeElement);
                     }
                 }
-                emitMemberAssignments(node, /*staticFlag*/0);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ false));
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;
                     if (superCall) {
@@ -3591,7 +3604,7 @@ module ts {
                 //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
                 writeLine();
-                emitMemberAssignments(node, NodeFlags.Static);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
                 emitDecoratorsOfClass(node);
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
@@ -3648,7 +3661,7 @@ module ts {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitMemberAssignments(node, NodeFlags.Static);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
                 writeLine();
                 emitDecoratorsOfClass(node);
                 writeLine();
