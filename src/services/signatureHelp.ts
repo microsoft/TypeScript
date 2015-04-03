@@ -179,7 +179,7 @@ module ts.SignatureHelp {
     }
 
     export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
-        let typeInfoResolver = program.getTypeChecker();
+        let typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
         let startingToken = findTokenOnLeftOfPosition(sourceFile, position);
@@ -198,7 +198,7 @@ module ts.SignatureHelp {
 
         let call = argumentInfo.invocation;
         let candidates = <Signature[]>[];
-        let resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+        let resolvedSignature = typeChecker.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
@@ -496,8 +496,8 @@ module ts.SignatureHelp {
 
             let invocation = argumentListInfo.invocation;
             let callTarget = getInvokedExpression(invocation)
-            let callTargetSymbol = typeInfoResolver.getSymbolAtLocation(callTarget);
-            let callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+            let callTargetSymbol = typeChecker.getSymbolAtLocation(callTarget);
+            let callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeChecker, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             let items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 let signatureHelpParameters: SignatureHelpParameter[];
                 let prefixDisplayParts: SymbolDisplayPart[] = [];
@@ -513,12 +513,12 @@ module ts.SignatureHelp {
                     signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     let parameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
+                        typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
                     suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
                 }
                 else {
                     let typeParameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
+                        typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
                     prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
@@ -528,7 +528,7 @@ module ts.SignatureHelp {
                 }
 
                 let returnTypeParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
                 suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                 
                 return {
@@ -563,7 +563,7 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
                 let displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
                 let isOptional = hasQuestionToken(parameter.valueDeclaration);
 
@@ -577,7 +577,7 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
                 let displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
                 return {
                     name: typeParameter.symbol.name,
