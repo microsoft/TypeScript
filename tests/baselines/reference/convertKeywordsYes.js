@@ -505,22 +505,22 @@ var bigModule;
         }
         return constructor;
     })();
-    var  = (function () {
-        function () {
+    var default_1 = (function () {
+        function default_1() {
         }
-        return ;
+        return default_1;
     })();
-    var  = (function () {
-        function () {
+    var default_2 = (function () {
+        function default_2() {
         }
-        return ;
+        return default_2;
     })();
     interface;
     { }
-    var  = (function () {
-        function () {
+    var default_3 = (function () {
+        function default_3() {
         }
-        return ;
+        return default_3;
     })();
     var _a = void 0;
     var module = (function () {
@@ -528,31 +528,31 @@ var bigModule;
         }
         return module;
     })();
-    var  = (function () {
-        function () {
+    var default_4 = (function () {
+        function default_4() {
         }
-        return ;
+        return default_4;
     })();
     package;
     { }
-    var  = (function () {
-        function () {
+    var default_5 = (function () {
+        function default_5() {
         }
-        return ;
+        return default_5;
     })();
     private;
     { }
-    var  = (function () {
-        function () {
+    var default_6 = (function () {
+        function default_6() {
         }
-        return ;
+        return default_6;
     })();
     protected;
     { }
-    var  = (function () {
-        function () {
+    var default_7 = (function () {
+        function default_7() {
         }
-        return ;
+        return default_7;
     })();
     public;
     { }
@@ -561,10 +561,10 @@ var bigModule;
         }
         return set;
     })();
-    var  = (function () {
-        function () {
+    var default_8 = (function () {
+        function default_8() {
         }
-        return ;
+        return default_8;
     })();
     static;
     { }
@@ -573,10 +573,10 @@ var bigModule;
         }
         return get;
     })();
-    var  = (function () {
-        function () {
+    var default_9 = (function () {
+        function default_9() {
         }
-        return ;
+        return default_9;
     })();
     yield;
     { }
