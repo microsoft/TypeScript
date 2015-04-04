@@ -659,9 +659,13 @@
         "category": "Error",
         "code": 1209
     },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code":  1210
+    },
     "A class declaration without the 'default' modifier must have a name": {
         "category": "Error",
-        "code": 1210
+        "code": 1211
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

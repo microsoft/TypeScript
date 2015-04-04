@@ -20,7 +20,7 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
     return value;
 };
 var C = (function () {
-    function C(public, p) {
+    function C(, p) {
     }
     __decorate([dec], C, void 0, 1);
     return C;

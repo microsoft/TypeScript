@@ -6,7 +6,7 @@ class test {
 
 //// [parser642331.js]
 var test = (function () {
-    function test(static) {
+    function test() {
     }
     return test;
 })();

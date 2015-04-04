@@ -4756,9 +4756,7 @@ module ts {
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
             // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
             let savedStrictModeContext = inStrictModeContext();
-            if (languageVersion >= ScriptTarget.ES6) {
-                setStrictModeContext(true);
-            }
+            setStrictModeContext(true);
 
             var node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
