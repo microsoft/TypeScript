@@ -9,10 +9,10 @@ var bar;
 var ;
 var foo;
 var ;
-var  = (function () {
-    function () {
+var default_1 = (function () {
+    function default_1() {
     }
-    return ;
+    return default_1;
 })();
 ;
 var bar;
