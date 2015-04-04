@@ -167,7 +167,7 @@ module ts {
         Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name: { code: 1207, category: DiagnosticCategory.Error, key: "Decorators cannot be applied to multiple get/set accessors of the same name." },
         Cannot_compile_non_external_modules_when_the_separateCompilation_flag_is_provided: { code: 1208, category: DiagnosticCategory.Error, key: "Cannot compile non-external modules when the '--separateCompilation' flag is provided." },
         Ambient_const_enums_are_not_allowed_when_the_separateCompilation_flag_is_provided: { code: 1209, category: DiagnosticCategory.Error, key: "Ambient const enums are not allowed when the '--separateCompilation' flag is provided." },
-        Invalid_use_of_0_because_class_definition_is_considered_a_strict_mode_code: { code: 1210, category: DiagnosticCategory.Error, key: "Invalid use of '{0}' because class definition is considered a strict mode code " },
+        Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode: { code: 1210, category: DiagnosticCategory.Error, key: "Invalid use of '{0}'. Class definitions are automatically in strict mode." },
         A_class_declaration_without_the_default_modifier_must_have_a_name: { code: 1211, category: DiagnosticCategory.Error, key: "A class declaration without the 'default' modifier must have a name" },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },

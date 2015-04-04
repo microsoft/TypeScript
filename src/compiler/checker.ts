@@ -12446,10 +12446,11 @@ module ts {
                 if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
                     let nameText = declarationNameToString(identifier);
 
-                    // We are checking if this parameter's name is of method or constructor so that we can give more explicit errors because
-                    // invalid usage error particularly of "arguments" is very common mistake
-                    if (contextNode && (contextNode.parent.kind === SyntaxKind.MethodDeclaration || contextNode.parent.kind === SyntaxKind.Constructor)) {
-                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_because_class_definition_is_considered_a_strict_mode_code, nameText);
+                    // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
+                    // if so, we would like to give more explicit invalid usage error.
+                    // This will be particularly helpful in the case of "arguments" as such case is very common mistake.
+                    if (getAncestor(name, SyntaxKind.ClassDeclaration) || getAncestor(name, SyntaxKind.ClassExpression)) {
+                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
                     }
                     else {
                         return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);

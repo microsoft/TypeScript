@@ -659,7 +659,7 @@
         "category": "Error",
         "code": 1209
     },
-    "Invalid use of '{0}' because class definition is considered a strict mode code ": {
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code":  1210
     },
