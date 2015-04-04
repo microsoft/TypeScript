@@ -549,7 +549,7 @@ module ts {
                                 result = [];
                             }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine, kind: kind });
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
                     }

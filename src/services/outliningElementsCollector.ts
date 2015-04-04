@@ -37,8 +37,7 @@ module ts {
                     let isFirstSingleLineComment = true;
                     let singleLineCommentCount = 0;
 
-                    for (let i = 0; i < comments.length; i++) {
-                        let currentComment = comments[i];
+                    for (let currentComment of comments) {
 
                         // For single line comments, combine consecutive ones (2 or more) into
                         // a single span from the start of the first till the end of the last
@@ -50,9 +49,9 @@ module ts {
                             lastSingleLineCommentEnd = currentComment.end;
                             singleLineCommentCount++;
                         }
-                        else {
+                        else if (currentComment.kind === SyntaxKind.MultiLineCommentTrivia) {
                             combineAndAddMultipleSingleLineComments(singleLineCommentCount, firstSingleLineCommentStart, lastSingleLineCommentEnd);
-                            addOutliningSpanComments(currentComment, false);
+                            addOutliningSpanComments(currentComment, /*autoCollapse*/ false);
 
                             singleLineCommentCount = 0;
                             lastSingleLineCommentEnd = -1;
@@ -64,18 +63,16 @@ module ts {
                 }
             }
 
-            function combineAndAddMultipleSingleLineComments(count: number, start: number, end: number) {
-                
+            function combineAndAddMultipleSingleLineComments(count: number, start: number, end: number) {                
                 // Only outline spans of two or more consecutive single line comments
                 if (count > 1) {
-
                     let multipleSingleLineComments = {
                         pos: start,
                         end: end,
                         kind: SyntaxKind.SingleLineCommentTrivia
                     }
 
-                    addOutliningSpanComments(multipleSingleLineComments, false);
+                    addOutliningSpanComments(multipleSingleLineComments, /*autoCollapse*/ false);
                 }
             }
 
@@ -90,7 +87,10 @@ module ts {
                     return;
                 }
 
-                addOutliningForLeadingCommentsForNode(n);
+                if (isDeclaration(n)) {
+                    addOutliningForLeadingCommentsForNode(n);
+                }
+
                 switch (n.kind) {
                     case SyntaxKind.Block:
                         if (!isFunctionBlock(n)) {
