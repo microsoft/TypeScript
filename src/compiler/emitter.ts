@@ -92,7 +92,7 @@ module ts {
 
             let generatedNameSet: Map<string> = {};
             let nodeToGeneratedName: string[] = [];
-            let blockScopedVariableToGeneratedName: string[];
+            let blockScopedNameToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
 
             let extendsEmitted = false;
@@ -1180,16 +1180,16 @@ module ts {
             }
 
             function getGeneratedNameForIdentifier(node: Identifier): string {
-                if (nodeIsSynthesized(node) || !blockScopedVariableToGeneratedName) {
+                if (nodeIsSynthesized(node) || !blockScopedNameToGeneratedName) {
                     return undefined;
                 }
 
-                var variableId = resolver.getNamedValueId(node, SymbolFlags.BlockScopedVariable);
+                var variableId = resolver.getNamedValueId(node, SymbolFlags.BlockScopedVariable | SymbolFlags.Class);
                 if (variableId === undefined) {
                     return undefined;
                 }
 
-                return blockScopedVariableToGeneratedName[variableId];
+                return blockScopedNameToGeneratedName[variableId];
             }
 
             function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
@@ -2485,7 +2485,7 @@ module ts {
                         write(", ");
                     }
 
-                    renameBlockScopedVariableIfNecessary(name);
+                    renameBlockScopedValueIfNecessary(name, SymbolFlags.BlockScopedVariable);
                     if (name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement)) {
                         emitModuleMemberName(<Declaration>name.parent);
                     }
@@ -2694,7 +2694,7 @@ module ts {
                     }
                 }
                 else {
-                    renameBlockScopedVariableIfNecessary(<Identifier>node.name);
+                    renameBlockScopedValueIfNecessary(<Identifier>node.name, SymbolFlags.BlockScopedVariable);
                     emitModuleMemberName(node);
 
                     let initializer = node.initializer;
@@ -2743,34 +2743,61 @@ module ts {
                 return getCombinedNodeFlags(node.parent);
             }
 
-            function renameBlockScopedVariableIfNecessary(node: Node): void {
+            function renameBlockScopedValueIfNecessary(node: Node, meaning: SymbolFlags): void {
+                // currently supported scenarios - classes and block scoped variables
+                Debug.assert(meaning === SymbolFlags.BlockScopedVariable || meaning === SymbolFlags.Class);
+
                 // do not rename if
                 // - language version is ES6+
                 // - node is synthesized
                 // - node is not identifier (can happen when tree is malformed)
-                // - node is definitely not name of variable declaration. 
-                // it still can be part of parameter declaration, this check will be done next
                 if (languageVersion >= ScriptTarget.ES6 ||
                     nodeIsSynthesized(node) ||
-                    node.kind !== SyntaxKind.Identifier ||
-                    (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
+                    node.kind !== SyntaxKind.Identifier) {
                     return;
                 }
 
-                let combinedFlags = getCombinedFlagsForIdentifier(<Identifier>node);
-                if (((combinedFlags & NodeFlags.BlockScoped) === 0) || combinedFlags & NodeFlags.Export) {
-                    // do not rename exported or non-block scoped variables
+                let flags: NodeFlags;
+                let container: Node;
+                if (meaning === SymbolFlags.BlockScopedVariable) {
+                    // block scoped variable case
+                    // do not rename node is definitely not name of variable declaration. 
+                    if (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement) {
+                        return;
+                    }
+
+                    flags = getCombinedFlagsForIdentifier(<Identifier>node);
+                    if (!(flags & NodeFlags.BlockScoped)) {
+                        // do not rename non-block scoped variables
+                        return;
+                    }
+
+                    let list = getAncestor(node, SyntaxKind.VariableDeclarationList);
+                    if (list.parent.kind === SyntaxKind.VariableStatement) {
+                        container = list.parent.parent;
+                    }
+                }
+                else {
+                    if (node.parent.kind !== SyntaxKind.ClassDeclaration) {
+                        return;
+                    }
+                    // class declaration case
+                    flags = node.parent.flags;
+                    container = node.parent.parent;
+                }
+
+                if (flags & NodeFlags.Export) {
+                    // do not rename exported names
                     return;
                 }
 
-                // here it is known that node is a block scoped variable
-                let list = getAncestor(node, SyntaxKind.VariableDeclarationList);
-                if (list.parent.kind === SyntaxKind.VariableStatement) {
-                    let isSourceFileLevelBinding = list.parent.parent.kind === SyntaxKind.SourceFile;
-                    let isModuleLevelBinding = list.parent.parent.kind === SyntaxKind.ModuleBlock;
-                    let isFunctionLevelBinding =
-                        list.parent.parent.kind === SyntaxKind.Block && isFunctionLike(list.parent.parent.parent);
-                    if (isSourceFileLevelBinding || isModuleLevelBinding || isFunctionLevelBinding) {
+                if (container) {
+                    // do not rename items that are top level in the function scope
+                    let isSourceFileLevelItem = container.kind === SyntaxKind.SourceFile;
+                    let isModuleLevelItem = container.kind === SyntaxKind.ModuleBlock;
+                    let isFunctionLevelItem =
+                        container.kind === SyntaxKind.Block && isFunctionLike(container.parent);
+                    if (isSourceFileLevelItem || isModuleLevelItem || isFunctionLevelItem) {
                         return;
                     }
                 }
@@ -2781,13 +2808,13 @@ module ts {
                     : blockScopeContainer.parent;
 
                 if (resolver.resolvesToSomeValue(parent, (<Identifier>node).text)) {
-                    let variableId = resolver.getNamedValueId(<Identifier>node, SymbolFlags.BlockScopedVariable);
-                    if (!blockScopedVariableToGeneratedName) {
-                        blockScopedVariableToGeneratedName = [];
+                    let variableId = resolver.getNamedValueId(<Identifier>node, meaning);
+                    if (!blockScopedNameToGeneratedName) {
+                        blockScopedNameToGeneratedName = [];
                     }
 
                     let generatedName = makeUniqueName((<Identifier>node).text);
-                    blockScopedVariableToGeneratedName[variableId] = generatedName;
+                    blockScopedNameToGeneratedName[variableId] = generatedName;
                 }
             }
 
@@ -3679,6 +3706,9 @@ module ts {
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write("var ");
+                    if (node.name) {
+                        renameBlockScopedValueIfNecessary(node.name, SymbolFlags.Class);
+                    }
                     emitDeclarationName(node);
                     write(" = ");
                 }
