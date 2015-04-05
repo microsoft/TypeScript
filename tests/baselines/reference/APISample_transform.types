@@ -3280,10 +3280,12 @@ declare module "typescript" {
 >Node : Node
 >name : string
 
-        getBlockScopedVariableId(node: Identifier): number;
->getBlockScopedVariableId : (node: Identifier) => number
->node : Identifier
+        getNamedValueId(n: Identifier, meaning: SymbolFlags): number;
+>getNamedValueId : (n: Identifier, meaning: SymbolFlags) => number
+>n : Identifier
 >Identifier : Identifier
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags

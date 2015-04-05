@@ -11471,23 +11471,23 @@ module ts {
             return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
-        function getBlockScopedVariableId(n: Identifier): number {
+        function getNamedValueId(n: Identifier, meaning: SymbolFlags): number {
             Debug.assert(!nodeIsSynthesized(n));
 
-            let isVariableDeclarationOrBindingElement =
-                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
+            let isDeclarationOrBindingElement =
+                n.parent.kind === SyntaxKind.BindingElement || (isDeclarationName(n) && n.parent.kind !== SyntaxKind.ShorthandPropertyAssignment);
 
             let symbol = 
-                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
+                (isDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
-            let isLetOrConst =
+            let hasMatchingMeaning =
                 symbol &&
-                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
-                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
+                (symbol.flags & meaning) &&
+                (!(meaning & SymbolFlags.BlockScopedVariable) || symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause);
 
-            if (isLetOrConst) {
+            if (hasMatchingMeaning) {
                 // side-effect of calling this method:
                 //   assign id to symbol if it was not yet set
                 getSymbolLinks(symbol);
@@ -11528,7 +11528,7 @@ module ts {
                 getConstantValue,
                 resolvesToSomeValue,
                 collectLinkedAliases,
-                getBlockScopedVariableId,
+                getNamedValueId,
             };
         }
 

@@ -17,7 +17,6 @@ module ts {
         Auto      = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i        = 0x10000000,  // Use/preference flag for '_i'
-        _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
     // @internal
@@ -1185,7 +1184,7 @@ module ts {
                     return undefined;
                 }
 
-                var variableId = resolver.getBlockScopedVariableId(node)
+                var variableId = resolver.getNamedValueId(node, SymbolFlags.BlockScopedVariable);
                 if (variableId === undefined) {
                     return undefined;
                 }
@@ -2486,7 +2485,7 @@ module ts {
                         write(", ");
                     }
 
-                    renameNonTopLevelLetAndConst(name);
+                    renameBlockScopedVariableIfNecessary(name);
                     if (name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement)) {
                         emitModuleMemberName(<Declaration>name.parent);
                     }
@@ -2695,7 +2694,7 @@ module ts {
                     }
                 }
                 else {
-                    renameNonTopLevelLetAndConst(<Identifier>node.name);
+                    renameBlockScopedVariableIfNecessary(<Identifier>node.name);
                     emitModuleMemberName(node);
 
                     let initializer = node.initializer;
@@ -2744,7 +2743,7 @@ module ts {
                 return getCombinedNodeFlags(node.parent);
             }
 
-            function renameNonTopLevelLetAndConst(node: Node): void {
+            function renameBlockScopedVariableIfNecessary(node: Node): void {
                 // do not rename if
                 // - language version is ES6+
                 // - node is synthesized
@@ -2782,7 +2781,7 @@ module ts {
                     : blockScopeContainer.parent;
 
                 if (resolver.resolvesToSomeValue(parent, (<Identifier>node).text)) {
-                    let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
+                    let variableId = resolver.getNamedValueId(<Identifier>node, SymbolFlags.BlockScopedVariable);
                     if (!blockScopedVariableToGeneratedName) {
                         blockScopedVariableToGeneratedName = [];
                     }
