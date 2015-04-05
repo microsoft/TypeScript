@@ -1,0 +1,59 @@
+tests/cases/compiler/classDeclarationBlockScoping3.ts(3,11): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/compiler/classDeclarationBlockScoping3.ts(14,15): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/compiler/classDeclarationBlockScoping3.ts(21,15): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/compiler/classDeclarationBlockScoping3.ts(28,15): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/compiler/classDeclarationBlockScoping3.ts(36,15): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+
+
+==== tests/cases/compiler/classDeclarationBlockScoping3.ts (5 errors) ====
+    var c;
+    function foo() {
+        class c { }
+              ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+        new c();
+    }
+    
+    module M {
+        class c { }
+        new c();
+    }
+    
+    function foo2() {
+        {
+            class c { }
+                  ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+            new c()
+        }
+    }
+    
+    module M2 {
+        {
+            class c { }
+                  ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+            new c();
+        }
+    }
+    
+    function foo3() {
+        {
+            class c { }
+                  ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+            new c();
+            for (var c; ;);
+        }
+    }
+    
+    module M3 {
+        {
+            class c { }
+                  ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+            new c();
+            for (var c; ;);
+        }
+    }
+    
