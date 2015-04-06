@@ -1,14 +1,14 @@
 /// <reference path="fourslash.ts"/>
 
 ////[|/*
-////    Comment before module:
+////    Block comment at the beginning of the file before module:
 ////        line one of the comment
 ////        line two of the comment
 ////        line three
 ////        line four
 ////        line five
 ////*/|]
-////module Sayings [|{
+////module Sayings[| {
 ////    [|/*
 ////    Comment before class:
 ////        line one of the comment
@@ -17,7 +17,7 @@
 ////        line four
 ////        line five
 ////    */|]
-////    export class Greeter [|{
+////    export class Greeter[| {
 ////        [|/*
 ////            Comment before a string identifier
 ////            line two of the comment
@@ -27,17 +27,17 @@
 ////            constructor
 ////            parameter message as a string
 ////        */|]
-////        /* This is a single line block comment style. Should not be collapsed*/
+////        
 ////        [|/*
 ////            Multiple comments should be collapsed individually
 ////        */|]
-////        constructor(message: string /* do not collapse single lines*/) [|{
+////        constructor(message: string /* do not collapse this */)[| {
 ////            this.greeting = message;
 ////        }|]
 ////        [|/*
 ////            method of a class
 ////        */|]
-////        greet() [|{
+////        greet()[| {
 ////            return "Hello, " + this.greeting;
 ////        }|]
 ////    }|]
@@ -45,7 +45,7 @@
 ////
 ////[|/*
 ////    Block comment for interface. The ending can be on the same line as the declaration.
-////*/|]interface IFoo [|{
+////*/|]interface IFoo[| {
 ////    [|/*
 ////    Multiple block comments
 ////    */|]
@@ -95,10 +95,11 @@
 ////  [|/*
 ////        Over a function in an object literal
 ////  */|]
-////  get foo() [|{
+////  get foo()[| {
 ////    return 1;
 ////  }|]
 ////}|]
+debugger;
 verify.outliningSpansInCurrentFile(test.ranges());
 
 
