@@ -74,7 +74,7 @@ module ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfExternalModule,
+            getExportsOfModule: getExportsOfModuleAsArray,
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -897,6 +897,10 @@ module ts {
 
         function getExportAssignmentSymbol(moduleSymbol: Symbol): Symbol {
             return moduleSymbol.exports["export="];
+        }
+
+        function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
+            return symbolsToArray(getExportsOfModule(moduleSymbol));
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
@@ -3041,17 +3045,6 @@ module ts {
                 }
             }
             return result;
-        }
-
-        function getExportsOfExternalModule(node: ImportDeclaration): Symbol[] {
-            if (!node.moduleSpecifier) {
-                return emptyArray;
-            }
-            let module = resolveExternalModuleName(node, node.moduleSpecifier);
-            if (!module) {
-                return emptyArray;
-            }
-            return symbolsToArray(getExportsOfModule(module));
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -9846,6 +9839,10 @@ module ts {
                 grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
             }
 
+            if (!node.name && !(node.flags & NodeFlags.Default)) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
+            }
+
             checkGrammarClassDeclarationHeritageClauses(node);
             checkDecorators(node);
             if (node.name) {
@@ -12729,7 +12726,16 @@ module ts {
                 let identifier = <Identifier>name;
                 if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
                     let nameText = declarationNameToString(identifier);
-                    return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+
+                    // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
+                    // if so, we would like to give more explicit invalid usage error.
+                    // This will be particularly helpful in the case of "arguments" as such case is very common mistake.
+                    if (getAncestor(name, SyntaxKind.ClassDeclaration) || getAncestor(name, SyntaxKind.ClassExpression)) {
+                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
+                    }
+                    else {
+                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
+                    }
                 }
             }
         }

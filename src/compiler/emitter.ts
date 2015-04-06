@@ -290,6 +290,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
                         generateNameForFunctionOrClassDeclaration(<Declaration>node);
                         break;
                     case SyntaxKind.ModuleDeclaration:
@@ -3231,28 +3232,49 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitMemberAssignments(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
-                forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
-                        writeLine();
-                        emitLeadingComments(member);
-                        emitStart(member);
-                        emitStart((<PropertyDeclaration>member).name);
-                        if (staticFlag) {
-                            emitDeclarationName(node);
-                        }
-                        else {
-                            write("this");
-                        }
-                        emitMemberAccessForPropertyName((<PropertyDeclaration>member).name);
-                        emitEnd((<PropertyDeclaration>member).name);
-                        write(" = ");
-                        emit((<PropertyDeclaration>member).initializer);
-                        write(";");
-                        emitEnd(member);
-                        emitTrailingComments(member);
+            function getInitializedProperties(node: ClassLikeDeclaration, static: boolean) {
+                let properties: PropertyDeclaration[] = [];
+                for (let member of node.members) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && static === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
+                        properties.push(<PropertyDeclaration>member);
                     }
-                });
+                }
+
+                return properties;
+            }
+
+            function emitPropertyDeclarations(node: ClassLikeDeclaration, properties: PropertyDeclaration[]) {
+                for (let property of properties) {
+                    emitPropertyDeclaration(node, property);
+                }
+            }
+
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: Identifier, isExpression?: boolean) {
+                writeLine();
+                emitLeadingComments(property);
+                emitStart(property);
+                emitStart(property.name);
+                if (receiver) {
+                    emit(receiver);
+                }
+                else {
+                    if (property.flags & NodeFlags.Static) {
+                        emitDeclarationName(node);
+                    }
+                    else {
+                        write("this");
+                    }
+                }
+                emitMemberAccessForPropertyName(property.name);
+                emitEnd(property.name);
+                write(" = ");
+                emit(property.initializer);
+                if (!isExpression) {
+                    write(";");
+                }
+
+                emitEnd(property);
+                emitTrailingComments(property);
             }
 
             function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
@@ -3370,6 +3392,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 tempVariables = undefined;
                 tempParameters = undefined;
 
+                emitConstructorWorker(node, baseTypeElement);
+
+                tempFlags = saveTempFlags;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -3457,7 +3487,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitEnd(baseTypeElement);
                     }
                 }
-                emitMemberAssignments(node, /*staticFlag*/0);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ false));
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;
                     if (superCall) {
@@ -3477,10 +3507,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (ctor) {
                     emitTrailingComments(ctor);
                 }
-
-                tempFlags = saveTempFlags;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
             }
 
             function emitClassExpression(node: ClassExpression) {
@@ -3572,6 +3598,29 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
                 }
 
+                // If the class has static properties, and it's a class expression, then we'll need
+                // to specialize the emit a bit.  for a class expression of the form: 
+                //
+                //      class C { static a = 1; static b = 2; ... } 
+                //
+                // We'll emit:
+                //
+                //      (_temp = class C { ... }, _temp.a = 1, _temp.b = 2, _temp)
+                //
+                // This keeps the expression as an expression, while ensuring that the static parts
+                // of it have been initialized by the time it is used.
+                let staticProperties = getInitializedProperties(node, /*static:*/ true);
+                let isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
+                let tempVariable: Identifier;
+
+                if (isClassExpressionWithStaticProperties) {
+                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    increaseIndent();
+                    emit(tempVariable);
+                    write(" = ")
+                }
+
                 write("class");
 
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
@@ -3622,9 +3671,24 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // From ES6 specification:
                 //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-                writeLine();
-                emitMemberAssignments(node, NodeFlags.Static);
-                emitDecoratorsOfClass(node);
+
+                if (isClassExpressionWithStaticProperties) {
+                    for (var property of staticProperties) {
+                        write(",");
+                        writeLine();
+                        emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                    }
+                    write(",");
+                    writeLine();
+                    emit(tempVariable);
+                    decreaseIndent();
+                    write(")");
+                }
+                else {
+                    writeLine();
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node);
+                }
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
@@ -3680,7 +3744,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitMemberAssignments(node, NodeFlags.Static);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
                 writeLine();
                 emitDecoratorsOfClass(node);
                 writeLine();

@@ -659,6 +659,14 @@
         "category": "Error",
         "code": 1209
     },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code":  1210
+    },
+    "A class declaration without the 'default' modifier must have a name": {
+        "category": "Error",
+        "code": 1211
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2013,6 +2021,71 @@
         "category": "Error",
         "code": 8001
     },
+    "'import ... =' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8002
+    },
+    "'export=' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8003
+    },
+    "'type parameter declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8004
+    },
+    "'implements clauses' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8005
+    },
+    "'interface declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8006
+    },
+    "'module declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'type aliases' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8008
+    },
+    "'{0}' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8009
+    },
+    "'types' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8010
+    },
+    "'type arguments' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8011
+    },
+    "'parameter modifiers' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8012
+    },
+    "'?' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
+    "'property declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8014
+    },
+    "'enum declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8015
+    },
+    "'type assertion expressions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8016
+    },
+    "'decorators' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8017
+    },
+
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000

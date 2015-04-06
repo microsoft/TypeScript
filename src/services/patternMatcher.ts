@@ -471,7 +471,7 @@ module ts {
 
     // Helper function to compare two matches to determine which is better.  Matches are first
     // ordered by kind (so all prefix matches always beat all substring matches).  Then, if the
-    // match is a camel case match, the relative weights of hte match are used to determine 
+    // match is a camel case match, the relative weights of the match are used to determine 
     // which is better (with a greater weight being better).  Then if the match is of the same 
     // type, then a case sensitive match is considered better than an insensitive one. 
     function patternMatchCompareTo(match1: PatternMatch, match2: PatternMatch): number {

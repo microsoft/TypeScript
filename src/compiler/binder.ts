@@ -388,23 +388,28 @@ module ts {
             bindChildren(node, /*symbolKind:*/ 0, /*isBlockScopeContainer:*/ true);
         }
 
-        function bindBlockScopedVariableDeclaration(node: Declaration) {
+        function bindBlockScopedDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             switch (blockScopeContainer.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                    declareModuleMember(node, symbolKind, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>container)) {
-                        declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                        declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
+                    // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
             }
-            bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
+            bindChildren(node, symbolKind, /*isBlockScopeContainer*/ false);
+        }
+
+        function bindBlockScopedVariableDeclaration(node: Declaration) {
+            bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
         function getDestructuringParameterName(node: Declaration) {
@@ -493,7 +498,7 @@ module ts {
                     bindCatchVariableDeclaration(<CatchClause>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes, /*isBlockScopeContainer*/ false);
+                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);

@@ -2403,9 +2403,8 @@ declare module "typescript" {
 >expression : Expression
 >Expression : Expression
     }
-    interface ImportDeclaration extends Statement, ModuleElement {
+    interface ImportDeclaration extends ModuleElement {
 >ImportDeclaration : ImportDeclaration
->Statement : Statement
 >ModuleElement : ModuleElement
 
         importClause?: ImportClause;
@@ -2914,10 +2913,10 @@ declare module "typescript" {
 >Symbol : Symbol
 >Symbol : Symbol
 
-        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
->getExportsOfExternalModule : (node: ImportDeclaration) => Symbol[]
->node : ImportDeclaration
->ImportDeclaration : ImportDeclaration
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+>getExportsOfModule : (moduleSymbol: Symbol) => Symbol[]
+>moduleSymbol : Symbol
+>Symbol : Symbol
 >Symbol : Symbol
     }
     interface SymbolDisplayBuilder {
@@ -5884,6 +5883,9 @@ declare module "typescript" {
 
         kindModifiers: string;
 >kindModifiers : string
+
+        sortText: string;
+>sortText : string
     }
     interface CompletionEntryDetails {
 >CompletionEntryDetails : CompletionEntryDetails
@@ -6152,6 +6154,9 @@ declare module "typescript" {
 
         static unknown: string;
 >unknown : string
+
+        static warning: string;
+>warning : string
 
         static keyword: string;
 >keyword : string

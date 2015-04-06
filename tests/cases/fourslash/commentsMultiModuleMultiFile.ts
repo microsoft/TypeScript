@@ -28,7 +28,7 @@
 
 // this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
 edit.insert('');
-
+debugger;
 goTo.marker('1');
 verify.completionListContains("multiM", "module multiM", "this is multi declare module\nthi is multi module 2\nthis is multi module 3 comment");
 
