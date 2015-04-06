@@ -1680,7 +1680,7 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getNewLine: () => "\r\n"
+            getNewLine: () => (sys && sys.newLine) || "\r\n"
         };
 
         var program = createProgram([inputFileName], options, compilerHost);
