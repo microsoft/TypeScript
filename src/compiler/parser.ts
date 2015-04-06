@@ -1432,14 +1432,7 @@ module ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
-            if (!(pos >= 0)) {
-                pos = scanner.getStartPos();
-            }
-
-            node.pos = pos;
-            node.end = pos;
-            return node;
+            return createNodeAtPosition(scanner, kind, pos);
         }
 
         function finishNode<T extends Node>(node: T): T {
@@ -5389,5 +5382,345 @@ module ts {
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
+    // Parses out a JSDoc type expression.  The starting position should be right at the open
+    // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
+    function parseJSDocTypeExpression(content: string, start: number): JSDocType {
+        let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true, content);
+        scanner.setTextPos(start);
+        
+        // Prime the first token for us to start processing.
+        let token = nextToken();
+        let error = false;
+
+        parseExpected(SyntaxKind.OpenBraceToken);
+        let type = parseJSDocType();
+        parseExpected(SyntaxKind.CloseBraceToken);
+
+        return error ? undefined : type;
+
+        function nextToken(): SyntaxKind {
+            return token = scanner.scan();
+        }
+
+        function createNode(kind: SyntaxKind, pos?: number): Node {
+            return createNodeAtPosition(scanner, kind, pos);
+        }
+
+        function parseExpected(kind: SyntaxKind): void {
+            if (token === kind) {
+                nextToken();
+            }
+            else {
+                error = true;
+            }
+        }
+
+        function isIdentifier() {
+            if (token === SyntaxKind.Identifier) {
+                return true;
+            }
+
+            return token > SyntaxKind.LastReservedWord && token <= SyntaxKind.LastKeyword;
+        }
+
+        function isIdentifierOrKeyword() {
+            if (token === SyntaxKind.Identifier) {
+                return true;
+            }
+
+            return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
+        }
+
+        function parseJSDocType(): JSDocType {
+            let type = parseJSDocType();
+            if (type && token === SyntaxKind.EqualsToken) {
+                return parseJSDocOptionalType(type);
+            }
+
+            return type;
+        }
+
+        function parseJSDocTypeCore(): JSDocType {
+            switch (token) {
+                case SyntaxKind.AsteriskToken:
+                    return parseJSDocAllType();
+                case SyntaxKind.QuestionToken:
+                    return parseJSDocUnknownOrNullableType();
+                case SyntaxKind.OpenParenToken:
+                    return parseJSDocUnionType();
+                case SyntaxKind.ExclamationToken:
+                    return parseJSDocNonNullableType();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJSDocRecordType();
+                case SyntaxKind.FunctionKeyword:
+                    return parseJSDocFunctionType();
+                case SyntaxKind.DotDotDotToken:
+                    return parseJSDocVariadicType();
+                case SyntaxKind.NewKeyword:
+                    return parseJSDocConstructorType();
+                case SyntaxKind.ThisKeyword:
+                    return parseJSDocThisType();
+            }
+
+            if (isIdentifier()) {
+                return parseJSDocTypeReference();
+            }
+
+            error = true;
+            return undefined;
+        }
+
+        function parseJSDocThisType(): JSDocThisType {
+            let result = <JSDocThisType>createNode(SyntaxKind.JSDocThisType);
+            nextToken();
+            parseExpected(SyntaxKind.ColonToken);
+            result.type = parseJSDocType();
+            return finishNode(result);
+        }
+
+        function parseJSDocConstructorType(): JSDocConstructorType {
+            let result = <JSDocConstructorType>createNode(SyntaxKind.JSDocConstructorType);
+            nextToken();
+            parseExpected(SyntaxKind.ColonToken);
+            result.type = parseJSDocType();
+            return finishNode(result);
+        }
+
+        function parseJSDocVariadicType(): JSDocVariadicType {
+            let result = <JSDocVariadicType>createNode(SyntaxKind.JSDocVariadicType);
+            nextToken();
+            result.type = parseJSDocType();
+            return finishNode(result);
+        }
+
+        function parseJSDocFunctionType(): JSDocFunctionType {
+            let result = <JSDocFunctionType>createNode(SyntaxKind.JSDocFunctionType);
+            nextToken();
+            parseExpected(SyntaxKind.OpenParenToken);
+
+            let parameters = <NodeArray<JSDocType>>[];
+            parameters.pos = scanner.getStartPos();
+
+            while (!error && token !== SyntaxKind.CloseParenToken && token !== SyntaxKind.EndOfFileToken) {
+                if (parameters.length > 0) {
+                    parseExpected(SyntaxKind.CommaToken);
+                }
+
+                parameters.push(parseJSDocType());
+            }
+
+            parameters.end = scanner.getStartPos();
+            parseExpected(SyntaxKind.CloseParenToken);
+
+            if (token === SyntaxKind.ColonToken) {
+                nextToken();
+                result.type = parseJSDocType();
+            }
+
+            return finishNode(result);
+        }
+
+        function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
+            let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+            nextToken();
+            return finishNode(result);
+        }
+
+        function parseJSDocTypeReference(): JSDocTypeReference {
+            let result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
+            result.name = parseIdentifier();
+
+            while (!error && result.name && token === SyntaxKind.DotToken) {
+                if (isIdentifierOrKeyword()) {
+                    result.name = parseQualifiedName(result.name);
+                }
+                else if (token === SyntaxKind.LessThanToken) {
+                    result.typeArguments = parseTypeArguments();
+                    break;
+                }
+                else {
+                    error = true;
+                    return undefined;
+                }
+            }
+
+            return finishNode(result);
+        }
+
+        function parseTypeArguments() {
+            // Move past the <
+            nextToken();
+
+            let typeArguments = <NodeArray<JSDocType>>[];
+            typeArguments.pos = scanner.getStartPos();
+
+            typeArguments.push(parseJSDocType());
+            while (!error && token === SyntaxKind.CommaToken) {
+                nextToken();
+                typeArguments.push(parseJSDocType());
+            }
+
+            typeArguments.end = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.GreaterThanToken);
+
+            return typeArguments;
+        }
+
+        function parseQualifiedName(left: EntityName): QualifiedName {
+            // Move past the .
+            nextToken();
+
+            let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.pos);
+            result.left = left;
+            result.right = parseIdentifierOrKeyword();
+
+            return finishNode(result);
+        }
+
+        function parseIdentifierOrKeyword(): Identifier {
+            return parseIdentifierHelper(isIdentifierOrKeyword());
+        }
+
+        function parseIdentifier(): Identifier {
+            return parseIdentifierHelper(isIdentifier());
+        }
+
+        function parseIdentifierHelper(isIdentifier: boolean): Identifier {
+            if (isIdentifier) {
+                let result = <Identifier>createNode(SyntaxKind.Identifier);
+                result.text = scanner.getTokenValue();
+                nextToken();
+                return finishNode(result);
+            }
+            else {
+                error = true;
+                return undefined;
+            }
+        }
+
+        function parseJSDocRecordType(): JSDocRecordType {
+            let result = <JSDocRecordType>createNode(SyntaxKind.JSDocRecordType);
+            nextToken();
+
+            let members = <NodeArray<JSDocMember>>[];
+            members.pos = scanner.getStartPos();
+
+            while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken && !error) {
+                members.push(parseJSDocMember());
+            }
+
+            members.end = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(result);
+        }
+
+        function parseJSDocMember(): JSDocMember {
+            let result = <JSDocMember>createNode(SyntaxKind.JSDocMember);
+            result.name = parsePropertyName();
+
+            if (token === SyntaxKind.ColonToken) {
+                nextToken();
+                result.type = parseJSDocType();
+            }
+
+            return finishNode(result);
+        }
+
+        function parsePropertyName(): Identifier | LiteralExpression {
+            if (token === SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
+                let result = <Identifier | LiteralExpression>createNode(token);
+                nextToken();
+                return finishNode(result);
+            }
+            else {
+                error = true;
+                return undefined;
+            }
+        }
+
+        function parseJSDocNonNullableType(): JSDocNonNullableType {
+            let result = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType);
+            nextToken();
+            result.type = parseJSDocType();
+            return finishNode(result);
+        }
+
+        function parseJSDocUnionType(): JSDocUnionType {
+            let result = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType);
+            nextToken();
+
+            let types = <NodeArray<JSDocType>>[];
+            types.pos = scanner.getStartPos();
+
+            types.push(parseJSDocType());
+            while (token === SyntaxKind.BarToken) {
+                nextToken();
+                types.push(parseJSDocType());
+            }
+
+            types.end = scanner.getStartPos();
+
+            parseExpected(SyntaxKind.CloseParenToken);
+
+            return finishNode(result);
+        }
+
+        function parseJSDocAllType(): JSDocAllType {
+            let result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+            nextToken();
+            return finishNode(result);
+        }
+
+        function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
+            let pos = scanner.getStartPos();
+            // skip the ?
+            nextToken();
+
+            // Need to lookahead to decide if this is a nullable or unknown type.
+
+            // Here are cases where we'll pick the unknown type:
+            //
+            //      Foo(?,
+            //      { a: ? }
+            //      Foo(?)
+            //      Foo<?>
+            //      Foo(?=
+            //      (?|
+            if (token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.CloseBraceToken ||
+                token === SyntaxKind.CloseParenToken ||
+                token === SyntaxKind.GreaterThanToken ||
+                token === SyntaxKind.EqualsToken ||
+                token === SyntaxKind.BarToken) {
+
+                let result = <JSDocUnknownType>createNode(SyntaxKind.JSDocUnknownType, pos);
+                return finishNode(result);
+            }
+            else {
+                let result = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, pos);
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+        }
+
+        function finishNode<T extends Node>(node: T): T {
+            node.end = scanner.getStartPos();
+            return node;
+        }
+    }
+
+    function createNodeAtPosition(scanner: Scanner, kind: SyntaxKind, pos?: number): Node {
+        let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
+        if (!(pos >= 0)) {
+            pos = scanner.getStartPos();
+        }
+
+        node.pos = pos;
+        node.end = pos;
+        return node;
     }
 }

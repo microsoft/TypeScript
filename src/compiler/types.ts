@@ -269,6 +269,23 @@ module ts {
         // Top-level nodes
         SourceFile,
 
+        // JSDoc nodes.
+        // The * type.
+        JSDocAllType,
+        // The ? type.
+        JSDocUnknownType,
+        JSDocUnionType,
+        JSDocNullableType,
+        JSDocNonNullableType,
+        JSDocRecordType,
+        JSDocMember,
+        JSDocTypeReference,
+        JSDocOptionalType,
+        JSDocFunctionType,
+        JSDocVariadicType,
+        JSDocConstructorType,
+        JSDocThisType,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -985,6 +1002,65 @@ module ts {
 
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
+    }
+
+    export interface JSDocType extends Node {
+        _jsDocTypeBrand: any;
+    }
+
+    export interface JSDocAllType extends JSDocType {
+        _JSDocAllTypeBrand: any;
+    }
+
+    export interface JSDocUnknownType extends JSDocType {
+        _JSDocUnknownTypeBrand: any;
+    }
+
+    export interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocNonNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordType extends JSDocType {
+        member: NodeArray<JSDocMember>;
+    }
+
+    export interface JSDocTypeReference extends JSDocType {
+        name: EntityName;
+        typeArguments: NodeArray<JSDocType>
+    }
+
+    export interface JSDocOptionalType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocFunctionType extends JSDocType {
+        parameters: NodeArray<JSDocType>;
+        type: JSDocType;
+    }
+
+    export interface JSDocVariadicType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocConstructorType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocThisType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocMember extends Node {
+        name: Identifier | LiteralExpression,
+        type?: JSDocType
     }
 
     // Source files are declarations when they are external modules.
