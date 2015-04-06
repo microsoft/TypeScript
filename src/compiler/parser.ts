@@ -5386,7 +5386,7 @@ module ts {
 
     // Parses out a JSDoc type expression.  The starting position should be right at the open
     // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
-    function parseJSDocTypeExpression(content: string, start: number): JSDocType {
+    export function parseJSDocTypeExpression(content: string, start: number): JSDocType {
         let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true, content);
         scanner.setTextPos(start);
         
@@ -5434,7 +5434,7 @@ module ts {
         }
 
         function parseJSDocType(): JSDocType {
-            let type = parseJSDocType();
+            let type = parseJSDocTypeCore();
             if (type && token === SyntaxKind.EqualsToken) {
                 return parseJSDocOptionalType(type);
             }

@@ -191,7 +191,7 @@ module Utils {
         };
     }
 
-    export function sourceFileToJSON(file: ts.SourceFile): string {
+    export function sourceFileToJSON(file: ts.Node): string {
         return JSON.stringify(file,(k, v) => {
             return isNodeOrArray(v) ? serializeNode(v) : v;
         }, "    ");
