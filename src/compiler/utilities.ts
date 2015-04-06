@@ -449,6 +449,18 @@ module ts {
         return false;
     }
 
+    export function isAccessor(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {

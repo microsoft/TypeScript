@@ -3457,6 +3457,30 @@ declare module "typescript" {
 >getBlockScopedVariableId : (node: Identifier) => number
 >node : Identifier
 >Identifier : Identifier
+
+        serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+>serializeTypeOfNode : (node: Node, getGeneratedNameForNode: (Node: Node) => string) => string | string[]
+>node : Node
+>Node : Node
+>getGeneratedNameForNode : (Node: Node) => string
+>Node : Node
+>Node : Node
+
+        serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
+>serializeParameterTypesOfNode : (node: Node, getGeneratedNameForNode: (Node: Node) => string) => (string | string[])[]
+>node : Node
+>Node : Node
+>getGeneratedNameForNode : (Node: Node) => string
+>Node : Node
+>Node : Node
+
+        serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+>serializeReturnTypeOfNode : (node: Node, getGeneratedNameForNode: (Node: Node) => string) => string | string[]
+>node : Node
+>Node : Node
+>getGeneratedNameForNode : (Node: Node) => string
+>Node : Node
+>Node : Node
     }
     const enum SymbolFlags {
 >SymbolFlags : SymbolFlags
@@ -3773,6 +3797,9 @@ declare module "typescript" {
 
         EmitDecorate = 512,
 >EmitDecorate : NodeCheckFlags
+
+        EmitParam = 1024,
+>EmitParam : NodeCheckFlags
     }
     interface NodeLinks {
 >NodeLinks : NodeLinks
@@ -4287,6 +4314,9 @@ declare module "typescript" {
 
         separateCompilation?: boolean;
 >separateCompilation : boolean
+
+        emitDecoratorMetadata?: boolean;
+>emitDecoratorMetadata : boolean
 
         [option: string]: string | number | boolean;
 >option : string
