@@ -497,7 +497,16 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true, 
+            /*noOutFile*/ undefined,
+            /*generateDeclarations*/ undefined,
+            /*outDir*/ undefined,
+            /*preserveConstEnums*/ undefined,
+            /*keepComments*/ undefined,
+            /*noResolve*/ undefined,
+            /*stripInternal*/ undefined,
+            /*callback*/ undefined,
+            /*targetES5*/ true);
 
 var internalTests = "internal/"
 
