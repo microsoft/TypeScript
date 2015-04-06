@@ -12596,7 +12596,9 @@ module ts {
             else {
                 let elements = (<BindingPattern>name).elements;
                 for (let element of elements) {
-                    checkGrammarNameInLetOrConstDeclarations(element.name);
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                        checkGrammarNameInLetOrConstDeclarations(element.name);
+                    }
                 }
             }
         }
