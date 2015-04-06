@@ -1,4 +1,4 @@
-//// [arrayBindingPattern.ts]
+//// [arrayBindingPatternOmittedExpressions.ts]
 
 var results: string[];
 
@@ -16,7 +16,7 @@ function f([, a, , b, , , , s, , , ] = results) {
     b = s[2];
 }
 
-//// [arrayBindingPattern.js]
+//// [arrayBindingPatternOmittedExpressions.js]
 var results;
 {
     let [, b, , a] = results;
