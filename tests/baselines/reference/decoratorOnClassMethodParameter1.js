@@ -6,23 +6,21 @@ class C {
 }
 
 //// [decoratorOnClassMethodParameter1.js]
-var __decorate = this.__decorate || function (decorators, target, key, value) {
-    var kind = typeof (arguments.length == 2 ? value = target : value);
-    for (var i = decorators.length - 1; i >= 0; --i) {
-        var decorator = decorators[i];
-        switch (kind) {
-            case "function": value = decorator(value) || value; break;
-            case "number": decorator(target, key, value); break;
-            case "undefined": decorator(target, key); break;
-            case "object": value = decorator(target, key, value) || value; break;
-        }
+var __decorate = this.__decorate || (typeof Reflect === "object" && Reflect.decorate) || function (decorators, target, key, desc) {
+    switch (arguments.length) {
+        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
-    return value;
 };
+var __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };
 var C = (function () {
     function C() {
     }
     C.prototype.method = function (p) { };
-    __decorate([dec], C.prototype, "method", 0);
+    Object.defineProperty(C.prototype, "method",
+        __decorate([
+            __param(0, dec)
+        ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
     return C;
 })();
