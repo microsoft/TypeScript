@@ -44,11 +44,13 @@ for (var i = 1; i <= test.markers().length; i++) {
     switch (i) {
         case 0:
         case 1:
-        case 4:
             verify.occurrencesAtPositionCount(0);
             break;
         case 3:
             verify.occurrencesAtPositionCount(1); // 'return' is an instance member
+            break;
+        case 4:
+            verify.occurrencesAtPositionCount(4);
             break;
     }
 }

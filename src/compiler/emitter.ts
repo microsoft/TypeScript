@@ -23,6 +23,33 @@ module ts {
     // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+        // emit output for the __extends helper function
+        const extendsHelper = `
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};`;
+
+        // emit output for the __decorate helper function
+        const decorateHelper = `
+var __decorate = this.__decorate || (typeof Reflect === "object" && Reflect.decorate) || function (decorators, target, key, desc) {
+    switch (arguments.length) {
+        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
+    }
+};`;
+
+        // emit output for the __metadata helper function
+        const metadataHelper = `
+var __metadata = this.__metadata || (typeof Reflect === "object" && Reflect.metadata) || function () { };`;
+
+        // emit output for the __param helper function
+        const paramHelper = `
+var __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };`;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
@@ -98,6 +125,7 @@ module ts {
 
             let extendsEmitted = false;
             let decorateEmitted = false;
+            let paramEmitted = false;
             let tempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
@@ -262,6 +290,7 @@ module ts {
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
                         generateNameForFunctionOrClassDeclaration(<Declaration>node);
                         break;
                     case SyntaxKind.ModuleDeclaration:
@@ -768,27 +797,34 @@ module ts {
                 }
             }
 
-            function emitList(nodes: Node[], start: number, count: number, multiLine: boolean, trailingComma: boolean) {
+            function emitList<TNode extends Node>(nodes: TNode[], start: number, count: number, multiLine: boolean, trailingComma: boolean, leadingComma?: boolean, noTrailingNewLine?: boolean, emitNode?: (node: TNode) => void): number {
+                if (!emitNode) {
+                    emitNode = emit;
+                }
+
                 for (let i = 0; i < count; i++) {
                     if (multiLine) {
-                        if (i) {
+                        if (i || leadingComma) {
                             write(",");
                         }
                         writeLine();
                     }
                     else {
-                        if (i) {
+                        if (i || leadingComma) {
                             write(", ");
                         }
                     }
-                    emit(nodes[start + i]);
+                    emitNode(nodes[start + i]);
+                    leadingComma = true;
                 }
                 if (trailingComma) {
                     write(",");
                 }
-                if (multiLine) {
+                if (multiLine && !noTrailingNewLine) {
                     writeLine();
                 }
+
+                return count;
             }
 
             function emitCommaList(nodes: Node[]) {
@@ -1108,9 +1144,7 @@ module ts {
                             return;
                         }
 
-                        let generatedVariable = createTempVariable(TempFlags.Auto);
-                        generatedName = generatedVariable.text;
-                        recordTempDeclaration(generatedVariable);
+                        generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
                         computedPropertyNamesToGeneratedNames[node.id] = generatedName;
                         write(generatedName);
                         write(" = ");
@@ -1641,6 +1675,11 @@ module ts {
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
+                if (compilerOptions.separateCompilation) {
+                    // do not inline enum values in separate compilation mode
+                    return false;
+                }
+
                 let constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
                     write(constantValue.toString());
@@ -3193,33 +3232,58 @@ module ts {
                 }
             }
 
-            function emitMemberAssignments(node: ClassDeclaration, staticFlag: NodeFlags) {
-                forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
-                        writeLine();
-                        emitLeadingComments(member);
-                        emitStart(member);
-                        emitStart((<PropertyDeclaration>member).name);
-                        if (staticFlag) {
-                            emitDeclarationName(node);
-                        }
-                        else {
-                            write("this");
-                        }
-                        emitMemberAccessForPropertyName((<PropertyDeclaration>member).name);
-                        emitEnd((<PropertyDeclaration>member).name);
-                        write(" = ");
-                        emit((<PropertyDeclaration>member).initializer);
-                        write(";");
-                        emitEnd(member);
-                        emitTrailingComments(member);
+            function getInitializedProperties(node: ClassLikeDeclaration, static: boolean) {
+                let properties: PropertyDeclaration[] = [];
+                for (let member of node.members) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && static === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
+                        properties.push(<PropertyDeclaration>member);
                     }
-                });
+                }
+
+                return properties;
             }
 
-            function emitMemberFunctionsForES5AndLower(node: ClassDeclaration) {
+            function emitPropertyDeclarations(node: ClassLikeDeclaration, properties: PropertyDeclaration[]) {
+                for (let property of properties) {
+                    emitPropertyDeclaration(node, property);
+                }
+            }
+
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: Identifier, isExpression?: boolean) {
+                writeLine();
+                emitLeadingComments(property);
+                emitStart(property);
+                emitStart(property.name);
+                if (receiver) {
+                    emit(receiver);
+                }
+                else {
+                    if (property.flags & NodeFlags.Static) {
+                        emitDeclarationName(node);
+                    }
+                    else {
+                        write("this");
+                    }
+                }
+                emitMemberAccessForPropertyName(property.name);
+                emitEnd(property.name);
+                write(" = ");
+                emit(property.initializer);
+                if (!isExpression) {
+                    write(";");
+                }
+
+                emitEnd(property);
+                emitTrailingComments(property);
+            }
+
+            function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
                 forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
+                    if (member.kind === SyntaxKind.SemicolonClassElement) {
+                        writeLine();
+                        write(";");
+                    }
+                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
                             return emitOnlyPinnedOrTripleSlashComments(member);
                         }
@@ -3287,12 +3351,14 @@ module ts {
                 });
             }
 
-            function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
+            function emitMemberFunctionsForES6AndHigher(node: ClassLikeDeclaration) {
                 for (let member of node.members) {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
-                    else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
+                    else if (member.kind === SyntaxKind.MethodDeclaration ||
+                             member.kind === SyntaxKind.GetAccessor ||
+                             member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -3311,10 +3377,14 @@ module ts {
                         emitEnd(member);
                         emitTrailingComments(member);
                     }
+                    else if (member.kind === SyntaxKind.SemicolonClassElement) {
+                        writeLine();
+                        write(";");
+                    }
                 }
             }
 
-            function emitConstructor(node: ClassDeclaration, baseTypeNode: TypeReferenceNode) {
+            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -3322,6 +3392,14 @@ module ts {
                 tempVariables = undefined;
                 tempParameters = undefined;
 
+                emitConstructorWorker(node, baseTypeElement);
+
+                tempFlags = saveTempFlags;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
+            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -3368,7 +3446,7 @@ module ts {
                         //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
                         //      Else,
                         //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
-                        if (baseTypeNode) {
+                        if (baseTypeElement) {
                             write("(...args)");
                         }
                         else {
@@ -3387,7 +3465,7 @@ module ts {
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
-                    if (baseTypeNode) {
+                    if (baseTypeElement) {
                         var superCall = findInitialSuperCall(ctor);
                         if (superCall) {
                             writeLine();
@@ -3397,19 +3475,19 @@ module ts {
                     emitParameterPropertyAssignments(ctor);
                 }
                 else {
-                    if (baseTypeNode) {
+                    if (baseTypeElement) {
                         writeLine();
-                        emitStart(baseTypeNode);
+                        emitStart(baseTypeElement);
                         if (languageVersion < ScriptTarget.ES6) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
                             write("super(...args);");
                         }
-                        emitEnd(baseTypeNode);
+                        emitEnd(baseTypeElement);
                     }
                 }
-                emitMemberAssignments(node, /*staticFlag*/0);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ false));
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;
                     if (superCall) {
@@ -3429,89 +3507,118 @@ module ts {
                 if (ctor) {
                     emitTrailingComments(ctor);
                 }
+            }
 
-                tempFlags = saveTempFlags;
-                tempVariables = saveTempVariables;
-                tempParameters = saveTempParameters;
+            function emitClassExpression(node: ClassExpression) {
+                return emitClassLikeDeclaration(node);
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
+                return emitClassLikeDeclaration(node);
+            }
+
+            function emitClassLikeDeclaration(node: ClassLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6) {
-                    emitClassDeclarationBelowES6(<ClassDeclaration>node);
+                    emitClassLikeDeclarationBelowES6(node);
                 }
                 else {
-                    emitClassDeclarationForES6AndHigher(<ClassDeclaration>node);
+                    emitClassLikeDeclarationForES6AndHigher(node);
                 }
             }
             
-            function emitClassDeclarationForES6AndHigher(node: ClassDeclaration) {
+            function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let thisNodeIsDecorated = nodeIsDecorated(node);
-                if (thisNodeIsDecorated) {
-                    // To preserve the correct runtime semantics when decorators are applied to the class,
-                    // the emit needs to follow one of the following rules:
-                    //
-                    // * For a local class declaration:
-                    //
-                    //     @dec class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let C = class {
-                    //     };
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //
-                    // * For an exported class declaration:
-                    //
-                    //     @dec export class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     export let C = class {
-                    //     };
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //
-                    // * For a default export of a class declaration with a name:
-                    //
-                    //     @dec default export class C {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let C = class {
-                    //     }
-                    //     Object.defineProperty(C, "name", { value: "C", configurable: true });
-                    //     C = __decorate([dec], C);
-                    //     export default C;
-                    //
-                    // * For a default export of a class declaration without a name:
-                    //
-                    //     @dec default export class {
-                    //     }
-                    //
-                    //   The emit should be:
-                    //
-                    //     let _default = class {
-                    //     }
-                    //     _default = __decorate([dec], _default);
-                    //     export default _default;
-                    //
-                    if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
-                        write("export ");
-                    }
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    if (thisNodeIsDecorated) {
+                        // To preserve the correct runtime semantics when decorators are applied to the class,
+                        // the emit needs to follow one of the following rules:
+                        //
+                        // * For a local class declaration:
+                        //
+                        //     @dec class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let C = class {
+                        //     };
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //
+                        // * For an exported class declaration:
+                        //
+                        //     @dec export class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     export let C = class {
+                        //     };
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //
+                        // * For a default export of a class declaration with a name:
+                        //
+                        //     @dec default export class C {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let C = class {
+                        //     }
+                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
+                        //     C = __decorate([dec], C);
+                        //     export default C;
+                        //
+                        // * For a default export of a class declaration without a name:
+                        //
+                        //     @dec default export class {
+                        //     }
+                        //
+                        //   The emit should be:
+                        //
+                        //     let _default = class {
+                        //     }
+                        //     _default = __decorate([dec], _default);
+                        //     export default _default;
+                        //
+                        if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
+                            write("export ");
+                        }
 
-                    write("let ");
-                    emitDeclarationName(node);
-                    write(" = ");
-                }
-                else if (isES6ExportedDeclaration(node)) {                    
-                    write("export ");
-                    if (node.flags & NodeFlags.Default) {
-                        write("default ");
+                        write("let ");
+                        emitDeclarationName(node);
+                        write(" = ");
                     }
+                    else if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                        if (node.flags & NodeFlags.Default) {
+                            write("default ");
+                        }
+                    }
+                }
+
+                // If the class has static properties, and it's a class expression, then we'll need
+                // to specialize the emit a bit.  for a class expression of the form: 
+                //
+                //      class C { static a = 1; static b = 2; ... } 
+                //
+                // We'll emit:
+                //
+                //      (_temp = class C { ... }, _temp.a = 1, _temp.b = 2, _temp)
+                //
+                // This keeps the expression as an expression, while ensuring that the static parts
+                // of it have been initialized by the time it is used.
+                let staticProperties = getInitializedProperties(node, /*static:*/ true);
+                let isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
+                let tempVariable: Identifier;
+
+                if (isClassExpressionWithStaticProperties) {
+                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    increaseIndent();
+                    emit(tempVariable);
+                    write(" = ")
                 }
 
                 write("class");
@@ -3522,10 +3629,10 @@ module ts {
                     emitDeclarationName(node);
                 }
 
-                var baseTypeNode = getClassBaseTypeNode(node);
+                var baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write(" extends ");
-                    emit(baseTypeNode.typeName);
+                    emit(baseTypeNode.expression);
                 }
 
                 write(" {");
@@ -3564,9 +3671,24 @@ module ts {
                 // From ES6 specification:
                 //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-                writeLine();
-                emitMemberAssignments(node, NodeFlags.Static);
-                emitDecoratorsOfClass(node);
+
+                if (isClassExpressionWithStaticProperties) {
+                    for (var property of staticProperties) {
+                        write(",");
+                        writeLine();
+                        emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                    }
+                    write(",");
+                    writeLine();
+                    emit(tempVariable);
+                    decreaseIndent();
+                    write(")");
+                }
+                else {
+                    writeLine();
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node);
+                }
 
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
@@ -3588,11 +3710,15 @@ module ts {
                 }
             }
 
-            function emitClassDeclarationBelowES6(node: ClassDeclaration) {
-                write("var ");
-                emitDeclarationName(node);
-                write(" = (function (");
-                let baseTypeNode = getClassBaseTypeNode(node);
+            function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    write("var ");
+                    emitDeclarationName(node);
+                    write(" = ");
+                }
+
+                write("(function (");
+                let baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write("_super");
                 }
@@ -3618,7 +3744,7 @@ module ts {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitMemberAssignments(node, NodeFlags.Static);
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
                 writeLine();
                 emitDecoratorsOfClass(node);
                 writeLine();
@@ -3639,38 +3765,43 @@ module ts {
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
-                    emit(baseTypeNode.typeName);
+                    emit(baseTypeNode.expression);
                 }
-                write(");");
+                write(")");
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    write(";");
+                }
                 emitEnd(node);
 
-                emitExportMemberAssignment(node);
+                if (node.kind === SyntaxKind.ClassDeclaration) {
+                    emitExportMemberAssignment(<ClassDeclaration>node);
+                }
 
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
             }
 
-            function emitClassMemberPrefix(node: ClassDeclaration, member: Node) {
+            function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
                 emitDeclarationName(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
                 }
             }
             
-            function emitDecoratorsOfClass(node: ClassDeclaration) {
+            function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
                 emitDecoratorsOfConstructor(node);
             }
 
-            function emitDecoratorsOfConstructor(node: ClassDeclaration) {
+            function emitDecoratorsOfConstructor(node: ClassLikeDeclaration) {
+                let decorators = node.decorators;
                 let constructor = getFirstConstructorWithBody(node);
-                if (constructor) {
-                    emitDecoratorsOfParameters(node, constructor);
-                }
+                let hasDecoratedParameters = constructor && forEach(constructor.parameters, nodeIsDecorated);
 
-                if (!nodeIsDecorated(node)) {
+                // skip decoration of the constructor if neither it nor its parameters are decorated
+                if (!decorators && !hasDecoratedParameters) {
                     return;
                 }
 
@@ -3688,81 +3819,104 @@ module ts {
                 writeLine();
                 emitStart(node);
                 emitDeclarationName(node);
-                write(" = ");
-                emitDecorateStart(node.decorators);
+                write(" = __decorate([");
+                increaseIndent();
+                writeLine();
+
+                let decoratorCount = decorators ? decorators.length : 0;
+                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
+                    emitStart(decorator);
+                    emit(decorator.expression);
+                    emitEnd(decorator);
+                });
+
+                argumentsWritten += emitDecoratorsOfParameters(constructor, /*leadingComma*/ argumentsWritten > 0);
+                emitSerializedTypeMetadata(node, /*leadingComma*/ argumentsWritten >= 0);
+
+                decreaseIndent();
+                writeLine();
+                write("], ");
                 emitDeclarationName(node);
                 write(");");
                 emitEnd(node);
                 writeLine();
             }
 
-            function emitDecoratorsOfMembers(node: ClassDeclaration, staticFlag: NodeFlags) {
-                forEach(node.members, member => {
+            function emitDecoratorsOfMembers(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
+                for (let member of node.members) {
+                    // only emit members in the correct group
                     if ((member.flags & NodeFlags.Static) !== staticFlag) {
-                        return;
+                        continue;
                     }
 
+                    // skip members that cannot be decorated (such as the constructor)
+                    if (!nodeCanBeDecorated(member)) {
+                        continue;
+                    }
+
+                    // skip a member if it or any of its parameters are not decorated
+                    if (!nodeOrChildIsDecorated(member)) {
+                        continue;
+                    }
+
+                    // skip an accessor declaration if it is not the first accessor
                     let decorators: NodeArray<Decorator>;
-                    switch (member.kind) {
-                        case SyntaxKind.MethodDeclaration:
-                            // emit decorators of the method's parameters
-                            emitDecoratorsOfParameters(node, <MethodDeclaration>member);
-                            decorators = member.decorators;
-                            break;
+                    let functionLikeMember: FunctionLikeDeclaration;
+                    if (isAccessor(member)) {
+                        let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        if (member !== accessors.firstAccessor) {
+                            continue;
+                        }
 
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            let accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
-                            if (member !== accessors.firstAccessor) {
-                                // skip the second accessor as we processed it with the first.
-                                return;
-                            }
+                        // get the decorators from the first accessor with decorators
+                        decorators = accessors.firstAccessor.decorators;
+                        if (!decorators && accessors.secondAccessor) {
+                            decorators = accessors.secondAccessor.decorators;
+                        }
 
-                            if (accessors.setAccessor) {
-                                // emit decorators of the set accessor parameter
-                                emitDecoratorsOfParameters(node, <AccessorDeclaration>accessors.setAccessor);
-                            }
-
-                            // get the decorators from the first decorated accessor.
-                            decorators = accessors.firstAccessor.decorators;
-                            if (!decorators && accessors.secondAccessor) {
-                                decorators = accessors.secondAccessor.decorators;
-                            }
-                            break;
-
-                        case SyntaxKind.PropertyDeclaration:
-                            decorators = member.decorators;
-                            break;
-
-                        default:
-                            // Constructor cannot be decorated, and its parameters are handled in emitDecoratorsOfConstructor
-                            // Other members (i.e. IndexSignature) cannot be decorated.
-                            return;
+                        // we only decorate parameters of the set accessor
+                        functionLikeMember = accessors.setAccessor;
                     }
+                    else {
+                        decorators = member.decorators;
 
-                    if (!decorators) {
-                        return;
+                        // we only decorate the parameters here if this is a method
+                        if (member.kind === SyntaxKind.MethodDeclaration) {
+                            functionLikeMember = <MethodDeclaration>member;
+                        }
                     }
 
                     // Emit the call to __decorate. Given the following:
                     //
                     //   class C {
-                    //     @dec method() {}
+                    //     @dec method(@dec2 x) {}
                     //     @dec get accessor() {}
                     //     @dec prop;
                     //   }
                     //
                     // The emit for a method is:
                     //
-                    //   Object.defineProperty(C.prototype, "method", __decorate([dec], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+                    //   Object.defineProperty(C.prototype, "method", 
+                    //       __decorate([
+                    //           dec,
+                    //           __param(0, dec2),
+                    //           __metadata("design:type", Function),
+                    //           __metadata("design:paramtypes", [Object]),
+                    //           __metadata("design:returntype", void 0)
+                    //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
                     // 
                     // The emit for an accessor is:
                     //
-                    //   Object.defineProperty(C.prototype, "accessor", __decorate([dec], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+                    //   Object.defineProperty(C.prototype, "accessor", 
+                    //       __decorate([
+                    //           dec
+                    //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
                     //
                     // The emit for a property is:
                     //
-                    //   __decorate([dec], C.prototype, "prop");
+                    //   __decorate([
+                    //       dec
+                    //   ], C.prototype, "prop");
                     //
 
                     writeLine();
@@ -3774,10 +3928,28 @@ module ts {
                         write(", ");
                         emitExpressionForPropertyName(member.name);
                         emitEnd(member.name);
-                        write(", ");
+                        write(",");
+                        increaseIndent();
+                        writeLine();
                     }
 
-                    emitDecorateStart(decorators);
+                    write("__decorate([");
+                    increaseIndent();
+                    writeLine();
+
+                    let decoratorCount = decorators ? decorators.length : 0;
+                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
+                        emitStart(decorator);
+                        emit(decorator.expression);
+                        emitEnd(decorator);
+                    });
+
+                    argumentsWritten += emitDecoratorsOfParameters(functionLikeMember, argumentsWritten > 0);
+                    emitSerializedTypeMetadata(member, argumentsWritten > 0);
+
+                    decreaseIndent();
+                    writeLine();
+                    write("], ");
                     emitStart(member.name);
                     emitClassMemberPrefix(node, member);
                     write(", ");
@@ -3792,78 +3964,150 @@ module ts {
                         emitExpressionForPropertyName(member.name);
                         emitEnd(member.name);
                         write("))");
+                        decreaseIndent();
                     }
 
                     write(");");
                     emitEnd(member);
                     writeLine();
-                });
-            }
-            
-            function emitDecoratorsOfParameters(node: ClassDeclaration, member: FunctionLikeDeclaration) {
-                forEach(member.parameters, (parameter, parameterIndex) => {
-                    if (!nodeIsDecorated(parameter)) {
-                        return;
-                    }
-
-                    // Emit the decorators for a parameter. Given the following:
-                    //
-                    //   class C {
-                    //     constructor(@dec p) { }
-                    //     method(@dec p) { }
-                    //     set accessor(@dec value) { }
-                    //   }
-                    //
-                    // The emit for a constructor is:
-                    //
-                    //   __decorate([dec], C, void 0, 0);
-                    //
-                    // The emit for a parameter is:
-                    //
-                    //   __decorate([dec], C.prototype, "method", 0);
-                    //
-                    // The emit for an accessor is:
-                    //
-                    //   __decorate([dec], C.prototype, "accessor", 0);
-                    //
-
-                    writeLine();
-                    emitStart(parameter);
-                    emitDecorateStart(parameter.decorators);
-                    emitStart(parameter.name);
-
-                    if (member.kind === SyntaxKind.Constructor) {
-                        emitDeclarationName(node);
-                        write(", void 0");
-                    }
-                    else {
-                        emitClassMemberPrefix(node, member);
-                        write(", ");
-                        emitExpressionForPropertyName(member.name);
-                    }
-
-                    write(", ");
-                    write(String(parameterIndex));
-                    emitEnd(parameter.name);
-                    write(");");
-                    emitEnd(parameter);
-                    writeLine();
-                });
-            }
-
-            function emitDecorateStart(decorators: Decorator[]): void {
-                write("__decorate([");
-                let decoratorCount = decorators.length;
-                for (let i = 0; i < decoratorCount; i++) {
-                    if (i > 0) {
-                        write(", ");
-                    }
-                    let decorator = decorators[i];
-                    emitStart(decorator);
-                    emit(decorator.expression);
-                    emitEnd(decorator);
                 }
-                write("], ");
+            }
+
+            function emitDecoratorsOfParameters(node: FunctionLikeDeclaration, leadingComma: boolean): number {
+                let argumentsWritten = 0;
+                if (node) {
+                    let parameterIndex = 0;
+                    for (let parameter of node.parameters) {
+                        if (nodeIsDecorated(parameter)) {
+                            let decorators = parameter.decorators;
+                            argumentsWritten += emitList(decorators, 0, decorators.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ leadingComma, /*noTrailingNewLine*/ true, decorator => {
+                                emitStart(decorator);
+                                write(`__param(${parameterIndex}, `);
+                                emit(decorator.expression);
+                                write(")");
+                                emitEnd(decorator);
+                            });
+                            leadingComma = true;
+                        }
+                        ++parameterIndex;
+                    }
+                }
+                return argumentsWritten;
+            }
+
+            function shouldEmitTypeMetadata(node: Declaration): boolean {
+                // This method determines whether to emit the "design:type" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
+                switch (node.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                }
+
+                return false;
+            }
+
+            function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
+                // This method determines whether to emit the "design:returntype" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
+                switch (node.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                        return true;
+                }
+                return false;
+            }
+
+            function shouldEmitParamTypesMetadata(node: Declaration): boolean {
+                // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // compiler option is set.
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.SetAccessor:
+                        return true;
+                }
+                return false;
+            }
+
+            function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
+                // This method emits the serialized type metadata for a decorator target.
+                // The caller should have already tested whether the node has decorators.
+                let argumentsWritten = 0;
+                if (compilerOptions.emitDecoratorMetadata) {
+                    if (shouldEmitTypeMetadata(node)) {
+                        var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
+                        if (serializedType) {
+                            if (writeComma) {
+                                write(", ");
+                            }
+                            writeLine();
+                            write("__metadata('design:type', ");
+                            emitSerializedType(node, serializedType);
+                            write(")");
+                            argumentsWritten++;
+                        }
+                    }
+                    if (shouldEmitParamTypesMetadata(node)) {
+                        var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
+                        if (serializedTypes) {
+                            if (writeComma || argumentsWritten) {
+                                write(", ");
+                            }
+                            writeLine();
+                            write("__metadata('design:paramtypes', [");
+                            for (var i = 0; i < serializedTypes.length; ++i) {
+                                if (i > 0) {
+                                    write(", ");
+                                }
+                                emitSerializedType(node, serializedTypes[i]);
+                            }
+                            write("])");
+                            argumentsWritten++;
+                        }
+                    }
+                    if (shouldEmitReturnTypeMetadata(node)) {
+                        var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
+                        if (serializedType) {
+                            if (writeComma || argumentsWritten) {
+                                write(", ");
+                            }
+                            writeLine();
+                            write("__metadata('design:returntype', ");
+                            emitSerializedType(node, serializedType);
+                            write(")");
+                            argumentsWritten++;
+                        }
+                    }
+                }
+                return argumentsWritten;
+            }
+
+            function serializeTypeNameSegment(location: Node, path: string[], index: number): string {
+                switch (index) {
+                    case 0:
+                        return `typeof ${path[index]} !== 'undefined' && ${path[index]}`;
+                    case 1:
+                        return `${serializeTypeNameSegment(location, path, index - 1) }.${path[index]}`;
+                    default:
+                        let temp = createAndRecordTempVariable(TempFlags.Auto).text;
+                        return `(${temp} = ${serializeTypeNameSegment(location, path, index - 1) }) && ${temp}.${path[index]}`;
+                }
+            }
+
+            function emitSerializedType(location: Node, name: string | string[]): void {
+                if (typeof name === "string") {
+                    write(name);
+                    return;
+                }
+                else {
+                    Debug.assert(name.length > 0, "Invalid serialized type name");
+                    write(`(${serializeTypeNameSegment(location, name, name.length - 1) }) || Object`);
+                }
             }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -3872,7 +4116,7 @@ module ts {
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
                 let isConstEnum = isConst(node);
-                return !isConstEnum || compilerOptions.preserveConstEnums;
+                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.separateCompilation;
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -3964,7 +4208,7 @@ module ts {
             }
 
             function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-                return isInstantiatedModule(node, compilerOptions.preserveConstEnums);
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
@@ -4496,7 +4740,7 @@ module ts {
                 return statements.length;
             }
 
-            function writeHelper(text: string): void {
+            function writeLines(text: string): void {
                 let lines = text.split(/\r\n|\r|\n/g);
                 for (let i = 0; i < lines.length; ++i) {
                     let line = lines[i];
@@ -4515,41 +4759,25 @@ module ts {
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 // Only Emit __extends function when target ES5.
-                // For target ES6 and above, we can emit classDeclaration as if.
+                // For target ES6 and above, we can emit classDeclaration as is.
                 if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
-                    writeLine();
-                    write("var __extends = this.__extends || function (d, b) {");
-                    increaseIndent();
-                    writeLine();
-                    write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
-                    writeLine();
-                    write("function __() { this.constructor = d; }");
-                    writeLine();
-                    write("__.prototype = b.prototype;");
-                    writeLine();
-                    write("d.prototype = new __();");
-                    decreaseIndent();
-                    writeLine();
-                    write("};");
+                    writeLines(extendsHelper);
                     extendsEmitted = true;
                 }
+
                 if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
-                    writeHelper(`
-var __decorate = this.__decorate || function (decorators, target, key, value) {
-    var kind = typeof (arguments.length == 2 ? value = target : value);
-    for (var i = decorators.length - 1; i >= 0; --i) {
-        var decorator = decorators[i];
-        switch (kind) {
-            case "function": value = decorator(value) || value; break;
-            case "number": decorator(target, key, value); break;
-            case "undefined": decorator(target, key); break;
-            case "object": value = decorator(target, key, value) || value; break;
-        }
-    }
-    return value;
-};`);
+                    writeLines(decorateHelper);
+                    if (compilerOptions.emitDecoratorMetadata) {
+                        writeLines(metadataHelper);
+                    }
                     decorateEmitted = true;
                 }
+
+                if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
+                    writeLines(paramHelper);
+                    paramEmitted = true;
+                }
+
                 if (isExternalModule(node)) {
                     if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
@@ -4768,6 +4996,8 @@ var __decorate = this.__decorate || function (decorators, target, key, value) {
                         return emitDebuggerStatement(node);
                     case SyntaxKind.VariableDeclaration:
                         return emitVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.ClassExpression:
+                        return emitClassExpression(<ClassExpression>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
