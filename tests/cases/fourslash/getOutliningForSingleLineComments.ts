@@ -73,9 +73,6 @@
 ////class WithOneSingleLineComment[| {
 ////}|]
 
-
-
-
 verify.outliningSpansInCurrentFile(test.ranges());
 
 

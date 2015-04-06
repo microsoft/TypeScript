@@ -99,7 +99,7 @@
 ////    return 1;
 ////  }|]
 ////}|]
-debugger;
+
 verify.outliningSpansInCurrentFile(test.ranges());
 
 
