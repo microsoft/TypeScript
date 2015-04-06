@@ -8768,19 +8768,28 @@ module ts {
           */
         function checkTypeAnnotationAsExpression(node: AccessorDeclaration | PropertyDeclaration | ParameterDeclaration | MethodDeclaration) {
             switch (node.kind) {
-                case SyntaxKind.PropertyDeclaration:    return checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
-                case SyntaxKind.Parameter:              return checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
-                case SyntaxKind.MethodDeclaration:      return checkTypeNodeAsExpression((<MethodDeclaration>node).type);
-                case SyntaxKind.GetAccessor:            return checkTypeNodeAsExpression((<AccessorDeclaration>node).type);
-                case SyntaxKind.SetAccessor:            return checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
+                case SyntaxKind.PropertyDeclaration:
+                    checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
+                    break;
+                case SyntaxKind.Parameter: checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
+                    break;
+                case SyntaxKind.MethodDeclaration:
+                    checkTypeNodeAsExpression((<MethodDeclaration>node).type);
+                    break;
+                case SyntaxKind.GetAccessor:
+                    checkTypeNodeAsExpression((<AccessorDeclaration>node).type);
+                    break;
+                case SyntaxKind.SetAccessor:
+                    checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
+                    break;
             }
         }
         
         /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
         function checkParameterTypeAnnotationsAsExpressions(node: FunctionLikeDeclaration) {
             // ensure all type annotations with a value declaration are checked as an expression
-            if (node) {
-                forEach(node.parameters, checkTypeAnnotationAsExpression);
+            for (let parameter of node.parameters) {
+                checkTypeAnnotationAsExpression(parameter);
             }
         }
 
@@ -11624,7 +11633,9 @@ module ts {
                     case SyntaxKind.TypeLiteral:
                     case SyntaxKind.UnionType:
                     case SyntaxKind.AnyKeyword:
+                        break;
                     default:
+                        Debug.fail("Cannot serialize unexpected type node.");
                         break;
                 }
             }
