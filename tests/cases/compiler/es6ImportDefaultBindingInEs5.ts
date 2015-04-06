@@ -1,8 +1,10 @@
 // @target: es5
 // @module: commonjs
+// @declaration: true
 
 // @filename: es6ImportDefaultBindingInEs5_0.ts
-export var a = 10;
+var a = 10;
+export = a;
 
 // @filename: es6ImportDefaultBindingInEs5_1.ts
 import defaultBinding from "es6ImportDefaultBindingInEs5_0";

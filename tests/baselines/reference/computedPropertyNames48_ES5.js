@@ -28,7 +28,7 @@ extractIndexer((_a = {},
     _a
 )); // Should return string
 extractIndexer((_b = {},
-    _b[0 /* x */] = "",
+    _b[E.x] = "",
     _b
 )); // Should return string
 extractIndexer((_c = {},

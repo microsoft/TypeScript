@@ -6,7 +6,7 @@
 ////var /*2*/r = m2f/*3*/;
 
 goTo.marker('11');
-verify.quickInfoIs('(function) m2f(x: number): void\nmodule m2f');
+verify.quickInfoIs('function m2f(x: number): void\nmodule m2f');
 
 goTo.marker('1');
 verify.completionListContains('I');
@@ -16,7 +16,7 @@ verify.not.completionListContains('foo');
 edit.backspace(1);
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r: (x: number) => void');
+verify.quickInfoIs('var r: (x: number) => void');
 
 goTo.marker('3');
 edit.insert('(');

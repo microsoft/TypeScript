@@ -1,5 +1,5 @@
-tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(13,9): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
-tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(22,13): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(13,18): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(22,22): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
 
 
 ==== tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts (2 errors) ====
@@ -16,10 +16,9 @@ tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(22,13): error TS2
     class b extends Foo {
         public foo() {
             function _super() { // should be error
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            } 
-    ~~~~~~~~~
+                     ~~~~~~
 !!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            } 
         }
         _super() { // No Error
         }
@@ -28,10 +27,9 @@ tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts(22,13): error TS2
         public foo() {
             var x = () => {
                 function _super() { // should be error
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                } 
-    ~~~~~~~~~~~~~
+                         ~~~~~~
 !!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+                } 
             }
         }
         _super() { // No error

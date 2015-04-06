@@ -63,49 +63,49 @@
 
 
 goTo.marker('1');
-verify.quickInfoIs('(var) r1: Date');
+verify.quickInfoIs('var r1: Date');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r2: any');
+verify.quickInfoIs('var r2: any');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) r3: RegExp');
+verify.quickInfoIs('var r3: RegExp');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) r4: RegExp');
+verify.quickInfoIs('var r4: RegExp');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) r5: Date');
+verify.quickInfoIs('var r5: Date');
 
 goTo.marker('6');
-verify.quickInfoIs('(var) r6: any');
+verify.quickInfoIs('var r6: any');
 
 goTo.marker('7');
-verify.quickInfoIs('(var) r7: RegExp');
+verify.quickInfoIs('var r7: RegExp');
 
 goTo.marker('8');
-verify.quickInfoIs('(var) r8: RegExp');
+verify.quickInfoIs('var r8: RegExp');
 
 goTo.marker('9');
-verify.quickInfoIs('(var) r9: Date');
+verify.quickInfoIs('var r9: Date');
 
 goTo.marker('10');
-verify.quickInfoIs('(var) r10: any');
+verify.quickInfoIs('var r10: any');
 
 goTo.marker('11');
-verify.quickInfoIs('(var) r11: Date');
+verify.quickInfoIs('var r11: Date');
 
 goTo.marker('12');
-verify.quickInfoIs('(var) r12: Date');
+verify.quickInfoIs('var r12: Date');
 
 goTo.marker('13');
-verify.quickInfoIs('(var) r13: Ty<Date>');
+verify.quickInfoIs('var r13: Ty<Date>');
 
 goTo.marker('14');
-verify.quickInfoIs('(var) r14: any');
+verify.quickInfoIs('var r14: any');
 
 goTo.marker('15');
-verify.quickInfoIs('(var) r15: {\n    [x: number]: Date;\n}');
+verify.quickInfoIs('var r15: {\n    [x: number]: Date;\n}');
 
 goTo.marker('16');
-verify.quickInfoIs('(var) r16: any');
+verify.quickInfoIs('var r16: any');

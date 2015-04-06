@@ -11,7 +11,12 @@ var f6 = () => { return [<any>10]; }
 
 
 //// [declFileRestParametersOfFunctionAndFunctionType.js]
-function f1() { }
+function f1() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i - 0] = arguments[_i];
+    }
+}
 function f2(x) { }
 function f3(x) { }
 function f4() { }

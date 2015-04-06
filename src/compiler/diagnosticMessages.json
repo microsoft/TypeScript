@@ -27,10 +27,6 @@
         "category": "Error",
         "code": 1012
     },
-    "Catch clause parameter cannot have a type annotation.": {
-        "category": "Error",
-        "code": 1013
-    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -459,10 +455,6 @@
         "category": "Error",
         "code": 1157
     },
-    "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1159
-    },
     "Unterminated template literal.": {
         "category": "Error",
         "code": 1160
@@ -595,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export or export assignment.": {
+    "External module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -607,7 +599,74 @@
         "category": "Error",
         "code": 1194
     },
-
+    "Catch clause variable name must be an identifier.": {
+        "category": "Error",
+        "code": 1195
+    },
+    "Catch clause variable cannot have a type annotation.": {
+        "category": "Error",
+        "code": 1196
+    },
+    "Catch clause variable cannot have an initializer.": {
+        "category": "Error",
+        "code": 1197
+    },
+    "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": {
+        "category": "Error",
+        "code": 1198
+    },
+    "Unterminated Unicode escape sequence.": {
+        "category": "Error",
+        "code": 1199
+    },
+    "Line terminator not permitted before arrow.": {
+        "category": "Error",
+        "code": 1200
+    },
+    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
+        "category": "Error",
+        "code": 1201
+    },
+    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+        "category": "Error",
+        "code": 1202
+    },
+    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+        "category": "Error",
+        "code": 1203
+    },
+    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+        "category": "Error",
+        "code": 1204
+    },
+    "Decorators are only available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1205
+    },
+    "Decorators are not valid here.": {
+        "category": "Error",
+        "code": 1206
+    },
+    "Decorators cannot be applied to multiple get/set accessors of the same name.": {
+        "category": "Error",
+        "code": 1207
+    },
+    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1208
+    },
+    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1209
+    },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code":  1210
+    },
+    "A class declaration without the 'default' modifier must have a name": {
+        "category": "Error",
+        "code": 1211
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1288,10 +1347,6 @@
         "category": "Error",
         "code": 2481
     },
-    "'for...of' statements are only available when targeting ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 2482
-    },
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2483
@@ -1299,6 +1354,70 @@
     "Export declaration conflicts with exported declaration of '{0}'": {
         "category": "Error",
         "code": 2484
+    },
+    "The left-hand side of a 'for...of' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2485
+    },
+    "The left-hand side of a 'for...in' statement cannot be a previously defined constant.": {
+        "category": "Error",
+        "code": 2486
+    },
+    "Invalid left-hand side in 'for...of' statement.": {
+        "category": "Error",
+        "code": 2487
+    },
+    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2488
+    },
+    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2489
+    },
+    "The type returned by the 'next()' method of an iterator must have a 'value' property.": {
+        "category": "Error",
+        "code": 2490
+    },
+    "The left-hand side of a 'for...in' statement cannot be a destructuring pattern.": {
+        "category": "Error",
+        "code": 2491
+    },
+    "Cannot redeclare identifier '{0}' in catch clause": {
+        "category": "Error",
+        "code": 2492
+    },
+    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+        "category": "Error",
+        "code": 2493
+    },
+    "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 2494
+    },
+    "Type '{0}' is not an array type or a string type.": {
+        "category": "Error",
+        "code": 2495
+    },
+    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+        "category": "Error",
+        "code": 2496
+    },
+    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+        "category": "Error",
+        "code": 2497
+    },
+    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+        "category": "Error",
+        "code": 2498
+    },
+    "An interface can only extend an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2499
+    },
+    "A class can only implement an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2500
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1577,6 +1696,14 @@
         "category": "Error",
         "code": 4081
     },
+    "Default export of the module has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4082
+    },
+    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 4091
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1624,6 +1751,26 @@
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
+    },
+    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5043
+    },
+    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5044
+    },
+    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5045
+    },
+    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5046
+    },
+    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5047
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -1797,6 +1944,10 @@
         "category": "Message",
         "code": 6056
     },
+    "Preserve new-lines when emitting code.": {
+        "category": "Message",
+        "code": 6057
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -1870,6 +2021,71 @@
         "category": "Error",
         "code": 8001
     },
+    "'import ... =' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8002
+    },
+    "'export=' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8003
+    },
+    "'type parameter declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8004
+    },
+    "'implements clauses' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8005
+    },
+    "'interface declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8006
+    },
+    "'module declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'type aliases' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8008
+    },
+    "'{0}' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8009
+    },
+    "'types' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8010
+    },
+    "'type arguments' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8011
+    },
+    "'parameter modifiers' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8012
+    },
+    "'?' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
+    "'property declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8014
+    },
+    "'enum declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8015
+    },
+    "'type assertion expressions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8016
+    },
+    "'decorators' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8017
+    },
+
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000
@@ -1878,12 +2094,16 @@
         "category": "Error",
         "code": 9001
     },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
     },
-    "'for...of' statements are not currently supported.": {
+    "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
+    },
+    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+        "category": "Error",
+        "code": 9004
     }
 }

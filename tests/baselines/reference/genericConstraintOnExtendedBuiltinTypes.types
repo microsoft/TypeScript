@@ -12,7 +12,7 @@ declare module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 >Number : Number
->EndGate : unknown
+>EndGate : typeof EndGate
 >ICloneable : EndGate.ICloneable
 
 module EndGate.Tweening {

@@ -39,13 +39,13 @@ var ObjectLiteral;
     var ThisInObjectLiteral = {
         _foo: '1',
         get foo() {
-            return super._foo;
+            return _super._foo;
         },
         set foo(value) {
-            super._foo = value;
+            _super._foo = value;
         },
         test: function () {
-            return super._foo;
+            return _super._foo;
         }
     };
 })(ObjectLiteral || (ObjectLiteral = {}));
@@ -63,7 +63,7 @@ var SuperObjectTest = (function (_super) {
     SuperObjectTest.prototype.testing = function () {
         var test = {
             get F() {
-                return super.test.call(this);
+                return _super.test.call(this);
             }
         };
     };

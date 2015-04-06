@@ -179,19 +179,19 @@ interface ObjectConstructor {
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes. 
       */
-    seal(o: any): any;
+    seal<T>(o: T): T;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze(o: any): any;
+    freeze<T>(o: T): T;
 
     /**
       * Prevents the addition of new properties to an object.
       * @param o Object to make non-extensible. 
       */
-    preventExtensions(o: any): any;
+    preventExtensions<T>(o: T): T;
 
     /**
       * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
@@ -425,6 +425,9 @@ interface String {
       */
     substr(from: number, length?: number): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): string;
+
     [index: number]: string;
 }
 
@@ -477,6 +480,9 @@ interface Number {
       * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
       */
     toPrecision(precision?: number): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): number;
 }
 
 interface NumberConstructor {
@@ -1164,6 +1170,20 @@ interface ArrayConstructor {
 }
 
 declare var Array: ArrayConstructor;
+
+interface TypedPropertyDescriptor<T> {
+    enumerable?: boolean;
+    configurable?: boolean;
+    writable?: boolean;
+    value?: T;
+    get?: () => T;
+    set?: (value: T) => void;
+}
+
+declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
+declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
+declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
+declare type ParameterDecorator = (target: Function, propertyKey: string | symbol, parameterIndex: number) => void;
 declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
@@ -1396,22 +1416,22 @@ interface ArrayLike<T> {
 
 interface Array<T> {
     /** Iterator */
-    [Symbol.iterator] (): Iterator<T>;
+    [Symbol.iterator](): IterableIterator<T>;
 
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, T]>;
+    entries(): IterableIterator<[number, T]>;
 
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<T>;
+    values(): IterableIterator<T>;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -1495,7 +1515,7 @@ interface ArrayConstructor {
 
 interface String {
     /** Iterator */
-    [Symbol.iterator] (): Iterator<string>;
+    [Symbol.iterator](): IterableIterator<string>;
 
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
@@ -1613,12 +1633,17 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    [Symbol.iterator](): Iterator<T>;
     next(): IteratorResult<T>;
+    return?(value?: any): IteratorResult<T>;
+    throw?(e?: any): IteratorResult<T>;
 }
 
 interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;
+}
+
+interface IterableIterator<T> extends Iterator<T> {
+    [Symbol.iterator](): IterableIterator<T>;
 }
 
 interface GeneratorFunction extends Function {
@@ -1636,10 +1661,11 @@ interface GeneratorFunctionConstructor {
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
 
-interface Generator<T> extends Iterator<T> {
+interface Generator<T> extends IterableIterator<T> {
     next(value?: any): IteratorResult<T>;
-    throw (exception: any): IteratorResult<T>;
-    return (value: T): IteratorResult<T>;
+    throw(exception: any): IteratorResult<T>;
+    return(value: T): IteratorResult<T>;
+    [Symbol.iterator](): Generator<T>;
     [Symbol.toStringTag]: string;
 }
 
@@ -1807,15 +1833,15 @@ interface RegExp {
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    entries(): Iterator<[K, V]>;
+    entries(): IterableIterator<[K, V]>;
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V;
     has(key: K): boolean;
-    keys(): Iterator<K>;
+    keys(): IterableIterator<K>;
     set(key: K, value?: V): Map<K, V>;
     size: number;
-    values(): Iterator<V>;
-    [Symbol.iterator]():Iterator<[K,V]>;
+    values(): IterableIterator<V>;
+    [Symbol.iterator]():IterableIterator<[K,V]>;
     [Symbol.toStringTag]: string;
 }
 
@@ -1846,13 +1872,13 @@ interface Set<T> {
     add(value: T): Set<T>;
     clear(): void;
     delete(value: T): boolean;
-    entries(): Iterator<[T, T]>;
+    entries(): IterableIterator<[T, T]>;
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
-    keys(): Iterator<T>;
+    keys(): IterableIterator<T>;
     size: number;
-    values(): Iterator<T>;
-    [Symbol.iterator]():Iterator<T>;
+    values(): IterableIterator<T>;
+    [Symbol.iterator]():IterableIterator<T>;
     [Symbol.toStringTag]: string;
 }
 
@@ -2083,7 +2109,7 @@ interface Int8Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2163,7 +2189,7 @@ interface Int8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2300,10 +2326,10 @@ interface Int8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int8ArrayConstructor {
@@ -2373,7 +2399,7 @@ interface Uint8Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2453,7 +2479,7 @@ interface Uint8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2590,10 +2616,10 @@ interface Uint8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint8ArrayConstructor {
@@ -2663,7 +2689,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2743,7 +2769,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2880,10 +2906,10 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -2953,7 +2979,7 @@ interface Int16Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3033,7 +3059,7 @@ interface Int16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3170,10 +3196,10 @@ interface Int16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int16ArrayConstructor {
@@ -3243,7 +3269,7 @@ interface Uint16Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3323,7 +3349,7 @@ interface Uint16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3460,10 +3486,10 @@ interface Uint16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint16ArrayConstructor {
@@ -3533,7 +3559,7 @@ interface Int32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3613,7 +3639,7 @@ interface Int32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3750,10 +3776,10 @@ interface Int32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int32ArrayConstructor {
@@ -3823,7 +3849,7 @@ interface Uint32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -3903,7 +3929,7 @@ interface Uint32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4040,10 +4066,10 @@ interface Uint32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint32ArrayConstructor {
@@ -4113,7 +4139,7 @@ interface Float32Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -4193,7 +4219,7 @@ interface Float32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4330,10 +4356,10 @@ interface Float32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float32ArrayConstructor {
@@ -4403,7 +4429,7 @@ interface Float64Array {
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
-    entries(): Iterator<[number, number]>;
+    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -4483,7 +4509,7 @@ interface Float64Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): Iterator<number>;
+    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -4620,10 +4646,10 @@ interface Float64Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Iterator<number>;
+    values(): IterableIterator<number>;
 
     [index: number]: number;
-    [Symbol.iterator] (): Iterator<number>;
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float64ArrayConstructor {
@@ -4682,7 +4708,7 @@ declare var Reflect: {
     construct(target: Function, argumentsList: ArrayLike<any>): any;
     defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
     deleteProperty(target: any, propertyKey: PropertyKey): boolean;
-    enumerate(target: any): Iterator<any>;
+    enumerate(target: any): IterableIterator<any>;
     get(target: any, propertyKey: PropertyKey, receiver?: any): any;
     getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     getPrototypeOf(target: any): any;
@@ -17179,7 +17205,11 @@ declare function importScripts(...urls: string[]): void;
 /// Windows Script Host APIS
 /////////////////////////////
 
-declare var ActiveXObject: { new (s: string): any; };
+
+interface ActiveXObject {
+    new (s: string): any;
+}
+declare var ActiveXObject: ActiveXObject;
 
 interface ITextWriter {
     Write(s: string): void;
@@ -17187,11 +17217,157 @@ interface ITextWriter {
     Close(): void;
 }
 
-declare var WScript: {
-    Echo(s: any): void;
-    StdErr: ITextWriter;
-    StdOut: ITextWriter;
-    Arguments: { length: number; Item(n: number): string; };
-    ScriptFullName: string;
-    Quit(exitCode?: number): number;
+interface TextStreamBase {
+    /**
+     * The column number of the current character position in an input stream.
+     */
+    Column: number;
+    /**
+     * The current line number in an input stream.
+     */
+    Line: number;
+    /**
+     * Closes a text stream.
+     * It is not necessary to close standard streams; they close automatically when the process ends. If you close a standard stream, be aware that any other pointers to that standard stream become invalid.
+     */
+    Close(): void;
 }
+
+interface TextStreamWriter extends TextStreamBase {
+    /**
+     * Sends a string to an output stream.
+     */
+    Write(s: string): void;
+    /**
+     * Sends a specified number of blank lines (newline characters) to an output stream.
+     */
+    WriteBlankLines(intLines: number): void;
+    /**
+     * Sends a string followed by a newline character to an output stream.
+     */
+    WriteLine(s: string): void;
+}
+
+interface TextStreamReader extends TextStreamBase {
+    /**
+     * Returns a specified number of characters from an input stream, beginning at the current pointer position.
+     * Does not return until the ENTER key is pressed.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    Read(characters: number): string;
+    /**
+     * Returns all characters from an input stream.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    ReadAll(): string;
+    /**
+     * Returns an entire line from an input stream.
+     * Although this method extracts the newline character, it does not add it to the returned string.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    ReadLine(): string;
+    /**
+     * Skips a specified number of characters when reading from an input text stream.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     * @param characters Positive number of characters to skip forward. (Backward skipping is not supported.)
+     */
+    Skip(characters: number): void;
+    /**
+     * Skips the next line when reading from an input text stream.
+     * Can only be used on a stream in reading mode, not writing or appending mode.
+     */
+    SkipLine(): void;
+    /**
+     * Indicates whether the stream pointer position is at the end of a line.
+     */
+    AtEndOfLine: boolean;
+    /**
+     * Indicates whether the stream pointer position is at the end of a stream.
+     */
+    AtEndOfStream: boolean;
+}
+
+declare var WScript: {
+    /**
+    * Outputs text to either a message box (under WScript.exe) or the command console window followed by a newline (under CScript.ext).
+    */
+    Echo(s: any): void;
+    /**
+     * Exposes the write-only error output stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdErr: TextStreamWriter;
+    /**
+     * Exposes the write-only output stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdOut: TextStreamWriter;
+    Arguments: { length: number; Item(n: number): string; };
+    /**
+     *  The full path of the currently running script.
+     */
+    ScriptFullName: string;
+    /**
+     * Forces the script to stop immediately, with an optional exit code.
+     */
+    Quit(exitCode?: number): number;
+    /**
+     * The Windows Script Host build version number.
+     */
+    BuildVersion: number;
+    /**
+     * Fully qualified path of the host executable.
+     */
+    FullName: string;
+    /**
+     * Gets/sets the script mode - interactive(true) or batch(false).
+     */
+    Interactive: boolean;
+    /**
+     * The name of the host executable (WScript.exe or CScript.exe).
+     */
+    Name: string;
+    /**
+     * Path of the directory containing the host executable.
+     */
+    Path: string;
+    /**
+     * The filename of the currently running script.
+     */
+    ScriptName: string;
+    /**
+     * Exposes the read-only input stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdIn: TextStreamReader;
+    /**
+     * Windows Script Host version
+     */
+    Version: string;
+    /**
+     * Connects a COM object's event sources to functions named with a given prefix, in the form prefix_event.
+     */
+    ConnectObject(objEventSource: any, strPrefix: string): void;
+    /**
+     * Creates a COM object.
+     * @param strProgiID
+     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     */
+    CreateObject(strProgID: string, strPrefix?: string): any;
+    /**
+     * Disconnects a COM object from its event sources.
+     */
+    DisconnectObject(obj: any): void;
+    /**
+     * Retrieves an existing object with the specified ProgID from memory, or creates a new one from a file.
+     * @param strPathname Fully qualified path to the file containing the object persisted to disk. For objects in memory, pass a zero-length string.
+     * @param strProgID
+     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     */
+    GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any;
+    /**
+     * Suspends script execution for a specified length of time, then continues execution.
+     * @param intTime Interval (in milliseconds) to suspend script execution.
+     */
+    Sleep(intTime: number): void;
+};

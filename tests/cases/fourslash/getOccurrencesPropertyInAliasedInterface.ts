@@ -1,4 +1,4 @@
-﻿////module m {
+////module m {
 ////    export interface Foo {
 ////        [|abc|]
 ////    }
@@ -15,7 +15,6 @@
 ////}
 ////
 ////(new C()).[|abc|];
-
 test.ranges().forEach(r => {
     goTo.position(r.start);
 

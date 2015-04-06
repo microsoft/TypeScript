@@ -4,9 +4,6 @@ class C {
 }
 
 //// [parserComputedPropertyName12.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype[e] = function () { };
-    return C;
-})();
+class C {
+    [e]() { }
+}

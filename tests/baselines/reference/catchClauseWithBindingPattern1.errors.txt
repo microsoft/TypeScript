@@ -1,0 +1,10 @@
+tests/cases/compiler/catchClauseWithBindingPattern1.ts(3,8): error TS1195: Catch clause variable name must be an identifier.
+
+
+==== tests/cases/compiler/catchClauseWithBindingPattern1.ts (1 errors) ====
+    try {
+    }
+    catch ({a}) {
+           ~
+!!! error TS1195: Catch clause variable name must be an identifier.
+    }

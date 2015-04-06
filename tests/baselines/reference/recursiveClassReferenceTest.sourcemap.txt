@@ -139,7 +139,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >        ^^^^
 3 >            ^^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^^^^->
+5 >                  ^^^^^^^^^^^^->
 1 >.
 2 >        
 3 >            Thing
@@ -159,16 +159,16 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(13, 18) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
 4 >Emitted(13, 19) Source(42, 2) + SourceIndex(0) name (Sample.Actions)
 ---
->>>        (function (_Thing_1) {
+>>>        (function (Thing_1) {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
-3 >                   ^^^^^^^^
+3 >                   ^^^^^^^
 1->
 2 >        
 3 >                   Thing
 1->Emitted(14, 9) Source(32, 23) + SourceIndex(0) name (Sample.Actions)
 2 >Emitted(14, 20) Source(32, 23) + SourceIndex(0) name (Sample.Actions)
-3 >Emitted(14, 28) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
+3 >Emitted(14, 27) Source(32, 28) + SourceIndex(0) name (Sample.Actions)
 ---
 >>>            var Find;
 1 >^^^^^^^^^^^^
@@ -215,33 +215,22 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                var StartFindAction = (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^
-3 >                    ^^^^^^^^^^^^^^^
-4 >                                   ^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >	
-2 >                export class 
-3 >                    StartFindAction
 1->Emitted(17, 17) Source(33, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find)
-2 >Emitted(17, 21) Source(33, 15) + SourceIndex(0) name (Sample.Actions.Thing.Find)
-3 >Emitted(17, 36) Source(33, 30) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 ---
 >>>                    function StartFindAction() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^
-3 >                             ^^^^^^^^^^^^^^^
+2 >                    ^^->
 1->
-2 >                    export class 
-3 >                             StartFindAction
 1->Emitted(18, 21) Source(33, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction)
-2 >Emitted(18, 30) Source(33, 15) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction)
-3 >Emitted(18, 45) Source(33, 30) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction)
 ---
 >>>                    }
-1 >^^^^^^^^^^^^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
 3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > implements Sample.Thing.IAction {
+1->export class StartFindAction implements Sample.Thing.IAction {
   >		
   >		public getId() { return "yo"; }
   >		
@@ -251,7 +240,7 @@ sourceFile:recursiveClassReferenceTest.ts
   >		}
   >	
 2 >                    }
-1 >Emitted(19, 21) Source(41, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction.constructor)
+1->Emitted(19, 21) Source(41, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction.constructor)
 2 >Emitted(19, 22) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find.StartFindAction.constructor)
 ---
 >>>                    StartFindAction.prototype.getId = function () { return "yo"; };
@@ -369,39 +358,36 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                Find.StartFindAction = StartFindAction;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^
-3 >                                    ^^^
-4 >                                       ^^^^^^^^^^^^^^^
-5 >                                                      ^
-6 >                                                       ^^^^^^^->
+3 >                                    ^^^^^^^^^^^^^^^^^^
+4 >                                                      ^
+5 >                                                       ^^^^^->
 1->
 2 >                StartFindAction
-3 >                                    
-4 >                                       StartFindAction implements Sample.Thing.IAction {
-  >                                       		
-  >                                       		public getId() { return "yo"; }
-  >                                       		
-  >                                       		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                       
-  >                                       			return true;
-  >                                       		}
-  >                                       	}
-5 >                                                      
+3 >                                     implements Sample.Thing.IAction {
+  >                                    		
+  >                                    		public getId() { return "yo"; }
+  >                                    		
+  >                                    		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                    
+  >                                    			return true;
+  >                                    		}
+  >                                    	}
+4 >                                                      
 1->Emitted(26, 17) Source(33, 15) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 2 >Emitted(26, 37) Source(33, 30) + SourceIndex(0) name (Sample.Actions.Thing.Find)
-3 >Emitted(26, 40) Source(33, 15) + SourceIndex(0) name (Sample.Actions.Thing.Find)
-4 >Emitted(26, 55) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
-5 >Emitted(26, 56) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
+3 >Emitted(26, 55) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
+4 >Emitted(26, 56) Source(41, 3) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 ---
->>>            })(Find = _Thing_1.Find || (_Thing_1.Find = {}));
+>>>            })(Find = Thing_1.Find || (Thing_1.Find = {}));
 1->^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^^^^
 5 >                   ^^^
-6 >                      ^^^^^^^^^^^^^
-7 >                                   ^^^^^
-8 >                                        ^^^^^^^^^^^^^
-9 >                                                     ^^^^^^^^
+6 >                      ^^^^^^^^^^^^
+7 >                                  ^^^^^
+8 >                                       ^^^^^^^^^^^^
+9 >                                                   ^^^^^^^^
 1->
   >
 2 >            }
@@ -409,28 +395,28 @@ sourceFile:recursiveClassReferenceTest.ts
 4 >               Find
 5 >                   
 6 >                      Find
-7 >                                   
-8 >                                        Find
-9 >                                                      {
-  >                                                     	export class StartFindAction implements Sample.Thing.IAction {
-  >                                                     		
-  >                                                     		public getId() { return "yo"; }
-  >                                                     		
-  >                                                     		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                                     
-  >                                                     			return true;
-  >                                                     		}
-  >                                                     	}
-  >                                                     }
+7 >                                  
+8 >                                       Find
+9 >                                                    {
+  >                                                   	export class StartFindAction implements Sample.Thing.IAction {
+  >                                                   		
+  >                                                   		public getId() { return "yo"; }
+  >                                                   		
+  >                                                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                                   
+  >                                                   			return true;
+  >                                                   		}
+  >                                                   	}
+  >                                                   }
 1->Emitted(27, 13) Source(42, 1) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 2 >Emitted(27, 14) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing.Find)
 3 >Emitted(27, 16) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
 4 >Emitted(27, 20) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
 5 >Emitted(27, 23) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
-6 >Emitted(27, 36) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
-7 >Emitted(27, 41) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
-8 >Emitted(27, 54) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
-9 >Emitted(27, 62) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing)
+6 >Emitted(27, 35) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
+7 >Emitted(27, 40) Source(32, 29) + SourceIndex(0) name (Sample.Actions.Thing)
+8 >Emitted(27, 52) Source(32, 33) + SourceIndex(0) name (Sample.Actions.Thing)
+9 >Emitted(27, 60) Source(42, 2) + SourceIndex(0) name (Sample.Actions.Thing)
 ---
 >>>        })(Thing = Actions.Thing || (Actions.Thing = {}));
 1 >^^^^^^^^
@@ -694,44 +680,27 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>            var FindWidget = (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^
-3 >                ^^^^^^^^^^
-4 >                          ^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >	
-2 >            export class 
-3 >                FindWidget
 1->Emitted(37, 13) Source(45, 2) + SourceIndex(0) name (Sample.Thing.Widgets)
-2 >Emitted(37, 17) Source(45, 15) + SourceIndex(0) name (Sample.Thing.Widgets)
-3 >Emitted(37, 27) Source(45, 25) + SourceIndex(0) name (Sample.Thing.Widgets)
 ---
 >>>                function FindWidget(codeThing) {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^
-3 >                         ^^^^^^^^^^
-4 >                                   ^
-5 >                                    ^^^^^^^^^
-6 >                                             ^^^->
-1-> implements Sample.Thing.IWidget {
+2 >                ^^^^^^^^^^^^^^^^^^^^
+3 >                                    ^^^^^^^^^
+4 >                                             ^^^->
+1->export class FindWidget implements Sample.Thing.IWidget {
   >
   >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
   >			
   >		private domNode:any = null;
   >		
-2 >                
-3 >                         FindWidget
-4 >                                    implements Sample.Thing.IWidget {
-  >                                   
-  >                                   		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                                   			
-  >                                   		private domNode:any = null;
-  >                                   		constructor(private 
-5 >                                    codeThing: Sample.Thing.ICodeThing
+2 >                constructor(private 
+3 >                                    codeThing: Sample.Thing.ICodeThing
 1->Emitted(38, 17) Source(50, 3) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-2 >Emitted(38, 26) Source(45, 15) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-3 >Emitted(38, 36) Source(45, 25) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-4 >Emitted(38, 37) Source(50, 23) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-5 >Emitted(38, 46) Source(50, 57) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
+2 >Emitted(38, 37) Source(50, 23) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
+3 >Emitted(38, 46) Source(50, 57) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
 ---
 >>>                    this.codeThing = codeThing;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -975,8 +944,8 @@ sourceFile:recursiveClassReferenceTest.ts
   >
   >		
 2 >                }
-1 >Emitted(51, 17) Source(61, 3) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
-2 >Emitted(51, 18) Source(61, 4) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget)
+1 >Emitted(51, 17) Source(61, 3) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.destroy)
+2 >Emitted(51, 18) Source(61, 4) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.destroy)
 ---
 >>>                return FindWidget;
 1->^^^^^^^^^^^^^^^^
@@ -1024,38 +993,35 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>            Widgets.FindWidget = FindWidget;
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^
-3 >                              ^^^
-4 >                                 ^^^^^^^^^^
-5 >                                           ^
-6 >                                            ^^^^^^^^^^^^^^^^^->
+3 >                              ^^^^^^^^^^^^^
+4 >                                           ^
+5 >                                            ^^^^^^^^^^^^^^^^^->
 1->
 2 >            FindWidget
-3 >                              
-4 >                                 FindWidget implements Sample.Thing.IWidget {
-  >                                 
-  >                                 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                                 			
-  >                                 		private domNode:any = null;
-  >                                 		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >                                 		    // scenario 1
-  >                                 		    codeThing.addWidget("addWidget", this);
-  >                                 		}
-  >                                 		
-  >                                 		public getDomNode() {
-  >                                 			return domNode;
-  >                                 		}
-  >                                 		
-  >                                 		public destroy() {
-  >                                 
-  >                                 		}
-  >                                 
-  >                                 	}
-5 >                                           
+3 >                               implements Sample.Thing.IWidget {
+  >                              
+  >                              		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >                              			
+  >                              		private domNode:any = null;
+  >                              		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >                              		    // scenario 1
+  >                              		    codeThing.addWidget("addWidget", this);
+  >                              		}
+  >                              		
+  >                              		public getDomNode() {
+  >                              			return domNode;
+  >                              		}
+  >                              		
+  >                              		public destroy() {
+  >                              
+  >                              		}
+  >                              
+  >                              	}
+4 >                                           
 1->Emitted(54, 13) Source(45, 15) + SourceIndex(0) name (Sample.Thing.Widgets)
 2 >Emitted(54, 31) Source(45, 25) + SourceIndex(0) name (Sample.Thing.Widgets)
-3 >Emitted(54, 34) Source(45, 15) + SourceIndex(0) name (Sample.Thing.Widgets)
-4 >Emitted(54, 44) Source(63, 3) + SourceIndex(0) name (Sample.Thing.Widgets)
-5 >Emitted(54, 45) Source(63, 3) + SourceIndex(0) name (Sample.Thing.Widgets)
+3 >Emitted(54, 44) Source(63, 3) + SourceIndex(0) name (Sample.Thing.Widgets)
+4 >Emitted(54, 45) Source(63, 3) + SourceIndex(0) name (Sample.Thing.Widgets)
 ---
 >>>        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
 1->^^^^^^^^
@@ -1202,37 +1168,26 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>var AbstractMode = (function () {
 1->
-2 >^^^^
-3 >    ^^^^^^^^^^^^
-4 >                ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >interface IMode { getInitialState(): IState;} 
   >
-2 >class 
-3 >    AbstractMode
 1->Emitted(58, 1) Source(67, 1) + SourceIndex(0)
-2 >Emitted(58, 5) Source(67, 7) + SourceIndex(0)
-3 >Emitted(58, 17) Source(67, 19) + SourceIndex(0)
 ---
 >>>    function AbstractMode() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             AbstractMode
 1->Emitted(59, 5) Source(67, 1) + SourceIndex(0) name (AbstractMode)
-2 >Emitted(59, 14) Source(67, 7) + SourceIndex(0) name (AbstractMode)
-3 >Emitted(59, 26) Source(67, 19) + SourceIndex(0) name (AbstractMode)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > implements IMode { public getInitialState(): IState { return null;} 
+1->class AbstractMode implements IMode { public getInitialState(): IState { return null;} 
 2 >    }
-1 >Emitted(60, 5) Source(67, 88) + SourceIndex(0) name (AbstractMode.constructor)
+1->Emitted(60, 5) Source(67, 88) + SourceIndex(0) name (AbstractMode.constructor)
 2 >Emitted(60, 6) Source(67, 89) + SourceIndex(0) name (AbstractMode.constructor)
 ---
 >>>    AbstractMode.prototype.getInitialState = function () { return null; };
@@ -1509,37 +1464,24 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                var State = (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^
-3 >                    ^^^^^
-4 >                         ^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >	
   >	
-2 >                export class 
-3 >                    State
 1->Emitted(72, 17) Source(78, 2) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-2 >Emitted(72, 21) Source(78, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-3 >Emitted(72, 26) Source(78, 20) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 ---
 >>>                    function State(mode) {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^
-3 >                             ^^^^^
-4 >                                  ^
-5 >                                   ^^^^
-6 >                                       ^^^->
-1-> implements IState {		
+2 >                    ^^^^^^^^^^^^^^^
+3 >                                   ^^^^
+4 >                                       ^^^->
+1->export class State implements IState {		
   >        
-2 >                    
-3 >                             State
-4 >                                   implements IState {		
-  >                                          constructor(private 
-5 >                                   mode: IMode
+2 >                    constructor(private 
+3 >                                   mode: IMode
 1->Emitted(73, 21) Source(79, 9) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
-2 >Emitted(73, 30) Source(78, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
-3 >Emitted(73, 35) Source(78, 20) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
-4 >Emitted(73, 36) Source(79, 29) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
-5 >Emitted(73, 40) Source(79, 40) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
+2 >Emitted(73, 36) Source(79, 29) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
+3 >Emitted(73, 40) Source(79, 40) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.State)
 ---
 >>>                        this.mode = mode;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1732,76 +1674,55 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                PlainText.State = State;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^
-3 >                               ^^^
-4 >                                  ^^^^^
-5 >                                       ^
-6 >                                        ^^^^^^^^->
+3 >                               ^^^^^^^^
+4 >                                       ^
+5 >                                        ^^^^^^^^->
 1->
 2 >                State
-3 >                               
-4 >                                  State implements IState {		
-  >                                          constructor(private mode: IMode) { }
-  >                                  		public clone():IState {
-  >                                  			return this;
-  >                                  		}
-  >                                  
-  >                                  		public equals(other:IState):boolean {
-  >                                  			return this === other;
-  >                                  		}
-  >                                  		
-  >                                  		public getMode(): IMode { return mode; }
-  >                                  	}
-5 >                                       
+3 >                                implements IState {		
+  >                                       constructor(private mode: IMode) { }
+  >                               		public clone():IState {
+  >                               			return this;
+  >                               		}
+  >                               
+  >                               		public equals(other:IState):boolean {
+  >                               			return this === other;
+  >                               		}
+  >                               		
+  >                               		public getMode(): IMode { return mode; }
+  >                               	}
+4 >                                       
 1->Emitted(85, 17) Source(78, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 2 >Emitted(85, 32) Source(78, 20) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-3 >Emitted(85, 35) Source(78, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-4 >Emitted(85, 40) Source(89, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-5 >Emitted(85, 41) Source(89, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
+3 >Emitted(85, 40) Source(89, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
+4 >Emitted(85, 41) Source(89, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 ---
 >>>                var Mode = (function (_super) {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^
-3 >                    ^^^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >	
   >	
-2 >                export class 
-3 >                    Mode
 1->Emitted(86, 17) Source(91, 2) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-2 >Emitted(86, 21) Source(91, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-3 >Emitted(86, 25) Source(91, 19) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 ---
 >>>                    __extends(Mode, _super);
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^
-3 >                              ^^^^
-4 >                                  ^^^^^^^^^^
-1-> extends 
-2 >                    
-3 >                              Mode
-4 >                                   extends AbstractMode
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^
+1->export class Mode extends 
+2 >                    AbstractMode
 1->Emitted(87, 21) Source(91, 28) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
-2 >Emitted(87, 31) Source(91, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
-3 >Emitted(87, 35) Source(91, 19) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
-4 >Emitted(87, 45) Source(91, 40) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
+2 >Emitted(87, 45) Source(91, 40) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
 ---
 >>>                    function Mode() {
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^
-3 >                             ^^^^
-4 >                                 ^^^^^^^^^^^^^^^^^^^^^^->
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >                    export class 
-3 >                             Mode
 1 >Emitted(88, 21) Source(91, 2) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
-2 >Emitted(88, 30) Source(91, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
-3 >Emitted(88, 34) Source(91, 19) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode)
 ---
 >>>                        _super.apply(this, arguments);
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1-> extends 
+1->export class Mode extends 
 2 >                        AbstractMode
 1->Emitted(89, 25) Source(91, 28) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode.constructor)
 2 >Emitted(89, 55) Source(91, 40) + SourceIndex(0) name (Sample.Thing.Languages.PlainText.Mode.constructor)
@@ -1928,28 +1849,25 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                PlainText.Mode = Mode;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^
-3 >                              ^^^
-4 >                                 ^^^^
-5 >                                     ^
-6 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                              ^^^^^^^
+4 >                                     ^
+5 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                Mode
-3 >                              
-4 >                                 Mode extends AbstractMode {
-  >                                 
-  >                                 		// scenario 2
-  >                                 		public getInitialState(): IState {
-  >                                 			return new State(self);
-  >                                 		}
-  >                                 
-  >                                 
-  >                                 	}
-5 >                                     
+3 >                               extends AbstractMode {
+  >                              
+  >                              		// scenario 2
+  >                              		public getInitialState(): IState {
+  >                              			return new State(self);
+  >                              		}
+  >                              
+  >                              
+  >                              	}
+4 >                                     
 1->Emitted(97, 17) Source(91, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 2 >Emitted(97, 31) Source(91, 19) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-3 >Emitted(97, 34) Source(91, 15) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-4 >Emitted(97, 38) Source(99, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
-5 >Emitted(97, 39) Source(99, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
+3 >Emitted(97, 38) Source(99, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
+4 >Emitted(97, 39) Source(99, 3) + SourceIndex(0) name (Sample.Thing.Languages.PlainText)
 ---
 >>>            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
 1->^^^^^^^^^^^^

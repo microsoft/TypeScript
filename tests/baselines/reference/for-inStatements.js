@@ -158,4 +158,4 @@ var Color;
     Color[Color["Blue"] = 1] = "Blue";
 })(Color || (Color = {}));
 for (var x in Color) { }
-for (var x in 1 /* Blue */) { }
+for (var x in Color.Blue) { }

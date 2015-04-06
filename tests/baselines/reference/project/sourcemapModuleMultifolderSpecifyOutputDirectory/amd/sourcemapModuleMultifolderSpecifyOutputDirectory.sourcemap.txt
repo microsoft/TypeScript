@@ -29,37 +29,26 @@ sourceFile:../../../../ref/m1.ts
 ---
 >>>    var m1_c1 = (function () {
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^
-4 >             ^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >    export class 
-3 >        m1_c1
 1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
-2 >Emitted(3, 9) Source(2, 14) + SourceIndex(0)
-3 >Emitted(3, 14) Source(2, 19) + SourceIndex(0)
 ---
 >>>        function m1_c1() {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^^^^^
+2 >        ^^->
 1->
-2 >        export class 
-3 >                 m1_c1
 1->Emitted(4, 9) Source(2, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(4, 18) Source(2, 14) + SourceIndex(0) name (m1_c1)
-3 >Emitted(4, 23) Source(2, 19) + SourceIndex(0) name (m1_c1)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^^^^->
-1 > {
+1->export class m1_c1 {
   >    public m1_c1_p1: number;
   >
 2 >        }
-1 >Emitted(5, 9) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(5, 9) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
 2 >Emitted(5, 10) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
 ---
 >>>        return m1_c1;
@@ -90,22 +79,19 @@ sourceFile:../../../../ref/m1.ts
 >>>    exports.m1_c1 = m1_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
-4 >                    ^^^^^
-5 >                         ^
-6 >                          ^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^
+4 >                         ^
+5 >                          ^^^^^^^^^^^^^^->
 1->
 2 >    m1_c1
-3 >                 
-4 >                    m1_c1 {
-  >                        public m1_c1_p1: number;
-  >                    }
-5 >                         
+3 >                  {
+  >                     public m1_c1_p1: number;
+  >                 }
+4 >                         
 1->Emitted(8, 5) Source(2, 14) + SourceIndex(0)
 2 >Emitted(8, 18) Source(2, 19) + SourceIndex(0)
-3 >Emitted(8, 21) Source(2, 14) + SourceIndex(0)
-4 >Emitted(8, 26) Source(4, 2) + SourceIndex(0)
-5 >Emitted(8, 27) Source(4, 2) + SourceIndex(0)
+3 >Emitted(8, 26) Source(4, 2) + SourceIndex(0)
+4 >Emitted(8, 27) Source(4, 2) + SourceIndex(0)
 ---
 >>>    exports.m1_instance1 = new m1_c1();
 1->^^^^
@@ -134,16 +120,10 @@ sourceFile:../../../../ref/m1.ts
 ---
 >>>    function m1_f1() {
 1 >^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^
-4 >                  ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >    export function 
-3 >             m1_f1
 1 >Emitted(10, 5) Source(7, 1) + SourceIndex(0)
-2 >Emitted(10, 14) Source(7, 17) + SourceIndex(0)
-3 >Emitted(10, 19) Source(7, 22) + SourceIndex(0)
 ---
 >>>        return exports.m1_instance1;
 1->^^^^^^^^
@@ -151,7 +131,7 @@ sourceFile:../../../../ref/m1.ts
 3 >              ^
 4 >               ^^^^^^^^^^^^^^^^^^^^
 5 >                                   ^
-1->() {
+1->export function m1_f1() {
   >    
 2 >        return
 3 >               
@@ -176,21 +156,18 @@ sourceFile:../../../../ref/m1.ts
 >>>    exports.m1_f1 = m1_f1;
 1->^^^^
 2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
-4 >                    ^^^^^
-5 >                         ^
+3 >                 ^^^^^^^^
+4 >                         ^
 1->
 2 >    m1_f1
-3 >                 
-4 >                    m1_f1() {
-  >                        return m1_instance1;
-  >                    }
-5 >                         
+3 >                 () {
+  >                     return m1_instance1;
+  >                 }
+4 >                         
 1->Emitted(13, 5) Source(7, 17) + SourceIndex(0)
 2 >Emitted(13, 18) Source(7, 22) + SourceIndex(0)
-3 >Emitted(13, 21) Source(7, 17) + SourceIndex(0)
-4 >Emitted(13, 26) Source(9, 2) + SourceIndex(0)
-5 >Emitted(13, 27) Source(9, 2) + SourceIndex(0)
+3 >Emitted(13, 26) Source(9, 2) + SourceIndex(0)
+4 >Emitted(13, 27) Source(9, 2) + SourceIndex(0)
 ---
 >>>});
 >>>//# sourceMappingURL=m1.js.map===================================================================
@@ -224,37 +201,26 @@ sourceFile:../../../../outputdir_module_multifolder_ref/m2.ts
 ---
 >>>    var m2_c1 = (function () {
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^
-4 >             ^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >    export class 
-3 >        m2_c1
 1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
-2 >Emitted(3, 9) Source(2, 14) + SourceIndex(0)
-3 >Emitted(3, 14) Source(2, 19) + SourceIndex(0)
 ---
 >>>        function m2_c1() {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^^^^^
+2 >        ^^->
 1->
-2 >        export class 
-3 >                 m2_c1
 1->Emitted(4, 9) Source(2, 1) + SourceIndex(0) name (m2_c1)
-2 >Emitted(4, 18) Source(2, 14) + SourceIndex(0) name (m2_c1)
-3 >Emitted(4, 23) Source(2, 19) + SourceIndex(0) name (m2_c1)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^^^^->
-1 > {
+1->export class m2_c1 {
   >    public m2_c1_p1: number;
   >
 2 >        }
-1 >Emitted(5, 9) Source(4, 1) + SourceIndex(0) name (m2_c1.constructor)
+1->Emitted(5, 9) Source(4, 1) + SourceIndex(0) name (m2_c1.constructor)
 2 >Emitted(5, 10) Source(4, 2) + SourceIndex(0) name (m2_c1.constructor)
 ---
 >>>        return m2_c1;
@@ -285,22 +251,19 @@ sourceFile:../../../../outputdir_module_multifolder_ref/m2.ts
 >>>    exports.m2_c1 = m2_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
-4 >                    ^^^^^
-5 >                         ^
-6 >                          ^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^
+4 >                         ^
+5 >                          ^^^^^^^^^^^^^^->
 1->
 2 >    m2_c1
-3 >                 
-4 >                    m2_c1 {
-  >                        public m2_c1_p1: number;
-  >                    }
-5 >                         
+3 >                  {
+  >                     public m2_c1_p1: number;
+  >                 }
+4 >                         
 1->Emitted(8, 5) Source(2, 14) + SourceIndex(0)
 2 >Emitted(8, 18) Source(2, 19) + SourceIndex(0)
-3 >Emitted(8, 21) Source(2, 14) + SourceIndex(0)
-4 >Emitted(8, 26) Source(4, 2) + SourceIndex(0)
-5 >Emitted(8, 27) Source(4, 2) + SourceIndex(0)
+3 >Emitted(8, 26) Source(4, 2) + SourceIndex(0)
+4 >Emitted(8, 27) Source(4, 2) + SourceIndex(0)
 ---
 >>>    exports.m2_instance1 = new m2_c1();
 1->^^^^
@@ -329,16 +292,10 @@ sourceFile:../../../../outputdir_module_multifolder_ref/m2.ts
 ---
 >>>    function m2_f1() {
 1 >^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^
-4 >                  ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >    export function 
-3 >             m2_f1
 1 >Emitted(10, 5) Source(7, 1) + SourceIndex(0)
-2 >Emitted(10, 14) Source(7, 17) + SourceIndex(0)
-3 >Emitted(10, 19) Source(7, 22) + SourceIndex(0)
 ---
 >>>        return exports.m2_instance1;
 1->^^^^^^^^
@@ -346,7 +303,7 @@ sourceFile:../../../../outputdir_module_multifolder_ref/m2.ts
 3 >              ^
 4 >               ^^^^^^^^^^^^^^^^^^^^
 5 >                                   ^
-1->() {
+1->export function m2_f1() {
   >    
 2 >        return
 3 >               
@@ -371,21 +328,18 @@ sourceFile:../../../../outputdir_module_multifolder_ref/m2.ts
 >>>    exports.m2_f1 = m2_f1;
 1->^^^^
 2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
-4 >                    ^^^^^
-5 >                         ^
+3 >                 ^^^^^^^^
+4 >                         ^
 1->
 2 >    m2_f1
-3 >                 
-4 >                    m2_f1() {
-  >                        return m2_instance1;
-  >                    }
-5 >                         
+3 >                 () {
+  >                     return m2_instance1;
+  >                 }
+4 >                         
 1->Emitted(13, 5) Source(7, 17) + SourceIndex(0)
 2 >Emitted(13, 18) Source(7, 22) + SourceIndex(0)
-3 >Emitted(13, 21) Source(7, 17) + SourceIndex(0)
-4 >Emitted(13, 26) Source(9, 2) + SourceIndex(0)
-5 >Emitted(13, 27) Source(9, 2) + SourceIndex(0)
+3 >Emitted(13, 26) Source(9, 2) + SourceIndex(0)
+4 >Emitted(13, 27) Source(9, 2) + SourceIndex(0)
 ---
 >>>});
 >>>//# sourceMappingURL=m2.js.map===================================================================
@@ -434,37 +388,26 @@ sourceFile:../../../test.ts
 ---
 >>>    var c1 = (function () {
 1->^^^^
-2 >    ^^^^
-3 >        ^^
-4 >          ^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >    export class 
-3 >        c1
 1->Emitted(3, 5) Source(4, 1) + SourceIndex(0)
-2 >Emitted(3, 9) Source(4, 14) + SourceIndex(0)
-3 >Emitted(3, 11) Source(4, 16) + SourceIndex(0)
 ---
 >>>        function c1() {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^^
+2 >        ^^->
 1->
-2 >        export class 
-3 >                 c1
 1->Emitted(4, 9) Source(4, 1) + SourceIndex(0) name (c1)
-2 >Emitted(4, 18) Source(4, 14) + SourceIndex(0) name (c1)
-3 >Emitted(4, 20) Source(4, 16) + SourceIndex(0) name (c1)
 ---
 >>>        }
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^->
-1 > {
+1->export class c1 {
   >    public p1: number;
   >
 2 >        }
-1 >Emitted(5, 9) Source(6, 1) + SourceIndex(0) name (c1.constructor)
+1->Emitted(5, 9) Source(6, 1) + SourceIndex(0) name (c1.constructor)
 2 >Emitted(5, 10) Source(6, 2) + SourceIndex(0) name (c1.constructor)
 ---
 >>>        return c1;
@@ -495,22 +438,19 @@ sourceFile:../../../test.ts
 >>>    exports.c1 = c1;
 1->^^^^
 2 >    ^^^^^^^^^^
-3 >              ^^^
-4 >                 ^^
-5 >                   ^
-6 >                    ^^^^^^^^^^^^^^->
+3 >              ^^^^^
+4 >                   ^
+5 >                    ^^^^^^^^^^^^^^->
 1->
 2 >    c1
-3 >              
-4 >                 c1 {
-  >                     public p1: number;
-  >                 }
-5 >                   
+3 >               {
+  >                  public p1: number;
+  >              }
+4 >                   
 1->Emitted(8, 5) Source(4, 14) + SourceIndex(0)
 2 >Emitted(8, 15) Source(4, 16) + SourceIndex(0)
-3 >Emitted(8, 18) Source(4, 14) + SourceIndex(0)
-4 >Emitted(8, 20) Source(6, 2) + SourceIndex(0)
-5 >Emitted(8, 21) Source(6, 2) + SourceIndex(0)
+3 >Emitted(8, 20) Source(6, 2) + SourceIndex(0)
+4 >Emitted(8, 21) Source(6, 2) + SourceIndex(0)
 ---
 >>>    exports.instance1 = new c1();
 1->^^^^
@@ -539,16 +479,10 @@ sourceFile:../../../test.ts
 ---
 >>>    function f1() {
 1 >^^^^
-2 >    ^^^^^^^^^
-3 >             ^^
-4 >               ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-2 >    export function 
-3 >             f1
 1 >Emitted(10, 5) Source(9, 1) + SourceIndex(0)
-2 >Emitted(10, 14) Source(9, 17) + SourceIndex(0)
-3 >Emitted(10, 16) Source(9, 19) + SourceIndex(0)
 ---
 >>>        return exports.instance1;
 1->^^^^^^^^
@@ -556,7 +490,7 @@ sourceFile:../../../test.ts
 3 >              ^
 4 >               ^^^^^^^^^^^^^^^^^
 5 >                                ^
-1->() {
+1->export function f1() {
   >    
 2 >        return
 3 >               
@@ -581,22 +515,19 @@ sourceFile:../../../test.ts
 >>>    exports.f1 = f1;
 1->^^^^
 2 >    ^^^^^^^^^^
-3 >              ^^^
-4 >                 ^^
-5 >                   ^
-6 >                    ^^^^^^^->
+3 >              ^^^^^
+4 >                   ^
+5 >                    ^^^^^^^->
 1->
 2 >    f1
-3 >              
-4 >                 f1() {
-  >                     return instance1;
-  >                 }
-5 >                   
+3 >              () {
+  >                  return instance1;
+  >              }
+4 >                   
 1->Emitted(13, 5) Source(9, 17) + SourceIndex(0)
 2 >Emitted(13, 15) Source(9, 19) + SourceIndex(0)
-3 >Emitted(13, 18) Source(9, 17) + SourceIndex(0)
-4 >Emitted(13, 20) Source(11, 2) + SourceIndex(0)
-5 >Emitted(13, 21) Source(11, 2) + SourceIndex(0)
+3 >Emitted(13, 20) Source(11, 2) + SourceIndex(0)
+4 >Emitted(13, 21) Source(11, 2) + SourceIndex(0)
 ---
 >>>    exports.a2 = m1.m1_c1;
 1->^^^^

@@ -41,6 +41,10 @@ declare module "typescript" {
      */
     function lastOrUndefined<T>(array: T[]): T;
     function binarySearch(array: number[], value: number): number;
+    function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     function hasProperty<T>(map: Map<T>, key: string): boolean;
     function getProperty<T>(map: Map<T>, key: string): T;
     function isEmpty<T>(map: Map<T>): boolean;
@@ -49,7 +53,6 @@ declare module "typescript" {
     function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U;
     function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U;
     function lookUp<T>(map: Map<T>, key: string): T;
-    function mapToArray<T>(map: Map<T>): T[];
     function copyMap<T>(source: Map<T>, target: Map<T>): void;
     /**
      * Creates a map from the elements of an array.
@@ -62,7 +65,7 @@ declare module "typescript" {
      * index in the array will be the one associated with the produced key.
      */
     function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
-    var localizedDiagnosticMessages: Map<string>;
+    let localizedDiagnosticMessages: Map<string>;
     function getLocaleSpecificMessage(message: string): string;
     function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -74,7 +77,7 @@ declare module "typescript" {
     function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[];
     function normalizeSlashes(path: string): string;
     function getRootLength(path: string): number;
-    var directorySeparator: string;
+    let directorySeparator: string;
     function normalizePath(path: string): string;
     function getDirectoryPath(path: string): string;
     function isUrl(path: string): boolean;
@@ -87,12 +90,6 @@ declare module "typescript" {
     function combinePaths(path1: string, path2: string): string;
     function fileExtensionIs(path: string, extension: string): boolean;
     function removeFileExtension(path: string): string;
-    /**
-     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters.
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    function escapeString(s: string): string;
     function getDefaultLibFileName(options: CompilerOptions): string;
     interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
@@ -100,7 +97,7 @@ declare module "typescript" {
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
-    var objectAllocator: ObjectAllocator;
+    let objectAllocator: ObjectAllocator;
     const enum AssertionLevel {
         None = 0,
         Normal = 1,
@@ -143,6 +140,11 @@ declare module "typescript" {
         diagnosticMessage?: DiagnosticMessage;
         isNoDefaultLib?: boolean;
     }
+    interface SynthesizedNode extends Node {
+        leadingCommentRanges?: CommentRange[];
+        trailingCommentRanges?: CommentRange[];
+        startsOnNewLine: boolean;
+    }
     function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration;
     interface StringSymbolWriter extends SymbolWriter {
         string(): string;
@@ -170,10 +172,14 @@ declare module "typescript" {
     function getTextOfNode(node: Node): string;
     function escapeIdentifier(identifier: string): string;
     function unescapeIdentifier(identifier: string): string;
+    function makeIdentifierFromModuleName(moduleName: string): string;
+    function isBlockOrCatchScoped(declaration: Declaration): boolean;
+    function getEnclosingBlockScopeContainer(node: Node): Node;
+    function isCatchClauseVariableDeclaration(declaration: Declaration): boolean;
     function declarationNameToString(name: DeclarationName): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic;
     function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
-    function getErrorSpanForNode(node: Node): Node;
+    function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
     function isExternalModule(file: SourceFile): boolean;
     function isDeclarationFile(file: SourceFile): boolean;
     function isConstEnumDeclaration(node: Node): boolean;
@@ -181,22 +187,27 @@ declare module "typescript" {
     function isConst(node: Node): boolean;
     function isLet(node: Node): boolean;
     function isPrologueDirective(node: Node): boolean;
-    function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode?: SourceFile): CommentRange[];
+    function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
     function getJsDocComments(node: Node, sourceFileOfNode: SourceFile): CommentRange[];
-    var fullTripleSlashReferencePathRegEx: RegExp;
+    let fullTripleSlashReferencePathRegEx: RegExp;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
-    function isAnyFunction(node: Node): boolean;
+    function isFunctionLike(node: Node): boolean;
     function isFunctionBlock(node: Node): boolean;
     function isObjectLiteralMethod(node: Node): boolean;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
     function getSuperContainer(node: Node, includeFunctions: boolean): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
+    function nodeCanBeDecorated(node: Node): boolean;
+    function nodeIsDecorated(node: Node): boolean;
+    function childIsDecorated(node: Node): boolean;
+    function nodeOrChildIsDecorated(node: Node): boolean;
     function isExpression(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
-    function isExternalModuleImportDeclaration(node: Node): boolean;
-    function getExternalModuleImportDeclarationExpression(node: Node): Expression;
-    function isInternalModuleImportDeclaration(node: Node): boolean;
+    function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleImportEqualsDeclarationExpression(node: Node): Expression;
+    function isInternalModuleImportEqualsDeclaration(node: Node): boolean;
+    function getExternalModuleName(node: Node): Expression;
     function hasDotDotDotToken(node: Node): boolean;
     function hasQuestionToken(node: Node): boolean;
     function hasRestParameters(s: SignatureDeclaration): boolean;
@@ -207,10 +218,12 @@ declare module "typescript" {
     function isInAmbientContext(node: Node): boolean;
     function isDeclaration(node: Node): boolean;
     function isStatement(n: Node): boolean;
-    function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean;
-    function getClassBaseTypeNode(node: ClassDeclaration): TypeReferenceNode;
-    function getClassImplementedTypeNodes(node: ClassDeclaration): NodeArray<TypeReferenceNode>;
-    function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<TypeReferenceNode>;
+    function isClassElement(n: Node): boolean;
+    function isDeclarationName(name: Node): boolean;
+    function isAliasSymbolDeclaration(node: Node): boolean;
+    function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration): HeritageClauseElement;
+    function getClassImplementsHeritageClauseElements(node: ClassDeclaration): NodeArray<HeritageClauseElement>;
+    function getInterfaceBaseTypeNodes(node: InterfaceDeclaration): NodeArray<HeritageClauseElement>;
     function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind): HeritageClause;
     function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference): SourceFile;
     function getAncestor(node: Node, kind: SyntaxKind): Node;
@@ -253,7 +266,7 @@ declare module "typescript" {
     function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
     function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
     function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
-    var unchangedTextChangeRange: TextChangeRange;
+    let unchangedTextChangeRange: TextChangeRange;
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
@@ -263,11 +276,64 @@ declare module "typescript" {
      * Vn.
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+    function nodeStartsNewLexicalEnvironment(n: Node): boolean;
+    function nodeIsSynthesized(node: Node): boolean;
+    function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node;
+    /**
+     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
+    function escapeString(s: string): string;
+    function escapeNonAsciiCharacters(s: string): string;
+    interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+    }
+    function getIndentString(level: number): string;
+    function getIndentSize(): number;
+    function createTextWriter(newLine: String): EmitTextWriter;
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string): string;
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string): string;
+    function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean): void;
+    function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number): number;
+    function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration;
+    function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean;
+    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+    };
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]): void;
+    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string, writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void): void;
+    function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string): void;
+    function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean;
+    function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean;
+    function getLocalSymbolForExportDefault(symbol: Symbol): Symbol;
 }
 declare module "typescript" {
-    var optionDeclarations: CommandLineOption[];
-    function parseCommandLine(commandLine: string[]): ParsedCommandLine;
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
     function readConfigFile(fileName: string): any;
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir
+      */
     function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
 }
 declare module "typescript" {
@@ -282,7 +348,10 @@ declare module "typescript" {
     function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean;
     function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number): boolean;
     function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number): boolean;
+    function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean;
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean;
     function findListItemInfo(node: Node): ListItemInfo;
+    function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean;
     function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node;
     function findContainingList(node: Node): Node;
     function getTouchingWord(sourceFile: SourceFile, position: number): Node;
@@ -305,9 +374,11 @@ declare module "typescript" {
     function getNodeModifiers(node: Node): string;
     function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node>;
     function isToken(n: Node): boolean;
+    function isWord(kind: SyntaxKind): boolean;
     function isComment(kind: SyntaxKind): boolean;
     function isPunctuation(kind: SyntaxKind): boolean;
     function isInsideTemplateLiteral(node: LiteralExpression, position: number): boolean;
+    function isAccessibilityModifier(kind: SyntaxKind): boolean;
     function compareDataObjects(dst: any, src: any): boolean;
 }
 declare module "typescript" {
@@ -318,6 +389,7 @@ declare module "typescript" {
     function keywordPart(kind: SyntaxKind): SymbolDisplayPart;
     function punctuationPart(kind: SyntaxKind): SymbolDisplayPart;
     function operatorPart(kind: SyntaxKind): SymbolDisplayPart;
+    function textOrKeywordPart(text: string): SymbolDisplayPart;
     function textPart(text: string): SymbolDisplayPart;
     function lineBreakPart(): SymbolDisplayPart;
     function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[];

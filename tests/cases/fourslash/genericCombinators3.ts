@@ -24,4 +24,4 @@ goTo.marker('1c');
 verify.quickInfoIs('(method) Combinators.map<number, string, string>(c: Collection<number, string>, f: (x: number, y: string) => string): Collection<number, string> (+1 overload)');
 
 goTo.marker('9');
-verify.quickInfoIs('(var) r1a: Collection<number, string>');
+verify.quickInfoIs('var r1a: Collection<number, string>');

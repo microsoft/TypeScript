@@ -5,7 +5,7 @@ tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,15): 
 
 ==== tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts (3 errors) ====
     var v : x.void;
-            ~~
+            ~
 !!! error TS2304: Cannot find name 'x'.
               ~~~~
 !!! error TS1003: Identifier expected.

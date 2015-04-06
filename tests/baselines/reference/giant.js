@@ -744,7 +744,7 @@ define(["require", "exports"], function (require, exports) {
         return C;
     })();
     var M;
-    (function (_M) {
+    (function (M_1) {
         var V;
         function F() { }
         ;
@@ -822,9 +822,9 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(M || (M = {}));
-        _M.eV;
+        M_1.eV;
         function eF() { }
-        _M.eF = eF;
+        M_1.eF = eF;
         ;
         var eC = (function () {
             function eC() {
@@ -870,7 +870,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return eC;
         })();
-        _M.eC = eC;
+        M_1.eC = eC;
         var eM;
         (function (eM) {
             var V;
@@ -900,7 +900,7 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(eM = _M.eM || (_M.eM = {}));
+        })(eM = M_1.eM || (M_1.eM = {}));
         ;
     })(M || (M = {}));
     exports.eV;
@@ -953,7 +953,7 @@ define(["require", "exports"], function (require, exports) {
     })();
     exports.eC = eC;
     var eM;
-    (function (_eM) {
+    (function (eM_1) {
         var V;
         function F() { }
         ;
@@ -1031,9 +1031,9 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
         })(M || (M = {}));
-        _eM.eV;
+        eM_1.eV;
         function eF() { }
-        _eM.eF = eF;
+        eM_1.eF = eF;
         ;
         var eC = (function () {
             function eC() {
@@ -1079,7 +1079,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return eC;
         })();
-        _eM.eC = eC;
+        eM_1.eC = eC;
         var eM;
         (function (eM) {
             var V;
@@ -1109,7 +1109,7 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(eM = _eM.eM || (_eM.eM = {}));
+        })(eM = eM_1.eM || (eM_1.eM = {}));
         ;
     })(eM = exports.eM || (exports.eM = {}));
     ;

@@ -11,7 +11,7 @@
 ////var /*2*/bb: d.D;
 
 goTo.marker('1');
-verify.quickInfoIs('(var) aa: d.C<number>');
+verify.quickInfoIs('var aa: d.C<number>');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) bb: d.D');
+verify.quickInfoIs('var bb: d.D');

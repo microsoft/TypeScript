@@ -1,0 +1,896 @@
+===================================================================
+JsFile: sourceMapValidationDecorators.js
+mapUrl: sourceMapValidationDecorators.js.map
+sourceRoot: 
+sources: sourceMapValidationDecorators.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDecorators.js
+sourceFile:sourceMapValidationDecorators.ts
+-------------------------------------------------------------------
+>>>var __decorate = this.__decorate || function (decorators, target, key, value) {
+>>>    var kind = typeof (arguments.length == 2 ? value = target : value);
+>>>    for (var i = decorators.length - 1; i >= 0; --i) {
+>>>        var decorator = decorators[i];
+>>>        switch (kind) {
+>>>            case "function": value = decorator(value) || value; break;
+>>>            case "number": decorator(target, key, value); break;
+>>>            case "undefined": decorator(target, key); break;
+>>>            case "object": value = decorator(target, key, value) || value; break;
+>>>        }
+>>>    }
+>>>    return value;
+>>>};
+>>>var Greeter = (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >declare function ClassDecorator1(target: Function): void;
+  >declare function ClassDecorator2(x: number): (target: Function) => void;
+  >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
+  >declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
+  >declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
+  >declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
+  >
+  >
+1 >Emitted(14, 1) Source(8, 1) + SourceIndex(0)
+---
+>>>    function Greeter(greeting) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^^^^^^^
+1->@ClassDecorator1
+  >@ClassDecorator2(10)
+  >class Greeter {
+  >    
+2 >    constructor(
+  >          @ParameterDecorator1 
+  >          @ParameterDecorator2(20) 
+  >          public 
+3 >                     greeting: string
+1->Emitted(15, 5) Source(11, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(15, 22) Source(14, 14) + SourceIndex(0) name (Greeter)
+3 >Emitted(15, 30) Source(14, 30) + SourceIndex(0) name (Greeter)
+---
+>>>        var b = [];
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^
+3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
+  >      
+  >      
+2 >        @ParameterDecorator1 
+  >              @ParameterDecorator2(30) 
+  >              ...b: string[]
+1 >Emitted(16, 9) Source(16, 7) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(16, 20) Source(18, 21) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>        for (var _i = 1; _i < arguments.length; _i++) {
+1->^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^^
+3 >                        ^
+4 >                         ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                               ^
+6 >                                                ^^^^
+1->
+2 >             @ParameterDecorator1 
+  >                   @ParameterDecorator2(30) 
+  >                   ...b: string[]
+3 >                        
+4 >                         @ParameterDecorator1 
+  >                               @ParameterDecorator2(30) 
+  >                               ...b: string[]
+5 >                                               
+6 >                                                @ParameterDecorator1 
+  >                                                      @ParameterDecorator2(30) 
+  >                                                      ...b: string[]
+1->Emitted(17, 14) Source(16, 7) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(17, 25) Source(18, 21) + SourceIndex(0) name (Greeter.constructor)
+3 >Emitted(17, 26) Source(16, 7) + SourceIndex(0) name (Greeter.constructor)
+4 >Emitted(17, 48) Source(18, 21) + SourceIndex(0) name (Greeter.constructor)
+5 >Emitted(17, 49) Source(16, 7) + SourceIndex(0) name (Greeter.constructor)
+6 >Emitted(17, 53) Source(18, 21) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>            b[_i - 1] = arguments[_i];
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >            @ParameterDecorator1 
+  >                  @ParameterDecorator2(30) 
+  >                  ...b: string[]
+1 >Emitted(18, 13) Source(16, 7) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(18, 39) Source(18, 21) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>        }
+>>>        this.greeting = greeting;
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^
+4 >                        ^^^^^^^^
+5 >                                ^
+1 >
+2 >        greeting
+3 >                     
+4 >                        greeting
+5 >                                : string
+1 >Emitted(20, 9) Source(14, 14) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(20, 22) Source(14, 22) + SourceIndex(0) name (Greeter.constructor)
+3 >Emitted(20, 25) Source(14, 14) + SourceIndex(0) name (Greeter.constructor)
+4 >Emitted(20, 33) Source(14, 22) + SourceIndex(0) name (Greeter.constructor)
+5 >Emitted(20, 34) Source(14, 30) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
+  >      
+  >      @ParameterDecorator1 
+  >      @ParameterDecorator2(30) 
+  >      ...b: string[]) {
+  >    
+2 >    }
+1 >Emitted(21, 5) Source(19, 5) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(21, 6) Source(19, 6) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>    Greeter.prototype.greet = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+4 >                              ^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(40)
+  >    
+2 >    greet
+3 >                           
+1->Emitted(22, 5) Source(23, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(22, 28) Source(23, 10) + SourceIndex(0) name (Greeter)
+3 >Emitted(22, 31) Source(21, 5) + SourceIndex(0) name (Greeter)
+---
+>>>        return "<h1>" + this.greeting + "</h1>";
+1->^^^^^^^^
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^^^^^
+5 >                     ^^^
+6 >                        ^^^^
+7 >                            ^
+8 >                             ^^^^^^^^
+9 >                                     ^^^
+10>                                        ^^^^^^^
+11>                                               ^
+1->@PropertyDecorator1
+  >    @PropertyDecorator2(40)
+  >    greet() {
+  >        
+2 >        return
+3 >               
+4 >               "<h1>"
+5 >                      + 
+6 >                        this
+7 >                            .
+8 >                             greeting
+9 >                                      + 
+10>                                        "</h1>"
+11>                                               ;
+1->Emitted(23, 9) Source(24, 9) + SourceIndex(0) name (Greeter.greet)
+2 >Emitted(23, 15) Source(24, 15) + SourceIndex(0) name (Greeter.greet)
+3 >Emitted(23, 16) Source(24, 16) + SourceIndex(0) name (Greeter.greet)
+4 >Emitted(23, 22) Source(24, 22) + SourceIndex(0) name (Greeter.greet)
+5 >Emitted(23, 25) Source(24, 25) + SourceIndex(0) name (Greeter.greet)
+6 >Emitted(23, 29) Source(24, 29) + SourceIndex(0) name (Greeter.greet)
+7 >Emitted(23, 30) Source(24, 30) + SourceIndex(0) name (Greeter.greet)
+8 >Emitted(23, 38) Source(24, 38) + SourceIndex(0) name (Greeter.greet)
+9 >Emitted(23, 41) Source(24, 41) + SourceIndex(0) name (Greeter.greet)
+10>Emitted(23, 48) Source(24, 48) + SourceIndex(0) name (Greeter.greet)
+11>Emitted(23, 49) Source(24, 49) + SourceIndex(0) name (Greeter.greet)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(24, 5) Source(25, 5) + SourceIndex(0) name (Greeter.greet)
+2 >Emitted(24, 6) Source(25, 6) + SourceIndex(0) name (Greeter.greet)
+---
+>>>    Greeter.prototype.fn = function (x) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^^^^^^^^
+5 >                                     ^
+1->
+  >
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(50)
+  >    private x: string;
+  >
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(60)
+  >    private static x1: number = 10;
+  >    
+  >    private 
+2 >    fn
+3 >                        
+4 >                           private fn(
+  >                                 @ParameterDecorator1 
+  >                                 @ParameterDecorator2(70) 
+  >                                 
+5 >                                     x: number
+1->Emitted(25, 5) Source(35, 13) + SourceIndex(0) name (Greeter)
+2 >Emitted(25, 25) Source(35, 15) + SourceIndex(0) name (Greeter)
+3 >Emitted(25, 28) Source(35, 5) + SourceIndex(0) name (Greeter)
+4 >Emitted(25, 38) Source(38, 7) + SourceIndex(0) name (Greeter)
+5 >Emitted(25, 39) Source(38, 16) + SourceIndex(0) name (Greeter)
+---
+>>>        return this.greeting;
+1 >^^^^^^^^
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^^^
+5 >                   ^
+6 >                    ^^^^^^^^
+7 >                            ^
+1 >) {
+  >        
+2 >        return
+3 >               
+4 >               this
+5 >                   .
+6 >                    greeting
+7 >                            ;
+1 >Emitted(26, 9) Source(39, 9) + SourceIndex(0) name (Greeter.fn)
+2 >Emitted(26, 15) Source(39, 15) + SourceIndex(0) name (Greeter.fn)
+3 >Emitted(26, 16) Source(39, 16) + SourceIndex(0) name (Greeter.fn)
+4 >Emitted(26, 20) Source(39, 20) + SourceIndex(0) name (Greeter.fn)
+5 >Emitted(26, 21) Source(39, 21) + SourceIndex(0) name (Greeter.fn)
+6 >Emitted(26, 29) Source(39, 29) + SourceIndex(0) name (Greeter.fn)
+7 >Emitted(26, 30) Source(39, 30) + SourceIndex(0) name (Greeter.fn)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(27, 5) Source(40, 5) + SourceIndex(0) name (Greeter.fn)
+2 >Emitted(27, 6) Source(40, 6) + SourceIndex(0) name (Greeter.fn)
+---
+>>>    Object.defineProperty(Greeter.prototype, "greetings", {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >    
+2 >    @PropertyDecorator1
+  >        @PropertyDecorator2(80)
+  >        get 
+3 >                          greetings
+1->Emitted(28, 5) Source(42, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(28, 27) Source(44, 9) + SourceIndex(0) name (Greeter)
+3 >Emitted(28, 57) Source(44, 18) + SourceIndex(0) name (Greeter)
+---
+>>>        get: function () {
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(29, 14) Source(42, 5) + SourceIndex(0) name (Greeter)
+---
+>>>            return this.greeting;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^
+3 >                  ^
+4 >                   ^^^^
+5 >                       ^
+6 >                        ^^^^^^^^
+7 >                                ^
+1->@PropertyDecorator1
+  >    @PropertyDecorator2(80)
+  >    get greetings() {
+  >        
+2 >            return
+3 >                   
+4 >                   this
+5 >                       .
+6 >                        greeting
+7 >                                ;
+1->Emitted(30, 13) Source(45, 9) + SourceIndex(0) name (Greeter.greetings)
+2 >Emitted(30, 19) Source(45, 15) + SourceIndex(0) name (Greeter.greetings)
+3 >Emitted(30, 20) Source(45, 16) + SourceIndex(0) name (Greeter.greetings)
+4 >Emitted(30, 24) Source(45, 20) + SourceIndex(0) name (Greeter.greetings)
+5 >Emitted(30, 25) Source(45, 21) + SourceIndex(0) name (Greeter.greetings)
+6 >Emitted(30, 33) Source(45, 29) + SourceIndex(0) name (Greeter.greetings)
+7 >Emitted(30, 34) Source(45, 30) + SourceIndex(0) name (Greeter.greetings)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(31, 9) Source(46, 5) + SourceIndex(0) name (Greeter.greetings)
+2 >Emitted(31, 10) Source(46, 6) + SourceIndex(0) name (Greeter.greetings)
+---
+>>>        set: function (greetings) {
+1->^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^
+3 >                       ^^^^^^^^^
+4 >                                ^^^^^^^->
+1->
+  >
+  >    
+2 >             set greetings(
+  >                   @ParameterDecorator1 
+  >                   @ParameterDecorator2(90) 
+  >                   
+3 >                       greetings: string
+1->Emitted(32, 14) Source(48, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(32, 24) Source(51, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(32, 33) Source(51, 24) + SourceIndex(0) name (Greeter)
+---
+>>>            this.greeting = greetings;
+1->^^^^^^^^^^^^
+2 >            ^^^^
+3 >                ^
+4 >                 ^^^^^^^^
+5 >                         ^^^
+6 >                            ^^^^^^^^^
+7 >                                     ^
+1->) {
+  >        
+2 >            this
+3 >                .
+4 >                 greeting
+5 >                          = 
+6 >                            greetings
+7 >                                     ;
+1->Emitted(33, 13) Source(52, 9) + SourceIndex(0) name (Greeter.greetings)
+2 >Emitted(33, 17) Source(52, 13) + SourceIndex(0) name (Greeter.greetings)
+3 >Emitted(33, 18) Source(52, 14) + SourceIndex(0) name (Greeter.greetings)
+4 >Emitted(33, 26) Source(52, 22) + SourceIndex(0) name (Greeter.greetings)
+5 >Emitted(33, 29) Source(52, 25) + SourceIndex(0) name (Greeter.greetings)
+6 >Emitted(33, 38) Source(52, 34) + SourceIndex(0) name (Greeter.greetings)
+7 >Emitted(33, 39) Source(52, 35) + SourceIndex(0) name (Greeter.greetings)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(34, 9) Source(53, 5) + SourceIndex(0) name (Greeter.greetings)
+2 >Emitted(34, 10) Source(53, 6) + SourceIndex(0) name (Greeter.greetings)
+---
+>>>        enumerable: true,
+>>>        configurable: true
+>>>    });
+1->^^^^^^^
+2 >       ^^^^^^^^^^^^^^->
+1->
+1->Emitted(37, 8) Source(46, 6) + SourceIndex(0) name (Greeter)
+---
+>>>    Greeter.x1 = 10;
+1->^^^^
+2 >    ^^^^^^^^^^
+3 >              ^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >    x1
+3 >              : number = 
+4 >                 10
+5 >                   ;
+1->Emitted(38, 5) Source(33, 20) + SourceIndex(0) name (Greeter)
+2 >Emitted(38, 15) Source(33, 22) + SourceIndex(0) name (Greeter)
+3 >Emitted(38, 18) Source(33, 33) + SourceIndex(0) name (Greeter)
+4 >Emitted(38, 20) Source(33, 35) + SourceIndex(0) name (Greeter)
+5 >Emitted(38, 21) Source(33, 36) + SourceIndex(0) name (Greeter)
+---
+>>>    Object.defineProperty(Greeter.prototype, "greet", __decorate([PropertyDecorator1, PropertyDecorator2(40)], Greeter.prototype, "greet", Object.getOwnPropertyDescriptor(Greeter.prototype, "greet")));
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                    ^^^^^^^^^^^^^^
+5 >                                                                  ^^^^^^^^^^^^^^^^^^
+6 >                                                                                    ^^
+7 >                                                                                      ^^^^^^^^^^^^^^^^^^
+8 >                                                                                                        ^
+9 >                                                                                                         ^^
+10>                                                                                                           ^
+11>                                                                                                            ^^^
+12>                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+13>                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                                                                                                                     ^^^^
+1->
+2 >    @PropertyDecorator1
+  >        @PropertyDecorator2(40)
+  >        
+3 >                          greet
+4 >                                                    
+5 >                                                                  PropertyDecorator1
+6 >                                                                                    
+  >                                                                                        @
+7 >                                                                                      PropertyDecorator2
+8 >                                                                                                        (
+9 >                                                                                                         40
+10>                                                                                                           )
+11>                                                                                                            
+  >                                                                                                                
+12>                                                                                                               greet
+13>                                                                                                                                         
+14>                                                                                                                                                                           greet
+15>                                                                                                                                                                                                     () {
+  >                                                                                                                                                                                                             return "<h1>" + this.greeting + "</h1>";
+  >                                                                                                                                                                                                         }
+1->Emitted(39, 5) Source(21, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(39, 27) Source(23, 5) + SourceIndex(0) name (Greeter)
+3 >Emitted(39, 53) Source(23, 10) + SourceIndex(0) name (Greeter)
+4 >Emitted(39, 67) Source(21, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(39, 85) Source(21, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(39, 87) Source(22, 6) + SourceIndex(0) name (Greeter)
+7 >Emitted(39, 105) Source(22, 24) + SourceIndex(0) name (Greeter)
+8 >Emitted(39, 106) Source(22, 25) + SourceIndex(0) name (Greeter)
+9 >Emitted(39, 108) Source(22, 27) + SourceIndex(0) name (Greeter)
+10>Emitted(39, 109) Source(22, 28) + SourceIndex(0) name (Greeter)
+11>Emitted(39, 112) Source(23, 5) + SourceIndex(0) name (Greeter)
+12>Emitted(39, 138) Source(23, 10) + SourceIndex(0) name (Greeter)
+13>Emitted(39, 172) Source(23, 5) + SourceIndex(0) name (Greeter)
+14>Emitted(39, 198) Source(23, 10) + SourceIndex(0) name (Greeter)
+15>Emitted(39, 202) Source(25, 6) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([PropertyDecorator1, PropertyDecorator2(50)], Greeter.prototype, "x");
+1 >^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^
+4 >                                  ^^
+5 >                                    ^^^^^^^^^^^^^^^^^^
+6 >                                                      ^
+7 >                                                       ^^
+8 >                                                         ^
+9 >                                                          ^^^
+10>                                                             ^^^^^^^^^^^^^^^^^^^^^^
+11>                                                                                   ^^
+12>                                                                                     ^^^^^^^->
+1 >
+  >
+  >    
+2 >    @
+3 >                PropertyDecorator1
+4 >                                  
+  >                                      @
+5 >                                    PropertyDecorator2
+6 >                                                      (
+7 >                                                       50
+8 >                                                         )
+9 >                                                          
+  >                                                              private 
+10>                                                             x
+11>                                                                                   : string;
+1 >Emitted(40, 5) Source(27, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(40, 17) Source(27, 6) + SourceIndex(0) name (Greeter)
+3 >Emitted(40, 35) Source(27, 24) + SourceIndex(0) name (Greeter)
+4 >Emitted(40, 37) Source(28, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(40, 55) Source(28, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(40, 56) Source(28, 25) + SourceIndex(0) name (Greeter)
+7 >Emitted(40, 58) Source(28, 27) + SourceIndex(0) name (Greeter)
+8 >Emitted(40, 59) Source(28, 28) + SourceIndex(0) name (Greeter)
+9 >Emitted(40, 62) Source(29, 13) + SourceIndex(0) name (Greeter)
+10>Emitted(40, 84) Source(29, 14) + SourceIndex(0) name (Greeter)
+11>Emitted(40, 86) Source(29, 23) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([ParameterDecorator1, ParameterDecorator2(70)], Greeter.prototype, "fn", 0);
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^^
+4 >                                   ^^
+5 >                                     ^^^^^^^^^^^^^^^^^^^
+6 >                                                        ^
+7 >                                                         ^^
+8 >                                                           ^
+9 >                                                            ^^^
+10>                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+11>                                                                                         ^^
+12>                                                                                           ^^^^^^^^->
+1->
+  >
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(60)
+  >    private static x1: number = 10;
+  >    
+  >    private fn(
+  >      
+2 >    @
+3 >                ParameterDecorator1
+4 >                                    
+  >                                         @
+5 >                                     ParameterDecorator2
+6 >                                                        (
+7 >                                                         70
+8 >                                                           )
+9 >                                                             
+  >                                                                  
+10>                                                               x
+11>                                                                                         : number
+1->Emitted(41, 5) Source(36, 7) + SourceIndex(0) name (Greeter)
+2 >Emitted(41, 17) Source(36, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(41, 36) Source(36, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(41, 38) Source(37, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(41, 57) Source(37, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(41, 58) Source(37, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(41, 60) Source(37, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(41, 61) Source(37, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(41, 64) Source(38, 7) + SourceIndex(0) name (Greeter)
+10>Emitted(41, 90) Source(38, 8) + SourceIndex(0) name (Greeter)
+11>Emitted(41, 92) Source(38, 16) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([ParameterDecorator1, ParameterDecorator2(90)], Greeter.prototype, "greetings", 0);
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^^
+4 >                                   ^^
+5 >                                     ^^^^^^^^^^^^^^^^^^^
+6 >                                                        ^
+7 >                                                         ^^
+8 >                                                           ^
+9 >                                                            ^^^
+10>                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11>                                                                                                ^^
+12>                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->) {
+  >        return this.greeting;
+  >    }
+  >
+  >    @PropertyDecorator1
+  >    @PropertyDecorator2(80)
+  >    get greetings() {
+  >        return this.greeting;
+  >    }
+  >
+  >    set greetings(
+  >      
+2 >    @
+3 >                ParameterDecorator1
+4 >                                    
+  >                                         @
+5 >                                     ParameterDecorator2
+6 >                                                        (
+7 >                                                         90
+8 >                                                           )
+9 >                                                             
+  >                                                                  
+10>                                                               greetings
+11>                                                                                                : string
+1->Emitted(42, 5) Source(49, 7) + SourceIndex(0) name (Greeter)
+2 >Emitted(42, 17) Source(49, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(42, 36) Source(49, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(42, 38) Source(50, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(42, 57) Source(50, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(42, 58) Source(50, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(42, 60) Source(50, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(42, 61) Source(50, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(42, 64) Source(51, 7) + SourceIndex(0) name (Greeter)
+10>Emitted(42, 97) Source(51, 16) + SourceIndex(0) name (Greeter)
+11>Emitted(42, 99) Source(51, 24) + SourceIndex(0) name (Greeter)
+---
+>>>    Object.defineProperty(Greeter.prototype, "greetings", __decorate([PropertyDecorator1, PropertyDecorator2(80)], Greeter.prototype, "greetings", Object.getOwnPropertyDescriptor(Greeter.prototype, "greetings")));
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                        ^^^^^^^^^^^^^^
+5 >                                                                      ^^^^^^^^^^^^^^^^^^
+6 >                                                                                        ^^
+7 >                                                                                          ^^^^^^^^^^^^^^^^^^
+8 >                                                                                                            ^
+9 >                                                                                                             ^^
+10>                                                                                                               ^
+11>                                                                                                                ^^^
+12>                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13>                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                                                                                                                                 ^^^^
+1->
+2 >    @PropertyDecorator1
+  >        @PropertyDecorator2(80)
+  >        get 
+3 >                          greetings
+4 >                                                        
+5 >                                                                      PropertyDecorator1
+6 >                                                                                        
+  >                                                                                            @
+7 >                                                                                          PropertyDecorator2
+8 >                                                                                                            (
+9 >                                                                                                             80
+10>                                                                                                               )
+11>                                                                                                                
+  >                                                                                                                    get 
+12>                                                                                                                   greetings
+13>                                                                                                                                                 
+14>                                                                                                                                                                                   greetings
+15>                                                                                                                                                                                                                 () {
+  >                                                                                                                                                                                                                         return this.greeting;
+  >                                                                                                                                                                                                                     }
+1->Emitted(43, 5) Source(42, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(43, 27) Source(44, 9) + SourceIndex(0) name (Greeter)
+3 >Emitted(43, 57) Source(44, 18) + SourceIndex(0) name (Greeter)
+4 >Emitted(43, 71) Source(42, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(43, 89) Source(42, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(43, 91) Source(43, 6) + SourceIndex(0) name (Greeter)
+7 >Emitted(43, 109) Source(43, 24) + SourceIndex(0) name (Greeter)
+8 >Emitted(43, 110) Source(43, 25) + SourceIndex(0) name (Greeter)
+9 >Emitted(43, 112) Source(43, 27) + SourceIndex(0) name (Greeter)
+10>Emitted(43, 113) Source(43, 28) + SourceIndex(0) name (Greeter)
+11>Emitted(43, 116) Source(44, 9) + SourceIndex(0) name (Greeter)
+12>Emitted(43, 146) Source(44, 18) + SourceIndex(0) name (Greeter)
+13>Emitted(43, 180) Source(44, 9) + SourceIndex(0) name (Greeter)
+14>Emitted(43, 210) Source(44, 18) + SourceIndex(0) name (Greeter)
+15>Emitted(43, 214) Source(46, 6) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([PropertyDecorator1, PropertyDecorator2(60)], Greeter, "x1");
+1 >^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^
+4 >                                  ^^
+5 >                                    ^^^^^^^^^^^^^^^^^^
+6 >                                                      ^
+7 >                                                       ^^
+8 >                                                         ^
+9 >                                                          ^^^
+10>                                                             ^^^^^^^^^^^^^
+11>                                                                          ^^
+12>                                                                            ^^^^^^^^->
+1 >
+2 >    @
+3 >                PropertyDecorator1
+4 >                                  
+  >                                      @
+5 >                                    PropertyDecorator2
+6 >                                                      (
+7 >                                                       60
+8 >                                                         )
+9 >                                                          
+  >                                                              private static 
+10>                                                             x1
+11>                                                                          : number = 10;
+1 >Emitted(44, 5) Source(31, 5) + SourceIndex(0) name (Greeter)
+2 >Emitted(44, 17) Source(31, 6) + SourceIndex(0) name (Greeter)
+3 >Emitted(44, 35) Source(31, 24) + SourceIndex(0) name (Greeter)
+4 >Emitted(44, 37) Source(32, 6) + SourceIndex(0) name (Greeter)
+5 >Emitted(44, 55) Source(32, 24) + SourceIndex(0) name (Greeter)
+6 >Emitted(44, 56) Source(32, 25) + SourceIndex(0) name (Greeter)
+7 >Emitted(44, 58) Source(32, 27) + SourceIndex(0) name (Greeter)
+8 >Emitted(44, 59) Source(32, 28) + SourceIndex(0) name (Greeter)
+9 >Emitted(44, 62) Source(33, 20) + SourceIndex(0) name (Greeter)
+10>Emitted(44, 75) Source(33, 22) + SourceIndex(0) name (Greeter)
+11>Emitted(44, 77) Source(33, 36) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([ParameterDecorator1, ParameterDecorator2(20)], Greeter, void 0, 0);
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^^
+4 >                                   ^^
+5 >                                     ^^^^^^^^^^^^^^^^^^^
+6 >                                                        ^
+7 >                                                         ^^
+8 >                                                           ^
+9 >                                                            ^^^
+10>                                                               ^^^^^^^^^^^^^^^^^^
+11>                                                                                 ^^
+12>                                                                                   ^->
+1->
+2 >    @
+3 >                ParameterDecorator1
+4 >                                    
+  >                                         @
+5 >                                     ParameterDecorator2
+6 >                                                        (
+7 >                                                         20
+8 >                                                           )
+9 >                                                             
+  >                                                                  public 
+10>                                                               greeting
+11>                                                                                 : string
+1->Emitted(45, 5) Source(12, 7) + SourceIndex(0) name (Greeter)
+2 >Emitted(45, 17) Source(12, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(45, 36) Source(12, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(45, 38) Source(13, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(45, 57) Source(13, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(45, 58) Source(13, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(45, 60) Source(13, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(45, 61) Source(13, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(45, 64) Source(14, 14) + SourceIndex(0) name (Greeter)
+10>Emitted(45, 82) Source(14, 22) + SourceIndex(0) name (Greeter)
+11>Emitted(45, 84) Source(14, 30) + SourceIndex(0) name (Greeter)
+---
+>>>    __decorate([ParameterDecorator1, ParameterDecorator2(30)], Greeter, void 0, 1);
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^^
+4 >                                   ^^
+5 >                                     ^^^^^^^^^^^^^^^^^^^
+6 >                                                        ^
+7 >                                                         ^^
+8 >                                                           ^
+9 >                                                            ^^^
+10>                                                               ^^^^^^^^^^^^^^^^^^
+11>                                                                                 ^^
+1->, 
+  >      
+  >      
+2 >    @
+3 >                ParameterDecorator1
+4 >                                    
+  >                                         @
+5 >                                     ParameterDecorator2
+6 >                                                        (
+7 >                                                         30
+8 >                                                           )
+9 >                                                             
+  >                                                                  ...
+10>                                                               b
+11>                                                                                 : string[]
+1->Emitted(46, 5) Source(16, 7) + SourceIndex(0) name (Greeter)
+2 >Emitted(46, 17) Source(16, 8) + SourceIndex(0) name (Greeter)
+3 >Emitted(46, 36) Source(16, 27) + SourceIndex(0) name (Greeter)
+4 >Emitted(46, 38) Source(17, 8) + SourceIndex(0) name (Greeter)
+5 >Emitted(46, 57) Source(17, 27) + SourceIndex(0) name (Greeter)
+6 >Emitted(46, 58) Source(17, 28) + SourceIndex(0) name (Greeter)
+7 >Emitted(46, 60) Source(17, 30) + SourceIndex(0) name (Greeter)
+8 >Emitted(46, 61) Source(17, 31) + SourceIndex(0) name (Greeter)
+9 >Emitted(46, 64) Source(18, 10) + SourceIndex(0) name (Greeter)
+10>Emitted(46, 82) Source(18, 11) + SourceIndex(0) name (Greeter)
+11>Emitted(46, 84) Source(18, 21) + SourceIndex(0) name (Greeter)
+---
+>>>    Greeter = __decorate([ClassDecorator1, ClassDecorator2(10)], Greeter);
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^
+4 >                                         ^^
+5 >                                           ^^^^^^^^^^^^^^^
+6 >                                                          ^
+7 >                                                           ^^
+8 >                                                             ^
+9 >                                                              ^^^^^^^^^^^^
+1 >
+2 >    @
+3 >                          ClassDecorator1
+4 >                                         
+  >                                         @
+5 >                                           ClassDecorator2
+6 >                                                          (
+7 >                                                           10
+8 >                                                             )
+9 >                                                              
+  >                                                              class Greeter {
+  >                                                                  constructor(
+  >                                                                    @ParameterDecorator1 
+  >                                                                    @ParameterDecorator2(20) 
+  >                                                                    public greeting: string, 
+  >                                                                    
+  >                                                                    @ParameterDecorator1 
+  >                                                                    @ParameterDecorator2(30) 
+  >                                                                    ...b: string[]) {
+  >                                                                  }
+  >                                                                  
+  >                                                                  @PropertyDecorator1
+  >                                                                  @PropertyDecorator2(40)
+  >                                                                  greet() {
+  >                                                                      return "<h1>" + this.greeting + "</h1>";
+  >                                                                  }
+  >                                                              
+  >                                                                  @PropertyDecorator1
+  >                                                                  @PropertyDecorator2(50)
+  >                                                                  private x: string;
+  >                                                              
+  >                                                                  @PropertyDecorator1
+  >                                                                  @PropertyDecorator2(60)
+  >                                                                  private static x1: number = 10;
+  >                                                                  
+  >                                                                  private fn(
+  >                                                                    @ParameterDecorator1 
+  >                                                                    @ParameterDecorator2(70) 
+  >                                                                    x: number) {
+  >                                                                      return this.greeting;
+  >                                                                  }
+  >                                                              
+  >                                                                  @PropertyDecorator1
+  >                                                                  @PropertyDecorator2(80)
+  >                                                                  get greetings() {
+  >                                                                      return this.greeting;
+  >                                                                  }
+  >                                                              
+  >                                                                  set greetings(
+  >                                                                    @ParameterDecorator1 
+  >                                                                    @ParameterDecorator2(90) 
+  >                                                                    greetings: string) {
+  >                                                                      this.greeting = greetings;
+  >                                                                  }    
+  >                                                              }
+1 >Emitted(47, 5) Source(8, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(47, 27) Source(8, 2) + SourceIndex(0) name (Greeter)
+3 >Emitted(47, 42) Source(8, 17) + SourceIndex(0) name (Greeter)
+4 >Emitted(47, 44) Source(9, 2) + SourceIndex(0) name (Greeter)
+5 >Emitted(47, 59) Source(9, 17) + SourceIndex(0) name (Greeter)
+6 >Emitted(47, 60) Source(9, 18) + SourceIndex(0) name (Greeter)
+7 >Emitted(47, 62) Source(9, 20) + SourceIndex(0) name (Greeter)
+8 >Emitted(47, 63) Source(9, 21) + SourceIndex(0) name (Greeter)
+9 >Emitted(47, 75) Source(54, 2) + SourceIndex(0) name (Greeter)
+---
+>>>    return Greeter;
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^
+1 >
+2 >    }
+1 >Emitted(48, 5) Source(54, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(48, 19) Source(54, 2) + SourceIndex(0) name (Greeter)
+---
+>>>})();
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > @ClassDecorator1
+  > @ClassDecorator2(10)
+  > class Greeter {
+  >     constructor(
+  >       @ParameterDecorator1 
+  >       @ParameterDecorator2(20) 
+  >       public greeting: string, 
+  >       
+  >       @ParameterDecorator1 
+  >       @ParameterDecorator2(30) 
+  >       ...b: string[]) {
+  >     }
+  >     
+  >     @PropertyDecorator1
+  >     @PropertyDecorator2(40)
+  >     greet() {
+  >         return "<h1>" + this.greeting + "</h1>";
+  >     }
+  > 
+  >     @PropertyDecorator1
+  >     @PropertyDecorator2(50)
+  >     private x: string;
+  > 
+  >     @PropertyDecorator1
+  >     @PropertyDecorator2(60)
+  >     private static x1: number = 10;
+  >     
+  >     private fn(
+  >       @ParameterDecorator1 
+  >       @ParameterDecorator2(70) 
+  >       x: number) {
+  >         return this.greeting;
+  >     }
+  > 
+  >     @PropertyDecorator1
+  >     @PropertyDecorator2(80)
+  >     get greetings() {
+  >         return this.greeting;
+  >     }
+  > 
+  >     set greetings(
+  >       @ParameterDecorator1 
+  >       @ParameterDecorator2(90) 
+  >       greetings: string) {
+  >         this.greeting = greetings;
+  >     }    
+  > }
+1 >Emitted(49, 1) Source(54, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(49, 2) Source(54, 2) + SourceIndex(0) name (Greeter)
+3 >Emitted(49, 2) Source(8, 1) + SourceIndex(0)
+4 >Emitted(49, 6) Source(54, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDecorators.js.map

@@ -164,7 +164,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
             constructor(
                 public logger: TypeScript.ILogger,
-                               ~~~~~~~~~~~~~~~~~~
+                               ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.
                 public tree: ParseTree,
                              ~~~~~~~~~
@@ -174,7 +174,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
 !!! error TS2304: Cannot find name 'ITextSnapshot'.
                 public languageHostIndentation: string,
                 public editorOptions: Services.EditorOptions,
-                                      ~~~~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 public firstToken: TokenSpan,
                                    ~~~~~~~~~
@@ -369,7 +369,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
             }
     
             static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
-                                                                                  ~~~~~~~~~~~~~~~~~~~~~~
+                                                                                  ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
                        ~~~~~~~~~~~~~~~~~~~~~
@@ -377,7 +377,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
             }
     
             static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
-                                                                      ~~~~~~~~~~~~~~~~~~~~~~
+                                                                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'Services'.
                 var indentSize = 0;
     

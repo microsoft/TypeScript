@@ -16,4 +16,5 @@
 
 goTo.marker();
 verify.memberListContains("toString", "(method) toString(): string");
-verify.memberListCount(1);
+verify.memberListContains("valueOf", "(method) valueOf(): string | number");
+verify.memberListCount(2);

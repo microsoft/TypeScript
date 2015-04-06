@@ -64,8 +64,8 @@ var F;
 (function (F) {
     F[F["B"] = 0] = "B";
 })(F || (F = {}));
-var e = 0 /* A */;
-var f = 0 /* B */;
+var e = E.A;
+var f = F.B;
 e = f;
 f = e;
 e = 1; // ok

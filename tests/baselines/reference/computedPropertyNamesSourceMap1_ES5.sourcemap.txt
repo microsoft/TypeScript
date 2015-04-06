@@ -10,38 +10,27 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1 >
-2 >^^^^
-3 >    ^
-4 >     ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class 
-3 >    C
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(1, 8) + SourceIndex(0)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^
+2 >    ^^->
 1->
-2 >    class 
-3 >             C
 1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (C)
-2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (C)
-3 >Emitted(2, 15) Source(1, 8) + SourceIndex(0) name (C)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > {
+1->class C {
   >    ["hello"]() {
   >        debugger;
   >    }
   >
 2 >    }
-1 >Emitted(3, 5) Source(5, 1) + SourceIndex(0) name (C.constructor)
+1->Emitted(3, 5) Source(5, 1) + SourceIndex(0) name (C.constructor)
 2 >Emitted(3, 6) Source(5, 2) + SourceIndex(0) name (C.constructor)
 ---
 >>>    C.prototype["hello"] = function () {

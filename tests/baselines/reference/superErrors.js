@@ -60,9 +60,9 @@ var __extends = this.__extends || function (d, b) {
 };
 function foo() {
     // super in a non class context
-    var x = super.;
-    var y = function () { return super.; };
-    var z = function () { return function () { return function () { return super.; }; }; };
+    var x = _super.;
+    var y = function () { return _super.; };
+    var z = function () { return function () { return function () { return _super.; }; }; };
 }
 var User = (function () {
     function User() {
@@ -80,24 +80,24 @@ var RegisteredUser = (function (_super) {
         this.name = "Frank";
         // super call in an inner function in a constructor
         function inner() {
-            super.sayHello.call(this);
+            _super.sayHello.call(this);
         }
         // super call in a lambda in an inner function in a constructor 
         function inner2() {
-            var x = function () { return super.sayHello.call(this); };
+            var x = function () { return _super.sayHello.call(this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () { return function () { return super.; }; })();
+        (function () { return function () { return _super.; }; })();
     }
     RegisteredUser.prototype.sayHello = function () {
         // super call in a method
         _super.prototype.sayHello.call(this);
         // super call in a lambda in an inner function in a method
         function inner() {
-            var x = function () { return super.sayHello.call(this); };
+            var x = function () { return _super.sayHello.call(this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () { return function () { return super.; }; })();
+        (function () { return function () { return _super.; }; })();
     };
     RegisteredUser.staticFunction = function () {
         var _this = this;

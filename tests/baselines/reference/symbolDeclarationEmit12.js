@@ -15,20 +15,13 @@ module M {
 //// [symbolDeclarationEmit12.js]
 var M;
 (function (M) {
-    var C = (function () {
-        function C() {
-        }
-        C.prototype[Symbol.toPrimitive] = function (x) { };
-        C.prototype[Symbol.isConcatSpreadable] = function () {
+    class C {
+        [Symbol.toPrimitive](x) { }
+        [Symbol.isConcatSpreadable]() {
             return undefined;
-        };
-        Object.defineProperty(C.prototype, Symbol.isRegExp, {
-            get: function () { return undefined; },
-            set: function (x) { },
-            enumerable: true,
-            configurable: true
-        });
-        return C;
-    })();
+        }
+        get [Symbol.isRegExp]() { return undefined; }
+        set [Symbol.isRegExp](x) { }
+    }
     M.C = C;
 })(M || (M = {}));

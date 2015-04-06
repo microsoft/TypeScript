@@ -9,17 +9,12 @@ class C {
 }
 
 //// [symbolProperty6.js]
-var C = (function () {
-    function C() {
+class C {
+    constructor() {
         this[Symbol.iterator] = 0;
     }
-    C.prototype[Symbol.isRegExp] = function () { };
-    Object.defineProperty(C.prototype, Symbol.toStringTag, {
-        get: function () {
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+    [Symbol.isRegExp]() { }
+    get [Symbol.toStringTag]() {
+        return 0;
+    }
+}

@@ -39,6 +39,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -57,6 +58,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
@@ -65,7 +67,7 @@ var servicesSources = [
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
-	"navigateTo.ts",
+    "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
@@ -109,6 +111,7 @@ var definitionsRoots = [
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
     "compiler/program.d.ts",
+    "compiler/commandLineParser.d.ts",
     "services/services.d.ts",
 ];
 
@@ -141,7 +144,8 @@ var harnessSources = [
     "services/colorization.ts",
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
-    "services/patternMatcher.ts"
+    "services/patternMatcher.ts",
+    "versionCache.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -220,15 +224,17 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
 
-        if (!keepComments) {
-            options += " -removeComments";
+        // Keep comments when specifically requested
+        // or when in debug mode.
+        if (!(keepComments || useDebugMode)) {
+            options += " --removeComments";
         }
 
         if (generateDeclarations) {
             options += " --declaration";
         }
 
-        if (useDebugMode || preserveConstEnums) {
+        if (preserveConstEnums || useDebugMode) {
             options += " --preserveConstEnums";
         }
 
@@ -463,7 +469,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -537,7 +543,7 @@ function cleanTestDirs() {
     }
 
     jake.mkdirP(localRwcBaseline);
-	jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localTest262Baseline);
     jake.mkdirP(localBaseline);
 }
 
@@ -574,7 +580,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     }
 
     colors = process.env.colors || process.env.color
-    colors = colors ? ' --no-colors ' : ''
+    colors = colors ? ' --no-colors ' : ' --colors ';
     tests = tests ? ' -g ' + tests : '';
     reporter = process.env.reporter || process.env.r || 'dot';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
@@ -716,7 +722,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath], [], /*useBuiltCompiler*/ true);
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {

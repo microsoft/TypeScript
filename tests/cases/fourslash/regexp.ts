@@ -3,4 +3,4 @@
 ////var /**/x = /aa/;
  
 goTo.marker();
-verify.quickInfoIs("(var) x: RegExp");
+verify.quickInfoIs("var x: RegExp");

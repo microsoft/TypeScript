@@ -977,7 +977,12 @@ $('#underscore_button').bind('click', buttonView.onClick);
 var fibonacci = _.memoize(function (n) {
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
 });
-var log = _.bind(function (message) { }, Date);
+var log = _.bind(function (message) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}, Date);
 _.delay(log, 1000, 'logged later');
 _.defer(function () { alert('deferred'); });
 var updatePosition = function () { return alert('updating position...'); };
@@ -1013,7 +1018,11 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 var iceCream = { flavor: "chocolate" };
 _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 _.clone({ name: 'moe' });
-_.chain([1, 2, 3, 200]).filter(function (num) { return num % 2 == 0; }).tap(alert).map(function (num) { return num * num; }).value();
+_.chain([1, 2, 3, 200])
+    .filter(function (num) { return num % 2 == 0; })
+    .tap(alert)
+    .map(function (num) { return num * num; })
+    .value();
 _.has({ a: 1, b: 2, c: 3 }, "b");
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };

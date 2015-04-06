@@ -127,6 +127,12 @@ module ts {
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
+        
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { definition: <encoded>; references: <encoded>[] }[]
+         */
+        findReferences(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -274,7 +280,14 @@ module ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            // Wrap the API changes for 1.5 release. This try/catch
+            // should be removed once TypeScript 1.5 has shipped.
+            try {
+                return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+            }
+            catch (e) {
+                return "";
+            }
         }
     }
 
@@ -316,6 +329,22 @@ module ts {
         public dispose(dummy: any): void {
             this.factory.unregisterShim(this);
         }
+    }
+
+    /* @internal */
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
+        return diagnostics.map(d => realizeDiagnostic(d, newLine));
+    }
+
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
+        return {
+            message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
+            start: diagnostic.start,
+            length: diagnostic.length,
+            /// TODO: no need for the tolowerCase call
+            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+            code: diagnostic.code
+        };
     }
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
@@ -378,18 +407,7 @@ module ts {
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
             var newLine = this.getNewLine();
-            return diagnostics.map(d => this.realizeDiagnostic(d, newLine));
-        }
-
-        private realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; } {
-            return {
-                message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-                start: diagnostic.start,
-                length: diagnostic.length,
-                /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase(),
-                code: diagnostic.code
-            };
+            return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
@@ -548,16 +566,19 @@ module ts {
 
         /// GET REFERENCES
 
-        /**
-         * Return references to a symbol at the requested position.
-         * References are separated by "\n".
-         * Each reference is a "fileindex min lim" sub-string.
-         */
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getReferencesAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getReferencesAtPosition(fileName, position);
+                });
+        }
+
+        public findReferences(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "findReferences('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.findReferences(fileName, position);
                 });
         }
 
@@ -826,3 +847,5 @@ module ts {
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
+
+let toolsVersion = "1.4";

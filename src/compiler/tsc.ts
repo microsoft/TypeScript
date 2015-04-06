@@ -2,8 +2,6 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.5.0.0";
-
     export interface SourceFile {
         fileWatcher: FileWatcher;
     }
@@ -134,23 +132,6 @@ module ts {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
 
-    function findConfigFile(): string {
-        var searchPath = normalizePath(sys.getCurrentDirectory());
-        var fileName = "tsconfig.json";
-        while (true) {
-            if (sys.fileExists(fileName)) {
-                return fileName;
-            }
-            var parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-            fileName = "../" + fileName;
-        }
-        return undefined;
-    }
-
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
         var configFileName: string;                 // Configuration file name (if any)
@@ -178,7 +159,7 @@ module ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
         }
 
@@ -200,7 +181,8 @@ module ts {
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
-            configFileName = findConfigFile();
+            var searchPath = normalizePath(sys.getCurrentDirectory());
+            configFileName = findConfigFile(searchPath);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
@@ -250,7 +232,7 @@ module ts {
 
             var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!commandLine.options.watch) {
+            if (!compilerOptions.watch) {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -269,7 +251,7 @@ module ts {
             }
             // Use default host function
             var sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && commandLine.options.watch) {
+            if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
                 sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
             }
@@ -294,6 +276,7 @@ module ts {
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
         function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             startTimer();
         }
@@ -322,17 +305,15 @@ module ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ts.parseTime = 0;
-        ts.bindTime = 0;
-        ts.checkTime = 0;
-        ts.emitTime = 0;
-
-        var start = new Date().getTime();
+        ioReadTime = 0;
+        ioWriteTime = 0;
+        programTime = 0;
+        bindTime = 0;
+        checkTime = 0;
+        emitTime = 0;
 
         var program = createProgram(fileNames, compilerOptions, compilerHost);
         var exitStatus = compileProgram();
-
-        var end = new Date().getTime() - start;
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -353,11 +334,17 @@ module ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            reportTimeStatistic("Parse time", ts.parseTime);
-            reportTimeStatistic("Bind time", ts.bindTime);
-            reportTimeStatistic("Check time", ts.checkTime);
-            reportTimeStatistic("Emit time", ts.emitTime);
-            reportTimeStatistic("Total time", end);
+            // Individual component times.
+            // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
+            // I/O read time and processing time for triple-slash references and module imports, and the reported
+            // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
+            reportTimeStatistic("I/O read", ioReadTime);
+            reportTimeStatistic("I/O write", ioWriteTime);
+            reportTimeStatistic("Parse time", programTime);
+            reportTimeStatistic("Bind time", bindTime);
+            reportTimeStatistic("Check time", checkTime);
+            reportTimeStatistic("Emit time", emitTime);
+            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
 
         return { program, exitStatus };
@@ -398,7 +385,7 @@ module ts {
             // The emitter emitted something, inform the caller if that happened in the presence
             // of diagnostics or not.
             if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
-                ExitStatus.DiagnosticsPresent_OutputsGenerated;
+                return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
 
             return ExitStatus.Success;
@@ -406,7 +393,7 @@ module ts {
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
     function printHelp() {

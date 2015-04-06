@@ -27,4 +27,4 @@ goTo.marker("referenceInsideFunctionExpression");
 verify.quickInfoIs("(local function) foo(): number");
 
 goTo.marker("referenceInGlobalScope");
-verify.quickInfoIs("(function) foo(a: number): string");
+verify.quickInfoIs("function foo(a: number): string");

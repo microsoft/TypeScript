@@ -835,7 +835,7 @@ module Harness {
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
-                    var fileName = ts.normalizeSlashes(file.unitName);
+                    var fileName = ts.normalizePath(file.unitName);
                     filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                 }
             };
@@ -844,6 +844,7 @@ module Harness {
             return {
                 getCurrentDirectory,
                 getSourceFile: (fn, languageVersion) => {
+                    fn = ts.normalizePath(fn);
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
                     }
@@ -1035,17 +1036,7 @@ module Harness {
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
 
-                        case 'mapsourcefiles':
-                        case 'maproot':
-                        case 'generatedeclarationfiles':
-                        case 'gatherDiagnostics':
-                        case 'codepage':
-                        case 'createFileLog':
                         case 'filename':
-                        case 'removecomments':
-                        case 'watch':
-                        case 'allowautomaticsemicoloninsertion':
-                        case 'locale':
                             // Not supported yet
                             break;
 
@@ -1061,6 +1052,10 @@ module Harness {
                             options.preserveConstEnums = setting.value === 'true';
                             break;
 
+                        case 'separatecompilation':
+                            options.separateCompilation = setting.value === 'true';
+                            break;
+
                         case 'suppressimplicitanyindexerrors':
                             options.suppressImplicitAnyIndexErrors = setting.value === 'true';
                             break;
@@ -1073,16 +1068,6 @@ module Harness {
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
                 });
-
-                var filemap: { [name: string]: ts.SourceFile; } = {};
-                var register = (file: { unitName: string; content: string; }) => {
-                    if (file.content !== undefined) {
-                        var fileName = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, options.target, assertInvariants);
-                    }
-                };
-                inputFiles.forEach(register);
-                otherFiles.forEach(register);
 
                 var fileOutputs: GeneratedFile[] = [];
                 
@@ -1470,7 +1455,12 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
+            "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
+            "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
+            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
+            "separatecompilation"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1706,6 +1696,14 @@ module Harness {
 
     export function isLibraryFile(filePath: string): boolean {
         return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
+    }
+
+    export function getDefaultLibraryFile(): { unitName: string, content: string } {
+        var libFile = Harness.userSpecifiedroot + Harness.libFolder + "/" + "lib.d.ts";
+        return {
+            unitName: libFile,
+            content: IO.readFile(libFile)
+        }
     }
 
     if (Error) (<any>Error).stackTraceLimit = 1;

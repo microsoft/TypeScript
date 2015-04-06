@@ -27,7 +27,7 @@ extractIndexer({
     [a]: ""
 }); // Should return string
 extractIndexer({
-    [0 /* x */]: ""
+    [E.x]: ""
 }); // Should return string
 extractIndexer({
     ["" || 0]: ""

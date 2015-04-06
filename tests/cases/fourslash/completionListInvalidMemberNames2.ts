@@ -1,4 +1,4 @@
-﻿/// <reference path='fourslash.ts' />
+/// <reference path='fourslash.ts' />
 
 ////enum Foo {
 ////    X, Y, '☆'

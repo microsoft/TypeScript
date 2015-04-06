@@ -15,5 +15,5 @@
 edit.insert('');
 
 goTo.marker();
-verify.quickInfoIs('(var) x: void');
+verify.quickInfoIs('var x: void');
 verify.numberOfErrorsInCurrentFile(0);

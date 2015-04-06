@@ -16,35 +16,24 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 >>>};
 >>>var AbstractGreeter = (function () {
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^
-4 >                   ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class 
-3 >    AbstractGreeter
 1 >Emitted(7, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(7, 20) Source(1, 22) + SourceIndex(0)
 ---
 >>>    function AbstractGreeter() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^^^^^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             AbstractGreeter
 1->Emitted(8, 5) Source(1, 1) + SourceIndex(0) name (AbstractGreeter)
-2 >Emitted(8, 14) Source(1, 7) + SourceIndex(0) name (AbstractGreeter)
-3 >Emitted(8, 29) Source(1, 22) + SourceIndex(0) name (AbstractGreeter)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
-1 > {
+1->class AbstractGreeter {
   >
 2 >    }
-1 >Emitted(9, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter.constructor)
+1->Emitted(9, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter.constructor)
 2 >Emitted(9, 6) Source(2, 2) + SourceIndex(0) name (AbstractGreeter.constructor)
 ---
 >>>    return AbstractGreeter;
@@ -73,48 +62,30 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 ---
 >>>var Greeter = (function (_super) {
 1->
-2 >^^^^
-3 >    ^^^^^^^
-4 >           ^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
-2 >class 
-3 >    Greeter
 1->Emitted(12, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(12, 5) Source(4, 7) + SourceIndex(0)
-3 >Emitted(12, 12) Source(4, 14) + SourceIndex(0)
 ---
 >>>    __extends(Greeter, _super);
 1->^^^^
-2 >    ^^^^^^^^^^
-3 >              ^^^^^^^
-4 >                     ^^^^^^^^^^
-1-> extends 
-2 >    
-3 >              Greeter
-4 >                      extends AbstractGreeter
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->class Greeter extends 
+2 >    AbstractGreeter
 1->Emitted(13, 5) Source(4, 23) + SourceIndex(0) name (Greeter)
-2 >Emitted(13, 15) Source(4, 7) + SourceIndex(0) name (Greeter)
-3 >Emitted(13, 22) Source(4, 14) + SourceIndex(0) name (Greeter)
-4 >Emitted(13, 32) Source(4, 38) + SourceIndex(0) name (Greeter)
+2 >Emitted(13, 32) Source(4, 38) + SourceIndex(0) name (Greeter)
 ---
 >>>    function Greeter() {
 1 >^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^
-4 >                    ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >    class 
-3 >             Greeter
 1 >Emitted(14, 5) Source(4, 1) + SourceIndex(0) name (Greeter)
-2 >Emitted(14, 14) Source(4, 7) + SourceIndex(0) name (Greeter)
-3 >Emitted(14, 21) Source(4, 14) + SourceIndex(0) name (Greeter)
 ---
 >>>        _super.apply(this, arguments);
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1-> extends 
+1->class Greeter extends 
 2 >        AbstractGreeter
 1->Emitted(15, 9) Source(4, 23) + SourceIndex(0) name (Greeter.constructor)
 2 >Emitted(15, 39) Source(4, 38) + SourceIndex(0) name (Greeter.constructor)

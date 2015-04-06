@@ -5,17 +5,10 @@ class C {
 }
 
 //// [symbolDeclarationEmit4.js]
-var C = (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, Symbol.isRegExp, {
-        get: function () { return ""; },
-        set: function (x) { },
-        enumerable: true,
-        configurable: true
-    });
-    return C;
-})();
+class C {
+    get [Symbol.isRegExp]() { return ""; }
+    set [Symbol.isRegExp](x) { }
+}
 
 
 //// [symbolDeclarationEmit4.d.ts]

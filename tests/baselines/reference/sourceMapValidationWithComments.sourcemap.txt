@@ -10,32 +10,21 @@ sourceFile:sourceMapValidationWithComments.ts
 -------------------------------------------------------------------
 >>>var DebugClass = (function () {
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^
-4 >              ^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class 
-3 >    DebugClass
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 15) Source(1, 17) + SourceIndex(0)
 ---
 >>>    function DebugClass() {
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^^^^^^^
+2 >    ^^->
 1->
-2 >    class 
-3 >             DebugClass
 1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (DebugClass)
-2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (DebugClass)
-3 >Emitted(2, 24) Source(1, 17) + SourceIndex(0) name (DebugClass)
 ---
 >>>    }
-1 >^^^^
+1->^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > {
+1->class DebugClass {
   >
   >    public static debugFunc() {
   >
@@ -57,7 +46,7 @@ sourceFile:sourceMapValidationWithComments.ts
   >    }
   >
 2 >    }
-1 >Emitted(3, 5) Source(21, 1) + SourceIndex(0) name (DebugClass.constructor)
+1->Emitted(3, 5) Source(21, 1) + SourceIndex(0) name (DebugClass.constructor)
 2 >Emitted(3, 6) Source(21, 2) + SourceIndex(0) name (DebugClass.constructor)
 ---
 >>>    DebugClass.debugFunc = function () {

@@ -13,4 +13,4 @@
 
 goTo.file("quickInfoExportAssignmentOfGenericInterface_1.ts");
 goTo.marker('1');
-verify.quickInfoIs("(var) x: a<a<string>>", undefined);
+verify.quickInfoIs("var x: a<a<string>>", undefined);

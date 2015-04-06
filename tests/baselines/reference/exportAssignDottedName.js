@@ -7,7 +7,7 @@ export function x(){
 
 //// [foo2.ts]
 import foo1 = require('./foo1');
-export = foo1.x; // Error, export assignment must be identifier only
+export = foo1.x; // Ok
 
 
 //// [foo1.js]
@@ -17,5 +17,4 @@ function x() {
 exports.x = x;
 //// [foo2.js]
 var foo1 = require('./foo1');
-x; // Error, export assignment must be identifier only
-module.exports = foo1;
+module.exports = foo1.x;
