@@ -202,10 +202,56 @@ module ts.SignatureHelp {
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
+            // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
+            // file, then see if we can figure out anything better.
+            if (isJavaScript(sourceFile.fileName)) {
+                return createJavaScriptSignatureHelpItems(argumentInfo);
+            }
+
             return undefined;
         }
 
         return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo);
+
+        function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo): SignatureHelpItems {
+            if (argumentInfo.invocation.kind !== SyntaxKind.CallExpression) {
+                return undefined;
+            }
+
+            // See if we can find some symbol with the call expression name that has call signatures.
+            let callExpression = <CallExpression>argumentInfo.invocation;
+            let expression = callExpression.expression;
+            let name = expression.kind === SyntaxKind.Identifier
+                ? <Identifier> expression
+                : expression.kind === SyntaxKind.PropertyAccessExpression
+                    ? (<PropertyAccessExpression>expression).name
+                    : undefined;
+
+            if (!name || !name.text) {
+                return undefined;
+            }
+
+            let typeChecker = program.getTypeChecker();
+            for (let sourceFile of program.getSourceFiles()) {
+                let nameToDeclarations = sourceFile.getNamedDeclarations();
+                let declarations = getProperty(nameToDeclarations, name.text);
+
+                if (declarations) {
+                    for (let declaration of declarations) {
+                        let symbol = declaration.symbol;
+                        if (symbol) {
+                            let type = typeChecker.getTypeOfSymbolAtLocation(symbol, declaration);
+                            if (type) {
+                                let callSignatures = type.getCallSignatures();
+                                if (callSignatures && callSignatures.length) {
+                                    return createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         /**
          * Returns relevant information for the argument list and the current argument if we are

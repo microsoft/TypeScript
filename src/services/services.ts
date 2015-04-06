@@ -2470,10 +2470,6 @@ module ts {
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
-        function isJavaScript(fileName: string) {
-            return fileExtensionIs(fileName, ".js");
-        }
-
         /**
          * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors  

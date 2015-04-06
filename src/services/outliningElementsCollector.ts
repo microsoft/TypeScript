@@ -35,6 +35,7 @@ module ts {
                 return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
             }
 
+
             let depth = 0;
             let maxDepth = 20;
             function walk(n: Node): void {
