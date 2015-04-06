@@ -219,7 +219,7 @@ var compilerFilename = "tsc.js";
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback, targetES5) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -230,6 +230,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --removeComments";
         }
 
+        if (targetES5) {
+            options += " --target es5";
+        }
+ 
         if (generateDeclarations) {
             options += " --declaration";
         }
@@ -367,7 +371,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*stripInternal*/ false,
             /*callback*/ function () { 
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
-            });
+            }, /*targetES5*/ true);
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -407,7 +411,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
-           });
+           }, /*targetES5*/ true);
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
