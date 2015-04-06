@@ -944,6 +944,8 @@ module Harness {
 
                 var newLine = '\r\n';
 
+                // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
+                // Treat them as library files, so include them in build, but not in baselines.
                 var includeBuiltFiles: { unitName: string; content: string }[] = [];
 
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
