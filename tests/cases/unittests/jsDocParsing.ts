@@ -35,6 +35,28 @@ module ts {
     "end": 2
 }`);
             });
+            it("parsesNullableTypeCorrectly", () => {
+                parsesCorrectly("{?number}",
+                    `{
+    "kind": "JSDocNullableType",
+    "containsParseError": false,
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "containsParseError": false,
+        "pos": 2,
+        "end": 8,
+        "name": {
+            "kind": "Identifier",
+            "containsParseError": false,
+            "pos": 2,
+            "end": 8,
+            "text": "number"
+        }
+    }
+}`);
+            });
         });
 
         describe("parsesIncorrectly", () => {
