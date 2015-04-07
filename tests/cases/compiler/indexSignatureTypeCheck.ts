@@ -33,8 +33,6 @@ pe[Val.b] = 5
 
 pe[true] = null
 
-
-
 interface indexErrors {
     [p2?: string];
     [...p3: any[]];
