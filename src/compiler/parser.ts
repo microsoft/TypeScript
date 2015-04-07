@@ -5389,18 +5389,20 @@ module ts {
     // Parses out a JSDoc type expression.  The starting position should be right at the open
     // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
     /* @internal */
-    export function parseJSDocTypeExpression(content: string, start?: number, length?: number): JSDocType {
+    export function parseJSDocTypeExpression(content: string, start?: number, length?: number): JSDocTypeExpression {
         let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true, content, /*onError:*/ undefined, start, length);
         
         // Prime the first token for us to start processing.
         let token = nextToken();
         let error = false;
 
+        let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
+
         parseExpected(SyntaxKind.OpenBraceToken);
-        let type = parseJSDocType();
+        result.type = parseJSDocType();
         parseExpected(SyntaxKind.CloseBraceToken);
 
-        return error ? undefined : type;
+        return error ? undefined : finishNode(result);
 
         function nextToken(): SyntaxKind {
             return token = scanner.scan();
@@ -5738,9 +5740,11 @@ module ts {
 
         let error = false;
         let type : JSDocType;
-        let parameterTypes: JSDocType[];
+        let parameters: JSDocParameter[];
         let returnType: JSDocType;
         let typeParameterNames: string[];
+
+        let pos: number;
 
         if (length >= "/** */".length) {
             if (content.charCodeAt(start) === CharacterCodes.slash &&
@@ -5753,9 +5757,21 @@ module ts {
                 let canParseTag = true;
                 let seenAsterisk = true;
 
-                for (let i = start + 3; !error && i < end; i++) {
-                    let ch = content.charCodeAt(i);
+                for (pos = start + 3; !error && pos < end; ) {
+                    let ch = content.charCodeAt(pos);
 
+                    if (ch === CharacterCodes.at && canParseTag) {
+                        // Don't update 'pos' in this block.  that will be handled inside the 
+                        // parseTag function.
+
+                        parseTag();
+                        
+                        // Once we parse out a tag, we cannot keep parsing out tags on this line.
+                        canParseTag = false;
+                        continue;
+                    }
+
+                    pos++;
                     if (isLineBreak(ch)) {
                         // After a line break, we can parse a tag, and we haven't seen as asterisk
                         // on the next line yet.
@@ -5766,14 +5782,6 @@ module ts {
 
                     if (isWhiteSpace(ch)) {
                         // Whitespace doesn't affect any of our parsing.
-                        continue;
-                    }
-
-                    if (ch === CharacterCodes.at && canParseTag) {
-                        i = parseTag(i);
-                        
-                        // Once we parse out a tag, we cannot keep parsing out tags on this line.
-                        canParseTag = false;
                         continue;
                     }
 
@@ -5799,126 +5807,125 @@ module ts {
         return error ? undefined : createJSDocComment();
 
         function createJSDocComment(): JSDocComment {
-            if (!returnType && !type && !parameterTypes && !typeParameterNames) {
+            if (!returnType && !type && !parameters && !typeParameterNames) {
                 return undefined;
             }
 
-            return { returnType, type, parameterTypes, typeParameterNames };
+            return { returnType, type, parameters, typeParameterNames };
         }
 
-        function skipWhitespace(pos: number): number {
+        function skipWhitespace(): void {
             while (pos < end && isWhiteSpace(content.charCodeAt(pos))) {
                 pos++;
             }
-
-            return pos;
         }
 
-        function parseTag(pos: number): number {
+        function parseTag(): void {
             Debug.assert(content.charCodeAt(pos) === CharacterCodes.at);
+        
+            // Skip the @ sign.
+            pos++;
 
-            // Scan forward to figure out the tag name.
-            for (var i = pos + 1; i < end; i++) {
-                if (!isIdentifierStart(content.charCodeAt(i), ScriptTarget.Latest)) {
-                    break;
-                }
-            }
-
-            let tagName = content.substring(pos + 1, i);
+            let tagName = scanIdentifier();
             switch (tagName) {
                 case "param":
-                    return handleParamTag(i);
+                    return handleParamTag();
                 case "return":
-                    return handleReturnTag(i);
+                    return handleReturnTag();
                 case "template":
-                    return handleTemplateTag(i);
+                    return handleTemplateTag();
                 case "type":
-                    return handleTypeTag(i);
+                    return handleTypeTag();
             }
-
-            return i;
         }
 
-        function handleParamTag(pos: number) {
-            let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
-            if (!typeExpr) {
+        function parseType(): JSDocType {
+            let typeExpression = parseJSDocTypeExpression(content, pos, end - pos);
+            if (!typeExpression) {
                 error = true;
-                return pos;
+                return undefined;
             }
 
-            parameterTypes = parameterTypes || [];
-            parameterTypes.push(typeExpr);
-            return typeExpr.end;
+            pos = typeExpression.end;
+            return typeExpression.type;
         }
 
-        function handleReturnTag(pos: number) {
-            if (!returnType) {
-                let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
-                if (typeExpr) {
-                    returnType = typeExpr;
-                    return typeExpr.end;
-                }
-            }
-
-            error = true;
-            return pos;
-        }
-
-        function handleTypeTag(pos: number) {
+        function handleParamTag() {
+            let type = parseType();
             if (!type) {
-                let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
-                if (typeExpr) {
-                    type = typeExpr;
-                    return typeExpr.end;
+                return;
+            }
+
+            skipWhitespace();
+
+            let name = scanIdentifier();
+            parameters = parameters || [];
+            parameters.push({ name, type });
+        }
+
+        function handleReturnTag(): void {
+            if (!returnType) {
+                returnType = parseType();
+                if (returnType) {
+                    return;
                 }
             }
 
             error = true;
-            return pos;
         }
 
-        function handleTemplateTag(pos: number): number {
+        function handleTypeTag(): void {
+            if (!type) {
+                type = parseType();
+                if (type) {
+                    return;
+                }
+            }
+
+            error = true;
+        }
+
+        function handleTemplateTag(): void {
             if (!typeParameterNames) {
                 typeParameterNames = [];
 
                 while (!error) {
-                    pos = skipWhitespace(pos);
-                    scanTypeParameterName();
-                    pos = skipWhitespace(pos);
-                    if (content.charCodeAt(pos) !== CharacterCodes.comma) {
-                        break;
-                    }
-                }
+                    skipWhitespace();
+                    let name = scanIdentifier();
+                    typeParameterNames.push(name);
 
-                if (typeParameterNames.length > 0) {
-                    return pos;
+                    skipWhitespace();
+                    if (content.charCodeAt(pos) !== CharacterCodes.comma) {
+                        return;
+                    }
+
+                    pos++;
                 }
             }
 
             error = true;
-            return pos;
+        }
 
-            function scanTypeParameterName() {
-                for (var i = pos; i < end; i++) {
-                    let ch = content.charCodeAt(i);
-                    if (i === pos && isIdentifierStart(ch, ScriptTarget.Latest)) {
-                        continue;
-                    }
-                    else if (i > pos && isIdentifierPart(ch, ScriptTarget.Latest)) {
-                        continue;
-                    }
-
-                    break;
+        function scanIdentifier(): string {
+            let startPos = pos;
+            for (;pos < end; pos++) {
+                let ch = content.charCodeAt(pos);
+                if (pos === startPos && isIdentifierStart(ch, ScriptTarget.Latest)) {
+                    continue;
+                }
+                else if (pos > startPos && isIdentifierPart(ch, ScriptTarget.Latest)) {
+                    continue;
                 }
 
-                if (i === pos) {
-                    error = true;
-                    return;
-                }
-
-                typeParameterNames.push(content.substring(pos, i));
-                pos = i;
+                break;
             }
+
+            if (startPos === pos) {
+                error = true;
+                return;
+            }
+
+            return content.substring(startPos, pos); 
         }
     }
 

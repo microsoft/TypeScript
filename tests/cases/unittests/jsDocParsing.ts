@@ -3,40 +3,43 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
 module ts {
-    function parsesCorrectly(content: string, expected: string) {
-        let type = ts.parseJSDocTypeExpression(content, 0);
-        let result = Utils.sourceFileToJSON(type);
-        assert.equal(result, expected);
-    }
-
-    function parsesIncorrectly(content: string) {
-        let type = ts.parseJSDocTypeExpression(content, 0);
-        assert.equal(type, undefined);
-    }
-
     describe("JSDocParsing", () => {
-        describe("parseCorrectly", () => {
-            it("unknownType", () => {
-                parsesCorrectly("{?}",
-                    `{
+        describe("TypeExpressions", () => {
+            function parsesCorrectly(content: string, expected: string) {
+                let typeExpression = ts.parseJSDocTypeExpression(content);
+                assert.isNotNull(typeExpression);
+
+                let result = Utils.sourceFileToJSON(typeExpression.type);
+                assert.equal(result, expected);
+            }
+
+            function parsesIncorrectly(content: string) {
+                let type = ts.parseJSDocTypeExpression(content);
+                assert.equal(type, undefined);
+            }
+
+            describe("parseCorrectly", () => {
+                it("unknownType", () => {
+                    parsesCorrectly("{?}",
+                        `{
     "kind": "JSDocUnknownType",
     "pos": 1,
     "end": 2
 }`);
-            });
+                });
 
-            it("allType", () => {
-                parsesCorrectly("{*}",
-                    `{
+                it("allType", () => {
+                    parsesCorrectly("{*}",
+                        `{
     "kind": "JSDocAllType",
     "pos": 1,
     "end": 2
 }`);
-            });
+                });
 
-            it("nullableType", () => {
-                parsesCorrectly("{?number}",
-                    `{
+                it("nullableType", () => {
+                    parsesCorrectly("{?number}",
+                        `{
     "kind": "JSDocNullableType",
     "pos": 1,
     "end": 8,
@@ -52,11 +55,11 @@ module ts {
         }
     }
 }`)
-            });
+                });
 
-            it("nonNullableType", () => {
-                parsesCorrectly("{!number}",
-                    `{
+                it("nonNullableType", () => {
+                    parsesCorrectly("{!number}",
+                        `{
     "kind": "JSDocNonNullableType",
     "pos": 1,
     "end": 8,
@@ -72,11 +75,11 @@ module ts {
         }
     }
 }`)
-            });
+                });
 
-            it("recordType1", () => {
-                parsesCorrectly("{{}}",
-                    `{
+                it("recordType1", () => {
+                    parsesCorrectly("{{}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 3,
@@ -86,11 +89,11 @@ module ts {
         "end": 2
     }
 }`)
-            });
+                });
 
-            it("recordType2", () => {
-                parsesCorrectly("{{foo}}",
-                    `{
+                it("recordType2", () => {
+                    parsesCorrectly("{{foo}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 6,
@@ -111,11 +114,11 @@ module ts {
         "end": 5
     }
 }`)
-            });
+                });
 
-            it("recordType3", () => {
-                parsesCorrectly("{{foo: number}}",
-                    `{
+                it("recordType3", () => {
+                    parsesCorrectly("{{foo: number}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 14,
@@ -147,11 +150,11 @@ module ts {
         "end": 13
     }
 }`)
-            });
+                });
 
-            it("recordType4", () => {
-                parsesCorrectly("{{foo, bar}}",
-                    `{
+                it("recordType4", () => {
+                    parsesCorrectly("{{foo, bar}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
@@ -183,11 +186,11 @@ module ts {
         "end": 10
     }
 }`)
-            });
+                });
 
-            it("recordType5", () => {
-                parsesCorrectly("{{foo: number, bar}}",
-                    `{
+                it("recordType5", () => {
+                    parsesCorrectly("{{foo: number, bar}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
@@ -230,11 +233,11 @@ module ts {
         "end": 18
     }
 }`)
-            });
+                });
 
-            it("recordType6", () => {
-                parsesCorrectly("{{foo, bar: number}}",
-                    `{
+                it("recordType6", () => {
+                    parsesCorrectly("{{foo, bar: number}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
@@ -277,11 +280,11 @@ module ts {
         "end": 18
     }
 }`)
-            });
+                });
 
-            it("recordType7", () => {
-                parsesCorrectly("{{foo: number, bar: number}}",
-                    `{
+                it("recordType7", () => {
+                    parsesCorrectly("{{foo: number, bar: number}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 27,
@@ -335,11 +338,11 @@ module ts {
         "end": 26
     }
 }`)
-            });
+                });
 
-            it("recordType8", () => {
-                parsesCorrectly("{{function}}",
-                    `{
+                it("recordType8", () => {
+                    parsesCorrectly("{{function}}",
+                        `{
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
@@ -360,11 +363,11 @@ module ts {
         "end": 10
     }
 }`)
-            });
+                });
 
-            it("unionType", () => {
-                parsesCorrectly("{(number|string)}",
-`{
+                it("unionType", () => {
+                    parsesCorrectly("{(number|string)}",
+                        `{
     "kind": "JSDocUnionType",
     "pos": 1,
     "end": 16,
@@ -396,11 +399,11 @@ module ts {
         "end": 15
     }
 }`);
-            });
+                });
 
-            it("functionType1", () => {
-                parsesCorrectly("{function()}",
-                    `{
+                it("functionType1", () => {
+                    parsesCorrectly("{function()}",
+                        `{
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 11,
@@ -410,11 +413,11 @@ module ts {
         "end": 10
     }
 }`);
-            });
+                });
 
-            it("functionType2", () => {
-                parsesCorrectly("{function(string, boolean)}",
-                    `{
+                it("functionType2", () => {
+                    parsesCorrectly("{function(string, boolean)}",
+                        `{
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 26,
@@ -446,11 +449,11 @@ module ts {
         "end": 25
     }
 }`);
-            });
+                });
 
-            it("functionReturnType1", () => {
-                parsesCorrectly("{function(string, boolean)}",
-                    `{
+                it("functionReturnType1", () => {
+                    parsesCorrectly("{function(string, boolean)}",
+                        `{
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 26,
@@ -482,11 +485,11 @@ module ts {
         "end": 25
     }
 }`);
-            });
+                });
 
-            it("thisType1", () => {
-                parsesCorrectly("{this:a.b}",
-                    `{
+                it("thisType1", () => {
+                    parsesCorrectly("{this:a.b}",
+                        `{
     "kind": "JSDocThisType",
     "pos": 1,
     "end": 9,
@@ -513,11 +516,11 @@ module ts {
         }
     }
 }`);
-            });
+                });
 
-            it("newType1", () => {
-                parsesCorrectly("{new:a.b}",
-                    `{
+                it("newType1", () => {
+                    parsesCorrectly("{new:a.b}",
+                        `{
     "kind": "JSDocConstructorType",
     "pos": 1,
     "end": 8,
@@ -544,11 +547,11 @@ module ts {
         }
     }
 }`);
-            });
+                });
 
-            it("variadicType", () => {
-                parsesCorrectly("{...number}",
-                    `{
+                it("variadicType", () => {
+                    parsesCorrectly("{...number}",
+                        `{
     "kind": "JSDocVariadicType",
     "pos": 1,
     "end": 10,
@@ -564,11 +567,11 @@ module ts {
         }
     }
 }`);
-            });
+                });
 
-            it("optionalType", () => {
-                parsesCorrectly("{number=}",
-                    `{
+                it("optionalType", () => {
+                    parsesCorrectly("{number=}",
+                        `{
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 8,
@@ -584,11 +587,11 @@ module ts {
         }
     }
 }`);
-            });
+                });
 
-            it("optionalNullable", () => {
-                parsesCorrectly("{?=}",
-                    `{
+                it("optionalNullable", () => {
+                    parsesCorrectly("{?=}",
+                        `{
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 3,
@@ -598,11 +601,11 @@ module ts {
         "end": 2
     }
 }`);
-            });
+                });
 
-            it("typeReference1", () => {
-                parsesCorrectly("{a.<number>}",
-                    `{
+                it("typeReference1", () => {
+                    parsesCorrectly("{a.<number>}",
+                        `{
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 11,
@@ -629,11 +632,11 @@ module ts {
         "end": 10
     }
 }`);
-            });
+                });
 
-            it("typeReference2", () => {
-                parsesCorrectly("{a.<number,string>}",
-                    `{
+                it("typeReference2", () => {
+                    parsesCorrectly("{a.<number,string>}",
+                        `{
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 18,
@@ -671,11 +674,11 @@ module ts {
         "end": 17
     }
 }`);
-            });
+                });
 
-            it("typeReference3", () => {
-                parsesCorrectly("{a.function}",
-                    `{
+                it("typeReference3", () => {
+                    parsesCorrectly("{a.function}",
+                        `{
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 11,
@@ -697,100 +700,491 @@ module ts {
         }
     }
 }`);
+                });
+            });
+
+            describe("parsesIncorrectly", () => {
+                it("emptyType", () => {
+                    parsesIncorrectly("{}");
+                });
+
+                it("trailingCommaInRecordType", () => {
+                    parsesIncorrectly("{{a,}}");
+                });
+
+                it("unionTypeWithTrailingBar", () => {
+                    parsesIncorrectly("{(a|)}");
+                });
+
+                it("unionTypeWithoutTypes", () => {
+                    parsesIncorrectly("{()}");
+                });
+
+                it("nullableTypeWithoutType", () => {
+                    parsesIncorrectly("{!}");
+                });
+
+                it("functionTypeWithTrailingComma", () => {
+                    parsesIncorrectly("{function(a,)}");
+                });
+
+                it("keyword", () => {
+                    parsesIncorrectly("{var}");
+                });
+
+                it("thisWithoutType", () => {
+                    parsesIncorrectly("{this:}");
+                });
+
+                it("newWithoutType", () => {
+                    parsesIncorrectly("{new:}");
+                });
+
+                it("variadicWithoutType", () => {
+                    parsesIncorrectly("{...}");
+                });
+
+                it("optionalWithoutType", () => {
+                    parsesIncorrectly("{=}");
+                });
+
+                it("allWithType", () => {
+                    parsesIncorrectly("{*foo}");
+                });
+
+                it("typeArgumentsNotFollowingDot", () => {
+                    parsesIncorrectly("{a<>}");
+                });
+
+                it("emptyTypeArguments", () => {
+                    parsesIncorrectly("{a.<>}");
+                });
+
+                it("typeArgumentsWithTrailingComma", () => {
+                    parsesIncorrectly("{a.<a,>}");
+                });
+
+                it("arrayType", () => {
+                    parsesIncorrectly("{a[]}");
+                });
+
+                it("tsFunctionType", () => {
+                    parsesIncorrectly("{() => string}");
+                });
+
+                it("tsConstructoType", () => {
+                    parsesIncorrectly("{new () => string}");
+                });
+
+                it("tupleType", () => {
+                    parsesIncorrectly("{[number,string]}");
+                });
+
+                it("typeOfType", () => {
+                    parsesIncorrectly("{typeof M}");
+                });
+
+                it("namedParameter", () => {
+                    parsesIncorrectly("{function(a: number)}");
+                });
+
+                it("callSignatureInRecordType", () => {
+                    parsesIncorrectly("{{(): number}}");
+                });
+
+                it("methodInRecordType", () => {
+                    parsesIncorrectly("{{foo(): number}}");
+                });
             });
         });
 
-        describe("parsesIncorrectly", () => {
-            it("emptyType", () => {
-                parsesIncorrectly("{}");
+        describe("DocComments", () => {
+            function parsesCorrectly(content: string, expected: string) {
+                let comment = ts.parseJSDocComment(content);
+                let result = JSON.stringify(comment, (k, v) => {
+                    return v && v.pos !== undefined
+                        ? JSON.parse(Utils.sourceFileToJSON(v))
+                        : v;
+                }, "    ");
+                assert.equal(result, expected);
+            }
+
+            function parsesIncorrectly(content: string) {
+                let type = ts.parseJSDocComment(content);
+                assert.equal(type, undefined);
+            }
+
+            describe("parsesIncorrectly", () => {
+                it("emptyComment", () => {
+                    parsesIncorrectly("/***/");
+                });
+
+                it("threeAsterisks", () => {
+                    parsesIncorrectly("/*** */");
+                });
+
+                it("asteriskAfterPreamble", () => {
+                    parsesIncorrectly("/** * @type {number} */");
+                });
+
+                it("multipleTypes", () => {
+                    parsesIncorrectly(
+`/**
+  * @type {number} 
+  * @type {string}
+  */`);
+                });
+
+                it("noType", () => {
+                    parsesIncorrectly(
+`/**
+  * @type
+  */`);
+                });
+
+                it("multipleReturnTypes", () => {
+                    parsesIncorrectly(
+`/**
+  * @return {number}
+  * @return {string}
+  */`);
+                });
+
+                it("noReturnType", () => {
+                    parsesIncorrectly(
+`/**
+  * @return
+  */`);
+                });
+
+                it("noTypeParameters", () => {
+                    parsesIncorrectly(
+`/**
+  * @template
+  */`);
+                });
+
+                it("trailingTypeParameterComma", () => {
+                    parsesIncorrectly(
+`/**
+  * @template T,
+  */`);
+                });
+
+                it("paramWithoutName", () => {
+                    parsesIncorrectly(
+`/**
+  * @param {number}
+  */`);
+                });
+
+                it("paramWithoutType", () => {
+                    parsesIncorrectly(
+`/**
+  * @param foo
+  */`);
+                });
+
+                it("paramWithoutTypeOrName", () => {
+                    parsesIncorrectly(
+`/**
+  * @param 
+  */`);
+                });
             });
 
-            it("trailingCommaInRecordType", () => {
-                parsesIncorrectly("{{a,}}");
-            });
+            describe("parsesCorrectly", () => {
+                it("noLeadingAsterisk", () => {
+                    parsesCorrectly(
+`/**
+    @type {number}
+  */`,
+                        `{
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 15,
+        "end": 21,
+        "name": {
+            "kind": 65,
+            "pos": 15,
+            "end": 21,
+            "text": "number"
+        }
+    }
+}`);
+                });
 
-            it("unionTypeWithTrailingBar", () => {
-                parsesIncorrectly("{(a|)}");
-            });
+                it("leadingAsterisk", () => {
+                    parsesCorrectly(
+`/**
+  * @type {number}
+  */`,
+                        `{
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 15,
+        "end": 21,
+        "name": {
+            "kind": 65,
+            "pos": 15,
+            "end": 21,
+            "text": "number"
+        }
+    }
+}`);
+                });
 
-            it("unionTypeWithoutTypes", () => {
-                parsesIncorrectly("{()}");
-            });
+                it("typeTag", () => {
+                    parsesCorrectly(
+`/**
+  * @type {number}
+  */`,
+                        `{
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 15,
+        "end": 21,
+        "name": {
+            "kind": 65,
+            "pos": 15,
+            "end": 21,
+            "text": "number"
+        }
+    }
+}`);
+                });
 
-            it("nullableTypeWithoutType", () => {
-                parsesIncorrectly("{!}");
-            });
+                it("returnTag1", () => {
+                    parsesCorrectly(
+`/**
+  * @return {number}
+  */`,
+                        `{
+    "returnType": {
+        "kind": "JSDocTypeReference",
+        "pos": 17,
+        "end": 23,
+        "name": {
+            "kind": 65,
+            "pos": 17,
+            "end": 23,
+            "text": "number"
+        }
+    }
+}`);
+                });
 
-            it("functionTypeWithTrailingComma", () => {
-                parsesIncorrectly("{function(a,)}");
-            });
+                it("returnTag2", () => {
+                    parsesCorrectly(
+                        `/**
+  * @return {number} Description text follows
+  */`,
+                        `{
+    "returnType": {
+        "kind": "JSDocTypeReference",
+        "pos": 17,
+        "end": 23,
+        "name": {
+            "kind": 65,
+            "pos": 17,
+            "end": 23,
+            "text": "number"
+        }
+    }
+}`);
+                });
 
-            it("keyword", () => {
-                parsesIncorrectly("{var}");
-            });
+                it("oneParamTag", () => {
+                    parsesCorrectly(
+`/**
+  * @param {number} name1
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 16,
+                "end": 22,
+                "name": {
+                    "kind": 65,
+                    "pos": 16,
+                    "end": 22,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
 
-            it("thisWithoutType", () => {
-                parsesIncorrectly("{this:}");
-            });
+                it("twoParamTag2", () => {
+                    parsesCorrectly(
+`/**
+  * @param {number} name1
+  * @param {number} name2
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 16,
+                "end": 22,
+                "name": {
+                    "kind": 65,
+                    "pos": 16,
+                    "end": 22,
+                    "text": "number"
+                }
+            }
+        },
+        {
+            "name": "name2",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 42,
+                "end": 48,
+                "name": {
+                    "kind": 65,
+                    "pos": 42,
+                    "end": 48,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
 
-            it("newWithoutType", () => {
-                parsesIncorrectly("{new:}");
-            });
+                it("paramTag1", () => {
+                    parsesCorrectly(
+                        `/**
+  * @param {number} name1 Description text follows
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 16,
+                "end": 22,
+                "name": {
+                    "kind": 65,
+                    "pos": 16,
+                    "end": 22,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
 
-            it("variadicWithoutType", () => {
-                parsesIncorrectly("{...}");
-            });
+                it("twoParamTagOnSameLine", () => {
+                    parsesCorrectly(
+`/**
+  * @param {number} name1 @param {number} name2
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 16,
+                "end": 22,
+                "name": {
+                    "kind": 65,
+                    "pos": 16,
+                    "end": 22,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
 
-            it("optionalWithoutType", () => {
-                parsesIncorrectly("{=}");
-            });
+                it("templateTag", () => {
+                    parsesCorrectly(
+`/**
+  * @template T
+  */`,
+                        `{
+    "typeParameterNames": [
+        "T"
+    ]
+}`);
+                });
 
-            it("allWithType", () => {
-                parsesIncorrectly("{*foo}");
-            });
+                it("templateTag2", () => {
+                    parsesCorrectly(
+                        `/**
+  * @template K,V
+  */`,
+                        `{
+    "typeParameterNames": [
+        "K",
+        "V"
+    ]
+}`);
+                });
 
-            it("typeArgumentsNotFollowingDot", () => {
-                parsesIncorrectly("{a<>}");
-            });
+                it("templateTag3", () => {
+                    parsesCorrectly(
+                        `/**
+  * @template K ,V
+  */`,
+                        `{
+    "typeParameterNames": [
+        "K",
+        "V"
+    ]
+}`);
+                });
 
-            it("emptyTypeArguments", () => {
-                parsesIncorrectly("{a.<>}");
-            });
+                it("templateTag4", () => {
+                    parsesCorrectly(
+                        `/**
+  * @template K, V
+  */`,
+                        `{
+    "typeParameterNames": [
+        "K",
+        "V"
+    ]
+}`);
+                });
 
-            it("typeArgumentsWithTrailingComma", () => {
-                parsesIncorrectly("{a.<a,>}");
-            });
+                it("templateTag5", () => {
+                    parsesCorrectly(
+                        `/**
+  * @template K , V
+  */`,
+                        `{
+    "typeParameterNames": [
+        "K",
+        "V"
+    ]
+}`);
+                });
 
-            it("arrayType", () => {
-                parsesIncorrectly("{a[]}");
-            });
-
-            it("tsFunctionType", () => {
-                parsesIncorrectly("{() => string}");
-            });
-
-            it("tsConstructoType", () => {
-                parsesIncorrectly("{new () => string}");
-            });
-
-            it("tupleType", () => {
-                parsesIncorrectly("{[number,string]}");
-            });
-
-            it("typeOfType", () => {
-                parsesIncorrectly("{typeof M}");
-            });
-
-            it("namedParameter", () => {
-                parsesIncorrectly("{function(a: number)}");
-            });
-
-            it("callSignatureInRecordType", () => {
-                parsesIncorrectly("{{(): number}}");
-            });
-
-            it("methodInRecordType", () => {
-                parsesIncorrectly("{{foo(): number}}");
+                it("templateTag6", () => {
+                    parsesCorrectly(
+                        `/**
+  * @template K , V Description of type parameters.
+  */`,
+                        `{
+    "typeParameterNames": [
+        "K",
+        "V"
+    ]
+}`);
+                });
             });
         });
     });

@@ -270,6 +270,7 @@ module ts {
         SourceFile,
 
         // JSDoc nodes.
+        JSDocTypeExpression,
         // The * type.
         JSDocAllType,
         // The ? type.
@@ -1010,6 +1011,11 @@ module ts {
         hasTrailingNewLine?: boolean;
     }
 
+    // represents a top level: { type } expression in a JSDoc comment.
+    export interface JSDocTypeExpression extends Node {
+        type: JSDocType;
+    }
+
     export interface JSDocType extends Node {
         _jsDocTypeBrand: any;
     }
@@ -1069,9 +1075,14 @@ module ts {
         type?: JSDocType
     }
 
+    export interface JSDocParameter {
+        name: string;
+        type: JSDocType;
+    }
+
     export interface JSDocComment {
         type?: JSDocType;
-        parameterTypes?: JSDocType[];
+        parameters?: JSDocParameter[];
         returnType?: JSDocType;
         typeParameterNames?: string[];
     }
