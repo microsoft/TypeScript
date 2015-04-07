@@ -54,6 +54,27 @@ module ts {
 }`)
             });
 
+            it("nonNullableType", () => {
+                parsesCorrectly("{!number}",
+                    `{
+    "kind": "JSDocNonNullableType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 2,
+        "end": 8,
+        "name": {
+            "kind": "Identifier",
+            "pos": 2,
+            "end": 8,
+            "text": "number"
+        }
+    }
+}`)
+            });
+
+
             it("unionType", () => {
                 debugger;
                 parsesCorrectly("{(number|string)}",
